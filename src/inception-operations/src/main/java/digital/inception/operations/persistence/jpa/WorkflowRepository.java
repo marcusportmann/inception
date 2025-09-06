@@ -124,6 +124,7 @@ public interface WorkflowRepository
   /**
    * Find the IDs for the active workflows for the workflow engine.
    *
+   * @param tenantId the ID for the tenant
    * @param workflowEngineId the ID for the workflow engine
    * @return the IDs for the active workflows for the workflow engine
    */
@@ -133,11 +134,12 @@ public interface WorkflowRepository
         from Workflow w
         join WorkflowDefinition wd
           on wd.id = w.definitionId and wd.version = w.definitionVersion
-       where w.status = digital.inception.operations.model.WorkflowStatus.ACTIVE
+       where w.tenantId = :tenantId
+         and w.status = digital.inception.operations.model.WorkflowStatus.ACTIVE
          and wd.engineId = :workflowEngineId
       """)
-  List<UUID> findActiveWorkflowIdsForWorkflowEngine(
-      @Param("workflowEngineId") String workflowEngineId);
+  List<UUID> findActiveWorkflowIdsForTenantAndWorkflowEngine(
+      @Param("tenantId") UUID tenantId, @Param("workflowEngineId") String workflowEngineId);
 
   /**
    * Find the workflow.

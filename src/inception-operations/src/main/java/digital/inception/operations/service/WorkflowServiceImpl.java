@@ -232,8 +232,12 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           workflowStore.getWorkflowEngineIdsForWorkflow(
               tenantId, cancelWorkflowRequest.getWorkflowId());
 
+      WorkflowDefinition workflowDefinition =
+          getWorkflowDefinitionForWorkflow(tenantId, cancelWorkflowRequest.getWorkflowId());
+
       getWorkflowEngineConnector(workflowEngineIds.getEngineId())
           .cancelWorkflow(
+              workflowDefinition,
               tenantId,
               cancelWorkflowRequest.getWorkflowId(),
               workflowEngineIds.getEngineInstanceId());
@@ -752,18 +756,24 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public List<UUID> getActiveWorkflowIdsForWorkflowEngine(String workflowEngineId)
+  public List<UUID> getActiveWorkflowIdsForWorkflowEngine(UUID tenantId, String workflowEngineId)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     if (!StringUtils.hasText(workflowEngineId)) {
       throw new InvalidArgumentException("workflowEngineId");
     }
 
     try {
-      return workflowStore.getActiveWorkflowIdsForWorkflowEngine(workflowEngineId);
+      return workflowStore.getActiveWorkflowIdsForWorkflowEngine(tenantId, workflowEngineId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the IDs for the active workflows for the workflow engine ("
               + workflowEngineId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -839,23 +849,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new ServiceUnavailableException(
           "Failed to retrieve the workflow (" + workflowId + ") for the tenant (" + tenantId + ")",
           e);
-    }
-  }
-
-  @Override
-  public Workflow getWorkflow(UUID workflowId)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
-    if (workflowId == null) {
-      throw new InvalidArgumentException("workflowId");
-    }
-
-    try {
-      return workflowStore.getWorkflow(workflowId);
-    } catch (WorkflowNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the workflow (" + workflowId + ")", e);
     }
   }
 
@@ -984,6 +977,29 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public WorkflowDefinition getWorkflowDefinitionForWorkflow(UUID tenantId, UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      WorkflowDefinitionId workflowDefinitionId =
+          workflowStore.getWorkflowDefinitionIdForWorkflow(tenantId, workflowId);
+
+      return getWorkflowService()
+          .getWorkflowDefinitionVersion(
+              workflowDefinitionId.getId(), workflowDefinitionId.getVersion());
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the workflow definition for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public WorkflowDefinitionId getWorkflowDefinitionIdForWorkflow(UUID tenantId, UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -1002,6 +1018,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new ServiceUnavailableException(
           "Failed to retrieve the workflow definition ID and version for the workflow ("
               + workflowId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -2041,8 +2059,12 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           workflowStore.getWorkflowEngineIdsForWorkflow(
               tenantId, suspendWorkflowRequest.getWorkflowId());
 
+      WorkflowDefinition workflowDefinition =
+          getWorkflowDefinitionForWorkflow(tenantId, suspendWorkflowRequest.getWorkflowId());
+
       getWorkflowEngineConnector(workflowEngineIds.getEngineId())
           .suspendWorkflow(
+              workflowDefinition,
               tenantId,
               suspendWorkflowRequest.getWorkflowId(),
               workflowEngineIds.getEngineInstanceId());
@@ -2105,8 +2127,12 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           workflowStore.getWorkflowEngineIdsForWorkflow(
               tenantId, unsuspendWorkflowRequest.getWorkflowId());
 
+      WorkflowDefinition workflowDefinition =
+          getWorkflowDefinitionForWorkflow(tenantId, unsuspendWorkflowRequest.getWorkflowId());
+
       getWorkflowEngineConnector(workflowEngineIds.getEngineId())
           .unsuspendWorkflow(
+              workflowDefinition,
               tenantId,
               unsuspendWorkflowRequest.getWorkflowId(),
               workflowEngineIds.getEngineInstanceId());
@@ -2239,6 +2265,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
         getWorkflowEngineConnector(workflowDefinition.getEngineId())
             .updateWorkflowData(
+                workflowDefinition,
                 tenantId,
                 workflow.getId(),
                 workflow.getEngineInstanceId(),

@@ -79,6 +79,7 @@ import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowSummaries;
+import digital.inception.operations.service.BackgroundWorkflowStatusVerifier;
 import digital.inception.operations.service.WorkflowService;
 import java.util.ArrayList;
 import java.util.List;
@@ -1310,6 +1311,18 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
     workflowService.verifyWorkflowDocument(
         tenantId, verifyWorkflowDocumentRequest, getAuthenticationName());
+  }
+
+  @Override
+  public void verifyWorkflowStatuses() throws ServiceUnavailableException {
+    try {
+      BackgroundWorkflowStatusVerifier backgroundWorkflowStatusVerifier =
+          getApplicationContext().getBean(BackgroundWorkflowStatusVerifier.class);
+
+      backgroundWorkflowStatusVerifier.verifyWorkflowStatuses();
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to verify the workflow statuses", e);
+    }
   }
 
   /**

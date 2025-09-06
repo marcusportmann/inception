@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -49,7 +50,8 @@ import java.util.UUID;
   "workflowId",
   "documentDefinitionId",
   "documentDefinitionName",
-  "requested"
+  "requested",
+  "description"
 })
 @XmlRootElement(
     name = "OutstandingWorkflowDocument",
@@ -63,12 +65,21 @@ import java.util.UUID;
       "workflowId",
       "documentDefinitionId",
       "documentDefinitionName",
-      "requested"
+      "requested",
+      "description"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OutstandingWorkflowDocument implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The description for the workflow document. */
+  @Schema(description = "The description for the workflow document")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 500)
+  @Column(name = "description", length = 500)
+  private String description;
 
   /** The ID for the document definition the workflow document is associated with. */
   @Schema(
@@ -150,6 +161,7 @@ public class OutstandingWorkflowDocument implements Serializable {
    *     associated with
    * @param status the status of the workflow document
    * @param requested the date and time the workflow document was requested
+   * @param description the description for the workflow document
    */
   public OutstandingWorkflowDocument(
       UUID id,
@@ -158,7 +170,8 @@ public class OutstandingWorkflowDocument implements Serializable {
       String documentDefinitionId,
       String documentDefinitionName,
       WorkflowDocumentStatus status,
-      OffsetDateTime requested) {
+      OffsetDateTime requested,
+      String description) {
     this.id = id;
     this.tenantId = tenantId;
     this.workflowId = workflowId;
@@ -166,6 +179,16 @@ public class OutstandingWorkflowDocument implements Serializable {
     this.documentDefinitionName = documentDefinitionName;
     this.status = status;
     this.requested = requested;
+    this.description = description;
+  }
+
+  /**
+   * Returns the description for the workflow document.
+   *
+   * @return the description for the workflow document
+   */
+  public String getDescription() {
+    return description;
   }
 
   /**
@@ -229,6 +252,15 @@ public class OutstandingWorkflowDocument implements Serializable {
    */
   public UUID getWorkflowId() {
     return workflowId;
+  }
+
+  /**
+   * Set the description for the workflow document.
+   *
+   * @param description the description for the workflow document
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

@@ -142,7 +142,8 @@ public interface WorkflowDocumentRepository
         wd.documentDefinitionId,
         dd.name,
         wd.status,
-        wd.requested
+        wd.requested,
+        wd.description
       )
       from WorkflowDocument wd
       join wd.documentDefinition dd

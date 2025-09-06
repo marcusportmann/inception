@@ -335,13 +335,14 @@ public interface WorkflowService {
   /**
    * Retrieve the IDs for the active workflows for the workflow engine.
    *
+   * @param tenantId the ID for the tenant
    * @param workflowEngineId the ID for the workflow engine
    * @return the IDs for the active workflows for the workflow engine
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the IDs for the active workflows for the workflow engine
    *     could not be retrieved
    */
-  List<UUID> getActiveWorkflowIdsForWorkflowEngine(String workflowEngineId)
+  List<UUID> getActiveWorkflowIdsForWorkflowEngine(UUID tenantId, String workflowEngineId)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -382,18 +383,6 @@ public interface WorkflowService {
    * @throws ServiceUnavailableException if the workflow could not be retrieved
    */
   Workflow getWorkflow(UUID tenantId, UUID workflowId)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
-
-  /**
-   * Retrieve the workflow.
-   *
-   * @param workflowId the ID for the workflow
-   * @return the workflow
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws WorkflowNotFoundException if the workflow could not be found
-   * @throws ServiceUnavailableException if the workflow could not be retrieved
-   */
-  Workflow getWorkflow(UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
@@ -464,6 +453,20 @@ public interface WorkflowService {
       throws InvalidArgumentException,
           WorkflowDefinitionCategoryNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow definition for the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @return the workflow definition for the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow definition for the workflow could not be
+   *     retrieved
+   */
+  WorkflowDefinition getWorkflowDefinitionForWorkflow(UUID tenantId, UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the composite {@link WorkflowDefinitionId} (id + version) for the workflow with the

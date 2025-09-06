@@ -439,14 +439,17 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
-  public List<UUID> getActiveWorkflowIdsForWorkflowEngine(String workflowEngineId)
+  public List<UUID> getActiveWorkflowIdsForWorkflowEngine(UUID tenantId, String workflowEngineId)
       throws ServiceUnavailableException {
     try {
-      return workflowRepository.findActiveWorkflowIdsForWorkflowEngine(workflowEngineId);
+      return workflowRepository.findActiveWorkflowIdsForTenantAndWorkflowEngine(
+          tenantId, workflowEngineId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the IDs for the active workflows for the workflow engine ("
               + workflowEngineId
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }

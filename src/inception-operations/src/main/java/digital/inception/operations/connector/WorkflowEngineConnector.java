@@ -37,13 +37,18 @@ public interface WorkflowEngineConnector {
   /**
    * Cancel a workflow.
    *
+   * @param workflowDefinition the workflow definition
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
    *     engine for the workflow
    * @throws WorkflowEngineConnectorException if the workflow could not be canceled
    */
-  void cancelWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
+  void cancelWorkflow(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException;
 
   /**
@@ -56,6 +61,7 @@ public interface WorkflowEngineConnector {
   /**
    * Retrieve the data for a workflow.
    *
+   * @param workflowDefinition the workflow definition
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
@@ -63,12 +69,17 @@ public interface WorkflowEngineConnector {
    * @return the workflow-engine-specific data for the workflow
    * @throws WorkflowEngineConnectorException if the data could not be retrieved for the workflow
    */
-  byte[] getWorkflowData(UUID tenantId, UUID workflowId, String engineInstanceId)
+  byte[] getWorkflowData(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException;
 
   /**
    * Retrieve the workflow form for the workflow.
    *
+   * @param workflowDefinition the workflow definition
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
@@ -79,12 +90,17 @@ public interface WorkflowEngineConnector {
    *     workflow
    */
   byte[] getWorkflowForm(
-      UUID tenantId, UUID workflowId, String engineInstanceId, WorkflowFormType workflowFormType)
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId,
+      WorkflowFormType workflowFormType)
       throws WorkflowEngineConnectorException;
 
   /**
    * Retrieve the status of the workflow from the workflow engine.
    *
+   * @param workflowDefinition the workflow definition
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
@@ -93,7 +109,11 @@ public interface WorkflowEngineConnector {
    * @throws WorkflowEngineConnectorException if the status of the workflow could not be retrieved
    *     from the workflow engine
    */
-  WorkflowStatus getWorkflowStatus(UUID tenantId, UUID workflowId, String engineInstanceId)
+  WorkflowStatus getWorkflowStatus(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException;
 
   /**
@@ -150,30 +170,41 @@ public interface WorkflowEngineConnector {
   /**
    * Suspend a workflow.
    *
+   * @param workflowDefinition the workflow definition
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
    *     engine for the workflow
    * @throws WorkflowEngineConnectorException if the workflow could not be suspended
    */
-  void suspendWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
+  void suspendWorkflow(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException;
 
   /**
    * Unsuspend a workflow.
    *
+   * @param workflowDefinition the workflow definition
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
    *     engine for the workflow
    * @throws WorkflowEngineConnectorException if the workflow could not be unsuspended
    */
-  void unsuspendWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
+  void unsuspendWorkflow(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException;
 
   /**
    * Update the workflow data.
    *
+   * @param workflowDefinition the workflow definition
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
@@ -181,6 +212,11 @@ public interface WorkflowEngineConnector {
    * @param data the updated JSON or XML data for the workflow
    * @throws WorkflowEngineConnectorException if the workflow data could not be updated
    */
-  void updateWorkflowData(UUID tenantId, UUID workflowId, String engineInstanceId, String data)
+  void updateWorkflowData(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId,
+      String data)
       throws WorkflowEngineConnectorException;
 }

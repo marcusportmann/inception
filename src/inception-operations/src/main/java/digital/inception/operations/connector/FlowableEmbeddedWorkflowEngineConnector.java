@@ -49,7 +49,11 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   }
 
   @Override
-  public void cancelWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
+  public void cancelWorkflow(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException {
     try {
       throw new RuntimeException("Not Implemented");
@@ -68,7 +72,11 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   }
 
   @Override
-  public byte[] getWorkflowData(UUID tenantId, UUID workflowId, String engineInstanceId)
+  public byte[] getWorkflowData(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException {
     try {
       throw new RuntimeException("Not Implemented");
@@ -85,7 +93,11 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
 
   @Override
   public byte[] getWorkflowForm(
-      UUID tenantId, UUID workflowId, String engineInstanceId, WorkflowFormType workflowFormType)
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId,
+      WorkflowFormType workflowFormType)
       throws WorkflowEngineConnectorException {
     try {
       throw new RuntimeException("Not Implemented");
@@ -101,7 +113,11 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   }
 
   @Override
-  public WorkflowStatus getWorkflowStatus(UUID tenantId, UUID workflowId, String engineInstanceId)
+  public WorkflowStatus getWorkflowStatus(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException {
     try {
       throw new RuntimeException("Not Implemented");
@@ -173,7 +189,11 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   }
 
   @Override
-  public void suspendWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
+  public void suspendWorkflow(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException {
     try {
       throw new RuntimeException("Not Implemented");
@@ -185,7 +205,11 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   }
 
   @Override
-  public void unsuspendWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
+  public void unsuspendWorkflow(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException {
     try {
       throw new RuntimeException("Not Implemented");
@@ -198,7 +222,11 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
 
   @Override
   public void updateWorkflowData(
-      UUID tenantId, UUID workflowId, String engineInstanceId, String data)
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId,
+      String data)
       throws WorkflowEngineConnectorException {
     try {
       throw new RuntimeException("Not Implemented");

@@ -3895,4 +3895,38 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           WorkflowDocumentNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Verify the workflow statuses.
+   *
+   * @throws ServiceUnavailableException if the workflow statuses could not be verified
+   */
+  @Operation(summary = "Verify the workflow statuses", description = "Verify the workflow statuses")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The workflow status were verified"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/verify-workflow-statuses",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+  void verifyWorkflowStatuses() throws ServiceUnavailableException;
 }

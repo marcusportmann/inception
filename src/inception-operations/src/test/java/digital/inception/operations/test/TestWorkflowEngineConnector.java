@@ -52,9 +52,20 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
   }
 
   @Override
-  public void cancelWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
+  public void cancelWorkflow(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException {
-    log.info("Cancelling the workflow (" + workflowId + ") for the tenant (" + tenantId + ")");
+    log.info(
+        "Cancelling the workflow ("
+            + workflowId
+            + ") with the engine instance ID ("
+            + engineInstanceId
+            + ") for the tenant ("
+            + tenantId
+            + ")");
   }
 
   @Override
@@ -68,20 +79,32 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
   }
 
   @Override
-  public byte[] getWorkflowData(UUID tenantId, UUID workflowId, String engineInstanceId)
+  public byte[] getWorkflowData(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException {
     return new byte[0];
   }
 
   @Override
   public byte[] getWorkflowForm(
-      UUID tenantId, UUID workflowId, String engineInstanceId, WorkflowFormType workflowFormType)
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId,
+      WorkflowFormType workflowFormType)
       throws WorkflowEngineConnectorException {
     return new byte[0];
   }
 
   @Override
-  public WorkflowStatus getWorkflowStatus(UUID tenantId, UUID workflowId, String engineInstanceId)
+  public WorkflowStatus getWorkflowStatus(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException {
     return WorkflowStatus.UNKNOWN;
   }
@@ -102,6 +125,8 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
             + workflowDocumentId
             + ") for the workflow ("
             + workflowId
+            + ") with the engine instance ID ("
+            + engineInstanceId
             + ") for the tenant ("
             + tenantId
             + ")");
@@ -138,24 +163,52 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
   }
 
   @Override
-  public void suspendWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
+  public void suspendWorkflow(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException {
-    log.info("Suspending the workflow (" + workflowId + ") for the tenant (" + tenantId + ")");
+    log.info(
+        "Suspending the workflow ("
+            + workflowId
+            + ") with the engine instance ID ("
+            + engineInstanceId
+            + ") for the tenant ("
+            + tenantId
+            + ")");
   }
 
   @Override
-  public void unsuspendWorkflow(UUID tenantId, UUID workflowId, String engineInstanceId)
+  public void unsuspendWorkflow(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
       throws WorkflowEngineConnectorException {
-    log.info("Unsuspending the workflow (" + workflowId + ") for the tenant (" + tenantId + ")");
+    log.info(
+        "Unsuspending the workflow ("
+            + workflowId
+            + ") with the engine instance ID ("
+            + engineInstanceId
+            + ") for the tenant ("
+            + tenantId
+            + ")");
   }
 
   @Override
   public void updateWorkflowData(
-      UUID tenantId, UUID workflowId, String engineInstanceId, String data)
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId,
+      String data)
       throws WorkflowEngineConnectorException {
     log.info(
         "Updating the data for the workflow ("
             + workflowId
+            + ") with the engine instance ID ("
+            + engineInstanceId
             + ") for the tenant ("
             + tenantId
             + ")");

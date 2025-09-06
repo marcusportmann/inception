@@ -193,12 +193,13 @@ public interface WorkflowStore {
   /**
    * Retrieve the IDs for the active workflows for the workflow engine.
    *
+   * @param tenantId the ID for the tenant
    * @param workflowEngineId the ID for the workflow engine
    * @return the IDs for the active workflows for the workflow engine
    * @throws ServiceUnavailableException if the IDs for the active workflows for the workflow engine
    *     could not be retrieved
    */
-  List<UUID> getActiveWorkflowIdsForWorkflowEngine(String workflowEngineId)
+  List<UUID> getActiveWorkflowIdsForWorkflowEngine(UUID tenantId, String workflowEngineId)
       throws ServiceUnavailableException;
 
   /**
