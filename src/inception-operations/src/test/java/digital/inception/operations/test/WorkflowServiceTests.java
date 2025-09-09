@@ -82,6 +82,7 @@ import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowEngineAttribute;
 import digital.inception.operations.model.WorkflowExternalReference;
+import digital.inception.operations.model.WorkflowFormType;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
@@ -373,6 +374,9 @@ public class WorkflowServiceTests {
 
     workflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("process_definition_key", UUID.randomUUID().toString()));
+
+    workflowDefinition.setSupportedWorkflowFormTypes(
+        List.of(WorkflowFormType.START_FORM, WorkflowFormType.WORK_FORM));
 
     workflowService.createWorkflowDefinition(workflowDefinition);
 
@@ -817,11 +821,14 @@ public class WorkflowServiceTests {
     workflowService.finalizeWorkflowStep(
         TenantUtil.DEFAULT_TENANT_ID,
         new FinalizeWorkflowStepRequest(
-            workflow.getId(), "test_workflow_step_1", WorkflowStepStatus.COMPLETED));
+            workflow.getId(),
+            "test_workflow_step_1",
+            WorkflowStepStatus.COMPLETED,
+            "test_workflow_step_2"));
 
     retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
-    assertEquals(1, retrievedWorkflow.getSteps().size());
+    assertEquals(2, retrievedWorkflow.getSteps().size());
     assertEquals("test_workflow_step_1", retrievedWorkflow.getSteps().getFirst().getCode());
     assertEquals(WorkflowStepStatus.COMPLETED, retrievedWorkflow.getSteps().getFirst().getStatus());
     assertNotNull(retrievedWorkflow.getSteps().getFirst().getFinalized());
@@ -1573,6 +1580,15 @@ public class WorkflowServiceTests {
                         }
                       });
             });
+
+    assertEquals(
+        (workflowDefinition1.getSupportedWorkflowFormTypes() != null)
+            ? workflowDefinition1.getSupportedWorkflowFormTypes()
+            : List.of(),
+        (workflowDefinition2.getSupportedWorkflowFormTypes() != null)
+            ? workflowDefinition2.getSupportedWorkflowFormTypes()
+            : List.of(),
+        "The supported workflow form types values for the workflow definitions do not match");
   }
 
   private void compareWorkflowEngines(

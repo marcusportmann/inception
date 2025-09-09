@@ -23,9 +23,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.core.validation.constraint.ValidISO8601DurationOrPeriod;
+import digital.inception.operations.persistence.jpa.WorkflowFormTypeListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -267,6 +269,14 @@ public class WorkflowDefinition implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "name", length = 100, nullable = false)
   private String name;
+
+  /** The supported workflow form types for the workflow definition. */
+  @Schema(description = "The supported workflow form types for the workflow definition")
+  @JsonProperty
+  @Size(max = 10)
+  @Convert(converter = WorkflowFormTypeListAttributeConverter.class)
+  @Column(name = "supported_workflow_form_types", length = 510)
+  private List<WorkflowFormType> supportedWorkflowFormTypes;
 
   /** The ID for the tenant the workflow definition is specific to. */
   @Schema(description = "The ID for the tenant the workflow definition is specific to")
@@ -802,6 +812,15 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns the supported workflow form types for the workflow definition.
+   *
+   * @return the supported workflow form types for the workflow definition
+   */
+  public List<WorkflowFormType> getSupportedWorkflowFormTypes() {
+    return supportedWorkflowFormTypes;
+  }
+
+  /**
    * Returns the ID for the tenant the workflow definition is specific to.
    *
    * @return the ID for the tenant the workflow definition is specific to
@@ -1019,6 +1038,15 @@ public class WorkflowDefinition implements Serializable {
     stepDefinitions.forEach(stepDefinition -> stepDefinition.setWorkflowDefinition(this));
     this.stepDefinitions.clear();
     this.stepDefinitions.addAll(stepDefinitions);
+  }
+
+  /**
+   * Set the supported workflow form types for the workflow definition.
+   *
+   * @param supportedWorkflowFormTypes the supported workflow form types for the workflow definition
+   */
+  public void setSupportedWorkflowFormTypes(List<WorkflowFormType> supportedWorkflowFormTypes) {
+    this.supportedWorkflowFormTypes = supportedWorkflowFormTypes;
   }
 
   /**

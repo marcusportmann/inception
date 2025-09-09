@@ -38,19 +38,25 @@ import java.util.UUID;
  */
 @Schema(description = "A request to finalize a workflow step")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowId", "step", "status"})
+@JsonPropertyOrder({"workflowId", "step", "status", "nextStep"})
 @XmlRootElement(
     name = "FinalizeWorkflowStepRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "FinalizeWorkflowStepRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowId", "step", "status"})
+    propOrder = {"workflowId", "step", "status", "nextStep"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class FinalizeWorkflowStepRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The code for the next workflow step to initiate. */
+  @Schema(description = "The code for the next workflow step to initiate")
+  @JsonProperty
+  @Size(min = 1, max = 50)
+  private String nextStep;
 
   /** The status for the workflow step. */
   @Schema(
@@ -97,6 +103,31 @@ public class FinalizeWorkflowStepRequest implements Serializable {
   }
 
   /**
+   * Constructs a new {@code FinalizeWorkflowStepRequest}.
+   *
+   * @param workflowId the ID for the workflow the workflow step is associated with
+   * @param step the code for the workflow step
+   * @param status the status for the workflow step
+   * @param nextStep the code for the next workflow step to initiate
+   */
+  public FinalizeWorkflowStepRequest(
+      UUID workflowId, String step, WorkflowStepStatus status, String nextStep) {
+    this.workflowId = workflowId;
+    this.step = step;
+    this.status = status;
+    this.nextStep = nextStep;
+  }
+
+  /**
+   * Returns the code for the next workflow step to initiate.
+   *
+   * @return the code for the next workflow step to initiate
+   */
+  public String getNextStep() {
+    return nextStep;
+  }
+
+  /**
    * Returns the status for the workflow step.
    *
    * @return the status for the workflow step
@@ -121,6 +152,15 @@ public class FinalizeWorkflowStepRequest implements Serializable {
    */
   public UUID getWorkflowId() {
     return workflowId;
+  }
+
+  /**
+   * Set the code for the next workflow step to initiate.
+   *
+   * @param nextStep the code for the next workflow step to initiate
+   */
+  public void setNextStep(String nextStep) {
+    this.nextStep = nextStep;
   }
 
   /**

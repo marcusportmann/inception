@@ -17,6 +17,7 @@
 package digital.inception.operations.connector;
 
 import digital.inception.operations.model.EventType;
+import digital.inception.operations.model.FormDefinition;
 import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
@@ -25,6 +26,7 @@ import digital.inception.operations.model.WorkflowFormType;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowVariable;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 
@@ -65,6 +67,22 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   }
 
   @Override
+  public Optional<FormDefinition> getFormDefinition(WorkflowDefinition workflowDefinition,
+      WorkflowFormType workflowFormType) throws WorkflowEngineConnectorException {
+    try {
+      throw new RuntimeException("Not Implemented");
+    } catch (Throwable e) {
+      throw new WorkflowEngineConnectorException(
+          "Failed to retrieve the form definition for the workflow form type ("
+          + workflowFormType
+          + ") for the workflow definition ("
+          + workflowDefinition.getId()
+          + ") version (" + workflowDefinition.getVersion() + ")",
+          e);
+    }
+  }
+
+  @Override
   public List<ValidWorkflowDefinitionAttribute> getValidWorkflowDefinitionAttributes() {
     return List.of(
         new ValidWorkflowDefinitionAttribute(
@@ -92,45 +110,21 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   }
 
   @Override
-  public byte[] getWorkflowForm(
-      WorkflowDefinition workflowDefinition,
-      UUID tenantId,
-      UUID workflowId,
-      String engineInstanceId,
-      WorkflowFormType workflowFormType)
-      throws WorkflowEngineConnectorException {
-    try {
-      throw new RuntimeException("Not Implemented");
-    } catch (Throwable e) {
-      throw new WorkflowEngineConnectorException(
-          "Failed to retrieve the workflow form for the workflow ("
-              + workflowId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public WorkflowStatus getWorkflowStatus(
-      WorkflowDefinition workflowDefinition,
-      UUID tenantId,
-      UUID workflowId,
-      String engineInstanceId)
-      throws WorkflowEngineConnectorException {
+  public WorkflowStatus getWorkflowStatus(WorkflowDefinition workflowDefinition, UUID tenantId,
+      UUID workflowId, String engineInstanceId) throws WorkflowEngineConnectorException {
     try {
       throw new RuntimeException("Not Implemented");
     } catch (Throwable e) {
       throw new WorkflowEngineConnectorException(
           "Failed to retrieve the status for the workflow ("
-              + workflowId
-              + ") for the tenant ("
-              + tenantId
-              + ")",
+          + workflowId
+          + ") for the tenant ("
+          + tenantId
+          + ")",
           e);
     }
   }
+
 
   @Override
   public void processWorkflowDocumentEvent(

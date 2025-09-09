@@ -735,12 +735,35 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     validateArgument("finalizeWorkflowStepRequest", finalizeWorkflowStepRequest);
 
     try {
+      if (StringUtils.hasText(finalizeWorkflowStepRequest.getNextStep())) {
+        WorkflowDefinitionId workflowDefinitionId =
+            workflowStore.getWorkflowDefinitionIdForWorkflow(
+                tenantId, finalizeWorkflowStepRequest.getWorkflowId());
+
+        List<WorkflowStepDefinition> stepDefinitions =
+            workflowDefinitionRepository.findStepDefinitionsByWorkflowDefinitionIdAndVersion(
+                workflowDefinitionId.getId(), workflowDefinitionId.getVersion());
+
+        boolean foundWorkflowStepDefinition = false;
+        for (WorkflowStepDefinition stepDefinition : stepDefinitions) {
+          if (stepDefinition.getCode().equals(finalizeWorkflowStepRequest.getNextStep())) {
+            foundWorkflowStepDefinition = true;
+            break;
+          }
+        }
+
+        if (!foundWorkflowStepDefinition) {
+          throw new InvalidArgumentException("finalizeWorkflowStepRequest.nextStep");
+        }
+      }
+
       workflowStore.finalizeWorkflowStep(
           tenantId,
           finalizeWorkflowStepRequest.getWorkflowId(),
           finalizeWorkflowStepRequest.getStep(),
-          finalizeWorkflowStepRequest.getStatus());
-    } catch (WorkflowStepNotFoundException e) {
+          finalizeWorkflowStepRequest.getStatus(),
+          finalizeWorkflowStepRequest.getNextStep());
+    } catch (InvalidArgumentException | WorkflowStepNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(

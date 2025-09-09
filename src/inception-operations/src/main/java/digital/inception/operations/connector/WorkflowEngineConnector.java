@@ -17,6 +17,7 @@
 package digital.inception.operations.connector;
 
 import digital.inception.operations.model.EventType;
+import digital.inception.operations.model.FormDefinition;
 import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
@@ -24,6 +25,7 @@ import digital.inception.operations.model.WorkflowFormType;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowVariable;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -52,6 +54,20 @@ public interface WorkflowEngineConnector {
       throws WorkflowEngineConnectorException;
 
   /**
+   * Retrieve the form definition for the workflow definition.
+   *
+   * @param workflowDefinition the workflow definition
+   * @param workflowFormType the workflow form type
+   * @return the Optional containing the form definition for the workflow definition or an empty
+   *     Optional if no form definition exists
+   * @throws WorkflowEngineConnectorException if the form definition could not be retrieved for the
+   *     workflow definition
+   */
+  Optional<FormDefinition> getFormDefinition(
+      WorkflowDefinition workflowDefinition, WorkflowFormType workflowFormType)
+      throws WorkflowEngineConnectorException;
+
+  /**
    * Returns the valid workflow definition attributes for the workflow engine connector.
    *
    * @return the valid workflow definition attributes for the workflow engine connector
@@ -74,27 +90,6 @@ public interface WorkflowEngineConnector {
       UUID tenantId,
       UUID workflowId,
       String engineInstanceId)
-      throws WorkflowEngineConnectorException;
-
-  /**
-   * Retrieve the workflow form for the workflow.
-   *
-   * @param workflowDefinition the workflow definition
-   * @param tenantId the ID for the tenant
-   * @param workflowId the ID for the workflow
-   * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
-   *     engine for the workflow
-   * @param workflowFormType the workflow form type
-   * @return the workflow form
-   * @throws WorkflowEngineConnectorException if the workflow form could not be retrieved for the
-   *     workflow
-   */
-  byte[] getWorkflowForm(
-      WorkflowDefinition workflowDefinition,
-      UUID tenantId,
-      UUID workflowId,
-      String engineInstanceId,
-      WorkflowFormType workflowFormType)
       throws WorkflowEngineConnectorException;
 
   /**

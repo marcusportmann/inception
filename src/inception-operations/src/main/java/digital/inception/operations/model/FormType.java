@@ -23,49 +23,45 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The {@code ObjectType} enumeration defines the possible object types.
+ * The {@code FormType} enumeration defines the possible form types.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The object type")
+@Schema(description = "The form type")
 @XmlEnum
-@XmlType(name = "ObjectType", namespace = "https://inception.digital/operations")
-public enum ObjectType implements CodeEnum {
+@XmlType(name = "FormType", namespace = "https://inception.digital/operations")
+public enum FormType implements CodeEnum {
 
-  /** Document. */
-  @XmlEnumValue("Document")
-  DOCUMENT("document", "Document"),
+  /** Flowable. */
+  @XmlEnumValue("Flowable")
+  FLOWABLE("flowable", "Flowable"),
 
-  /** Workflow. */
-  @XmlEnumValue("Workflow")
-  WORKFLOW("workflow", "Workflow"),
-
-  /** Workflow Document. */
-  @XmlEnumValue("WorkflowDocument")
-  WORKFLOW_DOCUMENT("workflow_document", "Workflow Document");
+  /** Formly. */
+  @XmlEnumValue("Formly")
+  FORMLY("formly", "Formly");
 
   private final String code;
 
   private final String description;
 
-  ObjectType(String code, String description) {
+  FormType(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the code for the operations object type.
+   * Returns the code for the form type.
    *
-   * @return the code for the operations object type
+   * @return the code for the form type
    */
   public String code() {
     return code;
   }
 
   /**
-   * Returns the description for the operations object type.
+   * Returns the description for the form type.
    *
-   * @return the description for the operations object type
+   * @return the description for the form type
    */
   public String description() {
     return description;

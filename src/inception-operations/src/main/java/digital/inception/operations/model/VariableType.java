@@ -23,49 +23,69 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The {@code ObjectType} enumeration defines the possible object types.
+ * The {@code VariableType} enumeration defines the possible variable types.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The object type")
+@Schema(description = "The variable type type")
 @XmlEnum
-@XmlType(name = "ObjectType", namespace = "https://inception.digital/operations")
-public enum ObjectType implements CodeEnum {
+@XmlType(name = "VariableType", namespace = "https://inception.digital/operations")
+public enum VariableType implements CodeEnum {
 
-  /** Document. */
-  @XmlEnumValue("Document")
-  DOCUMENT("document", "Document"),
+  /** Boolean. */
+  @XmlEnumValue("Boolean")
+  BOOLEAN("boolean", "Boolean"),
 
-  /** Workflow. */
-  @XmlEnumValue("Workflow")
-  WORKFLOW("workflow", "Workflow"),
+  /** Date. */
+  @XmlEnumValue("Date")
+  DATE("date", "Date"),
 
-  /** Workflow Document. */
-  @XmlEnumValue("WorkflowDocument")
-  WORKFLOW_DOCUMENT("workflow_document", "Workflow Document");
+  /** Decimal. */
+  @XmlEnumValue("Decimal")
+  DECIMAL("decimal", "Decimal"),
+
+  /** Double. */
+  @XmlEnumValue("Double")
+  DOUBLE("double", "Double"),
+
+  /** Integer. */
+  @XmlEnumValue("Integer")
+  INTEGER("integer", "Integer"),
+
+  /** JSON. */
+  @XmlEnumValue("JSON")
+  JSON("json", "JSON"),
+
+  /** Long. */
+  @XmlEnumValue("Long")
+  LONG("long", "Long"),
+
+  /** String. */
+  @XmlEnumValue("String")
+  STRING("string", "String");
 
   private final String code;
 
   private final String description;
 
-  ObjectType(String code, String description) {
+  VariableType(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the code for the operations object type.
+   * Returns the code for the variable type.
    *
-   * @return the code for the operations object type
+   * @return the code for the variable type
    */
   public String code() {
     return code;
   }
 
   /**
-   * Returns the description for the operations object type.
+   * Returns the description for the variable type.
    *
-   * @return the description for the operations object type
+   * @return the description for the variable type
    */
   public String description() {
     return description;

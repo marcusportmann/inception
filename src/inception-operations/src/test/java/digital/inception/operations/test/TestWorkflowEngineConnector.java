@@ -20,6 +20,7 @@ import digital.inception.operations.connector.AbstractWorkflowEngineConnectorBas
 import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.connector.WorkflowEngineConnectorException;
 import digital.inception.operations.model.EventType;
+import digital.inception.operations.model.FormDefinition;
 import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
@@ -28,6 +29,7 @@ import digital.inception.operations.model.WorkflowFormType;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowVariable;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 
@@ -69,6 +71,13 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
   }
 
   @Override
+  public Optional<FormDefinition> getFormDefinition(
+      WorkflowDefinition workflowDefinition, WorkflowFormType workflowFormType)
+      throws WorkflowEngineConnectorException {
+    return Optional.empty();
+  }
+
+  @Override
   public List<ValidWorkflowDefinitionAttribute> getValidWorkflowDefinitionAttributes() {
     return List.of(
         new ValidWorkflowDefinitionAttribute(
@@ -84,17 +93,6 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
       UUID tenantId,
       UUID workflowId,
       String engineInstanceId)
-      throws WorkflowEngineConnectorException {
-    return new byte[0];
-  }
-
-  @Override
-  public byte[] getWorkflowForm(
-      WorkflowDefinition workflowDefinition,
-      UUID tenantId,
-      UUID workflowId,
-      String engineInstanceId,
-      WorkflowFormType workflowFormType)
       throws WorkflowEngineConnectorException {
     return new byte[0];
   }

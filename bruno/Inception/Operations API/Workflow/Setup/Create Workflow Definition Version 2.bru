@@ -64,6 +64,10 @@ body:json {
         "roleCode": "Administrator",
         "type": "initiate_workflow"
       }
+    ],
+    "supportedWorkflowFormTypes": [
+      "start_form",
+      "work_form"
     ],  
     "validationSchemaType": "json",
     "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}"

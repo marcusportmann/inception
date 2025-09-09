@@ -184,10 +184,12 @@ public interface WorkflowStore {
    * @param workflowId the ID for the workflow the workflow step is associated with
    * @param step the code for the workflow step
    * @param status the final status for the workflow step
+   * @param nextStep the code for the next workflow step to initiate
    * @throws WorkflowStepNotFoundException if the workflow step could not be found
    * @throws ServiceUnavailableException if the workflow step could not be finalized
    */
-  void finalizeWorkflowStep(UUID tenantId, UUID workflowId, String step, WorkflowStepStatus status)
+  void finalizeWorkflowStep(
+      UUID tenantId, UUID workflowId, String step, WorkflowStepStatus status, String nextStep)
       throws WorkflowStepNotFoundException, ServiceUnavailableException;
 
   /**

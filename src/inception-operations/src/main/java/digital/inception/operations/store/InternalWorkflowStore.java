@@ -415,13 +415,20 @@ public class InternalWorkflowStore implements WorkflowStore {
 
   @Override
   public void finalizeWorkflowStep(
-      UUID tenantId, UUID workflowId, String step, WorkflowStepStatus status)
+      UUID tenantId, UUID workflowId, String step, WorkflowStepStatus status, String nextStep)
       throws WorkflowStepNotFoundException, ServiceUnavailableException {
     try {
       if (workflowStepRepository.finalizeWorkflowStep(
               workflowId, step, status, OffsetDateTime.now())
           <= 0) {
         throw new WorkflowStepNotFoundException(tenantId, workflowId, step);
+      }
+
+      if (StringUtils.hasText(nextStep)) {
+        WorkflowStep workflowStep =
+            new WorkflowStep(workflowId, nextStep, WorkflowStepStatus.ACTIVE, OffsetDateTime.now());
+
+        workflowStepRepository.saveAndFlush(workflowStep);
       }
     } catch (WorkflowStepNotFoundException e) {
       throw e;

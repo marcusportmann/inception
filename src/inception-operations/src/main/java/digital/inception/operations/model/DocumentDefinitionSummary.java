@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The {@code DocumentDefinitionSummary} class holds the information for document definition
+ * The {@code DocumentDefinitionSummary} class holds the information for a document definition
  * summary.
  *
  * @author Marcus Portmann

@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The {@code DocumentDefinition} class holds the information for document definition.
+ * The {@code DocumentDefinition} class holds the information for a document definition.
  *
  * @author Marcus Portmann
  */

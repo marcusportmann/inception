@@ -17,13 +17,11 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
-import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,10 +35,8 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -55,28 +51,12 @@ import java.util.UUID;
  */
 @Schema(description = "A workflow variable")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "name",
-  "booleanValue",
-  "dateValue",
-  "decimalValue",
-  "doubleValue",
-  "integerValue",
-  "stringValue"
-})
+@JsonPropertyOrder({"type", "name", "value"})
 @XmlRootElement(name = "WorkflowVariable", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowVariable",
     namespace = "https://inception.digital/operations",
-    propOrder = {
-      "name",
-      "booleanValue",
-      "dateValue",
-      "decimalValue",
-      "doubleValue",
-      "integerValue",
-      "stringValue"
-    })
+    propOrder = {"type", "name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_variables")
@@ -84,44 +64,6 @@ import java.util.UUID;
 public class WorkflowVariable implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The boolean value for the workflow variable. */
-  @Schema(description = "The boolean value for the workflow variable")
-  @JsonProperty
-  @XmlElement(name = "BooleanValue")
-  @Column(name = "boolean_value")
-  private Boolean booleanValue;
-
-  /** The date value for the workflow variable. */
-  @Schema(description = "The ISO 8601 format date value for the workflow variable")
-  @JsonProperty
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateValue")
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
-  @Column(name = "date_value")
-  private LocalDate dateValue;
-
-  /** The decimal value for the workflow variable. */
-  @Schema(description = "The decimal value for the workflow variable")
-  @JsonProperty
-  @XmlElement(name = "DecimalValue")
-  @Column(name = "decimal_value")
-  private BigDecimal decimalValue;
-
-  /** The double value for the workflow variable. */
-  @Schema(description = "The double value for the workflow variable")
-  @JsonProperty
-  @XmlElement(name = "DoubleValue")
-  @Column(name = "double_value")
-  private Double doubleValue;
-
-  /** The integer value for the workflow variable. */
-  @Schema(description = "The integer value for the workflow variable")
-  @JsonProperty
-  @XmlElement(name = "IntegerValue")
-  @Column(name = "integer_value")
-  private Integer integerValue;
 
   /**
    * The name for the workflow variable.
@@ -140,13 +82,27 @@ public class WorkflowVariable implements Serializable {
   @Column(name = "name", length = 255, nullable = false)
   private String name;
 
-  /** The string value for the workflow variable. */
-  @Schema(description = "The string value for the workflow variable")
+  /** The variable type for the workflow variable. */
+  @Schema(
+      description = "The variable type for the workflow variable",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
+  @NotNull
+  @Column(name = "type", nullable = false)
+  private VariableType type;
+
+  /**
+   * The value for the workflow variable.
+   *
+   * <p>NOTE: All values are stored as a {@code String} with a maximum length of 4000 characters.
+   */
+  @Schema(description = "The value for the workflow variable")
   @JsonProperty
-  @XmlElement(name = "StringValue")
+  @XmlElement(name = "Value")
   @Size(min = 1, max = 4000)
-  @Column(name = "string_value", length = 4000)
-  private String stringValue;
+  @Column(name = "value", length = 4000)
+  private String value;
 
   /** The ID for the workflow the workflow variable is associated with. */
   @Schema(hidden = true)
@@ -160,30 +116,14 @@ public class WorkflowVariable implements Serializable {
    * Constructs a new {@code WorkflowVariable}.
    *
    * @param name the name of the workflow variable
-   * @param booleanValue the boolean value for the workflow variable
-   * @param dateValue the date value for the workflow variable
-   * @param decimalValue the decimal value for the workflow variable
-   * @param doubleValue the double value for the workflow variable
-   * @param integerValue the integer value for the workflow variable
-   * @param stringValue the string value for the workflow variable
+   * @param type the variable type for the workflow variable
+   * @param value the value for the workflow variable
    * @param workflowId the ID for the workflow the workflow variable is associated with
    */
-  public WorkflowVariable(
-      String name,
-      Boolean booleanValue,
-      LocalDate dateValue,
-      BigDecimal decimalValue,
-      Double doubleValue,
-      Integer integerValue,
-      String stringValue,
-      UUID workflowId) {
+  public WorkflowVariable(String name, VariableType type, String value, UUID workflowId) {
     this.name = name;
-    this.booleanValue = booleanValue;
-    this.dateValue = dateValue;
-    this.decimalValue = decimalValue;
-    this.doubleValue = doubleValue;
-    this.integerValue = integerValue;
-    this.stringValue = stringValue;
+    this.type = type;
+    this.value = value;
     this.workflowId = workflowId;
   }
 
@@ -194,11 +134,12 @@ public class WorkflowVariable implements Serializable {
    * Constructs a new {@code WorkflowVariable}.
    *
    * @param name the name of the workflow variable
-   * @param stringValue the string value for the workflow variable
+   * @param value the string value for the workflow variable
    */
-  public WorkflowVariable(String name, String stringValue) {
+  public WorkflowVariable(String name, String value) {
+    this.type = VariableType.STRING;
     this.name = name;
-    this.stringValue = stringValue;
+    this.value = value;
   }
 
   /**
@@ -208,8 +149,9 @@ public class WorkflowVariable implements Serializable {
    * @param booleanValue the boolean value for the workflow variable
    */
   public WorkflowVariable(String name, boolean booleanValue) {
+    this.type = VariableType.BOOLEAN;
     this.name = name;
-    this.booleanValue = booleanValue;
+    this.value = Boolean.toString(booleanValue);
   }
 
   /**
@@ -219,8 +161,9 @@ public class WorkflowVariable implements Serializable {
    * @param doubleValue the double value for the workflow variable
    */
   public WorkflowVariable(String name, double doubleValue) {
+    this.type = VariableType.DOUBLE;
     this.name = name;
-    this.doubleValue = doubleValue;
+    this.value = Double.toString(doubleValue);
   }
 
   /**
@@ -230,8 +173,9 @@ public class WorkflowVariable implements Serializable {
    * @param dateValue the date value for the workflow variable
    */
   public WorkflowVariable(String name, LocalDate dateValue) {
+    this.type = VariableType.DATE;
     this.name = name;
-    this.dateValue = dateValue;
+    this.value = dateValue.toString();
   }
 
   /**
@@ -241,8 +185,9 @@ public class WorkflowVariable implements Serializable {
    * @param decimalValue the decimal value for the workflow variable
    */
   public WorkflowVariable(String name, BigDecimal decimalValue) {
+    this.type = VariableType.DECIMAL;
     this.name = name;
-    this.decimalValue = decimalValue;
+    this.value = decimalValue.toString();
   }
 
   /**
@@ -252,8 +197,9 @@ public class WorkflowVariable implements Serializable {
    * @param integerValue the integer value for the workflow variable
    */
   public WorkflowVariable(String name, Integer integerValue) {
+    this.type = VariableType.INTEGER;
     this.name = name;
-    this.integerValue = integerValue;
+    this.value = integerValue.toString();
   }
 
   /**
@@ -262,15 +208,7 @@ public class WorkflowVariable implements Serializable {
    * @return the cloned workflow variable
    */
   public WorkflowVariable cloneWorkflowVariable() {
-    return new WorkflowVariable(
-        name,
-        booleanValue,
-        dateValue,
-        decimalValue,
-        doubleValue,
-        integerValue,
-        stringValue,
-        workflowId);
+    return new WorkflowVariable(name, type, value, workflowId);
   }
 
   /**
@@ -300,51 +238,6 @@ public class WorkflowVariable implements Serializable {
   }
 
   /**
-   * Returns the boolean value for the workflow variable.
-   *
-   * @return the boolean value for the workflow variable
-   */
-  public Boolean getBooleanValue() {
-    return booleanValue;
-  }
-
-  /**
-   * Returns the date value for the workflow variable.
-   *
-   * @return the date value for the workflow variable
-   */
-  public LocalDate getDateValue() {
-    return dateValue;
-  }
-
-  /**
-   * Returns the decimal value for the workflow variable.
-   *
-   * @return the decimal value for the workflow variable
-   */
-  public BigDecimal getDecimalValue() {
-    return decimalValue;
-  }
-
-  /**
-   * Returns the double value for the workflow variable.
-   *
-   * @return the double value for the workflow variable
-   */
-  public Double getDoubleValue() {
-    return doubleValue;
-  }
-
-  /**
-   * Returns the integer value for the workflow variable.
-   *
-   * @return the integer value for the workflow variable
-   */
-  public Integer getIntegerValue() {
-    return integerValue;
-  }
-
-  /**
    * Returns the name of the workflow variable.
    *
    * @return the name of the workflow variable
@@ -354,33 +247,21 @@ public class WorkflowVariable implements Serializable {
   }
 
   /**
-   * Returns the string value for the workflow variable.
+   * Returns the variable type for the workflow variable.
    *
-   * @return the string value for the workflow variable
+   * @return the variable type for the workflow variable
    */
-  public String getStringValue() {
-    return stringValue;
+  public VariableType getType() {
+    return type;
   }
 
   /**
-   * Retrieve the workflow variable value as a {@code String}.
+   * Returns the value for the workflow variable.
    *
-   * @return the workflow variable value as a {@code String}
+   * @return the value for the workflow variable
    */
-  public String getValueAsString() {
-    if (booleanValue != null) {
-      return booleanValue.toString();
-    } else if (dateValue != null) {
-      return dateValue.toString();
-    } else if (decimalValue != null) {
-      return decimalValue.toString();
-    } else if (doubleValue != null) {
-      return doubleValue.toString();
-    } else if (integerValue != null) {
-      return integerValue.toString();
-    } else {
-      return stringValue;
-    }
+  public String getValue() {
+    return value;
   }
 
   /**
@@ -391,52 +272,8 @@ public class WorkflowVariable implements Serializable {
   @Override
   public int hashCode() {
     return ((workflowId == null) ? 0 : workflowId.hashCode())
-        + ((name == null) ? 0 : name.hashCode());
-  }
-
-  /**
-   * Set the boolean value for the workflow variable.
-   *
-   * @param booleanValue the boolean value for the workflow variable
-   */
-  public void setBooleanValue(Boolean booleanValue) {
-    this.booleanValue = booleanValue;
-  }
-
-  /**
-   * Set the date value for the workflow variable.
-   *
-   * @param dateValue the date value for the workflow variable
-   */
-  public void setDateValue(LocalDate dateValue) {
-    this.dateValue = dateValue;
-  }
-
-  /**
-   * Set the decimal value for the workflow variable.
-   *
-   * @param decimalValue the decimal value for the workflow variable
-   */
-  public void setDecimalValue(BigDecimal decimalValue) {
-    this.decimalValue = decimalValue;
-  }
-
-  /**
-   * Set the double value for the workflow variable.
-   *
-   * @param doubleValue the double value for the workflow variable
-   */
-  public void setDoubleValue(Double doubleValue) {
-    this.doubleValue = doubleValue;
-  }
-
-  /**
-   * Set the integer value for the workflow variable.
-   *
-   * @param integerValue the integer value for the workflow variable
-   */
-  public void setIntegerValue(Integer integerValue) {
-    this.integerValue = integerValue;
+        + ((name == null) ? 0 : name.hashCode())
+        + ((value == null) ? 0 : value.hashCode());
   }
 
   /**
@@ -449,12 +286,21 @@ public class WorkflowVariable implements Serializable {
   }
 
   /**
-   * Set the string value for the workflow variable.
+   * Set the variable type for the workflow variable.
    *
-   * @param stringValue the string value for the workflow variable
+   * @param type the variable type for the workflow variable
    */
-  public void setStringValue(String stringValue) {
-    this.stringValue = stringValue;
+  public void setType(VariableType type) {
+    this.type = type;
+  }
+
+  /**
+   * Set the value for the workflow variable.
+   *
+   * @param value the value for the workflow variable
+   */
+  public void setValue(String value) {
+    this.value = value;
   }
 
   /**

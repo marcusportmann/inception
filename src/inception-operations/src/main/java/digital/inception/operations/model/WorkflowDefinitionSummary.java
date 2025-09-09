@@ -20,9 +20,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
+import digital.inception.operations.persistence.jpa.WorkflowFormTypeListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -62,7 +64,8 @@ import java.util.UUID;
   "tenantId",
   "name",
   "engineId",
-  "documentDefinitions"
+  "documentDefinitions",
+  "supportedWorkflowFormTypes"
 })
 @XmlRootElement(
     name = "WorkflowDefinitionSummary",
@@ -77,7 +80,8 @@ import java.util.UUID;
       "tenantId",
       "name",
       "engineId",
-      "documentDefinitions"
+      "documentDefinitions",
+      "supportedWorkflowFormTypes"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -156,6 +160,16 @@ public class WorkflowDefinitionSummary implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "name", length = 100, nullable = false)
   private String name;
+
+  /** The supported workflow form types for the workflow definition. */
+  @Schema(description = "The supported workflow form types for the workflow definition")
+  @JsonProperty
+  @XmlElementWrapper(name = "SupportedWorkflowFormTypes", required = true)
+  @XmlElement(name = "SupportedWorkflowFormType", required = true)
+  @Size(max = 10)
+  @Convert(converter = WorkflowFormTypeListAttributeConverter.class)
+  @Column(name = "supported_workflow_form_types", length = 510)
+  private List<WorkflowFormType> supportedWorkflowFormTypes;
 
   /** The ID for the tenant the workflow definition is specific to. */
   @Schema(description = "The ID for the tenant the workflow definition is specific to")
@@ -249,6 +263,15 @@ public class WorkflowDefinitionSummary implements Serializable {
   }
 
   /**
+   * Returns the supported workflow form types for the workflow definition.
+   *
+   * @return the supported workflow form types for the workflow definition
+   */
+  public List<WorkflowFormType> getSupportedWorkflowFormTypes() {
+    return supportedWorkflowFormTypes;
+  }
+
+  /**
    * Returns the ID for the tenant the workflow definition is specific to.
    *
    * @return the ID for the tenant the workflow definition is specific to
@@ -274,5 +297,14 @@ public class WorkflowDefinitionSummary implements Serializable {
   @Override
   public int hashCode() {
     return ((id == null) ? 0 : id.hashCode()) + version;
+  }
+
+  /**
+   * Set the supported workflow form types for the workflow definition.
+   *
+   * @param supportedWorkflowFormTypes the supported workflow form types for the workflow definition
+   */
+  public void setSupportedWorkflowFormTypes(List<WorkflowFormType> supportedWorkflowFormTypes) {
+    this.supportedWorkflowFormTypes = supportedWorkflowFormTypes;
   }
 }
