@@ -210,7 +210,6 @@ public interface DocumentApiController {
   /**
    * Create the document definition.
    *
-   * @param documentDefinitionCategoryId the ID for the document definition category
    * @param documentDefinition the document definition
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateDocumentDefinitionException if the document definition already exists
@@ -262,19 +261,13 @@ public interface DocumentApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/document-definition-categories/{documentDefinitionCategoryId}/document-definitions",
+      value = "/document-definitions",
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createDocumentDefinition(
-      @Parameter(
-              name = "documentDefinitionCategoryId",
-              description = "The ID for the document definition category",
-              required = true)
-          @PathVariable
-          String documentDefinitionCategoryId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The document definition version to create",
               required = true)
@@ -550,11 +543,8 @@ public interface DocumentApiController {
   /**
    * Delete the document definition.
    *
-   * @param documentDefinitionCategoryId the ID for the document definition category
    * @param documentDefinitionId the ID for the document definition
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
-   *     not be found
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the document definition could not be deleted
    */
@@ -580,8 +570,7 @@ public interface DocumentApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description =
-                "The document definition category or document definition could not be found",
+            description = "The document definition could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -596,8 +585,7 @@ public interface DocumentApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value =
-          "/document-definition-categories/{documentDefinitionCategoryId}/document-definitions/{documentDefinitionId}",
+      value = "/document-definitions/{documentDefinitionId}",
       method = RequestMethod.DELETE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -605,19 +593,12 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteDocumentDefinition(
       @Parameter(
-              name = "documentDefinitionCategoryId",
-              description = "The ID for the document definition category",
-              required = true)
-          @PathVariable
-          String documentDefinitionCategoryId,
-      @Parameter(
               name = "documentDefinitionId",
               description = "The ID for the document definition",
               required = true)
           @PathVariable
           String documentDefinitionId)
       throws InvalidArgumentException,
-          DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 
@@ -956,12 +937,9 @@ public interface DocumentApiController {
   /**
    * Retrieve the document definition.
    *
-   * @param documentDefinitionCategoryId the ID for the document definition category
    * @param documentDefinitionId the ID for the document definition
    * @return the document definition
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
-   *     not be found
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the document definition could not be retrieved
    */
@@ -987,8 +965,7 @@ public interface DocumentApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description =
-                "The document definition category or document definition could not be found",
+            description = "The document definition could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -1003,8 +980,7 @@ public interface DocumentApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value =
-          "/document-definition-categories/{documentDefinitionCategoryId}/document-definitions/{documentDefinitionId}",
+      value = "/document-definitions/{documentDefinitionId}",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
@@ -1012,19 +988,12 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentDefinition getDocumentDefinition(
       @Parameter(
-              name = "documentDefinitionCategoryId",
-              description = "The ID for the document definition category",
-              required = true)
-          @PathVariable
-          String documentDefinitionCategoryId,
-      @Parameter(
               name = "documentDefinitionId",
               description = "The ID for the document definition",
               required = true)
           @PathVariable
           String documentDefinitionId)
       throws InvalidArgumentException,
-          DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 
@@ -1168,8 +1137,10 @@ public interface DocumentApiController {
    * @throws ServiceUnavailableException if the document definition summaries could not be retrieved
    */
   @Operation(
-      summary = "Retrieve the document definition summaries",
-      description = "Retrieve the document definition summaries")
+      summary =
+          "Retrieve the summaries for the document definitions associated with the document definition category",
+      description =
+          "Retrieve the summaries for the document definitions associated with the document definition category")
   @ApiResponses(
       value = {
         @ApiResponse(
@@ -1206,7 +1177,7 @@ public interface DocumentApiController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  List<DocumentDefinitionSummary> getDocumentDefinitionSummaries(
+  List<DocumentDefinitionSummary> getDocumentDefinitionSummariesForDocumentDefinitionCategory(
       @Parameter(
               name = "Tenant-ID",
               description = "The ID for the tenant",
@@ -1678,12 +1649,10 @@ public interface DocumentApiController {
   /**
    * Update the document definition.
    *
-   * @param documentDefinitionCategoryId the ID for the document definition category
    * @param documentDefinitionId the ID for the document definition
    * @param documentDefinition the document definition
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
-   *     not be found
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could not be found
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the document definition could not be updated
    */
@@ -1709,8 +1678,7 @@ public interface DocumentApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description =
-                "The document definition category or document definition could not be found",
+            description = "The document definition could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -1725,20 +1693,13 @@ public interface DocumentApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value =
-          "/document-definition-categories/{documentDefinitionCategoryId}/document-definitions/{documentDefinitionId}",
+      value = "/document-definitions/{documentDefinitionId}",
       method = RequestMethod.PUT,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateDocumentDefinition(
-      @Parameter(
-              name = "documentDefinitionCategoryId",
-              description = "The ID for the document definition category",
-              required = true)
-          @PathVariable
-          String documentDefinitionCategoryId,
       @Parameter(
               name = "documentDefinitionId",
               description = "The ID for the document definition",

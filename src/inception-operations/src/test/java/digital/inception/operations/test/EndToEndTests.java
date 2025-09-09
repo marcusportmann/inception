@@ -373,7 +373,11 @@ public class EndToEndTests {
     assertEquals(2, interactionSummaries.getInteractionSummaries().size());
 
     UUID firstInteractionId = interactionSummaries.getInteractionSummaries().getFirst().getId();
+    String firstConversationId =
+        interactionSummaries.getInteractionSummaries().getFirst().getConversationId();
     UUID secondInteractionId = interactionSummaries.getInteractionSummaries().get(1).getId();
+    String secondConversationId =
+        interactionSummaries.getInteractionSummaries().get(1).getConversationId();
 
     Interaction interaction =
         interactionService.getInteraction(TenantUtil.DEFAULT_TENANT_ID, firstInteractionId);
@@ -472,7 +476,7 @@ public class EndToEndTests {
             List.of(
                 new WorkflowAttribute(
                     "test_workflow_attribute_code", "test_workflow_attribute_value")),
-            List.of(new InitiateWorkflowInteractionLink(firstInteractionId)),
+            List.of(new InitiateWorkflowInteractionLink(firstInteractionId, firstConversationId)),
             null,
             workflowDataJson);
 
@@ -568,7 +572,8 @@ public class EndToEndTests {
 
     // Link an interaction to the workflow
     LinkInteractionToWorkflowRequest linkInteractionToWorkflowRequest =
-        new LinkInteractionToWorkflowRequest(workflow.getId(), secondInteractionId);
+        new LinkInteractionToWorkflowRequest(
+            workflow.getId(), secondInteractionId, secondConversationId);
 
     workflowService.linkInteractionToWorkflow(
         TenantUtil.DEFAULT_TENANT_ID, linkInteractionToWorkflowRequest, "TEST2");

@@ -417,13 +417,14 @@ public interface WorkflowStore {
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
    * @param interactionId the ID for the interaction
+   * @param conversationId the ID for the conversation the interaction is associated with
    * @param linkedBy the person or system linking the interaction to the workflow
    * @throws InteractionNotFoundException if the interaction could not be found
    * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws ServiceUnavailableException if the interaction could not be linked to the workflow
    */
   void linkInteractionToWorkflow(
-      UUID tenantId, UUID workflowId, UUID interactionId, String linkedBy)
+      UUID tenantId, UUID workflowId, UUID interactionId, String conversationId, String linkedBy)
       throws InteractionNotFoundException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**

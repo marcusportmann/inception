@@ -25,6 +25,7 @@ import digital.inception.operations.exception.DuplicateWorkflowAttributeDefiniti
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.FormDefinitionNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
 import digital.inception.operations.exception.WorkflowAttributeDefinitionNotFoundException;
@@ -43,6 +44,7 @@ import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.Event;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
+import digital.inception.operations.model.FormDefinition;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
@@ -371,6 +373,26 @@ public interface WorkflowService {
    */
   List<WorkflowAttributeDefinition> getRequiredWorkflowAttributeDefinitions(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the start form definition for the workflow definition version.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
+   * @return the start form definition for the workflow definition version
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
+   *     be found
+   * @throws FormDefinitionNotFoundException if the start form definition could not be found
+   * @throws ServiceUnavailableException if the start form definition could not be retrieved for the
+   *     workflow definition version
+   */
+  FormDefinition getStartFormDefinitionForWorkflowDefinition(
+      String workflowDefinitionId, int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionVersionNotFoundException,
+          FormDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Retrieve the workflow.

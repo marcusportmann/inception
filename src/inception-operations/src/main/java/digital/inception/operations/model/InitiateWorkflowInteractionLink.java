@@ -20,9 +20,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -40,18 +39,27 @@ import java.util.UUID;
  */
 @Schema(description = "A workflow interaction link specified when initiating a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"interactionId"})
+@JsonPropertyOrder({"interactionId", "conversationId"})
 @XmlRootElement(
     name = "InitiateWorkflowInteractionLink",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InitiateWorkflowInteractionLink",
     namespace = "https://inception.digital/operations",
-    propOrder = {"interactionId"})
+    propOrder = {"interactionId", "conversationId"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class InitiateWorkflowInteractionLink implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The ID for the conversation the workflow interaction link is associated with. */
+  @Schema(
+      description = "The ID for the conversation the workflow interaction link is associated with", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ConversationId", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  private String conversationId;
 
   /** The ID for the interaction the workflow interaction link is associated with. */
   @Schema(
@@ -60,8 +68,6 @@ public class InitiateWorkflowInteractionLink implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "InteractionId", required = true)
   @NotNull
-  @Id
-  @Column(name = "interaction_id", length = 50, nullable = false)
   private UUID interactionId;
 
   /** Constructs a new {@code InitiateWorkflowInteractionLink}. */
@@ -72,9 +78,21 @@ public class InitiateWorkflowInteractionLink implements Serializable {
    *
    * @param interactionId the ID for the interaction the workflow interaction link is associated
    *     with
+   * @param conversationId the ID for the conversation the workflow interaction link is associated
+   *     with
    */
-  public InitiateWorkflowInteractionLink(UUID interactionId) {
+  public InitiateWorkflowInteractionLink(UUID interactionId, String conversationId) {
     this.interactionId = interactionId;
+    this.conversationId = conversationId;
+  }
+
+  /**
+   * Returns the ID for the conversation the workflow interaction link is associated with.
+   *
+   * @return the ID for the conversation the workflow interaction link is associated with
+   */
+  public String getConversationId() {
+    return conversationId;
   }
 
   /**
@@ -84,6 +102,16 @@ public class InitiateWorkflowInteractionLink implements Serializable {
    */
   public UUID getInteractionId() {
     return interactionId;
+  }
+
+  /**
+   * Set the ID for the conversation the workflow interaction link is associated with.
+   *
+   * @param conversationId the ID for the conversation the workflow interaction link is associated
+   *     with
+   */
+  public void setConversationId(String conversationId) {
+    this.conversationId = conversationId;
   }
 
   /**

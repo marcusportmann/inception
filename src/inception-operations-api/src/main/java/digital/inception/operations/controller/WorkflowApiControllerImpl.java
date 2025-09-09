@@ -26,6 +26,7 @@ import digital.inception.operations.exception.DuplicateWorkflowAttributeDefiniti
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.FormDefinitionNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
 import digital.inception.operations.exception.WorkflowAttributeDefinitionNotFoundException;
@@ -44,6 +45,7 @@ import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.Event;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
+import digital.inception.operations.model.FormDefinition;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
@@ -158,22 +160,13 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void createWorkflowDefinition(
-      String workflowDefinitionCategoryId, WorkflowDefinition workflowDefinition)
+  public void createWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
           WorkflowDefinitionCategoryNotFoundException,
           WorkflowEngineNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
-    if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
-      throw new InvalidArgumentException("workflowDefinitionCategoryId");
-    }
-
-    if (!Objects.equals(workflowDefinitionCategoryId, workflowDefinition.getCategoryId())) {
-      throw new InvalidArgumentException("workflowDefinition.workflowDefinitionCategoryId");
-    }
-
     workflowService.createWorkflowDefinition(workflowDefinition);
   }
 
@@ -235,37 +228,10 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void deleteWorkflowDefinition(
-      String workflowDefinitionCategoryId, String workflowDefinitionId)
+  public void deleteWorkflowDefinition(String workflowDefinitionId)
       throws InvalidArgumentException,
-          WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
-    if (workflowDefinitionCategoryId == null) {
-      throw new InvalidArgumentException("workflowDefinitionCategoryId");
-    }
-
-    try {
-      if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
-        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
-      }
-
-      if (!workflowService.workflowDefinitionExists(
-          workflowDefinitionCategoryId, workflowDefinitionId)) {
-        throw new WorkflowDefinitionNotFoundException(workflowDefinitionId);
-      }
-    } catch (WorkflowDefinitionCategoryNotFoundException | WorkflowDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the workflow definition ("
-              + workflowDefinitionId
-              + ") for the workflow definition category ("
-              + workflowDefinitionCategoryId
-              + ")",
-          e);
-    }
-
     workflowService.deleteWorkflowDefinition(workflowDefinitionId);
   }
 
@@ -279,37 +245,11 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public void deleteWorkflowDefinitionVersion(
-      String workflowDefinitionCategoryId,
-      String workflowDefinitionId,
-      int workflowDefinitionVersion)
+      String workflowDefinitionId, int workflowDefinitionVersion)
       throws InvalidArgumentException,
-          WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException {
-    try {
-      if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
-        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
-      }
-
-      if (!workflowService.workflowDefinitionExists(
-          workflowDefinitionCategoryId, workflowDefinitionId)) {
-        throw new WorkflowDefinitionNotFoundException(workflowDefinitionId);
-      }
-    } catch (WorkflowDefinitionCategoryNotFoundException | WorkflowDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the version ("
-              + workflowDefinitionVersion
-              + ") of the workflow definition ("
-              + workflowDefinitionId
-              + ") under the workflow definition category ("
-              + workflowDefinitionCategoryId
-              + ")",
-          e);
-    }
-
     workflowService.deleteWorkflowDefinitionVersion(
         workflowDefinitionId, workflowDefinitionVersion);
   }
@@ -505,6 +445,17 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public FormDefinition getStartFormDefinitionForWorkflowDefinition(
+      String workflowDefinitionId, int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionVersionNotFoundException,
+          FormDefinitionNotFoundException,
+          ServiceUnavailableException {
+    return workflowService.getStartFormDefinitionForWorkflowDefinition(
+        workflowDefinitionId, workflowDefinitionVersion);
+  }
+
+  @Override
   public Workflow getWorkflow(UUID tenantId, UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
@@ -542,33 +493,10 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public WorkflowDefinition getWorkflowDefinition(
-      String workflowDefinitionCategoryId, String workflowDefinitionId)
+  public WorkflowDefinition getWorkflowDefinition(String workflowDefinitionId)
       throws InvalidArgumentException,
-          WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException {
-    try {
-      if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
-        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
-      }
-
-      if (!workflowService.workflowDefinitionExists(
-          workflowDefinitionCategoryId, workflowDefinitionId)) {
-        throw new WorkflowDefinitionNotFoundException(workflowDefinitionId);
-      }
-    } catch (WorkflowDefinitionCategoryNotFoundException | WorkflowDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the workflow definition ("
-              + workflowDefinitionId
-              + ") under the workflow definition category ("
-              + workflowDefinitionCategoryId
-              + ")",
-          e);
-    }
-
     return workflowService.getWorkflowDefinition(workflowDefinitionId);
   }
 
@@ -596,11 +524,12 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public List<WorkflowDefinitionSummary> getWorkflowDefinitionSummaries(
-      UUID tenantId, String workflowDefinitionCategoryId)
-      throws InvalidArgumentException,
-          WorkflowDefinitionCategoryNotFoundException,
-          ServiceUnavailableException {
+  public List<WorkflowDefinitionSummary>
+      getWorkflowDefinitionSummariesForWorkflowDefinitionCategory(
+          UUID tenantId, String workflowDefinitionCategoryId)
+          throws InvalidArgumentException,
+              WorkflowDefinitionCategoryNotFoundException,
+              ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
@@ -630,37 +559,10 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public WorkflowDefinition getWorkflowDefinitionVersion(
-      String workflowDefinitionCategoryId,
-      String workflowDefinitionId,
-      int workflowDefinitionVersion)
+      String workflowDefinitionId, int workflowDefinitionVersion)
       throws InvalidArgumentException,
-          WorkflowDefinitionCategoryNotFoundException,
-          WorkflowDefinitionNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException {
-    try {
-      if (!workflowService.workflowDefinitionCategoryExists(workflowDefinitionCategoryId)) {
-        throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategoryId);
-      }
-
-      if (!workflowService.workflowDefinitionExists(
-          workflowDefinitionCategoryId, workflowDefinitionId)) {
-        throw new WorkflowDefinitionNotFoundException(workflowDefinitionId);
-      }
-    } catch (WorkflowDefinitionCategoryNotFoundException | WorkflowDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the version ("
-              + workflowDefinitionVersion
-              + ") of the workflow definition ("
-              + workflowDefinitionId
-              + ") under the workflow definition category ("
-              + workflowDefinitionCategoryId
-              + ")",
-          e);
-    }
-
     return workflowService.getWorkflowDefinitionVersion(
         workflowDefinitionId, workflowDefinitionVersion);
   }
@@ -1193,7 +1095,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public void updateWorkflowDefinition(
-      String workflowDefinitionCategoryId,
       String workflowDefinitionId,
       Integer workflowDefinitionVersion,
       WorkflowDefinition workflowDefinition)
@@ -1203,20 +1104,12 @@ public class WorkflowApiControllerImpl extends SecureApiController
           WorkflowEngineNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
-    if (!StringUtils.hasText(workflowDefinitionCategoryId)) {
-      throw new InvalidArgumentException("workflowDefinitionCategoryId");
-    }
-
     if (!StringUtils.hasText(workflowDefinitionId)) {
       throw new InvalidArgumentException("workflowDefinitionId");
     }
 
     if (workflowDefinitionVersion == null) {
       throw new InvalidArgumentException("workflowDefinitionVersion");
-    }
-
-    if (!Objects.equals(workflowDefinitionCategoryId, workflowDefinition.getCategoryId())) {
-      throw new InvalidArgumentException("workflowDefinition.workflowDefinitionCategoryId");
     }
 
     if (!Objects.equals(workflowDefinitionId, workflowDefinition.getId())) {

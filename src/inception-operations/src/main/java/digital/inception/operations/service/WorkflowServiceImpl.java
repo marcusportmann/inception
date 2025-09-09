@@ -26,6 +26,7 @@ import digital.inception.operations.exception.DuplicateWorkflowAttributeDefiniti
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.FormDefinitionNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
 import digital.inception.operations.exception.WorkflowAttributeDefinitionNotFoundException;
@@ -46,6 +47,7 @@ import digital.inception.operations.model.Event;
 import digital.inception.operations.model.EventType;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
+import digital.inception.operations.model.FormDefinition;
 import digital.inception.operations.model.InitiateWorkflowInteractionLink;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
@@ -80,6 +82,7 @@ import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowEngineIds;
+import digital.inception.operations.model.WorkflowFormType;
 import digital.inception.operations.model.WorkflowInteractionLink;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
@@ -848,6 +851,53 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new ServiceUnavailableException(
           "Failed to retrieve the required workflow attribute definitions for the tenant ("
               + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public FormDefinition getStartFormDefinitionForWorkflowDefinition(
+      String workflowDefinitionId, int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionVersionNotFoundException,
+          FormDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (workflowDefinitionId == null) {
+      throw new InvalidArgumentException("workflowDefinitionId");
+    }
+
+    if (workflowDefinitionVersion <= 0) {
+      throw new InvalidArgumentException("workflowDefinitionVersion");
+    }
+
+    try {
+      WorkflowDefinition workflowDefinition =
+          getWorkflowService()
+              .getWorkflowDefinitionVersion(workflowDefinitionId, workflowDefinitionVersion);
+
+      WorkflowEngineConnector workflowEngineConnector =
+          getWorkflowEngineConnector(workflowDefinition.getEngineId());
+
+      Optional<FormDefinition> formDefinitionOptional =
+          workflowEngineConnector.getFormDefinition(
+              workflowDefinition, WorkflowFormType.START_FORM);
+
+      if (formDefinitionOptional.isEmpty()) {
+        throw new FormDefinitionNotFoundException(
+            workflowDefinitionId, workflowDefinitionVersion, WorkflowFormType.START_FORM);
+      }
+
+      return formDefinitionOptional.get();
+
+    } catch (WorkflowDefinitionVersionNotFoundException | FormDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the start form definition for the workflow definition ("
+              + workflowDefinitionId
+              + ") version ("
+              + workflowDefinitionVersion
               + ")",
           e);
     }
@@ -1635,7 +1685,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             initiateWorkflowRequest.getInteractionLinks()) {
           workflow.addInteractionLink(
               new WorkflowInteractionLink(
-                  initiateWorkflowInteractionLink.getInteractionId(), now, initiatedBy));
+                  initiateWorkflowInteractionLink.getInteractionId(),
+                  initiateWorkflowInteractionLink.getConversationId(),
+                  now,
+                  initiatedBy));
         }
       }
 
@@ -1762,6 +1815,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           tenantId,
           linkInteractionToWorkflowRequest.getWorkflowId(),
           linkInteractionToWorkflowRequest.getInteractionId(),
+          linkInteractionToWorkflowRequest.getConversationId(),
           linkedBy);
     } catch (InteractionNotFoundException | WorkflowNotFoundException e) {
       throw e;

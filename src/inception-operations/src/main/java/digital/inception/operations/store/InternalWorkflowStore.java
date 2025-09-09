@@ -1138,7 +1138,7 @@ public class InternalWorkflowStore implements WorkflowStore {
 
   @Override
   public void linkInteractionToWorkflow(
-      UUID tenantId, UUID workflowId, UUID interactionId, String linkedBy)
+      UUID tenantId, UUID workflowId, UUID interactionId, String conversationId, String linkedBy)
       throws InteractionNotFoundException, WorkflowNotFoundException, ServiceUnavailableException {
     try {
       if (workflowInteractionLinkRepository.existsById(
@@ -1155,7 +1155,8 @@ public class InternalWorkflowStore implements WorkflowStore {
       }
 
       workflowInteractionLinkRepository.saveAndFlush(
-          new WorkflowInteractionLink(workflowId, interactionId, OffsetDateTime.now(), linkedBy));
+          new WorkflowInteractionLink(
+              workflowId, interactionId, conversationId, OffsetDateTime.now(), linkedBy));
     } catch (InteractionNotFoundException | WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {

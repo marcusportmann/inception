@@ -1246,6 +1246,10 @@
         remarks="The ID for the interaction the workflow interaction link is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
+      <column name="conversation_id" type="nvarchar(30)"
+        remarks="The ID for the conversation the workflow interaction link is associated with">
+        <constraints nullable="false"/>
+      </column>
       <column name="linked" type="timestamp with time zone"
         remarks="The date and time the interaction was linked to the workflow">
         <constraints nullable="false"/>

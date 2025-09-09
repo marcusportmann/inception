@@ -110,20 +110,11 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void createDocumentDefinition(
-      String documentDefinitionCategoryId, DocumentDefinition documentDefinition)
+  public void createDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionException,
           DocumentDefinitionCategoryNotFoundException,
           ServiceUnavailableException {
-    if (!StringUtils.hasText(documentDefinitionCategoryId)) {
-      throw new InvalidArgumentException("documentDefinitionCategoryId");
-    }
-
-    if (!Objects.equals(documentDefinitionCategoryId, documentDefinition.getCategoryId())) {
-      throw new InvalidArgumentException("documentDefinition.documentDefinitionCategoryId");
-    }
-
     documentService.createDocumentDefinition(documentDefinition);
   }
 
@@ -177,37 +168,10 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void deleteDocumentDefinition(
-      String documentDefinitionCategoryId, String documentDefinitionId)
+  public void deleteDocumentDefinition(String documentDefinitionId)
       throws InvalidArgumentException,
-          DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
-    if (documentDefinitionCategoryId == null) {
-      throw new InvalidArgumentException("documentDefinitionCategoryId");
-    }
-
-    try {
-      if (!documentService.documentDefinitionCategoryExists(documentDefinitionCategoryId)) {
-        throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
-      }
-
-      if (!documentService.documentDefinitionExists(
-          documentDefinitionCategoryId, documentDefinitionId)) {
-        throw new DocumentDefinitionNotFoundException(documentDefinitionId);
-      }
-    } catch (DocumentDefinitionCategoryNotFoundException | DocumentDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the document definition ("
-              + documentDefinitionId
-              + ") for the document definition category ("
-              + documentDefinitionCategoryId
-              + ")",
-          e);
-    }
-
     documentService.deleteDocumentDefinition(documentDefinitionId);
   }
 
@@ -300,33 +264,10 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public DocumentDefinition getDocumentDefinition(
-      String documentDefinitionCategoryId, String documentDefinitionId)
+  public DocumentDefinition getDocumentDefinition(String documentDefinitionId)
       throws InvalidArgumentException,
-          DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
-    try {
-      if (!documentService.documentDefinitionCategoryExists(documentDefinitionCategoryId)) {
-        throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
-      }
-
-      if (!documentService.documentDefinitionExists(
-          documentDefinitionCategoryId, documentDefinitionId)) {
-        throw new DocumentDefinitionNotFoundException(documentDefinitionId);
-      }
-    } catch (DocumentDefinitionCategoryNotFoundException | DocumentDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the document definition ("
-              + documentDefinitionId
-              + ") under the document definition category ("
-              + documentDefinitionCategoryId
-              + ")",
-          e);
-    }
-
     return documentService.getDocumentDefinition(documentDefinitionId);
   }
 
@@ -354,11 +295,12 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public List<DocumentDefinitionSummary> getDocumentDefinitionSummaries(
-      UUID tenantId, String documentDefinitionCategoryId)
-      throws InvalidArgumentException,
-          DocumentDefinitionCategoryNotFoundException,
-          ServiceUnavailableException {
+  public List<DocumentDefinitionSummary>
+      getDocumentDefinitionSummariesForDocumentDefinitionCategory(
+          UUID tenantId, String documentDefinitionCategoryId)
+          throws InvalidArgumentException,
+              DocumentDefinitionCategoryNotFoundException,
+              ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
@@ -503,23 +445,13 @@ public class DocumentApiControllerImpl extends SecureApiController
 
   @Override
   public void updateDocumentDefinition(
-      String documentDefinitionCategoryId,
-      String documentDefinitionId,
-      DocumentDefinition documentDefinition)
+      String documentDefinitionId, DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
-    if (!StringUtils.hasText(documentDefinitionCategoryId)) {
-      throw new InvalidArgumentException("documentDefinitionCategoryId");
-    }
-
     if (!StringUtils.hasText(documentDefinitionId)) {
       throw new InvalidArgumentException("documentDefinitionId");
-    }
-
-    if (!Objects.equals(documentDefinitionCategoryId, documentDefinition.getCategoryId())) {
-      throw new InvalidArgumentException("documentDefinition.documentDefinitionCategoryId");
     }
 
     if (!Objects.equals(documentDefinitionId, documentDefinition.getId())) {

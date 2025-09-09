@@ -25,6 +25,7 @@ import digital.inception.operations.exception.DuplicateWorkflowAttributeDefiniti
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.FormDefinitionNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
 import digital.inception.operations.exception.WorkflowAttributeDefinitionNotFoundException;
@@ -43,6 +44,7 @@ import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.Event;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
+import digital.inception.operations.model.FormDefinition;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
@@ -238,7 +240,6 @@ public interface WorkflowApiController {
   /**
    * Create the workflow definition version.
    *
-   * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinition the workflow definition version
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateWorkflowDefinitionVersionException if the workflow definition version already
@@ -297,19 +298,13 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/workflow-definition-categories/{workflowDefinitionCategoryId}/workflow-definitions",
+      value = "/workflow-definitions",
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createWorkflowDefinition(
-      @Parameter(
-              name = "workflowDefinitionCategoryId",
-              description = "The ID for the workflow definition category",
-              required = true)
-          @PathVariable
-          String workflowDefinitionCategoryId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The workflow definition version to create",
               required = true)
@@ -646,11 +641,8 @@ public interface WorkflowApiController {
   /**
    * Delete all versions of the workflow definition.
    *
-   * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinitionId the ID for the workflow definition
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
-   *     not be found
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
    * @throws ServiceUnavailableException if the workflow definition could not be deleted
    */
@@ -676,8 +668,7 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description =
-                "The workflow definition category or workflow definition could not be found",
+            description = "The workflow definition could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -692,8 +683,7 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value =
-          "/workflow-definition-categories/{workflowDefinitionCategoryId}/workflow-definitions/{workflowDefinitionId}",
+      value = "/workflow-definitions/{workflowDefinitionId}",
       method = RequestMethod.DELETE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -701,19 +691,12 @@ public interface WorkflowApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteWorkflowDefinition(
       @Parameter(
-              name = "workflowDefinitionCategoryId",
-              description = "The ID for the workflow definition category",
-              required = true)
-          @PathVariable
-          String workflowDefinitionCategoryId,
-      @Parameter(
               name = "workflowDefinitionId",
               description = "The ID for the workflow definition",
               required = true)
           @PathVariable
           String workflowDefinitionId)
       throws InvalidArgumentException,
-          WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException;
 
@@ -785,12 +768,9 @@ public interface WorkflowApiController {
   /**
    * Delete the workflow definition version.
    *
-   * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinitionId the ID for the workflow definition
    * @param workflowDefinitionVersion the version of the workflow definition
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
-   *     not be found
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
    * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
    *     be found
@@ -820,8 +800,7 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description =
-                "The workflow definition category or workflow definition version could not be found",
+            description = "The workflow definition version could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -836,20 +815,13 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value =
-          "/workflow-definition-categories/{workflowDefinitionCategoryId}/workflow-definitions/{workflowDefinitionId}/{workflowDefinitionVersion}",
+      value = "/workflow-definitions/{workflowDefinitionId}/{workflowDefinitionVersion}",
       method = RequestMethod.DELETE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteWorkflowDefinitionVersion(
-      @Parameter(
-              name = "workflowDefinitionCategoryId",
-              description = "The ID for the workflow definition category",
-              required = true)
-          @PathVariable
-          String workflowDefinitionCategoryId,
       @Parameter(
               name = "workflowDefinitionId",
               description = "The ID for the workflow definition",
@@ -863,7 +835,6 @@ public interface WorkflowApiController {
           @PathVariable
           int workflowDefinitionVersion)
       throws InvalidArgumentException,
-          WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException;
@@ -1369,6 +1340,81 @@ public interface WorkflowApiController {
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the start form definition for the workflow definition version.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
+   * @return the start form definition for the workflow definition version
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
+   *     be found
+   * @throws FormDefinitionNotFoundException if the start form definition could not be found
+   * @throws ServiceUnavailableException if the start form definition could not be retrieved for the
+   *     workflow definition version
+   */
+  @Operation(
+      summary = "Retrieve the start form definition for the workflow definition version",
+      description = "Retrieve the start form definition for the workflow definition version")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The start form definition was retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow definition or start form definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value =
+          "/workflow-definitions/{workflowDefinitionId}/{workflowDefinitionVersion}/start-form-definition",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  FormDefinition getStartFormDefinitionForWorkflowDefinition(
+      @Parameter(
+              name = "workflowDefinitionId",
+              description = "The ID for the workflow definition",
+              required = true)
+          @PathVariable
+          String workflowDefinitionId,
+      @Parameter(
+              name = "workflowDefinitionVersion",
+              description = "The version of the workflow definition",
+              required = true)
+          @PathVariable
+          int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionVersionNotFoundException,
+          FormDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow.
    *
    * @param tenantId the ID for the tenant
@@ -1562,12 +1608,9 @@ public interface WorkflowApiController {
   /**
    * Retrieve the latest version of the workflow definition.
    *
-   * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinitionId the ID for the workflow definition
    * @return the latest version of the workflow definition
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
-   *     not be found
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
    * @throws ServiceUnavailableException if the latest version of the workflow definition could not
    *     be retrieved
@@ -1596,8 +1639,7 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description =
-                "The workflow definition category or workflow definition could not be found",
+            description = "The workflow definition could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -1612,8 +1654,7 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value =
-          "/workflow-definition-categories/{workflowDefinitionCategoryId}/workflow-definitions/{workflowDefinitionId}",
+      value = "/workflow-definitions/{workflowDefinitionId}",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
@@ -1621,19 +1662,12 @@ public interface WorkflowApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   WorkflowDefinition getWorkflowDefinition(
       @Parameter(
-              name = "workflowDefinitionCategoryId",
-              description = "The ID for the workflow definition category",
-              required = true)
-          @PathVariable
-          String workflowDefinitionCategoryId,
-      @Parameter(
               name = "workflowDefinitionId",
               description = "The ID for the workflow definition",
               required = true)
           @PathVariable
           String workflowDefinitionId)
       throws InvalidArgumentException,
-          WorkflowDefinitionCategoryNotFoundException,
           WorkflowDefinitionNotFoundException,
           ServiceUnavailableException;
 
@@ -1777,8 +1811,10 @@ public interface WorkflowApiController {
    * @throws ServiceUnavailableException if the workflow definition summaries could not be retrieved
    */
   @Operation(
-      summary = "Retrieve the workflow definition summaries",
-      description = "Retrieve the workflow definition summaries")
+      summary =
+          "Retrieve the summaries for the workflow definitions associated with the workflow definition category",
+      description =
+          "Retrieve the summaries for the workflow definitions associated with the workflow definition category")
   @ApiResponses(
       value = {
         @ApiResponse(
@@ -1822,7 +1858,7 @@ public interface WorkflowApiController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  List<WorkflowDefinitionSummary> getWorkflowDefinitionSummaries(
+  List<WorkflowDefinitionSummary> getWorkflowDefinitionSummariesForWorkflowDefinitionCategory(
       @Parameter(
               name = "Tenant-ID",
               description = "The ID for the tenant",
@@ -1845,14 +1881,10 @@ public interface WorkflowApiController {
   /**
    * Retrieve the workflow definition version.
    *
-   * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinitionId the ID for the workflow definition
    * @param workflowDefinitionVersion the version of the workflow definition
    * @return the workflow definition version
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws WorkflowDefinitionCategoryNotFoundException if the workflow definition category could
-   *     not be found
-   * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
    * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
    *     be found
    * @throws ServiceUnavailableException if the workflow definition version could not be retrieved
@@ -1881,8 +1913,7 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description =
-                "The workflow definition category or workflow definition version could not be found",
+            description = "The workflow definition version could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -1897,20 +1928,13 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value =
-          "/workflow-definition-categories/{workflowDefinitionCategoryId}/workflow-definitions/{workflowDefinitionId}/{workflowDefinitionVersion}",
+      value = "/workflow-definitions/{workflowDefinitionId}/{workflowDefinitionVersion}",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   WorkflowDefinition getWorkflowDefinitionVersion(
-      @Parameter(
-              name = "workflowDefinitionCategoryId",
-              description = "The ID for the workflow definition category",
-              required = true)
-          @PathVariable
-          String workflowDefinitionCategoryId,
       @Parameter(
               name = "workflowDefinitionId",
               description = "The ID for the workflow definition",
@@ -1924,8 +1948,6 @@ public interface WorkflowApiController {
           @PathVariable
           int workflowDefinitionVersion)
       throws InvalidArgumentException,
-          WorkflowDefinitionCategoryNotFoundException,
-          WorkflowDefinitionNotFoundException,
           WorkflowDefinitionVersionNotFoundException,
           ServiceUnavailableException;
 
@@ -3533,7 +3555,6 @@ public interface WorkflowApiController {
   /**
    * Update the workflow definition version.
    *
-   * @param workflowDefinitionCategoryId the ID for the workflow definition category
    * @param workflowDefinitionId the ID for the workflow definition
    * @param workflowDefinitionVersion the version of the workflow definition
    * @param workflowDefinition the workflow definition version
@@ -3587,20 +3608,13 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value =
-          "/workflow-definition-categories/{workflowDefinitionCategoryId}/workflow-definitions/{workflowDefinitionId}/{workflowDefinitionVersion}",
+      value = "/workflow-definitions/{workflowDefinitionId}/{workflowDefinitionVersion}",
       method = RequestMethod.PUT,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateWorkflowDefinition(
-      @Parameter(
-              name = "workflowDefinitionCategoryId",
-              description = "The ID for the workflow definition category",
-              required = true)
-          @PathVariable
-          String workflowDefinitionCategoryId,
       @Parameter(
               name = "workflowDefinitionId",
               description = "The ID for the workflow definition",

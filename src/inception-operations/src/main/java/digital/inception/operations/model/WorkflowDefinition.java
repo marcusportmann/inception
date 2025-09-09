@@ -1126,4 +1126,16 @@ public class WorkflowDefinition implements Serializable {
     variableDefinitions.forEach(
         workflowVariableDefinition -> workflowVariableDefinition.setWorkflowDefinition(this));
   }
+
+  /**
+   * Returns whether the workflow definition supports the workflow form type
+   *
+   * @param workflowFormType the workflow form type
+   * @return {@code true} if the workflow definition supports the workflow form type or {@code
+   *     false} otherwise
+   */
+  public boolean supportsWorkflowFormType(WorkflowFormType workflowFormType) {
+    return (supportedWorkflowFormTypes != null)
+        && (supportedWorkflowFormTypes.contains(workflowFormType));
+  }
 }

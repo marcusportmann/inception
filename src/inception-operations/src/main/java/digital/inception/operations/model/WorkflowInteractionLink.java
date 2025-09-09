@@ -52,14 +52,14 @@ import java.util.UUID;
  */
 @Schema(description = "A workflow interaction link")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"interactionId", "linked", "linkedBy"})
+@JsonPropertyOrder({"interactionId", "conversationId", "linked", "linkedBy"})
 @XmlRootElement(
     name = "WorkflowInteractionLink",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowInteractionLink",
     namespace = "https://inception.digital/operations",
-    propOrder = {"interactionId", "linked", "linkedBy"})
+    propOrder = {"interactionId", "conversationId", "linked", "linkedBy"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_interaction_links")
@@ -67,6 +67,17 @@ import java.util.UUID;
 public class WorkflowInteractionLink implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The ID for the conversation the workflow interaction link is associated with. */
+  @Schema(
+      description = "The ID for the conversation the workflow interaction link is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ConversationId", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(name = "conversation_id", length = 30, nullable = false)
+  private String conversationId;
 
   /** The ID for the interaction the workflow interaction link is associated with. */
   @Schema(
@@ -119,13 +130,20 @@ public class WorkflowInteractionLink implements Serializable {
    * @param workflowId the ID for the workflow the workflow interaction link is associated with
    * @param interactionId the ID for the interaction the workflow interaction link is associated
    *     with
+   * @param conversationId the ID for the conversation the workflow interaction link is associated
+   *     with
    * @param linked the date and time the interaction was linked to the workflow
    * @param linkedBy the person or system who linked the interaction to the workflow
    */
   public WorkflowInteractionLink(
-      UUID workflowId, UUID interactionId, OffsetDateTime linked, String linkedBy) {
+      UUID workflowId,
+      UUID interactionId,
+      String conversationId,
+      OffsetDateTime linked,
+      String linkedBy) {
     this.workflowId = workflowId;
     this.interactionId = interactionId;
+    this.conversationId = conversationId;
     this.linked = linked;
     this.linkedBy = linkedBy;
   }
@@ -135,11 +153,15 @@ public class WorkflowInteractionLink implements Serializable {
    *
    * @param interactionId the ID for the interaction the workflow interaction link is associated
    *     with
+   * @param conversationId the ID for the conversation the workflow interaction link is associated
+   *     with
    * @param linked the date and time the interaction was linked to the workflow
    * @param linkedBy the person or system who linked the interaction to the workflow
    */
-  public WorkflowInteractionLink(UUID interactionId, OffsetDateTime linked, String linkedBy) {
+  public WorkflowInteractionLink(
+      UUID interactionId, String conversationId, OffsetDateTime linked, String linkedBy) {
     this.interactionId = interactionId;
+    this.conversationId = conversationId;
     this.linked = linked;
     this.linkedBy = linkedBy;
   }
@@ -168,6 +190,15 @@ public class WorkflowInteractionLink implements Serializable {
 
     return Objects.equals(workflowId, other.workflowId)
         && Objects.equals(interactionId, other.interactionId);
+  }
+
+  /**
+   * Returns the ID for the conversation the workflow interaction link is associated with.
+   *
+   * @return the ID for the conversation the workflow interaction link is associated with
+   */
+  public String getConversationId() {
+    return conversationId;
   }
 
   /**
@@ -206,6 +237,16 @@ public class WorkflowInteractionLink implements Serializable {
   public int hashCode() {
     return ((workflowId == null) ? 0 : workflowId.hashCode())
         + ((interactionId == null) ? 0 : interactionId.hashCode());
+  }
+
+  /**
+   * Set the ID for the conversation the workflow interaction link is associated with.
+   *
+   * @param conversationId the ID for the conversation the workflow interaction link is associated
+   *     with
+   */
+  public void setConversationId(String conversationId) {
+    this.conversationId = conversationId;
   }
 
   /**
