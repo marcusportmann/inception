@@ -65,7 +65,8 @@ import java.util.UUID;
   "name",
   "engineId",
   "documentDefinitions",
-  "supportedWorkflowFormTypes"
+  "supportedWorkflowFormTypes",
+  "permissions"
 })
 @XmlRootElement(
     name = "WorkflowDefinitionSummary",
@@ -81,7 +82,8 @@ import java.util.UUID;
       "name",
       "engineId",
       "documentDefinitions",
-      "supportedWorkflowFormTypes"
+      "supportedWorkflowFormTypes",
+      "permissions"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -114,6 +116,28 @@ public class WorkflowDefinitionSummary implements Serializable {
         updatable = false)
   })
   private final List<WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
+
+  /** The permissions for the workflow definition. */
+  @Schema(description = "The permissions for the workflow definition")
+  @JsonProperty
+  @XmlElementWrapper(name = "Permissions")
+  @XmlElement(name = "Permission")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("roleCode")
+  @JoinColumns({
+    @JoinColumn(
+        name = "definition_id",
+        referencedColumnName = "id",
+        insertable = false,
+        updatable = false),
+    @JoinColumn(
+        name = "definition_version",
+        referencedColumnName = "version",
+        insertable = false,
+        updatable = false)
+  })
+  private final List<WorkflowDefinitionPermission> permissions = new ArrayList<>();
 
   /** The ID for the workflow definition category the workflow definition is associated with. */
   @Schema(
@@ -260,6 +284,15 @@ public class WorkflowDefinitionSummary implements Serializable {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Returns the permissions for the workflow definition.
+   *
+   * @return the permissions for the workflow definition
+   */
+  public List<WorkflowDefinitionPermission> getPermissions() {
+    return permissions;
   }
 
   /**
