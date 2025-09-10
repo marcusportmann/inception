@@ -395,6 +395,26 @@ public interface WorkflowService {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the work form definition for the workflow definition version.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
+   * @return the work form definition for the workflow definition version
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
+   *     be found
+   * @throws FormDefinitionNotFoundException if the work form definition could not be found
+   * @throws ServiceUnavailableException if the work form definition could not be retrieved for the
+   *     workflow definition version
+   */
+  FormDefinition getWorkFormDefinitionForWorkflowDefinition(
+      String workflowDefinitionId, int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionVersionNotFoundException,
+          FormDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow.
    *
    * @param tenantId the ID for the tenant

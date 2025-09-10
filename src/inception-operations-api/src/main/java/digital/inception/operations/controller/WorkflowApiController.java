@@ -1415,6 +1415,81 @@ public interface WorkflowApiController {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the work form definition for the workflow definition version.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @param workflowDefinitionVersion the version of the workflow definition
+   * @return the work form definition for the workflow definition version
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version could not
+   *     be found
+   * @throws FormDefinitionNotFoundException if the work form definition could not be found
+   * @throws ServiceUnavailableException if the work form definition could not be retrieved for the
+   *     workflow definition version
+   */
+  @Operation(
+      summary = "Retrieve the work form definition for the workflow definition version",
+      description = "Retrieve the work form definition for the workflow definition version")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The work form definition was retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow definition or work form definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value =
+          "/workflow-definitions/{workflowDefinitionId}/{workflowDefinitionVersion}/work-form-definition",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  FormDefinition getWorkFormDefinitionForWorkflowDefinition(
+      @Parameter(
+              name = "workflowDefinitionId",
+              description = "The ID for the workflow definition",
+              required = true)
+          @PathVariable
+          String workflowDefinitionId,
+      @Parameter(
+              name = "workflowDefinitionVersion",
+              description = "The version of the workflow definition",
+              required = true)
+          @PathVariable
+          int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionVersionNotFoundException,
+          FormDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Retrieve the workflow.
    *
    * @param tenantId the ID for the tenant

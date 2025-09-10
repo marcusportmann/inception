@@ -904,6 +904,52 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
+  public FormDefinition getWorkFormDefinitionForWorkflowDefinition(
+      String workflowDefinitionId, int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionVersionNotFoundException,
+          FormDefinitionNotFoundException,
+          ServiceUnavailableException {
+    if (workflowDefinitionId == null) {
+      throw new InvalidArgumentException("workflowDefinitionId");
+    }
+
+    if (workflowDefinitionVersion <= 0) {
+      throw new InvalidArgumentException("workflowDefinitionVersion");
+    }
+
+    try {
+      WorkflowDefinition workflowDefinition =
+          getWorkflowService()
+              .getWorkflowDefinitionVersion(workflowDefinitionId, workflowDefinitionVersion);
+
+      WorkflowEngineConnector workflowEngineConnector =
+          getWorkflowEngineConnector(workflowDefinition.getEngineId());
+
+      Optional<FormDefinition> formDefinitionOptional =
+          workflowEngineConnector.getFormDefinition(workflowDefinition, WorkflowFormType.WORK_FORM);
+
+      if (formDefinitionOptional.isEmpty()) {
+        throw new FormDefinitionNotFoundException(
+            workflowDefinitionId, workflowDefinitionVersion, WorkflowFormType.WORK_FORM);
+      }
+
+      return formDefinitionOptional.get();
+
+    } catch (WorkflowDefinitionVersionNotFoundException | FormDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the work form definition for the workflow definition ("
+              + workflowDefinitionId
+              + ") version ("
+              + workflowDefinitionVersion
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public Workflow getWorkflow(UUID tenantId, UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {

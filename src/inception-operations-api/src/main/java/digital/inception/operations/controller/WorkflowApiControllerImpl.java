@@ -456,6 +456,17 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public FormDefinition getWorkFormDefinitionForWorkflowDefinition(
+      String workflowDefinitionId, int workflowDefinitionVersion)
+      throws InvalidArgumentException,
+          WorkflowDefinitionVersionNotFoundException,
+          FormDefinitionNotFoundException,
+          ServiceUnavailableException {
+    return workflowService.getWorkFormDefinitionForWorkflowDefinition(
+        workflowDefinitionId, workflowDefinitionVersion);
+  }
+
+  @Override
   public Workflow getWorkflow(UUID tenantId, UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
