@@ -21,6 +21,8 @@ import io.agroal.api.transaction.TransactionAware;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The {@code TransactionAwareXAResource} class provides a wrapper for a transactional resource,
@@ -33,6 +35,8 @@ import javax.transaction.xa.Xid;
  *     href="https://github.com/agroal/agroal/blob/master/agroal-narayana/src/main/java/io/agroal/narayana/BaseXAResource.java">BaseXAResource.java</a>
  */
 public class TransactionAwareXAResource implements XAResource {
+
+  private static final Logger log = LoggerFactory.getLogger(TransactionAwareXAResource.class);
 
   /** The Agroal transaction aware connection resource. */
   private final TransactionAware transactionAware;
@@ -51,10 +55,31 @@ public class TransactionAwareXAResource implements XAResource {
     this.xaResource = xaResource;
   }
 
+  private static String flagsToString(int flags) {
+    if (flags == 0) {
+      return "NONE";
+    }
+    StringBuilder sb = new StringBuilder();
+    if ((flags & XAResource.TMNOFLAGS) != 0) sb.append("TMNOFLAGS|");
+    if ((flags & XAResource.TMJOIN) != 0) sb.append("TMJOIN|");
+    if ((flags & XAResource.TMRESUME) != 0) sb.append("TMRESUME|");
+    if ((flags & XAResource.TMSUCCESS) != 0) sb.append("TMSUCCESS|");
+    if ((flags & XAResource.TMFAIL) != 0) sb.append("TMFAIL|");
+    if ((flags & XAResource.TMSUSPEND) != 0) sb.append("TMSUSPEND|");
+    if ((flags & XAResource.TMSTARTRSCAN) != 0) sb.append("TMSTARTRSCAN|");
+    if ((flags & XAResource.TMENDRSCAN) != 0) sb.append("TMENDRSCAN|");
+
+    // Trim trailing '|'
+    if (!sb.isEmpty() && sb.charAt(sb.length() - 1) == '|') {
+      sb.setLength(sb.length() - 1);
+    }
+    return sb.toString();
+  }
+
   @Override
   public void commit(Xid xid, boolean onePhase) throws XAException {
     try {
-      transactionAware.transactionBeforeCompletion(true);
+      // transactionAware.transactionBeforeCompletion(true);  // REMOVE
       xaResource.commit(xid, onePhase);
     } catch (XAException e) {
       transactionAware.setFlushOnly();
@@ -73,6 +98,10 @@ public class TransactionAwareXAResource implements XAResource {
 
   @Override
   public void end(Xid xid, int flags) throws XAException {
+    if (log.isDebugEnabled()) {
+      log.debug("XA end   xid={}, flags={}", xid, flagsToString(flags));
+    }
+
     try {
       xaResource.end(xid, flags);
     } catch (XAException e) {
@@ -177,7 +206,7 @@ public class TransactionAwareXAResource implements XAResource {
   @Override
   public void rollback(Xid xid) throws XAException {
     try {
-      transactionAware.transactionBeforeCompletion(false);
+      // transactionAware.transactionBeforeCompletion(false); // REMOVE
       xaResource.rollback(xid);
     } catch (XAException e) {
       transactionAware.setFlushOnly();
@@ -209,9 +238,13 @@ public class TransactionAwareXAResource implements XAResource {
 
   @Override
   public void start(Xid xid, int flags) throws XAException {
+    if (log.isDebugEnabled()) {
+      log.debug("XA start xid={}, flags={}", xid, flagsToString(flags));
+    }
+
     try {
-      transactionAware.transactionStart();
-      xaResource.start(xid, flags);
+      xaResource.start(xid, flags); // start branch first
+      transactionAware.transactionStart(); // then tell the pool
     } catch (XAException e) {
       transactionAware.setFlushOnly();
       throw e;

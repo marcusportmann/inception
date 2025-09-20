@@ -152,29 +152,40 @@ public class NarayanaTransactionIntegration
       // time.
       transactionAware.transactionCheckCallback(this::transactionRunning);
 
-      if (transactionRunning()) {
-        TransactionAwares transactionAwares =
-            (TransactionAwares) transactionSynchronizationRegistry.getResource(key);
-        if (transactionAwares == null) {
-          transactionAwares = new TransactionAwares();
-          transactionSynchronizationRegistry.putResource(key, transactionAwares);
-          transactionSynchronizationRegistry.registerInterposedSynchronization(
-              new InterposedSynchronization(transactionAwares));
-        }
+      if (!transactionRunning()) {
+        // No active JTA TX — nothing else to do; callback above lets the pool probe later.
+        return;
+      }
 
-        // Add and possibly set as primary if this is the first enlistment in this TX.
-        transactionAwares.addAndMaybeSetPrimary(transactionAware);
-        transactionAware.transactionStart();
+      // Get or create the per-transaction holder and register a single interposed sync.
+      TransactionAwares transactionAwares =
+          (TransactionAwares) transactionSynchronizationRegistry.getResource(key);
+      if (transactionAwares == null) {
+        transactionAwares = new TransactionAwares();
+        transactionSynchronizationRegistry.putResource(key, transactionAwares);
+        transactionSynchronizationRegistry.registerInterposedSynchronization(
+            new InterposedSynchronization(transactionAwares));
+      }
 
-        // Enlist (wrap if necessary)
-        final XAResource toEnlist =
-            (xaResource != null)
-                ? new TransactionAwareXAResource(transactionAware, xaResource)
-                : new LocalXAResource(transactionAware);
-        transactionManager.getTransaction().enlistResource(toEnlist);
-      } else {
-        // No active JTA TX: still provide callback so pool can probe TX state.
-        transactionAware.transactionCheckCallback(this::transactionRunning);
+      // Track this handle (and primary if first).
+      transactionAwares.addAndMaybeSetPrimary(transactionAware);
+
+      // IMPORTANT:
+      // Do NOT call transactionAware.transactionStart() here.
+      // The XAResource.start(..) method will invoke it AFTER the RM has actually started the
+      // branch.
+
+      // XA-only enlistment: refuse to proceed without a real XAResource.
+      if (xaResource == null) {
+        throw new SQLException("Expected XAResource from pool for XA enlistment, but got null");
+      }
+
+      // Enlist the wrapped XAResource; XA start/end/prepare/commit will be driven by Narayana.
+      if (!transactionAwares.isEnlisted(transactionAware)) {
+        TransactionAwareXAResource wrapper =
+            new TransactionAwareXAResource(transactionAware, xaResource);
+        transactionManager.getTransaction().enlistResource(wrapper);
+        transactionAwares.rememberEnlisted(transactionAware, wrapper);
       }
     } catch (Throwable e) {
       throw new SQLException(
@@ -183,36 +194,37 @@ public class NarayanaTransactionIntegration
   }
 
   @Override
-  public boolean disassociate(TransactionAware transactionAware) {
-    // Fetch the current TX-scoped set, if any
+  public boolean disassociate(TransactionAware ta) {
+    // Snapshot the per-TX holder (may be null if no TSR entry exists)
     final TransactionAwares transactionAwares =
         (TransactionAwares) transactionSynchronizationRegistry.getResource(key);
 
     if (transactionRunning()) {
+      // Still inside a JTA transaction: NEVER end here; just update our bookkeeping.
       if (transactionAwares != null) {
-        // Still in TX: just detach from the set; do NOT end here.
-        transactionAwares.removeAndReassignPrimaryIfNeeded(transactionAware);
+        transactionAwares.removeAndReassignPrimaryIfNeeded(ta);
         if (transactionAwares.isEmpty()) {
           transactionSynchronizationRegistry.putResource(key, null);
         }
       }
-    } else {
-      // TX is not running. This can mean either:
-      //  (a) there was never a JTA TX for this TA (non-JTA usage), or
-      //  (b) the TX just completed and afterCompletion will (or already did) end it.
-
-      boolean partOfCompletedTx =
-          (transactionAwares != null && transactionAwares.contains(transactionAware));
-      if (!partOfCompletedTx) {
-        // Only end here if this TA is not tracked by the per-TX set
-        try {
-          transactionAware.transactionEnd();
-        } catch (Throwable ignore) {
-          // best-effort; avoid propagating double-close noise
-        }
-      }
-      // If it *was* part of the set, skip: afterCompletion ends it (or already did).
+      return true;
     }
+
+    // No active JTA transaction on this thread.
+    // Two possibilities:
+    //  (a) The handle was part of a TX that just completed (afterCompletion will/has cleaned up).
+    //  (b) The handle was never enlisted in JTA (pure non-JTA usage).
+    //
+    // To avoid racing the TM, DO NOT call transactionEnd() here if there's any chance this TA
+    // was (or still is) associated with a TX lifecycle we don't see anymore.
+    //
+    // If you *must* support explicit non-JTA usage, perform that end in a dedicated non-JTA path
+    // (e.g., your pool’s own close()) rather than here during JTA disassociation.
+
+    // If you still want a best-effort heuristic, you could check:
+    //   boolean wasTracked = (txAwares != null && txAwares.contains(ta));
+    // and only end when !wasTracked. But safest is to avoid ending here entirely.
+
     return true;
   }
 
@@ -305,7 +317,19 @@ public class NarayanaTransactionIntegration
 
     @Override
     public void beforeCompletion() {
-      /* no-op */
+      // beforeCompletion happens while the TX is still active, before RM end/prepare.
+      for (TransactionAware ta : txAwares.snapshot()) {
+        try {
+          ta.transactionBeforeCompletion(true); // outcome unknown; “true” means “attempting commit”
+        } catch (Throwable e) {
+          // signal failure-to-commit path to the pool; Narayana will mark RB
+          try {
+            ta.setFlushOnly();
+          } catch (Throwable ignore) {
+          }
+          log.warn("transactionBeforeCompletion() failed; marking flush-only", e);
+        }
+      }
     }
   }
 
@@ -314,21 +338,27 @@ public class NarayanaTransactionIntegration
    * semantics (no reliance on equals/hashCode of pool objects).
    */
   private static final class TransactionAwares {
+    // Track which handles have already been enlisted in this TX (and the wrapper used).
+    private final java.util.IdentityHashMap<TransactionAware, XAResource> enlisted =
+        new java.util.IdentityHashMap<>();
+
+    // Track all handles in this TX (identity semantics).
     private final Set<TransactionAware> set =
         java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
 
-    // Tracks the primary TransactionAware for this TX (first successfully enlisted).
+    // First successfully enlisted handle becomes "primary".
     private TransactionAware primary;
 
     synchronized void addAndMaybeSetPrimary(TransactionAware ta) {
       boolean added = set.add(ta);
       if (added && primary == null) {
-        primary = ta; // first enlistment becomes primary
+        primary = ta;
       }
     }
 
     synchronized void clear() {
       set.clear();
+      enlisted.clear();
       primary = null;
     }
 
@@ -344,15 +374,27 @@ public class NarayanaTransactionIntegration
       return set.isEmpty();
     }
 
+    synchronized boolean isEnlisted(TransactionAware ta) {
+      return enlisted.containsKey(ta);
+    }
+
+    synchronized void rememberEnlisted(TransactionAware ta, XAResource wrapper) {
+      set.add(ta); // ensure present
+      enlisted.put(ta, wrapper);
+      if (primary == null) {
+        primary = ta;
+      }
+    }
+
     synchronized void removeAndReassignPrimaryIfNeeded(TransactionAware ta) {
       if (!set.remove(ta)) return;
+      enlisted.remove(ta);
       if (ta == primary) {
-        // Promote any remaining element to primary (if present), else clear.
         primary = set.isEmpty() ? null : set.iterator().next();
       }
     }
 
-    synchronized Set<TransactionAware> snapshot() {
+    synchronized java.util.Set<TransactionAware> snapshot() {
       return new java.util.HashSet<>(set);
     }
   }
