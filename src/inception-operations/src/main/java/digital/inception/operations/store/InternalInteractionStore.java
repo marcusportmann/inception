@@ -43,7 +43,6 @@ import digital.inception.operations.persistence.jpa.InteractionAttachmentReposit
 import digital.inception.operations.persistence.jpa.InteractionAttachmentSummaryRepository;
 import digital.inception.operations.persistence.jpa.InteractionNoteRepository;
 import digital.inception.operations.persistence.jpa.InteractionRepository;
-import digital.inception.operations.persistence.jpa.InteractionSummaryRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Predicate;
@@ -93,9 +92,6 @@ public class InternalInteractionStore implements InteractionStore {
   /** The Interaction Repository. */
   private final InteractionRepository interactionRepository;
 
-  /** The Interaction Summary Repository. */
-  private final InteractionSummaryRepository interactionSummaryRepository;
-
   /* Entity Manager */
   @PersistenceContext(unitName = "operations")
   private EntityManager entityManager;
@@ -107,19 +103,16 @@ public class InternalInteractionStore implements InteractionStore {
    * @param interactionAttachmentSummaryRepository the Interaction Attachment Summary Repository
    * @param interactionNoteRepository the Interaction Note Repository
    * @param interactionRepository the Interaction Repository
-   * @param interactionSummaryRepository the Interaction Summary Repository
    */
   public InternalInteractionStore(
       InteractionAttachmentRepository interactionAttachmentRepository,
       InteractionNoteRepository interactionNoteRepository,
       InteractionAttachmentSummaryRepository interactionAttachmentSummaryRepository,
-      InteractionRepository interactionRepository,
-      InteractionSummaryRepository interactionSummaryRepository) {
+      InteractionRepository interactionRepository) {
     this.interactionAttachmentRepository = interactionAttachmentRepository;
     this.interactionNoteRepository = interactionNoteRepository;
     this.interactionAttachmentSummaryRepository = interactionAttachmentSummaryRepository;
     this.interactionRepository = interactionRepository;
-    this.interactionSummaryRepository = interactionSummaryRepository;
   }
 
   @Override
@@ -706,39 +699,11 @@ public class InternalInteractionStore implements InteractionStore {
                 "occurred");
       }
 
+      String filterLike = (filter == null) ? null : "%" + filter.toLowerCase() + "%";
+
       Page<InteractionSummary> interactionSummaryPage =
-          interactionSummaryRepository.findAll(
-              (Specification<InteractionSummary>)
-                  (root, query, criteriaBuilder) -> {
-                    List<Predicate> predicates = new ArrayList<>();
-
-                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
-
-                    predicates.add(
-                        criteriaBuilder.equal(root.get("sourceId"), interactionSourceId));
-
-                    if (status != null) {
-                      predicates.add(criteriaBuilder.equal(root.get("status"), status));
-                    }
-
-                    if (direction != null) {
-                      predicates.add(criteriaBuilder.equal(root.get("direction"), direction));
-                    }
-
-                    if (StringUtils.hasText(filter)) {
-                      predicates.add(
-                          criteriaBuilder.or(
-                              criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("sender")),
-                                  "%" + filter.toLowerCase() + "%"),
-                              criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("subject")),
-                                  "%" + filter.toLowerCase() + "%")));
-                    }
-
-                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                  },
-              pageRequest);
+          interactionRepository.findInteractionSummaries(
+              tenantId, interactionSourceId, status, direction, filterLike, pageRequest);
 
       return new InteractionSummaries(
           tenantId,

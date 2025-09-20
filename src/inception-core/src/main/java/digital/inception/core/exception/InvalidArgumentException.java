@@ -71,7 +71,7 @@ public class InvalidArgumentException extends ServiceException {
   }
 
   /**
-   * Constructs a new <b>InvalidArgumentException</b>.
+   * Constructs a new {@code InvalidArgumentException}.
    *
    * @param parameter the name of the parameter associated with the invalid argument
    * @param message the message for the parameter associated with the invalid argument

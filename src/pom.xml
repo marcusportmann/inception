@@ -112,6 +112,7 @@
     <cxf.version>4.0.2</cxf.version>
     <de.flapdoodle.embed.mongo.version>4.21.0</de.flapdoodle.embed.mongo.version>
     <easymock.version>5.6.0</easymock.version>
+    <excel-streaming-reader.version>5.1.1</excel-streaming-reader.version>
     <flowable.version>7.1.0</flowable.version>
     <freemarker.version>2.3.34</freemarker.version>
     <greenmail.version>2.1.5</greenmail.version>
@@ -138,6 +139,7 @@
     <org.glassfish.jaxb.version>4.0.5</org.glassfish.jaxb.version>
     <postgresql.version>42.7.7</postgresql.version>
     <r2dbc-h2.version>1.0.0.RELEASE</r2dbc-h2.version>
+    <software.amazon.awssdk.s3.version>2.33.9</software.amazon.awssdk.s3.version>
     <spring-shell-starter.version>3.4.1</spring-shell-starter.version>
     <springdoc-openapi.version>2.8.11</springdoc-openapi.version>
     <sun-activation.version>1.2.0</sun-activation.version>
@@ -171,6 +173,11 @@
         <groupId>com.github.librepdf</groupId>
         <artifactId>openpdf</artifactId>
         <version>${openpdf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.pjfanning</groupId>
+        <artifactId>excel-streaming-reader</artifactId>
+        <version>${excel-streaming-reader.version}</version>
       </dependency>
       <dependency>
         <groupId>com.ibm.icu</groupId>
@@ -431,6 +438,11 @@
         <groupId>org.springframework.shell</groupId>
         <artifactId>spring-shell-starter</artifactId>
         <version>${spring-shell-starter.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>s3</artifactId>
+        <version>${software.amazon.awssdk.s3.version}</version>
       </dependency>
 
       <!-- Inception Dependencies -->

@@ -17,12 +17,15 @@
 package digital.inception.operations.persistence.jpa;
 
 import digital.inception.operations.model.Interaction;
+import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionStatus;
+import digital.inception.operations.model.InteractionSummary;
 import jakarta.persistence.LockModeType;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -137,6 +140,72 @@ public interface InteractionRepository
       "select i.sourceId from Interaction i where i.tenantId = :tenantId and i.id = :interactionId")
   Optional<UUID> findInteractionSourceIdByTenantIdAndInteractionId(
       @Param("tenantId") UUID tenantId, @Param("interactionId") UUID interactionId);
+
+  /**
+   * Find the summaries for the interactions matching the specified criteria.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceId the the ID for the interaction source the interactions are
+   *     associated with
+   * @param status the status filter to apply to the interaction summaries
+   * @param direction the direction filter to apply to the interaction summaries, i.e., inbound or
+   *     outbound
+   * @param filterLike the SQL like filter to apply to the interaction summaries
+   * @param pageable the pagination information
+   * @return the summaries for the interactions matching the specified criteria
+   */
+  @Query(
+      "select new digital.inception.operations.model.InteractionSummary("
+          + "  i.id, i.tenantId, i.status, i.sourceId, i.conversationId, i.partyId, i.type, i.direction, "
+          + "  i.sender, i.recipients, i.subject, i.mimeType, i.occurred, i.assigned, i.assignedTo, "
+          + "  (select count(a) from InteractionAttachment a where a.interactionId = i.id), "
+          + "  (select count(n) from InteractionNote n where n.interactionId = i.id)"
+          + ") "
+          + "from Interaction i "
+          + "where i.tenantId = :tenantId "
+          + "and i.sourceId = :interactionSourceId "
+          + "and (:direction is null or i.direction = :direction) "
+          + "and (:status is null or i.status = :status) "
+          + "and (:filterLike is null or lower(i.sender) like :filterLike or lower(i.subject) like :filterLike)")
+  Page<InteractionSummary> findInteractionSummaries(
+      @Param("tenantId") UUID tenantId,
+      @Param("interactionSourceId") UUID interactionSourceId,
+      @Param("status") InteractionStatus status,
+      @Param("direction") InteractionDirection direction,
+      @Param("filterLike") String filterLike,
+      Pageable pageable);
+
+  /**
+   * Find the summaries for the interactions matching the specified criteria.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionSourceId the the ID for the interaction source the interactions are
+   *     associated with
+   * @param status the status filter to apply to the interaction summaries
+   * @param direction the direction filter to apply to the interaction summaries, i.e., inbound or
+   *     outbound
+   * @param filterLike the SQL like filter to apply to the interaction summaries
+   * @param pageable the pagination information
+   * @return the summaries for the interactions matching the specified criteria
+   */
+  @Query(
+      "select new digital.inception.operations.model.InteractionSummary("
+          + "  i.id, i.tenantId, i.status, i.sourceId, i.conversationId, i.partyId, i.type, i.direction, "
+          + "  i.sender, i.recipients, i.subject, i.mimeType, i.occurred, i.assigned, i.assignedTo"
+          + ") "
+          + "from Interaction i "
+          + "where i.tenantId = :tenantId "
+          + "and i.sourceId = :interactionSourceId "
+          + "and (:direction is null or i.direction = :direction) "
+          + "and (:status is null or i.status = :status) "
+          + "and (:filterLike is null or lower(i.sender) like :filterLike or lower(i.subject) like :filterLike)")
+  Page<InteractionSummary> findInteractionSummariesWithoutCounts(
+      @Param("tenantId") UUID tenantId,
+      @Param("interactionSourceId") UUID interactionSourceId,
+      @Param("status") InteractionStatus status,
+      @Param("direction") InteractionDirection direction,
+      @Param("filterLike") String filterLike,
+      Pageable pageable);
 
   /**
    * Find the interactions queued for processing.

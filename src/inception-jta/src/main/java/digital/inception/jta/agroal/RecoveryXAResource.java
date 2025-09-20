@@ -34,9 +34,9 @@ public class RecoveryXAResource implements AutoCloseable, XAResource {
 
   private final ResourceRecoveryFactory resourceRecoveryFactory;
 
-  private XAConnection xaConnection;
+  private volatile XAConnection xaConnection;
 
-  private XAResource xaResource;
+  private volatile XAResource xaResource;
 
   /**
    * Constructs a new {@code RecoveryXAResource}.
@@ -48,7 +48,7 @@ public class RecoveryXAResource implements AutoCloseable, XAResource {
   }
 
   @Override
-  public void close() throws XAException {
+  public synchronized void close() throws XAException {
     try {
       if (xaConnection != null) {
         xaConnection.close();
@@ -64,84 +64,114 @@ public class RecoveryXAResource implements AutoCloseable, XAResource {
 
   @Override
   public void commit(Xid xid, boolean onePhase) throws XAException {
-    xaResource.commit(xid, onePhase);
+    delegateOrThrow().commit(xid, onePhase);
   }
 
   @Override
   public void end(Xid xid, int flags) throws XAException {
-    xaResource.end(xid, flags);
+    delegateOrThrow().end(xid, flags);
   }
 
   @Override
   public void forget(Xid xid) throws XAException {
-    xaResource.forget(xid);
+    delegateOrThrow().forget(xid);
   }
 
   @Override
   public int getTransactionTimeout() throws XAException {
-    return xaResource.getTransactionTimeout();
+    return delegateOrThrow().getTransactionTimeout();
   }
 
   @Override
-  public boolean isSameRM(XAResource xaResource) throws XAException {
-    if (xaResource instanceof RecoveryXAResource) {
-      return this.xaResource.isSameRM(((RecoveryXAResource) xaResource).xaResource);
-    } else {
-      return this.xaResource.isSameRM(xaResource);
+  public boolean isSameRM(XAResource other) throws XAException {
+    XAResource d = delegateOrThrow();
+    if (other instanceof RecoveryXAResource) {
+      XAResource od = ((RecoveryXAResource) other).xaResource;
+      if (od == null) return false;
+      return d.isSameRM(od);
     }
+    return d.isSameRM(other);
   }
 
   @Override
   public int prepare(Xid xid) throws XAException {
-    return xaResource.prepare(xid);
+    return delegateOrThrow().prepare(xid);
   }
 
   @Override
-  public Xid[] recover(int flag) throws XAException {
-    if (flag == TMSTARTRSCAN) {
+  public synchronized Xid[] recover(int flag) throws XAException {
+    // Open on first use OR when a new scan starts. Use bitmask because flags can be combined.
+    boolean startScan = (flag & TMSTARTRSCAN) != 0;
+
+    if (startScan || xaConnection == null || xaResource == null) {
+      // (Re)open a recovery connection if needed
+      closeAndReset(); // ensure we don't leak a previous connection
       try {
         xaConnection = resourceRecoveryFactory.getRecoveryConnection();
-        xaResource = xaConnection.getXAResource();
-      } catch (Throwable e) {
-        if (xaConnection != null) {
-          try {
-            xaConnection.close();
-            xaConnection = null;
-          } catch (Throwable f) {
-            xaConnection = null;
-          }
+        if (xaConnection == null) {
+          throw new XAException(XAException.XAER_RMFAIL);
         }
+        xaResource = xaConnection.getXAResource();
 
+        // NOTE: Critical guard against null from driver
+        if (xaResource == null) {
+          throw new XAException(XAException.XAER_RMFAIL);
+        }
+      } catch (Throwable e) {
+        closeAndReset();
         throw XAExceptionUtil.xaException(
             XAException.XAER_RMFAIL,
-            "Failed to retrieve the recovery XAConnection from the ResourceRecoveryFactory",
+            "Failed to retrieve the recovery XAConnection/XAResource from the ResourceRecoveryFactory",
             e);
       }
     }
 
-    if (xaConnection == null) {
+    // At this point, both must be non-null or we bail out.
+    if (xaResource == null) {
       throw new XAException(XAException.XAER_RMFAIL);
     }
-    Xid[] value = xaResource.recover(flag);
 
-    if (flag == TMENDRSCAN && (value == null || value.length == 0)) {
-      close();
+    Xid[] xids = xaResource.recover(flag);
+
+    // Close when the scan ends. Some TMs may end with END even if XIDs were returned.
+    boolean endScan = (flag & TMENDRSCAN) != 0;
+    if (endScan) {
+      // You can choose to always close on END, or keep your existing optimization:
+      // if (xids == null || xids.length == 0) close();
+      closeAndReset();
     }
-    return value;
+
+    return xids;
   }
 
   @Override
   public void rollback(Xid xid) throws XAException {
-    xaResource.rollback(xid);
+    delegateOrThrow().rollback(xid);
   }
 
   @Override
   public boolean setTransactionTimeout(int seconds) throws XAException {
-    return xaResource.setTransactionTimeout(seconds);
+    return delegateOrThrow().setTransactionTimeout(seconds);
   }
 
   @Override
   public void start(Xid xid, int flags) throws XAException {
-    xaResource.start(xid, flags);
+    delegateOrThrow().start(xid, flags);
+  }
+
+  private synchronized void closeAndReset() {
+    try {
+      if (xaConnection != null) xaConnection.close();
+    } catch (Throwable ignore) {
+      // swallow during quiet close
+    } finally {
+      xaConnection = null;
+      xaResource = null;
+    }
+  }
+
+  private XAResource delegateOrThrow() throws XAException {
+    if (xaResource == null) throw new XAException(XAException.XAER_RMERR);
+    return xaResource;
   }
 }

@@ -24,7 +24,6 @@ import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
-import java.lang.reflect.Constructor;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
@@ -305,11 +304,10 @@ public final class DataSourceUtil {
       Class<?> transactionIntegrationClass =
           Class.forName("digital.inception.jta.agroal.NarayanaTransactionIntegration");
 
-      Constructor<?> transactionIntegrationConstructor =
-          transactionIntegrationClass.getConstructor(ApplicationContext.class);
-
       Object transactionIntegrationObject =
-          transactionIntegrationConstructor.newInstance(applicationContext);
+          applicationContext
+              .getAutowireCapableBeanFactory()
+              .createBean(transactionIntegrationClass);
 
       if (transactionIntegrationObject instanceof TransactionIntegration transactionIntegration) {
         return transactionIntegration;

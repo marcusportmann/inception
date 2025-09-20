@@ -17,8 +17,8 @@
 package digital.inception.scheduler.service;
 
 /**
- * The <b>BackgroundJobExecutor</b> interface defines the interface that must be implemented by all
- * background job executors.
+ * The {@code BackgroundJobExecutor} interface defines the interface that must be implemented by
+ * all background job executors.
  */
 public interface BackgroundJobExecutor {
 

@@ -44,13 +44,18 @@ public final class TransactionUtil {
         return false;
       }
       int status = transaction.getStatus();
-      return ((status != Status.STATUS_UNKNOWN)
-          && (status != Status.STATUS_NO_TRANSACTION)
-          && (status != Status.STATUS_COMMITTED)
-          && (status != Status.STATUS_ROLLEDBACK));
-      // other states are active transaction: ACTIVE, MARKED_ROLLBACK, PREPARING, PREPARED,
-      // COMMITTING, ROLLING_BACK
-    } catch (Exception e) {
+
+      return switch (status) {
+        case Status.STATUS_ACTIVE,
+            Status.STATUS_MARKED_ROLLBACK,
+            Status.STATUS_PREPARING,
+            Status.STATUS_PREPARED,
+            Status.STATUS_COMMITTING,
+            Status.STATUS_ROLLING_BACK ->
+            true;
+        default -> false;
+      };
+    } catch (Throwable e) {
       throw new TransactionSystemException(
           "Failed to check for an existing active JTA transaction", e);
     }

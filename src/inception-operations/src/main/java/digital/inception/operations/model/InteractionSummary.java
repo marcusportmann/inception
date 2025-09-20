@@ -20,13 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.operations.persistence.jpa.RecipientsAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -66,7 +60,9 @@ import java.util.UUID;
   "mimeType",
   "occurred",
   "assigned",
-  "assignedTo"
+  "assignedTo",
+  "attachmentCount",
+  "noteCount"
 })
 @XmlRootElement(name = "InteractionSummary", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -87,11 +83,11 @@ import java.util.UUID;
       "mimeType",
       "occurred",
       "assigned",
-      "assignedTo"
+      "assignedTo",
+      "attachmentCount",
+      "noteCount"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@Entity
-@Table(name = "operations_interactions")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class InteractionSummary implements Serializable {
 
@@ -103,7 +99,6 @@ public class InteractionSummary implements Serializable {
   @XmlElement(name = "Timestamp")
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
-  @Column(name = "assigned")
   private OffsetDateTime assigned;
 
   /** The username for the user the interaction is assigned to. */
@@ -111,15 +106,19 @@ public class InteractionSummary implements Serializable {
   @JsonProperty
   @XmlElement(name = "AssignedTo")
   @Size(min = 1, max = 100)
-  @Column(name = "assigned_to", length = 100)
   private String assignedTo;
+
+  /** The number of interaction attachments associated with the interaction. */
+  @Schema(description = "The number of interaction attachments associated with the interaction")
+  @JsonProperty
+  @XmlElement(name = "AttachmentCount")
+  private Long attachmentCount;
 
   /** The ID for the conversation the interaction is associated with. */
   @Schema(description = "The ID for the conversation the interaction is associated with")
   @JsonProperty
   @XmlElement(name = "ConversationId")
   @Size(min = 1, max = 30)
-  @Column(name = "conversation_id", length = 30)
   private String conversationId;
 
   /** The direction for the interaction, i.e., inbound or outbound. */
@@ -129,7 +128,6 @@ public class InteractionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Direction", required = true)
   @NotNull
-  @Column(name = "direction", nullable = false)
   private InteractionDirection direction;
 
   /** The ID for the interaction. */
@@ -137,8 +135,6 @@ public class InteractionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  @Id
-  @Column(name = "id", nullable = false)
   private UUID id;
 
   /** The mime type for the content for the interaction. */
@@ -148,8 +144,13 @@ public class InteractionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "MimeType", required = true)
   @NotNull
-  @Column(name = "mime_type", nullable = false)
   private InteractionMimeType mimeType;
+
+  /** The number of interaction notes associated with the interaction. */
+  @Schema(description = "The number of interaction notes associated with the interaction")
+  @JsonProperty
+  @XmlElement(name = "NoteCount")
+  private Long noteCount;
 
   /** The date and time the interaction occurred (received if inbound, sent if outbound). */
   @Schema(
@@ -160,14 +161,12 @@ public class InteractionSummary implements Serializable {
   @XmlElement(name = "Occurred", required = true)
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
-  @Column(name = "occurred", nullable = false)
   private OffsetDateTime occurred;
 
   /** The ID for the party the interaction is associated with. */
   @Schema(description = "The ID for the party the interaction is associated with")
   @JsonProperty
   @XmlElement(name = "PartyId")
-  @Column(name = "party_id", nullable = false)
   private UUID partyId;
 
   /**
@@ -181,9 +180,7 @@ public class InteractionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Recipients", required = true)
   @XmlElement(name = "Recipient", required = true)
-  @Convert(converter = RecipientsAttributeConverter.class)
   @NotNull
-  @Column(name = "recipients", length = 2000, nullable = false)
   private List<String> recipients;
 
   /**
@@ -198,7 +195,6 @@ public class InteractionSummary implements Serializable {
   @XmlElement(name = "Sender", required = true)
   @NotNull
   @Size(min = 1, max = 255)
-  @Column(name = "sender", length = 255, nullable = false)
   private String sender;
 
   /** The ID for the interaction source the interaction is associated with. */
@@ -209,7 +205,6 @@ public class InteractionSummary implements Serializable {
   @XmlElement(name = "SourceId", required = true)
   @NotNull
   @Size(min = 1, max = 50)
-  @Column(name = "source_id", length = 50, nullable = false)
   private UUID sourceId;
 
   /** The status of the interaction. */
@@ -219,7 +214,6 @@ public class InteractionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
-  @Column(name = "status", nullable = false)
   private InteractionStatus status;
 
   /** The subject for the interaction. */
@@ -229,7 +223,6 @@ public class InteractionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Subject", required = true)
   @Size(max = 2000)
-  @Column(name = "subject", length = 2000, nullable = false)
   private String subject;
 
   /** The ID for the tenant the interaction is associated with. */
@@ -239,7 +232,6 @@ public class InteractionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
   @NotNull
-  @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
   /** The interaction type. */
@@ -247,8 +239,125 @@ public class InteractionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(name = "type", nullable = false)
   private InteractionType type;
+
+  /**
+   * Constructs a new {@code InteractionSummary}.
+   *
+   * @param id the ID for the interaction
+   * @param tenantId the ID for the tenant the interaction is associated with
+   * @param status the status of the interaction
+   * @param sourceId the ID for the interaction source the interaction is associated with
+   * @param conversationId the ID for the conversation the interaction is associated with
+   * @param partyId the ID for the party the interaction is associated with
+   * @param type the interaction type
+   * @param direction the direction for the interaction, i.e., inbound or outbound
+   * @param sender the identifier representing who the interaction is from, e.g. an email address, a
+   *     mobile number, etc
+   * @param recipients the identifiers representing the recipients for the interaction, e.g. email
+   *     addresses, mobile numbers, etc
+   * @param subject the subject for the interaction
+   * @param mimeType the mime type for the content for the interaction
+   * @param occurred the date and time the interaction occurred (received if inbound, sent if
+   *     outbound)
+   * @param assigned the date and time the interaction was assigned
+   * @param assignedTo the date and time the interaction was assigned
+   * @param attachmentCount the number of interaction attachments associated with the interaction
+   * @param noteCount the number of interaction notes associated with the interaction
+   */
+  public InteractionSummary(
+      UUID id,
+      UUID tenantId,
+      InteractionStatus status,
+      UUID sourceId,
+      String conversationId,
+      UUID partyId,
+      InteractionType type,
+      InteractionDirection direction,
+      String sender,
+      List<String> recipients,
+      String subject,
+      InteractionMimeType mimeType,
+      OffsetDateTime occurred,
+      OffsetDateTime assigned,
+      String assignedTo,
+      long attachmentCount,
+      long noteCount) {
+    this.id = id;
+    this.tenantId = tenantId;
+    this.status = status;
+    this.sourceId = sourceId;
+    this.conversationId = conversationId;
+    this.partyId = partyId;
+    this.type = type;
+    this.direction = direction;
+    this.sender = sender;
+    this.recipients = recipients;
+    this.subject = subject;
+    this.mimeType = mimeType;
+    this.occurred = occurred;
+    this.assigned = assigned;
+    this.assignedTo = assignedTo;
+    this.attachmentCount = attachmentCount;
+    this.noteCount = noteCount;
+  }
+
+  /**
+   * Constructs a new {@code InteractionSummary}.
+   *
+   * @param id the ID for the interaction
+   * @param tenantId the ID for the tenant the interaction is associated with
+   * @param status the status of the interaction
+   * @param sourceId the ID for the interaction source the interaction is associated with
+   * @param conversationId the ID for the conversation the interaction is associated with
+   * @param partyId the ID for the party the interaction is associated with
+   * @param type the interaction type
+   * @param direction the direction for the interaction, i.e., inbound or outbound
+   * @param sender the identifier representing who the interaction is from, e.g. an email address, a
+   *     mobile number, etc
+   * @param recipients the identifiers representing the recipients for the interaction, e.g. email
+   *     addresses, mobile numbers, etc
+   * @param subject the subject for the interaction
+   * @param mimeType the mime type for the content for the interaction
+   * @param occurred the date and time the interaction occurred (received if inbound, sent if
+   *     outbound)
+   * @param assigned the date and time the interaction was assigned
+   * @param assignedTo the date and time the interaction was assigned
+   */
+  public InteractionSummary(
+      UUID id,
+      UUID tenantId,
+      InteractionStatus status,
+      UUID sourceId,
+      String conversationId,
+      UUID partyId,
+      InteractionType type,
+      InteractionDirection direction,
+      String sender,
+      List<String> recipients,
+      String subject,
+      InteractionMimeType mimeType,
+      OffsetDateTime occurred,
+      OffsetDateTime assigned,
+      String assignedTo) {
+    this.id = id;
+    this.tenantId = tenantId;
+    this.status = status;
+    this.sourceId = sourceId;
+    this.conversationId = conversationId;
+    this.partyId = partyId;
+    this.type = type;
+    this.direction = direction;
+    this.sender = sender;
+    this.recipients = recipients;
+    this.subject = subject;
+    this.mimeType = mimeType;
+    this.occurred = occurred;
+    this.assigned = assigned;
+    this.assignedTo = assignedTo;
+  }
+
+
 
   /** Constructs a new {@code InteractionSummary}. */
   public InteractionSummary() {}
@@ -297,6 +406,15 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
+   * Returns the number of interaction attachments associated with the interaction.
+   *
+   * @return the number of interaction attachments associated with the interaction
+   */
+  public Long getAttachmentCount() {
+    return attachmentCount;
+  }
+
+  /**
    * Returns the ID for the conversation the interaction is associated with.
    *
    * @return the ID for the conversation the interaction is associated with
@@ -330,6 +448,15 @@ public class InteractionSummary implements Serializable {
    */
   public InteractionMimeType getMimeType() {
     return mimeType;
+  }
+
+  /**
+   * Returns the number of interaction notes associated with the interaction.
+   *
+   * @return the number of interaction notes associated with the interaction
+   */
+  public Long getNoteCount() {
+    return noteCount;
   }
 
   /**

@@ -21,36 +21,53 @@ import com.arjuna.ats.internal.jta.recovery.arjunacore.XARecoveryModule;
 import com.arjuna.ats.jta.recovery.XAResourceRecoveryHelper;
 import digital.inception.jta.util.TransactionUtil;
 import io.agroal.api.transaction.TransactionAware;
+import jakarta.annotation.PreDestroy;
 import jakarta.transaction.Synchronization;
 import jakarta.transaction.TransactionManager;
 import jakarta.transaction.TransactionSynchronizationRegistry;
 import java.sql.SQLException;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.transaction.xa.XAResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 /**
- * The {@code NarayanaTransactionIntegration} class.
+ * The {@code NarayanaTransactionIntegration} class provides an Agroal {@code
+ * TransactionIntegration} implementation that tracks a "primary" TransactionAware per JTA
+ * transaction.
  *
  * @author Marcus Portmann
  */
+@Component
 public class NarayanaTransactionIntegration
     implements io.agroal.api.transaction.TransactionIntegration {
 
-  private static final ConcurrentMap<ResourceRecoveryFactory, XAResourceRecoveryHelperImpl>
-      xaResourceRecoveryHelperImplCache = new ConcurrentHashMap<>();
+  private static final Logger log = LoggerFactory.getLogger(NarayanaTransactionIntegration.class);
 
-  // In order to construct a UID that is globally unique, simply pair a UID with an InetAddress.
+  /**
+   * Stable key used to store per-transaction state in the TSR.
+   *
+   * <p>The TransactionSynchronizationRegistry (TSR) is per-transaction storage, not a global map.
+   * This key is just the name under which this bean stores its value inside each active
+   * transaction’s registry. So even with a single Spring bean, there can be hundreds of concurrent
+   * TSR entries—one per active JTA transaction—all using the same key object but living in
+   * different transaction scopes.
+   */
   private final UUID key = UUID.randomUUID();
 
   private final RecoveryManager recoveryManager;
-
   private final TransactionManager transactionManager;
-
   private final TransactionSynchronizationRegistry transactionSynchronizationRegistry;
+
+  private final ConcurrentMap<ResourceRecoveryFactory, XAResourceRecoveryHelperImpl>
+      xaResourceRecoveryHelperImplCache = new ConcurrentHashMap<>();
 
   /**
    * Constructs a new {@code NarayanaTransactionIntegration}.
@@ -85,6 +102,7 @@ public class NarayanaTransactionIntegration
    *
    * @param applicationContext the Spring application context
    */
+  @Autowired
   public NarayanaTransactionIntegration(ApplicationContext applicationContext) {
     try {
       this.transactionManager =
@@ -103,10 +121,15 @@ public class NarayanaTransactionIntegration
 
   @Override
   public void addResourceRecoveryFactory(ResourceRecoveryFactory resourceRecoveryFactory) {
+    if (recoveryManager == null) {
+      throw new IllegalStateException(
+          "RecoveryManager is not configured. Use the constructor that provides a RecoveryManager or the Spring-bootstrapped constructor.");
+    }
+
     XARecoveryModule xaRecoveryModule =
         (XARecoveryModule)
             recoveryManager.getModules().stream()
-                .filter(recoveryModule -> recoveryModule instanceof XARecoveryModule)
+                .filter(m -> m instanceof XARecoveryModule)
                 .findFirst()
                 .orElse(null);
 
@@ -125,99 +148,221 @@ public class NarayanaTransactionIntegration
   public void associate(TransactionAware transactionAware, XAResource xaResource)
       throws SQLException {
     try {
-      if (transactionRunning()) {
-        if (transactionSynchronizationRegistry.getResource(key) == null) {
-          transactionSynchronizationRegistry.registerInterposedSynchronization(
-              new InterposedSynchronization(transactionAware));
-          transactionSynchronizationRegistry.putResource(key, transactionAware);
-
-          XAResource xaResourceToEnlist;
-          if (xaResource != null) {
-            xaResourceToEnlist = new TransactionAwareXAResource(transactionAware, xaResource);
-          } else {
-            xaResourceToEnlist = new LocalXAResource(transactionAware);
-          }
-          transactionManager.getTransaction().enlistResource(xaResourceToEnlist);
-        } else {
-          transactionAware.transactionStart();
-        }
-      }
+      // Always provide the TX liveness callback so Agroal can re-check transaction state at any
+      // time.
       transactionAware.transactionCheckCallback(this::transactionRunning);
-    } catch (Exception e) {
-      throw new SQLException("Failed to associate the connection with an existing transaction", e);
+
+      if (transactionRunning()) {
+        TransactionAwares transactionAwares =
+            (TransactionAwares) transactionSynchronizationRegistry.getResource(key);
+        if (transactionAwares == null) {
+          transactionAwares = new TransactionAwares();
+          transactionSynchronizationRegistry.putResource(key, transactionAwares);
+          transactionSynchronizationRegistry.registerInterposedSynchronization(
+              new InterposedSynchronization(transactionAwares));
+        }
+
+        // Add and possibly set as primary if this is the first enlistment in this TX.
+        transactionAwares.addAndMaybeSetPrimary(transactionAware);
+        transactionAware.transactionStart();
+
+        // Enlist (wrap if necessary)
+        final XAResource toEnlist =
+            (xaResource != null)
+                ? new TransactionAwareXAResource(transactionAware, xaResource)
+                : new LocalXAResource(transactionAware);
+        transactionManager.getTransaction().enlistResource(toEnlist);
+      } else {
+        // No active JTA TX: still provide callback so pool can probe TX state.
+        transactionAware.transactionCheckCallback(this::transactionRunning);
+      }
+    } catch (Throwable e) {
+      throw new SQLException(
+          "Failed to associate the TransactionAware resource with the current JTA transaction", e);
     }
   }
 
   @Override
   public boolean disassociate(TransactionAware transactionAware) {
-    if (transactionRunning()) {
-      transactionSynchronizationRegistry.putResource(key, null);
-    }
+    // Fetch the current TX-scoped set, if any
+    final TransactionAwares transactionAwares =
+        (TransactionAwares) transactionSynchronizationRegistry.getResource(key);
 
+    if (transactionRunning()) {
+      if (transactionAwares != null) {
+        // Still in TX: just detach from the set; do NOT end here.
+        transactionAwares.removeAndReassignPrimaryIfNeeded(transactionAware);
+        if (transactionAwares.isEmpty()) {
+          transactionSynchronizationRegistry.putResource(key, null);
+        }
+      }
+    } else {
+      // TX is not running. This can mean either:
+      //  (a) there was never a JTA TX for this TA (non-JTA usage), or
+      //  (b) the TX just completed and afterCompletion will (or already did) end it.
+
+      boolean partOfCompletedTx =
+          (transactionAwares != null && transactionAwares.contains(transactionAware));
+      if (!partOfCompletedTx) {
+        // Only end here if this TA is not tracked by the per-TX set
+        try {
+          transactionAware.transactionEnd();
+        } catch (Throwable ignore) {
+          // best-effort; avoid propagating double-close noise
+        }
+      }
+      // If it *was* part of the set, skip: afterCompletion ends it (or already did).
+    }
     return true;
   }
 
   @Override
   public TransactionAware getTransactionAware() {
-    if (transactionRunning()) {
-      return (TransactionAware) transactionSynchronizationRegistry.getResource(key);
-    }
-    return null;
+    if (!transactionRunning()) return null;
+    TransactionAwares transactionAwares =
+        (TransactionAwares) transactionSynchronizationRegistry.getResource(key);
+    return (transactionAwares == null) ? null : transactionAwares.getPrimary();
   }
 
   @Override
   public void removeResourceRecoveryFactory(ResourceRecoveryFactory resourceRecoveryFactory) {
-    XARecoveryModule xaRecoveryModule =
+    if (recoveryManager == null) {
+      throw new IllegalStateException(
+          "RecoveryManager is not configured. Use the constructor that provides a RecoveryManager or the Spring-bootstrapped constructor.");
+    }
+
+    final XAResourceRecoveryHelper helper =
+        xaResourceRecoveryHelperImplCache.remove(resourceRecoveryFactory);
+    if (helper == null) return;
+
+    final XARecoveryModule xaRecoveryModule =
         (XARecoveryModule)
             recoveryManager.getModules().stream()
-                .filter(recoveryModule -> recoveryModule instanceof XARecoveryModule)
+                .filter(m -> m instanceof XARecoveryModule)
+                .findFirst()
+                .orElseThrow(
+                    () ->
+                        new IllegalStateException(
+                            "Failed to retrieve the XARecoveryModule from the Narayana Recovery Manager"));
+    xaRecoveryModule.removeXAResourceRecoveryHelper(helper);
+  }
+
+  /** Shutdown the Narayana Transaction Integration. */
+  @PreDestroy
+  public void shutdown() {
+    log.info("Shutting down the Narayana Transaction Integration");
+
+    if (recoveryManager == null) {
+      xaResourceRecoveryHelperImplCache.clear();
+      return;
+    }
+
+    final XARecoveryModule xaRecoveryModule =
+        (XARecoveryModule)
+            recoveryManager.getModules().stream()
+                .filter(m -> m instanceof XARecoveryModule)
                 .findFirst()
                 .orElse(null);
 
-    if (xaRecoveryModule == null) {
-      throw new IllegalStateException(
-          "Failed to retrieve the XARecoveryModule from the Narayana Recovery Manager");
+    if (xaRecoveryModule != null) {
+      for (XAResourceRecoveryHelperImpl helper : xaResourceRecoveryHelperImplCache.values()) {
+        try {
+          xaRecoveryModule.removeXAResourceRecoveryHelper(helper);
+        } catch (Throwable t) {
+          log.warn("Failed to remove the XAResourceRecoveryHelper during shutdown; continuing", t);
+        }
+      }
     }
-
-    xaRecoveryModule.removeXAResourceRecoveryHelper(
-        xaResourceRecoveryHelperImplCache.remove(resourceRecoveryFactory));
+    xaResourceRecoveryHelperImplCache.clear();
   }
 
   private boolean transactionRunning() {
     return TransactionUtil.transactionExists(transactionManager);
   }
 
+  /** Interposed synchronization that ends all enlisted TransactionAwares for the TX. */
   private static class InterposedSynchronization implements Synchronization {
+    private final TransactionAwares txAwares;
 
-    private final TransactionAware transactionAware;
-
-    InterposedSynchronization(TransactionAware transactionAware) {
-      this.transactionAware = transactionAware;
+    InterposedSynchronization(TransactionAwares txAwares) {
+      this.txAwares = txAwares;
     }
 
+    @Override
     public void afterCompletion(int status) {
-      try {
-        transactionAware.transactionEnd();
-      } catch (Throwable ignored) {
+      if (txAwares == null) return; // defensive
+
+      for (TransactionAware ta : txAwares.snapshot()) {
+        try {
+          ta.transactionEnd();
+        } catch (Throwable e) {
+          log.warn("Failed to end transaction-aware after completion; continuing", e);
+        }
       }
+      txAwares.clear();
+      // DO NOT access TSR here; transaction is no longer associated.
     }
 
-    public void beforeCompletion() {}
+    @Override
+    public void beforeCompletion() {
+      /* no-op */
+    }
   }
 
   /**
-   * The {@code XAResourceRecoveryImpl} class provides an implementation of the
-   * XAResourceRecoveryHelper interface.
-   *
-   * @author Marcus Portmann
+   * Per-transaction holder of enlisted TransactionAwares, with a tracked "primary". Uses identity
+   * semantics (no reliance on equals/hashCode of pool objects).
    */
-  private static class XAResourceRecoveryHelperImpl implements XAResourceRecoveryHelper {
+  private static final class TransactionAwares {
+    private final Set<TransactionAware> set =
+        java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
 
+    // Tracks the primary TransactionAware for this TX (first successfully enlisted).
+    private TransactionAware primary;
+
+    synchronized void addAndMaybeSetPrimary(TransactionAware ta) {
+      boolean added = set.add(ta);
+      if (added && primary == null) {
+        primary = ta; // first enlistment becomes primary
+      }
+    }
+
+    synchronized void clear() {
+      set.clear();
+      primary = null;
+    }
+
+    synchronized boolean contains(TransactionAware ta) {
+      return set.contains(ta);
+    }
+
+    synchronized TransactionAware getPrimary() {
+      return primary;
+    }
+
+    synchronized boolean isEmpty() {
+      return set.isEmpty();
+    }
+
+    synchronized void removeAndReassignPrimaryIfNeeded(TransactionAware ta) {
+      if (!set.remove(ta)) return;
+      if (ta == primary) {
+        // Promote any remaining element to primary (if present), else clear.
+        primary = set.isEmpty() ? null : set.iterator().next();
+      }
+    }
+
+    synchronized Set<TransactionAware> snapshot() {
+      return new java.util.HashSet<>(set);
+    }
+  }
+
+  /** Minimal helper wrapper for Narayana's recovery SPI. */
+  private static class XAResourceRecoveryHelperImpl implements XAResourceRecoveryHelper {
     private final XAResource[] xaResources;
 
-    public XAResourceRecoveryHelperImpl(XAResource xaResource) {
-      this.xaResources = new XAResource[1];
-      this.xaResources[0] = xaResource;
+    XAResourceRecoveryHelperImpl(XAResource xaResource) {
+      this.xaResources = new XAResource[] {xaResource};
     }
 
     @Override

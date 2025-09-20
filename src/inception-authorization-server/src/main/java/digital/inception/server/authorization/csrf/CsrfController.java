@@ -27,7 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/** The <b>CsrfController</b> class implements the CSRF token endpoint. */
+/** The {@code CsrfController} class implements the CSRF token endpoint. */
 @Controller
 @RequestMapping("csrf")
 public class CsrfController {
@@ -36,7 +36,7 @@ public class CsrfController {
   private final Bucket tokensIssuedRateLimitBucket;
 
   /**
-   * Constructs a new <b>CsrfController</b>.
+   * Constructs a new {@code CsrfController}.
    *
    * @param tokensIssuedPerSecond the number of tokens that can be issued per second
    */

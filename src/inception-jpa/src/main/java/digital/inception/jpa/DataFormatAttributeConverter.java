@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package digital.inception.operations.persistence.jpa;
+package digital.inception.jpa;
 
-import digital.inception.operations.model.InteractionSummary;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import digital.inception.core.data.DataFormat;
+import jakarta.persistence.Converter;
 
 /**
- * The {@code InteractionSummaryRepository} interface declares the persistence for the {@code
- * InteractionSummary} domain type.
+ * The {@code DataFormatAttributeConverter} class implements the custom JPA attribute converter for
+ * the {@code DataFormat} enumeration.
  *
  * @author Marcus Portmann
  */
-public interface InteractionSummaryRepository
-    extends JpaRepository<InteractionSummary, String>,
-        JpaSpecificationExecutor<InteractionSummary> {}
+@Converter(autoApply = true)
+public class DataFormatAttributeConverter extends AbstractCodeEnumAttributeConverter<DataFormat> {
+
+  /** Constructs a new {@code DataFormatConverter}. */
+  public DataFormatAttributeConverter() {
+    super(DataFormat.class);
+  }
+}
