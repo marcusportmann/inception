@@ -67,17 +67,20 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   }
 
   @Override
-  public Optional<FormDefinition> getFormDefinition(WorkflowDefinition workflowDefinition,
-      WorkflowFormType workflowFormType) throws WorkflowEngineConnectorException {
+  public Optional<FormDefinition> getFormDefinition(
+      WorkflowDefinition workflowDefinition, WorkflowFormType workflowFormType)
+      throws WorkflowEngineConnectorException {
     try {
       throw new RuntimeException("Not Implemented");
     } catch (Throwable e) {
       throw new WorkflowEngineConnectorException(
           "Failed to retrieve the form definition for the workflow form type ("
-          + workflowFormType
-          + ") for the workflow definition ("
-          + workflowDefinition.getId()
-          + ") version (" + workflowDefinition.getVersion() + ")",
+              + workflowFormType
+              + ") for the workflow definition ("
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
+              + ")",
           e);
     }
   }
@@ -110,21 +113,24 @@ public class FlowableEmbeddedWorkflowEngineConnector extends AbstractWorkflowEng
   }
 
   @Override
-  public WorkflowStatus getWorkflowStatus(WorkflowDefinition workflowDefinition, UUID tenantId,
-      UUID workflowId, String engineInstanceId) throws WorkflowEngineConnectorException {
+  public WorkflowStatus getWorkflowStatus(
+      WorkflowDefinition workflowDefinition,
+      UUID tenantId,
+      UUID workflowId,
+      String engineInstanceId)
+      throws WorkflowEngineConnectorException {
     try {
       throw new RuntimeException("Not Implemented");
     } catch (Throwable e) {
       throw new WorkflowEngineConnectorException(
           "Failed to retrieve the status for the workflow ("
-          + workflowId
-          + ") for the tenant ("
-          + tenantId
-          + ")",
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
           e);
     }
   }
-
 
   @Override
   public void processWorkflowDocumentEvent(

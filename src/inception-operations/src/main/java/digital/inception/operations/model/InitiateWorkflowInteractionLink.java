@@ -54,7 +54,8 @@ public class InitiateWorkflowInteractionLink implements Serializable {
 
   /** The ID for the conversation the workflow interaction link is associated with. */
   @Schema(
-      description = "The ID for the conversation the workflow interaction link is associated with", requiredMode = Schema.RequiredMode.REQUIRED)
+      description = "The ID for the conversation the workflow interaction link is associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "ConversationId", required = true)
   @NotNull

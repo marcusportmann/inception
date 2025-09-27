@@ -728,6 +728,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-template</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-test</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -805,6 +810,7 @@
     <module>inception-sms</module>
     <module>inception-sms-api</module>
     <module>inception-sms-ws</module>
+    <module>inception-template</module>
     <module>inception-test</module>
     <module>inception-test-archunit</module>
     <module>inception-web</module>

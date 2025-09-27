@@ -30,7 +30,6 @@ import digital.inception.operations.model.EventStatus;
 import digital.inception.operations.model.EventType;
 import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.WorkflowDefinition;
-import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.persistence.jpa.EventRepository;
 import jakarta.persistence.EntityManager;

@@ -278,6 +278,7 @@ public class WorkflowServiceTests {
         new DocumentAttributeDefinition(
             "test_document_attribute_code",
             "Test Document Attribute",
+            "Test Document Attribute Description",
             true,
             null,
             TenantUtil.DEFAULT_TENANT_ID);
@@ -314,6 +315,7 @@ public class WorkflowServiceTests {
         new WorkflowAttributeDefinition(
             "test_workflow_attribute_code",
             "Test Workflow Attribute",
+            "Test Workflow Attribute Description",
             true,
             null,
             TenantUtil.DEFAULT_TENANT_ID);
@@ -937,6 +939,7 @@ public class WorkflowServiceTests {
         new WorkflowAttributeDefinition(
             "test_workflow_attribute_code",
             "Test Workflow Attribute",
+            "Test Workflow Attribute Description",
             true,
             null,
             TenantUtil.DEFAULT_TENANT_ID);

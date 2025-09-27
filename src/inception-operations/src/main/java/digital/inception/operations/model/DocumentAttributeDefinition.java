@@ -93,6 +93,16 @@ public class DocumentAttributeDefinition implements Serializable {
   @Column(name = "document_definition_id", length = 50)
   private String documentDefinitionId;
 
+  /** The name of the document attribute. */
+  @Schema(
+      description = "The name of the document attribute",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "name", length = 100, nullable = false)
+  private String name;
+
   /** Is the document attribute required? */
   @Schema(
       description = "Is the document attribute required",
@@ -117,6 +127,7 @@ public class DocumentAttributeDefinition implements Serializable {
    * Constructs a new {@code DocumentAttributeDefinition}.
    *
    * @param code the code for the document attribute
+   * @param name the name of the document attribute
    * @param description the description for the document attribute
    * @param required is the document attribute required
    * @param documentDefinitionId the ID for the document definition the document attribute
@@ -125,11 +136,13 @@ public class DocumentAttributeDefinition implements Serializable {
    */
   public DocumentAttributeDefinition(
       String code,
+      String name,
       String description,
       boolean required,
       String documentDefinitionId,
       UUID tenantId) {
     this.code = code;
+    this.name = name;
     this.description = description;
     this.required = required;
     this.documentDefinitionId = documentDefinitionId;
@@ -189,6 +202,15 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
+   * Returns the name of the document attribute.
+   *
+   * @return the name of the document attribute
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
    * Returns the ID for the tenant the document attribute definition is specific to.
    *
    * @return the ID for the tenant the document attribute definition is specific to
@@ -242,6 +264,15 @@ public class DocumentAttributeDefinition implements Serializable {
    */
   public void setDocumentDefinitionId(String documentDefinitionId) {
     this.documentDefinitionId = documentDefinitionId;
+  }
+
+  /**
+   * Set the name of the document attribute.
+   *
+   * @param name the name of the document attribute
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

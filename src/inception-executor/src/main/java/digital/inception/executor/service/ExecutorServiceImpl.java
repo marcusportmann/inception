@@ -1040,8 +1040,8 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
           OffsetDateTime lockedBefore =
               OffsetDateTime.now().minus(taskType.getExecutionTimeout(), ChronoUnit.MILLIS);
 
-          if (inDebugMode) {
-            log.info(
+          if (log.isDebugEnabled()) {
+            log.debug(
                 "Resetting the hung tasks of type ("
                     + taskType.getCode()
                     + ") that were locked for execution before "
@@ -1067,8 +1067,8 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
       OffsetDateTime lockedBefore =
           OffsetDateTime.now().minus(taskExecutionTimeout, ChronoUnit.MILLIS);
 
-      if (inDebugMode) {
-        log.info("Resetting the hung tasks that were locked for execution before " + lockedBefore);
+      if (log.isDebugEnabled()) {
+        log.debug("Resetting the hung tasks that were locked for execution before " + lockedBefore);
       }
 
       int numberOfResetHungTasks = taskRepository.resetHungTasks(lockedBefore);

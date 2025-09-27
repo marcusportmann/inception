@@ -152,6 +152,7 @@ public class DocumentServiceTests {
         new DocumentAttributeDefinition(
             "test_document_attribute_code",
             "Test Document Attribute",
+            "Test Document Attribute Description",
             true,
             null,
             TenantUtil.DEFAULT_TENANT_ID);

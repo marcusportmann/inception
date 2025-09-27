@@ -1,7 +1,7 @@
 meta {
   name: Create Workflow Definition
   type: http
-  seq: 8
+  seq: 9
 }
 
 post {
@@ -32,6 +32,9 @@ body:json {
         "verifiable": true,
         "validityPeriod": "P3M"
       }
+    ],
+    "requiredExternalReferenceTypes": [
+      "test_external_reference_type"
     ],
     "stepDefinitions": [
       {

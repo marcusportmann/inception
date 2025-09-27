@@ -1,7 +1,7 @@
 meta {
   name: Create Workflow Attribute Definition
   type: http
-  seq: 6
+  seq: 7
 }
 
 post {
@@ -13,7 +13,8 @@ post {
 body:json {
   {
     "code": "test_workflow_attribute_code",
-    "description": "Test Workflow Attribute",
+    "name": "Test Workflow Attribute",
+    "description": "Test Workflow Attribute Description",
     "workflowDefinitionId": "test_workflow_definition",
     "required": true,
     "tenantId": "00000000-0000-0000-0000-000000000000"

@@ -16,7 +16,6 @@
 
 package digital.inception.operations.store;
 
-import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DocumentNotFoundException;

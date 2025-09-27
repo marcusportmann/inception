@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
+import digital.inception.jpa.StringListAttributeConverter;
 import digital.inception.operations.persistence.jpa.WorkflowFormTypeListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -185,6 +186,16 @@ public class WorkflowDefinitionSummary implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /** The codes for the required external reference types for the workflow definition. */
+  @Schema(
+      description =
+          "The codes for the required external reference types for the workflow definition")
+  @JsonProperty
+  @Size(max = 10)
+  @Convert(converter = StringListAttributeConverter.class)
+  @Column(name = "required_external_reference_types", length = 510)
+  private List<String> requiredExternalReferenceTypes;
+
   /** The supported workflow form types for the workflow definition. */
   @Schema(description = "The supported workflow form types for the workflow definition")
   @JsonProperty
@@ -296,6 +307,15 @@ public class WorkflowDefinitionSummary implements Serializable {
   }
 
   /**
+   * Returns the codes for the required external reference types for the workflow definition.
+   *
+   * @return the codes for the required external reference types for the workflow definition
+   */
+  public List<String> getRequiredExternalReferenceTypes() {
+    return requiredExternalReferenceTypes;
+  }
+
+  /**
    * Returns the supported workflow form types for the workflow definition.
    *
    * @return the supported workflow form types for the workflow definition
@@ -330,6 +350,16 @@ public class WorkflowDefinitionSummary implements Serializable {
   @Override
   public int hashCode() {
     return ((id == null) ? 0 : id.hashCode()) + version;
+  }
+
+  /**
+   * Set the codes for the required external reference types for the workflow definition.
+   *
+   * @param requiredExternalReferenceTypes the codes for the required external reference types for
+   *     the workflow definition
+   */
+  public void setRequiredExternalReferenceTypes(List<String> requiredExternalReferenceTypes) {
+    this.requiredExternalReferenceTypes = requiredExternalReferenceTypes;
   }
 
   /**

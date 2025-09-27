@@ -1,7 +1,7 @@
 meta {
   name: Update Workflow Attribute Definition
   type: http
-  seq: 6
+  seq: 9
 }
 
 put {
@@ -13,7 +13,8 @@ put {
 body:json {
   {
     "code": "test_workflow_attribute_code",
-    "description": "Test Workflow Attribute",
+    "name": "Updated Test Workflow Attribute",
+    "description": "Updated Test Workflow Attribute Description",
     "workflowDefinitionId": "test_workflow_definition",
     "required": true,
     "tenantId": "00000000-0000-0000-0000-000000000000"

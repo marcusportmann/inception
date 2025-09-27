@@ -357,8 +357,6 @@ public class InteractionSummary implements Serializable {
     this.assignedTo = assignedTo;
   }
 
-
-
   /** Constructs a new {@code InteractionSummary}. */
   public InteractionSummary() {}
 
