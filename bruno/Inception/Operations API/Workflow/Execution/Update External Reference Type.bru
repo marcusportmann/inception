@@ -1,0 +1,32 @@
+meta {
+  name: Update External Reference Type
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{baseURL}}/api/operations/reference/external-reference-types/{{externalReferenceTypeCode}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "code": "test_external_reference_code",
+    "name": "Test External Reference",
+    "description": "Test External Reference",
+    "tenantId": "00000000-0000-0000-0000-000000000000"
+  }
+}
+
+vars:pre-request {
+  externalReferenceTypeCode: test_external_reference_code
+}
+
+assert {
+  res.status: eq 204
+}
+
+settings {
+  encodeUrl: true
+}

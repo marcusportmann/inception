@@ -1,0 +1,33 @@
+meta {
+  name: Get Filtered Interaction Summaries
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseURL}}/api/operations/interaction-sources/{{interactionSourceId}}/interaction-summaries?status=queued&direction=inbound&filter=test
+  body: json
+  auth: inherit
+}
+
+params:query {
+  status: queued
+  direction: inbound
+  filter: test
+}
+
+headers {
+  Tenant-ID: 00000000-0000-0000-0000-000000000000
+}
+
+vars:pre-request {
+  interactionSourceId: 11111111-1111-1111-1111-111111111111
+}
+
+assert {
+  res.status: eq 200
+}
+
+settings {
+  encodeUrl: true
+}

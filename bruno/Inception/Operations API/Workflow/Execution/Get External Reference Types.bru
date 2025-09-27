@@ -1,0 +1,19 @@
+meta {
+  name: Get External Reference Types
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseURL}}/api/operations/reference/external-reference-types
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+}
+
+settings {
+  encodeUrl: true
+}

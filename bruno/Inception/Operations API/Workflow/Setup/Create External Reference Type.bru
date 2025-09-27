@@ -1,0 +1,29 @@
+meta {
+  name: Create External Reference Type
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseURL}}/api/operations/reference/external-reference-types
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "code": "test_external_reference_code",
+    "name": "Test External Reference",
+    "description": "Test External Reference",
+    "objectType": "workflow",
+    "tenantId": "00000000-0000-0000-0000-000000000000"
+  }
+}
+
+assert {
+  res.status: eq 204
+}
+
+settings {
+  encodeUrl: true
+}
