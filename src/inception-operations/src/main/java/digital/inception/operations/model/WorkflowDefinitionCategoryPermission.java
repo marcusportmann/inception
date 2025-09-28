@@ -39,36 +39,46 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
- * The {@code InteractionSourcePermission} class holds the information for an interaction source
- * permission.
+ * The {@code WorkflowDefinitionCategoryPermission} class holds the information for a workflow
+ * definition category permission.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "An interaction source permission")
+@Schema(description = "A workflow definition category permission")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"roleCode", "type"})
 @XmlRootElement(
-    name = "InteractionSourcePermission",
+    name = "WorkflowDefinitionCategoryPermission",
     namespace = "https://inception.digital/operations")
 @XmlType(
-    name = "InteractionSourcePermission",
+    name = "WorkflowDefinitionCategoryPermission",
     namespace = "https://inception.digital/operations",
     propOrder = {"roleCode", "type"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name = "operations_interaction_source_permissions")
-@IdClass(InteractionSourcePermissionId.class)
-public class InteractionSourcePermission implements Serializable {
+@Table(name = "operations_workflow_definition_category_permissions")
+@IdClass(WorkflowDefinitionCategoryPermissionId.class)
+public class WorkflowDefinitionCategoryPermission implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the role the interaction source permission is assigned to. */
+  /**
+   * The ID for the workflow definition category the workflow definition category permission is
+   * associated with.
+   */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "category_id", nullable = false)
+  private String categoryId;
+
+  /** The code for the role the workflow definition category permission is assigned to. */
   @Schema(
-      description = "The code for the role the interaction source permission is assigned to",
+      description =
+          "The code for the role the workflow definition category permission is assigned to",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "RoleCode", required = true)
@@ -78,35 +88,26 @@ public class InteractionSourcePermission implements Serializable {
   @Column(name = "role_code", length = 100, nullable = false)
   private String roleCode;
 
-  /** The ID for the interaction source the interaction source permission is associated with. */
-  @Schema(hidden = true)
-  @JsonIgnore
-  @XmlTransient
-  @Id
-  @Column(name = "source_id", nullable = false)
-  private UUID sourceId;
-
-  /** The interaction permission type. */
-  @Schema(
-      description = "The interaction permission type",
-      requiredMode = Schema.RequiredMode.REQUIRED)
+  /** The workflow permission type. */
+  @Schema(description = "The workflow permission type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Id
   @Column(name = "type", length = 50, nullable = false)
-  private InteractionPermissionType type;
+  private WorkflowPermissionType type;
 
-  /** Constructs a new {@code InteractionSourcePermission}. */
-  public InteractionSourcePermission() {}
+  /** Constructs a new {@code WorkflowDefinitionCategoryPermission}. */
+  public WorkflowDefinitionCategoryPermission() {}
 
   /**
-   * Constructs a new {@code InteractionSourcePermission}.
+   * Constructs a new {@code WorkflowDefinitionCategoryPermission}.
    *
-   * @param roleCode the code for the role the interaction source permission is assigned to
-   * @param type the interaction permission type
+   * @param roleCode the code for the role the workflow definition category permission is assigned
+   *     to
+   * @param type the workflow permission type
    */
-  public InteractionSourcePermission(String roleCode, InteractionPermissionType type) {
+  public WorkflowDefinitionCategoryPermission(String roleCode, WorkflowPermissionType type) {
     this.roleCode = roleCode;
     this.type = type;
   }
@@ -131,28 +132,28 @@ public class InteractionSourcePermission implements Serializable {
       return false;
     }
 
-    InteractionSourcePermission other = (InteractionSourcePermission) object;
+    WorkflowDefinitionCategoryPermission other = (WorkflowDefinitionCategoryPermission) object;
 
-    return Objects.equals(sourceId, other.sourceId)
+    return StringUtil.equalsIgnoreCase(categoryId, other.categoryId)
         && StringUtil.equalsIgnoreCase(roleCode, other.roleCode)
         && type == other.type;
   }
 
   /**
-   * Returns the code for the role the interaction source permission is assigned to.
+   * Returns the code for the role the workflow definition category permission is assigned to.
    *
-   * @return the code for the role the interaction source permission is assigned to
+   * @return the code for the role the workflow definition category permission is assigned to
    */
   public String getRoleCode() {
     return roleCode;
   }
 
   /**
-   * Returns the interaction permission type.
+   * Returns the workflow permission type.
    *
-   * @return the interaction permission type
+   * @return the workflow permission type
    */
-  public InteractionPermissionType getType() {
+  public WorkflowPermissionType getType() {
     return type;
   }
 
@@ -163,43 +164,45 @@ public class InteractionSourcePermission implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((sourceId == null) ? 0 : sourceId.hashCode())
+    return ((categoryId == null) ? 0 : categoryId.hashCode())
         + ((roleCode == null) ? 0 : roleCode.hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
 
   /**
-   * Set the interaction source the interaction permission type is associated with.
+   * Set the code for the role the workflow definition category permission is assigned to.
    *
-   * @param interactionSource the interaction source the interaction permission type is associated
-   *     with
-   */
-  @JsonBackReference("interactionSourcePermissionReference")
-  @Schema(hidden = true)
-  public void setInteractionSource(InteractionSource interactionSource) {
-    if (interactionSource != null) {
-      this.sourceId = interactionSource.getId();
-    } else {
-      this.sourceId = null;
-    }
-  }
-
-  /**
-   * Set the code for the role the interaction source permission is assigned to.
-   *
-   * @param roleCode the code for the role the interaction source permission is assigned to
+   * @param roleCode the code for the role the workflow definition category permission is assigned
+   *     to
    */
   public void setRoleCode(String roleCode) {
     this.roleCode = roleCode;
   }
 
   /**
-   * Set the interaction permission type.
+   * Set the workflow permission type.
    *
-   * @param type the interaction permission type
+   * @param type the workflow permission type
    */
-  public void setType(InteractionPermissionType type) {
+  public void setType(WorkflowPermissionType type) {
     this.type = type;
+  }
+
+  /**
+   * Set the workflow definition category the workflow definition category permission is associated
+   * with.
+   *
+   * @param workflowDefinitionCategory the workflow definition category the workflow definition
+   *     category permission is associated with
+   */
+  @JsonBackReference("workflowDefinitionCategoryPermissionReference")
+  @Schema(hidden = true)
+  public void setWorkflowDefinitionCategory(WorkflowDefinitionCategory workflowDefinitionCategory) {
+    if (workflowDefinitionCategory != null) {
+      this.categoryId = workflowDefinitionCategory.getId();
+    } else {
+      this.categoryId = null;
+    }
   }
 
   /**
@@ -211,8 +214,8 @@ public class InteractionSourcePermission implements Serializable {
    */
   @SuppressWarnings("unused")
   private void afterUnmarshal(Unmarshaller unmarshaller, Object parentObject) {
-    if (parentObject instanceof InteractionSource parent) {
-      setInteractionSource(parent);
+    if (parentObject instanceof WorkflowDefinitionCategory parent) {
+      setWorkflowDefinitionCategory(parent);
     }
   }
 }

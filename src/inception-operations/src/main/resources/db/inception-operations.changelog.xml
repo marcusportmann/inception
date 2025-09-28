@@ -215,12 +215,6 @@
       </column>
     </createTable>
 
-
-
-
-
-
-
     <createTable tableName="operations_workflow_engines" remarks="Workflow Engines">
       <column name="id" type="nvarchar(50)" remarks="The ID for the workflow engine">
         <constraints primaryKey="true" nullable="false"/>
@@ -273,6 +267,32 @@
     <createIndex indexName="operations_workflow_definition_categories_tenant_id_ix"
       tableName="operations_workflow_definition_categories">
       <column name="tenant_id"/>
+    </createIndex>
+
+    <createTable tableName="operations_workflow_definition_category_permissions"
+      remarks="Workflow Definition Category Permissions">
+      <column name="category_id" type="nvarchar(50)"
+        remarks="The ID for the workflow definition category the workflow definition category permission is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="role_code" type="nvarchar(100)"
+        remarks="The code for the role the workflow definition category permission is assigned to">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(50)"
+        remarks="The code for the workflow permission type for the workflow definition category permission">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint
+      constraintName="operations_workflow_definition_category_permissions_workflow_definition_category_fk"
+      baseTableName="operations_workflow_definition_category_permissions"
+      baseColumnNames="category_id"
+      referencedTableName="operations_workflow_definition_categories" referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_definition_category_permissions_category_id_ix"
+      tableName="operations_workflow_definition_category_permissions">
+      <column name="category_id"/>
     </createIndex>
 
     <createTable tableName="operations_workflow_definitions" remarks="Workflow Definitions">
@@ -1469,6 +1489,11 @@
       <dropIndex tableName="operations_workflow_definitions"
         indexName="operations_workflow_definitions_category_id_ix"/>
       <dropTable tableName="operations_workflow_definitions"/>
+
+      <dropAllForeignKeyConstraints baseTableName="operations_workflow_definition_category_permissions"/>
+      <dropIndex tableName="operations_workflow_definition_category_permissions"
+        indexName="operations_workflow_definition_category_permissions_category_id_ix"/>
+      <dropTable tableName="operations_workflow_definition_category_permissions"/>
 
       <dropAllForeignKeyConstraints baseTableName="operations_workflow_definition_categories"/>
       <dropIndex tableName="operations_workflow_definition_categories"

@@ -72,6 +72,7 @@ import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
+import digital.inception.operations.model.WorkflowDefinitionCategoryPermission;
 import digital.inception.operations.model.WorkflowDefinitionDocumentDefinition;
 import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
@@ -327,7 +328,17 @@ public class WorkflowServiceTests {
         new WorkflowDefinitionCategory(
             "test_workflow_definition_category_" + randomId(), "Test Workflow Definition Category");
 
+    workflowDefinitionCategory.addPermission(
+        new WorkflowDefinitionCategoryPermission(
+            "Administrator", WorkflowPermissionType.INITIATE_WORKFLOW));
+
     workflowService.createWorkflowDefinitionCategory(workflowDefinitionCategory);
+
+    WorkflowDefinitionCategory retrievedWorkflowDefinitionCategory =
+        workflowService.getWorkflowDefinitionCategory(workflowDefinitionCategory.getId());
+
+    compareWorkflowDefinitionCategories(
+        workflowDefinitionCategory, retrievedWorkflowDefinitionCategory);
 
     // Create the workflow definition
     WorkflowDefinition workflowDefinition =
@@ -374,13 +385,56 @@ public class WorkflowServiceTests {
     workflowDefinition.addVariableDefinition(
         new WorkflowVariableDefinition("testVariableName", true, "Test Variable Description"));
 
+    String processDefinitionKey = UUID.randomUUID().toString();
+
     workflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("process_definition_key", UUID.randomUUID().toString()));
+        new WorkflowDefinitionAttribute("process_definition_key", processDefinitionKey));
 
     workflowDefinition.setSupportedWorkflowFormTypes(
         List.of(WorkflowFormType.START_FORM, WorkflowFormType.WORK_FORM));
 
+    workflowDefinition.addPermission(
+        new WorkflowDefinitionPermission(
+            "Administrator", WorkflowPermissionType.INITIATE_WORKFLOW));
+
+    workflowDefinition.setRequiredExternalReferenceTypes(
+        List.of("test_workflow_external_reference_code"));
+
     workflowService.createWorkflowDefinition(workflowDefinition);
+
+    WorkflowDefinition retrievedWorkflowDefinition =
+        workflowService.getWorkflowDefinition(workflowDefinition.getId());
+
+    assertEquals(
+        processDefinitionKey,
+        retrievedWorkflowDefinition
+            .getAttribute("process_definition_key")
+            .orElseThrow(
+                () ->
+                    new RuntimeException(
+                        "Failed to retrieve the process_definition_key workflow definition attribute"))
+            .getValue());
+
+    assertEquals(
+        processDefinitionKey,
+        retrievedWorkflowDefinition
+            .getAttributeValue("process_definition_key")
+            .orElseThrow(
+                () ->
+                    new RuntimeException(
+                        "Failed to retrieve the process_definition_key workflow definition attribute")));
+
+    compareWorkflowDefinitions(workflowDefinition, retrievedWorkflowDefinition);
+
+    workflowDefinition.removePermission("Administrator", WorkflowPermissionType.INITIATE_WORKFLOW);
+
+    assertTrue(workflowDefinition.getPermissions().isEmpty());
+
+    workflowDefinition.removeVariableDefinition("testVariableName");
+
+    assertTrue(workflowDefinition.getVariableDefinitions().isEmpty());
+
+    assertTrue(workflowDefinition.supportsWorkflowFormType(WorkflowFormType.WORK_FORM));
 
     // Initiate the workflow
     TestWorkflowData testWorkflowData =
@@ -1367,6 +1421,34 @@ public class WorkflowServiceTests {
         workflowDefinitionCategory1.getTenantId(),
         workflowDefinitionCategory2.getTenantId(),
         "The tenant ID values for the workflow definition categories do not match");
+
+    assertEquals(
+        workflowDefinitionCategory1.getPermissions().size(),
+        workflowDefinitionCategory2.getPermissions().size(),
+        "The number of permissions for the workflow definition categories do not match");
+
+    workflowDefinitionCategory1
+        .getPermissions()
+        .forEach(
+            workflowDefinitionCategoryPermission1 -> {
+              boolean foundWorkflowDefinitionCategoryPermission =
+                  workflowDefinitionCategory2.getPermissions().stream()
+                      .anyMatch(
+                          workflowDefinitionCategoryPermission2 ->
+                              Objects.equals(
+                                  workflowDefinitionCategoryPermission1,
+                                  workflowDefinitionCategoryPermission2));
+              if (!foundWorkflowDefinitionCategoryPermission) {
+                fail(
+                    "Failed to find the permission ("
+                        + workflowDefinitionCategoryPermission1.getRoleCode()
+                        + ")("
+                        + workflowDefinitionCategoryPermission1.getType()
+                        + ") for the workflow definition category ("
+                        + workflowDefinitionCategory1.getId()
+                        + ")");
+              }
+            });
   }
 
   private void compareWorkflowDefinitionDocumentDefinitions(
@@ -1420,6 +1502,10 @@ public class WorkflowServiceTests {
         workflowDefinition1.getTenantId(),
         workflowDefinition2.getTenantId(),
         "The tenant ID values for the workflow definitions do not match");
+    assertEquals(
+        workflowDefinition1.getTimeToComplete(),
+        workflowDefinition2.getTimeToComplete(),
+        "The time to complete values for the workflow definitions do not match");
     assertEquals(
         workflowDefinition1.getValidationSchema(),
         workflowDefinition2.getValidationSchema(),
@@ -1503,6 +1589,74 @@ public class WorkflowServiceTests {
                         }
                       });
             });
+
+    assertEquals(
+        workflowDefinition1.getPermissions().size(),
+        workflowDefinition2.getPermissions().size(),
+        "The number of permissions for the workflow definitions do not match");
+
+    workflowDefinition1
+        .getPermissions()
+        .forEach(
+            workflowDefinitionPermission1 -> {
+              boolean foundWorkflowDefinitionPermission =
+                  workflowDefinition2.getPermissions().stream()
+                      .anyMatch(
+                          workflowDefinitionPermission2 ->
+                              Objects.equals(
+                                  workflowDefinitionPermission1, workflowDefinitionPermission2));
+              if (!foundWorkflowDefinitionPermission) {
+                fail(
+                    "Failed to find the permission ("
+                        + workflowDefinitionPermission1.getRoleCode()
+                        + ")("
+                        + workflowDefinitionPermission1.getType()
+                        + ") for the workflow definition ("
+                        + workflowDefinition1.getId()
+                        + ") version ("
+                        + workflowDefinition1.getVersion()
+                        + ")");
+              }
+            });
+
+    if ((workflowDefinition1.getRequiredExternalReferenceTypes() == null)
+        && (workflowDefinition2.getRequiredExternalReferenceTypes() != null)) {
+      fail("The required external reference types for both workflow definitions are not null");
+    }
+
+    if (workflowDefinition1.getRequiredExternalReferenceTypes() != null) {
+      if (workflowDefinition2.getRequiredExternalReferenceTypes() == null) {
+        fail("The required external reference types for the workflow definition is null");
+      }
+
+      assertEquals(
+          workflowDefinition1.getRequiredExternalReferenceTypes().size(),
+          workflowDefinition2.getRequiredExternalReferenceTypes().size(),
+          "The number of required external reference types for the workflow definitions do not match");
+
+      workflowDefinition1
+          .getRequiredExternalReferenceTypes()
+          .forEach(
+              requiredExternalReferenceType1 -> {
+                boolean foundRequiredExternalReferenceType =
+                    workflowDefinition2.getRequiredExternalReferenceTypes().stream()
+                        .anyMatch(
+                            requiredExternalReferenceType2 ->
+                                Objects.equals(
+                                    requiredExternalReferenceType1,
+                                    requiredExternalReferenceType2));
+                if (!foundRequiredExternalReferenceType) {
+                  fail(
+                      "Failed to find the required external reference type ("
+                          + requiredExternalReferenceType1
+                          + ") for the workflow definition ("
+                          + workflowDefinition1.getId()
+                          + ") version ("
+                          + workflowDefinition1.getVersion()
+                          + ")");
+                }
+              });
+    }
 
     assertEquals(
         workflowDefinition1.getStepDefinitions().size(),

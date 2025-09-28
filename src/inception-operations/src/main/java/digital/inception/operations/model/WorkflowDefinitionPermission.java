@@ -171,7 +171,7 @@ public class WorkflowDefinitionPermission implements Serializable {
   @Override
   public int hashCode() {
     return ((definitionId == null) ? 0 : definitionId.hashCode())
-        + definitionVersion
+        + ((definitionVersion == 0) ? 0 : Integer.hashCode(definitionVersion))
         + ((roleCode == null) ? 0 : roleCode.hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
@@ -195,10 +195,10 @@ public class WorkflowDefinitionPermission implements Serializable {
   }
 
   /**
-   * Set the workflow definition the workflow permission type is associated with.
+   * Set the workflow definition the workflow definition permission is associated with.
    *
-   * @param workflowDefinition the workflow definition the workflow permission type is associated
-   *     with
+   * @param workflowDefinition the workflow definition the workflow definition permission is
+   *     associated with
    */
   @JsonBackReference("workflowDefinitionPermissionReference")
   @Schema(hidden = true)
@@ -213,7 +213,7 @@ public class WorkflowDefinitionPermission implements Serializable {
   }
 
   /**
-   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * Called by the JAXB runtime when an instance of this class has been completely unmarshalled, but
    * before it is added to its parent.
    *
    * @param unmarshaller the JAXB unmarshaller

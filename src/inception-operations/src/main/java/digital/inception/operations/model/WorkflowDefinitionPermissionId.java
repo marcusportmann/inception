@@ -84,7 +84,7 @@ public class WorkflowDefinitionPermissionId implements Serializable {
   @Override
   public int hashCode() {
     return ((definitionId == null) ? 0 : definitionId.hashCode())
-        + definitionVersion
+           + ((definitionVersion == 0) ? 0 : Integer.hashCode(definitionVersion))
         + ((roleCode == null) ? 0 : roleCode.hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }

@@ -21,27 +21,30 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * The {@code WorkflowStepDefinitionId} class implements the ID class for the {@code
- * WorkflowStepDefinition} class.
+ * The {@code WorkflowDefinitionCategoryPermissionId} class implements the ID class for The {@code
+ * WorkflowDefinitionCategoryPermission} class.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
-public class WorkflowStepDefinitionId implements Serializable {
+@SuppressWarnings({"UnusedDeclaration"})
+public class WorkflowDefinitionCategoryPermissionId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the workflow step. */
-  private String code;
+  /**
+   * The ID for the workflow definition category the workflow definition category permission is
+   * associated with.
+   */
+  private String categoryId;
 
-  /** The ID for the workflow definition the workflow step definition is associated with. */
-  private String definitionId;
+  /** The code for the role the workflow definition category permission is assigned to. */
+  private String roleCode;
 
-  /** The version of the workflow definition the workflow step definition is associated with. */
-  private int definitionVersion;
+  /** The workflow permission type. */
+  private WorkflowPermissionType type;
 
-  /** Constructs a new {@code WorkflowStepDefinitionId}. */
-  public WorkflowStepDefinitionId() {}
+  /** Constructs a new {@code WorkflowDefinitionCategoryPermissionId}. */
+  public WorkflowDefinitionCategoryPermissionId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -63,11 +66,11 @@ public class WorkflowStepDefinitionId implements Serializable {
       return false;
     }
 
-    WorkflowStepDefinitionId other = (WorkflowStepDefinitionId) object;
+    WorkflowDefinitionCategoryPermissionId other = (WorkflowDefinitionCategoryPermissionId) object;
 
-    return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
-        && definitionVersion == other.definitionVersion
-        && StringUtil.equalsIgnoreCase(code, other.code);
+    return StringUtil.equalsIgnoreCase(categoryId, other.categoryId)
+        && StringUtil.equalsIgnoreCase(roleCode, other.roleCode)
+        && type == other.type;
   }
 
   /**
@@ -77,8 +80,8 @@ public class WorkflowStepDefinitionId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((definitionId == null) ? 0 : definitionId.hashCode())
-           + ((definitionVersion == 0) ? 0 : Integer.hashCode(definitionVersion))
-        + ((code == null) ? 0 : code.hashCode());
+    return ((categoryId == null) ? 0 : categoryId.hashCode())
+        + ((roleCode == null) ? 0 : roleCode.hashCode())
+        + ((type == null) ? 0 : type.hashCode());
   }
 }

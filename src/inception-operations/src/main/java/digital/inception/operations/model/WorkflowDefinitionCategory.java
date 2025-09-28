@@ -17,23 +17,34 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -44,20 +55,38 @@ import java.util.UUID;
  */
 @Schema(description = "A workflow definition category")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "tenantId", "name"})
+@JsonPropertyOrder({"id", "tenantId", "name", "permissions"})
 @XmlRootElement(
     name = "WorkflowDefinitionCategory",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowDefinitionCategory",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "tenantId", "name"})
+    propOrder = {"id", "tenantId", "name", "permissions"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_definition_categories")
 public class WorkflowDefinitionCategory implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The permissions for the workflow definition category. */
+  @Schema(description = "The permissions for the workflow definition category")
+  @JsonProperty
+  @JsonManagedReference("workflowDefinitionCategoryPermissionReference")
+  @XmlElementWrapper(name = "Permissions")
+  @XmlElement(name = "Permission")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("roleCode")
+  @JoinColumns({
+    @JoinColumn(
+        name = "category_id",
+        referencedColumnName = "id",
+        insertable = false,
+        updatable = false)
+  })
+  private final List<WorkflowDefinitionCategoryPermission> permissions = new ArrayList<>();
 
   /** The ID for the workflow definition category. */
   @Schema(
@@ -117,6 +146,22 @@ public class WorkflowDefinitionCategory implements Serializable {
   }
 
   /**
+   * Add the permission for the workflow definition category.
+   *
+   * @param permission the permission
+   */
+  public void addPermission(WorkflowDefinitionCategoryPermission permission) {
+    permissions.removeIf(
+        existingPermission ->
+            (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), permission.getRoleCode())
+                && existingPermission.getType() == permission.getType()));
+
+    permission.setWorkflowDefinitionCategory(this);
+
+    permissions.add(permission);
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -160,6 +205,15 @@ public class WorkflowDefinitionCategory implements Serializable {
   }
 
   /**
+   * Returns the permissions for the workflow definition category.
+   *
+   * @return the permissions for the workflow definition category
+   */
+  public List<WorkflowDefinitionCategoryPermission> getPermissions() {
+    return permissions;
+  }
+
+  /**
    * Returns the ID for the tenant the workflow definition category is specific to.
    *
    * @return the ID for the tenant the workflow definition category is specific to
@@ -179,6 +233,20 @@ public class WorkflowDefinitionCategory implements Serializable {
   }
 
   /**
+   * Remove the permission with the specified role code and workflow permission type for the
+   * workflow definition category.
+   *
+   * @param roleCode the role code for the permission
+   * @param type the workflow permission type
+   */
+  public void removePermission(String roleCode, WorkflowPermissionType type) {
+    permissions.removeIf(
+        existingPermission ->
+            (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), roleCode)
+                && (existingPermission.getType() == type)));
+  }
+
+  /**
    * Set the ID for the workflow definition category.
    *
    * @param id the ID for the workflow definition category
@@ -194,6 +262,17 @@ public class WorkflowDefinitionCategory implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the permissions for the workflow definition category.
+   *
+   * @param permissions the permissions for the workflow definition category
+   */
+  public void setPermissions(List<WorkflowDefinitionCategoryPermission> permissions) {
+    permissions.forEach(permission -> permission.setWorkflowDefinitionCategory(this));
+    this.permissions.clear();
+    this.permissions.addAll(permissions);
   }
 
   /**

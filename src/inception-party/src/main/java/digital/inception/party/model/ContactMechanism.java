@@ -350,7 +350,7 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Called by the JAXB runtime an instance of this class has been completely unmarshalled, but
+   * Called by the JAXB runtime when an instance of this class has been completely unmarshalled, but
    * before it is added to its parent.
    *
    * @param unmarshaller the JAXB unmarshaller
