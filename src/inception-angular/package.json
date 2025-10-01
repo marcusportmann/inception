@@ -12,7 +12,8 @@
     "format": "prettier \"**/*.{ts,scss}\" --write",
     "format:check": "prettier \"**/*.{ts,scss}\" --check ",
     "prettier:diff": "bash -lc 'set -e; failed=0; for f in $(prettier -l \"**/*.{ts,scss}\"); do prettier --stdin-filepath \"$f\" < \"$f\" | git --no-pager diff --color=always --no-index -- \"$f\" - || failed=1; done; exit $failed'",
-    "test:ci": "ng test --watch=false --browsers=ChromeHeadless"
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
+    "postinstall": "cd ../.. && husky src/inception-angular/.husky"
   },
   "private": true,
   "dependencies": {
