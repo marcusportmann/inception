@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
+set -e
 
-cd src/inception-angular
+# Change to inception-angular directory
+cd "$(git rev-parse --show-toplevel)/src/inception-angular"
 
 # Run lint
 #yarn lint-staged

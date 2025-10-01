@@ -8,7 +8,6 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "prepare": "husky",
     "format": "prettier \"**/*.{ts,scss}\" --write",
     "format:check": "prettier \"**/*.{ts,scss}\" --check ",
     "prettier:diff": "bash -lc 'set -e; failed=0; for f in $(prettier -l \"**/*.{ts,scss}\"); do prettier --stdin-filepath \"$f\" < \"$f\" | git --no-pager diff --color=always --no-index -- \"$f\" - || failed=1; done; exit $failed'",
@@ -40,16 +39,15 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.17",
-    "@angular/cli": "^19.2.17",
-    "@angular/compiler-cli": "^19.2.15",
-    "@types/jasmine": "~5.1.9",
-    "@types/uuid": "^9.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.45.0",
-    "@typescript-eslint/parser": "^8.45.0",
     "@angular-eslint/builder": "^19.8.1",
     "@angular-eslint/eslint-plugin": "^19.8.1",
     "@angular-eslint/eslint-plugin-template": "^19.8.1",
     "@angular-eslint/schematics": "^19.8.1",
+    "@angular/cli": "^19.2.17",
+    "@angular/compiler-cli": "^19.2.15",
+    "@types/jasmine": "~5.1.9",
+    "@types/uuid": "^9.0.0",
+    "angular-eslint": "^19.8.1",
     "eslint": "^9.36.0",
     "husky": "^9.1.7",
     "jasmine-core": "~5.11.0",
@@ -61,6 +59,7 @@
     "lint-staged": "^16.2.3",
     "ng-packagr": "^19.2.2",
     "prettier": "^3.6.2",
-    "typescript": "~5.8.2"
+    "typescript": "~5.8.2",
+    "typescript-eslint": "^8.45.0"
   }
 }
