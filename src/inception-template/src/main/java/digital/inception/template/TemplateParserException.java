@@ -19,8 +19,8 @@ package digital.inception.template;
 import java.io.Serial;
 
 /**
- * The {@code TemplateParserException} exception is thrown to indicate an error condition when parsing a
- * WBXML document.
+ * The {@code TemplateParserException} exception is thrown to indicate an error condition when
+ * parsing a template.
  *
  * @author Marcus Portmann
  */
@@ -44,9 +44,9 @@ public class TemplateParserException extends Exception {
   }
 
   /**
-   * Constructs a new {@code TemplateParserException} instance with the specified cause and a message of
-   * {@code (cause==null ? null : cause.toString())} (which typically contains the class and message
-   * of cause).
+   * Constructs a new {@code TemplateParserException} instance with the specified cause and a
+   * message of {@code (cause==null ? null : cause.toString())} (which typically contains the class
+   * and message of cause).
    *
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
    *     null} value is permitted if the cause is nonexistent or unknown)
