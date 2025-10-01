@@ -1,0 +1,8 @@
+# .husky/pre-commit
+#!/usr/bin/env sh
+
+# Run lint
+yarn lint-staged
+
+# Run the security audit
+node pre-commit-audit.js
