@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef} from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 
 /**
  * The SpinnerComponent class implements the spinner component.
@@ -24,8 +24,7 @@ import {Component, ElementRef} from '@angular/core';
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'spinner',
-  template: `
-      <div class="spinner spinner-oval"></div>`,
+  template: ` <div class="spinner spinner-oval"></div>`,
   styles: [
     `
       .spinner {
@@ -50,14 +49,12 @@ import {Component, ElementRef} from '@angular/core';
   standalone: false
 })
 export class SpinnerComponent {
-
   /**
    * Constructs a new SpinnerComponent.
    *
    * @param elementRef The element reference.
    */
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor(private elementRef: ElementRef) {}
 
   show(): void {
     this.elementRef.nativeElement.focus();

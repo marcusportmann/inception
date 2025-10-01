@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {NavigationItem} from './navigation-item';
+import { NavigationItem } from './navigation-item';
 
 /**
  * The NavigationTitle class holds the information for a navigation title.
@@ -22,7 +22,6 @@ import {NavigationItem} from './navigation-item';
  * @author Marcus Portmann
  */
 export class NavigationTitle extends NavigationItem {
-
   /**
    * Constructs a new NavigationTitle.
    *

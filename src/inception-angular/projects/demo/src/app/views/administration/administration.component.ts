@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * The AdministrationComponent class implements the administration component.
@@ -22,12 +22,9 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Administration
-  `,
+  template: `Administration `,
   standalone: false
 })
 export class AdministrationComponent {
-
-  constructor() {
-  }
+  constructor() {}
 }

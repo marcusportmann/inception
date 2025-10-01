@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {map} from 'rxjs/operators';
-import {ISO8601Util} from './iso-8601-util';
+import { map } from 'rxjs/operators';
+import { ISO8601Util } from './iso-8601-util';
 
 function convertStringValuesToTypes(value: any): any {
   if (!value) return value;
@@ -24,7 +24,8 @@ function convertStringValuesToTypes(value: any): any {
     const trimmedValue = value.trim();
 
     // Check if it's a valid ISO date string (example for length 23 or 29 or similar future formats)
-    const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[\+\-]\d{2}:\d{2})?$/;
+    const iso8601Regex =
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[\+\-]\d{2}:\d{2})?$/;
     if (iso8601Regex.test(trimmedValue)) {
       const parsedDate: Date = ISO8601Util.toDate(trimmedValue);
       return isNaN(parsedDate.getTime()) ? value : parsedDate;
@@ -44,23 +45,27 @@ function convertStringValuesToTypes(value: any): any {
   return value;
 }
 
-export function ResponseConverter(target: any, propertyKey: string,
-                                  descriptor: PropertyDescriptor): PropertyDescriptor {
+export function ResponseConverter(
+  target: any,
+  propertyKey: string,
+  descriptor: PropertyDescriptor
+): PropertyDescriptor {
   const originalMethod = descriptor.value;
 
   descriptor.value = function (...args: any) {
-    return originalMethod.call(this, ...args).pipe(map((result: any) => {
+    return originalMethod.call(this, ...args).pipe(
+      map((result: any) => {
+        //let originalResult = Object.assign({}, result);
+        //console.log('originalResult = ', originalResult);
 
-      //let originalResult = Object.assign({}, result);
-      //console.log('originalResult = ', originalResult);
+        let convertedResult = convertStringValuesToTypes(result);
 
-      let convertedResult = convertStringValuesToTypes(result)
+        // console.log('convertedResult = ', convertedResult);
 
-      // console.log('convertedResult = ', convertedResult);
-
-      return convertedResult;
-    }));
-  }
+        return convertedResult;
+      })
+    );
+  };
 
   return descriptor;
 }

@@ -1,8 +1,8 @@
-@use 'sass:list';
-@use 'sass:map';
-@use 'sass:math';
-@use 'sass:meta';
-@use 'sass:string';
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
 
 // Characters to escape in SVG data URIs
 $escaped-characters: (
@@ -24,12 +24,15 @@ $escaped-characters: (
 /// @param $search Substring to find
 /// @param $replace Replacement string (default: empty)
 /// @return Updated string
-@function str-replace($string, $search, $replace: '') {
+@function str-replace($string, $search, $replace: "") {
   $index: string.index($string, $search);
   @if $index {
-    @return string.slice($string, 1, $index - 1)
-      + $replace
-      + str-replace(string.slice($string, $index + string.length($search)), $search, $replace);
+    @return string.slice($string, 1, $index - 1) + $replace +
+      str-replace(
+        string.slice($string, $index + string.length($search)),
+        $search,
+        $replace
+      );
   }
   @return $string;
 }
@@ -38,9 +41,9 @@ $escaped-characters: (
 /// @param $string CSS url() or data URI string
 /// @return Escaped string
 @function escape-svg($string) {
-  @if string.index($string, 'data:image/svg+xml') {
+  @if string.index($string, "data:image/svg+xml") {
     @each $char, $encoded in $escaped-characters {
-      @if string.index($string, 'url(') == 1 {
+      @if string.index($string, "url(") == 1 {
         $content: string.slice($string, 6, -3);
         @return url("#{str-replace($content, $char, $encoded)}");
       } @else {
@@ -56,12 +59,25 @@ $escaped-characters: (
 /// @param $value2 Second value
 /// @param $return-calc If true, wrap in calc()
 @function add($value1, $value2, $return-calc: true) {
-  @if $value1 == null { @return $value2; }
-  @if $value2 == null { @return $value1; }
-  @if meta.type-of($value1) == 'number' and meta.type-of($value2) == 'number' and comparable($value1, $value2) {
+  @if $value1 == null {
+    @return $value2;
+  }
+  @if $value2 == null {
+    @return $value1;
+  }
+  @if meta.type-of($value1) ==
+    "number" and
+    meta.type-of($value2) ==
+    "number" and
+    comparable($value1, $value2)
+  {
     @return $value1 + $value2;
   }
-  @return if($return-calc, calc(#{$value1} + #{$value2}), $value1 + ' + ' + $value2);
+  @return if(
+    $return-calc,
+    calc(#{$value1} + #{$value2}),
+    $value1 + " + " + $value2
+  );
 }
 
 /// Subtracts two values, using calc() if necessary.
@@ -69,16 +85,31 @@ $escaped-characters: (
 /// @param $value2 Subtrahend
 /// @param $return-calc If true, wrap in calc()
 @function subtract($value1, $value2, $return-calc: true) {
-  @if $value1 == null and $value2 == null { @return null; }
-  @if $value1 == null { @return -$value2; }
-  @if $value2 == null { @return $value1; }
-  @if meta.type-of($value1) == 'number' and meta.type-of($value2) == 'number' and comparable($value1, $value2) {
+  @if $value1 == null and $value2 == null {
+    @return null;
+  }
+  @if $value1 == null {
+    @return -$value2;
+  }
+  @if $value2 == null {
+    @return $value1;
+  }
+  @if meta.type-of($value1) ==
+    "number" and
+    meta.type-of($value2) ==
+    "number" and
+    comparable($value1, $value2)
+  {
     @return $value1 - $value2;
   }
-  @if meta.type-of($value2) != 'number' {
-    $value2: '(' + $value2 + ')';
+  @if meta.type-of($value2) != "number" {
+    $value2: "(" + $value2 + ")";
   }
-  @return if($return-calc, calc(#{$value1} - #{$value2}), $value1 + ' - ' + $value2);
+  @return if(
+    $return-calc,
+    calc(#{$value1} - #{$value2}),
+    $value1 + " - " + $value2
+  );
 }
 
 /// Divides two values with optional precision.
@@ -90,8 +121,12 @@ $escaped-characters: (
   $sign: if($dividend * $divisor >= 0, 1, -1);
   $dividend: math.abs($dividend);
   $divisor: math.abs($divisor);
-  @if $dividend == 0 { @return 0; }
-  @if $divisor == 0 { @error "Cannot divide by 0."; }
+  @if $dividend == 0 {
+    @return 0;
+  }
+  @if $divisor == 0 {
+    @error "Cannot divide by 0.";
+  }
 
   $result: 0;
   $remainder: $dividend;
@@ -108,7 +143,12 @@ $escaped-characters: (
 
   $result: calc($result / $factor) * $sign;
 
-  $unit-map: (px: 1px, rem: 1rem, em: 1em, '%': 1%);
+  $unit-map: (
+    px: 1px,
+    rem: 1rem,
+    em: 1em,
+    "%": 1%
+  );
   $d-unit: math.unit($dividend);
   $r-unit: math.unit($divisor);
 
@@ -118,4 +158,3 @@ $escaped-characters: (
 
   @return $result;
 }
-

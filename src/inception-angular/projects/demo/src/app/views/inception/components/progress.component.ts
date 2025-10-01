@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * The ProgressComponent class implements the progress component.
@@ -26,7 +26,6 @@ import {Component} from '@angular/core';
   standalone: false
 })
 export class ProgressComponent {
-
   bufferValue?: string;
 
   color?: string;
@@ -34,5 +33,4 @@ export class ProgressComponent {
   mode?: string;
 
   value?: string;
-
 }

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-
-import {Injectable} from '@angular/core';
-import {ReplaySubject, Subject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { ReplaySubject, Subject } from 'rxjs';
 
 /**
  * The Sidebar Service implementation.
@@ -27,7 +26,6 @@ import {ReplaySubject, Subject} from 'rxjs';
   providedIn: 'root'
 })
 export class SidebarService {
-
   sidebarMinimized$: Subject<boolean> = new ReplaySubject<boolean>(1);
 
   /**
@@ -45,4 +43,3 @@ export class SidebarService {
     this.sidebarMinimized$.next(sidebarMinimized);
   }
 }
-

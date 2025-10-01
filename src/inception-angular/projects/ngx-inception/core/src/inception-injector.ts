@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Injector} from '@angular/core';
+import { Injector } from '@angular/core';
 
 /**
  * The Angular injector that allows singletons to be retrieved by the Inception framework.
@@ -28,7 +28,6 @@ export let InceptionInjector: Injector;
  * "TS2539: Cannot assign to 'InceptionInjector' because it is not a variable".
  */
 export function setInceptionInjector(injector: Injector) {
-
   if (!InceptionInjector) {
     InceptionInjector = injector;
   }

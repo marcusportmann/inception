@@ -14,21 +14,39 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, HostBinding, OnDestroy, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
+  AfterViewInit,
+  Component,
+  HostBinding,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AccessDeniedError,
+  AdminContainerView,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {merge, Observable, Subject, throwError} from 'rxjs';
+import { merge, Observable, Subject, throwError } from 'rxjs';
 import {
-  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil, tap
+  catchError,
+  debounceTime,
+  filter,
+  finalize,
+  first,
+  switchMap,
+  takeUntil,
+  tap
 } from 'rxjs/operators';
-import {CodeCategorySummary} from '../services/code-category-summary';
-import {CodesService} from '../services/codes.service';
+import { CodeCategorySummary } from '../services/code-category-summary';
+import { CodesService } from '../services/codes.service';
 
 /**
  * The CodeCategoriesComponent class implements the code categories component.
@@ -40,27 +58,36 @@ import {CodesService} from '../services/codes.service';
   styleUrls: ['code-categories.component.css'],
   standalone: false
 })
-export class CodeCategoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-  dataSource: MatTableDataSource<CodeCategorySummary> = new MatTableDataSource<CodeCategorySummary>();
+export class CodeCategoriesComponent
+  extends AdminContainerView
+  implements AfterViewInit, OnDestroy
+{
+  dataSource: MatTableDataSource<CodeCategorySummary> =
+    new MatTableDataSource<CodeCategorySummary>();
 
   displayedColumns = ['id', 'name', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort!: MatSort;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
   private destroy$ = new Subject<void>();
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private codesService: CodesService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private codesService: CodesService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean => data.id.toLowerCase().includes(
-      filter) || data.name.toLowerCase().includes(filter);
+    this.dataSource.filterPredicate = (data, filter): boolean =>
+      data.id.toLowerCase().includes(filter) ||
+      data.name.toLowerCase().includes(filter);
   }
 
   get title(): string {
@@ -74,25 +101,28 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
 
   codesAdministration(codeCategoryId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(codeCategoryId) + '/codes'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(codeCategoryId) + '/codes'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   deleteCodeCategory(codeCategoryId: string): void {
     this.confirmAndProcessAction(
       $localize`:@@codes_code_categories_confirm_delete_code_category:Are you sure you want to delete the code category?`,
-      () => this.codesService.deleteCodeCategory(codeCategoryId));
+      () => this.codesService.deleteCodeCategory(codeCategoryId)
+    );
   }
 
   editCodeCategory(codeCategoryId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(codeCategoryId) + '/edit'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(codeCategoryId) + '/edit'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   newCodeCategory(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
@@ -108,24 +138,42 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
     this.destroy$.complete();
   }
 
-  private confirmAndProcessAction(confirmationMessage: string,
-                                  action: () => Observable<void | boolean>): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({message: confirmationMessage});
+  private confirmAndProcessAction(
+    confirmationMessage: string,
+    action: () => Observable<void | boolean>
+  ): void {
+    const dialogRef = this.dialogService.showConfirmationDialog({
+      message: confirmationMessage
+    });
 
     dialogRef
-    .afterClosed()
-    .pipe(first(), filter((confirmed) => confirmed === true), switchMap(() => {
-      this.spinnerService.showSpinner();
-      return action().pipe(catchError((error) => this.handleError(error)),
-        tap(() => this.loadData()), finalize(() => this.spinnerService.hideSpinner()));
-    }), takeUntil(this.destroy$))
-    .subscribe();
+      .afterClosed()
+      .pipe(
+        first(),
+        filter((confirmed) => confirmed === true),
+        switchMap(() => {
+          this.spinnerService.showSpinner();
+          return action().pipe(
+            catchError((error) => this.handleError(error)),
+            tap(() => this.loadData()),
+            finalize(() => this.spinnerService.hideSpinner())
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   private handleError(error: Error): Observable<never> {
-    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+    if (
+      error instanceof AccessDeniedError ||
+      error instanceof InvalidArgumentError ||
+      error instanceof ServiceUnavailableError
+    ) {
       // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      this.router.navigateByUrl('/error/send-error-report', {
+        state: { error }
+      });
     } else {
       this.dialogService.showErrorDialog(error);
     }
@@ -134,28 +182,29 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
 
   private initializeDataLoaders(): void {
     this.sort.sortChange
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(() => (this.paginator.pageIndex = 0));
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => (this.paginator.pageIndex = 0));
 
     merge(this.sort.sortChange, this.paginator.page)
-    .pipe(debounceTime(200), takeUntil(this.destroy$))
-    .subscribe(() => this.loadData());
+      .pipe(debounceTime(200), takeUntil(this.destroy$))
+      .subscribe(() => this.loadData());
   }
 
   private loadCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
-    return this.codesService.getCodeCategorySummaries().pipe(
-      catchError((error) => this.handleError(error)));
+    return this.codesService
+      .getCodeCategorySummaries()
+      .pipe(catchError((error) => this.handleError(error)));
   }
 
   private loadData(): void {
     this.spinnerService.showSpinner();
     this.loadCodeCategorySummaries()
-    .pipe(finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe({
-      next: (codeCategorySummaries) => {
-        this.dataSource.data = codeCategorySummaries;
-      },
-      error: (error) => this.handleError(error),
-    });
+      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe({
+        next: (codeCategorySummaries) => {
+          this.dataSource.data = codeCategorySummaries;
+        },
+        error: (error) => this.handleError(error)
+      });
   }
 }

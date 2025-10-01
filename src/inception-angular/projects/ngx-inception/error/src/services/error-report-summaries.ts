@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {SortDirection} from 'ngx-inception/core';
-import {ErrorReportSortBy} from './error-report-sort-by';
-import {ErrorReportSummary} from './error-report-summary';
+import { SortDirection } from 'ngx-inception/core';
+import { ErrorReportSortBy } from './error-report-sort-by';
+import { ErrorReportSummary } from './error-report-summary';
 
 /**
  * The ErrorReportSummaries class holds the results of a request to retrieve a list of error report
@@ -25,7 +25,6 @@ import {ErrorReportSummary} from './error-report-summary';
  * @author Marcus Portmann
  */
 export class ErrorReportSummaries {
-
   /**
    * The error report summaries.
    */
@@ -88,9 +87,17 @@ export class ErrorReportSummaries {
    * @param filter               The filter that was applied to the error report
    *                             summaries.
    */
-  constructor(errorReportSummaries: ErrorReportSummary[], total: number, fromDate: string,
-              toDate: string, sortBy: ErrorReportSortBy, sortDirection: SortDirection,
-              pageIndex: number, pageSize: number, filter?: string) {
+  constructor(
+    errorReportSummaries: ErrorReportSummary[],
+    total: number,
+    fromDate: string,
+    toDate: string,
+    sortBy: ErrorReportSortBy,
+    sortDirection: SortDirection,
+    pageIndex: number,
+    pageSize: number,
+    filter?: string
+  ) {
     this.errorReportSummaries = errorReportSummaries;
     this.fromDate = fromDate;
     this.toDate = toDate;

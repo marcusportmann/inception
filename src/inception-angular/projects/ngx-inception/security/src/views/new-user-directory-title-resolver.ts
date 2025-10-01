@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 /**
  * The NewUserDirectoryTitleResolver class provides the route data resolver that resolves the
@@ -26,12 +26,10 @@ import {Observable, of} from 'rxjs';
  */
 @Injectable()
 export class NewUserDirectoryTitleResolver {
-
   /**
    * Constructs a new NewUserDirectoryTitleResolver.
    */
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Resolve the title.
@@ -39,8 +37,12 @@ export class NewUserDirectoryTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of($localize`:@@security_new_user_directory_title_resolver:New User Directory`);
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
+    return of(
+      $localize`:@@security_new_user_directory_title_resolver:New User Directory`
+    );
   }
 }

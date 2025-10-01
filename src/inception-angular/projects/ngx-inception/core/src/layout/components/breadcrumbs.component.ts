@@ -15,12 +15,18 @@
  */
 
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit
 } from '@angular/core';
-import {Observable, Subscription} from 'rxjs';
-import {Replace} from '../../util/replace';
-import {Breadcrumb} from '../services/breadcrumb';
-import {BreadcrumbsService} from '../services/breadcrumbs.service';
+import { Observable, Subscription } from 'rxjs';
+import { Replace } from '../../util/replace';
+import { Breadcrumb } from '../services/breadcrumb';
+import { BreadcrumbsService } from '../services/breadcrumbs.service';
 
 /**
  * The BreadcrumbsComponent class implements the breadcrumbs component.
@@ -33,13 +39,21 @@ import {BreadcrumbsService} from '../services/breadcrumbs.service';
   template: `
     <ng-container *ngIf="this.visible">
       <ol class="breadcrumb">
-        <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last=last>
-          <li class="breadcrumb-item"
-              *ngIf="(breadcrumb.label)"
-              [ngClass]="{active: last}">
-            <a *ngIf="!last && (!!breadcrumb.url)"
-               [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
-            <span *ngIf="last || (!breadcrumb.url)">{{ breadcrumb.label }}</span>
+        <ng-template
+          ngFor
+          let-breadcrumb
+          [ngForOf]="breadcrumbs | async"
+          let-last="last">
+          <li
+            class="breadcrumb-item"
+            *ngIf="breadcrumb.label"
+            [ngClass]="{ active: last }">
+            <a
+              *ngIf="!last && !!breadcrumb.url"
+              [routerLink]="breadcrumb.url"
+              >{{ breadcrumb.label }}</a
+            >
+            <span *ngIf="last || !breadcrumb.url">{{ breadcrumb.label }}</span>
           </li>
         </ng-template>
       </ol>
@@ -49,7 +63,6 @@ import {BreadcrumbsService} from '../services/breadcrumbs.service';
   standalone: false
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
-
   breadcrumbs: Observable<Array<Breadcrumb>>;
 
   @Input() fixed = false;
@@ -65,8 +78,11 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
    * @param breadcrumbsService The breadcrumbs service.
    * @param changeDetectorRef  The ChangeDetectorRef instance.
    */
-  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService,
-              private changeDetectorRef: ChangeDetectorRef) {
+  constructor(
+    private elementRef: ElementRef,
+    private breadcrumbsService: BreadcrumbsService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     this.breadcrumbs = this.breadcrumbsService.breadcrumbs$;
   }
 
@@ -78,24 +94,30 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     Replace(this.elementRef);
 
     this.subscriptions.add(
-      this.breadcrumbsService.breadcrumbs$.subscribe((breadcrumbs: Breadcrumb[]) => {
-        const bodySelector = document.querySelector('body');
+      this.breadcrumbsService.breadcrumbs$.subscribe(
+        (breadcrumbs: Breadcrumb[]) => {
+          const bodySelector = document.querySelector('body');
 
-        if (bodySelector) {
-          if ((this.fixed) && (breadcrumbs.length > 0)) {
-            bodySelector.classList.add('breadcrumbs-fixed');
-          } else {
-            bodySelector.classList.remove('breadcrumbs-fixed');
+          if (bodySelector) {
+            if (this.fixed && breadcrumbs.length > 0) {
+              bodySelector.classList.add('breadcrumbs-fixed');
+            } else {
+              bodySelector.classList.remove('breadcrumbs-fixed');
+            }
           }
-        }
 
-        this.changeDetectorRef.detectChanges();
-      }));
+          this.changeDetectorRef.detectChanges();
+        }
+      )
+    );
 
     this.subscriptions.add(
-      this.breadcrumbsService.breadcrumbsVisible$.subscribe((breadcrumbsVisible: boolean) => {
-        this.visible = breadcrumbsVisible;
-        this.changeDetectorRef.detectChanges();
-      }));
+      this.breadcrumbsService.breadcrumbsVisible$.subscribe(
+        (breadcrumbsVisible: boolean) => {
+          this.visible = breadcrumbsVisible;
+          this.changeDetectorRef.detectChanges();
+        }
+      )
+    );
   }
 }

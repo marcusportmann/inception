@@ -21,7 +21,6 @@
  * @author Marcus Portmann
  */
 export class UserDirectoryCapabilities {
-
   /**
    * The user directory supports the admin change password capability.
    */
@@ -81,11 +80,16 @@ export class UserDirectoryCapabilities {
    *                                          capability.
    * * @param supportsUserLocks               The user directory supports the user locks capability.
    */
-  constructor(supportsAdminChangePassword: boolean, supportsChangePassword: boolean,
-              supportsGroupAdministration: boolean, supportsGroupMemberAdministration: boolean,
-              supportsPasswordExpiry: boolean, supportsPasswordHistory: boolean,
-              supportsUserAdministration: boolean,
-              supportsUserLocks: boolean) {
+  constructor(
+    supportsAdminChangePassword: boolean,
+    supportsChangePassword: boolean,
+    supportsGroupAdministration: boolean,
+    supportsGroupMemberAdministration: boolean,
+    supportsPasswordExpiry: boolean,
+    supportsPasswordHistory: boolean,
+    supportsUserAdministration: boolean,
+    supportsUserLocks: boolean
+  ) {
     this.supportsAdminChangePassword = supportsAdminChangePassword;
     this.supportsChangePassword = supportsChangePassword;
     this.supportsGroupAdministration = supportsGroupAdministration;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * The Menu312Component class implements the menu 3.1.2 component.
@@ -24,15 +24,11 @@ import {Component} from '@angular/core';
 @Component({
   template: `
     <mat-card class="flex-grow-1">
-      <mat-card-content>
-        Menu 3.1.2
-      </mat-card-content>
+      <mat-card-content> Menu 3.1.2 </mat-card-content>
     </mat-card>
   `,
   standalone: false
 })
 export class Menu312Component {
-
-  constructor() {
-  }
+  constructor() {}
 }

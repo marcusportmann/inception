@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {TenantStatus} from './tenant-status';
+import { TenantStatus } from './tenant-status';
 
 /**
  * The Tenant class holds the information for a tenant.
@@ -22,7 +22,6 @@ import {TenantStatus} from './tenant-status';
  * @author Marcus Portmann
  */
 export class Tenant {
-
   /**
    * The ID for the tenant.
    */

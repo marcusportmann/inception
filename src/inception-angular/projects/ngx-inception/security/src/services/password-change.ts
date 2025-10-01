@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {PasswordChangeReason} from './password-change-reason';
+import { PasswordChangeReason } from './password-change-reason';
 
 /**
  * The PasswordChange class holds the information for a password change.
@@ -22,7 +22,6 @@ import {PasswordChangeReason} from './password-change-reason';
  * @author Marcus Portmann
  */
 export class PasswordChange {
-
   /**
    * Expire the user's password when performing an administrative password change.
    */
@@ -73,15 +72,23 @@ export class PasswordChange {
    * @param resetPasswordHistory Reset the user's password history when performing an
    *   administrative password change.
    */
-  constructor(reason: PasswordChangeReason, newPassword: string, password?: string,
-              securityCode?: string, expirePassword?: boolean, lockUser?: boolean,
-              resetPasswordHistory?: boolean) {
+  constructor(
+    reason: PasswordChangeReason,
+    newPassword: string,
+    password?: string,
+    securityCode?: string,
+    expirePassword?: boolean,
+    lockUser?: boolean,
+    resetPasswordHistory?: boolean
+  ) {
     this.reason = reason;
     this.newPassword = newPassword;
     this.password = !!password ? password : null;
     this.securityCode = !!securityCode ? securityCode : null;
     this.expirePassword = !!expirePassword ? expirePassword : null;
     this.lockUser = !!lockUser ? lockUser : null;
-    this.resetPasswordHistory = !!resetPasswordHistory ? resetPasswordHistory : null;
+    this.resetPasswordHistory = !!resetPasswordHistory
+      ? resetPasswordHistory
+      : null;
   }
 }

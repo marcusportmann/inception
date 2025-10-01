@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 /**
  * The Menu321TitleResolver class provides the resolver for the Menu321Component.
@@ -25,12 +25,10 @@ import {Observable, of} from 'rxjs';
  */
 @Injectable()
 export class Menu321TitleResolver {
-
   /**
    * Constructs a new Menu321TitleResolver.
    */
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Resolve the title.
@@ -38,8 +36,10 @@ export class Menu321TitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
     return of('Custom Menu 3.2.1 Title');
   }
 }

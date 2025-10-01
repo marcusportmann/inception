@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * The ListsComponent class implements the lists component.
@@ -26,27 +26,29 @@ import {Component} from '@angular/core';
   standalone: false
 })
 export class ListsComponent {
-
   folders = [
     {
       name: 'Photos',
-      updated: new Date('1/1/16'),
-    }, {
+      updated: new Date('1/1/16')
+    },
+    {
       name: 'Recipes',
-      updated: new Date('1/17/16'),
-    }, {
+      updated: new Date('1/17/16')
+    },
+    {
       name: 'Work',
-      updated: new Date('1/28/16'),
+      updated: new Date('1/28/16')
     }
   ];
 
   notes = [
     {
       name: 'Vacation Itinerary',
-      updated: new Date('2/20/16'),
-    }, {
+      updated: new Date('2/20/16')
+    },
+    {
       name: 'Kitchen Remodel',
-      updated: new Date('1/18/16'),
+      updated: new Date('1/18/16')
     }
   ];
 
@@ -55,22 +57,26 @@ export class ListsComponent {
       name: 'Jupiter',
       image: 'assets/images/planets/1.png',
       description: 'Fifth planet',
-      detail: 'Jupiter is the fifth planet from the Sun and the largest in the Solar System'
-    }, {
+      detail:
+        'Jupiter is the fifth planet from the Sun and the largest in the Solar System'
+    },
+    {
       name: 'Venus',
       image: 'assets/images/planets/2.png',
       description: 'Second planet',
-      detail: 'Venus is the second planet from the Sun, orbiting it every 224.7 Earth days'
-    }, {
+      detail:
+        'Venus is the second planet from the Sun, orbiting it every 224.7 Earth days'
+    },
+    {
       name: 'Mars',
       image: 'assets/images/planets/3.png',
       description: 'Fourth planet',
-      detail: 'Mars is the fourth planet from the Sun and the second-smallest planet'
+      detail:
+        'Mars is the fourth planet from the Sun and the second-smallest planet'
     }
   ];
 
   typesOfShoes = ['Dogs', 'Cats', 'Birds', 'Hamsters', 'Ponies'];
 
-  constructor() {
-  }
+  constructor() {}
 }

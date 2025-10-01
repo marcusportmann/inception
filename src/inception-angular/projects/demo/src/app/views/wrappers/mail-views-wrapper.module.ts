@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {MailViewsModule} from 'ngx-inception/mail';
+import { NgModule } from '@angular/core';
+import { MailViewsModule } from 'ngx-inception/mail';
 
 @NgModule({
   imports: [MailViewsModule]
 })
-export class MailViewsWrapperModule {
-}
+export class MailViewsWrapperModule {}

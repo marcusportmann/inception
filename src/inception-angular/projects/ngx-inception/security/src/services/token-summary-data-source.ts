@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {SortDirection} from 'ngx-inception/core';
-import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
-import {catchError, finalize} from 'rxjs/operators';
-import {SecurityService} from './security.service';
-import {TokenSortBy} from './token-sort-by';
-import {TokenStatus} from './token-status';
-import {TokenSummaries} from './token-summaries';
-import {TokenSummary} from './token-summary';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { SortDirection } from 'ngx-inception/core';
+import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+import { SecurityService } from './security.service';
+import { TokenSortBy } from './token-sort-by';
+import { TokenStatus } from './token-status';
+import { TokenSummaries } from './token-summaries';
+import { TokenSummary } from './token-summary';
 
 /**
  * The TokenSummaryDataSource class implements the token summary data source.
@@ -40,8 +40,7 @@ export class TokenSummaryDataSource implements DataSource<TokenSummary> {
 
   total$ = this.totalSubject$.asObservable();
 
-  constructor(private securityService: SecurityService) {
-  }
+  constructor(private securityService: SecurityService) {}
 
   /**
    * Clear the data source.
@@ -72,15 +71,31 @@ export class TokenSummaryDataSource implements DataSource<TokenSummary> {
    *
    * @return The token summaries.
    */
-  load(requiredStatus: TokenStatus, filter?: string, sortDirection?: SortDirection,
-       pageIndex?: number, pageSize?: number): Observable<TokenSummaries> {
+  load(
+    requiredStatus: TokenStatus,
+    filter?: string,
+    sortDirection?: SortDirection,
+    pageIndex?: number,
+    pageSize?: number
+  ): Observable<TokenSummaries> {
     this.loadingSubject$.next(true);
 
-    return this.securityService.getTokenSummaries(requiredStatus, filter, TokenSortBy.Name,
-      sortDirection, pageIndex, pageSize).pipe(tap((tokenSummaries: TokenSummaries) => {
-        this.updateData(tokenSummaries);
-      }), catchError((error: Error) => this.handleError(error)),
-      finalize(() => this.loadingSubject$.next(false)));
+    return this.securityService
+      .getTokenSummaries(
+        requiredStatus,
+        filter,
+        TokenSortBy.Name,
+        sortDirection,
+        pageIndex,
+        pageSize
+      )
+      .pipe(
+        tap((tokenSummaries: TokenSummaries) => {
+          this.updateData(tokenSummaries);
+        }),
+        catchError((error: Error) => this.handleError(error)),
+        finalize(() => this.loadingSubject$.next(false))
+      );
   }
 
   /**

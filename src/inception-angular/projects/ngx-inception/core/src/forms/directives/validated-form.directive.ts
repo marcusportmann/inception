@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-import {Directive, Host, HostListener, Optional, Self, ViewContainerRef} from '@angular/core';
-import {FormGroupDirective} from '@angular/forms';
+import {
+  Directive,
+  Host,
+  HostListener,
+  Optional,
+  Self,
+  ViewContainerRef
+} from '@angular/core';
+import { FormGroupDirective } from '@angular/forms';
 
 /**
  * The ValidatedFormDirective class implements the validated form directive.
@@ -28,28 +35,31 @@ import {FormGroupDirective} from '@angular/forms';
   standalone: false
 })
 export class ValidatedFormDirective {
-
   /**
    * Constructs a new ValidatedFormDirective.
    *
    * @param viewContainerRef   The view container reference.
    * @param formGroupDirective The form group directive.
    */
-  constructor(private viewContainerRef: ViewContainerRef,
-              @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective) {
-  }
+  constructor(
+    private viewContainerRef: ViewContainerRef,
+    @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective
+  ) {}
 
   @HostListener('reset')
-  onReset(): void {
-  }
+  onReset(): void {}
 
   @HostListener('submit')
   onSubmit(): boolean {
     // Mark all controls as touched
-    if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {
+    if (
+      this.formGroupDirective &&
+      this.formGroupDirective.control &&
+      this.formGroupDirective.control.controls
+    ) {
       const form = this.formGroupDirective.control;
 
-      Object.keys(form.controls).forEach(key => {
+      Object.keys(form.controls).forEach((key) => {
         const formControl = form.get(key);
 
         if (formControl) {
@@ -59,7 +69,9 @@ export class ValidatedFormDirective {
     }
 
     // Find the first invalid form control and set focus to it
-    return !this.checkForInvalidFormControlAndSetFocus(this.viewContainerRef.element.nativeElement);
+    return !this.checkForInvalidFormControlAndSetFocus(
+      this.viewContainerRef.element.nativeElement
+    );
   }
 
   private static isFormElement(nodeName: string): boolean {
@@ -76,12 +88,20 @@ export class ValidatedFormDirective {
 
   // eslint-disable-next-line
   private checkForInvalidFormControlAndSetFocus(nativeElement: any): boolean {
-    if (nativeElement.children && (nativeElement.children.length > 0)) {
+    if (nativeElement.children && nativeElement.children.length > 0) {
       for (const nativeChildElement of nativeElement.children) {
-        if (nativeChildElement && nativeChildElement.nodeName &&
-          ValidatedFormDirective.isFormElement(nativeChildElement.nodeName)) {
-          if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {
-            const formControl = this.formGroupDirective.control.controls[nativeChildElement.name];
+        if (
+          nativeChildElement &&
+          nativeChildElement.nodeName &&
+          ValidatedFormDirective.isFormElement(nativeChildElement.nodeName)
+        ) {
+          if (
+            this.formGroupDirective &&
+            this.formGroupDirective.control &&
+            this.formGroupDirective.control.controls
+          ) {
+            const formControl =
+              this.formGroupDirective.control.controls[nativeChildElement.name];
 
             if (formControl && formControl.invalid) {
               nativeChildElement.focus();

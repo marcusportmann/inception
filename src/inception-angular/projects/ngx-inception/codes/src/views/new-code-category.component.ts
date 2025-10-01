@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
+  AccessDeniedError,
+  AdminContainerView,
+  BackNavigation,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {CodeCategory} from '../services/code-category';
-import {CodesService} from '../services/codes.service';
+import { finalize, first } from 'rxjs/operators';
+import { CodeCategory } from '../services/code-category';
+import { CodesService } from '../services/codes.service';
 
 /**
  * The NewCodeCategoryComponent class implements the new code category component.
@@ -35,8 +41,10 @@ import {CodesService} from '../services/codes.service';
   styleUrls: ['new-code-category.component.css'],
   standalone: false
 })
-export class NewCodeCategoryComponent extends AdminContainerView implements AfterViewInit {
-
+export class NewCodeCategoryComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
   codeCategory: CodeCategory | null = null;
 
   dataControl: FormControl;
@@ -47,27 +55,40 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
 
   newCodeCategoryForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private codesService: CodesService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private codesService: CodesService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Initialize form controls
     this.dataControl = new FormControl('');
-    this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.idControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
+    this.nameControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
 
     // Initialize form group
     this.newCodeCategoryForm = new FormGroup({
       data: this.dataControl,
       id: this.idControl,
-      name: this.nameControl,
+      name: this.nameControl
     });
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@codes_new_code_category_back_navigation:Code Categories`,
-      ['..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation(
+      $localize`:@@codes_new_code_category_back_navigation:Code Categories`,
+      ['..'],
+      { relativeTo: this.activatedRoute }
+    );
   }
 
   get title(): string {
@@ -76,7 +97,7 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
@@ -95,19 +116,29 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
       this.spinnerService.showSpinner();
 
       this.codesService
-      .createCodeCategory(this.codeCategory)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe({
-        next: () => this.router.navigate(['..'], {relativeTo: this.activatedRoute}),
-        error: (error: Error) => this.handleError(error),
-      });
+        .createCodeCategory(this.codeCategory)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe({
+          next: () =>
+            this.router.navigate(['..'], { relativeTo: this.activatedRoute }),
+          error: (error: Error) => this.handleError(error)
+        });
     }
   }
 
   private handleError(error: Error): void {
-    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+    if (
+      error instanceof AccessDeniedError ||
+      error instanceof InvalidArgumentError ||
+      error instanceof ServiceUnavailableError
+    ) {
       // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      this.router.navigateByUrl('/error/send-error-report', {
+        state: { error }
+      });
     } else {
       this.dialogService.showErrorDialog(error);
     }

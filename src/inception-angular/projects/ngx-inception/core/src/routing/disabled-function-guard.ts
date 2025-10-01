@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 /**
  * The DisabledFunctionGuard class implements the routing guard that restricts access to a disabled
@@ -25,12 +25,10 @@ import {ActivatedRouteSnapshot} from '@angular/router';
  */
 @Injectable()
 export class DisabledFunctionGuard {
-
   /**
    * Constructs a new DisabledFunctionGuard.
    */
-  constructor() {
-  }
+  constructor() {}
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): boolean {
     return false;

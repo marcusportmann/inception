@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {SortDirection} from 'ngx-inception/core';
-import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
-import {catchError, finalize} from 'rxjs/operators';
-import {SecurityService} from './security.service';
-import {UserDirectorySummaries} from './user-directory-summaries';
-import {UserDirectorySummary} from './user-directory-summary';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { SortDirection } from 'ngx-inception/core';
+import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+import { SecurityService } from './security.service';
+import { UserDirectorySummaries } from './user-directory-summaries';
+import { UserDirectorySummary } from './user-directory-summary';
 
 /**
  * The UserDirectorySummaryDataSource class implements the token summary data source.
  *
  * @author Marcus Portmann
  */
-export class UserDirectorySummaryDataSource implements DataSource<UserDirectorySummary> {
+export class UserDirectorySummaryDataSource
+  implements DataSource<UserDirectorySummary>
+{
   private dataSubject$ = new BehaviorSubject<UserDirectorySummary[]>([]);
 
   private loadingSubject$ = new BehaviorSubject<boolean>(false);
@@ -38,8 +40,7 @@ export class UserDirectorySummaryDataSource implements DataSource<UserDirectoryS
 
   total$ = this.totalSubject$.asObservable();
 
-  constructor(private securityService: SecurityService) {
-  }
+  constructor(private securityService: SecurityService) {}
 
   /**
    * Clear the data source.
@@ -49,7 +50,9 @@ export class UserDirectorySummaryDataSource implements DataSource<UserDirectoryS
     this.dataSubject$.next([]);
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<UserDirectorySummary[]> {
+  connect(
+    collectionViewer: CollectionViewer
+  ): Observable<UserDirectorySummary[]> {
     return this.dataSubject$.asObservable();
   }
 
@@ -69,15 +72,23 @@ export class UserDirectorySummaryDataSource implements DataSource<UserDirectoryS
    *
    * @return The user directory summaries.
    */
-  load(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
-       pageSize?: number): Observable<UserDirectorySummaries> {
+  load(
+    filter?: string,
+    sortDirection?: SortDirection,
+    pageIndex?: number,
+    pageSize?: number
+  ): Observable<UserDirectorySummaries> {
     this.loadingSubject$.next(true);
 
-    return this.securityService.getUserDirectorySummaries(filter, sortDirection, pageIndex,
-      pageSize).pipe(tap((userDirectorySummaries: UserDirectorySummaries) => {
-        this.updateData(userDirectorySummaries);
-      }), catchError((error: Error) => this.handleError(error)),
-      finalize(() => this.loadingSubject$.next(false)));
+    return this.securityService
+      .getUserDirectorySummaries(filter, sortDirection, pageIndex, pageSize)
+      .pipe(
+        tap((userDirectorySummaries: UserDirectorySummaries) => {
+          this.updateData(userDirectorySummaries);
+        }),
+        catchError((error: Error) => this.handleError(error)),
+        finalize(() => this.loadingSubject$.next(false))
+      );
   }
 
   /**

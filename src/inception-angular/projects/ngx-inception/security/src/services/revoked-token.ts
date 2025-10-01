@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {TokenType} from './token-type';
+import { TokenType } from './token-type';
 
 /**
  * The RevokedToken class holds the information for a revoked token.
@@ -22,7 +22,6 @@ import {TokenType} from './token-type';
  * @author Marcus Portmann
  */
 export class RevokedToken {
-
   /**
    * The date the token expires.
    */
@@ -69,8 +68,15 @@ export class RevokedToken {
    * @param validFrom The date the token is valid from.
    * @param revoked   The date the token was revoked.
    */
-  constructor(id: string, type: TokenType, name: string, issued: Date, expires?: Date,
-              validFrom?: Date, revoked?: Date) {
+  constructor(
+    id: string,
+    type: TokenType,
+    name: string,
+    issued: Date,
+    expires?: Date,
+    validFrom?: Date,
+    revoked?: Date
+  ) {
     this.id = id;
     this.type = type;
     this.name = name;

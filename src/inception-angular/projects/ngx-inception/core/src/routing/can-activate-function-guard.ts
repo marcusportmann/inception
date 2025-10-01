@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {first, map} from 'rxjs/operators';
-import {Session} from '../session/services/session';
-import {SessionService} from '../session/services/session.service';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { first, map } from 'rxjs/operators';
+import { Session } from '../session/services/session';
+import { SessionService } from '../session/services/session.service';
 
 /**
  * The CanActivateFunctionGuard class implements the routing guard that restricts access to a route
@@ -29,50 +29,58 @@ import {SessionService} from '../session/services/session.service';
  */
 @Injectable()
 export class CanActivateFunctionGuard {
-
   /**
    * Constructs a new CanActivateFunctionGuard.
    *
    * @param router         The router.
    * @param sessionService The session service.
    */
-  constructor(private router: Router, private sessionService: SessionService) {
-  }
+  constructor(
+    private router: Router,
+    private sessionService: SessionService
+  ) {}
 
-  canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
-    return this.sessionService.session$.pipe(first(), map((session: Session | null) => {
-      if (activatedRouteSnapshot) {
-        if (activatedRouteSnapshot.data) {
-          if (activatedRouteSnapshot.data['authorities']) {
-            if (session) {
-              for (const authority of activatedRouteSnapshot.data['authorities']) {
-                if (session.hasAuthority(authority)) {
-                  return true;
+  canActivate(
+    activatedRouteSnapshot: ActivatedRouteSnapshot
+  ): Observable<boolean> {
+    return this.sessionService.session$.pipe(
+      first(),
+      map((session: Session | null) => {
+        if (activatedRouteSnapshot) {
+          if (activatedRouteSnapshot.data) {
+            if (activatedRouteSnapshot.data['authorities']) {
+              if (session) {
+                for (const authority of activatedRouteSnapshot.data[
+                  'authorities'
+                ]) {
+                  if (session.hasAuthority(authority)) {
+                    return true;
+                  }
                 }
+
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigate(['/login']);
+
+                return false;
+              } else {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigate(['/login']);
+
+                return false;
               }
-
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['/login']);
-
-              return false;
             } else {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['/login']);
-
-              return false;
+              return true;
             }
           } else {
             return true;
           }
         } else {
-          return true;
-        }
-      } else {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['/login']);
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/login']);
 
-        return false;
-      }
-    }));
+          return false;
+        }
+      })
+    );
   }
 }

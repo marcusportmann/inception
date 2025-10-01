@@ -14,20 +14,27 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, ConfirmationDialogComponent, DialogService,
-  Error, InvalidArgumentError, ServiceUnavailableError, SpinnerService
+  AccessDeniedError,
+  AdminContainerView,
+  BackNavigation,
+  ConfirmationDialogComponent,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {finalize, first} from 'rxjs/operators';
-import {GroupRole} from '../services/group-role';
-import {Role} from '../services/role';
-import {SecurityService} from '../services/security.service';
+import { ReplaySubject, Subject, Subscription } from 'rxjs';
+import { finalize, first } from 'rxjs/operators';
+import { GroupRole } from '../services/group-role';
+import { Role } from '../services/role';
+import { SecurityService } from '../services/security.service';
 
 /**
  * The GroupRolesComponent class implements the group roles component.
@@ -39,8 +46,10 @@ import {SecurityService} from '../services/security.service';
   styleUrls: ['group-roles.component.css'],
   standalone: false
 })
-export class GroupRolesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-
+export class GroupRolesComponent
+  extends AdminContainerView
+  implements AfterViewInit, OnDestroy
+{
   allRoles: Role[] = [];
 
   availableRoles$: Subject<Role[]> = new ReplaySubject<Role[]>(1);
@@ -51,7 +60,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   groupName: string;
 
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
   selectedRole: Role | null = null;
 
@@ -59,16 +68,21 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private securityService: SecurityService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private securityService: SecurityService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Retrieve the route parameters
-    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+    const userDirectoryId =
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
-      throw (new Error('No userDirectoryId route parameter found'));
+      throw new Error('No userDirectoryId route parameter found');
     }
 
     this.userDirectoryId = decodeURIComponent(userDirectoryId);
@@ -76,67 +90,101 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
     const groupName = this.activatedRoute.snapshot.paramMap.get('groupName');
 
     if (!groupName) {
-      throw (new Error('No groupName route parameter found'));
+      throw new Error('No groupName route parameter found');
     }
 
     this.groupName = decodeURIComponent(groupName);
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@security_group_roles_back_navigation:Back`,
-      ['../../..'], {
+    return new BackNavigation(
+      $localize`:@@security_group_roles_back_navigation:Back`,
+      ['../../..'],
+      {
         relativeTo: this.activatedRoute,
-        state: {userDirectoryId: this.userDirectoryId}
-      });
+        state: { userDirectoryId: this.userDirectoryId }
+      }
+    );
   }
 
   get title(): string {
-    return $localize`:@@security_group_roles_title:Group Roles`
+    return $localize`:@@security_group_roles_title:Group Roles`;
   }
 
   addRoleToGroup(): void {
     if (this.selectedRole) {
       this.spinnerService.showSpinner();
 
-      this.securityService.addRoleToGroup(this.userDirectoryId, this.groupName,
-        this.selectedRole.code)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-        this.loadRolesForGroup();
-        this.selectedRole = null;
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.securityService
+        .addRoleToGroup(
+          this.userDirectoryId,
+          this.groupName,
+          this.selectedRole.code
+        )
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe(
+          () => {
+            this.loadRolesForGroup();
+            this.selectedRole = null;
+          },
+          (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if (
+              error instanceof AccessDeniedError ||
+              error instanceof InvalidArgumentError ||
+              error instanceof ServiceUnavailableError
+            ) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {
+                state: { error }
+              });
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          }
+        );
     }
   }
 
   loadRolesForGroup(): void {
     this.spinnerService.showSpinner();
 
-    this.securityService.getRolesForGroup(this.userDirectoryId, this.groupName)
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((groupRoles: GroupRole[]) => {
-      this.dataSource.data = groupRoles;
+    this.securityService
+      .getRolesForGroup(this.userDirectoryId, this.groupName)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe(
+        (groupRoles: GroupRole[]) => {
+          this.dataSource.data = groupRoles;
 
-      this.availableRoles$.next(
-        GroupRolesComponent.calculateAvailableRoles(this.allRoles, this.dataSource.data));
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+          this.availableRoles$.next(
+            GroupRolesComponent.calculateAvailableRoles(
+              this.allRoles,
+              this.dataSource.data
+            )
+          );
+        },
+        (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if (
+            error instanceof AccessDeniedError ||
+            error instanceof InvalidArgumentError ||
+            error instanceof ServiceUnavailableError
+          ) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {
+              state: { error }
+            });
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        }
+      );
   }
 
   ngAfterViewInit(): void {
@@ -145,22 +193,34 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 
-    this.securityService.getRoles()
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((roles: Role[]) => {
-      this.allRoles = roles;
+    this.securityService
+      .getRoles()
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe(
+        (roles: Role[]) => {
+          this.allRoles = roles;
 
-      this.loadRolesForGroup();
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+          this.loadRolesForGroup();
+        },
+        (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if (
+            error instanceof AccessDeniedError ||
+            error instanceof InvalidArgumentError ||
+            error instanceof ServiceUnavailableError
+          ) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {
+              state: { error }
+            });
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        }
+      );
   }
 
   ngOnDestroy(): void {
@@ -168,34 +228,47 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
   }
 
   removeRoleFromGroup(roleCode: string) {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
+      this.dialogService.showConfirmationDialog({
         message: $localize`:@@security_group_roles_confirm_remove_role_from_group:Are you sure you want to remove the role from the group?`
       });
 
-    dialogRef.afterClosed()
-    .pipe(first())
-    .subscribe((confirmation: boolean | undefined) => {
-      if (confirmation === true) {
-        this.spinnerService.showSpinner();
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((confirmation: boolean | undefined) => {
+        if (confirmation === true) {
+          this.spinnerService.showSpinner();
 
-        this.securityService.removeRoleFromGroup(this.userDirectoryId, this.groupName, roleCode)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          this.loadRolesForGroup();
-          this.selectedRole = null;
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-            (error instanceof ServiceUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
-      }
-    });
+          this.securityService
+            .removeRoleFromGroup(this.userDirectoryId, this.groupName, roleCode)
+            .pipe(
+              first(),
+              finalize(() => this.spinnerService.hideSpinner())
+            )
+            .subscribe(
+              () => {
+                this.loadRolesForGroup();
+                this.selectedRole = null;
+              },
+              (error: Error) => {
+                // noinspection SuspiciousTypeOfGuard
+                if (
+                  error instanceof AccessDeniedError ||
+                  error instanceof InvalidArgumentError ||
+                  error instanceof ServiceUnavailableError
+                ) {
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigateByUrl('/error/send-error-report', {
+                    state: { error }
+                  });
+                } else {
+                  this.dialogService.showErrorDialog(error);
+                }
+              }
+            );
+        }
+      });
   }
 
   roleCodeToName(roleCode: string): string {
@@ -208,9 +281,10 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
     return 'Unknown';
   }
 
-  private static calculateAvailableRoles(allRoles: Role[],
-                                         existingGroupRoles: GroupRole[]): Role[] {
-
+  private static calculateAvailableRoles(
+    allRoles: Role[],
+    existingGroupRoles: GroupRole[]
+  ): Role[] {
     const availableRoles: Role[] = [];
 
     for (const possibleRole of allRoles) {

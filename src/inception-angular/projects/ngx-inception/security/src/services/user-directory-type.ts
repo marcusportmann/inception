@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class UserDirectoryType {
-
   /**
    * The code for the user directory type.
    */

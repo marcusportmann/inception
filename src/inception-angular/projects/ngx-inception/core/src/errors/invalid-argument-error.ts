@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
-import {Error} from './error';
-import {HttpError} from './http-error';
-import {ProblemDetails} from './problem-details';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Error } from './error';
+import { HttpError } from './http-error';
+import { ProblemDetails } from './problem-details';
 
 /**
  * The InvalidArgumentError class holds the information for an invalid argument error.
@@ -25,7 +25,6 @@ import {ProblemDetails} from './problem-details';
  * @author Marcus Portmann
  */
 export class InvalidArgumentError extends Error {
-
   static readonly TYPE = 'https://inception.digital/problems/invalid-argument';
 
   /**
@@ -34,7 +33,10 @@ export class InvalidArgumentError extends Error {
    * @param cause   The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@core_invalid_argument_error:An invalid argument error occurred.`, cause);
+    super(
+      $localize`:@@core_invalid_argument_error:An invalid argument error occurred.`,
+      cause
+    );
   }
 
   /**
@@ -46,6 +48,9 @@ export class InvalidArgumentError extends Error {
    *         otherwise.
    */
   static isInvalidArgumentError(httpErrorResponse: HttpErrorResponse): boolean {
-    return ProblemDetails.isProblemDetails(httpErrorResponse, InvalidArgumentError.TYPE);
+    return ProblemDetails.isProblemDetails(
+      httpErrorResponse,
+      InvalidArgumentError.TYPE
+    );
   }
 }

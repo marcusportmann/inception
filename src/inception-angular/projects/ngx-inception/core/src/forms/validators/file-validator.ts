@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AbstractControl, ValidatorFn} from '@angular/forms';
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 /**
  * The FileValidator class.
@@ -22,7 +22,6 @@ import {AbstractControl, ValidatorFn} from '@angular/forms';
  * @author Marcus Portmann
  */
 export class FileValidator {
-
   /**
    * Validator function to validate that the total length of one or more files does not exceed the
    * maximum number of bytes allowed.
@@ -32,12 +31,13 @@ export class FileValidator {
    * @return The validator function.
    */
   public static maxSize(maximumBytes: number): ValidatorFn {
-    const validatorFn = (control: AbstractControl): { [key: string]: any } | null => {
-
+    const validatorFn = (
+      control: AbstractControl
+    ): { [key: string]: any } | null => {
       if (control && control.value) {
         let numberOfBytes = 0;
 
-        for (const file of (control.value as File[])) {
+        for (const file of control.value as File[]) {
           numberOfBytes += file.size;
         }
 
@@ -66,12 +66,13 @@ export class FileValidator {
    * @return The validator function.
    */
   public static minSize(minimumBytes: number): ValidatorFn {
-    const validatorFn = (control: AbstractControl): { [key: string]: any } | null => {
-
+    const validatorFn = (
+      control: AbstractControl
+    ): { [key: string]: any } | null => {
       if (control && control.value) {
         let numberOfBytes = 0;
 
-        for (const file of (control.value as File[])) {
+        for (const file of control.value as File[]) {
           numberOfBytes += file.size;
         }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * The TooltipsComponent class implements the tooltips component.
@@ -25,6 +25,4 @@ import {Component} from '@angular/core';
   templateUrl: 'tooltips.component.html',
   standalone: false
 })
-export class TooltipsComponent {
-
-}
+export class TooltipsComponent {}

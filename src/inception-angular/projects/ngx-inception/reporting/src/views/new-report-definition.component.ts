@@ -14,16 +14,24 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, Base64, DialogService, Error,
-  FileValidator, InvalidArgumentError, ServiceUnavailableError, SpinnerService
+  AccessDeniedError,
+  AdminContainerView,
+  BackNavigation,
+  Base64,
+  DialogService,
+  Error,
+  FileValidator,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {ReportDefinition} from '../services/report-definition';
-import {ReportingService} from '../services/reporting.service';
+import { finalize, first } from 'rxjs/operators';
+import { ReportDefinition } from '../services/report-definition';
+import { ReportingService } from '../services/reporting.service';
 
 /**
  * The NewReportDefinitionComponent class implements the new report definition component.
@@ -35,8 +43,10 @@ import {ReportingService} from '../services/reporting.service';
   styleUrls: ['new-report-definition.component.css'],
   standalone: false
 })
-export class NewReportDefinitionComponent extends AdminContainerView implements AfterViewInit {
-
+export class NewReportDefinitionComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
   idControl: FormControl;
 
   nameControl: FormControl;
@@ -47,19 +57,26 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
 
   templateControl: FormControl;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private reportingService: ReportingService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private reportingService: ReportingService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Initialise the form controls
     this.idControl = new FormControl('', [Validators.required]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.templateControl = new FormControl('',
-      [
-        Validators.required, FileValidator.minSize(1), FileValidator.maxSize(
-        ReportingService.MAX_TEMPLATE_SIZE)
-      ]);
+    this.nameControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
+    this.templateControl = new FormControl('', [
+      Validators.required,
+      FileValidator.minSize(1),
+      FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)
+    ]);
 
     // Initialise the form
     this.newReportDefinitionForm = new FormGroup({
@@ -72,16 +89,18 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@reporting_new_report_definition_back_navigation:Report Definitions`,
-      ['..'], {relativeTo: this.activatedRoute});
+      ['..'],
+      { relativeTo: this.activatedRoute }
+    );
   }
 
   get title(): string {
-    return $localize`:@@reporting_new_report_definition_title:New Report Definition`
+    return $localize`:@@reporting_new_report_definition_title:New Report Definition`;
   }
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
@@ -90,14 +109,12 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
 
   ok(): void {
     if (this.reportDefinition && this.newReportDefinitionForm.valid) {
-
       const fileReader: FileReader = new FileReader();
 
       fileReader.onloadend = (ev: ProgressEvent) => {
         const template = fileReader.result;
 
-        if (this.reportDefinition && (template instanceof ArrayBuffer)) {
-
+        if (this.reportDefinition && template instanceof ArrayBuffer) {
           const base64: string = Base64.encode(template as ArrayBuffer);
 
           this.reportDefinition.id = this.idControl.value;
@@ -106,24 +123,41 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
 
           this.spinnerService.showSpinner();
 
-          this.reportingService.createReportDefinition(this.reportDefinition)
-          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-          .subscribe(() => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-          }, (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-              (error instanceof ServiceUnavailableError)) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          });
+          this.reportingService
+            .createReportDefinition(this.reportDefinition)
+            .pipe(
+              first(),
+              finalize(() => this.spinnerService.hideSpinner())
+            )
+            .subscribe(
+              () => {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigate(['..'], {
+                  relativeTo: this.activatedRoute
+                });
+              },
+              (error: Error) => {
+                // noinspection SuspiciousTypeOfGuard
+                if (
+                  error instanceof AccessDeniedError ||
+                  error instanceof InvalidArgumentError ||
+                  error instanceof ServiceUnavailableError
+                ) {
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigateByUrl('/error/send-error-report', {
+                    state: { error }
+                  });
+                } else {
+                  this.dialogService.showErrorDialog(error);
+                }
+              }
+            );
         } else {
           console.log(
-            'Failed to read the template file for the report definition (' + fileReader.result + ')');
+            'Failed to read the template file for the report definition (' +
+              fileReader.result +
+              ')'
+          );
         }
       };
 

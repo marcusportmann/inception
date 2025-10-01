@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 /**
  * The MailTitleResolver class provides the route data resolver that resolves the
@@ -24,12 +24,10 @@ import {Observable, of} from 'rxjs';
  * @author Marcus Portmann
  */
 export class MailTitleResolver {
-
   /**
    * Constructs a new MailTitleResolver.
    */
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Resolve the title.
@@ -37,8 +35,10 @@ export class MailTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
     return of($localize`:@@mail_mail_title_resolver:Mail`);
   }
 }

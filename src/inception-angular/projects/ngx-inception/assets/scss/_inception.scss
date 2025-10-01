@@ -1,213 +1,256 @@
 @forward "vendors/perfect-scrollbar/perfect-scrollbar";
 
-@use 'sass:color';
-@use 'sass:list';
-@use 'sass:map';
-@use 'sass:math';
-@use 'sass:meta';
-@use 'sass:string';
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
 
 @use "functions" as *;
 @use "mixins" as *;
 
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @use "@angular/material/core/typography/typography";
 
 @include mat.core();
 
-
-
-
-
-
-
-
-
-
 // Options
-$enable-rounded:                              true !default;
-$enable-grid-classes:                         true !default;
-$enable-pointer-cursor-for-buttons:           true !default;
-$enable-sidebar-nav-rounded:                  false !default;
+$enable-rounded: true !default;
+$enable-grid-classes: true !default;
+$enable-pointer-cursor-for-buttons: true !default;
+$enable-sidebar-nav-rounded: false !default;
 
 // Components
-$border-width:                1px !default;
-$border-radius:               .25rem !default;
+$border-width: 1px !default;
+$border-radius: 0.25rem !default;
 
 // Body
-$spacer:                              1rem !default;
+$spacer: 1rem !default;
 
 // Breadcrumbs
-$breadcrumb-height:                 35px;
-$breadcrumb-font-size:              .8rem !default;
-$breadcrumb-line-height:             1rem !default;
-$breadcrumb-padding-y:              8px !default;
-$breadcrumb-padding-x:              8px !default;
-$breadcrumb-item-padding:           .4rem !default;
-$breadcrumb-margin-bottom:          0 !default;
-$breadcrumb-divider:                string.quote("/") !default;
-$breadcrumb-border-radius:          $border-radius !default;
+$breadcrumb-height: 35px;
+$breadcrumb-font-size: 0.8rem !default;
+$breadcrumb-line-height: 1rem !default;
+$breadcrumb-padding-y: 8px !default;
+$breadcrumb-padding-x: 8px !default;
+$breadcrumb-item-padding: 0.4rem !default;
+$breadcrumb-margin-bottom: 0 !default;
+$breadcrumb-divider: string.quote("/") !default;
+$breadcrumb-border-radius: $border-radius !default;
 
 // Layout
-$layout-transition-speed:             .25s !default;
+$layout-transition-speed: 0.25s !default;
 
 // Links
-$link-decoration:                         none !default;
-$link-hover-decoration:                   underline !default;
+$link-decoration: none !default;
+$link-hover-decoration: underline !default;
 
 // Paragraphs
-$paragraph-margin-bottom:   1rem !default;
+$paragraph-margin-bottom: 1rem !default;
 
 // Z-index master list
 //
 // Warning: Avoid customizing these values. They're used for a bird's eye view
 // of components dependent on the z-axis and are designed to all work together.
 
-$zindex-sticky:                     1020 !default;
+$zindex-sticky: 1020 !default;
 
 // Admin Header
-$admin-header-height:                 40px !default;
-$admin-header-brand-width:            190px !default;
-$admin-header-brand-border:           (none: (size: 0, style: none, color: transparent)) !default;
-$admin-header-brand-minimized-width:  50px !default;
+$admin-header-height: 40px !default;
+$admin-header-brand-width: 190px !default;
+$admin-header-brand-border: (
+  none: (
+    size: 0,
+    style: none,
+    color: transparent
+  )
+) !default;
+$admin-header-brand-minimized-width: 50px !default;
 $admin-header-brand-minimized-border: $admin-header-brand-border !default;
-$admin-header-navbar-height:          55px !default;
+$admin-header-navbar-height: 55px !default;
 
 // Admin Body
 
 // Admin Footer
-$admin-footer-height:                 35px !default;
+$admin-footer-height: 35px !default;
 
 // Sidebar
-$sidebar-width:                       225px !default;
-$sidebar-padding:                     0 !default;
-$sidebar-minimized-width:             50px !default;
-$sidebar-minimized-height:            $sidebar-minimized-width !default;
-$sidebar-compact-width:               150px !default;
-$sidebar-compact-height:              $sidebar-compact-width !default;
-$sidebar-borders:                     (none: (size: 0, style: none, color: transparent)) !default;
-$sidebar-font-size:                   0.9375rem;
-$mobile-sidebar-width:                225px !default;
+$sidebar-width: 225px !default;
+$sidebar-padding: 0 !default;
+$sidebar-minimized-width: 50px !default;
+$sidebar-minimized-height: $sidebar-minimized-width !default;
+$sidebar-compact-width: 150px !default;
+$sidebar-compact-height: $sidebar-compact-width !default;
+$sidebar-borders: (
+  none: (
+    size: 0,
+    style: none,
+    color: transparent
+  )
+) !default;
+$sidebar-font-size: 0.9375rem;
+$mobile-sidebar-width: 225px !default;
 
 // Sidebar Header
-$sidebar-header-height:               auto !default;
-$sidebar-header-padding-y:            .75rem !default;
-$sidebar-header-padding-x:            1rem !default;
+$sidebar-header-height: auto !default;
+$sidebar-header-padding-y: 0.75rem !default;
+$sidebar-header-padding-x: 1rem !default;
 
 // Sidebar Form
-$sidebar-form-border:                 0 !default;
+$sidebar-form-border: 0 !default;
 
 // Sidebar Navigation
-$sidebar-nav-title-padding-y:         .75rem !default;
-$sidebar-nav-title-padding-x:         1rem !default;
-$sidebar-nav-link-padding-y:          .75rem !default;
-$sidebar-nav-link-padding-x:          1rem !default;
-$sidebar-nav-link-borders:            (none: (size: 0, style: none, color: transparent)) !default;
+$sidebar-nav-title-padding-y: 0.75rem !default;
+$sidebar-nav-title-padding-x: 1rem !default;
+$sidebar-nav-link-padding-y: 0.75rem !default;
+$sidebar-nav-link-padding-x: 1rem !default;
+$sidebar-nav-link-borders: (
+  none: (
+    size: 0,
+    style: none,
+    color: transparent
+  )
+) !default;
 
-$sidebar-nav-link-hover-borders:      (none: (size: 0, style: none, color: transparent)) !default;
+$sidebar-nav-link-hover-borders: (
+  none: (
+    size: 0,
+    style: none,
+    color: transparent
+  )
+) !default;
 
-$sidebar-nav-link-active-borders:     (none: (size: 0, style: none, color: transparent)) !default;
+$sidebar-nav-link-active-borders: (
+  none: (
+    size: 0,
+    style: none,
+    color: transparent
+  )
+) !default;
 
-$sidebar-nav-dropdown-borders:        (none: (size: 0, style: none, color: transparent)) !default;
+$sidebar-nav-dropdown-borders: (
+  none: (
+    size: 0,
+    style: none,
+    color: transparent
+  )
+) !default;
 
 // Sidebar Footer
-$sidebar-footer-height:               auto !default;
-$sidebar-footer-padding-y:            .75rem !default;
-$sidebar-footer-padding-x:            1rem !default;
-$sidebar-footer-borders:              (none: (size: 0, style: none, color: transparent)) !default;
+$sidebar-footer-height: auto !default;
+$sidebar-footer-padding-y: 0.75rem !default;
+$sidebar-footer-padding-x: 1rem !default;
+$sidebar-footer-borders: (
+  none: (
+    size: 0,
+    style: none,
+    color: transparent
+  )
+) !default;
 
 // Sidebar Minimizer
-$sidebar-minimizer-height:            35px !default;
-$sidebar-minimizer-borders:           (none: (size: 0, style: none, color: transparent)) !default;
+$sidebar-minimizer-height: 35px !default;
+$sidebar-minimizer-borders: (
+  none: (
+    size: 0,
+    style: none,
+    color: transparent
+  )
+) !default;
 
 // Title bar
-$title-bar-back-font-size:            0.875rem;
-$title-bar-padding-y:                 .75rem !default;
-$title-bar-height:                    35px;
+$title-bar-back-font-size: 0.875rem;
+$title-bar-padding-y: 0.75rem !default;
+$title-bar-height: 35px;
 
 // Aside
-$aside-menu-width:                    250px !default;
-$aside-menu-nav-padding-y:            .75rem !default;
-$aside-menu-nav-padding-x:            1rem !default;
+$aside-menu-width: 250px !default;
+$aside-menu-nav-padding-y: 0.75rem !default;
+$aside-menu-nav-padding-x: 1rem !default;
 
 // Fonts
-$font-family-sans-serif:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
-$font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
-$font-family-base:            $font-family-sans-serif !default;
+$font-family-sans-serif:
+  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-family-monospace:
+  SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+  monospace !default;
+$font-family-base: $font-family-sans-serif !default;
 
-$font-size-base:              1rem !default; // Assumes the browser default, typically `16px`
-$font-size-lg:                ($font-size-base * 1.25) !default;
-$font-size-sm:                ($font-size-base * .875) !default;
+$font-size-base: 1rem !default; // Assumes the browser default, typically `16px`
+$font-size-lg: ($font-size-base * 1.25) !default;
+$font-size-sm: ($font-size-base * 0.875) !default;
 
-$font-weight-light:           300 !default;
-$font-weight-normal:          400 !default;
-$font-weight-bold:            700 !default;
-$font-weight-bolder:          bolder !default;
+$font-weight-light: 300 !default;
+$font-weight-normal: 400 !default;
+$font-weight-bold: 700 !default;
+$font-weight-bolder: bolder !default;
 
-$font-weight-base:            $font-weight-normal !default;
-$line-height-base:            1.5rem !default;
+$font-weight-base: $font-weight-normal !default;
+$line-height-base: 1.5rem !default;
 
-$dt-font-weight:              $font-weight-bold !default;
+$dt-font-weight: $font-weight-bold !default;
 
-$small-font-size:             80% !default;
+$small-font-size: 80% !default;
 
-$h1-font-size:                $font-size-base * 2.5 !default;
-$h2-font-size:                $font-size-base * 2 !default;
-$h3-font-size:                $font-size-base * 1.75 !default;
-$h4-font-size:                $font-size-base * 1.5 !default;
-$h5-font-size:                $font-size-base * 1.25 !default;
-$h6-font-size:                $font-size-base !default;
+$h1-font-size: $font-size-base * 2.5 !default;
+$h2-font-size: $font-size-base * 2 !default;
+$h3-font-size: $font-size-base * 1.75 !default;
+$h4-font-size: $font-size-base * 1.5 !default;
+$h5-font-size: $font-size-base * 1.25 !default;
+$h6-font-size: $font-size-base !default;
 
-$headings-margin-bottom:      math.div($spacer, 2) !default;
-$headings-font-family:        inherit !default;
-$headings-font-weight:        500 !default;
-$headings-line-height:        1.2 !default;
+$headings-margin-bottom: math.div($spacer, 2) !default;
+$headings-font-family: inherit !default;
+$headings-font-weight: 500 !default;
+$headings-line-height: 1.2 !default;
 
-$display1-font-size:          6rem !default;
-$display2-font-size:          5.5rem !default;
-$display3-font-size:          4.5rem !default;
-$display4-font-size:          3.5rem !default;
+$display1-font-size: 6rem !default;
+$display2-font-size: 5.5rem !default;
+$display3-font-size: 4.5rem !default;
+$display4-font-size: 3.5rem !default;
 
-$display1-font-weight:        300 !default;
-$display2-font-weight:        300 !default;
-$display3-font-weight:        300 !default;
-$display4-font-weight:        300 !default;
-$display-line-height:         $headings-line-height !default;
+$display1-font-weight: 300 !default;
+$display2-font-weight: 300 !default;
+$display3-font-weight: 300 !default;
+$display4-font-weight: 300 !default;
+$display-line-height: $headings-line-height !default;
 
-$blockquote-small-font-size:  $small-font-size !default;
-$blockquote-font-size:        $font-size-base * 1.25 !default;
+$blockquote-small-font-size: $small-font-size !default;
+$blockquote-font-size: $font-size-base * 1.25 !default;
 
-$code-font-size:              0.75rem;
+$code-font-size: 0.75rem;
 
-$hr-border-width:             $border-width !default;
+$hr-border-width: $border-width !default;
 
-$list-inline-padding:         .5rem !default;
+$list-inline-padding: 0.5rem !default;
 
-$hr-margin-y:                 $spacer !default;
+$hr-margin-y: $spacer !default;
 
 // Switches
-$switch-width:                        40px !default;
-$switch-height:                       26px !default;
-$switch-font-size:                    10px !default;
-$switch-border-width:                 1px !default;
+$switch-width: 40px !default;
+$switch-height: 26px !default;
+$switch-font-size: 10px !default;
+$switch-border-width: 1px !default;
 
-$switch-lg-width:                     48px !default;
-$switch-lg-height:                    30px !default;
-$switch-lg-font-size:                 12px !default;
+$switch-lg-width: 48px !default;
+$switch-lg-height: 30px !default;
+$switch-lg-font-size: 12px !default;
 
-$switch-sm-width:                     32px !default;
-$switch-sm-height:                    22px !default;
-$switch-sm-font-size:                 8px !default;
+$switch-sm-width: 32px !default;
+$switch-sm-height: 22px !default;
+$switch-sm-font-size: 8px !default;
 
-$switch-label-width:                  48px !default;
-$switch-label-lg-width:               56px !default;
-$switch-label-sm-width:               40px !default;
+$switch-label-width: 48px !default;
+$switch-label-lg-width: 56px !default;
+$switch-label-sm-width: 40px !default;
 
-$switch-handle-margin:                2px !default;
+$switch-handle-margin: 2px !default;
 
 // Tables
-$table-cell-padding:          .75rem !default;
-$table-th-font-weight:        null !default;
+$table-cell-padding: 0.75rem !default;
+$table-th-font-weight: null !default;
 
 // Media Breakpoints
 // Define the minimum dimensions at which your layout will change,
@@ -236,349 +279,261 @@ $container-max-widths: (
 
 // Grid columns
 // Set the number of columns and specify the width of the gutters.
-$grid-columns:                12 !default;
-$grid-gutter-width:           30px !default;
-$grid-row-columns:            6 !default;
+$grid-columns: 12 !default;
+$grid-gutter-width: 30px !default;
+$grid-row-columns: 6 !default;
 
 // Spacing
 // Control the default styling of most Bootstrap elements by modifying these variables.
 // Mostly focused on spacing. You can add more entries to the $spacers map, should you need more variation.
 $spacers: () !default;
 $spacers: map.merge(
-    (
-      0: 0,
-      1: ($spacer * .25),
-      2: ($spacer * .5),
-      3: $spacer,
-      4: ($spacer * 1.5),
-      5: ($spacer * 3)
+  (
+    0: 0,
+    1: (
+      $spacer * 0.25
     ),
-    $spacers
+    2: (
+      $spacer * 0.5
+    ),
+    3: $spacer,
+    4: (
+      $spacer * 1.5
+    ),
+    5: (
+      $spacer * 3
+    )
+  ),
+  $spacers
 );
 
 // Utilities
-$displays: none, inline, inline-block, block, table, table-row, table-cell, flex, inline-flex !default;
+$displays:
+  none, inline, inline-block, block, table, table-row, table-cell, flex,
+  inline-flex !default;
 $overflows: auto, hidden !default;
 $positions: static, relative, absolute, fixed, sticky !default;
 $user-selects: all, auto, none !default;
 
-
 $theme-colors: (
-  primary:                                    #2196f3,
-  secondary:                                  #a4b7c1,
-  success:                                    #4dbd74,
-  info:                                       #63c2de,
-  warning:                                    #ffc107,
-  danger:                                     #f86c6b,
-  light:                                      #f0f3f5,
-  dark:                                       #29363d,
+  primary: #2196f3,
+  secondary: #a4b7c1,
+  success: #4dbd74,
+  info: #63c2de,
+  warning: #ffc107,
+  danger: #f86c6b,
+  light: #f0f3f5,
+  dark: #29363d,
 
-  blue:                                       #2196f3,
-  indigo:                                     #6610f2,
-  purple:                                     #6f42c1,
-  pink:                                       #e83e8c,
-  red:                                        #f86c6b,
-  orange:                                     #f8cb00,
-  yellow:                                     #ffc107,
-  green:                                      #4dbd74,
-  teal:                                       #20c997,
-  cyan:                                       #63c2de,
+  blue: #2196f3,
+  indigo: #6610f2,
+  purple: #6f42c1,
+  pink: #e83e8c,
+  red: #f86c6b,
+  orange: #f8cb00,
+  yellow: #ffc107,
+  green: #4dbd74,
+  teal: #20c997,
+  cyan: #63c2de,
 
-  gray-100:                                   #f0f3f5,
-  gray-200:                                   #c2cfd6,
-  gray-300:                                   #a4b7c1,
-  gray-400:                                   #869fac,
-  gray-500:                                   #678898,
-  gray-600:                                   #536c79,
-  gray-700:                                   #3e515b,
-  gray-800:                                   #29363d,
-  gray-900:                                   #151b1e,
+  gray-100: #f0f3f5,
+  gray-200: #c2cfd6,
+  gray-300: #a4b7c1,
+  gray-400: #869fac,
+  gray-500: #678898,
+  gray-600: #536c79,
+  gray-700: #3e515b,
+  gray-800: #29363d,
+  gray-900: #151b1e,
 
-  white:                                      #ffffff,
-  black:                                      #000000,
+  white: #ffffff,
+  black: #000000,
 
-  border-color:                               #a4b7c1, // Same as gray-300
-  body-color:                                 #29363d, // Sames as dark
-  body-bg-color:                              #f0f3f5, // Same as light
-  link-color:                                 #2196f3, // Same as primary
-  blockquote-small-color:                     #536c79, // Same as gray-600
-  headings-color:                             #29363d, // Same as dark
-  text-muted-color:                           #6c757d,
-  table-caption-color:                        #6c757d,
+  border-color: #a4b7c1,
+  // Same as gray-300
+  body-color: #29363d,
+  // Sames as dark
+  body-bg-color: #f0f3f5,
+  // Same as light
+  link-color: #2196f3,
+  // Same as primary
+  blockquote-small-color: #536c79,
+  // Same as gray-600
+  headings-color: #29363d,
+  // Same as dark
+  text-muted-color: #6c757d,
+  table-caption-color: #6c757d,
 
-  breadcrumb-bg-color:                        #ffffff,
-  breadcrumb-divider-color:                   #536c79, // Same as gray-600
-  breadcrumb-active-color:                    #536c79, // Same as gray-600
-  breadcrumb-border-color:                    #a4b7c1, // Same as gray-300
+  breadcrumb-bg-color: #ffffff,
+  breadcrumb-divider-color: #536c79,
+  // Same as gray-600
+  breadcrumb-active-color: #536c79,
+  // Same as gray-600
+  breadcrumb-border-color: #a4b7c1,
 
-  card-icon-color:                            #29363d, // Same as dark
-  card-icon-bg-color:                         transparent,
+  // Same as gray-300
+  card-icon-color: #29363d,
+  // Same as dark
+  card-icon-bg-color: transparent,
 
-  admin-header-color:                         #6c757d,
-  admin-header-hover-color:                   #343a40,
-  admin-header-active-color:                  #343a40,
-  admin-header-disabled-color:                #dee2e6,
-  admin-header-border-color:                  #a4b7c1,
-  admin-header-bg-color:                      #ffffff,
-  admin-header-brand-bg-color:                transparent,
-  admin-header-brand-minimized-bg-color:      transparent,
-  admin-footer-color:                         #29363d,
-  admin-footer-bg-color:                      #f8f9fa,
-  admin-footer-border-color:                  #a4b7c1, // Same as gray-300
+  admin-header-color: #6c757d,
+  admin-header-hover-color: #343a40,
+  admin-header-active-color: #343a40,
+  admin-header-disabled-color: #dee2e6,
+  admin-header-border-color: #a4b7c1,
+  admin-header-bg-color: #ffffff,
+  admin-header-brand-bg-color: transparent,
+  admin-header-brand-minimized-bg-color: transparent,
+  admin-footer-color: #29363d,
+  admin-footer-bg-color: #f8f9fa,
+  admin-footer-border-color: #a4b7c1,
 
-  title-bar-bg-color:                         #ffffff,
+  // Same as gray-300
+  title-bar-bg-color: #ffffff,
 
-  sidebar-color:                              #ffffff,
-  sidebar-bg-color:                           #343a40,
-  sidebar-form-color:                         #ffffff,
-  sidebar-form-placeholder-color:             rgba(255,255,255,.7),
-  sidebar-form-bg-color:                      color.adjust(#343a40, $lightness: -10%),
-  sidebar-header-bg-color:                    rgba(0,0,0,.2),
-  sidebar-footer-bg-color:                    rgba(0,0,0,.2),
+  sidebar-color: #ffffff,
+  sidebar-bg-color: #343a40,
+  sidebar-form-color: #ffffff,
+  sidebar-form-placeholder-color: rgba(255, 255, 255, 0.7),
+  sidebar-form-bg-color: color.adjust(#343a40, $lightness: -10%),
+  sidebar-header-bg-color: rgba(0, 0, 0, 0.2),
+  sidebar-footer-bg-color: rgba(0, 0, 0, 0.2),
+  sidebar-minimizer-bg-color: rgba(0, 0, 0, 0.2),
+  sidebar-minimizer-indicator-color: #6c757d,
+  sidebar-minimizer-hover-bg-color: rgba(0, 0, 0, 0.3),
+  sidebar-minimizer-hover-indicator-color: #ffffff,
 
-  sidebar-minimizer-bg-color:                 rgba(0,0,0,.2),
-  sidebar-minimizer-indicator-color:          #6c757d,
-  sidebar-minimizer-hover-bg-color:           rgba(0,0,0,.3),
-  sidebar-minimizer-hover-indicator-color:    #ffffff,
+  sidebar-nav-color: #ffffff,
+  sidebar-nav-title-color: #e9ecef,
+  sidebar-nav-link-color: #ffffff,
+  sidebar-nav-link-hover-color: #ffffff,
+  sidebar-nav-link-hover-icon-color: #ffffff,
+  sidebar-nav-link-hover-bg-color: #2196f3,
 
-  sidebar-nav-color:                          #ffffff,
-  sidebar-nav-title-color:                    #e9ecef,
-  sidebar-nav-link-color:                     #ffffff,
-  sidebar-nav-link-hover-color:               #ffffff,
-  sidebar-nav-link-hover-icon-color:          #ffffff,
-  sidebar-nav-link-hover-bg-color:            #2196f3, // Same as blue
-
-  sidebar-nav-link-active-color:              #ffffff,
-  sidebar-nav-link-active-bg-color:           color.adjust(#343a40, $lightness: 5%),
-  sidebar-nav-link-active-icon-color:         #2196f3, // Same as blue
-  sidebar-nav-link-bg-color:                  transparent,
-  sidebar-nav-link-icon-color:                #6c757d,
-  sidebar-nav-dropdown-color:                 #ffffff,
-  sidebar-nav-dropdown-bg-color:              rgba(0,0,0,.2),
-  sidebar-nav-dropdown-indicator-color:       #6c757d,
+  // Same as blue
+  sidebar-nav-link-active-color: #ffffff,
+  sidebar-nav-link-active-bg-color: color.adjust(#343a40, $lightness: 5%),
+  sidebar-nav-link-active-icon-color: #2196f3,
+  // Same as blue
+  sidebar-nav-link-bg-color: transparent,
+  sidebar-nav-link-icon-color: #6c757d,
+  sidebar-nav-dropdown-color: #ffffff,
+  sidebar-nav-dropdown-bg-color: rgba(0, 0, 0, 0.2),
+  sidebar-nav-dropdown-indicator-color: #6c757d,
   sidebar-nav-dropdown-indicator-hover-color: #ffffff,
 
-  switch-bg-color:                            #ffffff,
-  switch-handle-bg-color:                     #ffffff,
+  switch-bg-color: #ffffff,
+  switch-handle-bg-color: #ffffff,
 
-  title-bar-color:                            #495057,
-  title-bar-back-color:                       #AEB6BE,
+  title-bar-color: #495057,
+  title-bar-back-color: #aeb6be,
 
-  hr-border-color:                            rgba(#000000, .1)
+  hr-border-color: rgba(#000000, 0.1)
 ) !default;
 
 // Admin Header
-$admin-header-borders:                        (bottom: (size: 1px, style: solid, color: map.get($theme-colors, admin-header-border-color))) !default;
+$admin-header-borders: (
+  bottom: (
+    size: 1px,
+    style: solid,
+    color: map.get($theme-colors, admin-header-border-color)
+  )
+) !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-toggler-icon:                   str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{map.get($theme-colors, admin-header-color)}' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-toggler-icon: str-replace(
+  url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{map.get($theme-colors, admin-header-color)}' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"),
+  "#",
+  "%23"
+) !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-toggler-icon-hover:             str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{map.get($theme-colors, admin-header-hover-color)}' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-toggler-icon-hover: str-replace(
+  url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{map.get($theme-colors, admin-header-hover-color)}' stroke-width='2.25' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"),
+  "#",
+  "%23"
+) !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-login-icon:                     str-replace(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' style=''%3E%3Crect id='backgroundrect' width='100%25' height='100%25' x='0' y='0' fill='none' stroke='none'/%3E%3Cg class='currentLayer' style=''%3E%3Ctitle%3ELayer 1%3C/title%3E%3Cpath style='text-indent:0;text-align:start;line-height:normal;text-transform:none;block-progression:tb;-inkscape-font-specification:Sans' d='M 25 1 C 14.693688 1 5.9250828 7.5214964 2.53125 16.65625 A 1.0001 1.0001 0 1 0 4.40625 17.34375 C 7.5164172 8.9725036 15.536312 3 25 3 C 37.162603 3 47 12.837397 47 25 C 47 37.162603 37.162603 47 25 47 C 15.536312 47 7.5164172 41.027496 4.40625 32.65625 A 1.0001 1.0001 0 1 0 2.53125 33.34375 C 5.9250828 42.478504 14.693688 49 25 49 C 38.243397 49 49 38.243397 49 25 C 49 11.756603 38.243397 1 25 1 z M 25.90625 15.96875 A 1.0001 1.0001 0 0 0 25.78125 16 A 1.0001 1.0001 0 0 0 25.28125 17.71875 L 31.5625 24 L 2 24 A 1.0001 1.0001 0 0 0 1.90625 24 A 1.001098 1.001098 0 0 0 2 26 L 31.5625 26 L 25.28125 32.28125 A 1.016466 1.016466 0 1 0 26.71875 33.71875 L 34.71875 25.71875 A 1.0001 1.0001 0 0 0 34.71875 24.28125 L 26.71875 16.28125 A 1.0001 1.0001 0 0 0 25.90625 15.96875 z' overflow='visible' font-family='Sans' id='svg_1' class='selected' fill='#{map.get($theme-colors, admin-header-color)}' fill-opacity='1'/%3E%3C/g%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-login-icon: str-replace(
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' style=''%3E%3Crect id='backgroundrect' width='100%25' height='100%25' x='0' y='0' fill='none' stroke='none'/%3E%3Cg class='currentLayer' style=''%3E%3Ctitle%3ELayer 1%3C/title%3E%3Cpath style='text-indent:0;text-align:start;line-height:normal;text-transform:none;block-progression:tb;-inkscape-font-specification:Sans' d='M 25 1 C 14.693688 1 5.9250828 7.5214964 2.53125 16.65625 A 1.0001 1.0001 0 1 0 4.40625 17.34375 C 7.5164172 8.9725036 15.536312 3 25 3 C 37.162603 3 47 12.837397 47 25 C 47 37.162603 37.162603 47 25 47 C 15.536312 47 7.5164172 41.027496 4.40625 32.65625 A 1.0001 1.0001 0 1 0 2.53125 33.34375 C 5.9250828 42.478504 14.693688 49 25 49 C 38.243397 49 49 38.243397 49 25 C 49 11.756603 38.243397 1 25 1 z M 25.90625 15.96875 A 1.0001 1.0001 0 0 0 25.78125 16 A 1.0001 1.0001 0 0 0 25.28125 17.71875 L 31.5625 24 L 2 24 A 1.0001 1.0001 0 0 0 1.90625 24 A 1.001098 1.001098 0 0 0 2 26 L 31.5625 26 L 25.28125 32.28125 A 1.016466 1.016466 0 1 0 26.71875 33.71875 L 34.71875 25.71875 A 1.0001 1.0001 0 0 0 34.71875 24.28125 L 26.71875 16.28125 A 1.0001 1.0001 0 0 0 25.90625 15.96875 z' overflow='visible' font-family='Sans' id='svg_1' class='selected' fill='#{map.get($theme-colors, admin-header-color)}' fill-opacity='1'/%3E%3C/g%3E%3C/svg%3E"),
+  "#",
+  "%23"
+) !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-login-icon-hover:               str-replace(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' style=''%3E%3Crect id='backgroundrect' width='100%25' height='100%25' x='0' y='0' fill='none' stroke='none'/%3E%3Cg class='currentLayer' style=''%3E%3Ctitle%3ELayer 1%3C/title%3E%3Cpath style='text-indent:0;text-align:start;line-height:normal;text-transform:none;block-progression:tb;-inkscape-font-specification:Sans' d='M 25 1 C 14.693688 1 5.9250828 7.5214964 2.53125 16.65625 A 1.0001 1.0001 0 1 0 4.40625 17.34375 C 7.5164172 8.9725036 15.536312 3 25 3 C 37.162603 3 47 12.837397 47 25 C 47 37.162603 37.162603 47 25 47 C 15.536312 47 7.5164172 41.027496 4.40625 32.65625 A 1.0001 1.0001 0 1 0 2.53125 33.34375 C 5.9250828 42.478504 14.693688 49 25 49 C 38.243397 49 49 38.243397 49 25 C 49 11.756603 38.243397 1 25 1 z M 25.90625 15.96875 A 1.0001 1.0001 0 0 0 25.78125 16 A 1.0001 1.0001 0 0 0 25.28125 17.71875 L 31.5625 24 L 2 24 A 1.0001 1.0001 0 0 0 1.90625 24 A 1.001098 1.001098 0 0 0 2 26 L 31.5625 26 L 25.28125 32.28125 A 1.016466 1.016466 0 1 0 26.71875 33.71875 L 34.71875 25.71875 A 1.0001 1.0001 0 0 0 34.71875 24.28125 L 26.71875 16.28125 A 1.0001 1.0001 0 0 0 25.90625 15.96875 z' overflow='visible' font-family='Sans' id='svg_1' class='selected' fill='#{map.get($theme-colors, admin-header-hover-color)}' fill-opacity='1'/%3E%3C/g%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-login-icon-hover: str-replace(
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' style=''%3E%3Crect id='backgroundrect' width='100%25' height='100%25' x='0' y='0' fill='none' stroke='none'/%3E%3Cg class='currentLayer' style=''%3E%3Ctitle%3ELayer 1%3C/title%3E%3Cpath style='text-indent:0;text-align:start;line-height:normal;text-transform:none;block-progression:tb;-inkscape-font-specification:Sans' d='M 25 1 C 14.693688 1 5.9250828 7.5214964 2.53125 16.65625 A 1.0001 1.0001 0 1 0 4.40625 17.34375 C 7.5164172 8.9725036 15.536312 3 25 3 C 37.162603 3 47 12.837397 47 25 C 47 37.162603 37.162603 47 25 47 C 15.536312 47 7.5164172 41.027496 4.40625 32.65625 A 1.0001 1.0001 0 1 0 2.53125 33.34375 C 5.9250828 42.478504 14.693688 49 25 49 C 38.243397 49 49 38.243397 49 25 C 49 11.756603 38.243397 1 25 1 z M 25.90625 15.96875 A 1.0001 1.0001 0 0 0 25.78125 16 A 1.0001 1.0001 0 0 0 25.28125 17.71875 L 31.5625 24 L 2 24 A 1.0001 1.0001 0 0 0 1.90625 24 A 1.001098 1.001098 0 0 0 2 26 L 31.5625 26 L 25.28125 32.28125 A 1.016466 1.016466 0 1 0 26.71875 33.71875 L 34.71875 25.71875 A 1.0001 1.0001 0 0 0 34.71875 24.28125 L 26.71875 16.28125 A 1.0001 1.0001 0 0 0 25.90625 15.96875 z' overflow='visible' font-family='Sans' id='svg_1' class='selected' fill='#{map.get($theme-colors, admin-header-hover-color)}' fill-opacity='1'/%3E%3C/g%3E%3C/svg%3E"),
+  "#",
+  "%23"
+) !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-user-icon:                      str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Capa_1' x='0px' y='0px' viewBox='0 0 55 55' style='enable-background:new 0 0 55 55;' xml:space='preserve' width='512px' height='512px'%3E%3Cpath d='M55,27.5C55,12.337,42.663,0,27.5,0S0,12.337,0,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752 c0.058,0.049,0.121,0.089,0.179,0.137c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.234,0.489,0.348 c0.534,0.368,1.082,0.717,1.642,1.048c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98 c0.047,0.022,0.095,0.042,0.142,0.064c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033 c0.724,0.125,1.456,0.225,2.197,0.292c0.09,0.008,0.18,0.013,0.271,0.021C25.998,54.961,26.744,55,27.5,55 c0.749,0,1.488-0.039,2.222-0.098c0.093-0.008,0.186-0.013,0.279-0.021c0.735-0.067,1.461-0.164,2.178-0.287 c0.062-0.011,0.125-0.022,0.187-0.034c2.297-0.412,4.495-1.109,6.557-2.055c0.076-0.035,0.153-0.068,0.229-0.104 c0.617-0.29,1.22-0.603,1.811-0.936c0.147-0.083,0.293-0.167,0.439-0.253c0.538-0.317,1.067-0.648,1.581-1 c0.185-0.126,0.366-0.259,0.549-0.391c0.439-0.316,0.87-0.642,1.289-0.983c0.093-0.075,0.193-0.14,0.284-0.217l0.915-0.764 l-0.027-0.023C51.523,42.802,55,35.55,55,27.5z M2,27.5C2,13.439,13.439,2,27.5,2S53,13.439,53,27.5 c0,7.577-3.325,14.389-8.589,19.063c-0.294-0.203-0.59-0.385-0.893-0.537l-8.467-4.233c-0.76-0.38-1.232-1.144-1.232-1.993v-2.957 c0.196-0.242,0.403-0.516,0.617-0.817c1.096-1.548,1.975-3.27,2.616-5.123c1.267-0.602,2.085-1.864,2.085-3.289v-3.545 c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.519,0.236-3.448-1.883-5.864C34.524,9.065,31.541,8,27.5,8 s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.345-1.883,5.864v4.667c-0.568,0.661-0.887,1.502-0.887,2.369v3.545 c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313 c-0.252,0.137-0.502,0.297-0.752,0.476C5.276,41.792,2,35.022,2,27.5z M42.459,48.132c-0.35,0.254-0.706,0.5-1.067,0.735 c-0.166,0.108-0.331,0.216-0.5,0.321c-0.472,0.292-0.952,0.57-1.442,0.83c-0.108,0.057-0.217,0.111-0.326,0.167 c-1.126,0.577-2.291,1.073-3.488,1.476c-0.042,0.014-0.084,0.029-0.127,0.043c-0.627,0.208-1.262,0.393-1.904,0.552 c-0.002,0-0.004,0.001-0.006,0.001c-0.648,0.16-1.304,0.293-1.964,0.402c-0.018,0.003-0.036,0.007-0.054,0.01 c-0.621,0.101-1.247,0.174-1.875,0.229c-0.111,0.01-0.222,0.017-0.334,0.025C28.751,52.97,28.127,53,27.5,53 c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233 c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.027-0.118-0.04 c-0.629-0.214-1.251-0.451-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816 c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279 c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313 c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221 c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131 c-0.003-0.024-0.298-2.429,1.396-4.36C21.583,10.837,24.061,10,27.5,10c3.426,0,5.896,0.83,7.346,2.466 c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545 c0,0.713-0.485,1.36-1.181,1.575l-0.497,0.153l-0.16,0.495c-0.59,1.833-1.43,3.526-2.496,5.032c-0.262,0.37-0.517,0.698-0.736,0.949 l-0.248,0.283V39.8c0,1.612,0.896,3.062,2.338,3.782l8.467,4.233c0.054,0.027,0.107,0.055,0.16,0.083 C42.677,47.979,42.567,48.054,42.459,48.132z' fill='#{map.get($theme-colors, admin-header-color)}'/%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-user-icon: str-replace(
+  url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Capa_1' x='0px' y='0px' viewBox='0 0 55 55' style='enable-background:new 0 0 55 55;' xml:space='preserve' width='512px' height='512px'%3E%3Cpath d='M55,27.5C55,12.337,42.663,0,27.5,0S0,12.337,0,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752 c0.058,0.049,0.121,0.089,0.179,0.137c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.234,0.489,0.348 c0.534,0.368,1.082,0.717,1.642,1.048c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98 c0.047,0.022,0.095,0.042,0.142,0.064c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033 c0.724,0.125,1.456,0.225,2.197,0.292c0.09,0.008,0.18,0.013,0.271,0.021C25.998,54.961,26.744,55,27.5,55 c0.749,0,1.488-0.039,2.222-0.098c0.093-0.008,0.186-0.013,0.279-0.021c0.735-0.067,1.461-0.164,2.178-0.287 c0.062-0.011,0.125-0.022,0.187-0.034c2.297-0.412,4.495-1.109,6.557-2.055c0.076-0.035,0.153-0.068,0.229-0.104 c0.617-0.29,1.22-0.603,1.811-0.936c0.147-0.083,0.293-0.167,0.439-0.253c0.538-0.317,1.067-0.648,1.581-1 c0.185-0.126,0.366-0.259,0.549-0.391c0.439-0.316,0.87-0.642,1.289-0.983c0.093-0.075,0.193-0.14,0.284-0.217l0.915-0.764 l-0.027-0.023C51.523,42.802,55,35.55,55,27.5z M2,27.5C2,13.439,13.439,2,27.5,2S53,13.439,53,27.5 c0,7.577-3.325,14.389-8.589,19.063c-0.294-0.203-0.59-0.385-0.893-0.537l-8.467-4.233c-0.76-0.38-1.232-1.144-1.232-1.993v-2.957 c0.196-0.242,0.403-0.516,0.617-0.817c1.096-1.548,1.975-3.27,2.616-5.123c1.267-0.602,2.085-1.864,2.085-3.289v-3.545 c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.519,0.236-3.448-1.883-5.864C34.524,9.065,31.541,8,27.5,8 s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.345-1.883,5.864v4.667c-0.568,0.661-0.887,1.502-0.887,2.369v3.545 c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313 c-0.252,0.137-0.502,0.297-0.752,0.476C5.276,41.792,2,35.022,2,27.5z M42.459,48.132c-0.35,0.254-0.706,0.5-1.067,0.735 c-0.166,0.108-0.331,0.216-0.5,0.321c-0.472,0.292-0.952,0.57-1.442,0.83c-0.108,0.057-0.217,0.111-0.326,0.167 c-1.126,0.577-2.291,1.073-3.488,1.476c-0.042,0.014-0.084,0.029-0.127,0.043c-0.627,0.208-1.262,0.393-1.904,0.552 c-0.002,0-0.004,0.001-0.006,0.001c-0.648,0.16-1.304,0.293-1.964,0.402c-0.018,0.003-0.036,0.007-0.054,0.01 c-0.621,0.101-1.247,0.174-1.875,0.229c-0.111,0.01-0.222,0.017-0.334,0.025C28.751,52.97,28.127,53,27.5,53 c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233 c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.027-0.118-0.04 c-0.629-0.214-1.251-0.451-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816 c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279 c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313 c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221 c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131 c-0.003-0.024-0.298-2.429,1.396-4.36C21.583,10.837,24.061,10,27.5,10c3.426,0,5.896,0.83,7.346,2.466 c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545 c0,0.713-0.485,1.36-1.181,1.575l-0.497,0.153l-0.16,0.495c-0.59,1.833-1.43,3.526-2.496,5.032c-0.262,0.37-0.517,0.698-0.736,0.949 l-0.248,0.283V39.8c0,1.612,0.896,3.062,2.338,3.782l8.467,4.233c0.054,0.027,0.107,0.055,0.16,0.083 C42.677,47.979,42.567,48.054,42.459,48.132z' fill='#{map.get($theme-colors, admin-header-color)}'/%3E%3C/svg%3E"),
+  "#",
+  "%23"
+) !default;
 
 // noinspection SassScssResolvedByNameOnly
-$admin-header-user-icon-hover:                str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Capa_1' x='0px' y='0px' viewBox='0 0 55 55' style='enable-background:new 0 0 55 55;' xml:space='preserve' width='512px' height='512px'%3E%3Cpath d='M55,27.5C55,12.337,42.663,0,27.5,0S0,12.337,0,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752 c0.058,0.049,0.121,0.089,0.179,0.137c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.234,0.489,0.348 c0.534,0.368,1.082,0.717,1.642,1.048c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98 c0.047,0.022,0.095,0.042,0.142,0.064c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033 c0.724,0.125,1.456,0.225,2.197,0.292c0.09,0.008,0.18,0.013,0.271,0.021C25.998,54.961,26.744,55,27.5,55 c0.749,0,1.488-0.039,2.222-0.098c0.093-0.008,0.186-0.013,0.279-0.021c0.735-0.067,1.461-0.164,2.178-0.287 c0.062-0.011,0.125-0.022,0.187-0.034c2.297-0.412,4.495-1.109,6.557-2.055c0.076-0.035,0.153-0.068,0.229-0.104 c0.617-0.29,1.22-0.603,1.811-0.936c0.147-0.083,0.293-0.167,0.439-0.253c0.538-0.317,1.067-0.648,1.581-1 c0.185-0.126,0.366-0.259,0.549-0.391c0.439-0.316,0.87-0.642,1.289-0.983c0.093-0.075,0.193-0.14,0.284-0.217l0.915-0.764 l-0.027-0.023C51.523,42.802,55,35.55,55,27.5z M2,27.5C2,13.439,13.439,2,27.5,2S53,13.439,53,27.5 c0,7.577-3.325,14.389-8.589,19.063c-0.294-0.203-0.59-0.385-0.893-0.537l-8.467-4.233c-0.76-0.38-1.232-1.144-1.232-1.993v-2.957 c0.196-0.242,0.403-0.516,0.617-0.817c1.096-1.548,1.975-3.27,2.616-5.123c1.267-0.602,2.085-1.864,2.085-3.289v-3.545 c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.519,0.236-3.448-1.883-5.864C34.524,9.065,31.541,8,27.5,8 s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.345-1.883,5.864v4.667c-0.568,0.661-0.887,1.502-0.887,2.369v3.545 c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313 c-0.252,0.137-0.502,0.297-0.752,0.476C5.276,41.792,2,35.022,2,27.5z M42.459,48.132c-0.35,0.254-0.706,0.5-1.067,0.735 c-0.166,0.108-0.331,0.216-0.5,0.321c-0.472,0.292-0.952,0.57-1.442,0.83c-0.108,0.057-0.217,0.111-0.326,0.167 c-1.126,0.577-2.291,1.073-3.488,1.476c-0.042,0.014-0.084,0.029-0.127,0.043c-0.627,0.208-1.262,0.393-1.904,0.552 c-0.002,0-0.004,0.001-0.006,0.001c-0.648,0.16-1.304,0.293-1.964,0.402c-0.018,0.003-0.036,0.007-0.054,0.01 c-0.621,0.101-1.247,0.174-1.875,0.229c-0.111,0.01-0.222,0.017-0.334,0.025C28.751,52.97,28.127,53,27.5,53 c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233 c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.027-0.118-0.04 c-0.629-0.214-1.251-0.451-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816 c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279 c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313 c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221 c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131 c-0.003-0.024-0.298-2.429,1.396-4.36C21.583,10.837,24.061,10,27.5,10c3.426,0,5.896,0.83,7.346,2.466 c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545 c0,0.713-0.485,1.36-1.181,1.575l-0.497,0.153l-0.16,0.495c-0.59,1.833-1.43,3.526-2.496,5.032c-0.262,0.37-0.517,0.698-0.736,0.949 l-0.248,0.283V39.8c0,1.612,0.896,3.062,2.338,3.782l8.467,4.233c0.054,0.027,0.107,0.055,0.16,0.083 C42.677,47.979,42.567,48.054,42.459,48.132z' fill='#{map.get($theme-colors, admin-header-hover-color)}'/%3E%3C/svg%3E"), "#", "%23") !default;
+$admin-header-user-icon-hover: str-replace(
+  url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Capa_1' x='0px' y='0px' viewBox='0 0 55 55' style='enable-background:new 0 0 55 55;' xml:space='preserve' width='512px' height='512px'%3E%3Cpath d='M55,27.5C55,12.337,42.663,0,27.5,0S0,12.337,0,27.5c0,8.009,3.444,15.228,8.926,20.258l-0.026,0.023l0.892,0.752 c0.058,0.049,0.121,0.089,0.179,0.137c0.474,0.393,0.965,0.766,1.465,1.127c0.162,0.117,0.324,0.234,0.489,0.348 c0.534,0.368,1.082,0.717,1.642,1.048c0.122,0.072,0.245,0.142,0.368,0.212c0.613,0.349,1.239,0.678,1.88,0.98 c0.047,0.022,0.095,0.042,0.142,0.064c2.089,0.971,4.319,1.684,6.651,2.105c0.061,0.011,0.122,0.022,0.184,0.033 c0.724,0.125,1.456,0.225,2.197,0.292c0.09,0.008,0.18,0.013,0.271,0.021C25.998,54.961,26.744,55,27.5,55 c0.749,0,1.488-0.039,2.222-0.098c0.093-0.008,0.186-0.013,0.279-0.021c0.735-0.067,1.461-0.164,2.178-0.287 c0.062-0.011,0.125-0.022,0.187-0.034c2.297-0.412,4.495-1.109,6.557-2.055c0.076-0.035,0.153-0.068,0.229-0.104 c0.617-0.29,1.22-0.603,1.811-0.936c0.147-0.083,0.293-0.167,0.439-0.253c0.538-0.317,1.067-0.648,1.581-1 c0.185-0.126,0.366-0.259,0.549-0.391c0.439-0.316,0.87-0.642,1.289-0.983c0.093-0.075,0.193-0.14,0.284-0.217l0.915-0.764 l-0.027-0.023C51.523,42.802,55,35.55,55,27.5z M2,27.5C2,13.439,13.439,2,27.5,2S53,13.439,53,27.5 c0,7.577-3.325,14.389-8.589,19.063c-0.294-0.203-0.59-0.385-0.893-0.537l-8.467-4.233c-0.76-0.38-1.232-1.144-1.232-1.993v-2.957 c0.196-0.242,0.403-0.516,0.617-0.817c1.096-1.548,1.975-3.27,2.616-5.123c1.267-0.602,2.085-1.864,2.085-3.289v-3.545 c0-0.867-0.318-1.708-0.887-2.369v-4.667c0.052-0.519,0.236-3.448-1.883-5.864C34.524,9.065,31.541,8,27.5,8 s-7.024,1.065-8.867,3.168c-2.119,2.416-1.935,5.345-1.883,5.864v4.667c-0.568,0.661-0.887,1.502-0.887,2.369v3.545 c0,1.101,0.494,2.128,1.34,2.821c0.81,3.173,2.477,5.575,3.093,6.389v2.894c0,0.816-0.445,1.566-1.162,1.958l-7.907,4.313 c-0.252,0.137-0.502,0.297-0.752,0.476C5.276,41.792,2,35.022,2,27.5z M42.459,48.132c-0.35,0.254-0.706,0.5-1.067,0.735 c-0.166,0.108-0.331,0.216-0.5,0.321c-0.472,0.292-0.952,0.57-1.442,0.83c-0.108,0.057-0.217,0.111-0.326,0.167 c-1.126,0.577-2.291,1.073-3.488,1.476c-0.042,0.014-0.084,0.029-0.127,0.043c-0.627,0.208-1.262,0.393-1.904,0.552 c-0.002,0-0.004,0.001-0.006,0.001c-0.648,0.16-1.304,0.293-1.964,0.402c-0.018,0.003-0.036,0.007-0.054,0.01 c-0.621,0.101-1.247,0.174-1.875,0.229c-0.111,0.01-0.222,0.017-0.334,0.025C28.751,52.97,28.127,53,27.5,53 c-0.634,0-1.266-0.031-1.895-0.078c-0.109-0.008-0.218-0.015-0.326-0.025c-0.634-0.056-1.265-0.131-1.89-0.233 c-0.028-0.005-0.056-0.01-0.084-0.015c-1.322-0.221-2.623-0.546-3.89-0.971c-0.039-0.013-0.079-0.027-0.118-0.04 c-0.629-0.214-1.251-0.451-1.862-0.713c-0.004-0.002-0.009-0.004-0.013-0.006c-0.578-0.249-1.145-0.525-1.705-0.816 c-0.073-0.038-0.147-0.074-0.219-0.113c-0.511-0.273-1.011-0.568-1.504-0.876c-0.146-0.092-0.291-0.185-0.435-0.279 c-0.454-0.297-0.902-0.606-1.338-0.933c-0.045-0.034-0.088-0.07-0.133-0.104c0.032-0.018,0.064-0.036,0.096-0.054l7.907-4.313 c1.36-0.742,2.205-2.165,2.205-3.714l-0.001-3.602l-0.23-0.278c-0.022-0.025-2.184-2.655-3.001-6.216l-0.091-0.396l-0.341-0.221 c-0.481-0.311-0.769-0.831-0.769-1.392v-3.545c0-0.465,0.197-0.898,0.557-1.223l0.33-0.298v-5.57l-0.009-0.131 c-0.003-0.024-0.298-2.429,1.396-4.36C21.583,10.837,24.061,10,27.5,10c3.426,0,5.896,0.83,7.346,2.466 c1.692,1.911,1.415,4.361,1.413,4.381l-0.009,5.701l0.33,0.298c0.359,0.324,0.557,0.758,0.557,1.223v3.545 c0,0.713-0.485,1.36-1.181,1.575l-0.497,0.153l-0.16,0.495c-0.59,1.833-1.43,3.526-2.496,5.032c-0.262,0.37-0.517,0.698-0.736,0.949 l-0.248,0.283V39.8c0,1.612,0.896,3.062,2.338,3.782l8.467,4.233c0.054,0.027,0.107,0.055,0.16,0.083 C42.677,47.979,42.567,48.054,42.459,48.132z' fill='#{map.get($theme-colors, admin-header-hover-color)}'/%3E%3C/svg%3E"),
+  "#",
+  "%23"
+) !default;
 
 // Admin Footer
-$admin-footer-borders:                        (top: (size: 1px, style: solid, color: map.get($theme-colors, admin-footer-border-color))) !default;
+$admin-footer-borders: (
+  top: (
+    size: 1px,
+    style: solid,
+    color: map.get($theme-colors, admin-footer-border-color)
+  )
+) !default;
 
 // Sidebar
 
 // noinspection SassScssResolvedByNameOnly
-$sidebar-nav-dropdown-indicator:              str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-nav-dropdown-indicator-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
+$sidebar-nav-dropdown-indicator: str-replace(
+  url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-nav-dropdown-indicator-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"),
+  "#",
+  "%23"
+) !default;
 
 // noinspection SassScssResolvedByNameOnly
-$sidebar-nav-dropdown-indicator-hover:        str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-nav-dropdown-indicator-hover-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
+$sidebar-nav-dropdown-indicator-hover: str-replace(
+  url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-nav-dropdown-indicator-hover-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"),
+  "#",
+  "%23"
+) !default;
 
 // Sidebar Footer & Minimizer…
 
 // noinspection SassScssResolvedByNameOnly
-$sidebar-minimizer-indicator:                 str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-minimizer-indicator-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
+$sidebar-minimizer-indicator: str-replace(
+  url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-minimizer-indicator-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"),
+  "#",
+  "%23"
+) !default;
 
 // noinspection SassScssResolvedByNameOnly
-$sidebar-minimizer-hover-indicator:           str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-minimizer-hover-indicator-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"), "#", "%23") !default;
+$sidebar-minimizer-hover-indicator: str-replace(
+  url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath fill='#{map.get($theme-colors, sidebar-minimizer-hover-indicator-color)}' d='M9.148 2.352l-4.148 4.148 4.148 4.148q0.148 0.148 0.148 0.352t-0.148 0.352l-1.297 1.297q-0.148 0.148-0.352 0.148t-0.352-0.148l-5.797-5.797q-0.148-0.148-0.148-0.352t0.148-0.352l5.797-5.797q0.148-0.148 0.352-0.148t0.352 0.148l1.297 1.297q0.148 0.148 0.148 0.352t-0.148 0.352z'/%3E%3C/svg%3E"),
+  "#",
+  "%23"
+) !default;
 
 // Breadcrumb
-$breadcrumb-borders:                          (bottom: (size: 1px, style: solid, color: map.get($theme-colors, breadcrumb-border-color))) !default;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$breadcrumb-borders: (
+  bottom: (
+    size: 1px,
+    style: solid,
+    color: map.get($theme-colors, breadcrumb-border-color)
+  )
+) !default;
 
 // Default variables
-$xxx: 'xxx' !default;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$xxx: "xxx" !default;
 
 //                        _
 //        _ __ ___   ___ | |_   ___  ___ ___ ___
@@ -598,14 +553,8 @@ $xxx: 'xxx' !default;
   // Preserve quotes in font-family lists
   // See: https://github.com/sass/sass/issues/2383#issuecomment-336349172
   --font-family-sans-serif: #{meta.inspect($font-family-sans-serif)};
-  --font-family-monospace:   #{meta.inspect($font-family-monospace)};
+  --font-family-monospace: #{meta.inspect($font-family-monospace)};
 }
-
-
-
-
-
-
 
 //                 _                 _
 //        _ __ ___| |__   ___   ___ | |_   ___  ___ ___ ___
@@ -620,7 +569,9 @@ $xxx: 'xxx' !default;
 // 1. Use border-box globally
 // 2. Set base typography and layout defaults
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -715,7 +666,7 @@ dt {
 }
 
 dd {
-  margin: 0 0 .5rem;
+  margin: 0 0 0.5rem;
 }
 
 blockquote {
@@ -737,8 +688,12 @@ sup {
   line-height: 0;
   vertical-align: baseline;
 }
-sub { bottom: -.25em; }
-sup { top: -.5em; }
+sub {
+  bottom: -0.25em;
+}
+sup {
+  top: -0.5em;
+}
 
 // Links
 a {
@@ -895,7 +850,7 @@ legend {
   display: block;
   width: 100%;
   max-width: 100%;
-  margin: 0 0 .5rem;
+  margin: 0 0 0.5rem;
   padding: 0;
   font-size: 1.5rem;
   line-height: inherit;
@@ -943,11 +898,6 @@ template {
   display: none !important;
 }
 
-
-
-
-
-
 //             _ _
 //        __ _| (_) __ _ _ __    ___  ___ ___ ___
 //       / _` | | |/ _` | '_ \  / __|/ __/ __/ __|
@@ -955,25 +905,24 @@ template {
 //   ____\__,_|_|_|\__, |_| |_(_)___/\___|___/___/
 //  |_____|        |___/
 
-.align-baseline    { vertical-align: baseline !important; } // Browser default
-.align-top         { vertical-align: top !important; }
-.align-middle      { vertical-align: middle !important; }
-.align-bottom      { vertical-align: bottom !important; }
-.align-text-bottom { vertical-align: text-bottom !important; }
-.align-text-top    { vertical-align: text-top !important; }
-
-
-
-
-
-
-
-
-
-
-
-
-
+.align-baseline {
+  vertical-align: baseline !important;
+} // Browser default
+.align-top {
+  vertical-align: top !important;
+}
+.align-middle {
+  vertical-align: middle !important;
+}
+.align-bottom {
+  vertical-align: bottom !important;
+}
+.align-text-bottom {
+  vertical-align: text-bottom !important;
+}
+.align-text-top {
+  vertical-align: text-top !important;
+}
 
 //                   _     _
 //         __ _ _ __(_) __| |  ___  ___ ___ ___
@@ -1036,12 +985,13 @@ template {
   }
 
   // Column generation
-  @include make-grid-columns($columns: $grid-columns, $row-columns: $grid-row-columns, $gutter: $grid-gutter-width, $breakpoints: $media-breakpoints);
+  @include make-grid-columns(
+    $columns: $grid-columns,
+    $row-columns: $grid-row-columns,
+    $gutter: $grid-gutter-width,
+    $breakpoints: $media-breakpoints
+  );
 }
-
-
-
-
 
 //        _                        _                           _
 //       | |__  _ __ ___  __ _  __| | ___ _ __ _   _ _ __ ___ | |__   ___  ___ ___ ___
@@ -1072,7 +1022,7 @@ template {
     padding-left: $breadcrumb-item-padding;
 
     &::before {
-      float: left;                     // suppress inline spacing/underline
+      float: left; // suppress inline spacing/underline
       padding-right: $breadcrumb-item-padding;
       color: map.get($theme-colors, breadcrumb-divider-color);
       content: escape-svg($breadcrumb-divider);
@@ -1088,18 +1038,6 @@ template {
     color: map.get($theme-colors, breadcrumb-active-color);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 //           _ _           _
 //        __| (_)___ _ __ | | __ _ _   _   ___  ___ ___ ___
@@ -1130,11 +1068,6 @@ template {
   }
 }
 
-
-
-
-
-
 //         __ _
 //        / _| | _____  __  ___  ___ ___ ___
 //       | |_| |/ _ \ \/ / / __|/ __/ __/ __|
@@ -1148,49 +1081,115 @@ template {
   @include media-breakpoint-up($breakpoint, $media-breakpoints) {
     $infix: breakpoint-infix($breakpoint, $media-breakpoints);
 
-    .flex#{$infix}-row            { flex-direction: row !important; }
-    .flex#{$infix}-column         { flex-direction: column !important; }
-    .flex#{$infix}-row-reverse    { flex-direction: row-reverse !important; }
-    .flex#{$infix}-column-reverse { flex-direction: column-reverse !important; }
+    .flex#{$infix}-row {
+      flex-direction: row !important;
+    }
+    .flex#{$infix}-column {
+      flex-direction: column !important;
+    }
+    .flex#{$infix}-row-reverse {
+      flex-direction: row-reverse !important;
+    }
+    .flex#{$infix}-column-reverse {
+      flex-direction: column-reverse !important;
+    }
 
-    .flex#{$infix}-wrap         { flex-wrap: wrap !important; }
-    .flex#{$infix}-nowrap       { flex-wrap: nowrap !important; }
-    .flex#{$infix}-wrap-reverse { flex-wrap: wrap-reverse !important; }
-    .flex#{$infix}-fill         { flex: 1 1 auto !important; }
-    .flex#{$infix}-grow-0       { flex-grow: 0 !important; }
-    .flex#{$infix}-grow-1       { flex-grow: 1 !important; }
-    .flex#{$infix}-shrink-0     { flex-shrink: 0 !important; }
-    .flex#{$infix}-shrink-1     { flex-shrink: 1 !important; }
+    .flex#{$infix}-wrap {
+      flex-wrap: wrap !important;
+    }
+    .flex#{$infix}-nowrap {
+      flex-wrap: nowrap !important;
+    }
+    .flex#{$infix}-wrap-reverse {
+      flex-wrap: wrap-reverse !important;
+    }
+    .flex#{$infix}-fill {
+      flex: 1 1 auto !important;
+    }
+    .flex#{$infix}-grow-0 {
+      flex-grow: 0 !important;
+    }
+    .flex#{$infix}-grow-1 {
+      flex-grow: 1 !important;
+    }
+    .flex#{$infix}-shrink-0 {
+      flex-shrink: 0 !important;
+    }
+    .flex#{$infix}-shrink-1 {
+      flex-shrink: 1 !important;
+    }
 
-    .justify-content#{$infix}-start   { justify-content: flex-start !important; }
-    .justify-content#{$infix}-end     { justify-content: flex-end !important; }
-    .justify-content#{$infix}-center  { justify-content: center !important; }
-    .justify-content#{$infix}-between { justify-content: space-between !important; }
-    .justify-content#{$infix}-around  { justify-content: space-around !important; }
+    .justify-content#{$infix}-start {
+      justify-content: flex-start !important;
+    }
+    .justify-content#{$infix}-end {
+      justify-content: flex-end !important;
+    }
+    .justify-content#{$infix}-center {
+      justify-content: center !important;
+    }
+    .justify-content#{$infix}-between {
+      justify-content: space-between !important;
+    }
+    .justify-content#{$infix}-around {
+      justify-content: space-around !important;
+    }
 
-    .align-items#{$infix}-start    { align-items: flex-start !important; }
-    .align-items#{$infix}-end      { align-items: flex-end !important; }
-    .align-items#{$infix}-center   { align-items: center !important; }
-    .align-items#{$infix}-baseline { align-items: baseline !important; }
-    .align-items#{$infix}-stretch  { align-items: stretch !important; }
+    .align-items#{$infix}-start {
+      align-items: flex-start !important;
+    }
+    .align-items#{$infix}-end {
+      align-items: flex-end !important;
+    }
+    .align-items#{$infix}-center {
+      align-items: center !important;
+    }
+    .align-items#{$infix}-baseline {
+      align-items: baseline !important;
+    }
+    .align-items#{$infix}-stretch {
+      align-items: stretch !important;
+    }
 
-    .align-content#{$infix}-start   { align-content: flex-start !important; }
-    .align-content#{$infix}-end     { align-content: flex-end !important; }
-    .align-content#{$infix}-center  { align-content: center !important; }
-    .align-content#{$infix}-between { align-content: space-between !important; }
-    .align-content#{$infix}-around  { align-content: space-around !important; }
-    .align-content#{$infix}-stretch { align-content: stretch !important; }
+    .align-content#{$infix}-start {
+      align-content: flex-start !important;
+    }
+    .align-content#{$infix}-end {
+      align-content: flex-end !important;
+    }
+    .align-content#{$infix}-center {
+      align-content: center !important;
+    }
+    .align-content#{$infix}-between {
+      align-content: space-between !important;
+    }
+    .align-content#{$infix}-around {
+      align-content: space-around !important;
+    }
+    .align-content#{$infix}-stretch {
+      align-content: stretch !important;
+    }
 
-    .align-self#{$infix}-auto     { align-self: auto !important; }
-    .align-self#{$infix}-start    { align-self: flex-start !important; }
-    .align-self#{$infix}-end      { align-self: flex-end !important; }
-    .align-self#{$infix}-center   { align-self: center !important; }
-    .align-self#{$infix}-baseline { align-self: baseline !important; }
-    .align-self#{$infix}-stretch  { align-self: stretch !important; }
+    .align-self#{$infix}-auto {
+      align-self: auto !important;
+    }
+    .align-self#{$infix}-start {
+      align-self: flex-start !important;
+    }
+    .align-self#{$infix}-end {
+      align-self: flex-end !important;
+    }
+    .align-self#{$infix}-center {
+      align-self: center !important;
+    }
+    .align-self#{$infix}-baseline {
+      align-self: baseline !important;
+    }
+    .align-self#{$infix}-stretch {
+      align-self: stretch !important;
+    }
   }
 }
-
-
 
 //         __ _             _
 //        / _| | ___   __ _| |_   ___  ___ ___ ___
@@ -1204,15 +1203,17 @@ template {
   @include media-breakpoint-up($breakpoint, $media-breakpoints) {
     $infix: breakpoint-infix($breakpoint, $media-breakpoints);
 
-    .float#{$infix}-left  { float: left !important; }
-    .float#{$infix}-right { float: right !important; }
-    .float#{$infix}-none  { float: none !important; }
+    .float#{$infix}-left {
+      float: left !important;
+    }
+    .float#{$infix}-right {
+      float: right !important;
+    }
+    .float#{$infix}-none {
+      float: none !important;
+    }
   }
 }
-
-
-
-
 
 //        _                         _
 //       | | __ _ _   _  ___  _   _| |_   ___  ___ ___ ___
@@ -1239,7 +1240,9 @@ template {
         .admin-body {
           -ms-overflow-style: none;
           -ms-overflow-y: hidden;
-          min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});
+          min-height: calc(
+            100vh - #{$admin-header-height} - #{$admin-footer-height}
+          );
         }
       }
     }
@@ -1264,7 +1267,7 @@ admin-root {
   flex-direction: row;
   flex-wrap: wrap;
 
-  height: $admin-header-height;;
+  height: $admin-header-height;
   padding: 0;
   margin: 0;
   background-color: map.get($theme-colors, admin-header-bg-color);
@@ -1307,7 +1310,7 @@ admin-root {
     }
 
     &:focus {
-      outline: none!important;
+      outline: none !important;
     }
   }
 
@@ -1368,7 +1371,7 @@ admin-root {
           cursor: pointer;
         }
 
-        .user-icon  {
+        .user-icon {
           display: inline-block;
           width: 24px;
           height: 24px;
@@ -1464,7 +1467,10 @@ admin-root {
     .admin-header {
       .brand {
         width: $admin-header-brand-minimized-width;
-        background-color: map.get($theme-colors, admin-header-brand-minimized-bg-color);
+        background-color: map.get(
+          $theme-colors,
+          admin-header-brand-minimized-bg-color
+        );
         @include borders($admin-header-brand-minimized-border);
 
         .brand-full {
@@ -1499,7 +1505,7 @@ admin-root {
   // put the nav on the left
   order: -1;
 
-  margin-left: - $sidebar-width;
+  margin-left: -$sidebar-width;
 
   sidebar-nav-item {
     font-size: $sidebar-font-size;
@@ -1540,7 +1546,7 @@ admin-root {
     $title-bar-top: $admin-header-height;
     position: fixed;
     top: $title-bar-top;
-    left:  0;
+    left: 0;
     right: 0;
     z-index: $zindex-sticky - 3;
   }
@@ -1578,7 +1584,9 @@ admin-root {
     }
 
     .admin-header + .admin-body {
-      min-height: calc(100vh - #{$admin-header-height}  - #{$admin-footer-height});
+      min-height: calc(
+        100vh - #{$admin-header-height} - #{$admin-footer-height}
+      );
     }
   }
 
@@ -1587,7 +1595,9 @@ admin-root {
     }
 
     .admin-header + .admin-body {
-      min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});
+      min-height: calc(
+        100vh - #{$admin-header-height} - #{$admin-footer-height}
+      );
     }
   }
 
@@ -1634,12 +1644,12 @@ admin-root {
 
   .sidebar-compact {
     .sidebar {
-      margin-left: - $sidebar-compact-width;
+      margin-left: -$sidebar-compact-width;
     }
   }
   .sidebar-minimized {
     .sidebar {
-      margin-left: - $sidebar-minimized-width;
+      margin-left: -$sidebar-minimized-width;
     }
   }
 }
@@ -1719,8 +1729,12 @@ admin-root {
 
     .sidebar#{$infix}-show {
       @keyframes opacity {
-        0%   { opacity: 0; }
-        100% { opacity: 1; }
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
 
       // Changed xs to md
@@ -1735,7 +1749,7 @@ admin-root {
             width: 100%;
             height: 100%;
             content: "";
-            background: rgba(0, 0, 0, .7);
+            background: rgba(0, 0, 0, 0.7);
             animation: opacity $layout-transition-speed;
           }
         }
@@ -1771,7 +1785,11 @@ admin-root {
 .admin-footer,
 .sidebar,
 .main {
-  transition: margin-left $layout-transition-speed, margin-right $layout-transition-speed, width $layout-transition-speed, flex $layout-transition-speed;
+  transition:
+    margin-left $layout-transition-speed,
+    margin-right $layout-transition-speed,
+    width $layout-transition-speed,
+    flex $layout-transition-speed;
 }
 
 // noinspection SassScssResolvedByNameOnly
@@ -1781,12 +1799,14 @@ admin-root {
 
 // noinspection SassScssResolvedByNameOnly
 .breadcrumb {
-  transition: left $layout-transition-speed, right $layout-transition-speed, width $layout-transition-speed;
+  transition:
+    left $layout-transition-speed,
+    right $layout-transition-speed,
+    width $layout-transition-speed;
 }
 
 // Dialogs
 .form-dialog-panel {
-
 }
 
 // Mobile layout
@@ -1810,7 +1830,14 @@ admin-root {
       //} @else {
       //  color: map.get($theme-colors, white);
       //}
-      @if (color.channel(map.get($theme-colors, admin-header-brand-bg-color), "lightness", $space: hsl) > 40%) {
+      @if (
+        color.channel(
+            map.get($theme-colors, admin-header-brand-bg-color),
+            "lightness",
+            $space: hsl
+          ) >
+          40%
+      ) {
         color: map.get($theme-colors, admin-header-color);
       } @else {
         color: map.get($theme-colors, white);
@@ -1820,7 +1847,7 @@ admin-root {
     .navbar-brand {
       position: absolute;
       left: 50%;
-      margin-left: - (math.div($admin-header-brand-width, 2) + 24);
+      margin-left: -(math.div($admin-header-brand-width, 2) + 24);
     }
   }
 
@@ -1922,14 +1949,6 @@ simple-container {
   }
 }
 
-
-
-
-
-
-
-
-
 //        _
 //       | | ___   __ _  ___   ___  ___ ___ ___
 //       | |/ _ \ / _` |/ _ \ / __|/ __/ __/ __|
@@ -1950,12 +1969,6 @@ simple-container {
 .logo-full {
 }
 
-
-
-
-
-
-
 //                        _            _       _
 //        _ __ ___   __ _| |_ ___ _ __(_) __ _| |  ___  ___ ___ ___
 //       | '_ ` _ \ / _` | __/ _ \ '__| |/ _` | | / __|/ __/ __/ __|
@@ -1967,67 +1980,64 @@ simple-container {
 //@import 'variables';
 //@import 'default-theme-variables';
 
-
 $inception-typography: mat.m2-define-typography-config(
-  $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-    //$headline-1: null,
-    //$headline-2: null,
-    //$headline-3: null,
-    //$headline-4: null,
-    //$headline-5: null,
-    //$headline-6: null,
+  $font-family:
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+  //$headline-1: null,
+  //$headline-2: null,
+  //$headline-3: null,
+  //$headline-4: null,
+  //$headline-5: null,
+  //$headline-6: null,
   $subtitle-1: mat.m2-define-typography-level(1rem, 1.5rem, 500),
   $subtitle-2: mat.m2-define-typography-level(14px, 24px, 500),
   $body-1: mat.m2-define-typography-level(1rem),
   $body-2: mat.m2-define-typography-level(14px),
   $caption: mat.m2-define-typography-level(12px, 20px, 400, null, normal),
-  $button: mat.m2-define-typography-level(1rem, 1rem),
-  // $overline: null,
+  $button: mat.m2-define-typography-level(1rem, 1rem) // $overline: null,
 );
 
-
-
 $inception-legacy-typography: mat.m2-define-legacy-typography-config(
-  $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-    //$display-4:     define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
-    //$display-3:     define-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
-    //$display-2:     define-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
-    //$display-1:     define-typography-level(34px, 40px, 400),
-    //$headline:      define-typography-level(24px, 32px, 400),
-    //$title:         define-typography-level(20px, 32px, 500),
-    //$subheading-2:  define-typography-level(16px, 28px, 400),
-  $subheading-1: mat.m2-define-typography-level(1rem, 1.5rem, 500), // DEFAULT: define-typography-level(15px, 24px, 400),
+  $font-family:
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+  //$display-4:     define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
+  //$display-3:     define-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
+  //$display-2:     define-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
+  //$display-1:     define-typography-level(34px, 40px, 400),
+  //$headline:      define-typography-level(24px, 32px, 400),
+  //$title:         define-typography-level(20px, 32px, 500),
+  //$subheading-2:  define-typography-level(16px, 28px, 400),
+  $subheading-1: mat.m2-define-typography-level(1rem, 1.5rem, 500),
+  // DEFAULT: define-typography-level(15px, 24px, 400),
   $subheading-2: mat.m2-define-typography-level(14px, 24px, 500),
   $body-1: mat.m2-define-typography-level(1rem),
   $body-2: mat.m2-define-typography-level(14px),
   $caption: mat.m2-define-typography-level(12px, 20px, 400, null, normal),
   $button: mat.m2-define-typography-level(1rem, 1rem),
   // Line-height must be unit-less fraction of the font-size.
-  //$input:         define-typography-level(inherit, 1.125, 400)
+   //$input:         define-typography-level(inherit, 1.125, 400)
 );
-
-
 
 //$inception-primary: mat.define-palette($inception-palette);
 $inception-primary: mat.m2-define-palette(mat.$m2-blue-palette);
-$inception-accent:  mat.m2-define-palette(mat.$m2-light-blue-palette);
+$inception-accent: mat.m2-define-palette(mat.$m2-light-blue-palette);
 $inception-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
-$inception-theme: mat.m2-define-light-theme((
-  color: (
-    primary: $inception-primary,
-    accent: $inception-accent,
-    warn: $inception-warn
-  ),
-  typography: $inception-typography,
-  density: 0,
-));
+$inception-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $inception-primary,
+      accent: $inception-accent,
+      warn: $inception-warn
+    ),
+    typography: $inception-typography,
+    density: 0
+  )
+);
 
 @include mat.all-component-themes($inception-theme);
 
 @include mat.all-component-typographies($inception-typography);
-
-
 
 .cdk-global-scrollblock {
   position: static;
@@ -2038,12 +2048,8 @@ $inception-theme: mat.m2-define-light-theme((
   z-index: 10000;
 }
 
-
-
-.mat-expansion-panel
-{
-  .mat-expansion-panel-header
-  {
+.mat-expansion-panel {
+  .mat-expansion-panel-header {
     &.mat-expanded {
       border-bottom-style: solid;
       border-bottom-width: 1px;
@@ -2053,21 +2059,16 @@ $inception-theme: mat.m2-define-light-theme((
       margin-bottom: 10px;
     }
 
-    .mat-expansion-panel-header-description
-    {
+    .mat-expansion-panel-header-description {
       justify-content: space-between;
       align-items: center;
     }
   }
 }
 
-
-
 .mat-mdc-button-base {
   font-weight: 500;
 }
-
-
 
 .mat-mdc-card {
   --mat-card-title-text-line-height: 1.5rem;
@@ -2078,14 +2079,20 @@ $inception-theme: mat.m2-define-light-theme((
   --mat-card-subtitle-text-size: 1rem;
   --mat-card-subtitle-text-weight: 400;
 
-  box-shadow: 0 1px 1px -2px rgba(0,0,0,.05), 0 1px 1px 0 rgba(0,0,0,.12), 0 1px 5px 0 rgba(0,0,0,.12) !important;
+  box-shadow:
+    0 1px 1px -2px rgba(0, 0, 0, 0.05),
+    0 1px 1px 0 rgba(0, 0, 0, 0.12),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12) !important;
 
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 
   .mat-mdc-card-actions {
     justify-content: flex-end;
 
-    .mdc-button:not(:last-child), .mdc-flat-button:not(:last-child), .mdc-raised-button:not(:last-child), .mdc-icon-button:not(:last-child) {
+    .mdc-button:not(:last-child),
+    .mdc-flat-button:not(:last-child),
+    .mdc-raised-button:not(:last-child),
+    .mdc-icon-button:not(:last-child) {
       margin-right: 10px;
     }
   }
@@ -2114,7 +2121,7 @@ $inception-theme: mat.m2-define-light-theme((
 
   .mat-mdc-card-header {
     padding: 0.75rem;
-    border-radius: .25rem .25rem 0 0;
+    border-radius: 0.25rem 0.25rem 0 0;
 
     .mat-mdc-card-title {
       margin-bottom: 0;
@@ -2136,7 +2143,10 @@ $inception-theme: mat.m2-define-light-theme((
 
   &.mat-card-primary {
     .mat-mdc-card-header {
-      background-color: mat.m2-get-color-from-palette($inception-primary, default);
+      background-color: mat.m2-get-color-from-palette(
+        $inception-primary,
+        default
+      );
     }
 
     .mat-mdc-card-subtitle {
@@ -2150,7 +2160,10 @@ $inception-theme: mat.m2-define-light-theme((
 
   &.mat-card-accent {
     .mat-mdc-card-header {
-      background-color: mat.m2-get-color-from-palette($inception-accent, default);
+      background-color: mat.m2-get-color-from-palette(
+        $inception-accent,
+        default
+      );
     }
 
     .mat-mdc-card-subtitle {
@@ -2177,10 +2190,7 @@ $inception-theme: mat.m2-define-light-theme((
   }
 }
 
-
-
 .mat-mdc-dialog-container {
-
   padding: 0 !important;
 
   .mat-mdc-dialog-title {
@@ -2199,12 +2209,18 @@ $inception-theme: mat.m2-define-light-theme((
     padding: 8px 16px 16px;
     margin: 0;
 
-    .mat-mdc-button:not(:last-child), .mat-mdc-flat-button:not(:last-child), .mat-mdc-raised-button:not(:last-child), .mat-mdc-icon-button:not(:last-child) {
+    .mat-mdc-button:not(:last-child),
+    .mat-mdc-flat-button:not(:last-child),
+    .mat-mdc-raised-button:not(:last-child),
+    .mat-mdc-icon-button:not(:last-child) {
       margin-right: 10px;
     }
   }
 
-  .confirmation-dialog, .error-dialog, .information-dialog, .warning-dialog {
+  .confirmation-dialog,
+  .error-dialog,
+  .information-dialog,
+  .warning-dialog {
     display: block;
     padding: 0;
 
@@ -2240,7 +2256,10 @@ $inception-theme: mat.m2-define-light-theme((
 
   .confirmation-dialog {
     .header {
-      background-color: mat.m2-get-color-from-palette($inception-primary, default);
+      background-color: mat.m2-get-color-from-palette(
+        $inception-primary,
+        default
+      );
     }
 
     .button {
@@ -2266,7 +2285,10 @@ $inception-theme: mat.m2-define-light-theme((
 
   .information-dialog {
     .header {
-      background-color: mat.m2-get-color-from-palette($inception-primary, default);
+      background-color: mat.m2-get-color-from-palette(
+        $inception-primary,
+        default
+      );
     }
 
     .button {
@@ -2291,10 +2313,7 @@ $inception-theme: mat.m2-define-light-theme((
   }
 }
 
-
-
 .mat-mdc-form-field {
-
   width: 100%;
 
   &.static {
@@ -2320,13 +2339,11 @@ $inception-theme: mat.m2-define-light-theme((
   }
 
   &.mat-form-field-appearance-fill {
-
     .mat-mdc-text-field-wrapper {
       // Reduce the padding on the left and right of a text field
       padding: 0px 4px;
 
       .mat-mdc-form-field-flex {
-
         .mat-mdc-form-field-text-prefix {
         }
 
@@ -2335,9 +2352,8 @@ $inception-theme: mat.m2-define-light-theme((
           padding-bottom: 8px;
 
           .mat-mdc-floating-label {
-
             &:not(.mdc-floating-label--float-above) {
-              transform: translateY(-20%);;
+              transform: translateY(-20%);
             }
 
             &.mdc-floating-label--float-above {
@@ -2379,12 +2395,10 @@ $inception-theme: mat.m2-define-light-theme((
     }
 
     .mat-mdc-text-field-wrapper {
-
     }
   }
 
   &.mat-form-field-appearance-outline {
-
     margin-top: 10px;
 
     .mat-mdc-form-field-infix {
@@ -2397,13 +2411,11 @@ $inception-theme: mat.m2-define-light-theme((
     .mat-mdc-text-field-wrapper {
       padding-bottom: 0;
 
-      .mat-mdc-form-field-flex
-      {
+      .mat-mdc-form-field-flex {
         padding-top: 0;
         padding-bottom: 0;
 
-        .mat-mdc-form-field-infix
-        {
+        .mat-mdc-form-field-infix {
           border-top: 0;
           min-height: 0 !important;
           padding: 0.25em 0 !important;
@@ -2413,14 +2425,14 @@ $inception-theme: mat.m2-define-light-theme((
       .mat-mdc-form-field-underline {
         bottom: 0 !important;
       }
-
     }
     .mat-mdc-form-field-subscript-wrapper {
       display: none;
     }
   }
 
-  input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
     display: none;
   }
 
@@ -2430,7 +2442,7 @@ $inception-theme: mat.m2-define-light-theme((
     }
 
     .mat-datepicker-clear {
-      color: rgba(0,0,0,0.54);
+      color: rgba(0, 0, 0, 0.54);
       background-color: transparent;
       width: 32px;
       padding: 0;
@@ -2451,8 +2463,6 @@ $inception-theme: mat.m2-define-light-theme((
   }
 }
 
-
-
 .mat-mdc-list {
   .mat-mdc-list-item {
     i.mat-mdc-list-item-icon {
@@ -2460,8 +2470,6 @@ $inception-theme: mat.m2-define-light-theme((
     }
   }
 }
-
-
 
 .mat-mdc-menu-panel {
   border-top: 1px solid #dee2e6;
@@ -2504,18 +2512,20 @@ $inception-theme: mat.m2-define-light-theme((
   }
 }
 
-
-
 .mat-mdc-nested-table {
   display: block;
   margin-left: 6px;
   margin-right: 6px;
 
-  .mat-mdc-nested-header-row, .mat-mdc-nested-footer-row, .mat-mdc-nested-row {
+  .mat-mdc-nested-header-row,
+  .mat-mdc-nested-footer-row,
+  .mat-mdc-nested-row {
     min-height: 3rem;
   }
 
-  .mat-mdc-nested-row, .mat-mdc-nested-header-row, .mat-mdc-nested-footer-row {
+  .mat-mdc-nested-row,
+  .mat-mdc-nested-header-row,
+  .mat-mdc-nested-footer-row {
     display: flex;
     align-items: center;
     box-sizing: border-box;
@@ -2527,7 +2537,8 @@ $inception-theme: mat.m2-define-light-theme((
     border-bottom-color: rgba(0, 0, 0, 0.12);
   }
 
-  .mat-mdc-nested-header-cell, .mat-mdc-nested-cell {
+  .mat-mdc-nested-header-cell,
+  .mat-mdc-nested-cell {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2535,14 +2546,17 @@ $inception-theme: mat.m2-define-light-theme((
 
   .mat-mdc-nested-header-cell {
     color: var(--mdc-filled-text-field-label-text-color);
-    @include mat.m2-typography-level($inception-typography, 'subtitle-2');
+    @include mat.m2-typography-level($inception-typography, "subtitle-2");
   }
 
-  .mat-mdc-nested-cell, .mat-mdc-nested-footer-cell {
-    @include mat.m2-typography-level($inception-typography, 'body-2');
+  .mat-mdc-nested-cell,
+  .mat-mdc-nested-footer-cell {
+    @include mat.m2-typography-level($inception-typography, "body-2");
   }
 
-  .mat-mdc-nested-header-cell, .mat-mdc-nested-cell, .mat-mdc-nested-footer-cell {
+  .mat-mdc-nested-header-cell,
+  .mat-mdc-nested-cell,
+  .mat-mdc-nested-footer-cell {
     flex: 1;
     padding-left: 6px;
   }
@@ -2587,28 +2601,19 @@ $inception-theme: mat.m2-define-light-theme((
   padding-right: 6px;
 }
 
-
-
 .mat-mdc-paginator {
   --mat-paginator-container-size: 48px;
 }
-
-
 
 .mat-mdc-standard-chip {
   --mdc-chip-label-text-weight: 400;
 }
 
-
-
 .mat-mdc-tab-body-content {
   padding: 1em;
 }
 
-
-
 .mat-mdc-table {
-
   .mat-mdc-header-row {
     min-height: 42px;
   }
@@ -2617,7 +2622,8 @@ $inception-theme: mat.m2-define-light-theme((
     min-height: 42px;
   }
 
-  .mat-mdc-header-cell, .mat-mdc-cell {
+  .mat-mdc-header-cell,
+  .mat-mdc-cell {
     white-space: nowrap;
 
     > span.ellipsis {
@@ -2662,8 +2668,6 @@ $inception-theme: mat.m2-define-light-theme((
   }
 }
 
-
-
 .mat-mdc-table-header {
   display: flex;
   justify-content: space-between;
@@ -2683,7 +2687,6 @@ $inception-theme: mat.m2-define-light-theme((
       width: 14rem;
 
       .mat-date-range-input-container {
-
         .mat-date-range-input-wrapper {
           display: inline-flex;
 
@@ -2742,7 +2745,9 @@ $inception-theme: mat.m2-define-light-theme((
       line-height: 1.5rem;
     }
 
-    .select-align-right-100px, .select-align-right-125px, .select-align-right-150px {
+    .select-align-right-100px,
+    .select-align-right-125px,
+    .select-align-right-150px {
       margin-right: 10px;
 
       .mat-mdc-select-value {
@@ -2785,12 +2790,8 @@ $inception-theme: mat.m2-define-light-theme((
   }
 }
 
-
-
 .mdc-text-field {
-
   &.mdc-text-field--filled {
-
     &:not(.mdc-text-field--disabled) {
       background-color: inherit;
     }
@@ -2802,14 +2803,10 @@ $inception-theme: mat.m2-define-light-theme((
     &.mdc-text-field--disabled {
       background-color: inherit;
     }
-
   }
 }
 
-
-
 .mat-mdc-unelevated-button {
-
   &.mat-unthemed {
     // TODO: CHECK THIS COLOR
     border: 1px solid rgba(0, 0, 0);
@@ -2833,23 +2830,22 @@ $inception-theme: mat.m2-define-light-theme((
   }
 }
 
-
-
-.mat-mdc-raised-button, .mat-mdc-fab, .mat-mdc-mini-fab {
+.mat-mdc-raised-button,
+.mat-mdc-fab,
+.mat-mdc-mini-fab {
   &.mat-accent {
     color: white !important;
   }
 }
 
-
-
 .mat-mdc-tab {
   --mat-tab-header-label-text-weight: 500;
 }
 
-
-
-.mat-mdc-table-header, .mat-mdc-table, .mat-mdc-nested-table-header, .mat-mdc-nested-table {
+.mat-mdc-table-header,
+.mat-mdc-table,
+.mat-mdc-nested-table-header,
+.mat-mdc-nested-table {
   .mat-mdc-icon-button {
     --mdc-icon-button-state-layer-size: 30px;
     font-size: 1rem;
@@ -2863,8 +2859,6 @@ $inception-theme: mat.m2-define-light-theme((
   }
 }
 
-
-
 @include media-breakpoint-down(xs, $media-breakpoints) {
   .mat-mdc-dialog-container {
     .mat-mdc-dialog-content {
@@ -2872,7 +2866,10 @@ $inception-theme: mat.m2-define-light-theme((
       max-width: 80vw !important;
     }
 
-    .confirmation-dialog, .error-dialog, .information-dialog, .warning-dialog {
+    .confirmation-dialog,
+    .error-dialog,
+    .information-dialog,
+    .warning-dialog {
       min-width: 300px !important;
       max-width: 300px !important;
     }
@@ -2886,31 +2883,21 @@ $inception-theme: mat.m2-define-light-theme((
       max-width: 80vw !important;
     }
 
-    .confirmation-dialog, .error-dialog, .information-dialog, .warning-dialog {
+    .confirmation-dialog,
+    .error-dialog,
+    .information-dialog,
+    .warning-dialog {
       min-width: 360px !important;
       max-width: 360px !important;
     }
   }
 }
 
-
-
 // To fix cut-off text in single line textareas
 textarea.mat-mdc-input-element {
   margin-bottom: 8px;
   min-height: 16px;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 //                        _            _       _       _
 //        _ __ ___   __ _| |_ ___ _ __(_) __ _| |     (_) ___ ___  _ __  ___   ___  ___ ___ ___
@@ -2921,14 +2908,14 @@ textarea.mat-mdc-input-element {
 
 /* fallback */
 @font-face {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/material-icons.woff2') format('woff2');
+  src: url("../fonts/material-icons.woff2") format("woff2");
 }
 
 .material-icons {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -2939,17 +2926,9 @@ textarea.mat-mdc-input-element {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  -webkit-font-feature-settings: 'liga';
+  -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
 }
-
-
-
-
-
-
-
-
 
 //            _     _      _
 //        ___(_) __| | ___| |__   __ _ _ __ ___  ___ ___ ___
@@ -2979,7 +2958,7 @@ textarea.mat-mdc-input-element {
     color: map.get($theme-colors, sidebar-color);
     background: 0;
     border: 0;
-    opacity: .8;
+    opacity: 0.8;
 
     &:hover {
       opacity: 1;
@@ -3034,7 +3013,7 @@ textarea.mat-mdc-input-element {
   .nav-item {
     position: relative;
     margin: 0;
-    transition: background .3s ease-in-out;
+    transition: background 0.3s ease-in-out;
   }
 
   .nav-dropdown-items {
@@ -3042,7 +3021,7 @@ textarea.mat-mdc-input-element {
     padding: 0;
     margin: 0;
     overflow-y: hidden;
-    transition: max-height .3s ease-in-out;
+    transition: max-height 0.3s ease-in-out;
 
     .nav-item {
       padding: 0;
@@ -3116,7 +3095,7 @@ textarea.mat-mdc-input-element {
       background-image: $sidebar-nav-dropdown-indicator;
       background-repeat: no-repeat;
       background-position: center;
-      transition: transform .3s;
+      transition: transform 0.3s;
     }
   }
 
@@ -3128,24 +3107,20 @@ textarea.mat-mdc-input-element {
     }
 
     > .sidebar-nav-dropdown {
-      > .nav-dropdown-items
-      {
+      > .nav-dropdown-items {
         max-height: 1500px;
       }
 
-      .nav-link
-      {
+      .nav-link {
         color: map.get($theme-colors, sidebar-nav-dropdown-color);
         border-left: 0;
       }
 
-      > .nav-dropdown-toggle::before
-      {
+      > .nav-dropdown-toggle::before {
         transform: rotate(-90deg);
       }
 
-      .nav-dropdown.open
-      {
+      .nav-dropdown.open {
         border-left: 0;
       }
     }
@@ -3153,7 +3128,8 @@ textarea.mat-mdc-input-element {
 
   .nav-label {
     display: block;
-    padding: math.div($sidebar-nav-link-padding-y, 8) $sidebar-nav-link-padding-x;
+    padding: math.div($sidebar-nav-link-padding-y, 8)
+      $sidebar-nav-link-padding-x;
     color: map.get($theme-colors, sidebar-nav-title-color);
 
     &:hover {
@@ -3171,9 +3147,19 @@ textarea.mat-mdc-input-element {
     }
   }
 
-  @if (color.channel(map.get($theme-colors, sidebar-bg-color), "lightness", $space: hsl) < 40) {
+  @if (
+    color.channel(
+        map.get($theme-colors, sidebar-bg-color),
+        "lightness",
+        $space: hsl
+      ) <
+      40
+  ) {
     .progress {
-      background-color: color.adjust(map.get($theme-colors, sidebar-bg-color), $lightness: 15%) !important;
+      background-color: color.adjust(
+        map.get($theme-colors, sidebar-bg-color),
+        $lightness: 15%
+      ) !important;
     }
   }
 
@@ -3202,7 +3188,7 @@ textarea.mat-mdc-input-element {
       background-repeat: no-repeat;
       background-position: center;
       background-size: math.div($sidebar-minimizer-height, 4);
-      transition: .3s;
+      transition: 0.3s;
     }
 
     &:focus,
@@ -3211,7 +3197,10 @@ textarea.mat-mdc-input-element {
     }
 
     &:hover {
-      background-color: map.get($theme-colors, sidebar-minimizer-hover-bg-color);
+      background-color: map.get(
+        $theme-colors,
+        sidebar-minimizer-hover-bg-color
+      );
       &::before {
         background-image: $sidebar-minimizer-hover-indicator;
       }
@@ -3261,7 +3250,6 @@ textarea.mat-mdc-input-element {
         }
 
         &.nav-dropdown-toggle {
-
           &::before {
             top: 30px;
           }
@@ -3348,7 +3336,6 @@ textarea.mat-mdc-input-element {
       }
 
       .nav-dropdown-items {
-
         .nav-item {
           width: $sidebar-width;
 
@@ -3359,28 +3346,23 @@ textarea.mat-mdc-input-element {
       }
 
       .nav > sidebar-nav-item > .nav-dropdown {
-        > .sidebar-nav-dropdown
-        {
-          > .nav-dropdown-items
-          {
+        > .sidebar-nav-dropdown {
+          > .nav-dropdown-items {
             display: none;
             max-height: 1000px;
             background: map.get($theme-colors, sidebar-bg-color);
           }
         }
 
-        &:hover
-        {
+        &:hover {
           background: map.get($theme-colors, sidebar-nav-link-hover-bg-color);
 
           > .sidebar-nav-dropdown {
-
             .nav-item-name {
               display: inline;
             }
 
-            > .nav-dropdown-items
-            {
+            > .nav-dropdown-items {
               position: absolute;
               left: $sidebar-minimized-width;
               display: inline;
@@ -3391,12 +3373,6 @@ textarea.mat-mdc-input-element {
     }
   }
 }
-
-
-
-
-
-
 
 //                             _
 //        ___ _ __   __ _  ___(_)_ __   __ _   ___  ___ ___ ___
@@ -3413,7 +3389,9 @@ textarea.mat-mdc-input-element {
 
     @each $prop, $abbrev in (margin: m, padding: p) {
       @each $size, $length in $spacers {
-        .#{$abbrev}#{$infix}-#{$size} { #{$prop}: $length !important; }
+        .#{$abbrev}#{$infix}-#{$size} {
+          #{$prop}: $length !important;
+        }
         .#{$abbrev}t#{$infix}-#{$size},
         .#{$abbrev}y#{$infix}-#{$size} {
           #{$prop}-top: $length !important;
@@ -3436,7 +3414,9 @@ textarea.mat-mdc-input-element {
     // Negative margins (e.g., where `.mb-n1` is negative version of `.mb-1`)
     @each $size, $length in $spacers {
       @if "#{$size}" != "0" {
-        .m#{$infix}-n#{$size} { margin: -$length !important; }
+        .m#{$infix}-n#{$size} {
+          margin: -$length !important;
+        }
         .mt#{$infix}-n#{$size},
         .my#{$infix}-n#{$size} {
           margin-top: -$length !important;
@@ -3457,7 +3437,9 @@ textarea.mat-mdc-input-element {
     }
 
     // Some special margin utils
-    .m#{$infix}-auto { margin: auto !important; }
+    .m#{$infix}-auto {
+      margin: auto !important;
+    }
     .mt#{$infix}-auto,
     .my#{$infix}-auto {
       margin-top: auto !important;
@@ -3476,36 +3458,6 @@ textarea.mat-mdc-input-element {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //                     _ _       _
 //        _____      _(_) |_ ___| |__   ___  ___   ___  ___ ___ ___
@@ -3533,7 +3485,7 @@ textarea.mat-mdc-input-element {
   cursor: pointer;
   background-color: map.get($theme-colors, white);
   border: $border-width solid map.get($theme-colors, border-color);
-  transition: .15s ease-out;
+  transition: 0.15s ease-out;
   @include border-radius($enable-rounded, $border-radius);
 
   &::before {
@@ -3546,7 +3498,7 @@ textarea.mat-mdc-input-element {
     content: "";
     background-color: map.get($theme-colors, white);
     border: 1px solid map.get($theme-colors, border-color);
-    transition: .15s ease-out;
+    transition: 0.15s ease-out;
     @include border-radius($enable-rounded, math.div($border-radius, 2));
   }
 }
@@ -3560,17 +3512,29 @@ textarea.mat-mdc-input-element {
 
 .switch-input:disabled ~ .switch-slider {
   cursor: not-allowed;
-  opacity: .5;
+  opacity: 0.5;
 }
 
 // noinspection SassScssResolvedByNameOnly
 .switch-lg {
-  @include switch-size($switch-lg-width, $switch-lg-height, $switch-lg-font-size, $switch-handle-margin, $switch-border-width);
+  @include switch-size(
+    $switch-lg-width,
+    $switch-lg-height,
+    $switch-lg-font-size,
+    $switch-handle-margin,
+    $switch-border-width
+  );
 }
 
 // noinspection SassScssResolvedByNameOnly
 .switch-sm {
-  @include switch-size($switch-sm-width, $switch-sm-height, $switch-sm-font-size, $switch-handle-margin, $switch-border-width);
+  @include switch-size(
+    $switch-sm-width,
+    $switch-sm-height,
+    $switch-sm-font-size,
+    $switch-handle-margin,
+    $switch-border-width
+  );
 }
 
 // noinspection SassScssResolvedByNameOnly
@@ -3587,7 +3551,7 @@ textarea.mat-mdc-input-element {
       right: 1px;
       z-index: 1;
       width: 50%;
-      margin-top: -.5em;
+      margin-top: -0.5em;
       font-size: $switch-font-size;
       font-weight: 600;
       line-height: 1;
@@ -3612,11 +3576,23 @@ textarea.mat-mdc-input-element {
 
   // Sizes
   &.switch-lg {
-    @include switch-size($switch-label-lg-width, $switch-lg-height, $switch-lg-font-size, $switch-handle-margin, $switch-border-width);
+    @include switch-size(
+      $switch-label-lg-width,
+      $switch-lg-height,
+      $switch-lg-font-size,
+      $switch-handle-margin,
+      $switch-border-width
+    );
   }
 
   &.switch-sm {
-    @include switch-size($switch-label-sm-width, $switch-sm-height, $switch-sm-font-size, $switch-handle-margin, $switch-border-width);
+    @include switch-size(
+      $switch-label-sm-width,
+      $switch-sm-height,
+      $switch-sm-font-size,
+      $switch-handle-margin,
+      $switch-border-width
+    );
   }
 }
 
@@ -3633,7 +3609,7 @@ textarea.mat-mdc-input-element {
       height: $switch-height;
       border: 0;
       border-radius: 50em;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, .3);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     }
   }
 
@@ -3655,24 +3631,19 @@ textarea.mat-mdc-input-element {
   }
   //outline style
   .switch-outline-#{"" + $color} {
-    @include switch-outline-variant($value, map.get($theme-colors, switch-bg-color));
+    @include switch-outline-variant(
+      $value,
+      map.get($theme-colors, switch-bg-color)
+    );
   }
   //outline alternative style
   .switch-outline-#{"" + $color}-alt {
-    @include switch-outline-variant-alt($value, map.get($theme-colors, switch-bg-color));
+    @include switch-outline-variant-alt(
+      $value,
+      map.get($theme-colors, switch-bg-color)
+    );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 //       _                                           _
 //      | |_ _   _ _ __   ___   __ _ _ __ __ _ _ __ | |__  _   _   ___  ___ ___ ___
@@ -3682,7 +3653,18 @@ textarea.mat-mdc-input-element {
 //  |_____|  |___/|_|          |___/          |_|          |___/
 
 // noinspection SassScssResolvedByNameOnly
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
   margin-bottom: $headings-margin-bottom;
   font-family: $headings-font-family;
   font-weight: $headings-font-weight;
@@ -3691,22 +3673,40 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 // noinspection SassScssResolvedByNameOnly
-h1, .h1 { font-size: $h1-font-size; }
+h1,
+.h1 {
+  font-size: $h1-font-size;
+}
 
 // noinspection SassScssResolvedByNameOnly
-h2, .h2 { font-size: $h2-font-size; }
+h2,
+.h2 {
+  font-size: $h2-font-size;
+}
 
 // noinspection SassScssResolvedByNameOnly
-h3, .h3 { font-size: $h3-font-size; }
+h3,
+.h3 {
+  font-size: $h3-font-size;
+}
 
 // noinspection SassScssResolvedByNameOnly
-h4, .h4 { font-size: $h4-font-size; }
+h4,
+.h4 {
+  font-size: $h4-font-size;
+}
 
 // noinspection SassScssResolvedByNameOnly
-h5, .h5 { font-size: $h5-font-size; }
+h5,
+.h5 {
+  font-size: $h5-font-size;
+}
 
 // noinspection SassScssResolvedByNameOnly
-h6, .h6 { font-size: $h6-font-size; }
+h6,
+.h6 {
+  font-size: $h6-font-size;
+}
 
 // Type display classes
 // noinspection SassScssResolvedByNameOnly
@@ -3751,7 +3751,8 @@ hr {
 }
 
 // noinspection SassScssResolvedByNameOnly
-small, .small {
+small,
+.small {
   font-size: $small-font-size;
   font-weight: $font-weight-normal;
 }
@@ -3794,15 +3795,15 @@ small, .small {
 }
 
 .font-xxs {
-  font-size: .75rem !important;
+  font-size: 0.75rem !important;
 }
 
 .font-xs {
-  font-size: .875rem !important;
+  font-size: 0.875rem !important;
 }
 
 .font-sm {
-  font-size: .9375rem !important;
+  font-size: 0.9375rem !important;
 }
 
 .font-lg {
@@ -3828,4 +3829,3 @@ small, .small {
 .font-5xl {
   font-size: 2.5rem !important;
 }
-

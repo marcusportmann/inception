@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {UserStatus} from './user-status';
+import { UserStatus } from './user-status';
 
 /**
  * The User class holds the information for a user.
@@ -22,7 +22,6 @@ import {UserStatus} from './user-status';
  * @author Marcus Portmann
  */
 export class User {
-
   /**
    * The email address for the user.
    */
@@ -94,9 +93,19 @@ export class User {
    *                          incorrect password for the user.
    * @param passwordExpiry    The date and time the password for the user expires.
    */
-  constructor(userDirectoryId: string, username: string, name: string, preferredName: string,
-              mobileNumber: string, phoneNumber: string, email: string, status: UserStatus,
-              password: string, passwordAttempts?: number, passwordExpiry?: Date) {
+  constructor(
+    userDirectoryId: string,
+    username: string,
+    name: string,
+    preferredName: string,
+    mobileNumber: string,
+    phoneNumber: string,
+    email: string,
+    status: UserStatus,
+    password: string,
+    passwordAttempts?: number,
+    passwordExpiry?: Date
+  ) {
     this.userDirectoryId = userDirectoryId;
     this.username = username;
     this.name = name;

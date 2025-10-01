@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Country, ReferenceService} from 'ngx-inception/reference';
-import {Subscription} from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Country, ReferenceService } from 'ngx-inception/reference';
+import { Subscription } from 'rxjs';
 
 /**
  * The Title class holds title information for the example form component.
@@ -44,7 +49,6 @@ class Title {
   standalone: false
 })
 export class ExampleComponent implements OnInit, OnDestroy {
-
   static readonly MAX_DATE = Date.now();
 
   static readonly MIN_DATE = new Date(1900, 1, 1);
@@ -69,13 +73,20 @@ export class ExampleComponent implements OnInit, OnDestroy {
 
   titleControl: FormControl;
 
-  titles: Array<Title> = [new Title('Mr', 'Mr'), new Title('Mrs', 'Mrs'), new Title('Ms', 'Ms')];
+  titles: Array<Title> = [
+    new Title('Mr', 'Mr'),
+    new Title('Mrs', 'Mrs'),
+    new Title('Ms', 'Ms')
+  ];
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private referenceService: ReferenceService) {
-
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private referenceService: ReferenceService
+  ) {
     // Initialise the form controls
     this.confirmPasswordControl = new FormControl([], Validators.required);
     this.dateOfBirthControl = new FormControl([], Validators.required);
@@ -102,7 +113,7 @@ export class ExampleComponent implements OnInit, OnDestroy {
       grossIncome: this.grossIncomeControl,
       favoriteColor: this.favoriteColorControl,
       favoritePetDog: [''],
-      favoritePetCat: [{value: 'true'}],
+      favoritePetCat: [{ value: 'true' }],
       favoritePetFish: [''],
       notes: ['']
     });
@@ -120,8 +131,7 @@ export class ExampleComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onSubmit(): void {
     console.log('favorite color = ', this.favoriteColorControl.value);

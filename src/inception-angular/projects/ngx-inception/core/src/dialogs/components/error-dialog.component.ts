@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Error} from '../../errors/error';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Error } from '../../errors/error';
 
 /**
  * The ErrorDialogData interface defines the data that is displayed by an error dialog.
@@ -24,7 +24,6 @@ import {Error} from '../../errors/error';
  * @author Marcus Portmann
  */
 export interface ErrorDialogData {
-
   /**
    * The error.
    */
@@ -49,28 +48,33 @@ export interface ErrorDialogData {
       </span>
     </div>
     <div class="button">
-      <button mat-flat-button color="warn" (click)="ok()" tabindex="-1"
-              i18n="@@error_dialog_button_ok">OK
+      <button
+        mat-flat-button
+        color="warn"
+        (click)="ok()"
+        tabindex="-1"
+        i18n="@@error_dialog_button_ok">
+        OK
       </button>
     </div>
   `,
   host: {
-    'class': 'error-dialog',
+    class: 'error-dialog',
     '(document:keydown.enter)': 'onEnter($event)'
   },
   standalone: false
 })
 export class ErrorDialogComponent {
-
   /**
    * Constructs a new ErrorDialogComponent.
    *
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(private dialogRef: MatDialogRef<ErrorDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData) {
-  }
+  constructor(
+    private dialogRef: MatDialogRef<ErrorDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData
+  ) {}
 
   get message(): string {
     return this.data.error.message;

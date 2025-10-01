@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 /**
  * The ExpiredPasswordTitleResolver class provides the route data resolver that resolves the
@@ -26,12 +26,10 @@ import {Observable, of} from 'rxjs';
  */
 @Injectable()
 export class ExpiredPasswordTitleResolver {
-
   /**
    * Constructs a new ExpiredPasswordTitleResolver.
    */
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Resolve the title.
@@ -39,8 +37,12 @@ export class ExpiredPasswordTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of($localize`:@@login_expired_password_title_resolver:Expired Password`);
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
+    return of(
+      $localize`:@@login_expired_password_title_resolver:Expired Password`
+    );
   }
 }

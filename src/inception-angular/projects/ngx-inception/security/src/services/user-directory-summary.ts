@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class UserDirectorySummary {
-
   /**
    * The ID for the user directory.
    */

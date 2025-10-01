@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * The Menu21Component class implements the menu 2.1 component.
@@ -23,16 +23,12 @@ import {Component} from '@angular/core';
  */
 @Component({
   template: `
-      <mat-card class="flex-grow-1">
-          <mat-card-content>
-              Menu 2.1
-          </mat-card-content>
-      </mat-card>
+    <mat-card class="flex-grow-1">
+      <mat-card-content> Menu 2.1 </mat-card-content>
+    </mat-card>
   `,
   standalone: false
 })
 export class Menu21Component {
-
-  constructor() {
-  }
+  constructor() {}
 }

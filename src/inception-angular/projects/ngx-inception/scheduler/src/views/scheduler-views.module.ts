@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
-import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
-import {EditJobTitleResolver} from './edit-job-title-resolver';
-import {EditJobComponent} from './edit-job.component';
-import {JobParameterDialogComponent} from './job-parameter-dialog.component';
-import {JobTitleResolver} from './job-title-resolver';
-import {JobsTitleResolver} from './jobs-title-resolver';
-import {JobsComponent} from './jobs.component';
-import {NewJobTitleResolver} from './new-job-title-resolver';
-import {NewJobComponent} from './new-job.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
+import { EditJobTitleResolver } from './edit-job-title-resolver';
+import { EditJobComponent } from './edit-job.component';
+import { JobParameterDialogComponent } from './job-parameter-dialog.component';
+import { JobTitleResolver } from './job-title-resolver';
+import { JobsTitleResolver } from './jobs-title-resolver';
+import { JobsComponent } from './jobs.component';
+import { NewJobTitleResolver } from './new-job-title-resolver';
+import { NewJobComponent } from './new-job.component';
 
 const routes: Routes = [
   {
@@ -43,29 +43,34 @@ const routes: Routes = [
         component: JobsComponent,
         data: {
           authorities: [
-            'ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
+            'ROLE_Administrator',
+            'FUNCTION_Scheduler.SchedulerAdministration',
             'FUNCTION_Scheduler.JobAdministration'
           ]
         }
-      }, {
+      },
+      {
         path: 'new',
         pathMatch: 'full',
         canActivate: [CanActivateFunctionGuard],
         component: NewJobComponent,
         data: {
           authorities: [
-            'ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
+            'ROLE_Administrator',
+            'FUNCTION_Scheduler.SchedulerAdministration',
             'FUNCTION_Scheduler.JobAdministration'
           ]
         },
         resolve: {
           title: NewJobTitleResolver
         }
-      }, {
+      },
+      {
         path: ':jobId',
         pathMatch: 'full',
         redirectTo: ':jobId/edit'
-      }, {
+      },
+      {
         path: ':jobId',
         pathMatch: 'prefix',
         resolve: {
@@ -79,7 +84,8 @@ const routes: Routes = [
             component: EditJobComponent,
             data: {
               authorities: [
-                'ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
+                'ROLE_Administrator',
+                'FUNCTION_Scheduler.SchedulerAdministration',
                 'FUNCTION_Scheduler.JobAdministration'
               ]
             },
@@ -96,21 +102,26 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     // Components
-    EditJobComponent, JobParameterDialogComponent, JobsComponent, NewJobComponent
+    EditJobComponent,
+    JobParameterDialogComponent,
+    JobsComponent,
+    NewJobComponent
   ],
   imports: [
     // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
     // Inception modules
     CoreModule
   ],
   providers: [
     // Resolvers
-    JobsTitleResolver, JobTitleResolver, EditJobTitleResolver, NewJobTitleResolver
+    JobsTitleResolver,
+    JobTitleResolver,
+    EditJobTitleResolver,
+    NewJobTitleResolver
   ]
 })
-export class SchedulerViewsModule {
-}
-
-
-
+export class SchedulerViewsModule {}

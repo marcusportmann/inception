@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {CodesService} from '../services/codes.service';
+import { Inject, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { CodesService } from '../services/codes.service';
 
 /**
  * The CodeCategoryTitleResolver class provides the route data resolver that resolves the
@@ -27,14 +27,12 @@ import {CodesService} from '../services/codes.service';
  */
 @Injectable()
 export class CodeCategoryTitleResolver {
-
   /**
    * Constructs a new CodeCategoryTitleResolver.
    *
    * @param codesService The codes service.
    */
-  constructor(@Inject(CodesService) private codesService: CodesService) {
-  }
+  constructor(@Inject(CodesService) private codesService: CodesService) {}
 
   /**
    * Resolve the title.
@@ -42,12 +40,14 @@ export class CodeCategoryTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
     let codeCategoryId = activatedRouteSnapshot.paramMap.get('codeCategoryId');
 
     if (!codeCategoryId) {
-      throw (new Error('No codeCategoryId route parameter found'));
+      throw new Error('No codeCategoryId route parameter found');
     }
 
     codeCategoryId = decodeURIComponent(codeCategoryId);

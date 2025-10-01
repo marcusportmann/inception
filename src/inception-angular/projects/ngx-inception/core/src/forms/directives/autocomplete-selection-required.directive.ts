@@ -14,43 +14,60 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Directive, Host, Input, OnDestroy, Self} from '@angular/core';
-import {NgControl} from '@angular/forms';
-import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
-import {MatOptionSelectionChange} from '@angular/material/core';
-import {Subscription} from 'rxjs';
+import {
+  AfterViewInit,
+  Directive,
+  Host,
+  Input,
+  OnDestroy,
+  Self
+} from '@angular/core';
+import { NgControl } from '@angular/forms';
+import {
+  MatAutocomplete,
+  MatAutocompleteTrigger
+} from '@angular/material/autocomplete';
+import { MatOptionSelectionChange } from '@angular/material/core';
+import { Subscription } from 'rxjs';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[autocompleteSelectionRequired]',
   standalone: false
 })
-export class AutocompleteSelectionRequiredDirective implements AfterViewInit, OnDestroy {
-
+export class AutocompleteSelectionRequiredDirective
+  implements AfterViewInit, OnDestroy
+{
   @Input()
   matAutocomplete: MatAutocomplete | undefined;
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(@Host() @Self() private readonly autoCompleteTrigger: MatAutocompleteTrigger,
-              private readonly ngControl: NgControl) {
-  }
+  constructor(
+    @Host()
+    @Self()
+    private readonly autoCompleteTrigger: MatAutocompleteTrigger,
+    private readonly ngControl: NgControl
+  ) {}
 
   ngAfterViewInit() {
-    this.subscriptions.add(this.autoCompleteTrigger.panelClosingActions.subscribe(
-      (next: MatOptionSelectionChange | null) => {
-        if (this.matAutocomplete) {
-          const selected = this.matAutocomplete.options
-          .map(option => option.value)
-          .find(option => option === this.ngControl.value);
+    this.subscriptions.add(
+      this.autoCompleteTrigger.panelClosingActions.subscribe(
+        (next: MatOptionSelectionChange | null) => {
+          if (this.matAutocomplete) {
+            const selected = this.matAutocomplete.options
+              .map((option) => option.value)
+              .find((option) => option === this.ngControl.value);
 
-          if (selected == null) {
-            if (this.ngControl.control && (!!this.ngControl.control.value)) {
-              this.ngControl.control.setValue('');
+            if (selected == null) {
+              if (this.ngControl.control && !!this.ngControl.control.value) {
+                this.ngControl.control.setValue('');
+              }
             }
           }
         }
-      }));
+      )
+    );
   }
 
   ngOnDestroy() {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {NavigationBadge} from './navigation-badge';
+import { NavigationBadge } from './navigation-badge';
 
 /**
  * The NavigationItem class holds the information for a navigation item.
@@ -22,7 +22,6 @@ import {NavigationBadge} from './navigation-badge';
  * @author Marcus Portmann
  */
 export class NavigationItem {
-
   /**
    * The authorities that are used to restrict access to the navigation item.
    */
@@ -88,15 +87,23 @@ export class NavigationItem {
    * @param divider     The divider indicator.
    * @param title       The title indicator.
    */
-  constructor(icon: string, name: string, url: string, authorities?: string[],
-              children?: NavigationItem[],
-              cssClass?: string, variant?: string, badge?: NavigationBadge, divider?: boolean,
-              title?: boolean) {
+  constructor(
+    icon: string,
+    name: string,
+    url: string,
+    authorities?: string[],
+    children?: NavigationItem[],
+    cssClass?: string,
+    variant?: string,
+    badge?: NavigationBadge,
+    divider?: boolean,
+    title?: boolean
+  ) {
     this.icon = icon;
     this.name = name;
     this.url = url;
-    this.authorities = (!!authorities) ? authorities : [];
-    this.children = (!!children) ? children : [];
+    this.authorities = !!authorities ? authorities : [];
+    this.children = !!children ? children : [];
     this.cssClass = cssClass;
     this.variant = variant;
     this.badge = badge;

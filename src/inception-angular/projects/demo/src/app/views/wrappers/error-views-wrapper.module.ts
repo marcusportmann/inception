@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {ErrorViewsModule} from 'ngx-inception/error';
+import { NgModule } from '@angular/core';
+import { ErrorViewsModule } from 'ngx-inception/error';
 
 @NgModule({
   imports: [ErrorViewsModule]
 })
-export class ErrorViewsWrapperModule {
-}
+export class ErrorViewsWrapperModule {}

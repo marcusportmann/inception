@@ -14,36 +14,42 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import {RouterModule, Routes} from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'prefix',
     redirectTo: 'components/buttons'
-  }, {
+  },
+  {
     path: 'components',
     pathMatch: 'prefix',
-    loadChildren: () => import('./components/components.module').then(m => m.ComponentsModule),
+    loadChildren: () =>
+      import('./components/components.module').then((m) => m.ComponentsModule),
     data: {
-      title: 'Components',
+      title: 'Components'
     }
-  }, {
+  },
+  {
     path: 'forms',
     pathMatch: 'prefix',
-    loadChildren: () => import('./forms/forms.module').then(m => m.FormsModule),
+    loadChildren: () =>
+      import('./forms/forms.module').then((m) => m.FormsModule),
     data: {
-      title: 'Forms',
+      title: 'Forms'
     }
-  }, {
+  },
+  {
     path: 'tables',
     pathMatch: 'prefix',
-    loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule),
+    loadChildren: () =>
+      import('./tables/tables.module').then((m) => m.TablesModule),
     data: {
-      title: 'Tables',
+      title: 'Tables'
     }
   }
 ];
@@ -55,12 +61,7 @@ const routes: Routes = [
  * @author Marcus Portmann
  */
 @NgModule({
-  imports: [
-    CommonModule,
-
-    RouterModule.forChild(routes)
-  ],
+  imports: [CommonModule, RouterModule.forChild(routes)],
   declarations: []
 })
-export class InceptionModule {
-}
+export class InceptionModule {}

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 /**
  * The EditUserDirectoryTitleResolver class provides the route data resolver that resolves the
@@ -26,12 +26,10 @@ import {Observable, of} from 'rxjs';
  */
 @Injectable()
 export class EditUserDirectoryTitleResolver {
-
   /**
    * Constructs a new EditUserDirectoryTitleResolver.
    */
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Resolve the title.
@@ -39,8 +37,12 @@ export class EditUserDirectoryTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of($localize`:@@security_edit_user_directory_title_resolver:Edit User Directory`);
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
+    return of(
+      $localize`:@@security_edit_user_directory_title_resolver:Edit User Directory`
+    );
   }
 }

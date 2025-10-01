@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
-import {CoreModule} from 'ngx-inception/core';
-import {ExpiredPasswordTitleResolver} from './expired-password-title-resolver';
-import {ExpiredPasswordComponent} from './expired-password.component';
-import {ForgottenPasswordTitleResolver} from './forgotten-password-title-resolver';
-import {ForgottenPasswordComponent} from './forgotten-password.component';
-import {LoginTitleResolver} from './login-title-resolver';
-import {LoginComponent} from './login.component';
-import {ResetPasswordTitleResolver} from './reset-password-title-resolver';
-import {ResetPasswordComponent} from './reset-password.component';
-import {SelectTenantTitleResolver} from './select-tenant-title-resolver';
-import {SelectTenantComponent} from './select-tenant.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { CoreModule } from 'ngx-inception/core';
+import { ExpiredPasswordTitleResolver } from './expired-password-title-resolver';
+import { ExpiredPasswordComponent } from './expired-password.component';
+import { ForgottenPasswordTitleResolver } from './forgotten-password-title-resolver';
+import { ForgottenPasswordComponent } from './forgotten-password.component';
+import { LoginTitleResolver } from './login-title-resolver';
+import { LoginComponent } from './login.component';
+import { ResetPasswordTitleResolver } from './reset-password-title-resolver';
+import { ResetPasswordComponent } from './reset-password.component';
+import { SelectTenantTitleResolver } from './select-tenant-title-resolver';
+import { SelectTenantComponent } from './select-tenant.component';
 
 const routes: Routes = [
   {
@@ -38,28 +38,32 @@ const routes: Routes = [
     resolve: {
       title: LoginTitleResolver
     }
-  }, {
+  },
+  {
     path: 'expired-password',
     pathMatch: 'prefix',
     component: ExpiredPasswordComponent,
     resolve: {
       title: ExpiredPasswordTitleResolver
     }
-  }, {
+  },
+  {
     path: 'forgotten-password',
     pathMatch: 'prefix',
     component: ForgottenPasswordComponent,
     resolve: {
       title: ForgottenPasswordTitleResolver
     }
-  }, {
+  },
+  {
     path: 'reset-password',
     pathMatch: 'prefix',
     component: ResetPasswordComponent,
     resolve: {
       title: ResetPasswordTitleResolver
     }
-  }, {
+  },
+  {
     path: 'select-tenant',
     pathMatch: 'prefix',
     component: SelectTenantComponent,
@@ -72,22 +76,29 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     // Components
-    ExpiredPasswordComponent, ForgottenPasswordComponent, LoginComponent, ResetPasswordComponent,
+    ExpiredPasswordComponent,
+    ForgottenPasswordComponent,
+    LoginComponent,
+    ResetPasswordComponent,
     SelectTenantComponent
   ],
   imports: [
     // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
 
     // Inception modules
     CoreModule
   ],
   providers: [
     // Resolvers
-    ExpiredPasswordTitleResolver, ForgottenPasswordTitleResolver, LoginTitleResolver,
+    ExpiredPasswordTitleResolver,
+    ForgottenPasswordTitleResolver,
+    LoginTitleResolver,
     ResetPasswordTitleResolver,
     SelectTenantTitleResolver
   ]
 })
-export class LoginViewsModule {
-}
+export class LoginViewsModule {}

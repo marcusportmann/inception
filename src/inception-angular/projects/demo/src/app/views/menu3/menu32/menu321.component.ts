@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component} from '@angular/core';
-import {TitleBarService} from 'ngx-inception/core';
+import { AfterViewInit, Component } from '@angular/core';
+import { TitleBarService } from 'ngx-inception/core';
 
 /**
  * The Menu321Component class implements the menu 3.2.1 component.
@@ -25,22 +25,18 @@ import {TitleBarService} from 'ngx-inception/core';
 @Component({
   template: `
     <mat-card class="flex-grow-1">
-      <mat-card-content>
-        Menu 3.2.1
-      </mat-card-content>
+      <mat-card-content> Menu 3.2.1 </mat-card-content>
     </mat-card>
   `,
   standalone: false
 })
 export class Menu321Component implements AfterViewInit {
-
   /**
    * Constructs a new Menu321Component.
    *
    * @param titleBarService The title bar service.
    */
-  constructor(private titleBarService: TitleBarService) {
-  }
+  constructor(private titleBarService: TitleBarService) {}
 
   ngAfterViewInit(): void {
     this.titleBarService.setTitle('Custom Menu 3.2.1 Title');

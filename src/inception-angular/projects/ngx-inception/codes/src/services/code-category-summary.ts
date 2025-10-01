@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class CodeCategorySummary {
-
   /**
    * The ID for the code category.
    */

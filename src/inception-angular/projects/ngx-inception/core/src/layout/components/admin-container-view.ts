@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Observable} from 'rxjs';
-import {BackNavigation} from './back-navigation';
+import { Observable } from 'rxjs';
+import { BackNavigation } from './back-navigation';
 
 /**
  * The AdminContainerView class provides the abstract base class that all admin container view
@@ -24,7 +24,6 @@ import {BackNavigation} from './back-navigation';
  * @author Marcus Portmann
  */
 export abstract class AdminContainerView {
-
   /**
    * Tne back navigation for the admin container view.
    */

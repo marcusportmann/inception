@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class TokenClaim {
-
   /**
    * The name of the token claim.
    */

@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-import {Directive, Input, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
-import {first} from 'rxjs/operators';
-import {Session} from '../services/session';
-import {SessionService} from '../services/session.service';
+import {
+  Directive,
+  Input,
+  OnInit,
+  TemplateRef,
+  ViewContainerRef
+} from '@angular/core';
+import { first } from 'rxjs/operators';
+import { Session } from '../services/session';
+import { SessionService } from '../services/session.service';
 
 /**
  * The HasAuthorityDirective class implements the has authority directive.
@@ -30,7 +36,6 @@ import {SessionService} from '../services/session.service';
   standalone: false
 })
 export class HasAuthorityDirective implements OnInit {
-
   @Input('hasAuthority') requiredAuthorities: string[] = [];
 
   /**
@@ -41,30 +46,34 @@ export class HasAuthorityDirective implements OnInit {
    * @param sessionService The session service.
    */
   // eslint-disable-next-line
-  constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef,
-              private sessionService: SessionService) {
-  }
+  constructor(
+    private templateRef: TemplateRef<any>,
+    private viewContainer: ViewContainerRef,
+    private sessionService: SessionService
+  ) {}
 
   ngOnInit(): void {
     if (this.requiredAuthorities.length > 0) {
-      this.sessionService.session$.pipe(first()).subscribe((session: (Session | null)) => {
-        if (session) {
-          let foundAuthority = false;
+      this.sessionService.session$
+        .pipe(first())
+        .subscribe((session: Session | null) => {
+          if (session) {
+            let foundAuthority = false;
 
-          for (const requiredAuthority of this.requiredAuthorities) {
-            if (session.hasAuthority(requiredAuthority)) {
-              foundAuthority = true;
-              break;
+            for (const requiredAuthority of this.requiredAuthorities) {
+              if (session.hasAuthority(requiredAuthority)) {
+                foundAuthority = true;
+                break;
+              }
+            }
+
+            if (foundAuthority) {
+              this.viewContainer.createEmbeddedView(this.templateRef);
+            } else {
+              this.viewContainer.clear();
             }
           }
-
-          if (foundAuthority) {
-            this.viewContainer.createEmbeddedView(this.templateRef);
-          } else {
-            this.viewContainer.clear();
-          }
-        }
-      });
+        });
     } else {
       this.viewContainer.createEmbeddedView(this.templateRef);
     }

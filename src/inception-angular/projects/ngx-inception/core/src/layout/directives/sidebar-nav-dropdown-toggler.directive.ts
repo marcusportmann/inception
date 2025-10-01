@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener} from '@angular/core';
-import {SidebarNavDropdownDirective} from './sidebar-nav-dropdown.directive';
+import { Directive, HostListener } from '@angular/core';
+import { SidebarNavDropdownDirective } from './sidebar-nav-dropdown.directive';
 
 /**
  * The SidebarNavDropdownTogglerDirective class implements the sidebar nav dropdown toggle
@@ -29,14 +29,12 @@ import {SidebarNavDropdownDirective} from './sidebar-nav-dropdown.directive';
   standalone: false
 })
 export class SidebarNavDropdownTogglerDirective {
-
   /**
    * Constructs a new SidebarNavDropdownDirective.
    *
    * @param dropdown The sidebar nav dropdown directive.
    */
-  constructor(private dropdown: SidebarNavDropdownDirective) {
-  }
+  constructor(private dropdown: SidebarNavDropdownDirective) {}
 
   // eslint-disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {

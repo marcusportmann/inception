@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class Language {
-
   /**
    * The ISO 639-1 alpha-2 code for the language.
    */
@@ -67,9 +66,15 @@ export class Language {
    * @param shortName   The short name for the language.
    * @param description The description for the language.
    */
-  constructor(code: string, iso3Code: string, localeId: string, sortIndex: number, name: string,
-              shortName: string,
-              description: string) {
+  constructor(
+    code: string,
+    iso3Code: string,
+    localeId: string,
+    sortIndex: number,
+    name: string,
+    shortName: string,
+    description: string
+  ) {
     this.code = code;
     this.iso3Code = iso3Code;
     this.localeId = localeId;

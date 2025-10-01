@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 /**
  * The NewMailTemplateTitleResolver class provides the route data resolver that resolves the
@@ -26,12 +26,10 @@ import {Observable, of} from 'rxjs';
  */
 @Injectable()
 export class NewMailTemplateTitleResolver {
-
   /**
    * Constructs a new NewMailTemplateTitleResolver.
    */
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Resolve the title.
@@ -39,8 +37,12 @@ export class NewMailTemplateTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of($localize`:@@mail_new_mail_template_title_resolver:New Mail Template`);
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
+    return of(
+      $localize`:@@mail_new_mail_template_title_resolver:New Mail Template`
+    );
   }
 }

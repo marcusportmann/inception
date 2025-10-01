@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
-import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
-import {ConfigTitleResolver} from './config-title-resolver';
-import {ConfigsTitleResolver} from './configs-title-resolver';
-import {ConfigsComponent} from './configs.component';
-import {EditConfigTitleResolver} from './edit-config-title-resolver';
-import {EditConfigComponent} from './edit-config.component';
-import {NewConfigTitleResolver} from './new-config-title-resolver';
-import {NewConfigComponent} from './new-config.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
+import { ConfigTitleResolver } from './config-title-resolver';
+import { ConfigsTitleResolver } from './configs-title-resolver';
+import { ConfigsComponent } from './configs.component';
+import { EditConfigTitleResolver } from './edit-config-title-resolver';
+import { EditConfigComponent } from './edit-config.component';
+import { NewConfigTitleResolver } from './new-config-title-resolver';
+import { NewConfigComponent } from './new-config.component';
 
 const routes: Routes = [
   {
@@ -34,24 +34,33 @@ const routes: Routes = [
     canActivate: [CanActivateFunctionGuard],
     component: ConfigsComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Config.ConfigAdministration']
+      authorities: [
+        'ROLE_Administrator',
+        'FUNCTION_Config.ConfigAdministration'
+      ]
     }
-  }, {
+  },
+  {
     path: 'new',
     pathMatch: 'full',
     canActivate: [CanActivateFunctionGuard],
     component: NewConfigComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Config.ConfigAdministration']
+      authorities: [
+        'ROLE_Administrator',
+        'FUNCTION_Config.ConfigAdministration'
+      ]
     },
     resolve: {
       title: NewConfigTitleResolver
     }
-  }, {
+  },
+  {
     path: ':id',
     pathMatch: 'full',
     redirectTo: ':id/edit'
-  }, {
+  },
+  {
     path: ':id',
     resolve: {
       title: ConfigTitleResolver
@@ -63,7 +72,10 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: EditConfigComponent,
         data: {
-          authorities: ['ROLE_Administrator', 'FUNCTION_Config.ConfigAdministration']
+          authorities: [
+            'ROLE_Administrator',
+            'FUNCTION_Config.ConfigAdministration'
+          ]
         },
         resolve: {
           title: EditConfigTitleResolver
@@ -76,20 +88,26 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     // Components
-    ConfigsComponent, EditConfigComponent, NewConfigComponent
+    ConfigsComponent,
+    EditConfigComponent,
+    NewConfigComponent
   ],
   imports: [
     // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
 
     // Inception modules
     CoreModule
   ],
   providers: [
     // Resolvers
-    ConfigTitleResolver, ConfigsTitleResolver, EditConfigTitleResolver,
+    ConfigTitleResolver,
+    ConfigsTitleResolver,
+    EditConfigTitleResolver,
     NewConfigTitleResolver
   ]
 })
-export class ConfigViewsModule {
-}
+export class ConfigViewsModule {}

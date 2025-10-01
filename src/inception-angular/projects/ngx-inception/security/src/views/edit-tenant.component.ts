@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
+  AccessDeniedError,
+  AdminContainerView,
+  BackNavigation,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {SecurityService} from '../services/security.service';
-import {Tenant} from '../services/tenant';
+import { finalize, first } from 'rxjs/operators';
+import { SecurityService } from '../services/security.service';
+import { Tenant } from '../services/tenant';
 
 /**
  * The EditTenantComponent class implements the edit tenant component.
@@ -35,8 +41,10 @@ import {Tenant} from '../services/tenant';
   styleUrls: ['edit-tenant.component.css'],
   standalone: false
 })
-export class EditTenantComponent extends AdminContainerView implements AfterViewInit {
-
+export class EditTenantComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
   editTenantForm: FormGroup;
 
   nameControl: FormControl;
@@ -45,22 +53,29 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
 
   tenantId: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private securityService: SecurityService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private securityService: SecurityService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Retrieve the route parameters
     const tenantId = this.activatedRoute.snapshot.paramMap.get('tenantId');
 
     if (!tenantId) {
-      throw (new Error('No tenantId route parameter found'));
+      throw new Error('No tenantId route parameter found');
     }
 
     this.tenantId = decodeURIComponent(tenantId);
 
     // Initialise the form controls
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.nameControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
 
     // Initialise the form
     this.editTenantForm = new FormGroup({
@@ -69,43 +84,62 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@security_edit_tenant_back_navigation:Tenants`,
-      ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation(
+      $localize`:@@security_edit_tenant_back_navigation:Tenants`,
+      ['../..'],
+      { relativeTo: this.activatedRoute }
+    );
   }
 
   get title(): string {
-    return $localize`:@@security_edit_tenant_title:Edit Tenant`
+    return $localize`:@@security_edit_tenant_title:Edit Tenant`;
   }
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 
-    this.securityService.getTenant(this.tenantId)
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((tenant: Tenant) => {
-      this.tenant = tenant;
+    this.securityService
+      .getTenant(this.tenantId)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe(
+        (tenant: Tenant) => {
+          this.tenant = tenant;
 
-      this.nameControl.setValue(tenant.name);
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error).afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-        });
-      }
-    });
+          this.nameControl.setValue(tenant.name);
+        },
+        (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if (
+            error instanceof AccessDeniedError ||
+            error instanceof InvalidArgumentError ||
+            error instanceof ServiceUnavailableError
+          ) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {
+              state: { error }
+            });
+          } else {
+            this.dialogService
+              .showErrorDialog(error)
+              .afterClosed()
+              .pipe(first())
+              .subscribe(() => {
+                this.router.navigate(['../..'], {
+                  relativeTo: this.activatedRoute
+                });
+              });
+          }
+        }
+      );
   }
 
   ok(): void {
@@ -114,21 +148,35 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
 
       this.spinnerService.showSpinner();
 
-      this.securityService.updateTenant(this.tenant)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.securityService
+        .updateTenant(this.tenant)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe(
+          () => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['../..'], {
+              relativeTo: this.activatedRoute
+            });
+          },
+          (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if (
+              error instanceof AccessDeniedError ||
+              error instanceof InvalidArgumentError ||
+              error instanceof ServiceUnavailableError
+            ) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {
+                state: { error }
+              });
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          }
+        );
     }
   }
 }

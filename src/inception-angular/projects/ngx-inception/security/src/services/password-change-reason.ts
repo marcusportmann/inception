@@ -21,7 +21,6 @@
  * @author Marcus Portmann
  */
 export enum PasswordChangeReason {
-
   /**
    * User.
    */

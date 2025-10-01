@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
+  AccessDeniedError,
+  AdminContainerView,
+  BackNavigation,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {Policy} from '../services/policy';
-import {PolicyType} from '../services/policy-type';
-import {SecurityService} from '../services/security.service';
+import { finalize, first } from 'rxjs/operators';
+import { Policy } from '../services/policy';
+import { PolicyType } from '../services/policy-type';
+import { SecurityService } from '../services/security.service';
 
 /**
  * The NewPolicyComponent class implements the new policy component.
@@ -36,8 +42,10 @@ import {SecurityService} from '../services/security.service';
   styleUrls: ['new-policy.component.css'],
   standalone: false
 })
-export class NewPolicyComponent extends AdminContainerView implements AfterViewInit {
-
+export class NewPolicyComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
   dataControl: FormControl;
 
   idControl: FormControl;
@@ -52,17 +60,30 @@ export class NewPolicyComponent extends AdminContainerView implements AfterViewI
 
   versionControl: FormControl;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private securityService: SecurityService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Initialise the form controls
     this.dataControl = new FormControl('', [Validators.required]);
-    this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.idControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
+    this.nameControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
     this.typeControl = new FormControl('', [Validators.required]);
-    this.versionControl = new FormControl('', [Validators.required, Validators.maxLength(30)]);
+    this.versionControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(30)
+    ]);
 
     // Initialise the form
     this.newPolicyForm = new FormGroup({
@@ -75,17 +96,20 @@ export class NewPolicyComponent extends AdminContainerView implements AfterViewI
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@security_new_policy_back_navigation:Policies`, ['..'],
-      {relativeTo: this.activatedRoute});
+    return new BackNavigation(
+      $localize`:@@security_new_policy_back_navigation:Policies`,
+      ['..'],
+      { relativeTo: this.activatedRoute }
+    );
   }
 
   get title(): string {
-    return $localize`:@@security_new_policy_title:New Policy`
+    return $localize`:@@security_new_policy_title:New Policy`;
   }
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
@@ -102,20 +126,33 @@ export class NewPolicyComponent extends AdminContainerView implements AfterViewI
 
       this.spinnerService.showSpinner();
 
-      this.securityService.createPolicy(this.policy)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.securityService
+        .createPolicy(this.policy)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe(
+          () => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+          },
+          (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if (
+              error instanceof AccessDeniedError ||
+              error instanceof InvalidArgumentError ||
+              error instanceof ServiceUnavailableError
+            ) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {
+                state: { error }
+              });
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          }
+        );
     }
   }
 }

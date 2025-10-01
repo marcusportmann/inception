@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {InceptionInjector} from './inception-injector';
-import {NavigationItem} from './layout/services/navigation-item';
-import {NavigationService} from './layout/services/navigation.service';
+import { InceptionInjector } from './inception-injector';
+import { NavigationItem } from './layout/services/navigation-item';
+import { NavigationService } from './layout/services/navigation.service';
 
 /**
  * The InceptionAppModule class provides the base class that all application module classes that
@@ -25,13 +25,12 @@ import {NavigationService} from './layout/services/navigation.service';
  * @author Marcus Portmann
  */
 export abstract class InceptionAppModule {
-
   /**
    * Constructs a new InceptionAppModule.
    */
   protected constructor() {
-
-    const navigationService: NavigationService = InceptionInjector.get(NavigationService);
+    const navigationService: NavigationService =
+      InceptionInjector.get(NavigationService);
 
     if (navigationService) {
       navigationService.initNavigation(this.initNavigation());

@@ -14,21 +14,29 @@
  * limitations under the License.
  */
 
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Self,
   ViewChild
 } from '@angular/core';
-import {ControlValueAccessor, NgControl} from '@angular/forms';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatChipGrid} from '@angular/material/chips';
-import {MatFormFieldControl} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
-import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {debounceTime, first, startWith} from 'rxjs/operators';
-import {Country} from '../services/country';
-import {ReferenceService} from '../services/reference.service';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipGrid } from '@angular/material/chips';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { ReplaySubject, Subject, Subscription } from 'rxjs';
+import { debounceTime, first, startWith } from 'rxjs/operators';
+import { Country } from '../services/country';
+import { ReferenceService } from '../services/reference.service';
 
 /**
  * The CountriesChipGridComponent class implements the countries chip list component.
@@ -39,10 +47,10 @@ import {ReferenceService} from '../services/reference.service';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'countries-chip-grid',
   template: `
-
     <mat-chip-grid #countriesChipGrid>
-      <mat-chip-row *ngFor="let country of countries; let index = index;"
-                    (removed)="removeCountry(country, index)">
+      <mat-chip-row
+        *ngFor="let country of countries; let index = index"
+        (removed)="removeCountry(country, index)">
         {{ country.shortName }}
         <button matChipRemove>
           <mat-icon>cancel</mat-icon>
@@ -56,12 +64,13 @@ import {ReferenceService} from '../services/reference.service';
         [matChipInputFor]="countriesChipGrid"
         (input)="addCountryInputChanged($event)"
         (focusin)="onFocusIn($event)"
-        (focusout)="onFocusOut($event)">
+        (focusout)="onFocusOut($event)" />
       <mat-autocomplete
         #addCountryAutocomplete="matAutocomplete"
         (optionSelected)="selectCountry($event)">
-        <mat-option *ngFor="let filteredCountry of filteredCountries$ | async"
-                    [value]="filteredCountry">
+        <mat-option
+          *ngFor="let filteredCountry of filteredCountries$ | async"
+          [value]="filteredCountry">
           {{ filteredCountry.shortName }}
         </mat-option>
       </mat-autocomplete>
@@ -82,15 +91,19 @@ import {ReferenceService} from '../services/reference.service';
   ],
   standalone: false
 })
-export class CountriesChipGridComponent implements MatFormFieldControl<string[]>,
-  ControlValueAccessor, OnInit, OnDestroy {
-
+export class CountriesChipGridComponent
+  implements
+    MatFormFieldControl<string[]>,
+    ControlValueAccessor,
+    OnInit,
+    OnDestroy
+{
   private static nextId: number = 0;
 
   /**
    * The add country input.
    */
-  @ViewChild(MatInput, {static: true}) addCountryInput!: MatInput;
+  @ViewChild(MatInput, { static: true }) addCountryInput!: MatInput;
 
   /**
    * The name for the control type.
@@ -100,7 +113,8 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
   /**
    * The countries chip list.
    */
-  @ViewChild('countriesChipGrid', {static: true}) countriesChipGrid!: MatChipGrid;
+  @ViewChild('countriesChipGrid', { static: true })
+  countriesChipGrid!: MatChipGrid;
 
   /**
    * The filtered options for the autocomplete for the add country input.
@@ -115,7 +129,8 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
   /**
    * The ID for the control.
    */
-  @HostBinding() id = `countries-chip-list-${CountriesChipGridComponent.nextId++}`;
+  @HostBinding() id =
+    `countries-chip-list-${CountriesChipGridComponent.nextId++}`;
 
   /**
    * The reference to the element for the add country input.
@@ -141,9 +156,11 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
    */
   private addCountryInputValue$: Subject<string> = new ReplaySubject<string>(1);
 
-  constructor(private referenceService: ReferenceService,
-              @Optional() @Self() public ngControl: NgControl,
-              private changeDetectorRef: ChangeDetectorRef) {
+  constructor(
+    private referenceService: ReferenceService,
+    @Optional() @Self() public ngControl: NgControl,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     if (this.ngControl != null) {
       /*
        * Setting the value accessor directly (instead of using the providers) to avoid running into
@@ -246,8 +263,10 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
     }
 
     if (this._value !== countryCodes) {
-      this.referenceService.getCountries().pipe(first()).subscribe(
-        (countries: Map<string, Country>) => {
+      this.referenceService
+        .getCountries()
+        .pipe(first())
+        .subscribe((countries: Map<string, Country>) => {
           this._countries = [];
           this._value = [];
 
@@ -272,7 +291,7 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
   }
 
   get errorState(): boolean {
-    return this.required && (this.countries.length == 0) && this.touched;
+    return this.required && this.countries.length == 0 && this.touched;
   }
 
   get shouldLabelFloat(): boolean {
@@ -280,7 +299,7 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
   }
 
   addCountryInputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
+    if ((event.target as HTMLInputElement).value !== undefined) {
       this.addCountryInputValue$.next((event.target as HTMLInputElement).value);
     }
   }
@@ -302,20 +321,23 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
     });
 
     // Update filtered countries based on the value of add country input
-    this.referenceService.getCountries().pipe(first()).subscribe(
-      (countries: Map<string, Country>) => {
-        this._subscriptions.add(this.addCountryInputValue$.pipe(
-          startWith(''),
-          debounceTime(500)).subscribe((value: string) => {
-
-          this.filteredCountries$.next(
-            this._filterCountries(Array.from(countries.values()), value));
-        }));
+    this.referenceService
+      .getCountries()
+      .pipe(first())
+      .subscribe((countries: Map<string, Country>) => {
+        this._subscriptions.add(
+          this.addCountryInputValue$
+            .pipe(startWith(''), debounceTime(500))
+            .subscribe((value: string) => {
+              this.filteredCountries$.next(
+                this._filterCountries(Array.from(countries.values()), value)
+              );
+            })
+        );
       });
   }
 
-  onChange: any = (_: any) => {
-  };
+  onChange: any = (_: any) => {};
 
   onContainerClick(event: MouseEvent) {
     if ((event.target as Element).tagName.toLowerCase() != 'input') {
@@ -333,12 +355,12 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
   onFocusOut(event: FocusEvent) {
     this.touched = true;
     this.onTouched();
-    this.focused = this.countriesChipGrid.focused || this.addCountryInput.focused;
+    this.focused =
+      this.countriesChipGrid.focused || this.addCountryInput.focused;
     this.stateChanges.next();
   }
 
-  onTouched: any = () => {
-  };
+  onTouched: any = () => {};
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -363,11 +385,8 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
   setDescribedByIds(ids: string[]) {
     // TODO: IMPLEMENT THIS IF NECESSARY -- MARCUS
     // https://material.angular.io/guide/creating-a-custom-form-field-control
-
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
-
-
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setAttribute('aria-describedby', ids.join(' '));
@@ -401,7 +420,7 @@ export class CountriesChipGridComponent implements MatFormFieldControl<string[]>
         if (this._value.includes(country.code)) {
           return false;
         } else {
-          return (country.shortName.toLowerCase().indexOf(value) >= 0);
+          return country.shortName.toLowerCase().indexOf(value) >= 0;
         }
       });
     } else {

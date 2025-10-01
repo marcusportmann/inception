@@ -14,20 +14,33 @@
  * limitations under the License.
  */
 
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Self,
+  ViewChild
 } from '@angular/core';
-import {ControlValueAccessor, NgControl} from '@angular/forms';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatFormFieldControl} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 import {
-  BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription, throttleTime
+  BehaviorSubject,
+  combineLatest,
+  ReplaySubject,
+  Subject,
+  Subscription,
+  throttleTime
 } from 'rxjs';
-import {debounceTime, first, map} from 'rxjs/operators';
-import {ReferenceService} from '../services/reference.service';
-import {Region} from '../services/region';
+import { debounceTime, first, map } from 'rxjs/operators';
+import { ReferenceService } from '../services/reference.service';
+import { Region } from '../services/region';
 
 /**
  * The RegionInputComponent class implements the region input component.
@@ -49,7 +62,7 @@ import {Region} from '../services/region';
         [matAutocompleteConnectedTo]="origin"
         (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
-        (focusout)="onFocusOut($event)">
+        (focusout)="onFocusOut($event)" />
       <mat-autocomplete
         #regionAutocomplete="matAutocomplete"
         (closed)="onClosed()"
@@ -71,9 +84,13 @@ import {Region} from '../services/region';
   ],
   standalone: false
 })
-export class RegionInputComponent implements MatFormFieldControl<string>,
-  ControlValueAccessor, OnInit, OnDestroy {
-
+export class RegionInputComponent
+  implements
+    MatFormFieldControl<string>,
+    ControlValueAccessor,
+    OnInit,
+    OnDestroy
+{
   private static _nextId: number = 0;
 
   /**
@@ -84,7 +101,9 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   /**
    * The filtered options for the autocomplete.
    */
-  filteredOptions$: BehaviorSubject<Region[]> = new BehaviorSubject<Region[]>([]);
+  filteredOptions$: BehaviorSubject<Region[]> = new BehaviorSubject<Region[]>(
+    []
+  );
 
   /**
    * Whether the control is focused.
@@ -99,7 +118,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   /**
    * The input.
    */
-  @ViewChild(MatInput, {static: true}) input!: MatInput;
+  @ViewChild(MatInput, { static: true }) input!: MatInput;
 
   /**
    * The observable providing access to the value for the region input as it changes.
@@ -126,13 +145,17 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   /**
    * The ISO 639-1 alpha-2 code for the country to retrieve the regions for.
    */
-  private country$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+  private country$: BehaviorSubject<string | null> = new BehaviorSubject<
+    string | null
+  >(null);
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private referenceService: ReferenceService,
-              @Optional() @Self() public ngControl: NgControl,
-              private changeDetectorRef: ChangeDetectorRef) {
+  constructor(
+    private referenceService: ReferenceService,
+    @Optional() @Self() public ngControl: NgControl,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     if (this.ngControl != null) {
       /*
        * Setting the value accessor directly (instead of using the providers) to avoid running into
@@ -268,7 +291,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   }
 
   get empty(): boolean {
-    return ((this._value == null) || (this._value.length == 0));
+    return this._value == null || this._value.length == 0;
   }
 
   get errorState(): boolean {
@@ -289,7 +312,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   }
 
   inputChanged(event: Event) {
-    if (((event.target as HTMLInputElement).value) !== undefined) {
+    if ((event.target as HTMLInputElement).value !== undefined) {
       this.inputValue$.next((event.target as HTMLInputElement).value);
     }
   }
@@ -302,76 +325,89 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   ngOnInit(): void {
     this.input.placeholder = this._placeholder;
 
-    this.subscriptions.add(combineLatest([this.country$]).pipe(throttleTime(250), map(values => ({
-      country: this.country$.value
-    }))).subscribe(parameters => {
-      this.referenceService.getRegions().pipe(first()).subscribe((regions: Map<string, Region>) => {
-        this._options = [];
+    this.subscriptions.add(
+      combineLatest([this.country$])
+        .pipe(
+          throttleTime(250),
+          map((values) => ({
+            country: this.country$.value
+          }))
+        )
+        .subscribe((parameters) => {
+          this.referenceService
+            .getRegions()
+            .pipe(first())
+            .subscribe((regions: Map<string, Region>) => {
+              this._options = [];
 
-        for (const region of regions.values()) {
-          if ((!parameters.country) || (region.country === parameters.country)) {
-            this._options.push(region);
-          }
+              for (const region of regions.values()) {
+                if (
+                  !parameters.country ||
+                  region.country === parameters.country
+                ) {
+                  this._options.push(region);
+                }
+              }
+
+              this.filteredOptions$.next(this._options);
+
+              /*
+               * If a value has already been set, attempt to confirm it is valid by finding the
+               * corresponding option. If a match is found, use the option's name as the input's value.
+               * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+               */
+              if (!!this.value) {
+                for (const option of this._options) {
+                  if (option.code === this.value) {
+                    this.input.value = option.name;
+                    return;
+                  }
+                }
+
+                // The value is invalid so clear it
+                this.value = null;
+              }
+            });
+        })
+    );
+
+    this.subscriptions.add(
+      this.inputValue$.pipe(debounceTime(250)).subscribe((value: string) => {
+        if (!!this._value) {
+          this._value = null;
+          this.onChange(this._value);
+          // Flag the control as touched to trigger validation
+          this.touched = true;
+          this.changeDetectorRef.detectChanges();
+          this.stateChanges.next();
         }
 
-        this.filteredOptions$.next(this._options);
+        value = value.toLowerCase();
+
+        let filteredOptions: Region[] = [];
+
+        for (const option of this._options) {
+          if (option.name.toLowerCase().indexOf(value) !== -1) {
+            filteredOptions.push(option);
+          }
+        }
 
         /*
-         * If a value has already been set, attempt to confirm it is valid by finding the
-         * corresponding option. If a match is found, use the option's name as the input's value.
-         * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
+         * If there are no filtered options, as a result of there being no options at all or no
+         * options matching the filter specified by the user, then reset the input value and the
+         * filtered options. This has the effect of forcing the user to enter a valid filter.
          */
-        if (!!this.value) {
-          for (const option of this._options) {
-            if (option.code === this.value) {
-              this.input.value = option.name;
-              return;
-            }
-          }
-
-          // The value is invalid so clear it
-          this.value = null;
+        if (filteredOptions.length === 0) {
+          this.input.value = '';
+          filteredOptions = this._options;
         }
-      });
-    }));
 
-    this.subscriptions.add(this.inputValue$.pipe(
-      debounceTime(250)).subscribe((value: string) => {
-      if (!!this._value) {
-        this._value = null;
-        this.onChange(this._value);
-        // Flag the control as touched to trigger validation
-        this.touched = true;
-        this.changeDetectorRef.detectChanges();
-        this.stateChanges.next();
-      }
-
-      value = value.toLowerCase();
-
-      let filteredOptions: Region[] = [];
-
-      for (const option of this._options) {
-        if (option.name.toLowerCase().indexOf(value) !== -1) {
-          filteredOptions.push(option);
-        }
-      }
-
-      /*
-       * If there are no filtered options, as a result of there being no options at all or no
-       * options matching the filter specified by the user, then reset the input value and the
-       * filtered options. This has the effect of forcing the user to enter a valid filter.
-       */
-      if (filteredOptions.length === 0) {
-        this.input.value = '';
-        filteredOptions = this._options;
-      }
-
-      this.filteredOptions$.next(filteredOptions);
-    }));
+        this.filteredOptions$.next(filteredOptions);
+      })
+    );
   }
 
-  onChange: any = (_: any) => {
-  };
+  onChange: any = (_: any) => {};
 
   onClosed(): void {
     /*
@@ -408,8 +444,7 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
     this.stateChanges.next();
   }
 
-  onTouched: any = () => {
-  };
+  onTouched: any = () => {};
 
   optionSelected(event: MatAutocompleteSelectedEvent): void {
     this.value = event.option.value.code;
@@ -428,10 +463,8 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
   setDescribedByIds(ids: string[]) {
     // TODO: IMPLEMENT THIS IF NECESSARY -- MARCUS
     // https://material.angular.io/guide/creating-a-custom-form-field-control
-
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
-
     // const controlElement = this._elementRef.nativeElement
     // .querySelector('.example-tel-input-container')!;
     // controlElement.setAttribute('aria-describedby', ids.join(' '));
@@ -452,4 +485,3 @@ export class RegionInputComponent implements MatFormFieldControl<string>,
     }
   }
 }
-

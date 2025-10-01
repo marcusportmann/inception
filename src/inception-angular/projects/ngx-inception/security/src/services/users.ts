@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {SortDirection} from 'ngx-inception/core';
-import {User} from './user';
-import {UserSortBy} from './user-sort-by';
+import { SortDirection } from 'ngx-inception/core';
+import { User } from './user';
+import { UserSortBy } from './user-sort-by';
 
 /**
  * The Users class holds the results of a request to retrieve a list of users.
@@ -24,7 +24,6 @@ import {UserSortBy} from './user-sort-by';
  * @author Marcus Portmann
  */
 export class Users {
-
   /**
    * The filter that was applied to the users.
    */
@@ -77,8 +76,16 @@ export class Users {
    * @param pageSize        The page size.
    * @param filter          The filter that was applied to the users.
    */
-  constructor(userDirectoryId: string, users: User[], total: number, sortBy: UserSortBy,
-              sortDirection: SortDirection, pageIndex: number, pageSize: number, filter?: string) {
+  constructor(
+    userDirectoryId: string,
+    users: User[],
+    total: number,
+    sortBy: UserSortBy,
+    sortDirection: SortDirection,
+    pageIndex: number,
+    pageSize: number,
+    filter?: string
+  ) {
     this.userDirectoryId = userDirectoryId;
     this.users = users;
     this.total = total;

@@ -21,7 +21,6 @@
  * @author Marcus Portmann
  */
 export class ValidationErrorAttribute {
-
   /**
    * The name for the validation error attribute.
    */
@@ -50,7 +49,6 @@ export class ValidationErrorAttribute {
  * @author Marcus Portmann
  */
 export class ValidationError {
-
   /**
    * The attributes associated with the validation error.
    */
@@ -73,7 +71,11 @@ export class ValidationError {
    * @param message    The error message for the validation error.
    * @param attributes The attributes associated with the validation error.
    */
-  constructor(property: string, message: string, attributes?: ValidationErrorAttribute[]) {
+  constructor(
+    property: string,
+    message: string,
+    attributes?: ValidationErrorAttribute[]
+  ) {
     this.property = property;
     this.message = message;
 

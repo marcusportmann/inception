@@ -14,15 +14,31 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, DialogService, Error, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  PasswordExpiredError, ServiceUnavailableError, Session, SessionService, SpinnerService
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AccessDeniedError,
+  DialogService,
+  Error,
+  INCEPTION_CONFIG,
+  InceptionConfig,
+  InvalidArgumentError,
+  PasswordExpiredError,
+  ServiceUnavailableError,
+  Session,
+  SessionService,
+  SpinnerService
 } from 'ngx-inception/core';
-import {SecurityService, Tenant, Tenants} from 'ngx-inception/security';
-import {catchError, finalize, first, map, Observable, throwError} from 'rxjs';
+import { SecurityService, Tenant, Tenants } from 'ngx-inception/security';
+import { catchError, finalize, first, map, Observable, throwError } from 'rxjs';
 
 /**
  * The LoginComponent class implements the login component.
@@ -42,20 +58,29 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
   @ViewChild('usernameInput') usernameInput!: ElementRef<HTMLInputElement>;
 
-  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private router: Router,
-              private activatedRoute: ActivatedRoute, private dialogService: DialogService,
-              private securityService: SecurityService, private sessionService: SessionService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private dialogService: DialogService,
+    private securityService: SecurityService,
+    private sessionService: SessionService,
+    private spinnerService: SpinnerService
+  ) {
     // Initialise the form controls
-    this.passwordControl = new FormControl(this.config.prepopulatedLoginPassword || '',
-      [Validators.required, Validators.maxLength(100)]);
-    this.usernameControl = new FormControl(this.config.prepopulatedLoginUsername || '',
-      [Validators.required, Validators.maxLength(100)]);
+    this.passwordControl = new FormControl(
+      this.config.prepopulatedLoginPassword || '',
+      [Validators.required, Validators.maxLength(100)]
+    );
+    this.usernameControl = new FormControl(
+      this.config.prepopulatedLoginUsername || '',
+      [Validators.required, Validators.maxLength(100)]
+    );
 
     // Initialise the form
     this.loginForm = new FormGroup({
       password: this.passwordControl,
-      username: this.usernameControl,
+      username: this.usernameControl
     });
   }
 
@@ -65,7 +90,9 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
   forgotPassword(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['forgotten-password'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['forgotten-password'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   isForgottenPasswordEnabled(): boolean {
@@ -80,17 +107,20 @@ export class LoginComponent implements AfterViewInit, OnInit {
       this.spinnerService.showSpinner();
 
       this.sessionService
-      .login(username, password)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()),
-        catchError((error) => this.handleError(error, username)))
-      .subscribe((session: Session | null) => {
-        if (session) {
-          this.handleSession(session);
-        } else {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
-        }
-      });
+        .login(username, password)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner()),
+          catchError((error) => this.handleError(error, username))
+        )
+        .subscribe((session: Session | null) => {
+          if (session) {
+            this.handleSession(session);
+          } else {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['/']);
+          }
+        });
     }
   }
 
@@ -103,32 +133,43 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-    .pipe(first(), map(() => window.history.state))
-    .subscribe((state) => {
-      if (state.username) {
-        this.usernameControl.setValue(state.username);
-      }
-    });
+      .pipe(
+        first(),
+        map(() => window.history.state)
+      )
+      .subscribe((state) => {
+        if (state.username) {
+          this.usernameControl.setValue(state.username);
+        }
+      });
   }
 
   private handleError(error: Error, username?: string): Observable<never> {
-    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+    if (
+      error instanceof AccessDeniedError ||
+      error instanceof InvalidArgumentError ||
+      error instanceof ServiceUnavailableError
+    ) {
       // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      this.router.navigateByUrl('/error/send-error-report', {
+        state: { error }
+      });
     } else if (error instanceof PasswordExpiredError && username) {
       // noinspection JSIgnoredPromiseFromCall
       this.router.navigate(['expired-password'], {
         relativeTo: this.activatedRoute,
-        state: {username},
+        state: { username }
       });
     } else {
-      this.dialogService.showErrorDialog(error).afterClosed()
-      .pipe(first())
-      .subscribe(() => {
-        setTimeout(() => {
-          this.usernameInput.nativeElement.focus();
+      this.dialogService
+        .showErrorDialog(error)
+        .afterClosed()
+        .pipe(first())
+        .subscribe(() => {
+          setTimeout(() => {
+            this.usernameInput.nativeElement.focus();
+          });
         });
-      });
     }
     return throwError(() => error);
   }
@@ -137,28 +178,38 @@ export class LoginComponent implements AfterViewInit, OnInit {
     if (session.hasRole('Administrator')) {
       this.loadTenants(this.securityService.getTenants(), session);
     } else {
-      this.loadTenants(this.securityService.getTenantsForUserDirectory(session.userDirectoryId),
-        session);
+      this.loadTenants(
+        this.securityService.getTenantsForUserDirectory(
+          session.userDirectoryId
+        ),
+        session
+      );
     }
   }
 
-  private loadTenants(tenants$: Observable<Tenants | Tenant[]>, session: Session): void {
+  private loadTenants(
+    tenants$: Observable<Tenants | Tenant[]>,
+    session: Session
+  ): void {
     tenants$
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()),
-      catchError((error) => this.handleError(error)))
-    .subscribe((tenants) => {
-      const tenantArray = Array.isArray(tenants) ? tenants : tenants.tenants;
-      if (tenantArray.length === 1) {
-        session.tenantId = tenantArray[0].id;
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['/']);
-      } else {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['select-tenant'], {
-          relativeTo: this.activatedRoute,
-          state: {tenants: tenantArray},
-        });
-      }
-    });
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner()),
+        catchError((error) => this.handleError(error))
+      )
+      .subscribe((tenants) => {
+        const tenantArray = Array.isArray(tenants) ? tenants : tenants.tenants;
+        if (tenantArray.length === 1) {
+          session.tenantId = tenantArray[0].id;
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/']);
+        } else {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['select-tenant'], {
+            relativeTo: this.activatedRoute,
+            state: { tenants: tenantArray }
+          });
+        }
+      });
   }
 }

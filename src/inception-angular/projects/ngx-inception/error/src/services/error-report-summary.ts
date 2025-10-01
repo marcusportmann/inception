@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class ErrorReportSummary {
-
   /**
    * The ID for the application that generated the error report.
    */
@@ -67,8 +66,15 @@ export class ErrorReportSummary {
    * @param who                The username for the user associated with the error report.
    * @param deviceId           The ID for the device the error report originated from.
    */
-  constructor(id: string, applicationId: string, applicationVersion: string, description: string,
-              created: Date, who?: string, deviceId?: string) {
+  constructor(
+    id: string,
+    applicationId: string,
+    applicationVersion: string,
+    description: string,
+    created: Date,
+    who?: string,
+    deviceId?: string
+  ) {
     this.id = id;
     this.applicationId = applicationId;
     this.applicationVersion = applicationVersion;

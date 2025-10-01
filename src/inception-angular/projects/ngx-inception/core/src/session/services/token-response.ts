@@ -21,7 +21,6 @@
  * @author Marcus Portmann
  */
 export interface TokenResponse {
-
   /**
    * The base-64 encoded OAuth2 JWT access token.
    */

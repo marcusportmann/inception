@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class JobParameter {
-
   /**
    * The name of the job parameter.
    */

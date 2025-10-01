@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {SortDirection} from 'ngx-inception/core';
-import {Tenant} from './tenant';
+import { SortDirection } from 'ngx-inception/core';
+import { Tenant } from './tenant';
 
 /**
  * The Tenants class holds the results of a request to retrieve a list of tenants.
@@ -23,7 +23,6 @@ import {Tenant} from './tenant';
  * @author Marcus Portmann
  */
 export class Tenants {
-
   /**
    * The filter that was applied to the tenants.
    */
@@ -64,8 +63,14 @@ export class Tenants {
    * @param pageSize      The page size.
    * @param filter        The filter that was applied to the tenants.
    */
-  constructor(tenants: Tenant[], total: number, sortDirection: SortDirection, pageIndex: number,
-              pageSize: number, filter?: string) {
+  constructor(
+    tenants: Tenant[],
+    total: number,
+    sortDirection: SortDirection,
+    pageIndex: number,
+    pageSize: number,
+    filter?: string
+  ) {
     this.tenants = tenants;
     this.total = total;
     this.sortDirection = sortDirection;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'inception-ngx-inception',
@@ -23,6 +23,5 @@ import {Component} from '@angular/core';
   standalone: false
 })
 export class NgxInceptionComponent {
-  constructor() {
-  }
+  constructor() {}
 }

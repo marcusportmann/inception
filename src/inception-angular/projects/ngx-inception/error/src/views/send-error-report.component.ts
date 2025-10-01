@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material/dialog';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  DialogService, Error, InformationDialogComponent, ProblemDetails, SpinnerService
+  DialogService,
+  Error,
+  InformationDialogComponent,
+  ProblemDetails,
+  SpinnerService
 } from 'ngx-inception/core';
-import {Observable, throwError} from 'rxjs';
-import {catchError, finalize, first, map} from 'rxjs/operators';
-import {ErrorService} from '../services/error.service';
+import { Observable, throwError } from 'rxjs';
+import { catchError, finalize, first, map } from 'rxjs/operators';
+import { ErrorService } from '../services/error.service';
 
 /**
  * The SendErrorReportComponent class implements the send error report component.
@@ -35,7 +39,6 @@ import {ErrorService} from '../services/error.service';
   standalone: false
 })
 export class SendErrorReportComponent implements OnInit {
-
   emailControl: FormControl;
 
   error: Error | null = null;
@@ -46,9 +49,13 @@ export class SendErrorReportComponent implements OnInit {
 
   sendErrorReportForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private dialogService: DialogService, private errorService: ErrorService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private dialogService: DialogService,
+    private errorService: ErrorService,
+    private spinnerService: SpinnerService
+  ) {
     // Initialize form controls
     this.emailControl = new FormControl('', Validators.email);
     this.feedbackControl = new FormControl('');
@@ -58,24 +65,27 @@ export class SendErrorReportComponent implements OnInit {
     this.sendErrorReportForm = new FormGroup({
       message: this.messageControl,
       email: this.emailControl,
-      feedback: this.feedbackControl,
+      feedback: this.feedbackControl
     });
   }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-    .pipe(first(), map(() => window.history.state))
-    .subscribe((state) => {
-      if (state.error) {
-        this.error = state.error;
-        this.messageControl.setValue(state.error.message);
-        this.logErrorDetails(this.error!);
-      } else {
-        console.log('No error found, redirecting to the application root');
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['/']);
-      }
-    });
+      .pipe(
+        first(),
+        map(() => window.history.state)
+      )
+      .subscribe((state) => {
+        if (state.error) {
+          this.error = state.error;
+          this.messageControl.setValue(state.error.message);
+          this.logErrorDetails(this.error!);
+        } else {
+          console.log('No error found, redirecting to the application root');
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/']);
+        }
+      });
   }
 
   sendErrorReport(): void {
@@ -83,23 +93,30 @@ export class SendErrorReportComponent implements OnInit {
       this.spinnerService.showSpinner();
 
       this.errorService
-      .sendErrorReport(this.error, this.emailControl.value, this.feedbackControl.value)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()),
-        catchError((error) => this.handleError(error)))
-      .subscribe(() => {
-        const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-          {
-            message: 'Your error report was submitted.',
-          });
-
-        dialogRef
-        .afterClosed()
-        .pipe(first())
+        .sendErrorReport(
+          this.error,
+          this.emailControl.value,
+          this.feedbackControl.value
+        )
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner()),
+          catchError((error) => this.handleError(error))
+        )
         .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
+          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> =
+            this.dialogService.showInformationDialog({
+              message: 'Your error report was submitted.'
+            });
+
+          dialogRef
+            .afterClosed()
+            .pipe(first())
+            .subscribe(() => {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigate(['/']);
+            });
         });
-      });
     }
   }
 

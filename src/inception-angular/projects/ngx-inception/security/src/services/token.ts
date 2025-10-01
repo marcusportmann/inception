@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {TokenClaim} from './token-claim';
-import {TokenType} from './token-type';
+import { TokenClaim } from './token-claim';
+import { TokenType } from './token-type';
 
 /**
  * The Token class holds the information for a token.
@@ -23,7 +23,6 @@ import {TokenType} from './token-type';
  * @author Marcus Portmann
  */
 export class Token {
-
   /**
    * The claims for the token.
    */
@@ -85,8 +84,15 @@ export class Token {
    * @param claims      The claims for the token.
    * @param data        The data for the token.
    */
-  constructor(id: string, type: TokenType, name: string, description: string, issued: Date,
-              claims: TokenClaim[], data: string) {
+  constructor(
+    id: string,
+    type: TokenType,
+    name: string,
+    description: string,
+    issued: Date,
+    claims: TokenClaim[],
+    data: string
+  ) {
     this.id = id;
     this.type = type;
     this.name = name;

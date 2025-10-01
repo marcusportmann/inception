@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
-import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The ConfigNotFoundError class holds the information for a config not found error.
@@ -23,8 +23,8 @@ import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 export class ConfigNotFoundError extends Error {
-
-  static readonly TYPE = 'https://inception.digital/problems/config/config-not-found';
+  static readonly TYPE =
+    'https://inception.digital/problems/config/config-not-found';
 
   /**
    * Constructs a new ConfigNotFoundError.
@@ -32,8 +32,9 @@ export class ConfigNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@config_config_not_found_error:The config could not be found.`, cause);
+    super(
+      $localize`:@@config_config_not_found_error:The config could not be found.`,
+      cause
+    );
   }
 }
-
-

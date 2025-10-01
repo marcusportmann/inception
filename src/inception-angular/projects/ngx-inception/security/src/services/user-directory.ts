@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {UserDirectoryParameter} from './user-directory-parameter';
+import { UserDirectoryParameter } from './user-directory-parameter';
 
 /**
  * The UserDirectory class holds the information for a user directory.
@@ -22,7 +22,6 @@ import {UserDirectoryParameter} from './user-directory-parameter';
  * @author Marcus Portmann
  */
 export class UserDirectory {
-
   /**
    * The ID for the user directory.
    */
@@ -51,10 +50,15 @@ export class UserDirectory {
    * @param type       The code for the user directory type.
    * @param parameters The parameters for the user directory.
    */
-  constructor(id: string, name: string, type: string, parameters?: UserDirectoryParameter[]) {
+  constructor(
+    id: string,
+    name: string,
+    type: string,
+    parameters?: UserDirectoryParameter[]
+  ) {
     this.id = id;
     this.name = name;
     this.type = type;
-    this.parameters = (!parameters) ? [] : parameters;
+    this.parameters = !parameters ? [] : parameters;
   }
 }

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {SortDirection} from 'ngx-inception/core';
-import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
-import {catchError, finalize} from 'rxjs/operators';
-import {GroupMember} from './group-member';
-import {GroupMembers} from './group-members';
-import {SecurityService} from './security.service';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { SortDirection } from 'ngx-inception/core';
+import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+import { GroupMember } from './group-member';
+import { GroupMembers } from './group-members';
+import { SecurityService } from './security.service';
 
 /**
  * The GroupMemberDataSource class implements the group members data source.
@@ -38,8 +38,7 @@ export class GroupMemberDataSource implements DataSource<GroupMember> {
 
   total$ = this.totalSubject$.asObservable();
 
-  constructor(private securityService: SecurityService) {
-  }
+  constructor(private securityService: SecurityService) {}
 
   /**
    * Clear the data source.
@@ -71,15 +70,32 @@ export class GroupMemberDataSource implements DataSource<GroupMember> {
    *
    * @return The group members.
    */
-  load(userDirectoryId: string, groupName: string, filter?: string, sortDirection?: SortDirection,
-       pageIndex?: number, pageSize?: number): Observable<GroupMembers> {
+  load(
+    userDirectoryId: string,
+    groupName: string,
+    filter?: string,
+    sortDirection?: SortDirection,
+    pageIndex?: number,
+    pageSize?: number
+  ): Observable<GroupMembers> {
     this.loadingSubject$.next(true);
 
-    return this.securityService.getMembersForGroup(userDirectoryId, groupName, filter,
-      sortDirection, pageIndex, pageSize).pipe(tap((groupMembers: GroupMembers) => {
-        this.updateData(groupMembers);
-      }), catchError((error: Error) => this.handleError(error)),
-      finalize(() => this.loadingSubject$.next(false)));
+    return this.securityService
+      .getMembersForGroup(
+        userDirectoryId,
+        groupName,
+        filter,
+        sortDirection,
+        pageIndex,
+        pageSize
+      )
+      .pipe(
+        tap((groupMembers: GroupMembers) => {
+          this.updateData(groupMembers);
+        }),
+        catchError((error: Error) => this.handleError(error)),
+        finalize(() => this.loadingSubject$.next(false))
+      );
   }
 
   /**

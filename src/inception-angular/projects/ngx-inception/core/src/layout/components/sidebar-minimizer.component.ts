@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, OnInit} from '@angular/core';
-import {Replace} from '../../util/replace';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { Replace } from '../../util/replace';
 
 /**
  * The SidebarMinimizerComponent class implements the sidebar minimizer component.
@@ -26,19 +26,21 @@ import {Replace} from '../../util/replace';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-minimizer',
   template: `
-    <button class="sidebar-minimizer" type="button" sidebarMinimizer brandMinimizer></button>
+    <button
+      class="sidebar-minimizer"
+      type="button"
+      sidebarMinimizer
+      brandMinimizer></button>
   `,
   standalone: false
 })
 export class SidebarMinimizerComponent implements OnInit {
-
   /**
    * Constructs a new SidebarMinimizerComponent.
    *
    * @param elementRef The element reference.
    */
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor(private elementRef: ElementRef) {}
 
   ngOnInit(): void {
     Replace(this.elementRef);

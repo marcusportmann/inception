@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {MailTemplateContentType} from './mail-template-content-type';
+import { MailTemplateContentType } from './mail-template-content-type';
 
 /**
  * The MailTemplate class holds the information for a mail template.
@@ -22,7 +22,6 @@ import {MailTemplateContentType} from './mail-template-content-type';
  * @author Marcus Portmann
  */
 export class MailTemplate {
-
   /**
    * The content type for the mail template.
    */
@@ -51,7 +50,12 @@ export class MailTemplate {
    * @param contentType The content type for the mail template.
    * @param template    The base-64 encoded Apache FreeMarker template for the mail template.
    */
-  constructor(id: string, name: string, contentType: MailTemplateContentType, template: string) {
+  constructor(
+    id: string,
+    name: string,
+    contentType: MailTemplateContentType,
+    template: string
+  ) {
     this.id = id;
     this.name = name;
     this.contentType = contentType;

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AdminContainerView} from 'ngx-inception/core';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AdminContainerView } from 'ngx-inception/core';
 
 /**
  * The SecurityOverviewComponent class implements the security overview component.
@@ -28,15 +28,17 @@ import {AdminContainerView} from 'ngx-inception/core';
   standalone: false
 })
 export class SecurityOverviewComponent extends AdminContainerView {
-
   /**
    * Constructs a new SecurityOverviewComponent.
    */
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
     super();
   }
 
   get title(): string {
-    return $localize`:@@security_security_overview_title:Security Overview`
+    return $localize`:@@security_security_overview_title:Security Overview`;
   }
 }

@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export interface OAuthError {
-
   /**
    * The error type e.g. invalid_request, invalid_client, invalid_grant, etc.
    */

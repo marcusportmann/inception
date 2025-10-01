@@ -14,22 +14,36 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, HostBinding, OnDestroy, ViewChild} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {ActivatedRoute, Router} from '@angular/router';
-import {add, isWithinInterval} from 'date-fns';
 import {
-  AccessDeniedError, AdminContainerView, DialogService, Error, InvalidArgumentError, ISO8601Util,
-  ServiceUnavailableError, SortDirection, SpinnerService, TableFilterComponent
+  AfterViewInit,
+  Component,
+  HostBinding,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { ActivatedRoute, Router } from '@angular/router';
+import { add, isWithinInterval } from 'date-fns';
+import {
+  AccessDeniedError,
+  AdminContainerView,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ISO8601Util,
+  ServiceUnavailableError,
+  SortDirection,
+  SpinnerService,
+  TableFilterComponent
 } from 'ngx-inception/core';
-import {merge, Observable, Subject, throwError} from 'rxjs';
-import {catchError, debounceTime, finalize, takeUntil} from 'rxjs/operators';
-import {ErrorReportSortBy} from '../services/error-report-sort-by';
-import {ErrorReportSummaries} from '../services/error-report-summaries';
-import {ErrorReportSummaryDataSource} from '../services/error-report-summary-data-source';
-import {ErrorService} from '../services/error.service';
+import { merge, Observable, Subject, throwError } from 'rxjs';
+import { catchError, debounceTime, finalize, takeUntil } from 'rxjs/operators';
+import { ErrorReportSortBy } from '../services/error-report-sort-by';
+import { ErrorReportSummaries } from '../services/error-report-summaries';
+import { ErrorReportSummaryDataSource } from '../services/error-report-summary-data-source';
+import { ErrorService } from '../services/error.service';
 
 /**
  * The ErrorReportsComponent class implements the error reports component.
@@ -41,7 +55,10 @@ import {ErrorService} from '../services/error.service';
   styleUrls: ['error-reports.component.css'],
   standalone: false
 })
-export class ErrorReportsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+export class ErrorReportsComponent
+  extends AdminContainerView
+  implements AfterViewInit, OnDestroy
+{
   dataSource: ErrorReportSummaryDataSource;
 
   displayedColumns = ['created', 'who', 'description', 'actions'];
@@ -50,23 +67,30 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort!: MatSort;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
+  @ViewChild(TableFilterComponent, { static: true })
+  tableFilter!: TableFilterComponent;
 
   toDateControl: FormControl;
 
   private destroy$ = new Subject<void>();
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private errorService: ErrorService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private errorService: ErrorService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Initialize form controls
-    this.fromDateControl = new FormControl(add(new Date(), {months: -1}), [Validators.required]);
+    this.fromDateControl = new FormControl(add(new Date(), { months: -1 }), [
+      Validators.required
+    ]);
     this.toDateControl = new FormControl(new Date(), [Validators.required]);
 
     // Initialize the data source
@@ -82,12 +106,14 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
   }
 
   dateRangeFilter(toDateCheck: Date | null): boolean {
-    const minDate = add(new Date(), {years: -1});
+    const minDate = add(new Date(), { years: -1 });
     const maxDate = new Date();
-    return toDateCheck ? isWithinInterval(toDateCheck, {
-      start: minDate,
-      end: maxDate
-    }) : false;
+    return toDateCheck
+      ? isWithinInterval(toDateCheck, {
+          start: minDate,
+          end: maxDate
+        })
+      : false;
   }
 
   ngAfterViewInit(): void {
@@ -102,7 +128,9 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
 
   viewErrorReport(errorReportId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(errorReportId)], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(errorReportId)], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   private formatDate(value: Date | string | null): string | null {
@@ -111,9 +139,15 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
   }
 
   private handleError(error: Error): Observable<never> {
-    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+    if (
+      error instanceof AccessDeniedError ||
+      error instanceof InvalidArgumentError ||
+      error instanceof ServiceUnavailableError
+    ) {
       // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      this.router.navigateByUrl('/error/send-error-report', {
+        state: { error }
+      });
     } else {
       this.dialogService.showErrorDialog(error);
     }
@@ -123,24 +157,24 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
   private initializeDataLoaders(): void {
     // Reset paginator and load data on sort, filter, or pagination change
     this.sort.sortChange
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(() => (this.paginator.pageIndex = 0));
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => (this.paginator.pageIndex = 0));
 
     merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-    .pipe(debounceTime(200), takeUntil(this.destroy$))
-    .subscribe(() => this.loadData());
+      .pipe(debounceTime(200), takeUntil(this.destroy$))
+      .subscribe(() => this.loadData());
   }
 
   private loadData(): void {
     this.spinnerService.showSpinner();
     this.loadErrorReportSummaries()
-    .pipe(finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe({
-      next: () => {
-        // Load complete
-      },
-      error: (error) => this.handleError(error),
-    });
+      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe({
+        next: () => {
+          // Load complete
+        },
+        error: (error) => this.handleError(error)
+      });
   }
 
   private loadErrorReportSummaries(): Observable<ErrorReportSummaries> {
@@ -150,18 +184,33 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
     let sortDirection = SortDirection.Descending;
 
     if (this.sort.active) {
-      sortBy = this.sort.active === 'who' ? ErrorReportSortBy.Who : ErrorReportSortBy.Created;
-      sortDirection = this.sort.direction === 'asc' ? SortDirection.Ascending :
-        SortDirection.Descending;
+      sortBy =
+        this.sort.active === 'who'
+          ? ErrorReportSortBy.Who
+          : ErrorReportSortBy.Created;
+      sortDirection =
+        this.sort.direction === 'asc'
+          ? SortDirection.Ascending
+          : SortDirection.Descending;
     }
 
-    const fromDate = this.formatDate(this.fromDateControl.value) || ISO8601Util.toString(
-      add(new Date(), {months: -1}));
-    const toDate = this.formatDate(this.toDateControl.value) || ISO8601Util.toString(new Date());
+    const fromDate =
+      this.formatDate(this.fromDateControl.value) ||
+      ISO8601Util.toString(add(new Date(), { months: -1 }));
+    const toDate =
+      this.formatDate(this.toDateControl.value) ||
+      ISO8601Util.toString(new Date());
 
     return this.dataSource
-    .load(filter, fromDate, toDate, sortBy, sortDirection, this.paginator.pageIndex,
-      this.paginator.pageSize)
-    .pipe(catchError((error) => this.handleError(error)));
+      .load(
+        filter,
+        fromDate,
+        toDate,
+        sortBy,
+        sortDirection,
+        this.paginator.pageIndex,
+        this.paginator.pageSize
+      )
+      .pipe(catchError((error) => this.handleError(error)));
   }
 }

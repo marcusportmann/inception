@@ -14,20 +14,31 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, HostBinding, ViewChild} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, ConfirmationDialogComponent, DialogService, Error,
-  InvalidArgumentError, ServiceUnavailableError, SpinnerService
+  AfterViewInit,
+  Component,
+  HostBinding,
+  ViewChild
+} from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AccessDeniedError,
+  AdminContainerView,
+  ConfirmationDialogComponent,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {MailTemplateContentType} from '../services/mail-template-content-type';
-import {MailTemplateSummary} from '../services/mail-template-summary';
-import {MailService} from '../services/mail.service';
+import { finalize, first } from 'rxjs/operators';
+import { MailTemplateContentType } from '../services/mail-template-content-type';
+import { MailTemplateSummary } from '../services/mail-template-summary';
+import { MailService } from '../services/mail.service';
 
 /**
  * The MailTemplatesComponent class implements the mail templates component.
@@ -39,34 +50,42 @@ import {MailService} from '../services/mail.service';
   styleUrls: ['mail-templates.component.css'],
   standalone: false
 })
-export class MailTemplatesComponent extends AdminContainerView implements AfterViewInit {
-
+export class MailTemplatesComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
   MailTemplateContentType = MailTemplateContentType;
 
-  dataSource: MatTableDataSource<MailTemplateSummary> = new MatTableDataSource<MailTemplateSummary>();
+  dataSource: MatTableDataSource<MailTemplateSummary> =
+    new MatTableDataSource<MailTemplateSummary>();
 
   displayedColumns = ['name', 'contentType', 'actions'];
 
-  getMailTemplateContentTypeDescription = MailService.getMailTemplateContentTypeDescription;
+  getMailTemplateContentTypeDescription =
+    MailService.getMailTemplateContentTypeDescription;
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort!: MatSort;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private mailService: MailService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private mailService: MailService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean => data.name.toLowerCase().includes(
-      filter);
+    this.dataSource.filterPredicate = (data, filter): boolean =>
+      data.name.toLowerCase().includes(filter);
   }
 
   get title(): string {
-    return $localize`:@@mail_mail_templates_title:Mail Templates`
+    return $localize`:@@mail_mail_templates_title:Mail Templates`;
   }
 
   applyFilter(filterValue: string): void {
@@ -76,63 +95,89 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
   }
 
   deleteMailTemplate(mailTemplateId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
+      this.dialogService.showConfirmationDialog({
         message: $localize`:@@mail_mail_templates_confirm_delete_mail_template:Are you sure you want to delete the mail template?`
       });
 
-    dialogRef.afterClosed()
-    .pipe(first())
-    .subscribe((confirmation: boolean | undefined) => {
-      if (confirmation === true) {
-        this.spinnerService.showSpinner();
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((confirmation: boolean | undefined) => {
+        if (confirmation === true) {
+          this.spinnerService.showSpinner();
 
-        this.mailService.deleteMailTemplate(mailTemplateId)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          this.loadMailTemplates();
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-            (error instanceof ServiceUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
-      }
-    });
+          this.mailService
+            .deleteMailTemplate(mailTemplateId)
+            .pipe(
+              first(),
+              finalize(() => this.spinnerService.hideSpinner())
+            )
+            .subscribe(
+              () => {
+                this.loadMailTemplates();
+              },
+              (error: Error) => {
+                // noinspection SuspiciousTypeOfGuard
+                if (
+                  error instanceof AccessDeniedError ||
+                  error instanceof InvalidArgumentError ||
+                  error instanceof ServiceUnavailableError
+                ) {
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigateByUrl('/error/send-error-report', {
+                    state: { error }
+                  });
+                } else {
+                  this.dialogService.showErrorDialog(error);
+                }
+              }
+            );
+        }
+      });
   }
 
   editMailTemplate(mailTemplateId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(mailTemplateId) + '/edit'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(mailTemplateId) + '/edit'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   loadMailTemplates(): void {
     this.spinnerService.showSpinner();
 
-    this.mailService.getMailTemplateSummaries()
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((mailTemplateSummaries: MailTemplateSummary[]) => {
-      this.dataSource.data = mailTemplateSummaries;
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+    this.mailService
+      .getMailTemplateSummaries()
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe(
+        (mailTemplateSummaries: MailTemplateSummary[]) => {
+          this.dataSource.data = mailTemplateSummaries;
+        },
+        (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if (
+            error instanceof AccessDeniedError ||
+            error instanceof InvalidArgumentError ||
+            error instanceof ServiceUnavailableError
+          ) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {
+              state: { error }
+            });
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        }
+      );
   }
 
   newMailTemplate(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
@@ -142,4 +187,3 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
     this.loadMailTemplates();
   }
 }
-

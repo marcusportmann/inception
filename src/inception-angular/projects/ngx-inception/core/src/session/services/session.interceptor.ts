@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {first, flatMap} from 'rxjs/operators';
-import {SessionService} from './session.service';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest
+} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { first, flatMap } from 'rxjs/operators';
+import { SessionService } from './session.service';
 
 /**
  * The SessionInterceptor class implements an Angular HTTP interceptor, which injects the OAuth2
@@ -29,30 +34,38 @@ import {SessionService} from './session.service';
  */
 @Injectable()
 export class SessionInterceptor implements HttpInterceptor {
-
   /**
    * Constructs a new SessionInterceptor.
    *
    * @param sessionService The session service.
    */
-  constructor(private sessionService: SessionService) {
-  }
+  constructor(private sessionService: SessionService) {}
 
   // eslint-disable-next-line
-  intercept(httpRequest: HttpRequest<any>, // eslint-disable-next-line
-            nextHttpHandler: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    httpRequest: HttpRequest<any>, // eslint-disable-next-line
+    nextHttpHandler: HttpHandler
+  ): Observable<HttpEvent<any>> {
     if (!httpRequest.url.endsWith('/oauth/token')) {
-      return this.sessionService.session$.pipe(first(), flatMap(session => {
-        if (session) {
-          httpRequest = httpRequest.clone({
-            headers: httpRequest.headers.set('Authorization', `Bearer ${session.accessToken}`)
-            .set('Tenant-ID',
-              (!!session.tenantId) ? session.tenantId : '00000000-0000-0000-0000-000000000000')
-          });
-        }
+      return this.sessionService.session$.pipe(
+        first(),
+        flatMap((session) => {
+          if (session) {
+            httpRequest = httpRequest.clone({
+              headers: httpRequest.headers
+                .set('Authorization', `Bearer ${session.accessToken}`)
+                .set(
+                  'Tenant-ID',
+                  !!session.tenantId
+                    ? session.tenantId
+                    : '00000000-0000-0000-0000-000000000000'
+                )
+            });
+          }
 
-        return nextHttpHandler.handle(httpRequest);
-      }));
+          return nextHttpHandler.handle(httpRequest);
+        })
+      );
     } else {
       return nextHttpHandler.handle(httpRequest);
     }

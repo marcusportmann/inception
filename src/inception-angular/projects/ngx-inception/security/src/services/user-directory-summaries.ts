@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {SortDirection} from 'ngx-inception/core';
-import {UserDirectorySummary} from './user-directory-summary';
+import { SortDirection } from 'ngx-inception/core';
+import { UserDirectorySummary } from './user-directory-summary';
 
 /**
  * The UserDirectorySummaries class holds the results of a request to retrieve a list of user
@@ -24,7 +24,6 @@ import {UserDirectorySummary} from './user-directory-summary';
  * @author Marcus Portmann
  */
 export class UserDirectorySummaries {
-
   /**
    * The filter that was applied to the user directory summaries.
    */
@@ -66,8 +65,14 @@ export class UserDirectorySummaries {
    * @param pageIndex              The page index.
    * @param pageSize               The page size.
    */
-  constructor(userDirectorySummaries: UserDirectorySummary[], total: number,
-              sortDirection: SortDirection, pageIndex: number, pageSize: number, filter?: string) {
+  constructor(
+    userDirectorySummaries: UserDirectorySummary[],
+    total: number,
+    sortDirection: SortDirection,
+    pageIndex: number,
+    pageSize: number,
+    filter?: string
+  ) {
     this.userDirectorySummaries = userDirectorySummaries;
     this.total = total;
     this.sortDirection = sortDirection;

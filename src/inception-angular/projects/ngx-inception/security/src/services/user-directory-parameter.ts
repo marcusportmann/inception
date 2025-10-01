@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class UserDirectoryParameter {
-
   /**
    * The name for the user directory parameter.
    */

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {AdminContainerView, BackNavigation} from 'ngx-inception/core';
-import {Observable} from 'rxjs';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AdminContainerView, BackNavigation } from 'ngx-inception/core';
+import { Observable } from 'rxjs';
 
 /**
  * The Menu322Component class implements the menu 3.2.2 component.
@@ -27,15 +27,12 @@ import {Observable} from 'rxjs';
 @Component({
   template: `
     <mat-card class="flex-grow-1">
-      <mat-card-content>
-        Menu 3.2.2
-      </mat-card-content>
+      <mat-card-content> Menu 3.2.2 </mat-card-content>
     </mat-card>
   `,
   standalone: false
 })
 export class Menu322Component extends AdminContainerView {
-
   /**
    * Constructs a new Menu322Component.
    *
@@ -49,16 +46,17 @@ export class Menu322Component extends AdminContainerView {
    * Tne back navigation for admin container view.
    */
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@demo_menu322_back_navigation:Menu 3.2.1`,
-      ['../menu321'], {relativeTo: this.activatedRoute});
+    return new BackNavigation(
+      $localize`:@@demo_menu322_back_navigation:Menu 3.2.1`,
+      ['../menu321'],
+      { relativeTo: this.activatedRoute }
+    );
   }
 
   /**
    * The title for the admin container view.
    */
   get title(): string | Observable<string> {
-    return $localize`:@@demo_menu322_title:Custom Menu 3.2.2 Title`
+    return $localize`:@@demo_menu322_title:Custom Menu 3.2.2 Title`;
   }
 }
-
-

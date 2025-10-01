@@ -15,6 +15,9 @@
  */
 
 export const SIDEBAR_CSS_CLASSES: string[] = [
-  'sidebar-show', 'sidebar-sm-show', 'sidebar-md-show', 'sidebar-lg-show',
+  'sidebar-show',
+  'sidebar-sm-show',
+  'sidebar-md-show',
+  'sidebar-lg-show',
   'sidebar-xl-show'
 ];

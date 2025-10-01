@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {NgxInceptionComponent} from './ngx-inception.component';
+import { NgModule } from '@angular/core';
+import { NgxInceptionComponent } from './ngx-inception.component';
 
 @NgModule({
   declarations: [NgxInceptionComponent],
@@ -23,6 +23,5 @@ import {NgxInceptionComponent} from './ngx-inception.component';
   exports: [NgxInceptionComponent]
 })
 export class InceptionModule {
-  constructor() {
-  }
+  constructor() {}
 }

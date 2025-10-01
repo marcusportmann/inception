@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class Group {
-
   /**
    * The description for the group.
    */
@@ -49,4 +48,3 @@ export class Group {
     this.description = description;
   }
 }
-

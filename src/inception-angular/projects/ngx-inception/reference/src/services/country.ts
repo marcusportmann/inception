@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class Country {
-
   /**
    * The ISO 3166-1 alpha-2 code for the country.
    */
@@ -79,8 +78,17 @@ export class Country {
    * @param sovereignState The code for the sovereign state the country is associated with.
    * @param nationality    The nationality for the country.
    */
-  constructor(code: string, iso3Code: string, localeId: string, sortIndex: number, name: string,
-              shortName: string, description: string, sovereignState: string, nationality: string) {
+  constructor(
+    code: string,
+    iso3Code: string,
+    localeId: string,
+    sortIndex: number,
+    name: string,
+    shortName: string,
+    description: string,
+    sovereignState: string,
+    nationality: string
+  ) {
     this.code = code;
     this.iso3Code = iso3Code;
     this.localeId = localeId;

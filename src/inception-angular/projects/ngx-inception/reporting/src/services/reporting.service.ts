@@ -14,18 +14,28 @@
  * limitations under the License.
  */
 
-import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {Inject, Injectable} from '@angular/core';
 import {
-  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ProblemDetails, ServiceUnavailableError
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse
+} from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import {
+  AccessDeniedError,
+  CommunicationError,
+  INCEPTION_CONFIG,
+  InceptionConfig,
+  InvalidArgumentError,
+  ProblemDetails,
+  ServiceUnavailableError
 } from 'ngx-inception/core';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {ReportDefinition} from './report-definition';
-import {ReportDefinitionSummary} from './report-definition-summary';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { ReportDefinition } from './report-definition';
+import { ReportDefinitionSummary } from './report-definition-summary';
 import {
-  DuplicateReportDefinitionError, ReportDefinitionNotFoundError
+  DuplicateReportDefinitionError,
+  ReportDefinitionNotFoundError
 } from './reporting.service.errors';
 
 /**
@@ -37,7 +47,6 @@ import {
   providedIn: 'root'
 })
 export class ReportingService {
-
   static readonly MAX_TEMPLATE_SIZE: number = 10485760;
 
   /**
@@ -46,8 +55,10 @@ export class ReportingService {
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
    */
-  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-              private httpClient: HttpClient) {
+  constructor(
+    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
+    private httpClient: HttpClient
+  ) {
     console.log('Initializing the Reporting Service');
   }
 
@@ -57,10 +68,23 @@ export class ReportingService {
    * @param reportDefinition The report definition to create.
    * @return True if the report definition was created successfully or false otherwise.
    */
-  createReportDefinition(reportDefinition: ReportDefinition): Observable<boolean> {
-    return this.httpClient.post<boolean>(`${this.config.apiUrlPrefix}/reporting/report-definitions`,
-      reportDefinition, {observe: 'response'}).pipe(map(ReportingService.isResponse204),
-      catchError(ReportingService.handleApiError('Failed to create the report definition.')));
+  createReportDefinition(
+    reportDefinition: ReportDefinition
+  ): Observable<boolean> {
+    return this.httpClient
+      .post<boolean>(
+        `${this.config.apiUrlPrefix}/reporting/report-definitions`,
+        reportDefinition,
+        { observe: 'response' }
+      )
+      .pipe(
+        map(ReportingService.isResponse204),
+        catchError(
+          ReportingService.handleApiError(
+            'Failed to create the report definition.'
+          )
+        )
+      );
   }
 
   /**
@@ -70,10 +94,21 @@ export class ReportingService {
    * @return True if the report definition was deleted or false otherwise.
    */
   deleteReportDefinition(reportDefinitionId: string): Observable<boolean> {
-    return this.httpClient.delete<boolean>(
-      `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
-        reportDefinitionId)}`, {observe: 'response'}).pipe(map(ReportingService.isResponse204),
-      catchError(ReportingService.handleApiError('Failed to delete the report definition.')));
+    return this.httpClient
+      .delete<boolean>(
+        `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
+          reportDefinitionId
+        )}`,
+        { observe: 'response' }
+      )
+      .pipe(
+        map(ReportingService.isResponse204),
+        catchError(
+          ReportingService.handleApiError(
+            'Failed to delete the report definition.'
+          )
+        )
+      );
   }
 
   /**
@@ -82,11 +117,23 @@ export class ReportingService {
    * @param reportDefinitionId The ID for the report definition.
    * @return The report definition.
    */
-  getReportDefinition(reportDefinitionId: string): Observable<ReportDefinition> {
-    return this.httpClient.get<ReportDefinition>(
-      `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
-        reportDefinitionId)}`, {reportProgress: true}).pipe(
-      catchError(ReportingService.handleApiError('Failed to retrieve the report definition.')));
+  getReportDefinition(
+    reportDefinitionId: string
+  ): Observable<ReportDefinition> {
+    return this.httpClient
+      .get<ReportDefinition>(
+        `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
+          reportDefinitionId
+        )}`,
+        { reportProgress: true }
+      )
+      .pipe(
+        catchError(
+          ReportingService.handleApiError(
+            'Failed to retrieve the report definition.'
+          )
+        )
+      );
   }
 
   /**
@@ -96,10 +143,20 @@ export class ReportingService {
    * @return The name of the report definition.
    */
   getReportDefinitionName(reportDefinitionId: string): Observable<string> {
-    return this.httpClient.get<string>(
-      `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
-        reportDefinitionId)}/name`, {reportProgress: true}).pipe(catchError(
-      ReportingService.handleApiError('Failed to retrieve the report definition name.')));
+    return this.httpClient
+      .get<string>(
+        `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
+          reportDefinitionId
+        )}/name`,
+        { reportProgress: true }
+      )
+      .pipe(
+        catchError(
+          ReportingService.handleApiError(
+            'Failed to retrieve the report definition name.'
+          )
+        )
+      );
   }
 
   /**
@@ -108,10 +165,17 @@ export class ReportingService {
    * @return The summaries for all the report definitions.
    */
   getReportDefinitionSummaries(): Observable<ReportDefinitionSummary[]> {
-    return this.httpClient.get<ReportDefinitionSummary[]>(
-      `${this.config.apiUrlPrefix}/reporting/report-definitions`, {reportProgress: true}).pipe(
-      catchError(ReportingService.handleApiError(
-        'Failed to retrieve the summaries for the report definitions.')));
+    return this.httpClient
+      .get<
+        ReportDefinitionSummary[]
+      >(`${this.config.apiUrlPrefix}/reporting/report-definitions`, { reportProgress: true })
+      .pipe(
+        catchError(
+          ReportingService.handleApiError(
+            'Failed to retrieve the summaries for the report definitions.'
+          )
+        )
+      );
   }
 
   /**
@@ -120,9 +184,17 @@ export class ReportingService {
    * @return The report definitions.
    */
   getReportDefinitions(): Observable<ReportDefinition[]> {
-    return this.httpClient.get<ReportDefinition[]>(
-      `${this.config.apiUrlPrefix}/reporting/report-definitions`, {reportProgress: true}).pipe(
-      catchError(ReportingService.handleApiError('Failed to retrieve the report definitions.')));
+    return this.httpClient
+      .get<
+        ReportDefinition[]
+      >(`${this.config.apiUrlPrefix}/reporting/report-definitions`, { reportProgress: true })
+      .pipe(
+        catchError(
+          ReportingService.handleApiError(
+            'Failed to retrieve the report definitions.'
+          )
+        )
+      );
   }
 
   /**
@@ -131,30 +203,60 @@ export class ReportingService {
    * @param reportDefinition The report definition.
    * @return True if the report definition was updated successfully or false otherwise.
    */
-  updateReportDefinition(reportDefinition: ReportDefinition): Observable<boolean> {
-    return this.httpClient.put<boolean>(
-      `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
-        reportDefinition.id)}`, reportDefinition, {observe: 'response'}).pipe(
-      map(ReportingService.isResponse204),
-      catchError(ReportingService.handleApiError('Failed to update the report definition.')));
+  updateReportDefinition(
+    reportDefinition: ReportDefinition
+  ): Observable<boolean> {
+    return this.httpClient
+      .put<boolean>(
+        `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
+          reportDefinition.id
+        )}`,
+        reportDefinition,
+        { observe: 'response' }
+      )
+      .pipe(
+        map(ReportingService.isResponse204),
+        catchError(
+          ReportingService.handleApiError(
+            'Failed to update the report definition.'
+          )
+        )
+      );
   }
 
   private static handleApiError(defaultMessage: string) {
     return (httpErrorResponse: HttpErrorResponse) => {
-      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateReportDefinitionError.TYPE)) {
-        return throwError(() => new DuplicateReportDefinitionError(httpErrorResponse));
-      } else if (ProblemDetails.isProblemDetails(httpErrorResponse,
-        ReportDefinitionNotFoundError.TYPE)) {
-        return throwError(() => new ReportDefinitionNotFoundError(httpErrorResponse));
+      if (
+        ProblemDetails.isProblemDetails(
+          httpErrorResponse,
+          DuplicateReportDefinitionError.TYPE
+        )
+      ) {
+        return throwError(
+          () => new DuplicateReportDefinitionError(httpErrorResponse)
+        );
+      } else if (
+        ProblemDetails.isProblemDetails(
+          httpErrorResponse,
+          ReportDefinitionNotFoundError.TYPE
+        )
+      ) {
+        return throwError(
+          () => new ReportDefinitionNotFoundError(httpErrorResponse)
+        );
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
         return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+      } else if (
+        InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
+      ) {
         return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
+      return throwError(
+        () => new ServiceUnavailableError(defaultMessage, httpErrorResponse)
+      );
     };
   }
 
@@ -168,4 +270,3 @@ export class ReportingService {
     return httpResponse.status === 204;
   }
 }
-

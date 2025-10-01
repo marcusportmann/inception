@@ -14,104 +14,115 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
-import {CoreModule} from 'ngx-inception/core';
-import {ButtonsComponent} from './buttons.component';
-import {CardsComponent} from './cards.component';
-import {DialogsComponent} from './dialogs.component';
-import {ErrorReportComponent} from './error-report.component';
-import {ExpansionPanelsComponent} from './expansion-panels.component';
-import {GridListComponent} from './grid-list.component';
-import {ListsComponent} from './lists.component';
-import {ProgressComponent} from './progress.component';
-import {SwitchesComponent} from './switches.component';
-import {TabsComponent} from './tabs.component';
-import {TooltipsComponent} from './tooltips.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { CoreModule } from 'ngx-inception/core';
+import { ButtonsComponent } from './buttons.component';
+import { CardsComponent } from './cards.component';
+import { DialogsComponent } from './dialogs.component';
+import { ErrorReportComponent } from './error-report.component';
+import { ExpansionPanelsComponent } from './expansion-panels.component';
+import { GridListComponent } from './grid-list.component';
+import { ListsComponent } from './lists.component';
+import { ProgressComponent } from './progress.component';
+import { SwitchesComponent } from './switches.component';
+import { TabsComponent } from './tabs.component';
+import { TooltipsComponent } from './tooltips.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'prefix',
     redirectTo: 'buttons'
-  }, {
+  },
+  {
     path: 'buttons',
     pathMatch: 'prefix',
     component: ButtonsComponent,
     data: {
-      title: 'Buttons',
+      title: 'Buttons'
     }
-  }, {
+  },
+  {
     path: 'cards',
     pathMatch: 'prefix',
     component: CardsComponent,
     data: {
-      title: 'Cards',
+      title: 'Cards'
     }
-  }, {
+  },
+  {
     path: 'dialogs',
     pathMatch: 'prefix',
     component: DialogsComponent,
     data: {
-      title: 'Dialogs',
+      title: 'Dialogs'
     }
-  }, {
+  },
+  {
     path: 'error-report',
     pathMatch: 'prefix',
     component: ErrorReportComponent,
     data: {
-      title: 'Error Report',
+      title: 'Error Report'
     }
-  }, {
+  },
+  {
     path: 'expansion-panels',
     pathMatch: 'prefix',
     component: ExpansionPanelsComponent,
     data: {
-      title: 'Expansion Panels',
+      title: 'Expansion Panels'
     }
-  }, {
+  },
+  {
     path: 'grid-list',
     pathMatch: 'prefix',
     component: GridListComponent,
     data: {
-      title: 'Grid List',
+      title: 'Grid List'
     }
-  }, {
+  },
+  {
     path: 'lists',
     pathMatch: 'prefix',
     component: ListsComponent,
     data: {
-      title: 'Lists',
+      title: 'Lists'
     }
-  }, {
+  },
+  {
     path: 'progress',
     pathMatch: 'prefix',
     component: ProgressComponent,
     data: {
-      title: 'Progress',
+      title: 'Progress'
     }
-  }, {
+  },
+  {
     path: 'switches',
     pathMatch: 'prefix',
     component: SwitchesComponent,
     data: {
-      title: 'Switches',
+      title: 'Switches'
     }
-  }, {
+  },
+  {
     path: 'tabs',
     pathMatch: 'prefix',
     component: TabsComponent,
     data: {
-      title: 'Tabs',
+      title: 'Tabs'
     }
-  }, {
+  },
+  {
     path: 'tooltips',
     pathMatch: 'prefix',
     component: TooltipsComponent,
     data: {
-      title: 'Tooltips',
+      title: 'Tooltips'
     }
   }
 ];
@@ -119,16 +130,25 @@ const routes: Routes = [
 @NgModule({
   imports: [
     // Angular modules
-    CommonModule, FormsModule, RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule,
+    RouterModule.forChild(routes),
 
     // Inception modules
     CoreModule
   ],
   declarations: [
-    ButtonsComponent, CardsComponent, DialogsComponent, ErrorReportComponent,
-    ExpansionPanelsComponent, GridListComponent, ListsComponent, ProgressComponent,
-    SwitchesComponent, TabsComponent, TooltipsComponent
+    ButtonsComponent,
+    CardsComponent,
+    DialogsComponent,
+    ErrorReportComponent,
+    ExpansionPanelsComponent,
+    GridListComponent,
+    ListsComponent,
+    ProgressComponent,
+    SwitchesComponent,
+    TabsComponent,
+    TooltipsComponent
   ]
 })
-export class ComponentsModule {
-}
+export class ComponentsModule {}

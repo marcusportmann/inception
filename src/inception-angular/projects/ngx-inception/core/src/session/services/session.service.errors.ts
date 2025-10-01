@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
-import {Error, HttpError, ProblemDetails} from '../../errors';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Error, HttpError, ProblemDetails } from '../../errors';
 
 /**
  * The LoginError class holds the information for a login error.
@@ -23,14 +23,16 @@ import {Error, HttpError, ProblemDetails} from '../../errors';
  * @author Marcus Portmann
  */
 export class LoginError extends Error {
-
   /**
    * Constructs a new LoginError.
    *
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@session_login_error:Incorrect username or password.`, cause);
+    super(
+      $localize`:@@session_login_error:Incorrect username or password.`,
+      cause
+    );
   }
 }
 
@@ -40,14 +42,16 @@ export class LoginError extends Error {
  * @author Marcus Portmann
  */
 export class PasswordExpiredError extends Error {
-
   /**
    * Constructs a new PasswordExpiredError.
    *
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@session_password_expired_error:The password has expired.`, cause);
+    super(
+      $localize`:@@session_password_expired_error:The password has expired.`,
+      cause
+    );
   }
 }
 
@@ -57,7 +61,6 @@ export class PasswordExpiredError extends Error {
  * @author Marcus Portmann
  */
 export class UserLockedError extends Error {
-
   /**
    * Constructs a new UserLockedError.
    *
@@ -66,6 +69,7 @@ export class UserLockedError extends Error {
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
       $localize`:@@security_user_locked_error:The user has exceeded the maximum number of failed password attempts and has been locked.`,
-      cause);
+      cause
+    );
   }
 }

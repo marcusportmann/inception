@@ -15,12 +15,17 @@
  */
 
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, OnDestroy, OnInit
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  OnDestroy,
+  OnInit
 } from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {NavigationItem} from '../services/navigation-item';
-import {NavigationService} from '../services/navigation.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { NavigationItem } from '../services/navigation-item';
+import { NavigationService } from '../services/navigation.service';
 
 /**
  * The SidebarNavComponent class implements the sidebar nav component.
@@ -30,15 +35,15 @@ import {NavigationService} from '../services/navigation.service';
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-nav',
-  template: `
-    <ul class="nav">
-      <sidebar-nav-item *ngFor="let navItem of navItems" [navItem]="navItem"></sidebar-nav-item>
-    </ul>`,
+  template: ` <ul class="nav">
+    <sidebar-nav-item
+      *ngFor="let navItem of navItems"
+      [navItem]="navItem"></sidebar-nav-item>
+  </ul>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
 export class SidebarNavComponent implements OnInit, OnDestroy {
-
   navItems: NavigationItem[];
 
   @HostBinding('attr.role') role = 'nav';
@@ -54,8 +59,11 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
    * @param router            The router.
    * @param changeDetectorRef The ChangeDetectorRef instance.
    */
-  constructor(private navigationService: NavigationService, private router: Router,
-              private changeDetectorRef: ChangeDetectorRef) {
+  constructor(
+    private navigationService: NavigationService,
+    private router: Router,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     this.navItems = new Array<NavigationItem>();
   }
 
@@ -65,17 +73,18 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
     }
 
     if (this.routerEventSubscription) {
-
       this.routerEventSubscription.unsubscribe();
     }
   }
 
   ngOnInit(): void {
-    this.userNavigationSubscription = this.navigationService.userNavigation$.subscribe(
-      (navigation: NavigationItem[]) => {
-        this.navItems = navigation;
-        this.changeDetectorRef.detectChanges();
-      });
+    this.userNavigationSubscription =
+      this.navigationService.userNavigation$.subscribe(
+        (navigation: NavigationItem[]) => {
+          this.navItems = navigation;
+          this.changeDetectorRef.detectChanges();
+        }
+      );
 
     this.routerEventSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -88,5 +97,3 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
     return true;
   }
 }
-
-

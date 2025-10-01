@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
+  AccessDeniedError,
+  AdminContainerView,
+  BackNavigation,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {Group} from '../services/group';
-import {SecurityService} from '../services/security.service';
-import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
+import { finalize, first } from 'rxjs/operators';
+import { Group } from '../services/group';
+import { SecurityService } from '../services/security.service';
+import { UserDirectoryCapabilities } from '../services/user-directory-capabilities';
 
 /**
  * The NewGroupComponent class implements the new group component.
@@ -36,8 +42,10 @@ import {UserDirectoryCapabilities} from '../services/user-directory-capabilities
   styleUrls: ['new-group.component.css'],
   standalone: false
 })
-export class NewGroupComponent extends AdminContainerView implements AfterViewInit {
-
+export class NewGroupComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
   descriptionControl: FormControl;
 
   group: Group | null = null;
@@ -50,48 +58,59 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
 
   userDirectoryId: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private securityService: SecurityService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private securityService: SecurityService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Retrieve the route parameters
-    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+    const userDirectoryId =
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
-      throw (new Error('No userDirectoryId route parameter found'));
+      throw new Error('No userDirectoryId route parameter found');
     }
 
     this.userDirectoryId = decodeURIComponent(userDirectoryId);
 
     // Initialise the form controls
     this.descriptionControl = new FormControl('', [Validators.maxLength(100)]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.nameControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
 
     // Initialise the form
     this.newGroupForm = new FormGroup({
       description: this.descriptionControl,
-      name: this.nameControl,
+      name: this.nameControl
     });
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@security_new_group_back_navigation:Groups`,
-      ['../..'], {
+    return new BackNavigation(
+      $localize`:@@security_new_group_back_navigation:Groups`,
+      ['../..'],
+      {
         relativeTo: this.activatedRoute,
-        state: {userDirectoryId: this.userDirectoryId}
-      });
+        state: { userDirectoryId: this.userDirectoryId }
+      }
+    );
   }
 
   get title(): string {
-    return $localize`:@@security_new_group_title:New Group`
+    return $localize`:@@security_new_group_title:New Group`;
   }
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../..'], {
       relativeTo: this.activatedRoute,
-      state: {userDirectoryId: this.userDirectoryId}
+      state: { userDirectoryId: this.userDirectoryId }
     });
   }
 
@@ -99,50 +118,73 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 
-    this.securityService.getUserDirectoryCapabilities(this.userDirectoryId)
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((userDirectoryCapabilities: UserDirectoryCapabilities) => {
-      this.userDirectoryCapabilities = userDirectoryCapabilities;
+    this.securityService
+      .getUserDirectoryCapabilities(this.userDirectoryId)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe(
+        (userDirectoryCapabilities: UserDirectoryCapabilities) => {
+          this.userDirectoryCapabilities = userDirectoryCapabilities;
 
-      this.group = new Group(this.userDirectoryId, '', '');
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+          this.group = new Group(this.userDirectoryId, '', '');
+        },
+        (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if (
+            error instanceof AccessDeniedError ||
+            error instanceof InvalidArgumentError ||
+            error instanceof ServiceUnavailableError
+          ) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {
+              state: { error }
+            });
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        }
+      );
   }
 
   ok(): void {
     if (this.group && this.newGroupForm.valid) {
-
       this.group.name = this.nameControl.value;
       this.group.description = this.descriptionControl.value;
 
       this.spinnerService.showSpinner();
 
-      this.securityService.createGroup(this.group)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['../..'], {
-          relativeTo: this.activatedRoute,
-          state: {userDirectoryId: this.userDirectoryId}
-        });
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.securityService
+        .createGroup(this.group)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe(
+          () => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['../..'], {
+              relativeTo: this.activatedRoute,
+              state: { userDirectoryId: this.userDirectoryId }
+            });
+          },
+          (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if (
+              error instanceof AccessDeniedError ||
+              error instanceof InvalidArgumentError ||
+              error instanceof ServiceUnavailableError
+            ) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {
+                state: { error }
+              });
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          }
+        );
     }
   }
 }

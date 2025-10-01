@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {MailService} from '../services/mail.service';
+import { Inject, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { MailService } from '../services/mail.service';
 
 /**
  * The MailTemplateTitleResolver class provides the route data resolver that resolves the
@@ -27,14 +27,12 @@ import {MailService} from '../services/mail.service';
  */
 @Injectable()
 export class MailTemplateTitleResolver {
-
   /**
    * Constructs a new MailTemplateTitleResolver.
    *
    * @param mailService The mail service.
    */
-  constructor(@Inject(MailService) private mailService: MailService) {
-  }
+  constructor(@Inject(MailService) private mailService: MailService) {}
 
   /**
    * Resolve the title.
@@ -42,12 +40,14 @@ export class MailTemplateTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
     let mailTemplateId = activatedRouteSnapshot.paramMap.get('mailTemplateId');
 
     if (!mailTemplateId) {
-      throw (new Error('No mailTemplateId route parameter found'));
+      throw new Error('No mailTemplateId route parameter found');
     }
 
     mailTemplateId = decodeURIComponent(mailTemplateId);

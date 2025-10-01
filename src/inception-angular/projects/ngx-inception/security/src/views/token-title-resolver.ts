@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {SecurityService} from '../services/security.service';
+import { Inject, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { SecurityService } from '../services/security.service';
 
 /**
  * The TokenTitleResolver class provides the route data resolver that resolves the
@@ -27,14 +27,14 @@ import {SecurityService} from '../services/security.service';
  */
 @Injectable()
 export class TokenTitleResolver {
-
   /**
    * Constructs a new TokenTitleResolver.
    *
    * @param securityService The security service.
    */
-  constructor(@Inject(SecurityService) private securityService: SecurityService) {
-  }
+  constructor(
+    @Inject(SecurityService) private securityService: SecurityService
+  ) {}
 
   /**
    * Resolve the title.
@@ -42,12 +42,14 @@ export class TokenTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
     let tokenId = activatedRouteSnapshot.paramMap.get('tokenId');
 
     if (!tokenId) {
-      throw (new Error('No tokenId route parameter found'));
+      throw new Error('No tokenId route parameter found');
     }
 
     tokenId = decodeURIComponent(tokenId);

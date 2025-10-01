@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {SecurityService} from '../services/security.service';
+import { Inject, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { SecurityService } from '../services/security.service';
 
 /**
  * The TenantTitleResolver class provides the route data resolver that resolves the
@@ -27,14 +27,14 @@ import {SecurityService} from '../services/security.service';
  */
 @Injectable()
 export class TenantTitleResolver {
-
   /**
    * Constructs a new TenantTitleResolver.
    *
    * @param securityService The security service.
    */
-  constructor(@Inject(SecurityService) private securityService: SecurityService) {
-  }
+  constructor(
+    @Inject(SecurityService) private securityService: SecurityService
+  ) {}
 
   /**
    * Resolve the title.
@@ -42,12 +42,14 @@ export class TenantTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
     let tenantId = activatedRouteSnapshot.paramMap.get('tenantId');
 
     if (!tenantId) {
-      throw (new Error('No tenantId route parameter found'));
+      throw new Error('No tenantId route parameter found');
     }
 
     tenantId = decodeURIComponent(tenantId);

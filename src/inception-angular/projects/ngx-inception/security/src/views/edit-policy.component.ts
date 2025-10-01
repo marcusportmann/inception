@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
+  AccessDeniedError,
+  AdminContainerView,
+  BackNavigation,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {Policy} from '../services/policy';
-import {SecurityService} from '../services/security.service';
+import { finalize, first } from 'rxjs/operators';
+import { Policy } from '../services/policy';
+import { SecurityService } from '../services/security.service';
 
 /**
  * The EditPolicyComponent class implements the edit policy component.
@@ -35,8 +41,10 @@ import {SecurityService} from '../services/security.service';
   styleUrls: ['edit-policy.component.css'],
   standalone: false
 })
-export class EditPolicyComponent extends AdminContainerView implements AfterViewInit {
-
+export class EditPolicyComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
   dataControl: FormControl;
 
   editPolicyForm: FormGroup;
@@ -53,29 +61,42 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
 
   versionControl: FormControl;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private securityService: SecurityService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Retrieve the route parameters
     const policyId = this.activatedRoute.snapshot.paramMap.get('policyId');
 
     if (!policyId) {
-      throw (new Error('No policyId route parameter found'));
+      throw new Error('No policyId route parameter found');
     }
 
     this.policyId = decodeURIComponent(policyId);
 
     // Initialise the form controls
     this.dataControl = new FormControl('', [Validators.required]);
-    this.idControl = new FormControl({
-      value: '',
-      disabled: true
-    }, [Validators.required, Validators.maxLength(100)]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.idControl = new FormControl(
+      {
+        value: '',
+        disabled: true
+      },
+      [Validators.required, Validators.maxLength(100)]
+    );
+    this.nameControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
     this.typeControl = new FormControl([], Validators.required);
-    this.versionControl = new FormControl('', [Validators.required, Validators.maxLength(30)]);
+    this.versionControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(30)
+    ]);
 
     // Initialise the form
     this.editPolicyForm = new FormGroup({
@@ -88,45 +109,65 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@security_edit_policy_back_navigation:Policies`,
-      ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation(
+      $localize`:@@security_edit_policy_back_navigation:Policies`,
+      ['../..'],
+      { relativeTo: this.activatedRoute }
+    );
   }
 
   get title(): string {
-    return $localize`:@@security_edit_policy_title:Edit Policy`
+    return $localize`:@@security_edit_policy_title:Edit Policy`;
   }
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
     // Retrieve the existing code category and initialise the form controls
     this.spinnerService.showSpinner();
 
-    this.securityService.getPolicy(this.policyId)
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((policy: Policy) => {
-      this.policy = policy;
-      this.idControl.setValue(policy.id);
-      this.versionControl.setValue(policy.version);
-      this.nameControl.setValue(policy.name);
-      this.typeControl.setValue(policy.type);
-      this.dataControl.setValue(policy.data);
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error).afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-        });
-      }
-    });
+    this.securityService
+      .getPolicy(this.policyId)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe(
+        (policy: Policy) => {
+          this.policy = policy;
+          this.idControl.setValue(policy.id);
+          this.versionControl.setValue(policy.version);
+          this.nameControl.setValue(policy.name);
+          this.typeControl.setValue(policy.type);
+          this.dataControl.setValue(policy.data);
+        },
+        (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if (
+            error instanceof AccessDeniedError ||
+            error instanceof InvalidArgumentError ||
+            error instanceof ServiceUnavailableError
+          ) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {
+              state: { error }
+            });
+          } else {
+            this.dialogService
+              .showErrorDialog(error)
+              .afterClosed()
+              .pipe(first())
+              .subscribe(() => {
+                this.router.navigate(['../..'], {
+                  relativeTo: this.activatedRoute
+                });
+              });
+          }
+        }
+      );
   }
 
   ok(): void {
@@ -138,20 +179,35 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
 
       this.spinnerService.showSpinner();
 
-      this.securityService.updatePolicy(this.policy)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) || (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.securityService
+        .updatePolicy(this.policy)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe(
+          () => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['../..'], {
+              relativeTo: this.activatedRoute
+            });
+          },
+          (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if (
+              error instanceof AccessDeniedError ||
+              error instanceof InvalidArgumentError ||
+              error instanceof ServiceUnavailableError
+            ) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {
+                state: { error }
+              });
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          }
+        );
     }
   }
 }

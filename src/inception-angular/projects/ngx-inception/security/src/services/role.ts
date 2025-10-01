@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class Role {
-
   /**
    * The code for the role.
    */

@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {CodesViewsModule} from 'ngx-inception/codes';
+import { NgModule } from '@angular/core';
+import { CodesViewsModule } from 'ngx-inception/codes';
 
 @NgModule({
   imports: [CodesViewsModule]
 })
-export class CodesViewsWrapperModule {
-}
+export class CodesViewsWrapperModule {}

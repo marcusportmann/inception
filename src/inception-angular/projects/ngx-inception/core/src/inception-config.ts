@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {InjectionToken} from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
 /**
  * The InceptionConfig interface defines the config that can be passed to the InceptionModule
@@ -23,7 +23,6 @@ import {InjectionToken} from '@angular/core';
  * @author Marcus Portmann
  */
 export interface InceptionConfig {
-
   /**
    * The API URL prefix.
    */
@@ -72,4 +71,6 @@ export interface InceptionConfig {
 /**
  * The injection token for the InceptionConfig.
  */
-export const INCEPTION_CONFIG = new InjectionToken<InceptionConfig>('INCEPTION_CONFIG');
+export const INCEPTION_CONFIG = new InjectionToken<InceptionConfig>(
+  'INCEPTION_CONFIG'
+);

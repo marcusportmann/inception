@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
+  AccessDeniedError,
+  AdminContainerView,
+  BackNavigation,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {combineLatest} from 'rxjs';
-import {finalize, first} from 'rxjs/operators';
-import {Group} from '../services/group';
-import {SecurityService} from '../services/security.service';
-import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
+import { combineLatest } from 'rxjs';
+import { finalize, first } from 'rxjs/operators';
+import { Group } from '../services/group';
+import { SecurityService } from '../services/security.service';
+import { UserDirectoryCapabilities } from '../services/user-directory-capabilities';
 
 /**
  * The EditGroupComponent class implements the edit group component.
@@ -37,8 +43,10 @@ import {UserDirectoryCapabilities} from '../services/user-directory-capabilities
   styleUrls: ['edit-group.component.css'],
   standalone: false
 })
-export class EditGroupComponent extends AdminContainerView implements AfterViewInit {
-
+export class EditGroupComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
   descriptionControl: FormControl;
 
   editGroupForm: FormGroup;
@@ -53,16 +61,21 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
 
   userDirectoryId: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private securityService: SecurityService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private securityService: SecurityService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Retrieve the route parameters
-    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+    const userDirectoryId =
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
-      throw (new Error('No userDirectoryId route parameter found'));
+      throw new Error('No userDirectoryId route parameter found');
     }
 
     this.userDirectoryId = decodeURIComponent(userDirectoryId);
@@ -70,7 +83,7 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
     const groupName = this.activatedRoute.snapshot.paramMap.get('groupName');
 
     if (!groupName) {
-      throw (new Error('No groupName route parameter found'));
+      throw new Error('No groupName route parameter found');
     }
 
     this.groupName = decodeURIComponent(groupName);
@@ -90,22 +103,25 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@security_edit_group_back_navigation:Groups`,
-      ['../../..'], {
+    return new BackNavigation(
+      $localize`:@@security_edit_group_back_navigation:Groups`,
+      ['../../..'],
+      {
         relativeTo: this.activatedRoute,
-        state: {userDirectoryId: this.userDirectoryId}
-      });
+        state: { userDirectoryId: this.userDirectoryId }
+      }
+    );
   }
 
   get title(): string {
-    return $localize`:@@security_edit_group_title:Edit Group`
+    return $localize`:@@security_edit_group_title:Edit Group`;
   }
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../../..'], {
       relativeTo: this.activatedRoute,
-      state: {userDirectoryId: this.userDirectoryId}
+      state: { userDirectoryId: this.userDirectoryId }
     });
   }
 
@@ -117,24 +133,35 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
       this.securityService.getUserDirectoryCapabilities(this.userDirectoryId),
       this.securityService.getGroup(this.userDirectoryId, this.groupName)
     ])
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((results: [UserDirectoryCapabilities, Group]) => {
-      this.userDirectoryCapabilities = results[0];
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe(
+        (results: [UserDirectoryCapabilities, Group]) => {
+          this.userDirectoryCapabilities = results[0];
 
-      this.group = results[1];
+          this.group = results[1];
 
-      this.descriptionControl.setValue(results[1].description);
-      this.nameControl.setValue(results[1].name);
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+          this.descriptionControl.setValue(results[1].description);
+          this.nameControl.setValue(results[1].name);
+        },
+        (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if (
+            error instanceof AccessDeniedError ||
+            error instanceof InvalidArgumentError ||
+            error instanceof ServiceUnavailableError
+          ) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {
+              state: { error }
+            });
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        }
+      );
   }
 
   ok(): void {
@@ -143,24 +170,36 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
 
       this.spinnerService.showSpinner();
 
-      this.securityService.updateGroup(this.group)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['../../..'], {
-          relativeTo: this.activatedRoute,
-          state: {userDirectoryId: this.userDirectoryId}
-        });
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.securityService
+        .updateGroup(this.group)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe(
+          () => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['../../..'], {
+              relativeTo: this.activatedRoute,
+              state: { userDirectoryId: this.userDirectoryId }
+            });
+          },
+          (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if (
+              error instanceof AccessDeniedError ||
+              error instanceof InvalidArgumentError ||
+              error instanceof ServiceUnavailableError
+            ) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {
+                state: { error }
+              });
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          }
+        );
     }
   }
 }

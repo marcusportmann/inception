@@ -14,19 +14,30 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, HostBinding, ViewChild} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, ConfirmationDialogComponent, DialogService, Error,
-  InvalidArgumentError, ServiceUnavailableError, SpinnerService
+  AfterViewInit,
+  Component,
+  HostBinding,
+  ViewChild
+} from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AccessDeniedError,
+  AdminContainerView,
+  ConfirmationDialogComponent,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {ReportDefinitionSummary} from '../services/report-definition-summary';
-import {ReportingService} from '../services/reporting.service';
+import { finalize, first } from 'rxjs/operators';
+import { ReportDefinitionSummary } from '../services/report-definition-summary';
+import { ReportingService } from '../services/reporting.service';
 
 /**
  * The ReportDefinitionsComponent class implements the Report Definitions component.
@@ -38,30 +49,37 @@ import {ReportingService} from '../services/reporting.service';
   styleUrls: ['report-definitions.component.css'],
   standalone: false
 })
-export class ReportDefinitionsComponent extends AdminContainerView implements AfterViewInit {
-
-  dataSource: MatTableDataSource<ReportDefinitionSummary> = new MatTableDataSource<ReportDefinitionSummary>();
+export class ReportDefinitionsComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
+  dataSource: MatTableDataSource<ReportDefinitionSummary> =
+    new MatTableDataSource<ReportDefinitionSummary>();
 
   displayedColumns = ['name', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort!: MatSort;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private reportingService: ReportingService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private reportingService: ReportingService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean => data.name.toLowerCase().includes(
-      filter);
+    this.dataSource.filterPredicate = (data, filter): boolean =>
+      data.name.toLowerCase().includes(filter);
   }
 
   get title(): string {
-    return $localize`:@@reporting_report_definitions_title:Report Definitions`
+    return $localize`:@@reporting_report_definitions_title:Report Definitions`;
   }
 
   applyFilter(filterValue: string): void {
@@ -71,63 +89,89 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
   }
 
   deleteReportDefinition(reportDefinitionId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
+      this.dialogService.showConfirmationDialog({
         message: $localize`:@@reporting_report_definitions_confirm_delete_report_definition:Are you sure you want to delete the report definition?`
       });
 
-    dialogRef.afterClosed()
-    .pipe(first())
-    .subscribe((confirmation: boolean | undefined) => {
-      if (confirmation === true) {
-        this.spinnerService.showSpinner();
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((confirmation: boolean | undefined) => {
+        if (confirmation === true) {
+          this.spinnerService.showSpinner();
 
-        this.reportingService.deleteReportDefinition(reportDefinitionId)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          this.loadReportDefinitions();
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-            (error instanceof ServiceUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
-      }
-    });
+          this.reportingService
+            .deleteReportDefinition(reportDefinitionId)
+            .pipe(
+              first(),
+              finalize(() => this.spinnerService.hideSpinner())
+            )
+            .subscribe(
+              () => {
+                this.loadReportDefinitions();
+              },
+              (error: Error) => {
+                // noinspection SuspiciousTypeOfGuard
+                if (
+                  error instanceof AccessDeniedError ||
+                  error instanceof InvalidArgumentError ||
+                  error instanceof ServiceUnavailableError
+                ) {
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigateByUrl('/error/send-error-report', {
+                    state: { error }
+                  });
+                } else {
+                  this.dialogService.showErrorDialog(error);
+                }
+              }
+            );
+        }
+      });
   }
 
   editReportDefinition(reportDefinitionId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(reportDefinitionId) + '/edit'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(reportDefinitionId) + '/edit'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   loadReportDefinitions(): void {
     this.spinnerService.showSpinner();
 
-    this.reportingService.getReportDefinitionSummaries()
-    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe((reportDefinitionSummaries: ReportDefinitionSummary[]) => {
-      this.dataSource.data = reportDefinitionSummaries;
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+    this.reportingService
+      .getReportDefinitionSummaries()
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe(
+        (reportDefinitionSummaries: ReportDefinitionSummary[]) => {
+          this.dataSource.data = reportDefinitionSummaries;
+        },
+        (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if (
+            error instanceof AccessDeniedError ||
+            error instanceof InvalidArgumentError ||
+            error instanceof ServiceUnavailableError
+          ) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {
+              state: { error }
+            });
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        }
+      );
   }
 
   newReportDefinition(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
@@ -137,4 +181,3 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
     this.loadReportDefinitions();
   }
 }
-

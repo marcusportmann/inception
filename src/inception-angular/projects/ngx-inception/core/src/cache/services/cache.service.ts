@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {Session} from '../../session/services/session';
-import {SessionService} from '../../session/services/session.service';
+import { Injectable } from '@angular/core';
+import { Session } from '../../session/services/session';
+import { SessionService } from '../../session/services/session.service';
 
 /**
  * The Cache Service implementation.
@@ -27,7 +27,6 @@ import {SessionService} from '../../session/services/session.service';
   providedIn: 'root'
 })
 export class CacheService {
-
   private cache: Map<string, any> = new Map<string, any>();
 
   /**
@@ -48,7 +47,10 @@ export class CacheService {
    */
   clear(): void {
     console.log(
-      'Clearing ' + this.cache.size + ' items from the cache managed by the Cache Service');
+      'Clearing ' +
+        this.cache.size +
+        ' items from the cache managed by the Cache Service'
+    );
     this.cache.clear();
   }
 

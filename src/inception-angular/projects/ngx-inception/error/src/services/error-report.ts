@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class ErrorReport {
-
   /**
    * The ID for the application that generated the error report.
    */
@@ -85,8 +84,17 @@ export class ErrorReport {
    * @param feedback           The feedback provided by the user for the error.
    * @param data               The base-64 encoded data associated with the error report.
    */
-  constructor(id: string, applicationId: string, applicationVersion: string, description: string,
-              detail: string, created: Date, who?: string, feedback?: string, data?: string) {
+  constructor(
+    id: string,
+    applicationId: string,
+    applicationVersion: string,
+    description: string,
+    detail: string,
+    created: Date,
+    who?: string,
+    feedback?: string,
+    data?: string
+  ) {
     this.id = id;
     this.applicationId = applicationId;
     this.applicationVersion = applicationVersion;

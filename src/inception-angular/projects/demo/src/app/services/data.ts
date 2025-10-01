@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class Data {
-
   /**
    * The ISO 8601 format date value for the data.
    */
@@ -61,8 +60,14 @@ export class Data {
    * @param timestampValue      The timestamp value for the data.
    * @param zonedTimestampValue The zoned timestamp value for the data.
    */
-  constructor(id: number, integerValue: number, stringValue: string, dateValue: string,
-              timestampValue: Date, zonedTimestampValue: Date) {
+  constructor(
+    id: number,
+    integerValue: number,
+    stringValue: string,
+    dateValue: string,
+    timestampValue: Date,
+    zonedTimestampValue: Date
+  ) {
     this.id = id;
     this.integerValue = integerValue;
     this.stringValue = stringValue;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {formatISO, parseISO} from 'date-fns';
+import { formatISO, parseISO } from 'date-fns';
 
 /**
  * The ISO8601Util class.
@@ -22,7 +22,6 @@ import {formatISO, parseISO} from 'date-fns';
  * @author Marcus Portmann
  */
 export class ISO8601Util {
-
   /**
    * Transform an ISO 8601 format string into a <b>Date</b> instance.
    *
@@ -40,13 +39,6 @@ export class ISO8601Util {
    * @return the ISO 8601 format string for the <b>Date</b> insatnce
    */
   static toString(date: Date): string {
-    return formatISO(date, {representation: 'date'});
+    return formatISO(date, { representation: 'date' });
   }
 }
-
-
-
-
-
-
-

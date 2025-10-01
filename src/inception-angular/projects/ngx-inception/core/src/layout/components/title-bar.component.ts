@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {Replace} from '../../util/replace';
-import {TitleBarService} from '../services/title-bar.service';
-import {BackNavigation} from './back-navigation';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Replace } from '../../util/replace';
+import { TitleBarService } from '../services/title-bar.service';
+import { BackNavigation } from './back-navigation';
 
 /**
  * The TitleBarComponent class implements the title bar component.
@@ -31,8 +31,10 @@ import {BackNavigation} from './back-navigation';
   selector: 'title-bar',
   template: `
     <div *ngIf="title | async as title; else noTitle" class="title-bar">
-      <div *ngIf="backNavigation | async as backNavigation" class="back"
-           (click)="navigateBack(backNavigation)">
+      <div
+        *ngIf="backNavigation | async as backNavigation"
+        class="back"
+        (click)="navigateBack(backNavigation)">
         <span class="fa fa-chevron-left"></span> {{ backNavigation.title }}
       </div>
       <div class="title">{{ title }}</div>
@@ -47,7 +49,6 @@ import {BackNavigation} from './back-navigation';
   standalone: false
 })
 export class TitleBarComponent implements OnInit {
-
   @Input() fixed = false;
 
   /**
@@ -57,9 +58,11 @@ export class TitleBarComponent implements OnInit {
    * @param router          The router.
    * @param titleBarService The title bar service.
    */
-  constructor(private elementRef: ElementRef, private router: Router,
-              private titleBarService: TitleBarService) {
-  }
+  constructor(
+    private elementRef: ElementRef,
+    private router: Router,
+    private titleBarService: TitleBarService
+  ) {}
 
   /**
    * The back navigation.
@@ -81,9 +84,9 @@ export class TitleBarComponent implements OnInit {
   navigateBack(backNavigation: BackNavigation): void {
     if (backNavigation) {
       // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(backNavigation.commands, backNavigation.extras).then(
-        navigationResult => {
-        });
+      this.router
+        .navigate(backNavigation.commands, backNavigation.extras)
+        .then((navigationResult) => {});
     }
   }
 

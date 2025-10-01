@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
-import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {
-  AccessDeniedError, CacheService, CommunicationError, INCEPTION_CONFIG, InceptionConfig,
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams
+} from '@angular/common/http';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import {
+  AccessDeniedError,
+  CacheService,
+  CommunicationError,
+  INCEPTION_CONFIG,
+  InceptionConfig,
   ServiceUnavailableError
 } from 'ngx-inception/core';
-import {Observable, of, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {Country} from './country';
-import {Language} from './language';
-import {Region} from './region';
-import {TimeZone} from './time-zone';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Country } from './country';
+import { Language } from './language';
+import { Region } from './region';
+import { TimeZone } from './time-zone';
 
 /**
  * The Reference Service implementation.
@@ -36,7 +44,6 @@ import {TimeZone} from './time-zone';
   providedIn: 'root'
 })
 export class ReferenceService {
-
   /**
    * Constructs a new ReferenceService.
    *
@@ -45,9 +52,12 @@ export class ReferenceService {
    * @param httpClient The HTTP client.
    * @param cacheService The cache service for caching reference data.
    */
-  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-              @Inject(LOCALE_ID) private localeId: string, private httpClient: HttpClient,
-              private cacheService: CacheService) {
+  constructor(
+    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
+    @Inject(LOCALE_ID) private localeId: string,
+    private httpClient: HttpClient,
+    private cacheService: CacheService
+  ) {
     console.log(`Initializing the Reference Service (${localeId})`);
   }
 
@@ -57,7 +67,11 @@ export class ReferenceService {
    * @return The countries.
    */
   getCountries(): Observable<Map<string, Country>> {
-    return this.getData('countries', '/reference/countries', (country: Country) => country.code);
+    return this.getData(
+      'countries',
+      '/reference/countries',
+      (country: Country) => country.code
+    );
   }
 
   /**
@@ -66,7 +80,11 @@ export class ReferenceService {
    * @return The languages.
    */
   getLanguages(): Observable<Map<string, Language>> {
-    return this.getData('languages', '/reference/languages', (language: Language) => language.code);
+    return this.getData(
+      'languages',
+      '/reference/languages',
+      (language: Language) => language.code
+    );
   }
 
   /**
@@ -75,7 +93,11 @@ export class ReferenceService {
    * @return The regions.
    */
   getRegions(): Observable<Map<string, Region>> {
-    return this.getData('regions', '/reference/regions', (region: Region) => region.code);
+    return this.getData(
+      'regions',
+      '/reference/regions',
+      (region: Region) => region.code
+    );
   }
 
   /**
@@ -84,7 +106,11 @@ export class ReferenceService {
    * @return The time zones.
    */
   getTimeZones(): Observable<Map<string, TimeZone>> {
-    return this.getData('timeZones', '/reference/time-zones', (timeZone: TimeZone) => timeZone.id);
+    return this.getData(
+      'timeZones',
+      '/reference/time-zones',
+      (timeZone: TimeZone) => timeZone.id
+    );
   }
 
   /**
@@ -96,8 +122,11 @@ export class ReferenceService {
    *
    * @return An observable with the cached or retrieved data.
    */
-  private getData<T>(cacheKey: string, endpoint: string,
-                     keyGetter: (item: T) => string): Observable<Map<string, T>> {
+  private getData<T>(
+    cacheKey: string,
+    endpoint: string,
+    keyGetter: (item: T) => string
+  ): Observable<Map<string, T>> {
     let cachedData: Map<string, T> = this.cacheService.get(cacheKey);
 
     if (cachedData !== undefined) {
@@ -106,21 +135,25 @@ export class ReferenceService {
 
     const params = new HttpParams().set('localeId', this.localeId);
 
-    return this.httpClient.get<T[]>(this.config.apiUrlPrefix + endpoint, {
-      params,
-      reportProgress: true
-    })
-    .pipe(map((items: T[]) => {
-      cachedData = new Map<string, T>();
+    return this.httpClient
+      .get<T[]>(this.config.apiUrlPrefix + endpoint, {
+        params,
+        reportProgress: true
+      })
+      .pipe(
+        map((items: T[]) => {
+          cachedData = new Map<string, T>();
 
-      for (const item of items) {
-        cachedData.set(keyGetter(item), item);
-      }
+          for (const item of items) {
+            cachedData.set(keyGetter(item), item);
+          }
 
-      this.cacheService.set(cacheKey, cachedData);
+          this.cacheService.set(cacheKey, cachedData);
 
-      return cachedData;
-    }), catchError(this.handleApiError(`Failed to retrieve the ${cacheKey}.`)));
+          return cachedData;
+        }),
+        catchError(this.handleApiError(`Failed to retrieve the ${cacheKey}.`))
+      );
   }
 
   private handleApiError(defaultMessage: string) {
@@ -130,8 +163,9 @@ export class ReferenceService {
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(() => new CommunicationError(httpErrorResponse));
       }
-      return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
+      return throwError(
+        () => new ServiceUnavailableError(defaultMessage, httpErrorResponse)
+      );
     };
   }
 }
-

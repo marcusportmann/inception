@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {ModuleWithProviders, NgModule} from '@angular/core';
-import {CodesService} from './codes.service';
+import { CommonModule } from '@angular/common';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { CodesService } from './codes.service';
 
 /**
  * The CodesServicesModule class implements the Inception Codes Services Module.
@@ -29,19 +32,17 @@ import {CodesService} from './codes.service';
   exports: [],
   imports: [
     // Angular modules
-    CommonModule],
+    CommonModule
+  ],
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class CodesServicesModule {
-  constructor() {
-  }
+  constructor() {}
 
   static forRoot(): ModuleWithProviders<CodesServicesModule> {
     return {
       ngModule: CodesServicesModule,
-      providers: [
-        CodesService
-      ]
+      providers: [CodesService]
     };
   }
 }

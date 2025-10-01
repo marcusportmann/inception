@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {SortDirection} from 'ngx-inception/core';
-import {PolicySortBy} from './policy-sort-by';
-import {PolicySummary} from './policy-summary';
+import { SortDirection } from 'ngx-inception/core';
+import { PolicySortBy } from './policy-sort-by';
+import { PolicySummary } from './policy-summary';
 
 /**
  * The PolicySummaries class holds the results of a request to retrieve a list of policy summaries.
@@ -24,7 +24,6 @@ import {PolicySummary} from './policy-summary';
  * @author Marcus Portmann
  */
 export class PolicySummaries {
-
   /**
    * The filter that was applied to the policy summaries.
    */
@@ -71,8 +70,15 @@ export class PolicySummaries {
    * @param pageSize        The page size.
    * @param filter          The filter that was applied to the policy summaries.
    */
-  constructor(policySummaries: PolicySummary[], total: number, sortBy: PolicySortBy,
-              sortDirection: SortDirection, pageIndex: number, pageSize: number, filter?: string) {
+  constructor(
+    policySummaries: PolicySummary[],
+    total: number,
+    sortBy: PolicySortBy,
+    sortDirection: SortDirection,
+    pageIndex: number,
+    pageSize: number,
+    filter?: string
+  ) {
     this.policySummaries = policySummaries;
     this.total = total;
     this.sortBy = sortBy;

@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class NavigationBadge {
-
   /**
    * The text for the navigation badge.
    */

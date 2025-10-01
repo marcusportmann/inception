@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class Code {
-
   /**
    * The ID for the code category the code is associated with.
    */

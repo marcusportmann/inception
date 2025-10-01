@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
-import {HttpError} from './http-error';
-import {ProblemDetails} from './problem-details';
+import { HttpErrorResponse } from '@angular/common/http';
+import { HttpError } from './http-error';
+import { ProblemDetails } from './problem-details';
 
 /**
  * The base class that all error classes should be derived from.
@@ -24,7 +24,6 @@ import {ProblemDetails} from './problem-details';
  * @author Marcus Portmann
  */
 export class Error {
-
   /**
    * The cause of the error.
    */
@@ -46,8 +45,10 @@ export class Error {
    * @param message The error message.
    * @param cause   The cause of the error.
    */
-  constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError | null) {
-
+  constructor(
+    message: string,
+    cause?: ProblemDetails | HttpErrorResponse | HttpError | null
+  ) {
     this.message = message;
     this.timestamp = new Date();
 
@@ -59,13 +60,25 @@ export class Error {
           this.cause = problemDetails;
         } else {
           if (cause.error) {
-            this.cause = new HttpError(cause.error.error ? cause.error.error : '',
-              cause.error.error_description ? cause.error.error_description : '', cause.message,
+            this.cause = new HttpError(
+              cause.error.error ? cause.error.error : '',
+              cause.error.error_description
+                ? cause.error.error_description
+                : '',
+              cause.message,
               cause.status,
-              cause.statusText, cause.url ? cause.url : '');
+              cause.statusText,
+              cause.url ? cause.url : ''
+            );
           } else {
-            this.cause = new HttpError('', '', cause.message, cause.status, cause.statusText,
-              cause.url ? cause.url : '');
+            this.cause = new HttpError(
+              '',
+              '',
+              cause.message,
+              cause.status,
+              cause.statusText,
+              cause.url ? cause.url : ''
+            );
           }
         }
       } else if (cause instanceof ProblemDetails) {
@@ -77,5 +90,3 @@ export class Error {
     }
   }
 }
-
-

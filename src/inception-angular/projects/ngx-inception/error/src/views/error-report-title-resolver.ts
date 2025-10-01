@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
-import {ErrorService} from '../services/error.service';
+import { Inject, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { ErrorService } from '../services/error.service';
 
 /**
  * The ErrorReportTitleResolver class provides the route data resolver that resolves the
@@ -27,14 +27,12 @@ import {ErrorService} from '../services/error.service';
  */
 @Injectable()
 export class ErrorReportTitleResolver {
-
   /**
    * Constructs a new ErrorReportTitleResolver.
    *
    * @param errorService The error service.
    */
-  constructor(@Inject(ErrorService) private errorService: ErrorService) {
-  }
+  constructor(@Inject(ErrorService) private errorService: ErrorService) {}
 
   /**
    * Resolve the title.
@@ -42,12 +40,14 @@ export class ErrorReportTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
     let errorReportId = activatedRouteSnapshot.paramMap.get('errorReportId');
 
     if (!errorReportId) {
-      throw (new Error('No errorReportId route parameter found'));
+      throw new Error('No errorReportId route parameter found');
     }
 
     errorReportId = decodeURIComponent(errorReportId);

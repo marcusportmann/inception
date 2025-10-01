@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Directive, ElementRef} from '@angular/core';
+import { Directive, ElementRef } from '@angular/core';
 
 /**
  * The SidebarNavDropdownDirective class implements the sidebar nav dropdown directive.
@@ -27,14 +27,12 @@ import {Directive, ElementRef} from '@angular/core';
   standalone: false
 })
 export class SidebarNavDropdownDirective {
-
   /**
    * Constructs a new SidebarNavDropdownDirective.
    *
    * @param elementRef The element reference.
    */
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor(private elementRef: ElementRef) {}
 
   toggle(): void {
     this.elementRef.nativeElement.classList.toggle('open');

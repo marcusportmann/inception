@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
-import {ValidationError} from './validation-error';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ValidationError } from './validation-error';
 
 /**
  * The ProblemDetails class holds holds the information for a Problem Details Object as defined in
@@ -24,7 +24,6 @@ import {ValidationError} from './validation-error';
  * @author Marcus Portmann
  */
 export class ProblemDetails {
-
   /**
    * The human-readable explanation specific to this occurrence of the problem.
    */
@@ -92,13 +91,21 @@ export class ProblemDetails {
    * @return True if the HTTP error response is as a result of an API error represented as a problem
    *         details object.
    */
-  static isProblemDetails(httpErrorResponse: HttpErrorResponse, type?: string): boolean {
-    return !!((httpErrorResponse.name === 'HttpErrorResponse') && httpErrorResponse.error &&
-      (httpErrorResponse.error.timestamp) && (httpErrorResponse.error.type) &&
-      (httpErrorResponse.error.title) && (httpErrorResponse.error.status) &&
-      (httpErrorResponse.error.detail) && (((type == null) || (type == undefined)) ||
-        ((httpErrorResponse.error.type) && (httpErrorResponse.error.type == type))));
+  static isProblemDetails(
+    httpErrorResponse: HttpErrorResponse,
+    type?: string
+  ): boolean {
+    return !!(
+      httpErrorResponse.name === 'HttpErrorResponse' &&
+      httpErrorResponse.error &&
+      httpErrorResponse.error.timestamp &&
+      httpErrorResponse.error.type &&
+      httpErrorResponse.error.title &&
+      httpErrorResponse.error.status &&
+      httpErrorResponse.error.detail &&
+      (type == null ||
+        type == undefined ||
+        (httpErrorResponse.error.type && httpErrorResponse.error.type == type))
+    );
   }
 }
-
-

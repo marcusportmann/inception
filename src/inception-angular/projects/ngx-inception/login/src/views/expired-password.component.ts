@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material/dialog';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, DialogService, Error, InformationDialogComponent, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
+  AccessDeniedError,
+  DialogService,
+  Error,
+  InformationDialogComponent,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {SecurityService} from 'ngx-inception/security';
-import {Observable, throwError} from 'rxjs';
-import {catchError, finalize, first, map} from 'rxjs/operators';
+import { SecurityService } from 'ngx-inception/security';
+import { Observable, throwError } from 'rxjs';
+import { catchError, finalize, first, map } from 'rxjs/operators';
 
 /**
  * The ExpiredPasswordComponent class implements the expired password component.
@@ -46,16 +51,26 @@ export class ExpiredPasswordComponent implements OnInit {
 
   usernameControl: FormControl;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private dialogService: DialogService, private securityService: SecurityService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private dialogService: DialogService,
+    private securityService: SecurityService,
+    private spinnerService: SpinnerService
+  ) {
     // Initialize form controls
     this.confirmNewPasswordControl = new FormControl('', [
-      Validators.required, Validators.maxLength(100),]);
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
     this.newPasswordControl = new FormControl('', [
-      Validators.required, Validators.maxLength(100),]);
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
     this.passwordControl = new FormControl('', [
-      Validators.required, Validators.maxLength(100),]);
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
     this.usernameControl = new FormControl({
       value: '',
       disabled: true
@@ -66,14 +81,14 @@ export class ExpiredPasswordComponent implements OnInit {
       confirmNewPassword: this.confirmNewPasswordControl,
       newPassword: this.newPasswordControl,
       password: this.passwordControl,
-      username: this.usernameControl,
+      username: this.usernameControl
     });
   }
 
   cancel(): void {
     // Navigate back
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
   }
 
   changePassword(): void {
@@ -84,41 +99,55 @@ export class ExpiredPasswordComponent implements OnInit {
       const confirmNewPassword = this.confirmNewPasswordControl.value;
 
       if (newPassword !== confirmNewPassword) {
-        this.dialogService.showErrorDialog(new Error('The passwords do not match.'));
+        this.dialogService.showErrorDialog(
+          new Error('The passwords do not match.')
+        );
         return;
       }
 
       this.spinnerService.showSpinner();
 
       this.securityService
-      .changePassword(username, password, newPassword)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()),
-        catchError((error) => this.handleError(error)))
-      .subscribe(() => {
-        this.showSuccessDialog(username);
-      });
+        .changePassword(username, password, newPassword)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner()),
+          catchError((error) => this.handleError(error))
+        )
+        .subscribe(() => {
+          this.showSuccessDialog(username);
+        });
     }
   }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-    .pipe(first(), map(() => window.history.state))
-    .subscribe((state) => {
-      if (state.username) {
-        this.usernameControl.setValue(state.username);
-      } else {
-        // Redirect if no username in state
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-      }
-    });
+      .pipe(
+        first(),
+        map(() => window.history.state)
+      )
+      .subscribe((state) => {
+        if (state.username) {
+          this.usernameControl.setValue(state.username);
+        } else {
+          // Redirect if no username in state
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+        }
+      });
   }
 
   private handleError(error: Error): Observable<never> {
-    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+    if (
+      error instanceof AccessDeniedError ||
+      error instanceof InvalidArgumentError ||
+      error instanceof ServiceUnavailableError
+    ) {
       // Redirect on critical errors
       // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      this.router.navigateByUrl('/error/send-error-report', {
+        state: { error }
+      });
     } else {
       this.dialogService.showErrorDialog(error);
     }
@@ -126,20 +155,20 @@ export class ExpiredPasswordComponent implements OnInit {
   }
 
   private showSuccessDialog(username: string): void {
-    const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-      {
-        message: 'Your password was successfully changed.',
+    const dialogRef: MatDialogRef<InformationDialogComponent, boolean> =
+      this.dialogService.showInformationDialog({
+        message: 'Your password was successfully changed.'
       });
 
     dialogRef
-    .afterClosed()
-    .pipe(first())
-    .subscribe(() => {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(['..'], {
-        relativeTo: this.activatedRoute,
-        state: {username},
+      .afterClosed()
+      .pipe(first())
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['..'], {
+          relativeTo: this.activatedRoute,
+          state: { username }
+        });
       });
-    });
   }
 }

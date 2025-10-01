@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {Inject, Injectable} from '@angular/core';
 import {
-  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ResponseConverter, ServiceUnavailableError
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse
+} from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import {
+  AccessDeniedError,
+  CommunicationError,
+  INCEPTION_CONFIG,
+  InceptionConfig,
+  InvalidArgumentError,
+  ResponseConverter,
+  ServiceUnavailableError
 } from 'ngx-inception/core';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {Data} from './data';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Data } from './data';
 
 /**
  * The Data Service implementation.
@@ -33,15 +42,16 @@ import {Data} from './data';
   providedIn: 'root'
 })
 export class DataService {
-
   /**
    * Constructs a new DataService.
    *
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
    */
-  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-              private httpClient: HttpClient) {
+  constructor(
+    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
+    private httpClient: HttpClient
+  ) {
     console.log('Initializing the Data Service');
   }
 
@@ -52,22 +62,38 @@ export class DataService {
    */
   @ResponseConverter
   getAllData(): Observable<Data[]> {
-    return this.httpClient.get<Data[]>(this.config.apiUrlPrefix + '/data/all-data',
-      {reportProgress: true})
-    .pipe(map((allData: Data[]) => {
-      return allData;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
+    return this.httpClient
+      .get<
+        Data[]
+      >(this.config.apiUrlPrefix + '/data/all-data', { reportProgress: true })
+      .pipe(
+        map((allData: Data[]) => {
+          return allData;
+        }),
+        catchError((httpErrorResponse: HttpErrorResponse) => {
+          if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+            return throwError(() => new AccessDeniedError(httpErrorResponse));
+          } else if (
+            CommunicationError.isCommunicationError(httpErrorResponse)
+          ) {
+            return throwError(() => new CommunicationError(httpErrorResponse));
+          } else if (
+            InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
+          ) {
+            return throwError(
+              () => new InvalidArgumentError(httpErrorResponse)
+            );
+          }
 
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve all the data.', httpErrorResponse));
-    }));
+          return throwError(
+            () =>
+              new ServiceUnavailableError(
+                'Failed to retrieve all the data.',
+                httpErrorResponse
+              )
+          );
+        })
+      );
   }
 
   /**
@@ -77,22 +103,38 @@ export class DataService {
    */
   @ResponseConverter
   getData(): Observable<Data> {
-    return this.httpClient.get<Data>(this.config.apiUrlPrefix + '/data/data',
-      {reportProgress: true})
-    .pipe(map((data: Data) => {
-      return data;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
+    return this.httpClient
+      .get<Data>(this.config.apiUrlPrefix + '/data/data', {
+        reportProgress: true
+      })
+      .pipe(
+        map((data: Data) => {
+          return data;
+        }),
+        catchError((httpErrorResponse: HttpErrorResponse) => {
+          if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+            return throwError(() => new AccessDeniedError(httpErrorResponse));
+          } else if (
+            CommunicationError.isCommunicationError(httpErrorResponse)
+          ) {
+            return throwError(() => new CommunicationError(httpErrorResponse));
+          } else if (
+            InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
+          ) {
+            return throwError(
+              () => new InvalidArgumentError(httpErrorResponse)
+            );
+          }
 
-      return throwError(
-        () => new ServiceUnavailableError('Failed to retrieve the data.', httpErrorResponse));
-    }));
+          return throwError(
+            () =>
+              new ServiceUnavailableError(
+                'Failed to retrieve the data.',
+                httpErrorResponse
+              )
+          );
+        })
+      );
   }
 
   /**
@@ -101,22 +143,37 @@ export class DataService {
    * @param code The data to validate
    */
   validateData(data: Data): Observable<boolean> {
-    return this.httpClient.post<boolean>(
-      this.config.apiUrlPrefix + '/data/validate', data,
-      {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
+    return this.httpClient
+      .post<boolean>(this.config.apiUrlPrefix + '/data/validate', data, {
+        observe: 'response'
+      })
+      .pipe(
+        map((httpResponse: HttpResponse<boolean>) => {
+          return httpResponse.status === 204;
+        }),
+        catchError((httpErrorResponse: HttpErrorResponse) => {
+          if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+            return throwError(() => new AccessDeniedError(httpErrorResponse));
+          } else if (
+            CommunicationError.isCommunicationError(httpErrorResponse)
+          ) {
+            return throwError(() => new CommunicationError(httpErrorResponse));
+          } else if (
+            InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
+          ) {
+            return throwError(
+              () => new InvalidArgumentError(httpErrorResponse)
+            );
+          }
 
-      return throwError(
-        () => new ServiceUnavailableError('Failed to validate the data.', httpErrorResponse));
-    }));
+          return throwError(
+            () =>
+              new ServiceUnavailableError(
+                'Failed to validate the data.',
+                httpErrorResponse
+              )
+          );
+        })
+      );
   }
 }

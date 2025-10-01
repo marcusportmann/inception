@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {PolicyType} from './policy-type';
+import { PolicyType } from './policy-type';
 
 /**
  * The PolicySummary class holds the summary information for a policy.
@@ -22,7 +22,6 @@ import {PolicyType} from './policy-type';
  * @author Marcus Portmann
  */
 export class PolicySummary {
-
   /**
    * The ID for the policy.
    */

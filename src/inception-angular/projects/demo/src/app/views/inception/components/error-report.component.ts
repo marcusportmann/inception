@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, DialogService, Error, InvalidArgumentError, ServiceUnavailableError
+  AccessDeniedError,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError
 } from 'ngx-inception/core';
-import {first} from 'rxjs/operators';
-import {TestService} from '../../../services/test.service';
+import { first } from 'rxjs/operators';
+import { TestService } from '../../../services/test.service';
 
 /**
  * The ErrorReportComponent class implements the error report component.
@@ -32,25 +36,38 @@ import {TestService} from '../../../services/test.service';
   standalone: false
 })
 export class ErrorReportComponent {
-
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private dialogService: DialogService, private testService: TestService) {
-  }
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private dialogService: DialogService,
+    private testService: TestService
+  ) {}
 
   testErrorReport(): void {
-    this.testService.testExceptionHandling().pipe(first()).subscribe((result: boolean) => {
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error).afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-        });
-      }
-    });
+    this.testService
+      .testExceptionHandling()
+      .pipe(first())
+      .subscribe(
+        (result: boolean) => {},
+        (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if (
+            error instanceof AccessDeniedError ||
+            error instanceof InvalidArgumentError ||
+            error instanceof ServiceUnavailableError
+          ) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {
+              state: { error }
+            });
+          } else {
+            this.dialogService
+              .showErrorDialog(error)
+              .afterClosed()
+              .pipe(first())
+              .subscribe(() => {});
+          }
+        }
+      );
   }
 }

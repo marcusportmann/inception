@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {SortDirection} from 'ngx-inception/core';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
-import {first} from 'rxjs/operators';
-import {SecurityService} from './security.service';
-import {Tenant} from './tenant';
-import {Tenants} from './tenants';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { SortDirection } from 'ngx-inception/core';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { first } from 'rxjs/operators';
+import { SecurityService } from './security.service';
+import { Tenant } from './tenant';
+import { Tenants } from './tenants';
 
 /**
  * The TenantDataSource class implements the tenant data source.
@@ -28,7 +28,6 @@ import {Tenants} from './tenants';
  * @author Marcus Portmann
  */
 export class TenantDataSource implements DataSource<Tenant> {
-
   private dataSubject$: Subject<Tenant[]> = new ReplaySubject<Tenant[]>(1);
 
   private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>(1);
@@ -39,8 +38,7 @@ export class TenantDataSource implements DataSource<Tenant> {
 
   total$ = this.totalSubject$.asObservable();
 
-  constructor(private securityService: SecurityService) {
-  }
+  constructor(private securityService: SecurityService) {}
 
   /**
    * Clear the data source.
@@ -50,7 +48,9 @@ export class TenantDataSource implements DataSource<Tenant> {
     this.dataSubject$.next([]);
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<Tenant[] | ReadonlyArray<Tenant>> {
+  connect(
+    collectionViewer: CollectionViewer
+  ): Observable<Tenant[] | ReadonlyArray<Tenant>> {
     return this.dataSubject$.asObservable();
   }
 
@@ -68,24 +68,32 @@ export class TenantDataSource implements DataSource<Tenant> {
    * @param pageIndex     The page index.
    * @param pageSize      The page size.
    */
-  load(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
-       pageSize?: number): void {
+  load(
+    filter?: string,
+    sortDirection?: SortDirection,
+    pageIndex?: number,
+    pageSize?: number
+  ): void {
     this.loadingSubject$.next(true);
 
-    this.securityService.getTenants(filter, sortDirection, pageIndex, pageSize)
-    .pipe(first())
-    .subscribe((tenants: Tenants) => {
-      this.loadingSubject$.next(false);
+    this.securityService
+      .getTenants(filter, sortDirection, pageIndex, pageSize)
+      .pipe(first())
+      .subscribe(
+        (tenants: Tenants) => {
+          this.loadingSubject$.next(false);
 
-      this.totalSubject$.next(tenants.total);
+          this.totalSubject$.next(tenants.total);
 
-      this.dataSubject$.next(tenants.tenants);
-    }, (error: Error) => {
-      this.loadingSubject$.next(false);
+          this.dataSubject$.next(tenants.tenants);
+        },
+        (error: Error) => {
+          this.loadingSubject$.next(false);
 
-      this.totalSubject$.next(0);
+          this.totalSubject$.next(0);
 
-      this.loadingSubject$.error(error);
-    });
+          this.loadingSubject$.error(error);
+        }
+      );
   }
 }

@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export enum GroupMemberType {
-
   /**
    * User.
    */

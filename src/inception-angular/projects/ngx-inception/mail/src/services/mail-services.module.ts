@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {ModuleWithProviders, NgModule} from '@angular/core';
-import {MailService} from './mail.service';
+import { CommonModule } from '@angular/common';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { MailService } from './mail.service';
 
 /**
  * The MailServicesModule class implements the Inception Mail Services Module.
@@ -29,19 +32,17 @@ import {MailService} from './mail.service';
   exports: [],
   imports: [
     // Angular modules
-    CommonModule],
+    CommonModule
+  ],
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class MailServicesModule {
-  constructor() {
-  }
+  constructor() {}
 
   static forRoot(): ModuleWithProviders<MailServicesModule> {
     return {
       ngModule: MailServicesModule,
-      providers: [
-        MailService
-      ]
+      providers: [MailService]
     };
   }
 }

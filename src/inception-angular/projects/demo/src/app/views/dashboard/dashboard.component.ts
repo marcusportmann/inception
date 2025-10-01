@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * The DashboardComponent class implements the dashboard component.
@@ -22,13 +22,9 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Dashboard
-  `,
+  template: `Dashboard `,
   standalone: false
 })
 export class DashboardComponent {
-
-  constructor() {
-  }
-
+  constructor() {}
 }

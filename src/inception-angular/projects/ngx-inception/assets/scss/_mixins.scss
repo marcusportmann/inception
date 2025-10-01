@@ -1,9 +1,9 @@
-@use 'sass:color';
-@use 'sass:list';
-@use 'sass:map';
-@use 'sass:math';
-@use 'sass:meta';
-@use 'sass:string';
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
 
 // -----------------------------------------------------------------------------
 // Button social-size
@@ -17,7 +17,13 @@
   $prev-value: null;
 
   @each $key, $value in $map {
-    @if $prev-value != null and math.unit($value) != '%' and math.unit($prev-value) != '%' {
+    @if $prev-value !=
+      null and
+      math.unit($value) !=
+      "%" and
+      math.unit($prev-value) !=
+      "%"
+    {
       @if not math.compatible($prev-value, $value) {
         @warn "In #{$map-name}, value for '#{$key}' (#{$value}) is not comparable to previous '#{$prev-key}' (#{$prev-value}).";
       } @else if $prev-value >= $value {
@@ -58,7 +64,7 @@
   @include border-radius($border-radius);
 
   &::before {
-    width:  $icon-size;
+    width: $icon-size;
     height: $icon-size;
     padding: $padding-y 0;
     font-size: $font-size;
@@ -71,7 +77,7 @@
   }
 
   &.icon {
-    width:  $icon-size;
+    width: $icon-size;
     height: $icon-size;
   }
 }
@@ -81,7 +87,7 @@
 // -----------------------------------------------------------------------------
 @mixin borders($borders) {
   @each $direction, $settings in $borders {
-    $size:  map.get($settings, size);
+    $size: map.get($settings, size);
     $style: map.get($settings, style);
     $color: map.get($settings, color);
 
@@ -125,8 +131,8 @@
 // -----------------------------------------------------------------------------
 @mixin switch-size($width, $height, $font-size, $handle-margin, $border-width) {
   // Pre-calc reusable values
-  $handle-size:   $height - 2 * $handle-margin - 2 * $border-width;
-  $translate-x:   $width  - $height;
+  $handle-size: $height - 2 * $handle-margin - 2 * $border-width;
+  $translate-x: $width - $height;
 
   width: $width;
   height: $height;
@@ -135,7 +141,7 @@
     font-size: $font-size;
 
     &::before {
-      width:  $handle-size;
+      width: $handle-size;
       height: $handle-size;
     }
 
@@ -159,7 +165,7 @@
   height: $height;
 
   .switch-slider::before {
-    width:  $height;
+    width: $height;
     height: $height;
   }
 
@@ -176,7 +182,7 @@
 
   .switch-input:checked + .switch-slider {
     background-color: $color;
-    border-color:     $dark;
+    border-color: $dark;
 
     &::before {
       border-color: $dark;
@@ -187,21 +193,25 @@
 @mixin switch-outline-variant($color, $bg-color) {
   .switch-input:checked + .switch-slider {
     background-color: $bg-color;
-    border-color:     $color;
+    border-color: $color;
 
-    &::before { border-color: $color; }
-    &::after   { color:        $color; }
+    &::before {
+      border-color: $color;
+    }
+    &::after {
+      color: $color;
+    }
   }
 }
 
 @mixin switch-outline-variant-alt($color, $bg-color) {
   .switch-input:checked + .switch-slider {
     background-color: $bg-color;
-    border-color:     $color;
+    border-color: $color;
 
     &::before {
       background-color: $color;
-      border-color:     $color;
+      border-color: $color;
     }
     &::after {
       color: $color;
@@ -215,13 +225,13 @@
 @function breakpoint-next(
   $name,
   $breakpoints,
-  $breakpoint-names:  map.keys($breakpoints)
+  $breakpoint-names: map.keys($breakpoints)
 ) {
   $idx: list.index($breakpoint-names, $name);
   @return if(
-      $idx != null and $idx < list.length($breakpoint-names),
-      list.nth($breakpoint-names, $idx + 1),
-      null
+    $idx != null and $idx < list.length($breakpoint-names),
+    list.nth($breakpoint-names, $idx + 1),
+    null
   );
 }
 
@@ -232,7 +242,7 @@
 
 @function breakpoint-max($name, $breakpoints) {
   $next: breakpoint-next($name, $breakpoints);
-  @return if($next, breakpoint-min($next, $breakpoints) - .02, null);
+  @return if($next, breakpoint-min($next, $breakpoints) - 0.02, null);
 }
 
 @function breakpoint-infix($name, $breakpoints) {
@@ -243,7 +253,9 @@
   $min: breakpoint-min($name, $breakpoints);
 
   @if $min {
-    @media (min-width: $min) { @content; }
+    @media (min-width: $min) {
+      @content;
+    }
   } @else {
     @content;
   }
@@ -253,26 +265,30 @@
   $max: breakpoint-max($name, $breakpoints);
 
   @if $max {
-    @media (max-width: $max) { @content; }
+    @media (max-width: $max) {
+      @content;
+    }
   } @else {
     @content;
   }
 }
 
-@mixin media-breakpoint-between(
-  $lower,
-  $upper,
-  $breakpoints
-) {
+@mixin media-breakpoint-between($lower, $upper, $breakpoints) {
   $min: breakpoint-min($lower, $breakpoints);
   $max: breakpoint-max($upper, $breakpoints);
 
   @if $min != null and $max != null {
-    @media (min-width: $min) and (max-width: $max) { @content; }
+    @media (min-width: $min) and (max-width: $max) {
+      @content;
+    }
   } @else if $max == null {
-    @include media-breakpoint-up($lower, $breakpoints) { @content; }
+    @include media-breakpoint-up($lower, $breakpoints) {
+      @content;
+    }
   } @else if $min == null {
-    @include media-breakpoint-down($upper, $breakpoints) { @content; }
+    @include media-breakpoint-down($upper, $breakpoints) {
+      @content;
+    }
   }
 }
 
@@ -281,11 +297,17 @@
   $max: breakpoint-max($name, $breakpoints);
 
   @if $min != null and $max != null {
-    @media (min-width: $min) and (max-width: $max) { @content; }
+    @media (min-width: $min) and (max-width: $max) {
+      @content;
+    }
   } @else if $max == null {
-    @include media-breakpoint-up($name, $breakpoints) { @content; }
+    @include media-breakpoint-up($name, $breakpoints) {
+      @content;
+    }
   } @else if $min == null {
-    @include media-breakpoint-down($name, $breakpoints) { @content; }
+    @include media-breakpoint-down($name, $breakpoints) {
+      @content;
+    }
   }
 }
 
@@ -338,28 +360,31 @@
   }
 }
 
-
 // -----------------------------------------------------------------------------
 // Utility mixins
 // -----------------------------------------------------------------------------
 @mixin list-unstyled() {
   padding-left: 0;
-  list-style:   none;
+  list-style: none;
 }
 
 @mixin hover() {
-  &:hover { @content; }
+  &:hover {
+    @content;
+  }
 }
 
 @mixin hover-focus() {
   &:hover,
-  &:focus { @content; }
+  &:focus {
+    @content;
+  }
 }
 
 @mixin clearfix() {
   &::after {
     display: block;
-    clear:   both;
+    clear: both;
     content: "";
   }
 }
@@ -369,10 +394,10 @@
 // -----------------------------------------------------------------------------
 @mixin make-grid-columns($columns, $row-columns, $gutter, $breakpoints) {
   %grid-column {
-    position:       relative;
-    width:          100%;
-    padding-right:  $gutter * .5;
-    padding-left:   $gutter * .5;
+    position: relative;
+    width: 100%;
+    padding-right: $gutter * 0.5;
+    padding-left: $gutter * 0.5;
   }
 
   @each $bp in map.keys($breakpoints) {
@@ -380,12 +405,16 @@
 
     @if $columns > 0 {
       @for $i from 1 through $columns {
-        .col#{$infix}-#{$i} { @extend %grid-column; }
+        .col#{$infix}-#{$i} {
+          @extend %grid-column;
+        }
       }
     }
 
     .col#{$infix},
-    .col#{$infix}-auto { @extend %grid-column; }
+    .col#{$infix}-auto {
+      @extend %grid-column;
+    }
 
     @include media-breakpoint-up($bp, $breakpoints) {
       .col#{$infix} {
@@ -396,28 +425,40 @@
 
       @if $row-columns > 0 {
         @for $i from 1 through $row-columns {
-          .row-cols#{$infix}-#{$i} { @include row-cols($i); }
+          .row-cols#{$infix}-#{$i} {
+            @include row-cols($i);
+          }
         }
       }
 
-      .col#{$infix}-auto { @include make-col-auto(); }
+      .col#{$infix}-auto {
+        @include make-col-auto();
+      }
 
       @if $columns > 0 {
         @for $i from 1 through $columns {
-          .col#{$infix}-#{$i} { @include make-col($i, $columns); }
+          .col#{$infix}-#{$i} {
+            @include make-col($i, $columns);
+          }
         }
       }
 
-      .order#{$infix}-first { order: -1; }
-      .order#{$infix}-last  { order: $columns + 1; }
+      .order#{$infix}-first {
+        order: -1;
+      }
+      .order#{$infix}-last {
+        order: $columns + 1;
+      }
 
       @for $i from 0 through $columns {
-        .order#{$infix}-#{$i} { order: $i; }
+        .order#{$infix}-#{$i} {
+          order: $i;
+        }
       }
 
       @if $columns > 0 {
         @for $i from 0 through ($columns - 1) {
-          @if not ($infix == "" and $i == 0) {
+          @if not($infix == "" and $i == 0) {
             .offset#{$infix}-#{$i} {
               @include make-col-offset($i, $columns);
             }
@@ -429,18 +470,18 @@
 }
 
 @mixin make-container($gutter) {
-  width:         100%;
-  padding-right: $gutter * .5;
-  padding-left:  $gutter * .5;
-  margin-right:  auto;
-  margin-left:   auto;
+  width: 100%;
+  padding-right: $gutter * 0.5;
+  padding-left: $gutter * 0.5;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 @mixin make-row($gutter) {
-  display:      flex;
-  flex-wrap:    wrap;
-  margin-right: -$gutter * .5;
-  margin-left:  -$gutter * .5;
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -$gutter * 0.5;
+  margin-left: -$gutter * 0.5;
 }
 
 @mixin make-container-max-widths($max-widths, $breakpoints) {
@@ -452,20 +493,20 @@
 }
 
 @mixin make-col-ready($gutter) {
-  position:       relative;
-  width:          100%;
-  padding-right:  $gutter * .5;
-  padding-left:   $gutter * .5;
+  position: relative;
+  width: 100%;
+  padding-right: $gutter * 0.5;
+  padding-left: $gutter * 0.5;
 }
 
 @mixin make-col($size, $columns) {
-  flex:      0 0 math.percentage(math.div($size, $columns));
+  flex: 0 0 math.percentage(math.div($size, $columns));
   max-width: math.percentage(math.div($size, $columns));
 }
 
 @mixin make-col-auto() {
-  flex:      0 0 auto;
-  width:     auto;
+  flex: 0 0 auto;
+  width: auto;
   max-width: 100%;
 }
 
@@ -476,9 +517,7 @@
 
 @mixin row-cols($count) {
   > * {
-    flex:      0 0 math.div(100%, $count);
+    flex: 0 0 math.div(100%, $count);
     max-width: math.div(100%, $count);
   }
 }
-
-

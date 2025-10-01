@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
-import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The CodeCategoryNotFoundError class holds the information for a code category not found error.
@@ -23,8 +23,8 @@ import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 export class CodeCategoryNotFoundError extends Error {
-
-  static readonly TYPE = 'https://inception.digital/problems/codes/code-category-not-found';
+  static readonly TYPE =
+    'https://inception.digital/problems/codes/code-category-not-found';
 
   /**
    * Constructs a new CodeCategoryNotFoundError.
@@ -32,8 +32,10 @@ export class CodeCategoryNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@codes_code_category_not_found_error:The code category could not be found.`,
-      cause);
+    super(
+      $localize`:@@codes_code_category_not_found_error:The code category could not be found.`,
+      cause
+    );
   }
 }
 
@@ -43,8 +45,8 @@ export class CodeCategoryNotFoundError extends Error {
  * @author Marcus Portmann
  */
 export class CodeNotFoundError extends Error {
-
-  static readonly TYPE = 'https://inception.digital/problems/codes/code-not-found';
+  static readonly TYPE =
+    'https://inception.digital/problems/codes/code-not-found';
 
   /**
    * Constructs a new CodeNotFoundError.
@@ -52,7 +54,10 @@ export class CodeNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@codes_code_not_found_error:The code could not be found.`, cause);
+    super(
+      $localize`:@@codes_code_not_found_error:The code could not be found.`,
+      cause
+    );
   }
 }
 
@@ -62,8 +67,8 @@ export class CodeNotFoundError extends Error {
  * @author Marcus Portmann
  */
 export class DuplicateCodeCategoryError extends Error {
-
-  static readonly TYPE = 'https://inception.digital/problems/codes/duplicate-code-category';
+  static readonly TYPE =
+    'https://inception.digital/problems/codes/duplicate-code-category';
 
   /**
    * Constructs a new DuplicateCodeCategoryError.
@@ -71,8 +76,10 @@ export class DuplicateCodeCategoryError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@codes_duplicate_code_category_error:The code category already exists.`,
-      cause);
+    super(
+      $localize`:@@codes_duplicate_code_category_error:The code category already exists.`,
+      cause
+    );
   }
 }
 
@@ -82,8 +89,8 @@ export class DuplicateCodeCategoryError extends Error {
  * @author Marcus Portmann
  */
 export class DuplicateCodeError extends Error {
-
-  static readonly TYPE = 'https://inception.digital/problems/codes/duplicate-code';
+  static readonly TYPE =
+    'https://inception.digital/problems/codes/duplicate-code';
 
   /**
    * Constructs a new DuplicateCodeError.
@@ -91,6 +98,9 @@ export class DuplicateCodeError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@codes_duplicate_code_error:The code already exists.`, cause);
+    super(
+      $localize`:@@codes_duplicate_code_error:The code already exists.`,
+      cause
+    );
   }
 }

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {SortDirection} from 'ngx-inception/core';
-import {TokenSortBy} from './token-sort-by';
-import {TokenStatus} from './token-status';
-import {TokenSummary} from './token-summary';
+import { SortDirection } from 'ngx-inception/core';
+import { TokenSortBy } from './token-sort-by';
+import { TokenStatus } from './token-status';
+import { TokenSummary } from './token-summary';
 
 /**
  * The TokenSummaries class holds the results of a request to retrieve a list of token summaries.
@@ -25,7 +25,6 @@ import {TokenSummary} from './token-summary';
  * @author Marcus Portmann
  */
 export class TokenSummaries {
-
   /**
    * The filter that was applied to the token summaries.
    */
@@ -78,9 +77,16 @@ export class TokenSummaries {
    * @param status         The status filter that was applied to the token summaries.
    * @param filter         The filter that was applied to the token summaries.
    */
-  constructor(tokenSummaries: TokenSummary[], total: number, sortBy: TokenSortBy,
-              sortDirection: SortDirection, pageIndex: number, pageSize: number,
-              status?: TokenStatus, filter?: string) {
+  constructor(
+    tokenSummaries: TokenSummary[],
+    total: number,
+    sortBy: TokenSortBy,
+    sortDirection: SortDirection,
+    pageIndex: number,
+    pageSize: number,
+    status?: TokenStatus,
+    filter?: string
+  ) {
     this.tokenSummaries = tokenSummaries;
     this.total = total;
     this.sortBy = sortBy;

@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {Inject, Injectable} from '@angular/core';
 import {
-  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ResponseConverter, ServiceUnavailableError
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse
+} from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import {
+  AccessDeniedError,
+  CommunicationError,
+  INCEPTION_CONFIG,
+  InceptionConfig,
+  InvalidArgumentError,
+  ResponseConverter,
+  ServiceUnavailableError
 } from 'ngx-inception/core';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 /**
  * The Test Service implementation.
@@ -32,15 +41,16 @@ import {catchError, map} from 'rxjs/operators';
   providedIn: 'root'
 })
 export class TestService {
-
   /**
    * Constructs a new TestService.
    *
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
    */
-  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-              private httpClient: HttpClient) {
+  constructor(
+    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
+    private httpClient: HttpClient
+  ) {
     console.log('Initializing the Test Service');
   }
 
@@ -49,21 +59,40 @@ export class TestService {
    */
   @ResponseConverter
   testExceptionHandling(): Observable<boolean> {
-    return this.httpClient.get<boolean>(
-      this.config.apiUrlPrefix + '/test/test-exception-handling', {observe: 'response'})
-    .pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 200;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-        return throwError(() => new AccessDeniedError(httpErrorResponse));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-        return throwError(() => new InvalidArgumentError(httpErrorResponse));
-      }
+    return this.httpClient
+      .get<boolean>(
+        this.config.apiUrlPrefix + '/test/test-exception-handling',
+        { observe: 'response' }
+      )
+      .pipe(
+        map((httpResponse: HttpResponse<boolean>) => {
+          return httpResponse.status === 200;
+        }),
+        catchError((httpErrorResponse: HttpErrorResponse) => {
+          if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+            return throwError(() => new AccessDeniedError(httpErrorResponse));
+          } else if (
+            CommunicationError.isCommunicationError(httpErrorResponse)
+          ) {
+            return throwError(() => new CommunicationError(httpErrorResponse));
+          } else if (
+            InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
+          ) {
+            return throwError(
+              () => new InvalidArgumentError(httpErrorResponse)
+            );
+          }
 
-      return throwError(() => new ServiceUnavailableError(
-        'Testing the exception handling at ' + new Date().toISOString() + '.', httpErrorResponse));
-    }));
+          return throwError(
+            () =>
+              new ServiceUnavailableError(
+                'Testing the exception handling at ' +
+                  new Date().toISOString() +
+                  '.',
+                httpErrorResponse
+              )
+          );
+        })
+      );
   }
 }

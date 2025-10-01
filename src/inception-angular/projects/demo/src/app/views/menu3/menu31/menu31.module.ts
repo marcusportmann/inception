@@ -14,31 +14,33 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {CoreModule} from 'ngx-inception/core';
-import {Menu311Component} from './menu311.component';
-import {Menu312Component} from './menu312.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { CoreModule } from 'ngx-inception/core';
+import { Menu311Component } from './menu311.component';
+import { Menu312Component } from './menu312.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'prefix',
     redirectTo: 'menu311'
-  }, {
+  },
+  {
     path: 'menu311',
     pathMatch: 'prefix',
     component: Menu311Component,
     data: {
-      title: 'Menu 3.1.1',
+      title: 'Menu 3.1.1'
     }
-  }, {
+  },
+  {
     path: 'menu312',
     pathMatch: 'prefix',
     component: Menu312Component,
     data: {
-      title: 'Menu 3.1.2',
+      title: 'Menu 3.1.2'
     }
   }
 ];
@@ -52,12 +54,12 @@ const routes: Routes = [
 @NgModule({
   imports: [
     // Angular modules
-    CommonModule, RouterModule.forChild(routes),
+    CommonModule,
+    RouterModule.forChild(routes),
 
     // Inception modules
     CoreModule
   ],
   declarations: [Menu311Component, Menu312Component]
 })
-export class Menu31Module {
-}
+export class Menu31Module {}

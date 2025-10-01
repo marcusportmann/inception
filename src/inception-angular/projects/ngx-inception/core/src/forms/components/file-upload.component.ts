@@ -14,38 +14,53 @@
  * limitations under the License.
  */
 
-import {FocusMonitor} from '@angular/cdk/a11y';
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
+import { FocusMonitor } from '@angular/cdk/a11y';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  Component, DoCheck, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
+  Component,
+  DoCheck,
+  ElementRef,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Self,
+  ViewChild
 } from '@angular/core';
 import {
-  AbstractControl, ControlValueAccessor, FormGroupDirective, NgControl, NgForm
+  AbstractControl,
+  ControlValueAccessor,
+  FormGroupDirective,
+  NgControl,
+  NgForm
 } from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
-import {MatFormFieldControl} from '@angular/material/form-field';
-import {Subject} from 'rxjs';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'file-upload',
   standalone: false,
   template: `
-    <div class="file-upload"
-         role="button"
-         tabindex="0"
-         (click)="open()"
-         (keydown.enter)="open()"
-         [class.disabled]="disabled"
-         [class.mat-form-field-should-float]="shouldLabelFloat">
+    <div
+      class="file-upload"
+      role="button"
+      tabindex="0"
+      (click)="open()"
+      (keydown.enter)="open()"
+      [class.disabled]="disabled"
+      [class.mat-form-field-should-float]="shouldLabelFloat">
       <span class="filename">{{ fileNames || placeholder }}</span>
     </div>
 
-    <input #input
-           type="file"
-           [attr.accept]="accept"
-           [attr.multiple]="multiple ? '' : null"
-           (change)="onFileSelected($event)"
-           hidden>
+    <input
+      #input
+      type="file"
+      [attr.accept]="accept"
+      [attr.multiple]="multiple ? '' : null"
+      (change)="onFileSelected($event)"
+      hidden />
   `,
   styles: [
     `
@@ -67,14 +82,23 @@ import {Subject} from 'rxjs';
         overflow: hidden;
         text-overflow: ellipsis;
       }
-    `],
+    `
+  ],
   providers: [
     {
       provide: MatFormFieldControl,
       useExisting: FileUploadComponent
-    }]
+    }
+  ]
 })
-export class FileUploadComponent implements MatFormFieldControl<File[]>, ControlValueAccessor, OnInit, OnDestroy, DoCheck {
+export class FileUploadComponent
+  implements
+    MatFormFieldControl<File[]>,
+    ControlValueAccessor,
+    OnInit,
+    OnDestroy,
+    DoCheck
+{
   static nextId = 0;
 
   @Input() accept = '';
@@ -94,7 +118,7 @@ export class FileUploadComponent implements MatFormFieldControl<File[]>, Control
 
   @HostBinding() id = `file-upload-${FileUploadComponent.nextId++}`;
 
-  @ViewChild('input', {static: true}) inputRef!: ElementRef<HTMLInputElement>;
+  @ViewChild('input', { static: true }) inputRef!: ElementRef<HTMLInputElement>;
 
   //@Input() placeholder = 'No file chosen';
 
@@ -106,20 +130,25 @@ export class FileUploadComponent implements MatFormFieldControl<File[]>, Control
 
   private _files: File[] | null = null;
 
-  constructor(private fm: FocusMonitor, private _elementRef: ElementRef<HTMLElement>,
-              @Optional() @Self() public ngControl: NgControl,
-              @Optional() public _parentForm: NgForm,
-              @Optional() public _parentFormGroup: FormGroupDirective,
-              defaultErrorStateMatcher: ErrorStateMatcher) {
+  constructor(
+    private fm: FocusMonitor,
+    private _elementRef: ElementRef<HTMLElement>,
+    @Optional() @Self() public ngControl: NgControl,
+    @Optional() public _parentForm: NgForm,
+    @Optional() public _parentFormGroup: FormGroupDirective,
+    defaultErrorStateMatcher: ErrorStateMatcher
+  ) {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
     this.errorStateMatcher = defaultErrorStateMatcher;
 
-    this.fm.monitor(this._elementRef.nativeElement, true).subscribe(origin => {
-      this.focused = !!origin;
-      this.stateChanges.next();
-    });
+    this.fm
+      .monitor(this._elementRef.nativeElement, true)
+      .subscribe((origin) => {
+        this.focused = !!origin;
+        this.stateChanges.next();
+      });
   }
 
   private _disabled = false;
@@ -142,7 +171,10 @@ export class FileUploadComponent implements MatFormFieldControl<File[]>, Control
   }
 
   set hideRequiredMarker(v: boolean) {
-    console.log('[FileUploadComponent][hideRequiredMarker] Setting hide required = ', v);
+    console.log(
+      '[FileUploadComponent][hideRequiredMarker] Setting hide required = ',
+      v
+    );
 
     this._hideRequiredMarker = coerceBooleanProperty(v);
     this.stateChanges.next();
@@ -166,7 +198,7 @@ export class FileUploadComponent implements MatFormFieldControl<File[]>, Control
   /** Human-readable file names */
   get fileNames(): string {
     if (Array.isArray(this._files) && this._files.length) {
-      return this._files.map(f => f.name).join(', ');
+      return this._files.map((f) => f.name).join(', ');
     }
     return '';
   }
@@ -202,7 +234,7 @@ export class FileUploadComponent implements MatFormFieldControl<File[]>, Control
       return false;
     }
     // auto (default): float on focus or when there's a value or when there's a placeholder
-    return this.focused || !!this.fileNames || (!!this.placeholder);
+    return this.focused || !!this.fileNames || !!this.placeholder;
   }
 
   /** MatFormFieldControl.value */
@@ -219,8 +251,10 @@ export class FileUploadComponent implements MatFormFieldControl<File[]>, Control
 
   ngDoCheck() {
     const control = this.ngControl?.control;
-    const newState = this.errorStateMatcher.isErrorState(control,
-      this._parentForm || this._parentFormGroup);
+    const newState = this.errorStateMatcher.isErrorState(
+      control,
+      this._parentForm || this._parentFormGroup
+    );
     if (newState !== this.errorState) {
       this.errorState = newState;
       this.stateChanges.next();
@@ -277,9 +311,7 @@ export class FileUploadComponent implements MatFormFieldControl<File[]>, Control
     this.stateChanges.next();
   }
 
-  private _onChange: (_: File[] | null) => void = () => {
-  };
+  private _onChange: (_: File[] | null) => void = () => {};
 
-  private _onTouched = () => {
-  };
+  private _onTouched = () => {};
 }

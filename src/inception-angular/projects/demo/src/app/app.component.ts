@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'body',
-  template: `
-    <router-outlet></router-outlet>`,
+  template: ` <router-outlet></router-outlet>`,
   standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
-
   // eslint-disable-next-line
   private unsubscribe$: Subject<any> = new Subject();
 
-  constructor(private router: Router) {
-  }
+  constructor(private router: Router) {}
 
   ngOnDestroy(): void {
     this.unsubscribe$.complete();

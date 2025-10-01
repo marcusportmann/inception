@@ -20,8 +20,8 @@
  * @author Marcus Portmann
  */
 export class Base64 {
-
-  static readonly CHARACTERS: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  static readonly CHARACTERS: string =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
   static readonly LOOKUP: Uint8Array = new Uint8Array(256);
 
@@ -30,8 +30,7 @@ export class Base64 {
       Base64.LOOKUP[Base64.CHARACTERS.charCodeAt(i)] = i;
     }
 
-    this._Initialize = () => {
-    };
+    this._Initialize = () => {};
   }
 
   /**
@@ -97,12 +96,13 @@ export class Base64 {
       // eslint-disable-next-line no-bitwise
       base64 += Base64.CHARACTERS[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
       // eslint-disable-next-line no-bitwise
-      base64 += Base64.CHARACTERS[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
+      base64 +=
+        Base64.CHARACTERS[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
       // eslint-disable-next-line no-bitwise
       base64 += Base64.CHARACTERS[bytes[i + 2] & 63];
     }
 
-    if ((len % 3) === 2) {
+    if (len % 3 === 2) {
       base64 = base64.substring(0, base64.length - 1) + '=';
     } else if (len % 3 === 1) {
       base64 = base64.substring(0, base64.length - 2) + '==';

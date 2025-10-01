@@ -24,7 +24,6 @@
  * @author Marcus Portmann
  */
 export class HttpError {
-
   /**
    * The error.
    */
@@ -65,9 +64,14 @@ export class HttpError {
    * @param statusText       The status text.
    * @param url              The URL associated with the error.
    */
-  constructor(error: string, errorDescription: string, message: string, status: number,
-              statusText: string,
-              url: string) {
+  constructor(
+    error: string,
+    errorDescription: string,
+    message: string,
+    status: number,
+    statusText: string,
+    url: string
+  ) {
     this.error = error;
     this.errorDescription = errorDescription;
     this.message = message;
@@ -76,5 +80,3 @@ export class HttpError {
     this.url = url;
   }
 }
-
-

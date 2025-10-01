@@ -14,19 +14,31 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, HostBinding, ViewChild} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, ConfirmationDialogComponent, DialogService,
-  Error, InvalidArgumentError, ServiceUnavailableError, SpinnerService
+  AfterViewInit,
+  Component,
+  HostBinding,
+  ViewChild
+} from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AccessDeniedError,
+  AdminContainerView,
+  BackNavigation,
+  ConfirmationDialogComponent,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {Code} from '../services/code';
-import {CodesService} from '../services/codes.service';
+import { finalize, first } from 'rxjs/operators';
+import { Code } from '../services/code';
+import { CodesService } from '../services/codes.service';
 
 /**
  * The CodesComponent class implements the codes component.
@@ -38,7 +50,10 @@ import {CodesService} from '../services/codes.service';
   styleUrls: ['codes.component.css'],
   standalone: false
 })
-export class CodesComponent extends AdminContainerView implements AfterViewInit {
+export class CodesComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
   codeCategoryId: string;
 
   dataSource: MatTableDataSource<Code> = new MatTableDataSource<Code>();
@@ -47,30 +62,39 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort!: MatSort;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private codesService: CodesService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private codesService: CodesService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     // Retrieve the route parameters
-    const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+    const codeCategoryId =
+      this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
     if (!codeCategoryId) {
       throw new Error('No codeCategoryId route parameter found');
     }
     this.codeCategoryId = decodeURIComponent(codeCategoryId);
 
     // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean => data.id.toLowerCase().includes(
-      filter) || data.name.toLowerCase().includes(filter);
+    this.dataSource.filterPredicate = (data, filter): boolean =>
+      data.id.toLowerCase().includes(filter) ||
+      data.name.toLowerCase().includes(filter);
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@codes_codes_back_navigation:Code Categories`, ['../..'],
-      {relativeTo: this.activatedRoute});
+    return new BackNavigation(
+      $localize`:@@codes_codes_back_navigation:Code Categories`,
+      ['../..'],
+      { relativeTo: this.activatedRoute }
+    );
   }
 
   get title(): string {
@@ -82,44 +106,49 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
   }
 
   deleteCode(codeId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: $localize`:@@codes_codes_confirm_delete_code:Are you sure you want to delete the code?`,
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
+      this.dialogService.showConfirmationDialog({
+        message: $localize`:@@codes_codes_confirm_delete_code:Are you sure you want to delete the code?`
       });
 
-    dialogRef.afterClosed()
-    .pipe(first())
-    .subscribe((confirmed: boolean | undefined) => {
-      if (confirmed) {
-        this.spinnerService.showSpinner();
-        this.codesService.deleteCode(this.codeCategoryId, codeId)
-        .pipe(finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe({
-          next: () => this.loadCodes(),
-          error: (error) => this.handleError(error),
-        });
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((confirmed: boolean | undefined) => {
+        if (confirmed) {
+          this.spinnerService.showSpinner();
+          this.codesService
+            .deleteCode(this.codeCategoryId, codeId)
+            .pipe(finalize(() => this.spinnerService.hideSpinner()))
+            .subscribe({
+              next: () => this.loadCodes(),
+              error: (error) => this.handleError(error)
+            });
+        }
+      });
   }
 
   editCode(codeId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(codeId) + '/edit'], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(codeId) + '/edit'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   loadCodes(): void {
     this.spinnerService.showSpinner();
-    this.codesService.getCodesForCodeCategory(this.codeCategoryId)
-    .pipe(finalize(() => this.spinnerService.hideSpinner()))
-    .subscribe({
-      next: (codes: Code[]) => (this.dataSource.data = codes),
-      error: (error) => this.handleError(error),
-    });
+    this.codesService
+      .getCodesForCodeCategory(this.codeCategoryId)
+      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe({
+        next: (codes: Code[]) => (this.dataSource.data = codes),
+        error: (error) => this.handleError(error)
+      });
   }
 
   newCode(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
@@ -129,9 +158,15 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
   }
 
   private handleError(error: Error): void {
-    if (error instanceof AccessDeniedError || error instanceof InvalidArgumentError || error instanceof ServiceUnavailableError) {
+    if (
+      error instanceof AccessDeniedError ||
+      error instanceof InvalidArgumentError ||
+      error instanceof ServiceUnavailableError
+    ) {
       // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      this.router.navigateByUrl('/error/send-error-report', {
+        state: { error }
+      });
     } else {
       this.dialogService.showErrorDialog(error);
     }

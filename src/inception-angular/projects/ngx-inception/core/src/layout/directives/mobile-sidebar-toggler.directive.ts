@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener} from '@angular/core';
+import { Directive, HostListener } from '@angular/core';
 
 /**
  * The AppMobileSidebarTogglerDirective class implements the app mobile sidebar toggler directive.
@@ -27,12 +27,10 @@ import {Directive, HostListener} from '@angular/core';
   standalone: false
 })
 export class MobileSidebarTogglerDirective {
-
   /**
    * Constructs a new AppMobileSidebarTogglerDirective.
    */
-  constructor() {
-  }
+  constructor() {}
 
   // eslint-disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {

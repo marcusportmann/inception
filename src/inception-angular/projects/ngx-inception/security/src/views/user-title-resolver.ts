@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {SecurityService} from '../services/security.service';
+import { Inject, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { SecurityService } from '../services/security.service';
 
 /**
  * The UserTitleResolver class provides the route data resolver that resolves the
@@ -27,14 +27,14 @@ import {SecurityService} from '../services/security.service';
  */
 @Injectable()
 export class UserTitleResolver {
-
   /**
    * Constructs a new UserTitleResolver.
    *
    * @param securityService The security service.
    */
-  constructor(@Inject(SecurityService) private securityService: SecurityService) {
-  }
+  constructor(
+    @Inject(SecurityService) private securityService: SecurityService
+  ) {}
 
   /**
    * Resolve the title.
@@ -42,12 +42,15 @@ export class UserTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    let userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
+    let userDirectoryId =
+      activatedRouteSnapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
-      throw (new Error('No userDirectoryId route parameter found'));
+      throw new Error('No userDirectoryId route parameter found');
     }
 
     userDirectoryId = decodeURIComponent(userDirectoryId);
@@ -55,7 +58,7 @@ export class UserTitleResolver {
     let username = activatedRouteSnapshot.paramMap.get('username');
 
     if (!username) {
-      throw (new Error('No username route parameter found'));
+      throw new Error('No username route parameter found');
     }
 
     username = decodeURIComponent(username);

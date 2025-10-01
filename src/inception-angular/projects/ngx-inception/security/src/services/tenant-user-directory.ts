@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class TenantUserDirectory {
-
   /**
    * The ID for the user directory.
    */

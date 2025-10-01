@@ -22,7 +22,6 @@
  * @author Marcus Portmann
  */
 export class Session {
-
   /**
    * The base-64 encoded OAuth2 JWT access token for the user session.
    */
@@ -97,9 +96,18 @@ export class Session {
    *                          time the OAuth2 JWT access token for the user session will expire.
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
-  constructor(username: string, userDirectoryId: string, name: string, scopes: string[],
-              roleCodes: string[], functionCodes: string[], tenantIds: string[],
-              accessToken: string, accessTokenExpiry?: Date, refreshToken?: string) {
+  constructor(
+    username: string,
+    userDirectoryId: string,
+    name: string,
+    scopes: string[],
+    roleCodes: string[],
+    functionCodes: string[],
+    tenantIds: string[],
+    accessToken: string,
+    accessTokenExpiry?: Date,
+    refreshToken?: string
+  ) {
     this.username = username;
     this.userDirectoryId = userDirectoryId;
     this.name = name;
@@ -150,8 +158,11 @@ export class Session {
    */
   hasFunction(requiredFunctionCode: string): boolean {
     for (const functionCode of this.functionCodes) {
-      if (functionCode.localeCompare(requiredFunctionCode, undefined,
-        {sensitivity: 'accent'}) === 0) {
+      if (
+        functionCode.localeCompare(requiredFunctionCode, undefined, {
+          sensitivity: 'accent'
+        }) === 0
+      ) {
         return true;
       }
     }
@@ -169,7 +180,11 @@ export class Session {
    */
   hasRole(requiredRoleCode: string): boolean {
     for (const roleCode of this.roleCodes) {
-      if (roleCode.localeCompare(requiredRoleCode, undefined, {sensitivity: 'accent'}) === 0) {
+      if (
+        roleCode.localeCompare(requiredRoleCode, undefined, {
+          sensitivity: 'accent'
+        }) === 0
+      ) {
         return true;
       }
     }

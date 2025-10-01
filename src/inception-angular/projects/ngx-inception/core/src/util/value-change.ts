@@ -18,7 +18,6 @@
  * The ValueChange class holds the information for a value change.
  */
 export class ValueChange<ValueType> {
-
   /**
    * The new value.
    */

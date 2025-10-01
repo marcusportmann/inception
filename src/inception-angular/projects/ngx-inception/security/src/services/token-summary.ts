@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {TokenStatus} from './token-status';
-import {TokenType} from './token-type';
+import { TokenStatus } from './token-status';
+import { TokenType } from './token-type';
 
 /**
  * The TokenSummary class holds the summary information for a token.
@@ -23,7 +23,6 @@ import {TokenType} from './token-type';
  * @author Marcus Portmann
  */
 export class TokenSummary {
-
   /**
    * The description for the token.
    */
@@ -79,8 +78,14 @@ export class TokenSummary {
    * @param issued      The date and time the token was issued.
    * @param status      The token status.
    */
-  constructor(id: string, type: TokenType, name: string, description: string, issued: Date,
-              status: TokenStatus) {
+  constructor(
+    id: string,
+    type: TokenType,
+    name: string,
+    description: string,
+    issued: Date,
+    status: TokenStatus
+  ) {
     this.id = id;
     this.type = type;
     this.name = name;

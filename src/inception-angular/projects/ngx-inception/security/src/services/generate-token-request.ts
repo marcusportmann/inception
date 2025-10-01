@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {TokenClaim} from './token-claim';
-import {TokenType} from './token-type';
+import { TokenClaim } from './token-claim';
+import { TokenType } from './token-type';
 
 /**
  * The GenerateTokenRequest class holds the information for a request to generate a token.
@@ -23,7 +23,6 @@ import {TokenType} from './token-type';
  * @author Marcus Portmann
  */
 export class GenerateTokenRequest {
-
   /**
    * The claims for the token.
    */
@@ -64,8 +63,14 @@ export class GenerateTokenRequest {
    * @param expiryDate    The ISO 8601 format date value for the date the token expires.
    * @param validFromDate The ISO 8601 format date value for the date the token is valid from.
    */
-  constructor(type: TokenType, name: string, description: string, claims: TokenClaim[],
-              expiryDate?: string, validFromDate?: string) {
+  constructor(
+    type: TokenType,
+    name: string,
+    description: string,
+    claims: TokenClaim[],
+    expiryDate?: string,
+    validFromDate?: string
+  ) {
     this.type = type;
     this.name = name;
     this.description = description;

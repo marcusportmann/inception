@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 /**
  * The ConfirmationDialogData interface defines the data that is displayed by a confirmation dialog.
@@ -23,7 +23,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
  * @author Marcus Portmann
  */
 export interface ConfirmationDialogData {
-
   /**
    * The message.
    */
@@ -48,32 +47,40 @@ export interface ConfirmationDialogData {
       </span>
     </div>
     <div class="button">
-      <button mat-flat-button color="primary" (click)="no()" tabindex="-1"
-              i18n="@@confirmation_dialog_button_no">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="no()"
+        tabindex="-1"
+        i18n="@@confirmation_dialog_button_no">
         No
       </button>
-      <button mat-flat-button color="primary" (click)="yes()" tabindex="-1"
-              i18n="@@confirmation_dialog_button_yes">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="yes()"
+        tabindex="-1"
+        i18n="@@confirmation_dialog_button_yes">
         Yes
       </button>
     </div>
   `,
   host: {
-    'class': 'confirmation-dialog'
+    class: 'confirmation-dialog'
   },
   standalone: false
 })
 export class ConfirmationDialogComponent {
-
   /**
    * Constructs a new ConfirmationDialogComponent.
    *
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) private data: ConfirmationDialogData) {
-  }
+  constructor(
+    private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: ConfirmationDialogData
+  ) {}
 
   get message(): string {
     return this.data.message;
@@ -87,5 +94,3 @@ export class ConfirmationDialogComponent {
     this.dialogRef.close(true);
   }
 }
-
-

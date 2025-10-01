@@ -14,23 +14,49 @@
  * limitations under the License.
  */
 
-import {Directionality} from '@angular/cdk/bidi';
-import {BooleanInput, coerceBooleanProperty} from '@angular/cdk/coercion';
-import {Platform} from '@angular/cdk/platform';
+import { Directionality } from '@angular/cdk/bidi';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { Platform } from '@angular/cdk/platform';
 import {
-  AfterContentChecked, AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
-  Component, ContentChild, ContentChildren, ElementRef, Inject, InjectionToken, Input, NgZone,
-  OnDestroy, Optional, QueryList, ViewChild, ViewEncapsulation
+  AfterContentChecked,
+  AfterContentInit,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ContentChild,
+  ContentChildren,
+  ElementRef,
+  Inject,
+  InjectionToken,
+  Input,
+  NgZone,
+  OnDestroy,
+  Optional,
+  QueryList,
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
-import {MatCheckbox} from '@angular/material/checkbox';
+import { MatCheckbox } from '@angular/material/checkbox';
 import {
-  FloatLabelType, getMatFormFieldDuplicatedHintError, MAT_ERROR, MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MAT_PREFIX, MAT_SUFFIX, MatError, matFormFieldAnimations, MatFormFieldAppearance,
-  MatFormFieldDefaultOptions, MatHint, MatLabel, MatPrefix, MatSuffix
+  FloatLabelType,
+  getMatFormFieldDuplicatedHintError,
+  MAT_ERROR,
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MAT_PREFIX,
+  MAT_SUFFIX,
+  MatError,
+  matFormFieldAnimations,
+  MatFormFieldAppearance,
+  MatFormFieldDefaultOptions,
+  MatHint,
+  MatLabel,
+  MatPrefix,
+  MatSuffix
 } from '@angular/material/form-field';
-import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
-import {merge, startWith, Subject, takeUntil} from 'rxjs';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
+import { merge, startWith, Subject, takeUntil } from 'rxjs';
 
 let nextUniqueId = 0;
 const floatingLabelScale = 0.75;
@@ -41,8 +67,8 @@ const outlineGapPadding = 5;
  * as alternative token to the actual `GroupFormField` class which would cause unnecessary
  * retention of the `GroupFormField` class and its component metadata.
  */
-export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldComponent>(
-  'GroupFormFieldComponent');
+export const GROUP_FORM_FIELD_COMPONENT =
+  new InjectionToken<GroupFormFieldComponent>('GroupFormFieldComponent');
 
 /** Container for form controls that applies Material Design styling and behavior. */
 @Component({
@@ -57,9 +83,11 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
     {
       provide: GROUP_FORM_FIELD_COMPONENT,
       useExisting: GroupFormFieldComponent
-    }],
+    }
+  ],
   host: {
-    'class': 'group-form-field mat-mdc-form-field mat-mdc-form-field-type-mat-input mat-form-field-hide-placeholder',
+    class:
+      'group-form-field mat-mdc-form-field mat-mdc-form-field-type-mat-input mat-form-field-hide-placeholder',
     '[class.mat-form-field-appearance-fill]': 'appearance === "fill"',
     '[class.mat-form-field-appearance-outline]': 'appearance === "outline"',
     '[class.mat-form-field-invalid]': '_hasError()',
@@ -73,42 +101,49 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
   inputs: ['color'],
   standalone: false
 })
-
-export class GroupFormFieldComponent implements AfterContentInit, AfterContentChecked, AfterViewInit, OnDestroy {
-
+export class GroupFormFieldComponent
+  implements AfterContentInit, AfterContentChecked, AfterViewInit, OnDestroy
+{
   static ngAcceptInputType_hideRequiredMarker: BooleanInput;
 
   /** Whether the Angular animations are enabled. */
   public readonly _animationsEnabled: boolean;
 
-  @ContentChildren(MatCheckbox, {descendants: true}) _checkboxChildren!: QueryList<MatCheckbox>;
+  @ContentChildren(MatCheckbox, { descendants: true })
+  _checkboxChildren!: QueryList<MatCheckbox>;
 
-  @ViewChild('connectionContainer', {static: true}) _connectionContainerRef!: ElementRef;
+  @ViewChild('connectionContainer', { static: true })
+  _connectionContainerRef!: ElementRef;
 
-  @ContentChildren(MAT_ERROR, {descendants: true}) _errorChildren!: QueryList<MatError>;
+  @ContentChildren(MAT_ERROR, { descendants: true })
+  _errorChildren!: QueryList<MatError>;
 
-  @ContentChildren(MatHint, {descendants: true}) _hintChildren!: QueryList<MatHint>;
+  @ContentChildren(MatHint, { descendants: true })
+  _hintChildren!: QueryList<MatHint>;
 
   // Unique id for the hint label.
   readonly _hintLabelId: string = `mat-hint-${nextUniqueId++}`;
 
   @ContentChild(MatLabel) _labelChildNonStatic?: MatLabel;
 
-  @ContentChild(MatLabel, {static: true}) _labelChildStatic!: MatLabel;
+  @ContentChild(MatLabel, { static: true }) _labelChildStatic!: MatLabel;
 
   // Unique id for the internal form field label.
   readonly _labelId = `group-form-field-label-${nextUniqueId++}`;
 
-  @ContentChildren(MAT_PREFIX, {descendants: true}) _prefixChildren!: QueryList<MatPrefix>;
+  @ContentChildren(MAT_PREFIX, { descendants: true })
+  _prefixChildren!: QueryList<MatPrefix>;
 
   @ContentChild(MatRadioGroup) _radioGroupChildNonStatic!: MatRadioGroup;
 
-  @ContentChild(MatRadioGroup, {static: true}) _radioGroupChildStatic!: MatRadioGroup;
+  @ContentChild(MatRadioGroup, { static: true })
+  _radioGroupChildStatic!: MatRadioGroup;
 
   /** State of the mat-hint and mat-error animations. */
   _subscriptAnimationState: string = '';
 
-  @ContentChildren(MAT_SUFFIX, {descendants: true}) _suffixChildren!: QueryList<MatSuffix>;
+  @ContentChildren(MAT_SUFFIX, { descendants: true })
+  _suffixChildren!: QueryList<MatSuffix>;
 
   /** Replace the old mixin—just a simple @Input */
   @Input() color: 'primary' | 'accent' | 'warn' = 'primary';
@@ -128,12 +163,18 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
   /** Override for the logic that disables the label animation in certain cases. */
   private _showAlwaysAnimate = false;
 
-  constructor(/** no override here—just inject */
-              public _elementRef: ElementRef, private _changeDetectorRef: ChangeDetectorRef,
-              @Optional() private _dir: Directionality, @Optional() @Inject(
-      MAT_FORM_FIELD_DEFAULT_OPTIONS) private _defaults: MatFormFieldDefaultOptions,
-              private _platform: Platform, private _ngZone: NgZone,
-              @Optional() @Inject(ANIMATION_MODULE_TYPE) _animationMode?: string) {
+  constructor(
+    /** no override here—just inject */
+    public _elementRef: ElementRef,
+    private _changeDetectorRef: ChangeDetectorRef,
+    @Optional() private _dir: Directionality,
+    @Optional()
+    @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS)
+    private _defaults: MatFormFieldDefaultOptions,
+    private _platform: Platform,
+    private _ngZone: NgZone,
+    @Optional() @Inject(ANIMATION_MODULE_TYPE) _animationMode?: string
+  ) {
     // NOTE: no super() call
     this.floatLabel = this._getDefaultFloatLabelState();
     this._animationsEnabled = _animationMode !== 'NoopAnimations';
@@ -150,7 +191,8 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
   set appearance(value: MatFormFieldAppearance) {
     const oldValue = this._appearance;
 
-    this._appearance = value || (this._defaults && this._defaults.appearance) || 'outline';
+    this._appearance =
+      value || (this._defaults && this._defaults.appearance) || 'outline';
 
     if (this._appearance === 'outline' && oldValue !== value) {
       this._outlineGapCalculationNeededOnStable = true;
@@ -237,7 +279,9 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
 
   /** Determines whether to display hints or errors. */
   _getDisplayedMessages(): 'error' | 'hint' {
-    return (this._errorChildren && this._errorChildren.length > 0) ? 'error' : 'hint';
+    return this._errorChildren && this._errorChildren.length > 0
+      ? 'error'
+      : 'hint';
   }
 
   /** Whether there are one or more errors associated with the group form field. */
@@ -266,7 +310,7 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
   _isDisabled(): boolean {
     if (!!this._radioGroupChild) {
       return this._radioGroupChild.disabled;
-    } else if (this._checkboxChildren && (this._checkboxChildren.length > 0)) {
+    } else if (this._checkboxChildren && this._checkboxChildren.length > 0) {
       const checkboxChildren = this._checkboxChildren.toArray();
 
       for (let i = 0; i < checkboxChildren.length; i++) {
@@ -305,7 +349,12 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
   _updateOutlineGap() {
     const labelEl = this._label ? this._label.nativeElement : null;
 
-    if (this.appearance !== 'outline' || !labelEl || !labelEl.children.length || !labelEl.textContent.trim()) {
+    if (
+      this.appearance !== 'outline' ||
+      !labelEl ||
+      !labelEl.children.length ||
+      !labelEl.textContent.trim()
+    ) {
       return;
     }
 
@@ -324,7 +373,9 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
     let gapWidth = 0;
 
     const container = this._connectionContainerRef.nativeElement;
-    const startEls = container.querySelectorAll('.mat-form-field-outline-start');
+    const startEls = container.querySelectorAll(
+      '.mat-form-field-outline-start'
+    );
     const gapEls = container.querySelectorAll('.mat-form-field-outline-gap');
 
     if (this._label && this._label.nativeElement.children.length) {
@@ -343,14 +394,19 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
       }
 
       const containerStart = this._getStartEnd(containerRect);
-      const labelStart = this._getStartEnd(labelEl.children[0].getBoundingClientRect());
+      const labelStart = this._getStartEnd(
+        labelEl.children[0].getBoundingClientRect()
+      );
       let labelWidth = 0;
 
       for (const child of labelEl.children) {
         labelWidth += child.offsetWidth;
       }
       startWidth = Math.abs(labelStart - containerStart) - outlineGapPadding;
-      gapWidth = labelWidth > 0 ? labelWidth * floatingLabelScale + outlineGapPadding * 2 : 0;
+      gapWidth =
+        labelWidth > 0
+          ? labelWidth * floatingLabelScale + outlineGapPadding * 2
+          : 0;
     }
 
     for (let i = 0; i < startEls.length; i++) {
@@ -360,7 +416,8 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
       gapEls[i].style.width = `${gapWidth}px`;
     }
 
-    this._outlineGapCalculationNeededOnStable = this._outlineGapCalculationNeededImmediately = false;
+    this._outlineGapCalculationNeededOnStable =
+      this._outlineGapCalculationNeededImmediately = false;
   }
 
   /** Throws an error if there are no valid child controls for the group form field control. */
@@ -391,18 +448,23 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
     // in order to avoid throwing users into an infinite loop
     // if `zone-patch-rxjs` is included.
     this._ngZone.runOutsideAngular(() => {
-      this._ngZone.onStable.asObservable().pipe(takeUntil(this._destroyed)).subscribe(() => {
-        if (this._outlineGapCalculationNeededOnStable) {
-          this._updateOutlineGap();
-        }
-      });
+      this._ngZone.onStable
+        .asObservable()
+        .pipe(takeUntil(this._destroyed))
+        .subscribe(() => {
+          if (this._outlineGapCalculationNeededOnStable) {
+            this._updateOutlineGap();
+          }
+        });
     });
 
     // Run change detection and update the outline if the suffix or prefix changes.
-    merge(this._prefixChildren.changes, this._suffixChildren.changes).subscribe(() => {
-      this._outlineGapCalculationNeededOnStable = true;
-      this._changeDetectorRef.markForCheck();
-    });
+    merge(this._prefixChildren.changes, this._suffixChildren.changes).subscribe(
+      () => {
+        this._outlineGapCalculationNeededOnStable = true;
+        this._changeDetectorRef.markForCheck();
+      }
+    );
 
     // Re-validate when the number of hints changes.
     this._hintChildren.changes.pipe(startWith(null)).subscribe(() => {
@@ -433,7 +495,7 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
         this._radioGroupChild._radios.forEach((radioButton: MatRadioButton) => {
           radioButton.ariaLabelledby = this._labelId;
         });
-      } else if (this._checkboxChildren && (this._checkboxChildren.length > 0)) {
+      } else if (this._checkboxChildren && this._checkboxChildren.length > 0) {
         this._checkboxChildren.forEach((checkbox: MatCheckbox) => {
           checkbox.ariaLabelledby = this._labelId;
         });
@@ -459,7 +521,7 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
 
   /** Gets the start end of the rect considering the current directionality. */
   private _getStartEnd(rect: ClientRect): number {
-    return (this._dir && this._dir.value === 'rtl') ? rect.right : rect.left;
+    return this._dir && this._dir.value === 'rtl' ? rect.right : rect.left;
   }
 
   /** Checks whether the form field is attached to the DOM. */
@@ -517,6 +579,3 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
     }
   }
 }
-
-
-

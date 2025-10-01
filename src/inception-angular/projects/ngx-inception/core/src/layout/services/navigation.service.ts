@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ReplaySubject, Subject} from 'rxjs';
-import {Session} from '../../session/services/session';
-import {SessionService} from '../../session/services/session.service';
-import {NavigationItem} from './navigation-item';
+import { Injectable } from '@angular/core';
+import { ReplaySubject, Subject } from 'rxjs';
+import { Session } from '../../session/services/session';
+import { SessionService } from '../../session/services/session.service';
+import { NavigationItem } from './navigation-item';
 
 /**
  * The Navigation Service implementation.
@@ -29,8 +29,9 @@ import {NavigationItem} from './navigation-item';
   providedIn: 'root'
 })
 export class NavigationService {
-
-  userNavigation$: Subject<NavigationItem[]> = new ReplaySubject<NavigationItem[]>(1);
+  userNavigation$: Subject<NavigationItem[]> = new ReplaySubject<
+    NavigationItem[]
+  >(1);
 
   private navigation: NavigationItem[] = [];
 
@@ -44,7 +45,8 @@ export class NavigationService {
 
     this.sessionService.session$.subscribe((session: Session | null) => {
       this.userNavigation$.next(
-        Object.assign([], this.filterNavigationItems(this.navigation, session)));
+        Object.assign([], this.filterNavigationItems(this.navigation, session))
+      );
     });
   }
 
@@ -59,7 +61,10 @@ export class NavigationService {
     this.userNavigation$.next(this.filterNavigationItems(navigation, null));
   }
 
-  private static hasAccessToNavigationItem(authorities: string[], session: Session): boolean {
+  private static hasAccessToNavigationItem(
+    authorities: string[],
+    session: Session
+  ): boolean {
     for (const authority of authorities) {
       if (session.hasAuthority(authority)) {
         return true;
@@ -69,8 +74,10 @@ export class NavigationService {
     return false;
   }
 
-  private filterNavigationItems(navigationItems: NavigationItem[],
-                                session: Session | null): NavigationItem[] {
+  private filterNavigationItems(
+    navigationItems: NavigationItem[],
+    session: Session | null
+  ): NavigationItem[] {
     if (!navigationItems) {
       return navigationItems;
     }
@@ -78,33 +85,51 @@ export class NavigationService {
     const filteredNavigationItems: NavigationItem[] = [];
 
     for (const navigationItem of navigationItems) {
-      const authorities = (navigationItem.authorities == null) ? [] : navigationItem.authorities;
+      const authorities =
+        navigationItem.authorities == null ? [] : navigationItem.authorities;
 
       if (authorities.length > 0) {
         if (session) {
-          if (NavigationService.hasAccessToNavigationItem(authorities, session)) {
-            const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(
-              navigationItem.children,
-              session);
+          if (
+            NavigationService.hasAccessToNavigationItem(authorities, session)
+          ) {
+            const filteredChildNavigationItems: NavigationItem[] =
+              this.filterNavigationItems(navigationItem.children, session);
 
             filteredNavigationItems.push(
-              new NavigationItem(navigationItem.icon, navigationItem.name, navigationItem.url,
-                navigationItem.authorities, filteredChildNavigationItems, navigationItem.cssClass,
-                navigationItem.variant, navigationItem.badge, navigationItem.divider,
-                navigationItem.title));
+              new NavigationItem(
+                navigationItem.icon,
+                navigationItem.name,
+                navigationItem.url,
+                navigationItem.authorities,
+                filteredChildNavigationItems,
+                navigationItem.cssClass,
+                navigationItem.variant,
+                navigationItem.badge,
+                navigationItem.divider,
+                navigationItem.title
+              )
+            );
           }
         }
       } else {
-        const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(
-          navigationItem.children,
-          session);
+        const filteredChildNavigationItems: NavigationItem[] =
+          this.filterNavigationItems(navigationItem.children, session);
 
         filteredNavigationItems.push(
-          new NavigationItem(navigationItem.icon, navigationItem.name, navigationItem.url,
+          new NavigationItem(
+            navigationItem.icon,
+            navigationItem.name,
+            navigationItem.url,
             navigationItem.authorities,
-            filteredChildNavigationItems, navigationItem.cssClass, navigationItem.variant,
+            filteredChildNavigationItems,
+            navigationItem.cssClass,
+            navigationItem.variant,
             navigationItem.badge,
-            navigationItem.divider, navigationItem.title));
+            navigationItem.divider,
+            navigationItem.title
+          )
+        );
       }
     }
 

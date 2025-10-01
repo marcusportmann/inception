@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {ReportingService} from '../services/reporting.service';
+import { Inject, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ReportingService } from '../services/reporting.service';
 
 /**
  * The ReportDefinitionTitleResolver class provides the route data resolver that resolves the
@@ -27,14 +27,14 @@ import {ReportingService} from '../services/reporting.service';
  */
 @Injectable()
 export class ReportDefinitionTitleResolver {
-
   /**
    * Constructs a new ReportDefinitionTitleResolver.
    *
    * @param reportingService The reporting service.
    */
-  constructor(@Inject(ReportingService) private reportingService: ReportingService) {
-  }
+  constructor(
+    @Inject(ReportingService) private reportingService: ReportingService
+  ) {}
 
   /**
    * Resolve the title.
@@ -42,12 +42,15 @@ export class ReportDefinitionTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    let reportDefinitionId = activatedRouteSnapshot.paramMap.get('reportDefinitionId');
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
+    let reportDefinitionId =
+      activatedRouteSnapshot.paramMap.get('reportDefinitionId');
 
     if (!reportDefinitionId) {
-      throw (new Error('No reportDefinitionId route parameter found'));
+      throw new Error('No reportDefinitionId route parameter found');
     }
 
     reportDefinitionId = decodeURIComponent(reportDefinitionId);

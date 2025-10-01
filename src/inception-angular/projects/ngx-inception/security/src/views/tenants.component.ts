@@ -14,19 +14,33 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, HostBinding, OnDestroy, ViewChild} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {ActivatedRoute, Router} from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, ConfirmationDialogComponent, DialogService, Error,
-  InvalidArgumentError, ServiceUnavailableError, SortDirection, SpinnerService, TableFilterComponent
+  AfterViewInit,
+  Component,
+  HostBinding,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AccessDeniedError,
+  AdminContainerView,
+  ConfirmationDialogComponent,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SortDirection,
+  SpinnerService,
+  TableFilterComponent
 } from 'ngx-inception/core';
-import {merge, Subscription} from 'rxjs';
-import {finalize, first} from 'rxjs/operators';
-import {SecurityService} from '../services/security.service';
-import {TenantDataSource} from '../services/tenant-data-source';
+import { merge, Subscription } from 'rxjs';
+import { finalize, first } from 'rxjs/operators';
+import { SecurityService } from '../services/security.service';
+import { TenantDataSource } from '../services/tenant-data-source';
 
 /**
  * The TenantsComponent class implements the tenants component.
@@ -38,68 +52,89 @@ import {TenantDataSource} from '../services/tenant-data-source';
   styleUrls: ['tenants.component.css'],
   standalone: false
 })
-export class TenantsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-
+export class TenantsComponent
+  extends AdminContainerView
+  implements AfterViewInit, OnDestroy
+{
   dataSource: TenantDataSource;
 
   displayedColumns = ['name', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort!: MatSort;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
+  @ViewChild(TableFilterComponent, { static: true })
+  tableFilter!: TableFilterComponent;
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private securityService: SecurityService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private securityService: SecurityService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService
+  ) {
     super();
 
     this.dataSource = new TenantDataSource(this.securityService);
   }
 
   get title(): string {
-    return $localize`:@@security_tenants_title:Tenants`
+    return $localize`:@@security_tenants_title:Tenants`;
   }
 
   deleteTenant(tenantId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
+      this.dialogService.showConfirmationDialog({
         message: $localize`:@@security_tenants_confirm_delete_tenant:Are you sure you want to delete the tenant?`
       });
 
-    dialogRef.afterClosed()
-    .pipe(first())
-    .subscribe((confirmation: boolean | undefined) => {
-      if (confirmation === true) {
-        this.spinnerService.showSpinner();
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((confirmation: boolean | undefined) => {
+        if (confirmation === true) {
+          this.spinnerService.showSpinner();
 
-        this.securityService.deleteTenant(tenantId)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          this.loadTenants();
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-            (error instanceof ServiceUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
-      }
-    });
+          this.securityService
+            .deleteTenant(tenantId)
+            .pipe(
+              first(),
+              finalize(() => this.spinnerService.hideSpinner())
+            )
+            .subscribe(
+              () => {
+                this.loadTenants();
+              },
+              (error: Error) => {
+                // noinspection SuspiciousTypeOfGuard
+                if (
+                  error instanceof AccessDeniedError ||
+                  error instanceof InvalidArgumentError ||
+                  error instanceof ServiceUnavailableError
+                ) {
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigateByUrl('/error/send-error-report', {
+                    state: { error }
+                  });
+                } else {
+                  this.dialogService.showErrorDialog(error);
+                }
+              }
+            );
+        }
+      });
   }
 
   editTenant(tenantId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(tenantId) + '/edit'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(tenantId) + '/edit'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   loadTenants(): void {
@@ -111,52 +146,77 @@ export class TenantsComponent extends AdminContainerView implements AfterViewIni
       filter = filter.toLowerCase();
     }
 
-    const sortDirection = this.sort.direction === 'asc' ? SortDirection.Ascending :
-      SortDirection.Descending;
+    const sortDirection =
+      this.sort.direction === 'asc'
+        ? SortDirection.Ascending
+        : SortDirection.Descending;
 
-    this.dataSource.load(filter, sortDirection, this.paginator.pageIndex, this.paginator.pageSize);
+    this.dataSource.load(
+      filter,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    );
   }
 
   newTenant(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
-    this.subscriptions.add(this.dataSource.loading$.subscribe((next: boolean) => {
-      if (next) {
-        this.spinnerService.showSpinner();
-      } else {
-        this.spinnerService.hideSpinner();
-      }
-    }, (error: Error) => {
-      // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-        (error instanceof ServiceUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    }));
-
-    this.subscriptions.add(this.sort.sortChange.subscribe(() => {
-      if (this.paginator) {
-        this.paginator.pageIndex = 0;
-      }
-    }));
-
-    this.subscriptions.add(this.tableFilter.changed.subscribe(() => {
-      if (this.paginator) {
-        this.paginator.pageIndex = 0;
-      }
-    }));
+    this.subscriptions.add(
+      this.dataSource.loading$.subscribe(
+        (next: boolean) => {
+          if (next) {
+            this.spinnerService.showSpinner();
+          } else {
+            this.spinnerService.hideSpinner();
+          }
+        },
+        (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if (
+            error instanceof AccessDeniedError ||
+            error instanceof InvalidArgumentError ||
+            error instanceof ServiceUnavailableError
+          ) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {
+              state: { error }
+            });
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        }
+      )
+    );
 
     this.subscriptions.add(
-      merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .subscribe(() => {
+      this.sort.sortChange.subscribe(() => {
+        if (this.paginator) {
+          this.paginator.pageIndex = 0;
+        }
+      })
+    );
+
+    this.subscriptions.add(
+      this.tableFilter.changed.subscribe(() => {
+        if (this.paginator) {
+          this.paginator.pageIndex = 0;
+        }
+      })
+    );
+
+    this.subscriptions.add(
+      merge(
+        this.sort.sortChange,
+        this.tableFilter.changed,
+        this.paginator.page
+      ).subscribe(() => {
         this.loadTenants();
-      }));
+      })
+    );
 
     this.loadTenants();
   }
@@ -167,8 +227,8 @@ export class TenantsComponent extends AdminContainerView implements AfterViewIni
 
   tenantUserDirectories(tenantId: string) {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(tenantId) + '/user-directories'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(tenantId) + '/user-directories'], {
+      relativeTo: this.activatedRoute
+    });
   }
 }
-

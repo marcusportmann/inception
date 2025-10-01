@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {DialogData} from '../services/dialog-data';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { DialogData } from '../services/dialog-data';
 
 /**
  * The WarningDialogComponent class implements the warning dialog component.
@@ -36,34 +36,43 @@ import {DialogData} from '../services/dialog-data';
       </span>
     </div>
     <div class="button">
-      <button mat-flat-button color="warn" *ngIf="data.buttonText; else defaultButton"
-              (click)="ok()"
-              tabindex="-1">{{ data.buttonText }}
+      <button
+        mat-flat-button
+        color="warn"
+        *ngIf="data.buttonText; else defaultButton"
+        (click)="ok()"
+        tabindex="-1">
+        {{ data.buttonText }}
       </button>
       <ng-template #defaultButton>
-        <button mat-flat-button color="warn" (click)="ok()" tabindex="-1"
-                i18n="@@warning_dialog_button_ok">OK
+        <button
+          mat-flat-button
+          color="warn"
+          (click)="ok()"
+          tabindex="-1"
+          i18n="@@warning_dialog_button_ok">
+          OK
         </button>
       </ng-template>
     </div>
   `,
   host: {
-    'class': 'warning-dialog',
+    class: 'warning-dialog',
     '(document:keydown.enter)': 'onEnter($event)'
   },
   standalone: false
 })
 export class WarningDialogComponent {
-
   /**
    * Constructs a new WarningDialogComponent.
    *
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(private dialogRef: MatDialogRef<WarningDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData) {
-  }
+  constructor(
+    private dialogRef: MatDialogRef<WarningDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {}
 
   ok(): void {
     this.dialogRef.close();

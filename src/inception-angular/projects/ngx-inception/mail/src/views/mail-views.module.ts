@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
-import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
-import {EditMailTemplateTitleResolver} from './edit-mail-template-title-resolver';
-import {EditMailTemplateComponent} from './edit-mail-template.component';
-import {MailTemplateTitleResolver} from './mail-template-title-resolver';
-import {MailTemplatesTitleResolver} from './mail-templates-title-resolver';
-import {MailTemplatesComponent} from './mail-templates.component';
-import {NewMailTemplateTitleResolver} from './new-mail-template-title-resolver';
-import {NewMailTemplateComponent} from './new-mail-template.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
+import { EditMailTemplateTitleResolver } from './edit-mail-template-title-resolver';
+import { EditMailTemplateComponent } from './edit-mail-template.component';
+import { MailTemplateTitleResolver } from './mail-template-title-resolver';
+import { MailTemplatesTitleResolver } from './mail-templates-title-resolver';
+import { MailTemplatesComponent } from './mail-templates.component';
+import { NewMailTemplateTitleResolver } from './new-mail-template-title-resolver';
+import { NewMailTemplateComponent } from './new-mail-template.component';
 
 const routes: Routes = [
   {
@@ -42,29 +42,34 @@ const routes: Routes = [
         component: MailTemplatesComponent,
         data: {
           authorities: [
-            'ROLE_Administrator', 'FUNCTION_Mail.MailAdministration',
+            'ROLE_Administrator',
+            'FUNCTION_Mail.MailAdministration',
             'FUNCTION_Mail.MailTemplateAdministration'
           ]
         }
-      }, {
+      },
+      {
         path: 'new',
         pathMatch: 'full',
         canActivate: [CanActivateFunctionGuard],
         component: NewMailTemplateComponent,
         data: {
           authorities: [
-            'ROLE_Administrator', 'FUNCTION_Mail.MailAdministration',
+            'ROLE_Administrator',
+            'FUNCTION_Mail.MailAdministration',
             'FUNCTION_Mail.MailTemplateAdministration'
           ]
         },
         resolve: {
           title: NewMailTemplateTitleResolver
         }
-      }, {
+      },
+      {
         path: ':mailTemplateId',
         pathMatch: 'full',
         redirectTo: ':mailTemplateId/edit'
-      }, {
+      },
+      {
         path: ':mailTemplateId',
         pathMatch: 'prefix',
         resolve: {
@@ -78,7 +83,8 @@ const routes: Routes = [
             component: EditMailTemplateComponent,
             data: {
               authorities: [
-                'ROLE_Administrator', 'FUNCTION_Mail.MailAdministration',
+                'ROLE_Administrator',
+                'FUNCTION_Mail.MailAdministration',
                 'FUNCTION_Mail.MailTemplateAdministration'
               ]
             },
@@ -95,23 +101,26 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     // Components
-    EditMailTemplateComponent, MailTemplatesComponent, NewMailTemplateComponent
+    EditMailTemplateComponent,
+    MailTemplatesComponent,
+    NewMailTemplateComponent
   ],
   imports: [
     // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
 
     // Inception modules
     CoreModule
   ],
   providers: [
     // Resolvers
-    MailTemplatesTitleResolver, MailTemplateTitleResolver, EditMailTemplateTitleResolver,
+    MailTemplatesTitleResolver,
+    MailTemplateTitleResolver,
+    EditMailTemplateTitleResolver,
     NewMailTemplateTitleResolver
   ]
 })
-export class MailViewsModule {
-}
-
-
-
+export class MailViewsModule {}

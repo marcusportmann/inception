@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class GroupRole {
-
   /**
    * The name of the group.
    */

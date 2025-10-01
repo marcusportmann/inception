@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class ReportDefinition {
-
   /**
    * The ID for the report definition.
    */

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
-import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
-import {ErrorReportTitleResolver} from './error-report-title-resolver';
-import {ErrorReportComponent} from './error-report.component';
-import {ErrorReportsTitleResolver} from './error-reports-title-resolver';
-import {ErrorReportsComponent} from './error-reports.component';
-import {SendErrorReportComponent} from './send-error-report.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
+import { ErrorReportTitleResolver } from './error-report-title-resolver';
+import { ErrorReportComponent } from './error-report.component';
+import { ErrorReportsTitleResolver } from './error-reports-title-resolver';
+import { ErrorReportsComponent } from './error-reports.component';
+import { SendErrorReportComponent } from './send-error-report.component';
 
 const routes: Routes = [
   {
@@ -33,48 +33,59 @@ const routes: Routes = [
     component: ErrorReportsComponent,
     data: {
       authorities: [
-        'ROLE_Administrator', 'FUNCTION_Error.ErrorReportAdministration',
-        'FUNCTION_Error.ViewErrorReport']
+        'ROLE_Administrator',
+        'FUNCTION_Error.ErrorReportAdministration',
+        'FUNCTION_Error.ViewErrorReport'
+      ]
     }
-  }, {
+  },
+  {
     path: 'send-error-report',
     pathMatch: 'prefix',
     component: SendErrorReportComponent,
     data: {
       title: 'Send Error Report'
     }
-  }, {
+  },
+  {
     path: ':errorReportId',
     pathMatch: 'full',
     canActivate: [CanActivateFunctionGuard],
     component: ErrorReportComponent,
     data: {
       authorities: [
-        'ROLE_Administrator', 'FUNCTION_Error.ErrorReportAdministration',
-        'FUNCTION_Error.ViewErrorReport']
+        'ROLE_Administrator',
+        'FUNCTION_Error.ErrorReportAdministration',
+        'FUNCTION_Error.ViewErrorReport'
+      ]
     },
     resolve: {
       title: ErrorReportTitleResolver
-    },
+    }
   }
 ];
 
 @NgModule({
   declarations: [
     // Components
-    ErrorReportsComponent, SendErrorReportComponent, ErrorReportComponent
+    ErrorReportsComponent,
+    SendErrorReportComponent,
+    ErrorReportComponent
   ],
   imports: [
     // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
 
     // Inception modules
     CoreModule
   ],
   providers: [
     // Resolvers
-    ErrorReportsTitleResolver, ErrorReportTitleResolver
+    ErrorReportsTitleResolver,
+    ErrorReportTitleResolver
   ]
 })
-export class ErrorViewsModule {
-}
+export class ErrorViewsModule {}

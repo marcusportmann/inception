@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-
-import {Injectable} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {render} from 'es6-template-string';
-import {ReplaySubject, Subject} from 'rxjs';
-import {filter} from 'rxjs/operators';
-import {Breadcrumb} from './breadcrumb';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { render } from 'es6-template-string';
+import { ReplaySubject, Subject } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { Breadcrumb } from './breadcrumb';
 
 /**
  * The Breadcrumbs Service implementation.
@@ -31,7 +30,6 @@ import {Breadcrumb} from './breadcrumb';
   providedIn: 'root'
 })
 export class BreadcrumbsService {
-
   breadcrumbs$: Subject<Breadcrumb[]> = new ReplaySubject<Breadcrumb[]>(1);
 
   breadcrumbsVisible$: Subject<boolean> = new ReplaySubject<boolean>(1);
@@ -42,45 +40,59 @@ export class BreadcrumbsService {
    * @param router         The router.
    * @param activatedRoute The activated route.
    */
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
     console.log('Initializing the Breadcrumbs Service');
 
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-    .subscribe(() => {
-      const breadcrumbs: Breadcrumb[] = [];
-      let currentRoute: ActivatedRoute | null = this.activatedRoute.root;
-      let url = '';
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        const breadcrumbs: Breadcrumb[] = [];
+        let currentRoute: ActivatedRoute | null = this.activatedRoute.root;
+        let url = '';
 
-      do {
-        const childrenRoutes = currentRoute.children;
-        currentRoute = null;
+        do {
+          const childrenRoutes = currentRoute.children;
+          currentRoute = null;
 
-        childrenRoutes.forEach(route => {
-          if (route.outlet === 'primary') {
-            const routeSnapshot = route.snapshot;
+          childrenRoutes.forEach((route) => {
+            if (route.outlet === 'primary') {
+              const routeSnapshot = route.snapshot;
 
-            if (routeSnapshot.url.length > 0) {
-              url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
+              if (routeSnapshot.url.length > 0) {
+                url +=
+                  '/' +
+                  routeSnapshot.url.map((segment) => segment.path).join('/');
 
-              if (routeSnapshot.data['title']) {
-                if (!!routeSnapshot.params) {
-                  breadcrumbs.push(
-                    new Breadcrumb(render(routeSnapshot.data['title'], routeSnapshot.params),
-                      url));
-                } else {
-                  breadcrumbs.push(new Breadcrumb(routeSnapshot.data['title'], url));
+                if (routeSnapshot.data['title']) {
+                  if (!!routeSnapshot.params) {
+                    breadcrumbs.push(
+                      new Breadcrumb(
+                        render(
+                          routeSnapshot.data['title'],
+                          routeSnapshot.params
+                        ),
+                        url
+                      )
+                    );
+                  } else {
+                    breadcrumbs.push(
+                      new Breadcrumb(routeSnapshot.data['title'], url)
+                    );
+                  }
                 }
               }
+              currentRoute = route;
             }
-            currentRoute = route;
-          }
-        });
-      } while (currentRoute);
+          });
+        } while (currentRoute);
 
-      this.breadcrumbs$.next(breadcrumbs);
+        this.breadcrumbs$.next(breadcrumbs);
 
-      return breadcrumbs;
-    });
+        return breadcrumbs;
+      });
   }
 
   /**
@@ -91,4 +103,3 @@ export class BreadcrumbsService {
     this.breadcrumbsVisible$.next(breadcrumbsVisible);
   }
 }
-

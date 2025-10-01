@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {SchedulerService} from '../services/scheduler.service';
+import { Inject, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { SchedulerService } from '../services/scheduler.service';
 
 /**
  * The JobTitleResolver class provides the route data resolver that resolves the
@@ -27,14 +27,14 @@ import {SchedulerService} from '../services/scheduler.service';
  */
 @Injectable()
 export class JobTitleResolver {
-
   /**
    * Constructs a new JobTitleResolver.
    *
    * @param schedulerService The scheduler service.
    */
-  constructor(@Inject(SchedulerService) private schedulerService: SchedulerService) {
-  }
+  constructor(
+    @Inject(SchedulerService) private schedulerService: SchedulerService
+  ) {}
 
   /**
    * Resolve the title.
@@ -42,12 +42,14 @@ export class JobTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+  resolve(
+    activatedRouteSnapshot: ActivatedRouteSnapshot,
+    routerStateSnapshot: RouterStateSnapshot
+  ): Observable<string> {
     let jobId = activatedRouteSnapshot.paramMap.get('jobId');
 
     if (!jobId) {
-      throw (new Error('No jobId route parameter found'));
+      throw new Error('No jobId route parameter found');
     }
 
     jobId = decodeURIComponent(jobId);

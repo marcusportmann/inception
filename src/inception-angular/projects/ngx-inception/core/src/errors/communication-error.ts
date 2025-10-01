@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
-import {Error} from './error';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Error } from './error';
 
 /**
  * The CommunicationError class holds the information for a communication error.
@@ -23,7 +23,6 @@ import {Error} from './error';
  * @author Marcus Portmann
  */
 export class CommunicationError extends Error {
-
   /**
    *  The HTTP status-code for the error.
    */
@@ -45,7 +44,6 @@ export class CommunicationError extends Error {
    * @param httpErrorResponse The HTTP error response containing the error information.
    */
   constructor(httpErrorResponse: HttpErrorResponse) {
-
     super('A communication error occurred.');
 
     this.status = httpErrorResponse.status;
@@ -65,8 +63,12 @@ export class CommunicationError extends Error {
    *         otherwise.
    */
   static isCommunicationError(httpErrorResponse: HttpErrorResponse): boolean {
-    return (httpErrorResponse.name === 'HttpErrorResponse') && (httpErrorResponse.status === 0) &&
-      httpErrorResponse.error && (httpErrorResponse.error instanceof ProgressEvent) &&
-      (httpErrorResponse.error.type === 'error');
+    return (
+      httpErrorResponse.name === 'HttpErrorResponse' &&
+      httpErrorResponse.status === 0 &&
+      httpErrorResponse.error &&
+      httpErrorResponse.error instanceof ProgressEvent &&
+      httpErrorResponse.error.type === 'error'
+    );
   }
 }

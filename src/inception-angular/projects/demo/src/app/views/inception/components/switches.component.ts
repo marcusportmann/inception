@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * The SwitchesComponent class implements the switches component.
@@ -26,7 +26,5 @@ import {Component} from '@angular/core';
   standalone: false
 })
 export class SwitchesComponent {
-
-  constructor() {
-  }
+  constructor() {}
 }

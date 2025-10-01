@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
-import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The DuplicateMailTemplateError class holds the information for a duplicate mail template error.
@@ -23,8 +23,8 @@ import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 export class DuplicateMailTemplateError extends Error {
-
-  static readonly TYPE = 'https://inception.digital/problems/mail/duplicate-mail-template';
+  static readonly TYPE =
+    'https://inception.digital/problems/mail/duplicate-mail-template';
 
   /**
    * Constructs a new DuplicateMailTemplateError.
@@ -32,8 +32,10 @@ export class DuplicateMailTemplateError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@mail_duplicate_mail_template_error:The mail template already exists.`,
-      cause);
+    super(
+      $localize`:@@mail_duplicate_mail_template_error:The mail template already exists.`,
+      cause
+    );
   }
 }
 
@@ -43,8 +45,8 @@ export class DuplicateMailTemplateError extends Error {
  * @author Marcus Portmann
  */
 export class MailTemplateNotFoundError extends Error {
-
-  static readonly TYPE = 'https://inception.digital/problems/mail/mail-template-not-found';
+  static readonly TYPE =
+    'https://inception.digital/problems/mail/mail-template-not-found';
 
   /**
    * Constructs a new MailTemplateNotFoundError.
@@ -52,8 +54,9 @@ export class MailTemplateNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@mail_mail_template_not_found_error:The mail template could not be found.`,
-      cause);
+    super(
+      $localize`:@@mail_mail_template_not_found_error:The mail template could not be found.`,
+      cause
+    );
   }
 }
-

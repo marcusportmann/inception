@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, Inject, Input, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
-import {Session} from '../../session/services/session';
-import {SessionService} from '../../session/services/session.service';
-import {Replace} from '../../util/replace';
+import { Component, ElementRef, Inject, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { INCEPTION_CONFIG, InceptionConfig } from '../../inception-config';
+import { Session } from '../../session/services/session';
+import { SessionService } from '../../session/services/session.service';
+import { Replace } from '../../util/replace';
 
 /**
  * The AdminHeaderComponent class implements the admin header component.
@@ -41,7 +41,10 @@ import {Replace} from '../../util/replace';
         <div class="brand-minimized"></div>
       </a>
 
-      <button class="toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
+      <button
+        class="toggler d-md-down-none"
+        type="button"
+        [sidebarToggler]="sidebarToggler">
         <span class="toggler-icon"></span>
       </button>
 
@@ -51,19 +54,28 @@ import {Replace} from '../../util/replace';
           <a href="#" class="nav-link"><i class="icon-bell"></i><span class="badge badge-danger">5</span></a>
         </li>
         -->
-        <li *ngIf="isLoggedIn() | async; else login_link" class="nav-item"
-            [matMenuTriggerFor]="userMenu">
-          <a href="#" class="nav-link" (click)="false">
+        <li
+          *ngIf="isLoggedIn() | async; else login_link"
+          class="nav-item"
+          [matMenuTriggerFor]="userMenu">
+          <a href="#" class="nav-link" (click)="(false)">
             <span class="user-icon"></span>
-            <span class="user-name d-md-down-none">{{ userName() | async }}</span>
+            <span class="user-name d-md-down-none">{{
+              userName() | async
+            }}</span>
           </a>
         </li>
 
-        <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false"
-                  class="user-menu">
+        <mat-menu
+          #userMenu="matMenu"
+          yPosition="below"
+          overlapTrigger="false"
+          class="user-menu">
           <a *ngIf="isUserProfileEnabled()" mat-menu-item (click)="profile()">
             <i class="fas fa-user-circle"></i>
-            <span i18n="@@admin_header_component_menu_item_profile">Profile</span>
+            <span i18n="@@admin_header_component_menu_item_profile"
+              >Profile</span
+            >
           </a>
           <a mat-menu-item (click)="logout()">
             <i class="fas fa-sign-out-alt"></i>
@@ -75,8 +87,11 @@ import {Replace} from '../../util/replace';
           <li class="nav-item">
             <a class="nav-link" (click)="login()">
               <span class="login-icon"></span>
-              <span class="login d-md-down-none"
-                    i18n="@@admin_header_component_link_login">Login</span>
+              <span
+                class="login d-md-down-none"
+                i18n="@@admin_header_component_link_login"
+                >Login</span
+              >
             </a>
           </li>
         </ng-template>
@@ -86,7 +101,6 @@ import {Replace} from '../../util/replace';
   standalone: false
 })
 export class AdminHeaderComponent implements OnInit {
-
   @Input() fixed = false;
 
   // eslint-disable-next-line
@@ -100,15 +114,19 @@ export class AdminHeaderComponent implements OnInit {
    * @param router         The router.
    * @param sessionService The session service.
    */
-  constructor(private elementRef: ElementRef,
-              @Inject(INCEPTION_CONFIG) private config: InceptionConfig, private router: Router,
-              private sessionService: SessionService) {
-  }
+  constructor(
+    private elementRef: ElementRef,
+    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
+    private router: Router,
+    private sessionService: SessionService
+  ) {}
 
   isLoggedIn(): Observable<boolean> {
-    return this.sessionService.session$.pipe(map((session: Session | null) => {
-      return (!!session);
-    }));
+    return this.sessionService.session$.pipe(
+      map((session: Session | null) => {
+        return !!session;
+      })
+    );
   }
 
   // eslint-disable-next-line
@@ -144,21 +162,21 @@ export class AdminHeaderComponent implements OnInit {
 
   profile(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['/profile']).then((result: boolean) => {
-    });
+    this.router.navigate(['/profile']).then((result: boolean) => {});
   }
 
   userName(): Observable<string> {
-    return this.sessionService.session$.pipe(map((session: Session | null) => {
-      if (!!session) {
-        return session.name;
-      } else {
-        return '';
-      }
-    }));
+    return this.sessionService.session$.pipe(
+      map((session: Session | null) => {
+        if (!!session) {
+          return session.name;
+        } else {
+          return '';
+        }
+      })
+    );
   }
 }
-
 
 // <a mat-menu-item>
 // <i class="fas fa-cogs"></i>

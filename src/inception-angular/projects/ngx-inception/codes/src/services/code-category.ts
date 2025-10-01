@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class CodeCategory {
-
   /**
    * The code data for the code category.
    */

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {SortDirection} from 'ngx-inception/core';
-import {GroupMember} from './group-member';
+import { SortDirection } from 'ngx-inception/core';
+import { GroupMember } from './group-member';
 
 /**
  * The GroupMembers class holds the results of a request to retrieve a list of group members.
@@ -23,7 +23,6 @@ import {GroupMember} from './group-member';
  * @author Marcus Portmann
  */
 export class GroupMembers {
-
   /**
    * The filter that was applied to the group members.
    */
@@ -76,16 +75,23 @@ export class GroupMembers {
    * @param pageSize        The page size.
    * @param filter          The filter that was applied to the group members.
    */
-  constructor(userDirectoryId: string, groupName: string, groupMembers: GroupMember[],
-              total: number,
-              sortDirection: SortDirection, pageIndex: number, pageSize: number, filter?: string) {
+  constructor(
+    userDirectoryId: string,
+    groupName: string,
+    groupMembers: GroupMember[],
+    total: number,
+    sortDirection: SortDirection,
+    pageIndex: number,
+    pageSize: number,
+    filter?: string
+  ) {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
     this.groupMembers = groupMembers;
     this.total = total;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
-    this.pageSize = pageSize
+    this.pageSize = pageSize;
     this.filter = !!filter ? filter : null;
   }
 }

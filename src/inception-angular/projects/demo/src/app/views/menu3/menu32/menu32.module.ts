@@ -14,28 +14,30 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {CoreModule} from 'ngx-inception/core';
-import {Menu321TitleResolver} from './menu321-title-resolver';
-import {Menu321Component} from './menu321.component';
-import {Menu322TitleResolver} from './menu322-title-resolver';
-import {Menu322Component} from './menu322.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { CoreModule } from 'ngx-inception/core';
+import { Menu321TitleResolver } from './menu321-title-resolver';
+import { Menu321Component } from './menu321.component';
+import { Menu322TitleResolver } from './menu322-title-resolver';
+import { Menu322Component } from './menu322.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'prefix',
     redirectTo: 'menu321'
-  }, {
+  },
+  {
     path: 'menu321',
     pathMatch: 'prefix',
     component: Menu321Component,
     resolve: {
       title: Menu321TitleResolver
     }
-  }, {
+  },
+  {
     path: 'menu322',
     pathMatch: 'prefix',
     component: Menu322Component,
@@ -54,7 +56,8 @@ const routes: Routes = [
 @NgModule({
   imports: [
     // Angular modules
-    CommonModule, RouterModule.forChild(routes),
+    CommonModule,
+    RouterModule.forChild(routes),
 
     // Inception modules
     CoreModule
@@ -62,5 +65,4 @@ const routes: Routes = [
   declarations: [Menu321Component, Menu322Component],
   providers: [Menu321TitleResolver, Menu322TitleResolver]
 })
-export class Menu32Module {
-}
+export class Menu32Module {}

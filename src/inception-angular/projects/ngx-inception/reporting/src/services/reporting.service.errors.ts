@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
-import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The DuplicateReportDefinitionError class holds the information for a duplicate report definition
@@ -24,8 +24,8 @@ import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 export class DuplicateReportDefinitionError extends Error {
-
-  static readonly TYPE = 'https://inception.digital/problems/reporting/duplicate-report-definition';
+  static readonly TYPE =
+    'https://inception.digital/problems/reporting/duplicate-report-definition';
 
   /**
    * Constructs a new DuplicateReportDefinitionError.
@@ -35,7 +35,8 @@ export class DuplicateReportDefinitionError extends Error {
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
       $localize`:@@reporting_duplicate_report_definition_error:The report definition already exists.`,
-      cause);
+      cause
+    );
   }
 }
 
@@ -46,8 +47,8 @@ export class DuplicateReportDefinitionError extends Error {
  * @author Marcus Portmann
  */
 export class ReportDefinitionNotFoundError extends Error {
-
-  static readonly TYPE = 'https://inception.digital/problems/reporting/report-definition-not-found';
+  static readonly TYPE =
+    'https://inception.digital/problems/reporting/report-definition-not-found';
 
   /**
    * Constructs a new ReportDefinitionNotFoundError.
@@ -57,6 +58,7 @@ export class ReportDefinitionNotFoundError extends Error {
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(
       $localize`:@@reporting_report_definition_not_found_error:The report definition could not be found.`,
-      cause);
+      cause
+    );
   }
 }

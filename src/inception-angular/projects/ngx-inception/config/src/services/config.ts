@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class Config {
-
   /**
    * The description for the config.
    */

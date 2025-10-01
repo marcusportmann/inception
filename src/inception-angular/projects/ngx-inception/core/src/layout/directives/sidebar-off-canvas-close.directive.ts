@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener} from '@angular/core';
+import { Directive, HostListener } from '@angular/core';
 
 /**
  * The SidebarOffCanvasCloseDirective class implements the sidebar off canvas close directive.
@@ -27,17 +27,22 @@ import {Directive, HostListener} from '@angular/core';
   standalone: false
 })
 export class SidebarOffCanvasCloseDirective {
-
-  constructor() {
-  }
+  constructor() {}
 
   // eslint-disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
 
-    if (SidebarOffCanvasCloseDirective.hasClass(document.querySelector('body'),
-      'sidebar-off-canvas')) {
-      SidebarOffCanvasCloseDirective.toggleClass(document.querySelector('body'), 'sidebar-opened');
+    if (
+      SidebarOffCanvasCloseDirective.hasClass(
+        document.querySelector('body'),
+        'sidebar-off-canvas'
+      )
+    ) {
+      SidebarOffCanvasCloseDirective.toggleClass(
+        document.querySelector('body'),
+        'sidebar-opened'
+      );
     }
   }
 

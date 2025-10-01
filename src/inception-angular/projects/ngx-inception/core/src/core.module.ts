@@ -14,95 +14,110 @@
  * limitations under the License.
  */
 
-import {ObserversModule} from '@angular/cdk/observers';
-import {CommonModule, formatDate, HashLocationStrategy, LocationStrategy} from '@angular/common';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {Injectable, Injector, ModuleWithProviders, NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatButtonModule} from '@angular/material/button';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatCardModule} from '@angular/material/card';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatChipsModule} from '@angular/material/chips';
-import {DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter} from '@angular/material/core';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from '@angular/material/form-field';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
-import {MatListModule} from '@angular/material/list';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatSelectModule} from '@angular/material/select';
-import {MatSliderModule} from '@angular/material/slider';
-import {MatSortModule} from '@angular/material/sort';
-import {MatTableModule} from '@angular/material/table';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {RouterModule} from '@angular/router';
+import { ObserversModule } from '@angular/cdk/observers';
 import {
-  PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule
+  CommonModule,
+  formatDate,
+  HashLocationStrategy,
+  LocationStrategy
+} from '@angular/common';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
+import {
+  Injectable,
+  Injector,
+  ModuleWithProviders,
+  NgModule
+} from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  NativeDateAdapter
+} from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldModule
+} from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
+import {
+  PERFECT_SCROLLBAR_CONFIG,
+  PerfectScrollbarConfigInterface,
+  PerfectScrollbarModule
 } from 'ngx-om-perfect-scrollbar';
-import {CacheService} from './cache/services/cache.service';
-import {ConfirmationDialogComponent} from './dialogs/components/confirmation-dialog.component';
-import {ErrorDialogComponent} from './dialogs/components/error-dialog.component';
-import {InformationDialogComponent} from './dialogs/components/information-dialog.component';
-import {WarningDialogComponent} from './dialogs/components/warning-dialog.component';
-import {DialogService} from './dialogs/services/dialog.service';
-import {FileUploadComponent} from './forms/components/file-upload.component';
-import {
-  GroupFormFieldNotchedOutlineComponent
-} from './forms/components/group-form-field-notched-outline.component';
-import {GroupFormFieldComponent} from './forms/components/group-form-field.component';
-import {TableFilterComponent} from './forms/components/table-filter.component';
-import {
-  AutocompleteSelectionRequiredDirective
-} from './forms/directives/autocomplete-selection-required.directive';
-import {AutofocusDirective} from './forms/directives/autofocus.directive';
-import {ValidatedFormDirective} from './forms/directives/validated-form.directive';
-import {INCEPTION_CONFIG, InceptionConfig} from './inception-config';
-import {setInceptionInjector} from './inception-injector';
-import {AdminContainerComponent} from './layout/components/admin-container.component';
-import {AdminFooterComponent} from './layout/components/admin-footer.component';
-import {AdminHeaderComponent} from './layout/components/admin-header.component';
-import {BreadcrumbsComponent} from './layout/components/breadcrumbs.component';
-import {NotFoundComponent} from './layout/components/not-found.component';
-import {SidebarFooterComponent} from './layout/components/sidebar-footer.component';
-import {SidebarFormComponent} from './layout/components/sidebar-form.component';
-import {SidebarHeaderComponent} from './layout/components/sidebar-header.component';
-import {SidebarMinimizerComponent} from './layout/components/sidebar-minimizer.component';
-import {SidebarNavItemComponent} from './layout/components/sidebar-nav-item.component';
-import {SidebarNavComponent} from './layout/components/sidebar-nav.component';
-import {SidebarComponent} from './layout/components/sidebar.component';
-import {SimpleContainerComponent} from './layout/components/simple-container.component';
-import {SpinnerComponent} from './layout/components/spinner.component';
-import {TitleBarComponent} from './layout/components/title-bar.component';
-import {BrandMinimizerDirective} from './layout/directives/brand-minimizer.directive';
-import {MobileSidebarTogglerDirective} from './layout/directives/mobile-sidebar-toggler.directive';
-import {SidebarMinimizerDirective} from './layout/directives/sidebar-minimizer.directive';
-import {
-  SidebarNavDropdownTogglerDirective
-} from './layout/directives/sidebar-nav-dropdown-toggler.directive';
-import {SidebarNavDropdownDirective} from './layout/directives/sidebar-nav-dropdown.directive';
-import {
-  SidebarOffCanvasCloseDirective
-} from './layout/directives/sidebar-off-canvas-close.directive';
-import {SidebarTogglerDirective} from './layout/directives/sidebar-toggler.directive';
-import {BreadcrumbsService} from './layout/services/breadcrumbs.service';
-import {NavigationService} from './layout/services/navigation.service';
-import {SpinnerService} from './layout/services/spinner.service';
-import {TitleBarService} from './layout/services/title-bar.service';
-import {CanActivateFunctionGuard} from './routing/can-activate-function-guard';
-import {DisabledFunctionGuard} from './routing/disabled-function-guard';
-import {HasAuthorityDirective} from './session/directives/has-authority.directive';
-import {SessionInterceptor} from './session/services/session.interceptor';
-import {SessionService} from './session/services/session.service';
+import { CacheService } from './cache/services/cache.service';
+import { ConfirmationDialogComponent } from './dialogs/components/confirmation-dialog.component';
+import { ErrorDialogComponent } from './dialogs/components/error-dialog.component';
+import { InformationDialogComponent } from './dialogs/components/information-dialog.component';
+import { WarningDialogComponent } from './dialogs/components/warning-dialog.component';
+import { DialogService } from './dialogs/services/dialog.service';
+import { FileUploadComponent } from './forms/components/file-upload.component';
+import { GroupFormFieldNotchedOutlineComponent } from './forms/components/group-form-field-notched-outline.component';
+import { GroupFormFieldComponent } from './forms/components/group-form-field.component';
+import { TableFilterComponent } from './forms/components/table-filter.component';
+import { AutocompleteSelectionRequiredDirective } from './forms/directives/autocomplete-selection-required.directive';
+import { AutofocusDirective } from './forms/directives/autofocus.directive';
+import { ValidatedFormDirective } from './forms/directives/validated-form.directive';
+import { INCEPTION_CONFIG, InceptionConfig } from './inception-config';
+import { setInceptionInjector } from './inception-injector';
+import { AdminContainerComponent } from './layout/components/admin-container.component';
+import { AdminFooterComponent } from './layout/components/admin-footer.component';
+import { AdminHeaderComponent } from './layout/components/admin-header.component';
+import { BreadcrumbsComponent } from './layout/components/breadcrumbs.component';
+import { NotFoundComponent } from './layout/components/not-found.component';
+import { SidebarFooterComponent } from './layout/components/sidebar-footer.component';
+import { SidebarFormComponent } from './layout/components/sidebar-form.component';
+import { SidebarHeaderComponent } from './layout/components/sidebar-header.component';
+import { SidebarMinimizerComponent } from './layout/components/sidebar-minimizer.component';
+import { SidebarNavItemComponent } from './layout/components/sidebar-nav-item.component';
+import { SidebarNavComponent } from './layout/components/sidebar-nav.component';
+import { SidebarComponent } from './layout/components/sidebar.component';
+import { SimpleContainerComponent } from './layout/components/simple-container.component';
+import { SpinnerComponent } from './layout/components/spinner.component';
+import { TitleBarComponent } from './layout/components/title-bar.component';
+import { BrandMinimizerDirective } from './layout/directives/brand-minimizer.directive';
+import { MobileSidebarTogglerDirective } from './layout/directives/mobile-sidebar-toggler.directive';
+import { SidebarMinimizerDirective } from './layout/directives/sidebar-minimizer.directive';
+import { SidebarNavDropdownTogglerDirective } from './layout/directives/sidebar-nav-dropdown-toggler.directive';
+import { SidebarNavDropdownDirective } from './layout/directives/sidebar-nav-dropdown.directive';
+import { SidebarOffCanvasCloseDirective } from './layout/directives/sidebar-off-canvas-close.directive';
+import { SidebarTogglerDirective } from './layout/directives/sidebar-toggler.directive';
+import { BreadcrumbsService } from './layout/services/breadcrumbs.service';
+import { NavigationService } from './layout/services/navigation.service';
+import { SpinnerService } from './layout/services/spinner.service';
+import { TitleBarService } from './layout/services/title-bar.service';
+import { CanActivateFunctionGuard } from './routing/can-activate-function-guard';
+import { DisabledFunctionGuard } from './routing/disabled-function-guard';
+import { HasAuthorityDirective } from './session/directives/has-authority.directive';
+import { SessionInterceptor } from './session/services/session.interceptor';
+import { SessionService } from './session/services/session.service';
 
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -139,13 +154,11 @@ class InceptionDateAdapter extends NativeDateAdapter {
   override format(date: Date, displayFormat: Object): string {
     if (displayFormat === 'input') {
       return formatDate(date, 'yyyy-MM-dd', this.locale);
-
     } else {
       return date.toDateString();
     }
   }
 }
-
 
 /**
  * The Core module for the Inception framework.
@@ -155,76 +168,162 @@ class InceptionDateAdapter extends NativeDateAdapter {
 @NgModule({
   declarations: [
     // Dialog Components
-    ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
+    ConfirmationDialogComponent,
+    ErrorDialogComponent,
+    InformationDialogComponent,
     WarningDialogComponent,
     // Forms Components
-    FileUploadComponent, GroupFormFieldComponent, GroupFormFieldNotchedOutlineComponent,
+    FileUploadComponent,
+    GroupFormFieldComponent,
+    GroupFormFieldNotchedOutlineComponent,
     TableFilterComponent,
     // Forms  Directives
-    AutocompleteSelectionRequiredDirective, AutofocusDirective,
+    AutocompleteSelectionRequiredDirective,
+    AutofocusDirective,
     ValidatedFormDirective,
     // Layout Components
-    AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
-    NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
-    SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
-    SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
+    AdminContainerComponent,
+    AdminFooterComponent,
+    AdminHeaderComponent,
+    BreadcrumbsComponent,
+    NotFoundComponent,
+    SidebarComponent,
+    SidebarFooterComponent,
+    SidebarFormComponent,
+    SidebarHeaderComponent,
+    SidebarMinimizerComponent,
+    SidebarNavComponent,
+    SidebarNavItemComponent,
+    SimpleContainerComponent,
+    SpinnerComponent,
+    TitleBarComponent,
     // Layout Directives
-    BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
-    SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
+    BrandMinimizerDirective,
+    MobileSidebarTogglerDirective,
+    SidebarMinimizerDirective,
+    SidebarNavDropdownDirective,
+    SidebarNavDropdownTogglerDirective,
+    SidebarOffCanvasCloseDirective,
     SidebarTogglerDirective,
     // Session Directives
     HasAuthorityDirective
   ],
   exports: [
     // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
     // 3rd party modules
     // ChartsModule,
     PerfectScrollbarModule,
     // Material modules
-    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
-    MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
-    MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
-    MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
     // Forms Components
-    FileUploadComponent, GroupFormFieldComponent, GroupFormFieldNotchedOutlineComponent,
+    FileUploadComponent,
+    GroupFormFieldComponent,
+    GroupFormFieldNotchedOutlineComponent,
     TableFilterComponent,
     // Forms Directives
-    AutocompleteSelectionRequiredDirective, AutofocusDirective, ValidatedFormDirective,
+    AutocompleteSelectionRequiredDirective,
+    AutofocusDirective,
+    ValidatedFormDirective,
     // Layout Components
-    AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
-    NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
-    SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
-    SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
+    AdminContainerComponent,
+    AdminFooterComponent,
+    AdminHeaderComponent,
+    BreadcrumbsComponent,
+    NotFoundComponent,
+    SidebarComponent,
+    SidebarFooterComponent,
+    SidebarFormComponent,
+    SidebarHeaderComponent,
+    SidebarMinimizerComponent,
+    SidebarNavComponent,
+    SidebarNavItemComponent,
+    SimpleContainerComponent,
+    SpinnerComponent,
+    TitleBarComponent,
     // Layout Directives
-    BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
-    SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
+    BrandMinimizerDirective,
+    MobileSidebarTogglerDirective,
+    SidebarMinimizerDirective,
+    SidebarNavDropdownDirective,
+    SidebarNavDropdownTogglerDirective,
+    SidebarOffCanvasCloseDirective,
     SidebarTogglerDirective,
     // Session Directives
     HasAuthorityDirective
   ],
   imports: [
     // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
     // 3rd party modules
     // ChartsModule,
     PerfectScrollbarModule,
     // CDK modules
     ObserversModule,
     // Material modules
-    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatChipsModule, MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule,
-    MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
-    MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule,
-    MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule],
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: SessionInterceptor,
-      multi: true,
+      multi: true
     },
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi())
   ]
 })
 export class CoreModule {
@@ -242,17 +341,19 @@ export class CoreModule {
         },
         {
           provide: LocationStrategy,
-          useClass: HashLocationStrategy,
+          useClass: HashLocationStrategy
         },
         {
           provide: DateAdapter,
           useClass: InceptionDateAdapter
-        }, {
+        },
+        {
           provide: MAT_DATE_FORMATS,
           useValue: INCEPTION_DATE_FORMATS
-        }, {
+        },
+        {
           provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-          useValue: {appearance: 'fill'}
+          useValue: { appearance: 'fill' }
         },
         {
           provide: HTTP_INTERCEPTORS,
@@ -280,7 +381,8 @@ export class CoreModule {
         SessionService,
 
         // Function Guards
-        CanActivateFunctionGuard, DisabledFunctionGuard,
+        CanActivateFunctionGuard,
+        DisabledFunctionGuard,
 
         provideHttpClient()
       ]

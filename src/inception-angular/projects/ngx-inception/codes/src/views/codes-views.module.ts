@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
-import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
-import {CodeCategoriesTitleResolver} from './code-categories-title-resolver';
-import {CodeCategoriesComponent} from './code-categories.component';
-import {CodeCategoryTitleResolver} from './code-category-title-resolver';
-import {CodeTitleResolver} from './code-title-resolver';
-import {CodesTitleResolver} from './codes-title-resolver';
-import {CodesComponent} from './codes.component';
-import {EditCodeCategoryTitleResolver} from './edit-code-category-title-resolver';
-import {EditCodeCategoryComponent} from './edit-code-category.component';
-import {EditCodeTitleResolver} from './edit-code-title-resolver';
-import {EditCodeComponent} from './edit-code.component';
-import {NewCodeCategoryTitleResolver} from './new-code-category-title-resolver';
-import {NewCodeCategoryComponent} from './new-code-category.component';
-import {NewCodeTitleResolver} from './new-code-title-resolver';
-import {NewCodeComponent} from './new-code.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
+import { CodeCategoriesTitleResolver } from './code-categories-title-resolver';
+import { CodeCategoriesComponent } from './code-categories.component';
+import { CodeCategoryTitleResolver } from './code-category-title-resolver';
+import { CodeTitleResolver } from './code-title-resolver';
+import { CodesTitleResolver } from './codes-title-resolver';
+import { CodesComponent } from './codes.component';
+import { EditCodeCategoryTitleResolver } from './edit-code-category-title-resolver';
+import { EditCodeCategoryComponent } from './edit-code-category.component';
+import { EditCodeTitleResolver } from './edit-code-title-resolver';
+import { EditCodeComponent } from './edit-code.component';
+import { NewCodeCategoryTitleResolver } from './new-code-category-title-resolver';
+import { NewCodeCategoryComponent } from './new-code-category.component';
+import { NewCodeTitleResolver } from './new-code-title-resolver';
+import { NewCodeComponent } from './new-code.component';
 
 const routes: Routes = [
   {
@@ -43,7 +43,8 @@ const routes: Routes = [
     data: {
       authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
     }
-  }, {
+  },
+  {
     path: 'new',
     pathMatch: 'full',
     canActivate: [CanActivateFunctionGuard],
@@ -54,11 +55,13 @@ const routes: Routes = [
     resolve: {
       title: NewCodeCategoryTitleResolver
     }
-  }, {
+  },
+  {
     path: ':codeCategoryId',
     pathMatch: 'full',
     redirectTo: ':codeCategoryId/edit'
-  }, {
+  },
+  {
     path: ':codeCategoryId',
     pathMatch: 'prefix',
     resolve: {
@@ -71,12 +74,16 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: EditCodeCategoryComponent,
         data: {
-          authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
+          authorities: [
+            'ROLE_Administrator',
+            'FUNCTION_Codes.CodeAdministration'
+          ]
         },
         resolve: {
           title: EditCodeCategoryTitleResolver
         }
-      }, {
+      },
+      {
         path: 'codes',
         pathMatch: 'prefix',
         resolve: {
@@ -89,24 +96,33 @@ const routes: Routes = [
             canActivate: [CanActivateFunctionGuard],
             component: CodesComponent,
             data: {
-              authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
+              authorities: [
+                'ROLE_Administrator',
+                'FUNCTION_Codes.CodeAdministration'
+              ]
             }
-          }, {
+          },
+          {
             path: 'new',
             pathMatch: 'full',
             canActivate: [CanActivateFunctionGuard],
             component: NewCodeComponent,
             data: {
-              authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
+              authorities: [
+                'ROLE_Administrator',
+                'FUNCTION_Codes.CodeAdministration'
+              ]
             },
             resolve: {
               title: NewCodeTitleResolver
             }
-          }, {
+          },
+          {
             path: ':codeId',
             pathMatch: 'full',
             redirectTo: ':codeId/edit'
-          }, {
+          },
+          {
             path: ':codeId',
             pathMatch: 'prefix',
             resolve: {
@@ -119,7 +135,10 @@ const routes: Routes = [
                 canActivate: [CanActivateFunctionGuard],
                 component: EditCodeComponent,
                 data: {
-                  authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
+                  authorities: [
+                    'ROLE_Administrator',
+                    'FUNCTION_Codes.CodeAdministration'
+                  ]
                 },
                 resolve: {
                   title: EditCodeTitleResolver
@@ -136,25 +155,33 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     // Components
-    CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, EditCodeComponent,
-    NewCodeCategoryComponent, NewCodeComponent
+    CodeCategoriesComponent,
+    CodesComponent,
+    EditCodeCategoryComponent,
+    EditCodeComponent,
+    NewCodeCategoryComponent,
+    NewCodeComponent
   ],
   imports: [
     // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
 
     // Inception modules
     CoreModule
   ],
   providers: [
     // Resolvers
-    CodeCategoriesTitleResolver, CodeCategoryTitleResolver, CodesTitleResolver, CodeTitleResolver,
-    EditCodeCategoryTitleResolver, EditCodeTitleResolver, NewCodeCategoryTitleResolver,
+    CodeCategoriesTitleResolver,
+    CodeCategoryTitleResolver,
+    CodesTitleResolver,
+    CodeTitleResolver,
+    EditCodeCategoryTitleResolver,
+    EditCodeTitleResolver,
+    NewCodeCategoryTitleResolver,
     NewCodeTitleResolver
   ]
 })
-export class CodesViewsModule {
-}
-
-
-
+export class CodesViewsModule {}

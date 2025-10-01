@@ -14,21 +14,28 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, AdminContainerView, BackNavigation, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService
+  AccessDeniedError,
+  AdminContainerView,
+  BackNavigation,
+  DialogService,
+  Error,
+  InvalidArgumentError,
+  ServiceUnavailableError,
+  SpinnerService
 } from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {Job} from '../services/job';
-import {JobParameter} from '../services/job-parameter';
-import {JobStatus} from '../services/job-status';
-import {SchedulerService} from '../services/scheduler.service';
+import { finalize, first } from 'rxjs/operators';
+import { Job } from '../services/job';
+import { JobParameter } from '../services/job-parameter';
+import { JobStatus } from '../services/job-status';
+import { SchedulerService } from '../services/scheduler.service';
 import {
-  JobParameterDialogComponent, JobParameterDialogData
+  JobParameterDialogComponent,
+  JobParameterDialogData
 } from './job-parameter-dialog.component';
 
 /**
@@ -41,8 +48,10 @@ import {
   styleUrls: ['new-job.component.css'],
   standalone: false
 })
-export class NewJobComponent extends AdminContainerView implements AfterViewInit {
-
+export class NewJobComponent
+  extends AdminContainerView
+  implements AfterViewInit
+{
   JobStatus = JobStatus;
 
   enabledControl: FormControl;
@@ -58,8 +67,14 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
   jobParameters: JobParameter[] = [];
 
   jobStatuses: JobStatus[] = [
-    JobStatus.Unscheduled, JobStatus.Scheduled, JobStatus.Executing,
-    JobStatus.Executed, JobStatus.Aborted, JobStatus.Failed, JobStatus.OnceOff];
+    JobStatus.Unscheduled,
+    JobStatus.Scheduled,
+    JobStatus.Executing,
+    JobStatus.Executed,
+    JobStatus.Aborted,
+    JobStatus.Failed,
+    JobStatus.OnceOff
+  ];
 
   nameControl: FormControl;
 
@@ -69,24 +84,40 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
 
   statusControl: FormControl;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private schedulerService: SchedulerService, private dialogService: DialogService,
-              private spinnerService: SpinnerService, private matDialog: MatDialog) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private schedulerService: SchedulerService,
+    private dialogService: DialogService,
+    private spinnerService: SpinnerService,
+    private matDialog: MatDialog
+  ) {
     super();
 
     // Initialise the form controls
     this.enabledControl = new FormControl(true, [Validators.required]);
     this.idControl = new FormControl('', [Validators.required]);
-    this.jobClassControl = new FormControl('', [Validators.required, Validators.maxLength(1000)]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.jobClassControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(1000)
+    ]);
+    this.nameControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
     this.schedulingPatternControl =
       // eslint-disable-next-line max-len
-      new FormControl('0 * * * *',
-        [
-          Validators.required, Validators.maxLength(100), Validators.pattern(// eslint-disable-next-line max-len
-          '(((([*])|(((([0-5])?[0-9])((-(([0-5])?[0-9])))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))(,(((([*])|(((([0-5])?[0-9])((-(([0-5])?[0-9])))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?)))* (((([*])|(((((([0-1])?[0-9]))|(([2][0-3])))((-(((([0-1])?[0-9]))|(([2][0-3])))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))(,(((([*])|(((((([0-1])?[0-9]))|(([2][0-3])))((-(((([0-1])?[0-9]))|(([2][0-3])))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?)))* (((((((([*])|(((((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))((-(((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))|(L)|(((((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))W))))(,(((((([*])|(((((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))((-(((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))|(L)|(((((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))W)))))*)|([?])) (((([*])|((((([1-9]))|(([1][0-2])))((-((([1-9]))|(([1][0-2])))))?))|((((JAN)|(FEB)|(MAR)|(APR)|(MAY)|(JUN)|(JUL)|(AUG)|(SEP)|(OKT)|(NOV)|(DEC))((-((JAN)|(FEB)|(MAR)|(APR)|(MAY)|(JUN)|(JUL)|(AUG)|(SEP)|(OKT)|(NOV)|(DEC))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))(,(((([*])|((((([1-9]))|(([1][0-2])))((-((([1-9]))|(([1][0-2])))))?))|((((JAN)|(FEB)|(MAR)|(APR)|(MAY)|(JUN)|(JUL)|(AUG)|(SEP)|(OKT)|(NOV)|(DEC))((-((JAN)|(FEB)|(MAR)|(APR)|(MAY)|(JUN)|(JUL)|(AUG)|(SEP)|(OKT)|(NOV)|(DEC))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?)))* (((((((([*])|((([0-6])((-([0-6])))?))|((((SUN)|(MON)|(TUE)|(WED)|(THU)|(FRI)|(SAT))((-((SUN)|(MON)|(TUE)|(WED)|(THU)|(FRI)|(SAT))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))|((([0-6])L))|(W)|(([#][1-5]))))(,(((((([*])|((([0-6])((-([0-6])))?))|((((SUN)|(MON)|(TUE)|(WED)|(THU)|(FRI)|(SAT))((-((SUN)|(MON)|(TUE)|(WED)|(THU)|(FRI)|(SAT))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))|((([0-6])L))|(W)|(([#][1-5])))))*)|([?]))((( (((([*])|((([1-2][0-9][0-9][0-9])((-([1-2][0-9][0-9][0-9])))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))(,(((([*])|((([1-2][0-9][0-9][0-9])((-([1-2][0-9][0-9][0-9])))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?)))*))?)')
-        ]);
-    this.statusControl = new FormControl(JobStatus.Unscheduled, [Validators.required]);
+      new FormControl('0 * * * *', [
+        Validators.required,
+        Validators.maxLength(100),
+        Validators.pattern(
+          // eslint-disable-next-line max-len
+          '(((([*])|(((([0-5])?[0-9])((-(([0-5])?[0-9])))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))(,(((([*])|(((([0-5])?[0-9])((-(([0-5])?[0-9])))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?)))* (((([*])|(((((([0-1])?[0-9]))|(([2][0-3])))((-(((([0-1])?[0-9]))|(([2][0-3])))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))(,(((([*])|(((((([0-1])?[0-9]))|(([2][0-3])))((-(((([0-1])?[0-9]))|(([2][0-3])))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?)))* (((((((([*])|(((((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))((-(((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))|(L)|(((((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))W))))(,(((((([*])|(((((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))((-(((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))|(L)|(((((([1-2])?[0-9]))|(([3][0-1]))|(([1-9])))W)))))*)|([?])) (((([*])|((((([1-9]))|(([1][0-2])))((-((([1-9]))|(([1][0-2])))))?))|((((JAN)|(FEB)|(MAR)|(APR)|(MAY)|(JUN)|(JUL)|(AUG)|(SEP)|(OKT)|(NOV)|(DEC))((-((JAN)|(FEB)|(MAR)|(APR)|(MAY)|(JUN)|(JUL)|(AUG)|(SEP)|(OKT)|(NOV)|(DEC))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))(,(((([*])|((((([1-9]))|(([1][0-2])))((-((([1-9]))|(([1][0-2])))))?))|((((JAN)|(FEB)|(MAR)|(APR)|(MAY)|(JUN)|(JUL)|(AUG)|(SEP)|(OKT)|(NOV)|(DEC))((-((JAN)|(FEB)|(MAR)|(APR)|(MAY)|(JUN)|(JUL)|(AUG)|(SEP)|(OKT)|(NOV)|(DEC))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?)))* (((((((([*])|((([0-6])((-([0-6])))?))|((((SUN)|(MON)|(TUE)|(WED)|(THU)|(FRI)|(SAT))((-((SUN)|(MON)|(TUE)|(WED)|(THU)|(FRI)|(SAT))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))|((([0-6])L))|(W)|(([#][1-5]))))(,(((((([*])|((([0-6])((-([0-6])))?))|((((SUN)|(MON)|(TUE)|(WED)|(THU)|(FRI)|(SAT))((-((SUN)|(MON)|(TUE)|(WED)|(THU)|(FRI)|(SAT))))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))|((([0-6])L))|(W)|(([#][1-5])))))*)|([?]))((( (((([*])|((([1-2][0-9][0-9][0-9])((-([1-2][0-9][0-9][0-9])))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?))(,(((([*])|((([1-2][0-9][0-9][0-9])((-([1-2][0-9][0-9][0-9])))?)))((/(([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?([0-9])?[0-9])))?)))*))?)'
+        )
+      ]);
+    this.statusControl = new FormControl(JobStatus.Unscheduled, [
+      Validators.required
+    ]);
 
     // Initialise the form
     this.newJobForm = new FormGroup({
@@ -100,18 +131,20 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@scheduler_new_job_back_navigation:Jobs`,
+    return new BackNavigation(
+      $localize`:@@scheduler_new_job_back_navigation:Jobs`,
       ['..'],
-      {relativeTo: this.activatedRoute});
+      { relativeTo: this.activatedRoute }
+    );
   }
 
   get title(): string {
-    return $localize`:@@scheduler_new_job_title:New Job`
+    return $localize`:@@scheduler_new_job_title:New Job`;
   }
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
   }
 
   deleteJobParameter(existingJobParameter: JobParameter): void {
@@ -129,24 +162,25 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
       value: existingJobParameter.value
     };
 
-    const dialogRef: MatDialogRef<JobParameterDialogComponent, JobParameter> = this.matDialog.open(
-      JobParameterDialogComponent, {
+    const dialogRef: MatDialogRef<JobParameterDialogComponent, JobParameter> =
+      this.matDialog.open(JobParameterDialogComponent, {
         restoreFocus: false,
         data
       });
 
-    dialogRef.afterClosed()
-    .pipe(first())
-    .subscribe((jobParameter: JobParameter | undefined) => {
-      if (jobParameter) {
-        for (const aJobParameter of this.jobParameters) {
-          if (aJobParameter.name === jobParameter.name) {
-            aJobParameter.value = jobParameter.value;
-            return;
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((jobParameter: JobParameter | undefined) => {
+        if (jobParameter) {
+          for (const aJobParameter of this.jobParameters) {
+            if (aJobParameter.name === jobParameter.name) {
+              aJobParameter.value = jobParameter.value;
+              return;
+            }
           }
         }
-      }
-    });
+      });
   }
 
   newJobParameter(): void {
@@ -156,37 +190,46 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
       readonlyName: false
     };
 
-    const dialogRef: MatDialogRef<JobParameterDialogComponent, JobParameter> = this.matDialog.open(
-      JobParameterDialogComponent, {
+    const dialogRef: MatDialogRef<JobParameterDialogComponent, JobParameter> =
+      this.matDialog.open(JobParameterDialogComponent, {
         restoreFocus: false,
         data
       });
 
-    dialogRef.afterClosed()
-    .pipe(first())
-    .subscribe((jobParameter: JobParameter | undefined) => {
-      if (jobParameter) {
-        for (const aJobParameter of this.jobParameters) {
-          if (aJobParameter.name === jobParameter.name) {
-            this.dialogService.showErrorDialog(new Error('The job parameter already exists.'));
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((jobParameter: JobParameter | undefined) => {
+        if (jobParameter) {
+          for (const aJobParameter of this.jobParameters) {
+            if (aJobParameter.name === jobParameter.name) {
+              this.dialogService.showErrorDialog(
+                new Error('The job parameter already exists.')
+              );
 
-            return;
+              return;
+            }
           }
+
+          this.jobParameters.push(jobParameter);
+
+          this.jobParameters.sort((a: JobParameter, b: JobParameter) => {
+            if (
+              (a.name ? a.name.toLowerCase() : '') <
+              (b.name ? b.name.toLowerCase() : '')
+            ) {
+              return -1;
+            }
+            if (
+              (a.name ? a.name.toLowerCase() : '') >
+              (b.name ? b.name.toLowerCase() : '')
+            ) {
+              return 1;
+            }
+            return 0;
+          });
         }
-
-        this.jobParameters.push(jobParameter);
-
-        this.jobParameters.sort((a: JobParameter, b: JobParameter) => {
-          if ((a.name ? a.name.toLowerCase() : '') < (b.name ? b.name.toLowerCase() : '')) {
-            return -1;
-          }
-          if ((a.name ? a.name.toLowerCase() : '') > (b.name ? b.name.toLowerCase() : '')) {
-            return 1;
-          }
-          return 0;
-        });
-      }
-    });
+      });
   }
 
   ngAfterViewInit(): void {
@@ -205,21 +248,33 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
 
       this.spinnerService.showSpinner();
 
-      this.schedulerService.createJob(this.job)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof AccessDeniedError) || (error instanceof InvalidArgumentError) ||
-          (error instanceof ServiceUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.schedulerService
+        .createJob(this.job)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe(
+          () => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+          },
+          (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if (
+              error instanceof AccessDeniedError ||
+              error instanceof InvalidArgumentError ||
+              error instanceof ServiceUnavailableError
+            ) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {
+                state: { error }
+              });
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          }
+        );
     }
   }
 }

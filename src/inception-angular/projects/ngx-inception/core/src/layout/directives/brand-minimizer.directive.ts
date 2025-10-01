@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener} from '@angular/core';
+import { Directive, HostListener } from '@angular/core';
 
 /**
  * The AppBrandMinimizerDirective class implements the app brand minimizer directive.
@@ -27,12 +27,10 @@ import {Directive, HostListener} from '@angular/core';
   standalone: false
 })
 export class BrandMinimizerDirective {
-
   /**
    * Constructs a new AppBrandMinimizerDirective.
    */
-  constructor() {
-  }
+  constructor() {}
 
   // eslint-disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {

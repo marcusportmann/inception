@@ -14,22 +14,26 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
 import {
-  AdminContainerComponent, CanActivateFunctionGuard, NotFoundComponent, SimpleContainerComponent
+  AdminContainerComponent,
+  CanActivateFunctionGuard,
+  NotFoundComponent,
+  SimpleContainerComponent
 } from 'ngx-inception/core';
 
-import {UserProfileComponent} from 'ngx-inception/security';
-import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
+import { UserProfileComponent } from 'ngx-inception/security';
+import { AdministrationTitleResolver } from './views/administration/administration-title-resolver';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'menu1',
-  }, {
+    redirectTo: 'menu1'
+  },
+  {
     path: '',
     component: AdminContainerComponent,
     children: [
@@ -37,55 +41,68 @@ export const routes: Routes = [
         path: 'profile',
         pathMatch: 'prefix',
         component: UserProfileComponent
-      }, {
+      },
+      {
         path: 'dashboard',
         pathMatch: 'prefix',
-        canActivate: [
-          CanActivateFunctionGuard
-        ],
+        canActivate: [CanActivateFunctionGuard],
         data: {
           title: 'Dashboard',
           authorities: ['ROLE_Administrator', 'FUNCTION_Dashboard.Dashboard']
         },
-        loadChildren: () => import('./views/dashboard/dashboard.module').then(
-          m => m.DashboardModule)
-      }, {
+        loadChildren: () =>
+          import('./views/dashboard/dashboard.module').then(
+            (m) => m.DashboardModule
+          )
+      },
+      {
         path: 'inception',
         pathMatch: 'prefix',
         data: {
           title: 'Inception'
         },
-        loadChildren: () => import('./views/inception/inception.module').then(
-          m => m.InceptionModule)
-      }, {
+        loadChildren: () =>
+          import('./views/inception/inception.module').then(
+            (m) => m.InceptionModule
+          )
+      },
+      {
         path: 'menu1',
         pathMatch: 'prefix',
         data: {
           title: 'Menu 1'
         },
-        loadChildren: () => import('./views/menu1/menu1.module').then(m => m.Menu1Module)
-      }, {
+        loadChildren: () =>
+          import('./views/menu1/menu1.module').then((m) => m.Menu1Module)
+      },
+      {
         path: 'menu2',
         pathMatch: 'prefix',
         data: {
           title: 'Menu 2'
         },
-        loadChildren: () => import('./views/menu2/menu2.module').then(m => m.Menu2Module)
-      }, {
+        loadChildren: () =>
+          import('./views/menu2/menu2.module').then((m) => m.Menu2Module)
+      },
+      {
         path: 'menu3',
         pathMatch: 'prefix',
         data: {
           title: 'Menu 3'
         },
-        loadChildren: () => import('./views/menu3/menu3.module').then(m => m.Menu3Module)
-      }, {
+        loadChildren: () =>
+          import('./views/menu3/menu3.module').then((m) => m.Menu3Module)
+      },
+      {
         path: 'administration',
         pathMatch: 'prefix',
         resolve: {
           title: AdministrationTitleResolver
         },
-        loadChildren: () => import('./views/administration/administration.module').then(
-          m => m.AdministrationModule)
+        loadChildren: () =>
+          import('./views/administration/administration.module').then(
+            (m) => m.AdministrationModule
+          )
       }
     ]
   },
@@ -95,8 +112,10 @@ export const routes: Routes = [
     path: 'login',
     pathMatch: 'prefix',
     component: SimpleContainerComponent,
-    loadChildren: () => import('./views/wrappers/login-views-wrapper.module').then(
-      m => m.LoginViewsWrapperModule)
+    loadChildren: () =>
+      import('./views/wrappers/login-views-wrapper.module').then(
+        (m) => m.LoginViewsWrapperModule
+      )
   },
 
   // Send Error Report route
@@ -104,8 +123,10 @@ export const routes: Routes = [
     path: 'error',
     pathMatch: 'prefix',
     component: SimpleContainerComponent,
-    loadChildren: () => import('./views/wrappers/error-views-wrapper.module').then(
-      m => m.ErrorViewsWrapperModule)
+    loadChildren: () =>
+      import('./views/wrappers/error-views-wrapper.module').then(
+        (m) => m.ErrorViewsWrapperModule
+      )
   },
 
   // Default route for invalid paths
@@ -119,12 +140,10 @@ export const routes: Routes = [
 @NgModule({
   // Tracing should only be enabled for DEBUG purposes
   imports: [
-
     // Angular modules
-    RouterModule.forRoot(routes, {enableTracing: false})
+    RouterModule.forRoot(routes, { enableTracing: false })
   ],
   exports: [RouterModule],
   providers: [AdministrationTitleResolver]
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}

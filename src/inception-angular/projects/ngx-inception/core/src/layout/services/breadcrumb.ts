@@ -21,7 +21,6 @@
  */
 
 export class Breadcrumb {
-
   /**
    * The label for the breadcrumb.
    */

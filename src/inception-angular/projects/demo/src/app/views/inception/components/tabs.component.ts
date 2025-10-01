@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * The TabsComponent class implements the tabs component.
@@ -26,7 +26,5 @@ import {Component} from '@angular/core';
   standalone: false
 })
 export class TabsComponent {
-
-  constructor() {
-  }
+  constructor() {}
 }

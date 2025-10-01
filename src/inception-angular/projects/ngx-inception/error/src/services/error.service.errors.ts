@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from '@angular/common/http';
-import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The ErrorReportNotFoundError class holds the information for an error report not found error.
@@ -23,8 +23,8 @@ import {Error, HttpError, ProblemDetails} from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 export class ErrorReportNotFoundError extends Error {
-
-  static readonly TYPE = 'https://inception.digital/problems/error/error-report-not-found';
+  static readonly TYPE =
+    'https://inception.digital/problems/error/error-report-not-found';
 
   /**
    * Constructs a new ErrorReportNotFoundError.
@@ -32,7 +32,9 @@ export class ErrorReportNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super($localize`:@@error_error_report_not_found_error:The error report could not be found.`,
-      cause);
+    super(
+      $localize`:@@error_error_report_not_found_error:The error report could not be found.`,
+      cause
+    );
   }
 }

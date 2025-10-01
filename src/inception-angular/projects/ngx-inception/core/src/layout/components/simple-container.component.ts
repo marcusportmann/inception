@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * The SimpleContainerComponent class implements the simple container component.
@@ -28,10 +28,8 @@ import {Component} from '@angular/core';
   standalone: false
 })
 export class SimpleContainerComponent {
-
   /**
    * Constructs a new SimpleContainerComponent.
    */
-  constructor() {
-  }
+  constructor() {}
 }

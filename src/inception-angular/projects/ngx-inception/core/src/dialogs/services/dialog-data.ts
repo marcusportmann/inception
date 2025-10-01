@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export interface DialogData {
-
   /**
    * The button text.
    */

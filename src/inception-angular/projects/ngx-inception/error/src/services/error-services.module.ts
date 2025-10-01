@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {ModuleWithProviders, NgModule} from '@angular/core';
-import {ErrorService} from './error.service';
+import { CommonModule } from '@angular/common';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ErrorService } from './error.service';
 
 /**
  * The ErrorServicesModule class implements the Inception Error Services Module.
@@ -29,19 +32,17 @@ import {ErrorService} from './error.service';
   exports: [],
   imports: [
     // Angular modules
-    CommonModule],
+    CommonModule
+  ],
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class ErrorServicesModule {
-  constructor() {
-  }
+  constructor() {}
 
   static forRoot(): ModuleWithProviders<ErrorServicesModule> {
     return {
       ngModule: ErrorServicesModule,
-      providers: [
-        ErrorService
-      ]
+      providers: [ErrorService]
     };
   }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {GroupMemberType} from './group-member-type';
+import { GroupMemberType } from './group-member-type';
 
 /**
  * The GroupMember class holds the information for a group member.
@@ -22,7 +22,6 @@ import {GroupMemberType} from './group-member-type';
  * @author Marcus Portmann
  */
 export class GroupMember {
-
   /**
    * The name of the group.
    */
@@ -52,8 +51,12 @@ export class GroupMember {
    * @param memberType      The group member type.
    * @param memberName      The name of the group member.
    */
-  constructor(userDirectoryId: string, groupName: string, memberType: GroupMemberType,
-              memberName: string) {
+  constructor(
+    userDirectoryId: string,
+    groupName: string,
+    memberType: GroupMemberType,
+    memberName: string
+  ) {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
     this.memberType = memberType;

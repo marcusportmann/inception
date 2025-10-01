@@ -19,7 +19,9 @@ export const removeClasses = (classNames: string[]): boolean => {
   const bodySelector = document.querySelector('body');
 
   if (bodySelector) {
-    const matchClasses = classNames.map((value) => bodySelector.classList.contains(value));
+    const matchClasses = classNames.map((value) =>
+      bodySelector.classList.contains(value)
+    );
 
     return matchClasses.indexOf(true) !== -1;
   } else {
@@ -41,7 +43,6 @@ export const toggleClasses = (toggle: string, classNames: string[]): void => {
     }
   }
 };
-
 
 /*
  const RemoveClasses = (NewClassNames) => {

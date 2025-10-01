@@ -15,11 +15,16 @@
  */
 
 import {
-  ChangeDetectionStrategy, Component, HostBinding, Input, OnDestroy, OnInit
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit
 } from '@angular/core';
-import {Subscription} from 'rxjs';
-import {SidebarService} from '../services/sidebar.service';
-import {SIDEBAR_CSS_CLASSES} from './sidebar-css-classes';
+import { Subscription } from 'rxjs';
+import { SidebarService } from '../services/sidebar.service';
+import { SIDEBAR_CSS_CLASSES } from './sidebar-css-classes';
 
 /**
  * The SidebarComponent class implements the sidebar component.
@@ -29,13 +34,11 @@ import {SIDEBAR_CSS_CLASSES} from './sidebar-css-classes';
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar',
-  template: `
-    <ng-content></ng-content>`,
+  template: ` <ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-
   // TODO: Confirm if we can default these properties to false -- MARCUS
   @Input() compact?: boolean;
 
@@ -54,8 +57,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
    *
    * @param sidebarService The sidebar service.
    */
-  constructor(private sidebarService: SidebarService) {
-  }
+  constructor(private sidebarService: SidebarService) {}
 
   @HostBinding('class.sidebar') get sidebar() {
     return true;
@@ -70,25 +72,27 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const bodySelector = document.querySelector('body');
 
-    this.sidebarMinimizedSubscription = this.sidebarService.sidebarMinimized$.subscribe(
-      (sidebarMinimized: boolean) => {
-        if (sidebarMinimized) {
-          if (bodySelector) {
-            bodySelector.classList.add('sidebar-minimized');
-          }
-        } else {
-          if (bodySelector) {
-            bodySelector.classList.remove('sidebar-minimized');
+    this.sidebarMinimizedSubscription =
+      this.sidebarService.sidebarMinimized$.subscribe(
+        (sidebarMinimized: boolean) => {
+          if (sidebarMinimized) {
+            if (bodySelector) {
+              bodySelector.classList.add('sidebar-minimized');
+            }
+          } else {
+            if (bodySelector) {
+              bodySelector.classList.remove('sidebar-minimized');
+            }
           }
         }
-      });
+      );
 
     if (bodySelector) {
-
       if (!!this.display) {
         let cssClass;
-        this.display ? cssClass = `sidebar-${this.display}-show` :
-          cssClass = SIDEBAR_CSS_CLASSES[0];
+        this.display
+          ? (cssClass = `sidebar-${this.display}-show`)
+          : (cssClass = SIDEBAR_CSS_CLASSES[0]);
         bodySelector.classList.add(cssClass);
       }
 

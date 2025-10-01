@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {ReportingViewsModule} from 'ngx-inception/reporting';
+import { NgModule } from '@angular/core';
+import { ReportingViewsModule } from 'ngx-inception/reporting';
 
 @NgModule({
   imports: [ReportingViewsModule]
 })
-export class ReportingViewsWrapperModule {
-}
+export class ReportingViewsWrapperModule {}

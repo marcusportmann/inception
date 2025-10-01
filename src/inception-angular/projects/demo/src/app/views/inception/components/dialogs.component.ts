@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
-import {ConfirmationDialogComponent, DialogService, Error} from 'ngx-inception/core';
-import {first} from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import {
+  ConfirmationDialogComponent,
+  DialogService,
+  Error
+} from 'ngx-inception/core';
+import { first } from 'rxjs/operators';
 
 /**
  * The DialogsComponent class implements the lists component.
@@ -29,23 +33,23 @@ import {first} from 'rxjs/operators';
   standalone: false
 })
 export class DialogsComponent {
-
   /**
    * Constructs a new DialogsComponent.
    *
    * @param dialogService The dialog service.
    */
-  constructor(private dialogService: DialogService) {
-  }
+  constructor(private dialogService: DialogService) {}
 
   confirmation(): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {message: 'Perform the action?'});
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
+      this.dialogService.showConfirmationDialog({
+        message: 'Perform the action?'
+      });
 
-    dialogRef.afterClosed()
-    .pipe(first())
-    .subscribe((confirmation: boolean | undefined) => {
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((confirmation: boolean | undefined) => {});
   }
 
   error(): void {
@@ -55,10 +59,14 @@ export class DialogsComponent {
   }
 
   info(): void {
-    this.dialogService.showInformationDialog({message: 'This is an information message.'});
+    this.dialogService.showInformationDialog({
+      message: 'This is an information message.'
+    });
   }
 
   warning(): void {
-    this.dialogService.showWarningDialog({message: 'This is a warning message.'});
+    this.dialogService.showWarningDialog({
+      message: 'This is a warning message.'
+    });
   }
 }

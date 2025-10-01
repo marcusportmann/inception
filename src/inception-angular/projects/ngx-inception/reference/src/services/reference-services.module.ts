@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {ModuleWithProviders, NgModule} from '@angular/core';
-import {ReferenceService} from './reference.service';
+import { CommonModule } from '@angular/common';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ReferenceService } from './reference.service';
 
 /**
  * The ReferenceServicesModule class implements the Inception Reference Services Module.
@@ -29,19 +32,17 @@ import {ReferenceService} from './reference.service';
   exports: [],
   imports: [
     // Angular modules
-    CommonModule],
+    CommonModule
+  ],
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class ReferenceServicesModule {
-  constructor() {
-  }
+  constructor() {}
 
   static forRoot(): ModuleWithProviders<ReferenceServicesModule> {
     return {
       ngModule: ReferenceServicesModule,
-      providers: [
-        ReferenceService
-      ]
+      providers: [ReferenceService]
     };
   }
 }

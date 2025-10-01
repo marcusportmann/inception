@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export class Region {
-
   /**
    * The ISO 3166-2 subdivision code for the region.
    */
@@ -61,8 +60,14 @@ export class Region {
    * @param name        The name of the region.
    * @param description The description for the region.
    */
-  constructor(country: string, code: string, localeId: string, sortIndex: number, name: string,
-              description: string) {
+  constructor(
+    country: string,
+    code: string,
+    localeId: string,
+    sortIndex: number,
+    name: string,
+    description: string
+  ) {
     this.country = country;
     this.code = code;
     this.localeId = localeId;

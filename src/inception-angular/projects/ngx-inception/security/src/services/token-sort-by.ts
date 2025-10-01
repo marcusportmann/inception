@@ -20,7 +20,6 @@
  * @author Marcus Portmann
  */
 export enum TokenSortBy {
-
   /**
    * Sort by expires.
    */

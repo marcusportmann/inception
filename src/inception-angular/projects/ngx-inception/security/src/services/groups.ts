@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {SortDirection} from 'ngx-inception/core';
-import {Group} from './group';
+import { SortDirection } from 'ngx-inception/core';
+import { Group } from './group';
 
 /**
  * The Groups class holds the results of a request to retrieve a list of groups.
@@ -23,7 +23,6 @@ import {Group} from './group';
  * @author Marcus Portmann
  */
 export class Groups {
-
   /**
    * The filter that was applied to the groups.
    */
@@ -70,8 +69,15 @@ export class Groups {
    * @param pageSize        The page size.
    * @param filter          The filter that was applied to the groups.
    */
-  constructor(userDirectoryId: string, groups: Group[], total: number, sortDirection: SortDirection,
-              pageIndex: number, pageSize: number, filter?: string,) {
+  constructor(
+    userDirectoryId: string,
+    groups: Group[],
+    total: number,
+    sortDirection: SortDirection,
+    pageIndex: number,
+    pageSize: number,
+    filter?: string
+  ) {
     this.userDirectoryId = userDirectoryId;
     this.groups = groups;
     this.total = total;

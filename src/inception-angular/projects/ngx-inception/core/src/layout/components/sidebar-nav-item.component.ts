@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, ElementRef, Input} from '@angular/core';
-import {Router} from '@angular/router';
-import {NavigationItem} from '../services/navigation-item';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { NavigationItem } from '../services/navigation-item';
 
 /**
  * The SidebarNavItemComponent class implements the sidebar nav item component.
@@ -39,50 +44,78 @@ import {NavigationItem} from '../services/navigation-item';
       <ng-template #checkForDropdown>
         <ng-container *ngIf="isDropdown(); else sidebarNavLink">
           <li
-            class="{{!!this.navItem.cssClass ? 'nav-item nav-dropdown ' + navItem?.cssClass : 'nav-item nav-dropdown'}}"
-            [class.open]="isActive()" sidebarNavDropdown>
+            class="{{
+              !!this.navItem.cssClass
+                ? 'nav-item nav-dropdown ' + navItem?.cssClass
+                : 'nav-item nav-dropdown'
+            }}"
+            [class.open]="isActive()"
+            sidebarNavDropdown>
             <div class="sidebar-nav-dropdown">
               <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
-                <i *ngIf="this.navItem.icon && !!this.navItem.icon"
-                   class="nav-icon {{ navItem?.icon }}"></i>
+                <i
+                  *ngIf="this.navItem.icon && !!this.navItem.icon"
+                  class="nav-icon {{ navItem?.icon }}"></i>
                 <span class="nav-item-name">{{ navItem?.name }}</span>
-                <span *ngIf="this.navItem.badge && !!this.navItem.badge"
-                      [ngClass]="'badge badge-' + navItem?.badge?.variant">
+                <span
+                  *ngIf="this.navItem.badge && !!this.navItem.badge"
+                  [ngClass]="'badge badge-' + navItem?.badge?.variant">
                   {{ navItem?.badge?.text }}
                 </span>
               </a>
               <ul class="nav-dropdown-items">
-                <sidebar-nav-item *ngFor="let child of navItem?.children"
-                                  [navItem]='child'></sidebar-nav-item>
+                <sidebar-nav-item
+                  *ngFor="let child of navItem?.children"
+                  [navItem]="child"></sidebar-nav-item>
               </ul>
             </div>
           </li>
         </ng-container>
       </ng-template>
       <ng-template #sidebarNavLink>
-        <li [ngClass]="!!this.navItem.cssClass ? 'nav-item ' + navItem?.cssClass : 'nav-item'">
-          <a *ngIf="!isExternalLink(); else externalLink"
-             [ngClass]="!!this.navItem.variant ? 'nav-link nav-link-' + navItem?.variant : 'nav-link'"
-             routerLinkActive="active"
-             [routerLink]="[navItem?.url]"
-             (click)="hideMobile()">
-            <i *ngIf="!!this.navItem.icon;" class="nav-icon {{ navItem?.icon }}"></i>
+        <li
+          [ngClass]="
+            !!this.navItem.cssClass
+              ? 'nav-item ' + navItem?.cssClass
+              : 'nav-item'
+          ">
+          <a
+            *ngIf="!isExternalLink(); else externalLink"
+            [ngClass]="
+              !!this.navItem.variant
+                ? 'nav-link nav-link-' + navItem?.variant
+                : 'nav-link'
+            "
+            routerLinkActive="active"
+            [routerLink]="[navItem?.url]"
+            (click)="hideMobile()">
+            <i
+              *ngIf="!!this.navItem.icon"
+              class="nav-icon {{ navItem?.icon }}"></i>
             <span class="nav-item-name">{{ navItem?.name }}</span>
-            <span *ngIf="this.navItem.badge && !!this.navItem.badge"
-                  [ngClass]="'badge badge-' + navItem?.badge?.variant">
-            {{ navItem?.badge?.text }}
-          </span>
+            <span
+              *ngIf="this.navItem.badge && !!this.navItem.badge"
+              [ngClass]="'badge badge-' + navItem?.badge?.variant">
+              {{ navItem?.badge?.text }}
+            </span>
           </a>
           <ng-template #externalLink>
             <a
-              [ngClass]="!!this.navItem.variant ? 'nav-link nav-link-' + navItem?.variant : 'nav-link'"
-              href="{{navItem?.url}}">
-              <i *ngIf="!!this.navItem.icon;" class="nav-icon {{ navItem?.icon }}"></i>
+              [ngClass]="
+                !!this.navItem.variant
+                  ? 'nav-link nav-link-' + navItem?.variant
+                  : 'nav-link'
+              "
+              href="{{ navItem?.url }}">
+              <i
+                *ngIf="!!this.navItem.icon"
+                class="nav-icon {{ navItem?.icon }}"></i>
               <span class="nav-item-name">{{ navItem?.name }}</span>
-              <span *ngIf="this.navItem.badge && !!this.navItem.badge"
-                    [ngClass]="'badge badge-' + navItem?.badge?.variant">
-              {{ navItem?.badge?.text }}
-            </span>
+              <span
+                *ngIf="this.navItem.badge && !!this.navItem.badge"
+                [ngClass]="'badge badge-' + navItem?.badge?.variant">
+                {{ navItem?.badge?.text }}
+              </span>
             </a>
           </ng-template>
         </li>
@@ -94,7 +127,6 @@ import {NavigationItem} from '../services/navigation-item';
   standalone: false
 })
 export class SidebarNavItemComponent {
-
   @Input() navItem?: NavigationItem;
 
   /**
@@ -103,8 +135,10 @@ export class SidebarNavItemComponent {
    * @param elementRef        The element reference.
    * @param router            The router.
    */
-  constructor(private elementRef: ElementRef, private router: Router) {
-  }
+  constructor(
+    private elementRef: ElementRef,
+    private router: Router
+  ) {}
 
   hideMobile() {
     if (document.body.classList.contains('sidebar-show')) {
@@ -113,8 +147,9 @@ export class SidebarNavItemComponent {
   }
 
   isActive(): boolean {
-    return this.navItem ? !!this.navItem.url && this.router.isActive(this.navItem.url, false) :
-      false;
+    return this.navItem
+      ? !!this.navItem.url && this.router.isActive(this.navItem.url, false)
+      : false;
   }
 
   isDivider(): boolean {
@@ -126,8 +161,9 @@ export class SidebarNavItemComponent {
   }
 
   isExternalLink(): boolean {
-    return this.navItem ? !!this.navItem.url && (this.navItem.url.substring(0, 4) === 'http') :
-      false;
+    return this.navItem
+      ? !!this.navItem.url && this.navItem.url.substring(0, 4) === 'http'
+      : false;
   }
 
   isTitle(): boolean {

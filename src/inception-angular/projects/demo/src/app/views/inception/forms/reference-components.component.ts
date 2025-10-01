@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /**
  * The ReferenceComponentsComponent class.
@@ -28,7 +33,6 @@ import {ActivatedRoute, Router} from '@angular/router';
   standalone: false
 })
 export class ReferenceComponentsComponent implements OnInit {
-
   countriesControl: FormControl = new FormControl([], Validators.required);
 
   countryControl: FormControl = new FormControl('', Validators.required);
@@ -41,9 +45,11 @@ export class ReferenceComponentsComponent implements OnInit {
 
   timeZoneControl: FormControl = new FormControl('', Validators.required);
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder) {
-
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private formBuilder: FormBuilder
+  ) {
     this.referenceForm = this.formBuilder.group({
       // hideRequired: false,
       // floatLabel: 'auto',

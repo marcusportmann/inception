@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
-import {ReferenceServicesModule} from '../services/reference-services.module';
-import {CountriesChipGridComponent} from './countries-chip-grid.component';
-import {CountryInputComponent} from './country-input.component';
-import {LanguageInputComponent} from './language-input.component';
-import {RegionInputComponent} from './region-input.component';
-import {TimeZoneInputComponent} from './time-zone-input.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { ReferenceServicesModule } from '../services/reference-services.module';
+import { CountriesChipGridComponent } from './countries-chip-grid.component';
+import { CountryInputComponent } from './country-input.component';
+import { LanguageInputComponent } from './language-input.component';
+import { RegionInputComponent } from './region-input.component';
+import { TimeZoneInputComponent } from './time-zone-input.component';
 
 @NgModule({
   declarations: [
     // Components
-    CountriesChipGridComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent,
+    CountriesChipGridComponent,
+    CountryInputComponent,
+    LanguageInputComponent,
+    RegionInputComponent,
     TimeZoneInputComponent
   ],
   imports: [
@@ -41,15 +44,17 @@ import {TimeZoneInputComponent} from './time-zone-input.component';
     ReferenceServicesModule,
 
     // Material modules
-    MatAutocompleteModule, MatChipsModule, MatInputModule, MatIconModule
+    MatAutocompleteModule,
+    MatChipsModule,
+    MatInputModule,
+    MatIconModule
   ],
   exports: [
-    CountriesChipGridComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent,
+    CountriesChipGridComponent,
+    CountryInputComponent,
+    LanguageInputComponent,
+    RegionInputComponent,
     TimeZoneInputComponent
   ]
 })
-export class ReferenceComponentsModule {
-}
-
-
-
+export class ReferenceComponentsModule {}

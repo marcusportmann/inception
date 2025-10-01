@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
-import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
-import {EditReportDefinitionTitleResolver} from './edit-report-definition-title-resolver';
-import {EditReportDefinitionComponent} from './edit-report-definition.component';
-import {NewReportDefinitionTitleResolver} from './new-report-definition-title-resolver';
-import {NewReportDefinitionComponent} from './new-report-definition.component';
-import {ReportDefinitionTitleResolver} from './report-definition-title-resolver';
-import {ReportDefinitionsTitleResolver} from './report-definitions-title-resolver';
-import {ReportDefinitionsComponent} from './report-definitions.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
+import { EditReportDefinitionTitleResolver } from './edit-report-definition-title-resolver';
+import { EditReportDefinitionComponent } from './edit-report-definition.component';
+import { NewReportDefinitionTitleResolver } from './new-report-definition-title-resolver';
+import { NewReportDefinitionComponent } from './new-report-definition.component';
+import { ReportDefinitionTitleResolver } from './report-definition-title-resolver';
+import { ReportDefinitionsTitleResolver } from './report-definitions-title-resolver';
+import { ReportDefinitionsComponent } from './report-definitions.component';
 
 const routes: Routes = [
   {
@@ -42,25 +42,29 @@ const routes: Routes = [
         component: ReportDefinitionsComponent,
         data: {
           authorities: [
-            'ROLE_Administrator', 'FUNCTION_Reporting.ReportingAdministration',
+            'ROLE_Administrator',
+            'FUNCTION_Reporting.ReportingAdministration',
             'FUNCTION_Reporting.ReportDefinitionAdministration'
           ]
         }
-      }, {
+      },
+      {
         path: 'new',
         pathMatch: 'full',
         canActivate: [CanActivateFunctionGuard],
         component: NewReportDefinitionComponent,
         data: {
           authorities: [
-            'ROLE_Administrator', 'FUNCTION_Reporting.ReportingAdministration',
+            'ROLE_Administrator',
+            'FUNCTION_Reporting.ReportingAdministration',
             'FUNCTION_Reporting.ReportDefinitionAdministration'
           ]
         },
         resolve: {
           title: NewReportDefinitionTitleResolver
         }
-      }, {
+      },
+      {
         path: ':reportDefinitionId',
         pathMatch: 'full',
         redirectTo: ':reportDefinitionId/edit'
@@ -80,7 +84,8 @@ const routes: Routes = [
             component: EditReportDefinitionComponent,
             data: {
               authorities: [
-                'ROLE_Administrator', 'FUNCTION_Reporting.ReportingAdministration',
+                'ROLE_Administrator',
+                'FUNCTION_Reporting.ReportingAdministration',
                 'FUNCTION_Reporting.ReportDefinitionAdministration'
               ]
             },
@@ -97,23 +102,26 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     // Components
-    EditReportDefinitionComponent, ReportDefinitionsComponent, NewReportDefinitionComponent
+    EditReportDefinitionComponent,
+    ReportDefinitionsComponent,
+    NewReportDefinitionComponent
   ],
   imports: [
     // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
 
     // Inception modules
     CoreModule
   ],
   providers: [
     // Resolvers
-    EditReportDefinitionTitleResolver, NewReportDefinitionTitleResolver,
-    ReportDefinitionsTitleResolver, ReportDefinitionTitleResolver
+    EditReportDefinitionTitleResolver,
+    NewReportDefinitionTitleResolver,
+    ReportDefinitionsTitleResolver,
+    ReportDefinitionTitleResolver
   ]
 })
-export class ReportingViewsModule {
-}
-
-
-
+export class ReportingViewsModule {}

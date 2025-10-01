@@ -14,33 +14,35 @@
  * limitations under the License.
  */
 
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {ReactiveFormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
-import {CoreModule} from 'ngx-inception/core';
-import {ReferenceComponentsModule} from 'ngx-inception/reference';
-import {ExampleComponent} from './example.component';
-import {ReferenceComponentsComponent} from './reference-components.component';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { CoreModule } from 'ngx-inception/core';
+import { ReferenceComponentsModule } from 'ngx-inception/reference';
+import { ExampleComponent } from './example.component';
+import { ReferenceComponentsComponent } from './reference-components.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'prefix',
     redirectTo: 'example'
-  }, {
+  },
+  {
     path: 'example',
     pathMatch: 'prefix',
     component: ExampleComponent,
     data: {
-      title: 'Example',
+      title: 'Example'
     }
-  }, {
+  },
+  {
     path: 'reference-components',
     pathMatch: 'prefix',
     component: ReferenceComponentsComponent,
     data: {
-      title: 'Reference Components',
+      title: 'Reference Components'
     }
   }
 ];
@@ -48,13 +50,15 @@ const routes: Routes = [
 @NgModule({
   imports: [
     // Angular modules
-    CommonModule, ReactiveFormsModule, RouterModule.forChild(routes),
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
 
     // Inception modules
-    CoreModule, ReferenceComponentsModule,
+    CoreModule,
+    ReferenceComponentsModule
   ],
   declarations: [ExampleComponent, ReferenceComponentsComponent],
   providers: []
 })
-export class FormsModule {
-}
+export class FormsModule {}

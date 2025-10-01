@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener, Input, OnInit} from '@angular/core';
-import {toggleClasses} from '../../util/toggle-classes';
-import {SIDEBAR_CSS_CLASSES} from '../components/sidebar-css-classes';
+import { Directive, HostListener, Input, OnInit } from '@angular/core';
+import { toggleClasses } from '../../util/toggle-classes';
+import { SIDEBAR_CSS_CLASSES } from '../components/sidebar-css-classes';
 
 /**
  * The SidebarTogglerDirective class implements the sidebar toggler directive.
@@ -29,7 +29,6 @@ import {SIDEBAR_CSS_CLASSES} from '../components/sidebar-css-classes';
   standalone: false
 })
 export class SidebarTogglerDirective implements OnInit {
-
   bp?: string;
 
   @Input('sidebarToggler') breakpoint?: string;
@@ -37,8 +36,7 @@ export class SidebarTogglerDirective implements OnInit {
   /**
    * Constructs a new SidebarTogglerDirective.
    */
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit(): void {
     this.bp = this.breakpoint;
@@ -48,7 +46,9 @@ export class SidebarTogglerDirective implements OnInit {
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
     let cssClass;
-    (!!this.bp) ? cssClass = `sidebar-${this.bp}-show` : cssClass = SIDEBAR_CSS_CLASSES[0];
+    !!this.bp
+      ? (cssClass = `sidebar-${this.bp}-show`)
+      : (cssClass = SIDEBAR_CSS_CLASSES[0]);
     toggleClasses(cssClass, SIDEBAR_CSS_CLASSES);
   }
 }
