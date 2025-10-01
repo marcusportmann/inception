@@ -880,6 +880,10 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
         task = new Task(queueTaskRequest.getType(), initialTaskStep, queueTaskRequest.getData());
       }
 
+      if (queueTaskRequest.getExecuteAt() != null) {
+        task.setNextExecution(queueTaskRequest.getExecuteAt());
+      }
+
       if ((queueTaskRequest.getSuspended() != null) && queueTaskRequest.getSuspended()) {
         task.setStatus(TaskStatus.SUSPENDED);
       }

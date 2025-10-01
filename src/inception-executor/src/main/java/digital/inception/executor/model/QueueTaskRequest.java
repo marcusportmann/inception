@@ -19,6 +19,7 @@ package digital.inception.executor.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,9 +27,12 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 /**
  * The {@code QueueTaskRequest} class holds the information for a request to queue a task for
@@ -38,12 +42,12 @@ import java.io.Serializable;
  */
 @Schema(description = "A request to queue a task for execution")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "batchId", "externalReference", "suspended", "data"})
+@JsonPropertyOrder({"type", "batchId", "externalReference", "executeAt", "suspended", "data"})
 @XmlRootElement(name = "QueueTaskRequest", namespace = "https://inception.digital/executor")
 @XmlType(
     name = "QueueTaskRequest",
     namespace = "https://inception.digital/executor",
-    propOrder = {"type", "batchId", "externalReference", "suspended", "data"})
+    propOrder = {"type", "batchId", "externalReference", "executeAt", "suspended", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class QueueTaskRequest implements Serializable {
@@ -64,6 +68,14 @@ public class QueueTaskRequest implements Serializable {
   @NotNull
   @Size(min = 1, max = 10485760)
   private String data;
+
+  /** The date and time the task should be executed. */
+  @Schema(description = "The date and time the task should be executed")
+  @JsonProperty
+  @XmlElement(name = "ExecuteAt")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  private OffsetDateTime executeAt;
 
   /** The external reference for the task. */
   @Schema(description = "The external reference for the task")
@@ -137,6 +149,15 @@ public class QueueTaskRequest implements Serializable {
   }
 
   /**
+   * Returns the date and time the task should be executed.
+   *
+   * @return the date and time the task should be executed
+   */
+  public OffsetDateTime getExecuteAt() {
+    return executeAt;
+  }
+
+  /**
    * Returns the external reference for the task.
    *
    * @return the external reference for the task
@@ -179,6 +200,15 @@ public class QueueTaskRequest implements Serializable {
    */
   public void setData(String data) {
     this.data = data;
+  }
+
+  /**
+   * Set the date and time the task should be executed.
+   *
+   * @param executeAt the date and time the task should be executed
+   */
+  public void setExecuteAt(OffsetDateTime executeAt) {
+    this.executeAt = executeAt;
   }
 
   /**

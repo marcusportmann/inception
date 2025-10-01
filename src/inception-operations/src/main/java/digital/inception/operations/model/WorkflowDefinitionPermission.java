@@ -39,6 +39,9 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
+import org.hibernate.annotations.JavaType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 /**
  * The {@code WorkflowDefinitionPermission} class holds the information for a workflow definition
@@ -101,6 +104,8 @@ public class WorkflowDefinitionPermission implements Serializable {
   @NotNull
   @Id
   @Column(name = "type", length = 50, nullable = false)
+  @JdbcTypeCode(SqlTypes.VARCHAR)
+  @JavaType(WorkflowPermissionTypeJavaType.class)
   private WorkflowPermissionType type;
 
   /** Constructs a new {@code WorkflowDefinitionPermission}. */
