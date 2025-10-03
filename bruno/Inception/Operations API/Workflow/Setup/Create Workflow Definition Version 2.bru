@@ -40,7 +40,8 @@ body:json {
         "name": "Test Workflow Step 1",
         "description": "The description for Test Workflow Step 1",
         "external": false,
-        "internal": false
+        "internal": false,
+        "optional": false
       },
       {
         "sequence": 2,
@@ -48,7 +49,8 @@ body:json {
         "name": "Test Workflow Step 2",
         "description": "The description for Test Workflow Step 2",
         "external": false,
-        "internal": false
+        "internal": false,
+        "optional": true
       },
       {
         "sequence": 3,
@@ -56,7 +58,8 @@ body:json {
         "name": "Test Workflow Step 3",
         "description": "The description for Test Workflow Step 3",
         "external": false,
-        "internal": false
+        "internal": false,
+        "optional": false
       }
     ],  
     "permissions": [
@@ -69,6 +72,13 @@ body:json {
       "start_form",
       "work_form"
     ],  
+    "variables": [
+      {
+        "name": "test_variable_name",      
+        "description": "The description for the test variable",
+        "required": false
+      }    
+    ],
     "validationSchemaType": "json",
     "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}"
   }

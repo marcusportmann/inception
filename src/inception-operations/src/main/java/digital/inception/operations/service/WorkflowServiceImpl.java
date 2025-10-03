@@ -20,6 +20,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.json.JsonClasspathResource;
 import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowAttributeDefinitionException;
@@ -98,6 +99,7 @@ import digital.inception.operations.persistence.jpa.WorkflowDefinitionRepository
 import digital.inception.operations.persistence.jpa.WorkflowDefinitionSummaryRepository;
 import digital.inception.operations.persistence.jpa.WorkflowEngineRepository;
 import digital.inception.operations.store.WorkflowStore;
+import jakarta.annotation.PostConstruct;
 import java.lang.reflect.Constructor;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -107,6 +109,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -1625,6 +1628,50 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
   }
 
+  /** Initialize the Workflow Service. */
+  @PostConstruct
+  public void init() {
+    log.info("Initializing the Workflow Service");
+
+    // Load the workflow definitions from the classpath
+    try {
+      log.info("Loading the workflow definitions from the classpath");
+
+      List<JsonClasspathResource<WorkflowDefinition>> jsonClasspathResources =
+          JsonClasspathResource.loadFromClasspath(
+              "workflow-definitions", getObjectMapper(), WorkflowDefinition.class);
+
+      for (JsonClasspathResource<WorkflowDefinition> jsonClasspathResource :
+          jsonClasspathResources) {
+        WorkflowDefinition workflowDefinition = jsonClasspathResource.value();
+
+        if (workflowDefinitionVersionExists(
+            workflowDefinition.getId(), workflowDefinition.getVersion())) {
+          updateWorkflowDefinition(workflowDefinition);
+
+          log.info(
+              "Updated the workflow definition ("
+                  + workflowDefinition.getId()
+                  + ") version ("
+                  + workflowDefinition.getVersion()
+                  + ")");
+        } else {
+          createWorkflowDefinition(workflowDefinition);
+
+          log.info(
+              "Created the workflow definition ("
+                  + workflowDefinition.getId()
+                  + ") version ("
+                  + workflowDefinition.getVersion()
+                  + ")");
+        }
+      }
+    } catch (Throwable e) {
+      throw new BeanInitializationException(
+          "Failed to load the workflow definitions from the classpath", e);
+    }
+  }
+
   @Override
   public Workflow initiateWorkflow(
       UUID tenantId, InitiateWorkflowRequest initiateWorkflowRequest, String initiatedBy)
@@ -2067,7 +2114,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     validateArgument("searchWorkflowsRequest", searchWorkflowsRequest);
 
     try {
-      return workflowStore.searchWorkflows(tenantId, searchWorkflowsRequest);
+      return workflowStore.searchWorkflows(tenantId, searchWorkflowsRequest, maxFilteredWorkflows);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to search for workflows for the tenant (" + tenantId + ")", e);

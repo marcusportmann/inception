@@ -477,10 +477,11 @@ public interface WorkflowStore {
    *
    * @param tenantId the ID for the tenant
    * @param searchWorkflowsRequest the request to search for workflows matching specific criteria
+   * @param maxResults the maximum number of workflow summaries that should be retrieved
    * @return the summaries for the workflows matching the search criteria
    * @throws ServiceUnavailableException if the workflow search failed
    */
-  WorkflowSummaries searchWorkflows(UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest)
+  WorkflowSummaries searchWorkflows(UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest, int maxResults)
       throws ServiceUnavailableException;
 
   /**

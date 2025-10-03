@@ -237,6 +237,7 @@ public class DocumentServiceTests {
             "test_shared_document_definition_" + randomId(),
             sharedDocumentDefinitionCategory.getId(),
             "Test Shared Document Definition",
+            "The description for the test shared document definition",
             List.of(RequiredDocumentAttribute.EXPIRY_DATE, RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
@@ -568,6 +569,10 @@ public class DocumentServiceTests {
         documentDefinition1.getName(),
         documentDefinition2.getName(),
         "The name values for the document definitions do not match");
+    assertEquals(
+        documentDefinition1.getDescription(),
+        documentDefinition2.getDescription(),
+        "The description values for the document definitions do not match");
 
     assertEquals(
         (documentDefinition1.getRequiredDocumentAttributes() != null)

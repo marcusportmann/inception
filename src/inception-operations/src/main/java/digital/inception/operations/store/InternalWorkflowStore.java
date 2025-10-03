@@ -29,12 +29,15 @@ import digital.inception.operations.exception.WorkflowInteractionLinkNotFoundExc
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
+import digital.inception.operations.model.AttributeSearchCriteria;
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.ExternalReferenceSearchCriteria;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
 import digital.inception.operations.model.SearchWorkflowsRequest;
+import digital.inception.operations.model.VariableSearchCriteria;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
@@ -44,6 +47,7 @@ import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocumentStatus;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowEngineIds;
+import digital.inception.operations.model.WorkflowExternalReference;
 import digital.inception.operations.model.WorkflowInteractionLink;
 import digital.inception.operations.model.WorkflowInteractionLinkId;
 import digital.inception.operations.model.WorkflowNote;
@@ -55,6 +59,7 @@ import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
+import digital.inception.operations.model.WorkflowVariable;
 import digital.inception.operations.persistence.jpa.WorkflowDocumentRepository;
 import digital.inception.operations.persistence.jpa.WorkflowInteractionLinkRepository;
 import digital.inception.operations.persistence.jpa.WorkflowNoteRepository;
@@ -81,6 +86,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -176,6 +182,31 @@ public class InternalWorkflowStore implements WorkflowStore {
       log.warn("Failed to check if we are using Oracle", e);
       usingOracle = false;
     }
+  }
+
+  private static Sort.Direction resolveSortDirection(
+      digital.inception.core.sorting.SortDirection sortDirection) {
+    if (sortDirection == null) {
+      return Sort.Direction.DESC;
+    } else if (sortDirection == SortDirection.ASCENDING) {
+      return Sort.Direction.ASC;
+    } else {
+      return Sort.Direction.DESC;
+    }
+  }
+
+  private static String resolveWorkflowSortByPropertyName(WorkflowSortBy sortBy) {
+    if (sortBy == null) return "initiated";
+    return switch (sortBy) {
+      case WorkflowSortBy.DEFINITION_ID -> "definitionId";
+      case WorkflowSortBy.FINALIZED -> "finalized";
+      case WorkflowSortBy.FINALIZED_BY -> "finalizedBy";
+      case WorkflowSortBy.INITIATED -> "initiated";
+      case WorkflowSortBy.INITIATED_BY -> "initiatedBy";
+      case WorkflowSortBy.UPDATED -> "updated";
+      case WorkflowSortBy.UPDATED_BY -> "updatedBy";
+      default -> "initiated";
+    };
   }
 
   @Override
@@ -1355,9 +1386,185 @@ public class InternalWorkflowStore implements WorkflowStore {
 
   @Override
   public WorkflowSummaries searchWorkflows(
-      UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest)
+      UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest, int maxResults)
       throws ServiceUnavailableException {
-    throw new ServiceUnavailableException("Not Implemented");
+    try {
+      // Build Specification
+      Specification<WorkflowSummary> specification =
+          (root, query, criteriaBuilder) -> {
+            // Avoid duplicates when joins or subqueries are involved
+            query.distinct(true);
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            // Tenant filter
+            if (tenantId != null) {
+              predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+            }
+
+            // Top-level filters
+            if (StringUtils.hasText(searchWorkflowsRequest.getWorkflowDefinitionId())) {
+              predicates.add(
+                  criteriaBuilder.equal(
+                      criteriaBuilder.lower(root.get("definitionId")),
+                      searchWorkflowsRequest.getWorkflowDefinitionId().toLowerCase()));
+            }
+
+            if (searchWorkflowsRequest.getStatus() != null) {
+              predicates.add(
+                  criteriaBuilder.equal(root.get("status"), searchWorkflowsRequest.getStatus()));
+            }
+
+            // Attribute criteria (EXISTS for each pair)
+            if (searchWorkflowsRequest.getAttributes() != null
+                && !searchWorkflowsRequest.getAttributes().isEmpty()) {
+              for (AttributeSearchCriteria attributeSearchCriteria :
+                  searchWorkflowsRequest.getAttributes()) {
+                if (attributeSearchCriteria == null) continue;
+
+                var subQuery = query.subquery(Integer.class);
+                var workflowAttributeRoot = subQuery.from(WorkflowAttribute.class);
+                var subPredicate =
+                    criteriaBuilder.equal(
+                        workflowAttributeRoot.get("workflowId"), root.get("id"));
+
+                if (attributeSearchCriteria.getCode() != null
+                    && !attributeSearchCriteria.getCode().isBlank()) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(workflowAttributeRoot.get("code")),
+                              attributeSearchCriteria.getCode().toLowerCase()));
+                }
+                if (attributeSearchCriteria.getValue() != null
+                    && !attributeSearchCriteria.getValue().isBlank()) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(workflowAttributeRoot.get("value")),
+                              attributeSearchCriteria.getValue().toLowerCase()));
+                }
+
+                subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
+                predicates.add(criteriaBuilder.exists(subQuery));
+              }
+            }
+
+            // External reference criteria (EXISTS for each pair)
+            if (searchWorkflowsRequest.getExternalReferences() != null
+                && !searchWorkflowsRequest.getExternalReferences().isEmpty()) {
+              for (ExternalReferenceSearchCriteria externalReferenceSearchCriteria :
+                  searchWorkflowsRequest.getExternalReferences()) {
+                if (externalReferenceSearchCriteria == null) continue;
+
+                var subQuery = query.subquery(Integer.class);
+                var workflowExternalReferenceRoot = subQuery.from(WorkflowExternalReference.class);
+                var subPredicate =
+                    criteriaBuilder.equal(
+                        workflowExternalReferenceRoot.get("objectId"), root.get("id"));
+
+                if (externalReferenceSearchCriteria.getType() != null
+                    && !externalReferenceSearchCriteria.getType().isBlank()) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(workflowExternalReferenceRoot.get("type")),
+                              externalReferenceSearchCriteria.getType().toLowerCase()));
+                }
+                if (externalReferenceSearchCriteria.getValue() != null
+                    && !externalReferenceSearchCriteria.getValue().isBlank()) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(workflowExternalReferenceRoot.get("value")),
+                              externalReferenceSearchCriteria.getValue().toLowerCase()));
+                }
+
+                subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
+                predicates.add(criteriaBuilder.exists(subQuery));
+              }
+            }
+
+            // Variable criteria (EXISTS for each pair)
+            if (searchWorkflowsRequest.getVariables() != null
+                && !searchWorkflowsRequest.getVariables().isEmpty()) {
+              for (VariableSearchCriteria variableSearchCriteria :
+                  searchWorkflowsRequest.getVariables()) {
+                if (variableSearchCriteria == null) continue;
+
+                var subQuery = query.subquery(Integer.class);
+                var workflowVariableRoot = subQuery.from(WorkflowVariable.class);
+                var subPredicate =
+                    criteriaBuilder.equal(
+                        workflowVariableRoot.get("workflowId"), root.get("id"));
+
+                if (variableSearchCriteria.getName() != null
+                    && !variableSearchCriteria.getName().isBlank()) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(workflowVariableRoot.get("name")),
+                              variableSearchCriteria.getName().toLowerCase()));
+                }
+                if (variableSearchCriteria.getValue() != null
+                    && !variableSearchCriteria.getValue().isBlank()) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(workflowVariableRoot.get("value")),
+                              variableSearchCriteria.getValue().toLowerCase()));
+                }
+
+                subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
+                predicates.add(criteriaBuilder.exists(subQuery));
+              }
+            }
+
+            return criteriaBuilder.and(
+                predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
+          };
+
+      // Sorting
+      String sortByPropertyName =
+          resolveWorkflowSortByPropertyName(searchWorkflowsRequest.getSortBy());
+      Sort.Direction dir = resolveSortDirection(searchWorkflowsRequest.getSortDirection());
+      Sort sort = Sort.by(dir, sortByPropertyName);
+
+      // Paging
+      int pageIndex =
+          searchWorkflowsRequest.getPageIndex() == null
+              ? 0
+              : Math.max(0, searchWorkflowsRequest.getPageIndex());
+      int pageSize =
+          searchWorkflowsRequest.getPageSize() == null
+              ? 50
+              : Math.max(1, Math.min(searchWorkflowsRequest.getPageSize(), maxResults));
+      Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
+
+      Page<WorkflowSummary> workflowSummaryPage =
+          workflowSummaryRepository.findAll(specification, pageable);
+
+      return new WorkflowSummaries(
+          tenantId,
+          workflowSummaryPage.toList(),
+          workflowSummaryPage.getTotalElements(),
+          searchWorkflowsRequest.getWorkflowDefinitionId(),
+          searchWorkflowsRequest.getStatus(),
+          null,
+          searchWorkflowsRequest.getSortBy(),
+          searchWorkflowsRequest.getSortDirection(),
+          pageIndex,
+          pageSize);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to search for the workflows for the tenant (" + tenantId + ")", e);
+    }
   }
 
   @Override

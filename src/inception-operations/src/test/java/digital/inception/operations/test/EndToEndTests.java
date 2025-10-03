@@ -328,6 +328,7 @@ public class EndToEndTests {
             "Test Workflow Step 1",
             "The description for Test Workflow Step 1",
             false,
+            false,
             false));
 
     workflowDefinition.addStepDefinition(
@@ -338,6 +339,7 @@ public class EndToEndTests {
             "The description for Test Workflow Step 2",
             false,
             true,
+            true,
             "P1D"));
 
     workflowDefinition.addStepDefinition(
@@ -346,6 +348,7 @@ public class EndToEndTests {
             "test_workflow_step_3",
             "Test Workflow Step 3",
             "The description for Test Workflow Step 3",
+            false,
             false,
             false));
 

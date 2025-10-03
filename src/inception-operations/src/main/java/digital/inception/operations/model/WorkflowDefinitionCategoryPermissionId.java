@@ -40,9 +40,6 @@ public class WorkflowDefinitionCategoryPermissionId implements Serializable {
   /** The code for the role the workflow definition category permission is assigned to. */
   private String roleCode;
 
-  /** The workflow permission type. */
-  private WorkflowPermissionType type;
-
   /** Constructs a new {@code WorkflowDefinitionCategoryPermissionId}. */
   public WorkflowDefinitionCategoryPermissionId() {}
 
@@ -69,8 +66,7 @@ public class WorkflowDefinitionCategoryPermissionId implements Serializable {
     WorkflowDefinitionCategoryPermissionId other = (WorkflowDefinitionCategoryPermissionId) object;
 
     return StringUtil.equalsIgnoreCase(categoryId, other.categoryId)
-        && StringUtil.equalsIgnoreCase(roleCode, other.roleCode)
-        && type == other.type;
+        && StringUtil.equalsIgnoreCase(roleCode, other.roleCode);
   }
 
   /**
@@ -81,7 +77,6 @@ public class WorkflowDefinitionCategoryPermissionId implements Serializable {
   @Override
   public int hashCode() {
     return ((categoryId == null) ? 0 : categoryId.hashCode())
-        + ((roleCode == null) ? 0 : roleCode.hashCode())
-        + ((type == null) ? 0 : type.hashCode());
+        + ((roleCode == null) ? 0 : roleCode.hashCode());
   }
 }

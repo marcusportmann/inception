@@ -39,9 +39,6 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import org.hibernate.annotations.JavaType;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 /**
  * The {@code WorkflowDefinitionCategoryPermission} class holds the information for a workflow
@@ -51,14 +48,14 @@ import org.hibernate.type.SqlTypes;
  */
 @Schema(description = "A workflow definition category permission")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"roleCode", "type"})
+@JsonPropertyOrder({"roleCode"})
 @XmlRootElement(
     name = "WorkflowDefinitionCategoryPermission",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowDefinitionCategoryPermission",
     namespace = "https://inception.digital/operations",
-    propOrder = {"roleCode", "type"})
+    propOrder = {"roleCode"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_definition_category_permissions")
@@ -91,17 +88,6 @@ public class WorkflowDefinitionCategoryPermission implements Serializable {
   @Column(name = "role_code", length = 100, nullable = false)
   private String roleCode;
 
-  /** The workflow permission type. */
-  @Schema(description = "The workflow permission type", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
-  @NotNull
-  @Id
-  @Column(name = "type", length = 50, nullable = false)
-  @JdbcTypeCode(SqlTypes.VARCHAR)
-  @JavaType(WorkflowPermissionTypeJavaType.class)
-  private WorkflowPermissionType type;
-
   /** Constructs a new {@code WorkflowDefinitionCategoryPermission}. */
   public WorkflowDefinitionCategoryPermission() {}
 
@@ -110,11 +96,9 @@ public class WorkflowDefinitionCategoryPermission implements Serializable {
    *
    * @param roleCode the code for the role the workflow definition category permission is assigned
    *     to
-   * @param type the workflow permission type
    */
-  public WorkflowDefinitionCategoryPermission(String roleCode, WorkflowPermissionType type) {
+  public WorkflowDefinitionCategoryPermission(String roleCode) {
     this.roleCode = roleCode;
-    this.type = type;
   }
 
   /**
@@ -140,8 +124,7 @@ public class WorkflowDefinitionCategoryPermission implements Serializable {
     WorkflowDefinitionCategoryPermission other = (WorkflowDefinitionCategoryPermission) object;
 
     return StringUtil.equalsIgnoreCase(categoryId, other.categoryId)
-        && StringUtil.equalsIgnoreCase(roleCode, other.roleCode)
-        && type == other.type;
+        && StringUtil.equalsIgnoreCase(roleCode, other.roleCode);
   }
 
   /**
@@ -154,15 +137,6 @@ public class WorkflowDefinitionCategoryPermission implements Serializable {
   }
 
   /**
-   * Returns the workflow permission type.
-   *
-   * @return the workflow permission type
-   */
-  public WorkflowPermissionType getType() {
-    return type;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -170,8 +144,7 @@ public class WorkflowDefinitionCategoryPermission implements Serializable {
   @Override
   public int hashCode() {
     return ((categoryId == null) ? 0 : categoryId.hashCode())
-        + ((roleCode == null) ? 0 : roleCode.hashCode())
-        + ((type == null) ? 0 : type.hashCode());
+        + ((roleCode == null) ? 0 : roleCode.hashCode());
   }
 
   /**
@@ -182,15 +155,6 @@ public class WorkflowDefinitionCategoryPermission implements Serializable {
    */
   public void setRoleCode(String roleCode) {
     this.roleCode = roleCode;
-  }
-
-  /**
-   * Set the workflow permission type.
-   *
-   * @param type the workflow permission type
-   */
-  public void setType(WorkflowPermissionType type) {
-    this.type = type;
   }
 
   /**

@@ -50,6 +50,7 @@ import java.util.UUID;
   "workflowId",
   "documentDefinitionId",
   "documentDefinitionName",
+  "documentDefinitionDescription",
   "requested",
   "description"
 })
@@ -65,6 +66,7 @@ import java.util.UUID;
       "workflowId",
       "documentDefinitionId",
       "documentDefinitionName",
+      "documentDefinitionDescription",
       "requested",
       "description"
     })
@@ -80,6 +82,15 @@ public class OutstandingWorkflowDocument implements Serializable {
   @Size(max = 500)
   @Column(name = "description", length = 500)
   private String description;
+
+  /** The description for the document definition the workflow document is associated with. */
+  @Schema(
+      description =
+          "The description for the document definition the workflow document is associated with")
+  @JsonProperty
+  @XmlElement(name = "DocumentDefinitionName")
+  @Size(min = 1, max = 500)
+  private String documentDefinitionDescription;
 
   /** The ID for the document definition the workflow document is associated with. */
   @Schema(
@@ -159,6 +170,8 @@ public class OutstandingWorkflowDocument implements Serializable {
    *     associated with
    * @param documentDefinitionName the name for the document definition the workflow document is
    *     associated with
+   * @param documentDefinitionDescription the description for the document definition the workflow document is
+   *     associated with
    * @param status the status of the workflow document
    * @param requested the date and time the workflow document was requested
    * @param description the description for the workflow document
@@ -169,6 +182,7 @@ public class OutstandingWorkflowDocument implements Serializable {
       UUID workflowId,
       String documentDefinitionId,
       String documentDefinitionName,
+      String documentDefinitionDescription,
       WorkflowDocumentStatus status,
       OffsetDateTime requested,
       String description) {
@@ -177,6 +191,7 @@ public class OutstandingWorkflowDocument implements Serializable {
     this.workflowId = workflowId;
     this.documentDefinitionId = documentDefinitionId;
     this.documentDefinitionName = documentDefinitionName;
+    this.documentDefinitionDescription = documentDefinitionDescription;
     this.status = status;
     this.requested = requested;
     this.description = description;
@@ -189,6 +204,15 @@ public class OutstandingWorkflowDocument implements Serializable {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the description for the document definition the workflow document is associated with.
+   *
+   * @return the description for the document definition the workflow document is associated with
+   */
+  public String getDocumentDefinitionDescription() {
+    return documentDefinitionDescription;
   }
 
   /**
@@ -261,6 +285,16 @@ public class OutstandingWorkflowDocument implements Serializable {
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Set the description for the document definition the workflow document is associated with.
+   *
+   * @param documentDefinitionDescription the description for the document definition the workflow
+   *     document is associated with
+   */
+  public void setDocumentDefinitionDescription(String documentDefinitionDescription) {
+    this.documentDefinitionDescription = documentDefinitionDescription;
   }
 
   /**

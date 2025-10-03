@@ -141,6 +141,7 @@ public interface WorkflowDocumentRepository
         wd.workflowId,
         wd.documentDefinitionId,
         dd.name,
+        dd.description,
         wd.status,
         wd.requested,
         wd.description

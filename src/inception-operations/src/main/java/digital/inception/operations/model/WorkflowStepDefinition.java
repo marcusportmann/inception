@@ -66,6 +66,7 @@ import org.springframework.boot.convert.DurationStyle;
   "description",
   "external",
   "internal",
+  "optional",
   "timeToComplete"
 })
 @XmlRootElement(name = "WorkflowStepDefinition", namespace = "https://inception.digital/operations")
@@ -79,6 +80,7 @@ import org.springframework.boot.convert.DurationStyle;
       "description",
       "external",
       "internal",
+      "optional",
       "timeToComplete"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -159,6 +161,16 @@ public class WorkflowStepDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /** Is this workflow step optional? */
+  @Schema(
+      description = "Is this workflow step optional",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Optional", required = true)
+  @NotNull
+  @Column(name = "optional", nullable = false)
+  private Boolean optional;
+
   /** The sequence number for the workflow step. */
   @Schema(
       description = "The sequence number for the workflow step",
@@ -189,6 +201,7 @@ public class WorkflowStepDefinition implements Serializable {
    * @param description the description for the workflow step
    * @param external is this workflow step completed by one or more external users
    * @param internal is this workflow step internal-only and excluded for external users
+   * @param optional is this workflow step optional
    */
   public WorkflowStepDefinition(
       int sequence,
@@ -196,13 +209,15 @@ public class WorkflowStepDefinition implements Serializable {
       String name,
       String description,
       boolean external,
-      boolean internal) {
+      boolean internal,
+      boolean optional) {
     this.sequence = sequence;
     this.code = code;
     this.name = name;
     this.description = description;
     this.external = external;
     this.internal = internal;
+    this.optional = optional;
   }
 
   /**
@@ -214,6 +229,7 @@ public class WorkflowStepDefinition implements Serializable {
    * @param description the description for the workflow step
    * @param external is this workflow step completed by one or more external users
    * @param internal is this workflow step internal-only and excluded for external users
+   * @param optional is this workflow step optional
    * @param timeToComplete the ISO-8601 duration format amount of time to complete the workflow step
    */
   public WorkflowStepDefinition(
@@ -223,6 +239,7 @@ public class WorkflowStepDefinition implements Serializable {
       String description,
       boolean external,
       boolean internal,
+      boolean optional,
       String timeToComplete) {
     this.sequence = sequence;
     this.code = code;
@@ -230,6 +247,7 @@ public class WorkflowStepDefinition implements Serializable {
     this.description = description;
     this.external = external;
     this.internal = internal;
+    this.optional = optional;
     this.timeToComplete = timeToComplete;
   }
 
@@ -355,6 +373,15 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
+   * Returns whether the workflow step is optional.
+   *
+   * @return {@code true} if the workflow step is optional or {@code false} otherwise
+   */
+  public Boolean isOptional() {
+    return optional;
+  }
+
+  /**
    * Set the code for the workflow step.
    *
    * @param code the code for the workflow step
@@ -399,6 +426,15 @@ public class WorkflowStepDefinition implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set whether the workflow step is optional.
+   *
+   * @param optional {@code true} if the workflow step is optional or {@code false} otherwise
+   */
+  public void setOptional(Boolean optional) {
+    this.optional = optional;
   }
 
   /**

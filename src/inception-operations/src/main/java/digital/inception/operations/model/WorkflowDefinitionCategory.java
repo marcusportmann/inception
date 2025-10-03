@@ -153,8 +153,8 @@ public class WorkflowDefinitionCategory implements Serializable {
   public void addPermission(WorkflowDefinitionCategoryPermission permission) {
     permissions.removeIf(
         existingPermission ->
-            (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), permission.getRoleCode())
-                && existingPermission.getType() == permission.getType()));
+            (StringUtil.equalsIgnoreCase(
+                existingPermission.getRoleCode(), permission.getRoleCode())));
 
     permission.setWorkflowDefinitionCategory(this);
 
@@ -242,8 +242,7 @@ public class WorkflowDefinitionCategory implements Serializable {
   public void removePermission(String roleCode, WorkflowPermissionType type) {
     permissions.removeIf(
         existingPermission ->
-            (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), roleCode)
-                && (existingPermission.getType() == type)));
+            (StringUtil.equalsIgnoreCase(existingPermission.getRoleCode(), roleCode)));
   }
 
   /**

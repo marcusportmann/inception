@@ -32,9 +32,20 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "WorkflowPermissionType", namespace = "https://inception.digital/operations")
 public enum WorkflowPermissionType implements CodeEnum {
 
+  /** Cancel Workflow. */
+  CANCEL_WORKFLOW("cancel_workflow", "Cancel Workflow"),
+
   /** Initiate Workflow. */
-  @XmlEnumValue("InitiateWorkflow")
-  INITIATE_WORKFLOW("initiate_workflow", "Initiate Workflow");
+  INITIATE_WORKFLOW("initiate_workflow", "Initiate Workflow"),
+
+  /** Suspend Workflow. */
+  SUSPEND_WORKFLOW("suspend_workflow", "Suspend Workflow"),
+
+  /** Unsuspend Workflow. */
+  UNSUSPEND_WORKFLOW("unsuspend_workflow", "Unsuspend Workflow"),
+
+  /** View Workflow. */
+  VIEW_WORKFLOW("view_workflow", "View Workflow");
 
   private final String code;
 

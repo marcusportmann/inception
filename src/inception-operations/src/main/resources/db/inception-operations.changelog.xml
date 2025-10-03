@@ -153,6 +153,7 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the document definition">
         <constraints nullable="false"/>
       </column>
+      <column name="description" type="nvarchar(500)" defaultValue="" remarks="The description for the document definition"/>
       <column name="required_document_attributes" type="nvarchar(510)"
         remarks="The comma-delimited list of codes for the required attributes for a document associated with the document definition"/>
     </createTable>
@@ -277,10 +278,6 @@
       </column>
       <column name="role_code" type="nvarchar(100)"
         remarks="The code for the role the workflow definition category permission is assigned to">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="type" type="nvarchar(50)"
-        remarks="The code for the workflow permission type for the workflow definition category permission">
         <constraints primaryKey="true" nullable="false"/>
       </column>
     </createTable>
@@ -465,6 +462,10 @@
       </column>
       <column name="internal" type="boolean"
         remarks="Is this workflow step internal-only and excluded for external users">
+        <constraints nullable="false"/>
+      </column>
+      <column name="optional" type="boolean"
+        remarks="Is this workflow step optional">
         <constraints nullable="false"/>
       </column>
       <column name="time_to_complete" type="nvarchar(50)"

@@ -20,6 +20,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.json.JsonClasspathResource;
 import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
@@ -49,10 +50,12 @@ import digital.inception.operations.persistence.jpa.DocumentDefinitionCategoryRe
 import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionSummaryRepository;
 import digital.inception.operations.store.DocumentStore;
+import jakarta.annotation.PostConstruct;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -830,6 +833,39 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + tenantId
               + ")",
           e);
+    }
+  }
+
+  /** Initialize the Document Service. */
+  @PostConstruct
+  public void init() {
+    log.info("Initializing the Document Service");
+
+    // Load the document definitions from the classpath
+    try {
+      log.info("Loading the document definitions from the classpath");
+
+      List<JsonClasspathResource<DocumentDefinition>> jsonClasspathResources =
+          JsonClasspathResource.loadFromClasspath(
+              "document-definitions", getObjectMapper(), DocumentDefinition.class);
+
+      for (JsonClasspathResource<DocumentDefinition> jsonClasspathResource :
+          jsonClasspathResources) {
+        DocumentDefinition documentDefinition = jsonClasspathResource.value();
+
+        if (documentDefinitionExists(documentDefinition.getId())) {
+          updateDocumentDefinition(documentDefinition);
+
+          log.info("Updated the document definition (" + documentDefinition.getId() + ")");
+        } else {
+          createDocumentDefinition(documentDefinition);
+
+          log.info("Created the document definition (" + documentDefinition.getId() + ")");
+        }
+      }
+    } catch (Throwable e) {
+      throw new BeanInitializationException(
+          "Failed to load the document definitions from the classpath", e);
     }
   }
 

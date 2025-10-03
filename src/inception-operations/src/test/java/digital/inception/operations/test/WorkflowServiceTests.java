@@ -185,6 +185,7 @@ public class WorkflowServiceTests {
             "Test Workflow Step 1",
             "The description for Test Workflow Step 1",
             false,
+            false,
             false));
 
     workflowDefinition.addAttribute(
@@ -329,8 +330,7 @@ public class WorkflowServiceTests {
             "test_workflow_definition_category_" + randomId(), "Test Workflow Definition Category");
 
     workflowDefinitionCategory.addPermission(
-        new WorkflowDefinitionCategoryPermission(
-            "Administrator", WorkflowPermissionType.INITIATE_WORKFLOW));
+        new WorkflowDefinitionCategoryPermission("Administrator"));
 
     workflowService.createWorkflowDefinitionCategory(workflowDefinitionCategory);
 
@@ -361,6 +361,7 @@ public class WorkflowServiceTests {
             "Test Workflow Step 1",
             "The description for Test Workflow Step 1",
             false,
+            false,
             false));
 
     workflowDefinition.addStepDefinition(
@@ -371,6 +372,7 @@ public class WorkflowServiceTests {
             "The description for Test Workflow Step 2",
             false,
             true,
+            true,
             "P1D"));
 
     workflowDefinition.addStepDefinition(
@@ -379,6 +381,7 @@ public class WorkflowServiceTests {
             "test_workflow_step_3",
             "Test Workflow Step 3",
             "The description for Test Workflow Step 3",
+            false,
             false,
             false));
 
@@ -1179,6 +1182,7 @@ public class WorkflowServiceTests {
             "Test Workflow Step 1",
             "The description for Test Workflow Step 1",
             false,
+            false,
             false));
 
     tenantWorkflowDefinition.addStepDefinition(
@@ -1188,7 +1192,8 @@ public class WorkflowServiceTests {
             "Test Workflow Step 2",
             "The description for Test Workflow Step 2",
             false,
-            false));
+            false,
+            true));
 
     tenantWorkflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -1196,6 +1201,7 @@ public class WorkflowServiceTests {
             "test_workflow_step_3",
             "Test Workflow Step 3",
             "The description for Test Workflow Step 3",
+            false,
             false,
             false));
 
@@ -1442,8 +1448,6 @@ public class WorkflowServiceTests {
                 fail(
                     "Failed to find the permission ("
                         + workflowDefinitionCategoryPermission1.getRoleCode()
-                        + ")("
-                        + workflowDefinitionCategoryPermission1.getType()
                         + ") for the workflow definition category ("
                         + workflowDefinitionCategory1.getId()
                         + ")");
