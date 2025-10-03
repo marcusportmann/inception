@@ -1,0 +1,48 @@
+meta {
+  name: Search Workflows
+  type: http
+  seq: 23
+}
+
+post {
+  url: {{baseURL}}/api/operations/search-workflows
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "pageIndex": 0,
+    "pageSize": 10,
+    "sortBy": "definition_id",
+    "sortDirection": "asc",
+    "workflowDefinitionId": "test_workflow_definition",
+    "status": "active",
+    "attributes": [
+      {
+        "code": "test_workflow_attribute_code",
+        "value": "test_workflow_attribute_value"
+      }
+    ],  
+    "externalReferences": [
+      {
+        "type": "test_external_reference_code",
+        "value": "Test External Reference"
+      }
+    ],
+    "variables": [
+      {
+        "name": "test_variable_name",
+        "value": "Test variable value"
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+settings {
+  encodeUrl: true
+}
