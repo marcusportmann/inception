@@ -1225,11 +1225,11 @@ public class InternalWorkflowStore implements WorkflowStore {
             }
 
             // Top-level filters
-            if (StringUtils.hasText(searchWorkflowsRequest.getWorkflowDefinitionId())) {
+            if (StringUtils.hasText(searchWorkflowsRequest.getDefinitionId())) {
               andPredicates.add(
                   criteriaBuilder.equal(
                       criteriaBuilder.lower(root.get("definitionId")),
-                      searchWorkflowsRequest.getWorkflowDefinitionId().toLowerCase()));
+                      searchWorkflowsRequest.getDefinitionId().toLowerCase()));
             }
 
             if (searchWorkflowsRequest.getStatus() != null) {

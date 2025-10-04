@@ -41,7 +41,7 @@ import java.util.List;
 @Schema(description = "A request to search for documents matching specific criteria")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "documentDefinitionId",
+  "definitionId",
   "attributes",
   "externalReferences",
   "sortBy",
@@ -54,7 +54,7 @@ import java.util.List;
     name = "SearchDocumentsRequest",
     namespace = "https://inception.digital/operations",
     propOrder = {
-      "documentDefinitionId",
+      "definitionId",
       "attributes",
       "externalReferences",
       "sortBy",
@@ -77,10 +77,10 @@ public class SearchDocumentsRequest implements Serializable {
   private List<AttributeSearchCriteria> attributes;
 
   /** The document definition ID filter to apply to the documents. */
-  @Schema(description = "The ID for the document")
+  @Schema(description = "The document definition ID filter to apply to the documents")
   @JsonProperty
-  @XmlElement(name = "DocumentDefinitionId")
-  private String documentDefinitionId;
+  @XmlElement(name = "DefinitionId")
+  private String definitionId;
 
   /** The external reference search criteria to apply when searching for documents. */
   @Schema(
@@ -121,7 +121,7 @@ public class SearchDocumentsRequest implements Serializable {
   /**
    * Constructs a new {@code SearchDocumentsRequest}.
    *
-   * @param documentDefinitionId the document definition ID filter to apply to the documents
+   * @param definitionId the document definition ID filter to apply to the documents
    * @param attributes the attribute search criteria to apply when searching for documents
    * @param externalReferences the external reference search criteria to apply when searching for
    *     documents
@@ -131,14 +131,14 @@ public class SearchDocumentsRequest implements Serializable {
    * @param pageSize the page size
    */
   public SearchDocumentsRequest(
-      String documentDefinitionId,
+      String definitionId,
       List<AttributeSearchCriteria> attributes,
       List<ExternalReferenceSearchCriteria> externalReferences,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.documentDefinitionId = documentDefinitionId;
+    this.definitionId = definitionId;
     this.attributes = attributes;
     this.externalReferences = externalReferences;
     this.sortBy = sortBy;
@@ -161,8 +161,8 @@ public class SearchDocumentsRequest implements Serializable {
    *
    * @return the document definition ID filter to apply to the documents
    */
-  public String getDocumentDefinitionId() {
-    return documentDefinitionId;
+  public String getDefinitionId() {
+    return definitionId;
   }
 
   /**
@@ -222,10 +222,10 @@ public class SearchDocumentsRequest implements Serializable {
   /**
    * Set the document definition ID filter to apply to the documents.
    *
-   * @param documentDefinitionId the document definition ID filter to apply to the documents
+   * @param definitionId the document definition ID filter to apply to the documents
    */
-  public void setDocumentDefinitionId(String documentDefinitionId) {
-    this.documentDefinitionId = documentDefinitionId;
+  public void setDefinitionId(String definitionId) {
+    this.definitionId = definitionId;
   }
 
   /**

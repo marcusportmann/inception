@@ -41,7 +41,7 @@ import java.util.List;
 @Schema(description = "A request to search for workflows matching specific criteria")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "workflowDefinitionId",
+  "definitionId",
   "status",
   "attributes",
   "externalReferences",
@@ -56,7 +56,7 @@ import java.util.List;
     name = "SearchWorkflowsRequest",
     namespace = "https://inception.digital/operations",
     propOrder = {
-      "workflowDefinitionId",
+      "definitionId",
       "status",
       "attributes",
       "externalReferences",
@@ -79,6 +79,12 @@ public class SearchWorkflowsRequest implements Serializable {
   @XmlElement(name = "Attribute")
   @Valid
   private List<AttributeSearchCriteria> attributes;
+
+  /** The workflow definition ID filter to apply to the workflows. */
+  @Schema(description = "The workflow definition ID filter to apply to the workflows")
+  @JsonProperty
+  @XmlElement(name = "DefinitionId")
+  private String definitionId;
 
   /** The external reference search criteria to apply when searching for workflows. */
   @Schema(
@@ -127,19 +133,13 @@ public class SearchWorkflowsRequest implements Serializable {
   @Valid
   private List<VariableSearchCriteria> variables;
 
-  /** The workflow definition ID filter to apply to the workflows. */
-  @Schema(description = "The ID for the workflow")
-  @JsonProperty
-  @XmlElement(name = "WorkflowDefinitionId")
-  private String workflowDefinitionId;
-
   /** Constructs a new {@code SearchWorkflowsRequest}. */
   public SearchWorkflowsRequest() {}
 
   /**
    * Constructs a new {@code SearchWorkflowsRequest}.
    *
-   * @param workflowDefinitionId the workflow definition ID filter to apply to the workflows
+   * @param definitionId the workflow definition ID filter to apply to the workflows
    * @param status the status filter to apply to the workflows
    * @param attributes the attribute search criteria to apply when searching for workflows
    * @param externalReferences the external reference search criteria to apply when searching for
@@ -151,7 +151,7 @@ public class SearchWorkflowsRequest implements Serializable {
    * @param pageSize the page size
    */
   public SearchWorkflowsRequest(
-      String workflowDefinitionId,
+      String definitionId,
       WorkflowStatus status,
       List<AttributeSearchCriteria> attributes,
       List<ExternalReferenceSearchCriteria> externalReferences,
@@ -160,7 +160,7 @@ public class SearchWorkflowsRequest implements Serializable {
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.workflowDefinitionId = workflowDefinitionId;
+    this.definitionId = definitionId;
     this.status = status;
     this.attributes = attributes;
     this.externalReferences = externalReferences;
@@ -178,6 +178,15 @@ public class SearchWorkflowsRequest implements Serializable {
    */
   public List<AttributeSearchCriteria> getAttributes() {
     return attributes;
+  }
+
+  /**
+   * Returns the workflow definition ID filter to apply to the workflows.
+   *
+   * @return the workflow definition ID filter to apply to the workflows
+   */
+  public String getDefinitionId() {
+    return definitionId;
   }
 
   /**
@@ -244,21 +253,21 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Returns the workflow definition ID filter to apply to the workflows.
-   *
-   * @return the workflow definition ID filter to apply to the workflows
-   */
-  public String getWorkflowDefinitionId() {
-    return workflowDefinitionId;
-  }
-
-  /**
    * Set the attribute search criteria to apply when searching for workflows.
    *
    * @param attributes the attribute search criteria to apply when searching for workflows
    */
   public void setAttributes(List<AttributeSearchCriteria> attributes) {
     this.attributes = attributes;
+  }
+
+  /**
+   * Set the workflow definition ID filter to apply to the workflows.
+   *
+   * @param definitionId the workflow definition ID filter to apply to the workflows
+   */
+  public void setDefinitionId(String definitionId) {
+    this.definitionId = definitionId;
   }
 
   /**
@@ -323,14 +332,5 @@ public class SearchWorkflowsRequest implements Serializable {
    */
   public void setVariables(List<VariableSearchCriteria> variables) {
     this.variables = variables;
-  }
-
-  /**
-   * Set the workflow definition ID filter to apply to the workflows.
-   *
-   * @param workflowDefinitionId the workflow definition ID filter to apply to the workflows
-   */
-  public void setWorkflowDefinitionId(String workflowDefinitionId) {
-    this.workflowDefinitionId = workflowDefinitionId;
   }
 }

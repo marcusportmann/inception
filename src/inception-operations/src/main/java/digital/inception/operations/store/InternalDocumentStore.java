@@ -409,11 +409,11 @@ public class InternalDocumentStore implements DocumentStore {
             }
 
             // Top-level filters
-            if (StringUtils.hasText(searchDocumentsRequest.getDocumentDefinitionId())) {
+            if (StringUtils.hasText(searchDocumentsRequest.getDefinitionId())) {
               andPredicates.add(
                   criteriaBuilder.equal(
                       criteriaBuilder.lower(root.get("definitionId")),
-                      searchDocumentsRequest.getDocumentDefinitionId().toLowerCase()));
+                      searchDocumentsRequest.getDefinitionId().toLowerCase()));
             }
 
             // Collect OR buckets from attributes, external refs, variables
