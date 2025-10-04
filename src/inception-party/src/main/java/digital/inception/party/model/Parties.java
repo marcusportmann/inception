@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code Parties} class holds the results of a request to retrieve a list of parties.
@@ -39,28 +38,12 @@ import java.util.UUID;
  */
 @Schema(description = "The results of a request to retrieve a list of parties")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "tenantId",
-  "parties",
-  "total",
-  "sortBy",
-  "sortDirection",
-  "pageIndex",
-  "pageSize"
-})
+@JsonPropertyOrder({"parties", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "Parties", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Parties",
     namespace = "https://inception.digital/party",
-    propOrder = {
-      "tenantId",
-      "parties",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize"
-    })
+    propOrder = {"parties", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Parties implements Serializable {
@@ -98,14 +81,6 @@ public class Parties implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the parties are associated with. */
-  @Schema(
-      description = "The ID for the tenant the parties are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  private UUID tenantId;
-
   /** The total number of parties. */
   @Schema(description = "The total number of parties", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -118,7 +93,6 @@ public class Parties implements Serializable {
   /**
    * Constructs a new {@code Parties}.
    *
-   * @param tenantId the ID for the tenant the parties are associated with
    * @param parties the parties
    * @param total the total number of parties
    * @param sortBy the method used to sort the parties e.g. by name
@@ -127,14 +101,12 @@ public class Parties implements Serializable {
    * @param pageSize the page size
    */
   public Parties(
-      UUID tenantId,
       List<Party> parties,
       long total,
       PartySortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
-    this.tenantId = tenantId;
     this.parties = parties;
     this.total = total;
     this.sortBy = sortBy;
@@ -186,15 +158,6 @@ public class Parties implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
-  }
-
-  /**
-   * Returns the ID for the tenant the parties are associated with.
-   *
-   * @return the ID for the tenant the parties are associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
   }
 
   /**

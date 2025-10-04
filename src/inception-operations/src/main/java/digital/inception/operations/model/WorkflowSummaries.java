@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code WorkflowSummaries} class holds the results of a request to retrieve a list of workflow
@@ -41,7 +40,6 @@ import java.util.UUID;
 @Schema(description = "The results of a request to retrieve a list of workflow summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "tenantId",
   "workflowSummaries",
   "total",
   "sortBy",
@@ -53,15 +51,7 @@ import java.util.UUID;
 @XmlType(
     name = "WorkflowSummaries",
     namespace = "https://inception.digital/operations",
-    propOrder = {
-      "tenantId",
-      "workflowSummaries",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize"
-    })
+    propOrder = {"workflowSummaries", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class WorkflowSummaries implements Serializable {
@@ -92,14 +82,6 @@ public class WorkflowSummaries implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the workflow summaries are associated with. */
-  @Schema(
-      description = "The ID for the tenant the workflow summaries are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  private UUID tenantId;
-
   /** The total number of workflow summaries. */
   @Schema(
       description = "The total number of workflow summaries",
@@ -121,7 +103,6 @@ public class WorkflowSummaries implements Serializable {
   /**
    * Constructs a new {@code WorkflowSummaries}.
    *
-   * @param tenantId the ID for the tenant the workflow summaries are associated with
    * @param workflowSummaries the workflow summaries
    * @param total the total number of workflow summaries
    * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
@@ -130,14 +111,12 @@ public class WorkflowSummaries implements Serializable {
    * @param pageSize the page size
    */
   public WorkflowSummaries(
-      UUID tenantId,
       List<WorkflowSummary> workflowSummaries,
       long total,
       WorkflowSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.tenantId = tenantId;
     this.workflowSummaries = workflowSummaries;
     this.total = total;
     this.sortBy = sortBy;
@@ -180,15 +159,6 @@ public class WorkflowSummaries implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
-  }
-
-  /**
-   * Returns the ID for the tenant the workflow summaries are associated with.
-   *
-   * @return the ID for the tenant the workflow summaries are associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
   }
 
   /**

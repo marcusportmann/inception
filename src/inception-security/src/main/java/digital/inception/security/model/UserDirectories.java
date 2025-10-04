@@ -39,23 +39,17 @@ import java.util.List;
  */
 @Schema(description = "The results of a request to retrieve a list of user directories")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"userDirectories", "total", "sortDirection", "pageIndex", "pageSize", "filter"})
+@JsonPropertyOrder({"userDirectories", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "UserDirectories", namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserDirectories",
     namespace = "https://inception.digital/security",
-    propOrder = {"userDirectories", "total", "sortDirection", "pageIndex", "pageSize", "filter"})
+    propOrder = {"userDirectories", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class UserDirectories implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the user directories. */
-  @Schema(description = "The filter that was applied to the user directories")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -100,7 +94,6 @@ public class UserDirectories implements Serializable {
    *
    * @param userDirectories the user directories
    * @param total the total number of user directories
-   * @param filter the filter that was applied to the user directories
    * @param sortDirection the sort direction that was applied to the user directories
    * @param pageIndex the page index
    * @param pageSize the page size
@@ -108,25 +101,14 @@ public class UserDirectories implements Serializable {
   public UserDirectories(
       List<UserDirectory> userDirectories,
       long total,
-      String filter,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
     this.userDirectories = userDirectories;
     this.total = total;
-    this.filter = filter;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the user directories.
-   *
-   * @return the filter that was applied to the user directories
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**

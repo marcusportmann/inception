@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code InteractionSummaries} class represents the results of a request to retrieve a list of
@@ -41,7 +40,6 @@ import java.util.UUID;
 @Schema(description = "The results of a request to retrieve a list of interaction summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "tenantId",
   "interactionSummaries",
   "total",
   "sortBy",
@@ -54,7 +52,6 @@ import java.util.UUID;
     name = "InteractionSummaries",
     namespace = "https://inception.digital/operations",
     propOrder = {
-      "tenantId",
       "interactionSummaries",
       "total",
       "sortBy",
@@ -99,14 +96,6 @@ public class InteractionSummaries implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the interaction summaries are associated with. */
-  @Schema(
-      description = "The ID for the tenant the interaction summaries are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  private UUID tenantId;
-
   /** The total number of interaction summaries. */
   @Schema(
       description = "The total number of interaction summaries",
@@ -121,7 +110,6 @@ public class InteractionSummaries implements Serializable {
   /**
    * Constructs a new {@code InteractionSummaries}.
    *
-   * @param tenantId the ID for the tenant the interaction summaries are associated with
    * @param interactionSummaries the interaction summaries
    * @param total the total number of interaction summaries
    * @param sortBy the method used to sort the interaction summaries e.g. by timestamp
@@ -130,14 +118,12 @@ public class InteractionSummaries implements Serializable {
    * @param pageSize the page size
    */
   public InteractionSummaries(
-      UUID tenantId,
       List<InteractionSummary> interactionSummaries,
       long total,
       InteractionSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.tenantId = tenantId;
     this.interactionSummaries = interactionSummaries;
     this.total = total;
     this.sortBy = sortBy;
@@ -189,15 +175,6 @@ public class InteractionSummaries implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
-  }
-
-  /**
-   * Returns the ID for the tenant the interaction summaries are associated with.
-   *
-   * @return the ID for the tenant the interaction summaries are associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
   }
 
   /**

@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code DocumentSummaries} class holds the results of a request to retrieve a list of document
@@ -41,7 +40,6 @@ import java.util.UUID;
 @Schema(description = "The results of a request to retrieve a list of document summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "tenantId",
   "documentSummaries",
   "total",
   "sortBy",
@@ -53,15 +51,7 @@ import java.util.UUID;
 @XmlType(
     name = "DocumentSummaries",
     namespace = "https://inception.digital/operations",
-    propOrder = {
-      "tenantId",
-      "documentSummaries",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize"
-    })
+    propOrder = {"documentSummaries", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class DocumentSummaries implements Serializable {
@@ -99,14 +89,6 @@ public class DocumentSummaries implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the document summaries are associated with. */
-  @Schema(
-      description = "The ID for the tenant the document summaries are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  private UUID tenantId;
-
   /** The total number of document summaries. */
   @Schema(
       description = "The total number of document summaries",
@@ -121,7 +103,6 @@ public class DocumentSummaries implements Serializable {
   /**
    * Constructs a new {@code DocumentSummaries}.
    *
-   * @param tenantId the ID for the tenant the document summaries are associated with
    * @param documentSummaries the document summaries
    * @param total the total number of document summaries
    * @param sortBy the method used to sort the document summaries e.g. by definition ID
@@ -130,14 +111,12 @@ public class DocumentSummaries implements Serializable {
    * @param pageSize the page size
    */
   public DocumentSummaries(
-      UUID tenantId,
       List<DocumentSummary> documentSummaries,
       long total,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.tenantId = tenantId;
     this.documentSummaries = documentSummaries;
     this.total = total;
     this.sortBy = sortBy;
@@ -189,15 +168,6 @@ public class DocumentSummaries implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
-  }
-
-  /**
-   * Returns the ID for the tenant the document summaries are associated with.
-   *
-   * @return the ID for the tenant the document summaries are associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
   }
 
   /**

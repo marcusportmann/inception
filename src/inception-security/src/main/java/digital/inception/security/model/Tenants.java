@@ -38,23 +38,17 @@ import java.util.List;
  */
 @Schema(description = "The results of a request to retrieve a list of tenants")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"tenants", "total", "sortDirection", "pageIndex", "pageSize", "filter"})
+@JsonPropertyOrder({"tenants", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "Tenants", namespace = "https://inception.digital/security")
 @XmlType(
     name = "Tenants",
     namespace = "https://inception.digital/security",
-    propOrder = {"tenants", "total", "sortDirection", "pageIndex", "pageSize", "filter"})
+    propOrder = {"tenants", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Tenants implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the tenants. */
-  @Schema(description = "The filter that was applied to the tenants")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -97,33 +91,17 @@ public class Tenants implements Serializable {
    *
    * @param tenants the tenants
    * @param total the total number of tenants
-   * @param filter the filter that was applied to the tenants
    * @param sortDirection the sort direction that was applied to the tenants
    * @param pageIndex the page index
    * @param pageSize the page size
    */
   public Tenants(
-      List<Tenant> tenants,
-      long total,
-      String filter,
-      SortDirection sortDirection,
-      int pageIndex,
-      int pageSize) {
+      List<Tenant> tenants, long total, SortDirection sortDirection, int pageIndex, int pageSize) {
     this.tenants = tenants;
     this.total = total;
-    this.filter = filter;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the tenants.
-   *
-   * @return the filter that was applied to the tenants
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**

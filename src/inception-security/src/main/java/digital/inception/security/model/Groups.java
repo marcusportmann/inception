@@ -38,24 +38,12 @@ import java.util.List;
  */
 @Schema(description = "The results of a request to retrieve a list of groups")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "groups",
-  "total",
-  "sortDirection",
-  "pageIndex",
-  "pageSize"
-})
+@JsonPropertyOrder({"groups", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "Groups", namespace = "https://inception.digital/security")
 @XmlType(
     name = "Groups",
     namespace = "https://inception.digital/security",
-    propOrder = {
-      "groups",
-      "total",
-      "sortDirection",
-      "pageIndex",
-      "pageSize"
-    })
+    propOrder = {"groups", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Groups implements Serializable {
@@ -108,11 +96,7 @@ public class Groups implements Serializable {
    * @param pageSize the page size
    */
   public Groups(
-      List<Group> groups,
-      long total,
-      SortDirection sortDirection,
-      int pageIndex,
-      int pageSize) {
+      List<Group> groups, long total, SortDirection sortDirection, int pageIndex, int pageSize) {
     this.groups = groups;
     this.total = total;
     this.sortDirection = sortDirection;

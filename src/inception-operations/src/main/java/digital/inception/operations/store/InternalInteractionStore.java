@@ -434,7 +434,6 @@ public class InternalInteractionStore implements InteractionStore {
               pageRequest);
 
       return new InteractionAttachmentSummaries(
-          tenantId,
           interactionAttachmentSummaryPage.toList(),
           interactionAttachmentSummaryPage.getTotalElements(),
           sortBy,
@@ -590,11 +589,8 @@ public class InternalInteractionStore implements InteractionStore {
               pageRequest);
 
       return new InteractionNotes(
-          tenantId,
-          interactionId,
           interactionNotePage.toList(),
           interactionNotePage.getTotalElements(),
-          filter,
           sortBy,
           sortDirection,
           pageIndex,
@@ -705,7 +701,6 @@ public class InternalInteractionStore implements InteractionStore {
               tenantId, interactionSourceId, status, direction, filterLike, pageRequest);
 
       return new InteractionSummaries(
-          tenantId,
           interactionSummaryPage.toList(),
           interactionSummaryPage.getTotalElements(),
           sortBy,

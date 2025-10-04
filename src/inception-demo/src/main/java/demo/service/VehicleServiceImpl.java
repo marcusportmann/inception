@@ -165,7 +165,7 @@ public class VehicleServiceImpl extends AbstractServiceBase implements VehicleSe
       }
 
       return new Cars(
-          carPage.toList(), carPage.getTotalElements(), filter, sortDirection, pageIndex, pageSize);
+          carPage.toList(), carPage.getTotalElements(), sortDirection, pageIndex, pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the filtered cars", e);
     }
@@ -217,12 +217,7 @@ public class VehicleServiceImpl extends AbstractServiceBase implements VehicleSe
       }
 
       return new Vehicles(
-          vehiclePage.toList(),
-          vehiclePage.getTotalElements(),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
+          vehiclePage.toList(), vehiclePage.getTotalElements(), sortDirection, pageIndex, pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to retrieve the filtered vehicles", e);
     }

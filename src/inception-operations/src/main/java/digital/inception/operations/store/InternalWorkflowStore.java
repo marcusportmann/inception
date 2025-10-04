@@ -752,11 +752,8 @@ public class InternalWorkflowStore implements WorkflowStore {
               pageRequest);
 
       return new WorkflowDocuments(
-          tenantId,
-          workflowId,
           workflowDocumentPage.toList(),
           workflowDocumentPage.getTotalElements(),
-          filter,
           sortBy,
           sortDirection,
           pageIndex,
@@ -943,11 +940,8 @@ public class InternalWorkflowStore implements WorkflowStore {
               pageRequest);
 
       return new WorkflowNotes(
-          tenantId,
-          workflowId,
           workflowNotePage.toList(),
           workflowNotePage.getTotalElements(),
-          filter,
           sortBy,
           sortDirection,
           pageIndex,
@@ -1397,7 +1391,6 @@ public class InternalWorkflowStore implements WorkflowStore {
           workflowSummaryRepository.findAll(specification, pageable);
 
       return new WorkflowSummaries(
-          tenantId,
           workflowSummaryPage.toList(),
           workflowSummaryPage.getTotalElements(),
           searchWorkflowsRequest.getSortBy(),

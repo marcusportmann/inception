@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code WorkflowDocuments} class holds the results of a request to retrieve a list of workflow
@@ -57,28 +56,12 @@ import java.util.UUID;
 @XmlType(
     name = "WorkflowDocuments",
     namespace = "https://inception.digital/operations",
-    propOrder = {
-      "tenantId",
-      "workflowId",
-      "workflowDocuments",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize",
-      "filter"
-    })
+    propOrder = {"workflowDocuments", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class WorkflowDocuments implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the workflow documents. */
-  @Schema(description = "The filter that was applied to the workflow documents")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -104,14 +87,6 @@ public class WorkflowDocuments implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the workflow documents are associated with. */
-  @Schema(
-      description = "The ID for the tenant the workflow documents are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  private UUID tenantId;
-
   /** The total number of workflow documents. */
   @Schema(
       description = "The total number of workflow documents",
@@ -127,58 +102,32 @@ public class WorkflowDocuments implements Serializable {
   @XmlElement(name = "WorkflowDocument", required = true)
   private List<WorkflowDocument> workflowDocuments;
 
-  /** The ID for the workflow the workflow documents are associated with. */
-  @Schema(
-      description = "The ID for the workflow the workflow documents are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "WorkflowId", required = true)
-  private UUID workflowId;
-
   /** Constructs a new {@code WorkflowDocuments}. */
   public WorkflowDocuments() {}
 
   /**
    * Constructs a new {@code WorkflowDocuments}.
    *
-   * @param tenantId the ID for the tenant the workflow documents are associated with
-   * @param workflowId the ID for the workflow the workflow documents are associated with
    * @param workflowDocuments the workflow documents
    * @param total the total number of workflow documents
-   * @param filter the filter that was applied to the workflow documents
    * @param sortBy the method used to sort the workflow documents e.g. by created
    * @param sortDirection the sort direction that was applied to the workflow documents
    * @param pageIndex the page index
    * @param pageSize the page size
    */
   public WorkflowDocuments(
-      UUID tenantId,
-      UUID workflowId,
       List<WorkflowDocument> workflowDocuments,
       long total,
-      String filter,
       WorkflowDocumentSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.tenantId = tenantId;
-    this.workflowId = workflowId;
     this.workflowDocuments = workflowDocuments;
     this.total = total;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the workflow documents.
-   *
-   * @return the filter that was applied to the workflow documents
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**
@@ -218,15 +167,6 @@ public class WorkflowDocuments implements Serializable {
   }
 
   /**
-   * Returns the ID for the tenant the workflow documents are associated with.
-   *
-   * @return the ID for the tenant the workflow documents are associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
-  }
-
-  /**
    * Returns the total number of workflow documents.
    *
    * @return the total number of workflow documents
@@ -242,23 +182,5 @@ public class WorkflowDocuments implements Serializable {
    */
   public List<WorkflowDocument> getWorkflowDocuments() {
     return workflowDocuments;
-  }
-
-  /**
-   * Returns the ID for the workflow the workflow documents are associated with.
-   *
-   * @return the ID for the workflow the workflow documents are associated with
-   */
-  public UUID getWorkflowId() {
-    return workflowId;
-  }
-
-  /**
-   * Set the ID for the workflow the workflow documents are associated with.
-   *
-   * @param workflowId the ID for the workflow the workflow documents are associated with
-   */
-  public void setWorkflowId(UUID workflowId) {
-    this.workflowId = workflowId;
   }
 }

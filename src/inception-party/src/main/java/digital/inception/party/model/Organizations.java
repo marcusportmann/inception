@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code Organizations} class holds the results of a request to retrieve a list of
@@ -40,28 +39,12 @@ import java.util.UUID;
  */
 @Schema(description = "The results of a request to retrieve a list of organizations")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "tenantId",
-  "organizations",
-  "total",
-  "sortBy",
-  "sortDirection",
-  "pageIndex",
-  "pageSize"
-})
+@JsonPropertyOrder({"organizations", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "Organizations", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Organizations",
     namespace = "https://inception.digital/party",
-    propOrder = {
-      "tenantId",
-      "organizations",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize"
-    })
+    propOrder = {"organizations", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Organizations implements Serializable {
@@ -99,14 +82,6 @@ public class Organizations implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the organizations are associated with. */
-  @Schema(
-      description = "The ID for the tenant the organizations are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  private UUID tenantId;
-
   /** The total number of organizations. */
   @Schema(
       description = "The total number of organizations",
@@ -121,7 +96,6 @@ public class Organizations implements Serializable {
   /**
    * Constructs a new {@code Organizations}.
    *
-   * @param tenantId the ID for the tenant the organizations are associated with
    * @param organizations the organizations
    * @param total the total number of organizations
    * @param sortBy the method used to sort the organizations e.g. by name
@@ -130,14 +104,12 @@ public class Organizations implements Serializable {
    * @param pageSize the page size
    */
   public Organizations(
-      UUID tenantId,
       List<Organization> organizations,
       long total,
       OrganizationSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
-    this.tenantId = tenantId;
     this.organizations = organizations;
     this.total = total;
     this.sortBy = sortBy;
@@ -189,15 +161,6 @@ public class Organizations implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
-  }
-
-  /**
-   * Returns the ID for the tenant the organizations are associated with.
-   *
-   * @return the ID for the tenant the organizations are associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
   }
 
   /**

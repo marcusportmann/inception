@@ -582,7 +582,6 @@ public class InternalPartyStore implements PartyStore {
               pageRequest);
 
       return new Organizations(
-          tenantId,
           organizationPage.toList(),
           organizationPage.getTotalElements(),
           sortBy,
@@ -633,7 +632,6 @@ public class InternalPartyStore implements PartyStore {
               pageRequest);
 
       return new Parties(
-          tenantId,
           partyPage.toList(),
           partyPage.getTotalElements(),
           sortBy,
@@ -728,7 +726,6 @@ public class InternalPartyStore implements PartyStore {
               pageRequest);
 
       return new Persons(
-          tenantId,
           personPage.toList(),
           personPage.getTotalElements(),
           sortBy,

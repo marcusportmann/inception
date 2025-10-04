@@ -38,23 +38,17 @@ import java.util.List;
  */
 @Schema(description = "The results of a request to retrieve a list of vehicles")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"vehicles", "total", "sortDirection", "pageIndex", "pageSize", "filter"})
+@JsonPropertyOrder({"vehicles", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "Vehicles", namespace = "https://demo")
 @XmlType(
     name = "Vehicles",
     namespace = "https://demo",
-    propOrder = {"vehicles", "total", "sortDirection", "pageIndex", "pageSize", "filter"})
+    propOrder = {"vehicles", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Vehicles implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the vehicles. */
-  @Schema(description = "The filter that was applied to the vehicles")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -97,7 +91,6 @@ public class Vehicles implements Serializable {
    *
    * @param vehicles the vehicles
    * @param total the total number of vehicles
-   * @param filter the filter that was applied to the vehicles
    * @param sortDirection the sort direction that was applied to the vehicles
    * @param pageIndex the page index
    * @param pageSize the page size
@@ -105,25 +98,14 @@ public class Vehicles implements Serializable {
   public Vehicles(
       List<Vehicle> vehicles,
       long total,
-      String filter,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
     this.vehicles = vehicles;
     this.total = total;
-    this.filter = filter;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the vehicles.
-   *
-   * @return the filter that was applied to the vehicles
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**

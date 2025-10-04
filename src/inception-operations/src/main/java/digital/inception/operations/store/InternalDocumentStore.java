@@ -370,11 +370,8 @@ public class InternalDocumentStore implements DocumentStore {
               pageRequest);
 
       return new DocumentNotes(
-          tenantId,
-          documentId,
           documentNotePage.toList(),
           documentNotePage.getTotalElements(),
-          filter,
           sortBy,
           sortDirection,
           pageIndex,
@@ -533,7 +530,6 @@ public class InternalDocumentStore implements DocumentStore {
           documentSummaryRepository.findAll(specification, pageable);
 
       return new DocumentSummaries(
-          tenantId,
           documentSummaryPage.toList(),
           documentSummaryPage.getTotalElements(),
           searchDocumentsRequest.getSortBy(),

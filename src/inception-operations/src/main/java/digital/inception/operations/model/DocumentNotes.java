@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code DocumentNotes} class holds the results of a request to retrieve a list of document
@@ -40,45 +39,17 @@ import java.util.UUID;
  */
 @Schema(description = "The results of a request to retrieve a list of document notes")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "tenantId",
-  "documentId",
-  "documentNotes",
-  "total",
-  "sortBy",
-  "sortDirection",
-  "pageIndex",
-  "pageSize",
-  "filter"
-})
+@JsonPropertyOrder({"documentNotes", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "DocumentNotes", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "DocumentNotes",
     namespace = "https://inception.digital/operations",
-    propOrder = {
-      "tenantId",
-      "documentId",
-      "documentNotes",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize",
-      "filter"
-    })
+    propOrder = {"documentNotes", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class DocumentNotes implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The ID for the document the document notes are associated with. */
-  @Schema(
-      description = "The ID for the document the document notes are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "DocumentId", required = true)
-  private UUID documentId;
 
   /** The document notes. */
   @Schema(description = "The document notes", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -86,12 +57,6 @@ public class DocumentNotes implements Serializable {
   @XmlElementWrapper(name = "DocumentNotes", required = true)
   @XmlElement(name = "DocumentNote", required = true)
   private List<DocumentNote> documentNotes;
-
-  /** The filter that was applied to the document notes. */
-  @Schema(description = "The filter that was applied to the document notes")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -117,14 +82,6 @@ public class DocumentNotes implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the document notes are associated with. */
-  @Schema(
-      description = "The ID for the tenant the document notes are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  private UUID tenantId;
-
   /** The total number of document notes. */
   @Schema(
       description = "The total number of document notes",
@@ -139,44 +96,26 @@ public class DocumentNotes implements Serializable {
   /**
    * Constructs a new {@code DocumentNotes}.
    *
-   * @param tenantId the ID for the tenant the document notes are associated with
-   * @param documentId the ID for the document the document notes are associated with
    * @param documentNotes the document notes
    * @param total the total number of document notes
-   * @param filter the filter that was applied to the document notes
    * @param sortBy the method used to sort the document notes e.g. by created
    * @param sortDirection the sort direction that was applied to the document notes
    * @param pageIndex the page index
    * @param pageSize the page size
    */
   public DocumentNotes(
-      UUID tenantId,
-      UUID documentId,
       List<DocumentNote> documentNotes,
       long total,
-      String filter,
       DocumentNoteSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.tenantId = tenantId;
-    this.documentId = documentId;
     this.documentNotes = documentNotes;
     this.total = total;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the ID for the document the document notes are associated with.
-   *
-   * @return the ID for the document the document notes are associated with
-   */
-  public UUID getDocumentId() {
-    return documentId;
   }
 
   /**
@@ -186,15 +125,6 @@ public class DocumentNotes implements Serializable {
    */
   public List<DocumentNote> getDocumentNotes() {
     return documentNotes;
-  }
-
-  /**
-   * Returns the filter that was applied to the document notes.
-   *
-   * @return the filter that was applied to the document notes
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**
@@ -231,15 +161,6 @@ public class DocumentNotes implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
-  }
-
-  /**
-   * Returns the ID for the tenant the document notes are associated with.
-   *
-   * @return the ID for the tenant the document notes are associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
   }
 
   /**

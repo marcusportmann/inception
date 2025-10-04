@@ -1576,12 +1576,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
       }
 
       return new Tenants(
-          tenantPage.toList(),
-          tenantPage.getTotalElements(),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
+          tenantPage.toList(), tenantPage.getTotalElements(), sortDirection, pageIndex, pageSize);
     } catch (Throwable e) {
       String message = "Failed to retrieve the tenants";
 
@@ -1873,7 +1868,6 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
       return new UserDirectories(
           userDirectoryPage.toList(),
           userDirectoryPage.getTotalElements(),
-          filter,
           sortDirection,
           pageIndex,
           pageSize);

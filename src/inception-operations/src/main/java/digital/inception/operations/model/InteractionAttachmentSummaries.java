@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code InteractionAttachmentSummaries} class represents the results of a request to retrieve
@@ -42,7 +41,6 @@ import java.util.UUID;
     description = "The results of a request to retrieve a list of interaction attachment summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "tenantId",
   "interactionAttachmentSummaries",
   "total",
   "sortBy",
@@ -57,7 +55,6 @@ import java.util.UUID;
     name = "InteractionAttachmentSummaries",
     namespace = "https://inception.digital/operations",
     propOrder = {
-      "tenantId",
       "interactionAttachmentSummaries",
       "total",
       "sortBy",
@@ -105,15 +102,6 @@ public class InteractionAttachmentSummaries implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the interaction attachment summaries are associated with. */
-  @Schema(
-      description =
-          "The ID for the tenant the interaction attachment summaries are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  private UUID tenantId;
-
   /** The total number of interaction attachment summaries. */
   @Schema(
       description = "The total number of interaction attachment summaries",
@@ -128,7 +116,6 @@ public class InteractionAttachmentSummaries implements Serializable {
   /**
    * Constructs a new {@code InteractionAttachmentSummaries}.
    *
-   * @param tenantId the ID for the tenant the interaction attachment summaries are associated with
    * @param interactionAttachmentSummaries the interaction attachment summaries
    * @param total the total number of interaction attachment summaries
    * @param sortBy the method used to sort the interaction attachment summaries e.g. by name
@@ -138,14 +125,12 @@ public class InteractionAttachmentSummaries implements Serializable {
    * @param pageSize the page size
    */
   public InteractionAttachmentSummaries(
-      UUID tenantId,
       List<InteractionAttachmentSummary> interactionAttachmentSummaries,
       long total,
       InteractionAttachmentSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.tenantId = tenantId;
     this.interactionAttachmentSummaries = interactionAttachmentSummaries;
     this.total = total;
     this.sortBy = sortBy;
@@ -197,15 +182,6 @@ public class InteractionAttachmentSummaries implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
-  }
-
-  /**
-   * Returns the ID for the tenant the interaction attachment summaries are associated with.
-   *
-   * @return the ID for the tenant the interaction attachment summaries are associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
   }
 
   /**

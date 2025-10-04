@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code InteractionNotes} class holds the results of a request to retrieve a list of
@@ -43,50 +42,23 @@ import java.util.UUID;
         "The results of a request to retrieve a list of interaction notes for an interaction")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "tenantId",
-  "interactionId",
   "interactionNotes",
   "total",
   "sortBy",
   "sortDirection",
   "pageIndex",
-  "pageSize",
-  "filter"
+  "pageSize"
 })
 @XmlRootElement(name = "InteractionNotes", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionNotes",
     namespace = "https://inception.digital/operations",
-    propOrder = {
-      "tenantId",
-      "interactionId",
-      "interactionNotes",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize",
-      "filter"
-    })
+    propOrder = {"interactionNotes", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class InteractionNotes implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the interaction notes. */
-  @Schema(description = "The filter that was applied to the interaction notes")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
-
-  /** The ID for the interaction the interaction notes are associated with. */
-  @Schema(
-      description = "The ID for the interaction the interaction notes are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "InteractionId", required = true)
-  private UUID interactionId;
 
   /** The interaction notes. */
   @Schema(description = "The interaction notes", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -119,14 +91,6 @@ public class InteractionNotes implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The ID for the tenant the interaction notes are associated with. */
-  @Schema(
-      description = "The ID for the tenant the interaction notes are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "TenantId", required = true)
-  private UUID tenantId;
-
   /** The total number of interaction notes. */
   @Schema(
       description = "The total number of interaction notes",
@@ -141,53 +105,26 @@ public class InteractionNotes implements Serializable {
   /**
    * Constructs a new {@code InteractionNotes}.
    *
-   * @param tenantId the ID for the tenant the interaction notes are associated with
-   * @param interactionId the ID for the interaction the interaction notes are associated with
    * @param interactionNotes the interaction notes
    * @param total the total number of interaction notes
-   * @param filter the filter that was applied to the interaction notes
    * @param sortBy the method used to sort the interaction notes e.g. by created
    * @param sortDirection the sort direction that was applied to the interaction notes
    * @param pageIndex the page index
    * @param pageSize the page size
    */
   public InteractionNotes(
-      UUID tenantId,
-      UUID interactionId,
       List<InteractionNote> interactionNotes,
       long total,
-      String filter,
       InteractionNoteSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.tenantId = tenantId;
-    this.interactionId = interactionId;
     this.interactionNotes = interactionNotes;
     this.total = total;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the interaction notes.
-   *
-   * @return the filter that was applied to the interaction notes
-   */
-  public String getFilter() {
-    return filter;
-  }
-
-  /**
-   * Returns the ID for the interaction the interaction notes are associated with.
-   *
-   * @return the ID for the interaction the interaction notes are associated with
-   */
-  public UUID getInteractionId() {
-    return interactionId;
   }
 
   /**
@@ -236,29 +173,11 @@ public class InteractionNotes implements Serializable {
   }
 
   /**
-   * Returns the ID for the tenant the interaction notes are associated with.
-   *
-   * @return the ID for the tenant the interaction notes are associated with
-   */
-  public UUID getTenantId() {
-    return tenantId;
-  }
-
-  /**
    * Returns the total number of interaction notes.
    *
    * @return the total number of interaction notes
    */
   public long getTotal() {
     return total;
-  }
-
-  /**
-   * Set the ID for the interaction the interaction notes are associated with.
-   *
-   * @param interactionId the ID for the interaction the interaction notes are associated with
-   */
-  public void setInteractionId(UUID interactionId) {
-    this.interactionId = interactionId;
   }
 }
