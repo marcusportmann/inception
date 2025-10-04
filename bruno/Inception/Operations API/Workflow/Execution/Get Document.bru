@@ -1,0 +1,19 @@
+meta {
+  name: Get Document
+  type: http
+  seq: 35
+}
+
+get {
+  url: {{baseURL}}/api/operations/documents/{{documentId}}
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+}
+
+settings {
+  encodeUrl: true
+}

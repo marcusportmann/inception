@@ -1,0 +1,49 @@
+meta {
+  name: Search Documents
+  type: http
+  seq: 36
+}
+
+post {
+  url: {{baseURL}}/api/operations/search-documents
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "pageIndex": 0,
+    "pageSize": 10,
+    "sortBy": "definition_id",
+    "sortDirection": "asc",
+    "documentDefinitionId": "test_document_definition",
+    "attributes": [
+      {
+        "code": "test_document_attribute_code",
+        "value": "test_document_attribute_value"
+      },
+      {
+        "code": "another_document_attribute_code",
+        "value": "another_document_attribute_value"
+      }
+    ],
+    "externalReferences": [
+      {
+        "type": "test_document_external_reference_code",
+        "value": "test_document_external_reference_value"
+      },
+      {
+        "type": "another_document_external_reference_code",
+        "value": "another_document_external_reference_value"
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+settings {
+  encodeUrl: true
+}
