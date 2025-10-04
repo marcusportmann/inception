@@ -137,7 +137,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   /*
    * The maximum number of times the execution of a task will be attempted.
    */
-  @Value("${inception.executor.maximum-task-execution-attempts:144}")
+  @Value("${inception.executor.max-task-execution-attempts:144}")
   private int maximumTaskExecutionAttempts;
 
   /*
@@ -756,9 +756,6 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
       return new TaskSummaries(
           taskSummaryPage.toList(),
           taskSummaryPage.getTotalElements(),
-          type,
-          status,
-          filter,
           sortBy,
           sortDirection,
           pageIndex,

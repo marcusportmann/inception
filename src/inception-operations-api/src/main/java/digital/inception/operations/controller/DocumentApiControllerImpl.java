@@ -39,7 +39,6 @@ import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
-import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
@@ -371,28 +370,6 @@ public class DocumentApiControllerImpl extends SecureApiController
 
     return documentService.getDocumentNotes(
         tenantId, documentId, filter, sortBy, sortDirection, pageIndex, pageSize);
-  }
-
-  @Override
-  public DocumentSummaries getDocumentSummaries(
-      UUID tenantId,
-      String documentDefinitionId,
-      String filter,
-      DocumentSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
-
-    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToFunction("Operations.DocumentAdministration"))
-        && (!hasAccessToTenant(tenantId))) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    return documentService.getDocumentSummaries(
-        tenantId, documentDefinitionId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override

@@ -71,7 +71,7 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
   private EntityManager entityManager;
 
   /** The maximum number of processing attempts for an event. */
-  @Value("${inception.operations.maximum-event-processing-attempts:#{100}}")
+  @Value("${inception.operations.max-event-processing-attempts:#{100}}")
   private int maximumEventProcessingAttempts;
 
   /** The Workflow Service. */

@@ -39,37 +39,17 @@ import java.util.List;
  */
 @Schema(description = "The results of a request to retrieve a list of user directory summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "userDirectorySummaries",
-  "total",
-  "sortDirection",
-  "pageIndex",
-  "pageSize",
-  "filter"
-})
+@JsonPropertyOrder({"userDirectorySummaries", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "UserDirectorySummaries", namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserDirectorySummaries",
     namespace = "https://inception.digital/security",
-    propOrder = {
-      "userDirectorySummaries",
-      "total",
-      "sortDirection",
-      "pageIndex",
-      "pageSize",
-      "filter"
-    })
+    propOrder = {"userDirectorySummaries", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class UserDirectorySummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the user directory summaries. */
-  @Schema(description = "The filter that was applied to the user directory summaries")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -114,7 +94,6 @@ public class UserDirectorySummaries implements Serializable {
    *
    * @param userDirectorySummaries the user directory summaries
    * @param total the total number of user directory summaries
-   * @param filter the filter that was applied to the user directory summaries
    * @param sortDirection the sort direction that was applied to the user directory summaries
    * @param pageIndex the page index
    * @param pageSize the page size
@@ -122,25 +101,14 @@ public class UserDirectorySummaries implements Serializable {
   public UserDirectorySummaries(
       List<UserDirectorySummary> userDirectorySummaries,
       long total,
-      String filter,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
     this.userDirectorySummaries = userDirectorySummaries;
     this.total = total;
-    this.filter = filter;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the user directory summaries.
-   *
-   * @return the filter that was applied to the user directory summaries
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**

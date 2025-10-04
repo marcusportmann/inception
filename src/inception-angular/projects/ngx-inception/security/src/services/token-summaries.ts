@@ -26,11 +26,6 @@ import { TokenSummary } from './token-summary';
  */
 export class TokenSummaries {
   /**
-   * The filter that was applied to the token summaries.
-   */
-  filter: string | null = null;
-
-  /**
    * The page index.
    */
   pageIndex: number;
@@ -51,11 +46,6 @@ export class TokenSummaries {
   sortDirection: SortDirection;
 
   /**
-   * The status filter that was applied to the token summaries.
-   */
-  status: TokenStatus | null = null;
-
-  /**
    * The token summaries.
    */
   tokenSummaries: TokenSummary[];
@@ -74,8 +64,6 @@ export class TokenSummaries {
    * @param sortDirection  The sort direction that was applied to the token summaries.
    * @param pageIndex      The page index.
    * @param pageSize       The page size.
-   * @param status         The status filter that was applied to the token summaries.
-   * @param filter         The filter that was applied to the token summaries.
    */
   constructor(
     tokenSummaries: TokenSummary[],
@@ -83,9 +71,7 @@ export class TokenSummaries {
     sortBy: TokenSortBy,
     sortDirection: SortDirection,
     pageIndex: number,
-    pageSize: number,
-    status?: TokenStatus,
-    filter?: string
+    pageSize: number
   ) {
     this.tokenSummaries = tokenSummaries;
     this.total = total;
@@ -93,7 +79,5 @@ export class TokenSummaries {
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-    this.status = !!status ? status : null;
-    this.filter = !!filter ? filter : null;
   }
 }

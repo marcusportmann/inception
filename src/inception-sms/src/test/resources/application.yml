@@ -1,6 +1,6 @@
 inception:
   sms:
-    maximum-send-attempts: 100
+    max-send-attempts: 100
     providers:
       sms-portal:
         api-endpoint: https://rest.smsportal.com/v1

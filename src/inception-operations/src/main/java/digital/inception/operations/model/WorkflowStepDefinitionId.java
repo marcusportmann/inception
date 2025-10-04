@@ -78,7 +78,7 @@ public class WorkflowStepDefinitionId implements Serializable {
   @Override
   public int hashCode() {
     return ((definitionId == null) ? 0 : definitionId.hashCode())
-           + ((definitionVersion == 0) ? 0 : Integer.hashCode(definitionVersion))
+        + ((definitionVersion == 0) ? 0 : Integer.hashCode(definitionVersion))
         + ((code == null) ? 0 : code.hashCode());
   }
 }

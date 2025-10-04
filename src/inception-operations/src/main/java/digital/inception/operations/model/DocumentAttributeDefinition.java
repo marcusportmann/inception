@@ -111,7 +111,7 @@ public class DocumentAttributeDefinition implements Serializable {
   @XmlElement(name = "Required", required = true)
   @NotNull
   @Column(name = "required", nullable = false)
-  private boolean required;
+  private Boolean required;
 
   /** The ID for the tenant the document attribute definition is specific to. */
   @Schema(description = "The ID for the tenant the document attribute definition is specific to")

@@ -1446,8 +1446,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
         groups = groups.subList(pageIndex * pageSize, Math.min(toIndex, groups.size()));
       }
 
-      return new Groups(
-          getUserDirectoryId(), groups, totalGroups, filter, sortDirection, pageIndex, pageSize);
+      return new Groups(groups, totalGroups, sortDirection, pageIndex, pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered groups for the user directory ("
@@ -1665,14 +1664,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
         }
 
         return new GroupMembers(
-            getUserDirectoryId(),
-            groupName,
-            groupMembers,
-            totalGroupMembers,
-            filter,
-            sortDirection,
-            pageIndex,
-            pageSize);
+            groupMembers, totalGroupMembers, sortDirection, pageIndex, pageSize);
       } else {
         throw new GroupNotFoundException(groupName);
       }
@@ -2010,15 +2002,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
         users = users.subList(pageIndex * pageSize, Math.min(toIndex, users.size()));
       }
 
-      return new Users(
-          getUserDirectoryId(),
-          users,
-          totalUsers,
-          filter,
-          sortBy,
-          sortDirection,
-          pageIndex,
-          pageSize);
+      return new Users(users, totalUsers, sortBy, sortDirection, pageIndex, pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered users for the user directory ("

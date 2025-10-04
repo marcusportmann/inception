@@ -60,6 +60,7 @@ import digital.inception.operations.model.InteractionType;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
 import digital.inception.operations.model.MailboxInteractionSourceAttributeName;
 import digital.inception.operations.model.MailboxProtocol;
+import digital.inception.operations.model.SearchInteractionsRequest;
 import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.persistence.jpa.InteractionSourceRepository;
@@ -117,12 +118,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
   };
 
-  /** The maximum number of filtered interactions. */
-  private static final int MAX_FILTERED_INTERACTIONS = 100;
-
-  /** The maximum number of filtered interaction attachments. */
-  private static final int MAX_FILTERED_INTERACTION_ATTACHMENTS = 100;
-
   /** The Spring application event publisher. */
   private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -146,19 +141,27 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   /** The internal reference to the Interaction Service to enable caching. */
   private InteractionService InteractionService;
 
+  /** The maximum number of filtered interactions that will be returned by the service. */
+  @Value("${inception.operations.max-filtered-interaction-attachments:#{100}}")
+  private int maxFilteredInteractionAttachments;
+
   /** The maximum number of filtered interaction notes that will be returned by the service. */
   @Value("${inception.operations.max-filtered-interaction-notes:#{100}}")
   private int maxFilteredInteractionNotes;
 
+  /** The maximum number of filtered interactions that will be returned by the service. */
+  @Value("${inception.operations.max-filtered-interactions:#{100}}")
+  private int maxFilteredInteractions;
+
   /** The maximum number of processing attempts for an interaction. */
-  @Value("${inception.operations.maximum-interaction-processing-attempts:#{100}}")
+  @Value("${inception.operations.max-interaction-processing-attempts:#{100}}")
   private int maximumInteractionProcessingAttempts;
 
   /**
    * The minimum size for an image attachment on an email for it be processed as a valid attachment.
    */
-  @Value("${inception.operations.minimum-image-attachment-size:20480}")
-  private int minimumImageAttachmentSize;
+  @Value("${inception.operations.min-image-attachment-size:20480}")
+  private int minImageAttachmentSize;
 
   /**
    * Constructs a new {@code InteractionServiceImpl}.
@@ -570,7 +573,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     if (pageSize == null) {
-      pageSize = MAX_FILTERED_INTERACTIONS;
+      pageSize = maxFilteredInteractions;
     }
 
     try {
@@ -586,7 +589,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
           sortDirection,
           pageIndex,
           pageSize,
-          MAX_FILTERED_INTERACTION_ATTACHMENTS);
+          maxFilteredInteractionAttachments);
     } catch (InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -910,7 +913,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     if (pageSize == null) {
-      pageSize = MAX_FILTERED_INTERACTIONS;
+      pageSize = maxFilteredInteractions;
     }
 
     try {
@@ -928,7 +931,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
           sortDirection,
           pageIndex,
           pageSize,
-          MAX_FILTERED_INTERACTIONS);
+          maxFilteredInteractions);
     } catch (InteractionSourceNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1191,6 +1194,25 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               + tenantId
               + ")",
           e);
+    }
+  }
+
+  @Override
+  public InteractionSummaries searchInteractions(
+      UUID tenantId, SearchInteractionsRequest searchInteractionsRequest)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("searchInteractionsRequest", searchInteractionsRequest);
+
+    try {
+      return interactionStore.searchInteractions(
+          tenantId, searchInteractionsRequest, maxFilteredInteractions);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to search for interactions for the tenant (" + tenantId + ")", e);
     }
   }
 
@@ -1818,7 +1840,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
           }
 
           for (MimeData interactionAttachmentMimeData :
-              MessageUtil.getMessageAttachments(message, minimumImageAttachmentSize)) {
+              MessageUtil.getMessageAttachments(message, minImageAttachmentSize)) {
 
             // Create the interaction attachments if required
             if (!interactionAttachmentExistsWithInteractionIdAndHash(

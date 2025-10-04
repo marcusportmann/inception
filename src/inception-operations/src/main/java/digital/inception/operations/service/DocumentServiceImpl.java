@@ -39,7 +39,6 @@ import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
-import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.SearchDocumentsRequest;
@@ -766,53 +765,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public DocumentSummaries getDocumentSummaries(
-      UUID tenantId,
-      String documentDefinitionId,
-      String filter,
-      DocumentSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
-
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
-
-    if (sortBy == null) {
-      sortBy = DocumentSortBy.DEFINITION_ID;
-    }
-
-    if (sortDirection == null) {
-      sortDirection = SortDirection.DESCENDING;
-    }
-
-    try {
-      return documentStore.getDocumentSummaries(
-          tenantId,
-          documentDefinitionId,
-          filter,
-          sortBy,
-          sortDirection,
-          pageIndex,
-          pageSize,
-          maxFilteredDocuments);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered document summaries for the tenant (" + tenantId + ")",
-          e);
-    }
-  }
-
-  @Override
   @Cacheable(cacheNames = "documentAttributeDefinitions", key = "#tenantId.toString + '-REQUIRED'")
   public List<DocumentAttributeDefinition> getRequiredDocumentAttributeDefinitions(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -880,7 +832,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     validateArgument("searchDocumentsRequest", searchDocumentsRequest);
 
     try {
-      return documentStore.searchDocuments(tenantId, searchDocumentsRequest);
+      return documentStore.searchDocuments(tenantId, searchDocumentsRequest, maxFilteredDocuments);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to search for documents for the tenant (" + tenantId + ")", e);

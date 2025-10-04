@@ -318,8 +318,9 @@ public class EndToEndTests {
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 
-    workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false, true);
-    workflowDefinition.addDocumentDefinition(anotherDocumentDefinition.getId(), false, true, false);
+    workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false, true, false);
+    workflowDefinition.addDocumentDefinition(
+        anotherDocumentDefinition.getId(), false, true, false, false);
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(

@@ -762,13 +762,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
                   pageRequest);
 
       return new Groups(
-          getUserDirectoryId(),
-          groupPage.toList(),
-          groupPage.getTotalElements(),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
+          groupPage.toList(), groupPage.getTotalElements(), sortDirection, pageIndex, pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the filtered groups for the user directory ("
@@ -895,11 +889,8 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
       }
 
       return new GroupMembers(
-          getUserDirectoryId(),
-          groupName,
           groupMembers,
           usernamesForGroupPage.getTotalElements(),
-          filter,
           sortDirection,
           pageIndex,
           pageSize);
@@ -1121,10 +1112,8 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
                   pageRequest);
 
       return new Users(
-          getUserDirectoryId(),
           userPage.toList(),
           userPage.getTotalElements(),
-          filter,
           sortBy,
           sortDirection,
           pageIndex,

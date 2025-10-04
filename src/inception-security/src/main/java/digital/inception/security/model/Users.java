@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code Users} class holds the results of a request to retrieve a list of users.
@@ -39,41 +38,17 @@ import java.util.UUID;
  */
 @Schema(description = "The results of a request to retrieve a list of users")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "userDirectoryId",
-  "users",
-  "total",
-  "sortBy",
-  "sortDirection",
-  "pageIndex",
-  "pageSize",
-  "filter"
-})
+@JsonPropertyOrder({"users", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "Users", namespace = "https://inception.digital/security")
 @XmlType(
     name = "Users",
     namespace = "https://inception.digital/security",
-    propOrder = {
-      "userDirectoryId",
-      "users",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize",
-      "filter"
-    })
+    propOrder = {"users", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Users implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the users. */
-  @Schema(description = "The filter that was applied to the users")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -105,14 +80,6 @@ public class Users implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** The ID for the user directory the users are associated with. */
-  @Schema(
-      description = "The ID for the user directory the users are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "UserDirectoryId", required = true)
-  private UUID userDirectoryId;
-
   /** The users. */
   @Schema(description = "The users", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -126,41 +93,26 @@ public class Users implements Serializable {
   /**
    * Constructs a new {@code Users}.
    *
-   * @param userDirectoryId the ID for the user directory the users are associated with
    * @param users the users
    * @param total the total number of users
-   * @param filter the filter that was applied to the users
    * @param sortBy the method used to sort the users e.g. by name
    * @param sortDirection the sort direction that was applied to the users
    * @param pageIndex the page index
    * @param pageSize the page size
    */
   public Users(
-      UUID userDirectoryId,
       List<User> users,
       long total,
-      String filter,
       UserSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.userDirectoryId = userDirectoryId;
     this.users = users;
     this.total = total;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the users.
-   *
-   * @return the filter that was applied to the users
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**
@@ -206,15 +158,6 @@ public class Users implements Serializable {
    */
   public long getTotal() {
     return total;
-  }
-
-  /**
-   * Returns the ID for the user directory the users are associated with.
-   *
-   * @return the ID for the user directory the users are associated with
-   */
-  public UUID getUserDirectoryId() {
-    return userDirectoryId;
   }
 
   /**

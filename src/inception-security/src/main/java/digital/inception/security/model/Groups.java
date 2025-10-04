@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code Groups} class holds the results of a request to retrieve a list of groups.
@@ -40,38 +39,28 @@ import java.util.UUID;
 @Schema(description = "The results of a request to retrieve a list of groups")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "userDirectoryId",
   "groups",
   "total",
   "sortDirection",
   "pageIndex",
-  "pageSize",
-  "filter"
+  "pageSize"
 })
 @XmlRootElement(name = "Groups", namespace = "https://inception.digital/security")
 @XmlType(
     name = "Groups",
     namespace = "https://inception.digital/security",
     propOrder = {
-      "userDirectoryId",
       "groups",
       "total",
       "sortDirection",
       "pageIndex",
-      "pageSize",
-      "filter"
+      "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Groups implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the groups. */
-  @Schema(description = "The filter that was applied to the groups")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The groups. */
   @Schema(description = "The groups", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -106,52 +95,29 @@ public class Groups implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** The ID for the user directory the groups are associated with. */
-  @Schema(
-      description = "The ID for the user directory the groups are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "UserDirectoryId", required = true)
-  private UUID userDirectoryId;
-
   /** Constructs a new {@code Groups}. */
   public Groups() {}
 
   /**
    * Constructs a new {@code Groups}.
    *
-   * @param userDirectoryId the ID for the user directory the groups are associated with
    * @param groups the groups
    * @param total the total number of groups
-   * @param filter the filter that was applied to the groups
    * @param sortDirection the sort direction that was applied to the groups
    * @param pageIndex the page index
    * @param pageSize the page size
    */
   public Groups(
-      UUID userDirectoryId,
       List<Group> groups,
       long total,
-      String filter,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.userDirectoryId = userDirectoryId;
     this.groups = groups;
     this.total = total;
-    this.filter = filter;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the groups.
-   *
-   * @return the filter that was applied to the groups
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**
@@ -197,14 +163,5 @@ public class Groups implements Serializable {
    */
   public long getTotal() {
     return total;
-  }
-
-  /**
-   * Returns the ID for the user directory the groups are associated with.
-   *
-   * @return the ID for the user directory the groups are associated with
-   */
-  public UUID getUserDirectoryId() {
-    return userDirectoryId;
   }
 }

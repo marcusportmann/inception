@@ -40,6 +40,7 @@ import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
+import digital.inception.operations.model.DeleteWorkflowStepRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.Event;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
@@ -73,8 +74,6 @@ import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
-import digital.inception.operations.model.WorkflowSortBy;
-import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -1047,6 +1046,77 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           WorkflowNotFoundException,
           WorkflowNoteNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Delete the workflow step.
+   *
+   * @param tenantId the ID for the tenant
+   * @param deleteWorkflowStepRequest the request to delete the workflow step
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws WorkflowStepNotFoundException if the workflow step could not be found
+   * @throws ServiceUnavailableException if the workflow step could not be deleted
+   */
+  @Operation(summary = "Delete the workflow step", description = "Delete the workflow step")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The workflow step was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow or workflow step could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/delete-workflow-step",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+  void deleteWorkflowStep(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to delete the workflow step",
+              required = true)
+          @RequestBody
+          DeleteWorkflowStepRequest deleteWorkflowStepRequest)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowStepNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -2556,99 +2626,6 @@ public interface WorkflowApiController {
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
-
-  /**
-   * Retrieve the summaries for the workflows.
-   *
-   * @param tenantId the ID for the tenant
-   * @param workflowDefinitionId the workflow definition ID filter to apply to the workflow
-   *     summaries
-   * @param status the status filter to apply to the workflow summaries
-   * @param filter the filter to apply to the workflow summaries
-   * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
-   * @param sortDirection the sort direction to apply to the workflow summaries
-   * @param pageIndex the page index
-   * @param pageSize the page size
-   * @return the summaries for the workflows
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the workflow summaries could not be retrieved
-   */
-  @Operation(
-      summary = "Retrieve the workflow summaries",
-      description = "Retrieve the workflow summaries")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "The workflow summaries were retrieved"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "403",
-            description = "Access denied",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/workflow-summaries",
-      method = RequestMethod.GET,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  WorkflowSummaries getWorkflowSummaries(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
-              name = "workflowDefinitionId",
-              description = "The workflow definition ID filter to apply to the workflow summaries")
-          @RequestParam(value = "workflowDefinitionId", required = false)
-          String workflowDefinitionId,
-      @Parameter(
-              name = "status",
-              description = "The status filter to apply to the workflow summaries")
-          @RequestParam(value = "status", required = false)
-          WorkflowStatus status,
-      @Parameter(name = "filter", description = "The filter to apply to the workflow summaries")
-          @RequestParam(value = "filter", required = false)
-          String filter,
-      @Parameter(
-              name = "sortBy",
-              description = "The method used to sort the workflow summaries e.g. by definition ID")
-          @RequestParam(value = "sortBy", required = false)
-          WorkflowSortBy sortBy,
-      @Parameter(
-              name = "sortDirection",
-              description = "The sort direction to apply to the workflow summaries")
-          @RequestParam(value = "sortDirection", required = false)
-          SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
-          Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The page size", example = "10")
-          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
-          Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Initiate a workflow.

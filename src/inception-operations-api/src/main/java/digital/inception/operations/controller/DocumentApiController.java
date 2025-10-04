@@ -38,7 +38,6 @@ import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
-import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
@@ -1362,93 +1361,6 @@ public interface DocumentApiController {
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the summaries for the documents.
-   *
-   * @param tenantId the ID for the tenant
-   * @param documentDefinitionId the document definition ID filter to apply to the document
-   *     summaries
-   * @param filter the filter to apply to the document summaries
-   * @param sortBy the method used to sort the document summaries e.g. by definition ID
-   * @param sortDirection the sort direction to apply to the document summaries
-   * @param pageIndex the page index
-   * @param pageSize the page size
-   * @return the summaries for the documents
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the document summaries could not be retrieved
-   */
-  @Operation(
-      summary = "Retrieve the document summaries",
-      description = "Retrieve the document summaries")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "The document summaries were retrieved"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "403",
-            description = "Access denied",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value = "/document-summaries",
-      method = RequestMethod.GET,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  DocumentSummaries getDocumentSummaries(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
-              name = "documentDefinitionId",
-              description = "The document definition ID filter to apply to the document summaries")
-          @RequestParam(value = "documentDefinitionId", required = false)
-          String documentDefinitionId,
-      @Parameter(name = "filter", description = "The filter to apply to the document summaries")
-          @RequestParam(value = "filter", required = false)
-          String filter,
-      @Parameter(
-              name = "sortBy",
-              description = "The method used to sort the document summaries e.g. by definition ID")
-          @RequestParam(value = "sortBy", required = false)
-          DocumentSortBy sortBy,
-      @Parameter(
-              name = "sortDirection",
-              description = "The sort direction to apply to the document summaries")
-          @RequestParam(value = "sortDirection", required = false)
-          SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
-          Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The page size", example = "10")
-          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
-          Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
-  /**
    * Search for documents.
    *
    * @param tenantId the ID for the tenant
@@ -1652,7 +1564,8 @@ public interface DocumentApiController {
    * @param documentDefinitionId the ID for the document definition
    * @param documentDefinition the document definition
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could not be found
+   * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
+   *     not be found
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the document definition could not be updated
    */

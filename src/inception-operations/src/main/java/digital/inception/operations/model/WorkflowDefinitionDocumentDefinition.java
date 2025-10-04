@@ -51,14 +51,28 @@ import org.springframework.boot.convert.DurationStyle;
  */
 @Schema(description = "An association of a document definition with a workflow definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"documentDefinitionId", "required", "singular", "verifiable", "validityPeriod"})
+@JsonPropertyOrder({
+  "documentDefinitionId",
+  "required",
+  "singular",
+  "verifiable",
+  "internal",
+  "validityPeriod"
+})
 @XmlRootElement(
     name = "WorkflowDefinitionDocumentDefinition",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowDefinitionDocumentDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"documentDefinitionId", "required", "singular", "verifiable", "validityPeriod"})
+    propOrder = {
+      "documentDefinitionId",
+      "required",
+      "singular",
+      "verifiable",
+      "internal",
+      "validityPeriod"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_definition_document_definitions")
@@ -80,6 +94,19 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   private String documentDefinitionId;
 
   /**
+   * Is a document with the document definition ID internal-only and excluded for external users.
+   */
+  @Schema(
+      description =
+          "Is a document with the document definition ID internal-only and excluded for external users",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Internal", required = true)
+  @NotNull
+  @Column(name = "internal", nullable = false)
+  private Boolean internal;
+
+  /**
    * Is a document with the document definition ID required for a workflow with the workflow
    * definition ID and workflow definition version.
    */
@@ -91,7 +118,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   @XmlElement(name = "Required", required = true)
   @NotNull
   @Column(name = "required", nullable = false)
-  private boolean required;
+  private Boolean required;
 
   /**
    * Is a workflow with the workflow definition ID and workflow definition version limited to a
@@ -105,7 +132,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   @XmlElement(name = "Singular", required = true)
   @NotNull
   @Column(name = "singular", nullable = false)
-  private boolean singular;
+  private Boolean singular;
 
   /**
    * The ISO-8601 duration format validity period from a document's issue date during which the
@@ -133,7 +160,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   @XmlElement(name = "Verifiable", required = true)
   @NotNull
   @Column(name = "verifiable", nullable = false)
-  private boolean verifiable;
+  private Boolean verifiable;
 
   /**
    * The ID for the workflow definition the workflow definition document definition is associated
@@ -173,19 +200,23 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    * @param verifiable should a document with the document definition ID be manually or
    *     automatically verified after being provided for a workflow with the workflow definition ID
    *     and workflow definition version
+   * @param internal is a document with the document definition ID internal-only and excluded for
+   *     external users
    */
   public WorkflowDefinitionDocumentDefinition(
       WorkflowDefinition workflowDefinition,
       String documentDefinitionId,
       boolean required,
       boolean singular,
-      boolean verifiable) {
+      boolean verifiable,
+      boolean internal) {
     this.workflowDefinitionId = workflowDefinition.getId();
     this.workflowDefinitionVersion = workflowDefinition.getVersion();
     this.documentDefinitionId = documentDefinitionId;
     this.required = required;
     this.singular = singular;
     this.verifiable = verifiable;
+    this.internal = internal;
   }
 
   /**
@@ -201,6 +232,8 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    * @param verifiable should a document with the document definition ID be manually or
    *     automatically verified after being provided for a workflow with the workflow definition ID
    *     and workflow definition version
+   * @param internal is a document with the document definition ID internal-only and excluded for
+   *     external users
    * @param validityPeriod the ISO-8601 duration format validity period from a document's issue date
    *     during which the document, with the document definition ID, can be associated with a
    *     workflow with the workflow definition ID and workflow definition version
@@ -211,6 +244,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
       boolean required,
       boolean singular,
       boolean verifiable,
+      boolean internal,
       String validityPeriod) {
     this.workflowDefinitionId = workflowDefinition.getId();
     this.workflowDefinitionVersion = workflowDefinition.getVersion();
@@ -218,6 +252,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
     this.required = required;
     this.singular = singular;
     this.verifiable = verifiable;
+    this.internal = internal;
     this.validityPeriod = validityPeriod;
   }
 
@@ -291,6 +326,17 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   }
 
   /**
+   * Returns whether a a document with the document definition ID is internal-only and excluded for
+   * external users.
+   *
+   * @return {@code true} if a document with the document definition ID is internal-only and
+   *     excluded for external users or {@code false} otherwise
+   */
+  public boolean isInternal() {
+    return internal;
+  }
+
+  /**
    * Returns whether a document with the document definition ID is required for a workflow with the
    * workflow definition ID and workflow definition version.
    *
@@ -333,6 +379,17 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    */
   public void setDocumentDefinitionId(String documentDefinitionId) {
     this.documentDefinitionId = documentDefinitionId;
+  }
+
+  /**
+   * Set whether a document with the document definition ID is internal-only and excluded for
+   * external users.
+   *
+   * @param internal {@code true} if a document with the document definition ID is internal-only and
+   *     excluded for external users or {@code false otherwise}
+   */
+  public void setInternal(boolean internal) {
+    this.internal = internal;
   }
 
   /**

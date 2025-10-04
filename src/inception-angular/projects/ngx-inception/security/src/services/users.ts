@@ -25,11 +25,6 @@ import { UserSortBy } from './user-sort-by';
  */
 export class Users {
   /**
-   * The filter that was applied to the users.
-   */
-  filter: string | null = null;
-
-  /**
    * The page index.
    */
   pageIndex: number;
@@ -55,11 +50,6 @@ export class Users {
   total: number;
 
   /**
-   * The ID for the user directory the users are associated with.
-   */
-  userDirectoryId: string;
-
-  /**
    * The users.
    */
   users: User[];
@@ -67,32 +57,26 @@ export class Users {
   /**
    * Constructs a new Users.
    *
-   * @param userDirectoryId The ID for the user directory the users are associated with.
    * @param users           The users.
    * @param total           The total number of users.
    * @param sortBy          The method used to sort the users e.g. by name.
    * @param sortDirection   The sort direction that was applied to the users.
    * @param pageIndex       The page index.
    * @param pageSize        The page size.
-   * @param filter          The filter that was applied to the users.
    */
   constructor(
-    userDirectoryId: string,
     users: User[],
     total: number,
     sortBy: UserSortBy,
     sortDirection: SortDirection,
     pageIndex: number,
-    pageSize: number,
-    filter?: string
+    pageSize: number
   ) {
-    this.userDirectoryId = userDirectoryId;
     this.users = users;
     this.total = total;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-    this.filter = !!filter ? filter : null;
   }
 }

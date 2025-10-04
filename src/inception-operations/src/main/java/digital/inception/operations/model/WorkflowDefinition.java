@@ -607,9 +607,15 @@ public class WorkflowDefinition implements Serializable {
    * @param verifiable should a document with the document definition ID be manually or
    *     automatically verified after being provided for a workflow with the workflow definition ID
    *     and workflow definition version
+   * @param internal is a document with the document definition ID internal-only and excluded for
+   *     external users
    */
   public void addDocumentDefinition(
-      String documentDefinitionId, boolean required, boolean singular, boolean verifiable) {
+      String documentDefinitionId,
+      boolean required,
+      boolean singular,
+      boolean verifiable,
+      boolean internal) {
     documentDefinitions.removeIf(
         existingDocumentDefinition ->
             StringUtil.equalsIgnoreCase(
@@ -617,7 +623,7 @@ public class WorkflowDefinition implements Serializable {
 
     documentDefinitions.add(
         new WorkflowDefinitionDocumentDefinition(
-            this, documentDefinitionId, required, singular, verifiable));
+            this, documentDefinitionId, required, singular, verifiable, internal));
   }
 
   /**
@@ -631,6 +637,8 @@ public class WorkflowDefinition implements Serializable {
    * @param verifiable should a document with the document definition ID be manually or
    *     automatically verified after being provided for a workflow with the workflow definition ID
    *     and workflow definition version
+   * @param internal is a document with the document definition ID internal-only and excluded for
+   *     external users
    * @param validityPeriod the ISO-8601 duration format validity period from a document's issue date
    *     during which the document, with the document definition ID, can be associated with a
    *     workflow with the workflow definition ID and workflow definition version
@@ -640,6 +648,7 @@ public class WorkflowDefinition implements Serializable {
       boolean required,
       boolean singular,
       boolean verifiable,
+      boolean internal,
       String validityPeriod) {
     documentDefinitions.removeIf(
         existingDocumentDefinition ->
@@ -648,7 +657,7 @@ public class WorkflowDefinition implements Serializable {
 
     documentDefinitions.add(
         new WorkflowDefinitionDocumentDefinition(
-            this, documentDefinitionId, required, singular, verifiable, validityPeriod));
+            this, documentDefinitionId, required, singular, verifiable, internal, validityPeriod));
   }
 
   /**

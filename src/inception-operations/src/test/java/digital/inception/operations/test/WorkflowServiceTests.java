@@ -40,6 +40,7 @@ import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFound
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
+import digital.inception.operations.model.AttributeSearchCriteria;
 import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.Document;
@@ -48,6 +49,7 @@ import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentExternalReference;
+import digital.inception.operations.model.ExternalReferenceSearchCriteria;
 import digital.inception.operations.model.ExternalReferenceType;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
@@ -59,12 +61,14 @@ import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
 import digital.inception.operations.model.RequiredDocumentAttribute;
+import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.SuspendWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowStepRequest;
 import digital.inception.operations.model.UnsuspendWorkflowRequest;
 import digital.inception.operations.model.UnsuspendWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
+import digital.inception.operations.model.VariableSearchCriteria;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
@@ -106,6 +110,7 @@ import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -351,8 +356,9 @@ public class WorkflowServiceTests {
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"));
 
-    workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false, true);
-    workflowDefinition.addDocumentDefinition(anotherDocumentDefinition.getId(), false, true, false);
+    workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false, true, false);
+    workflowDefinition.addDocumentDefinition(
+        anotherDocumentDefinition.getId(), false, true, false, false);
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -480,17 +486,37 @@ public class WorkflowServiceTests {
 
     compareWorkflows(workflow, retrievedWorkflow);
 
-    // Retrieve the workflow summaries, matching on the workflow attribute value
-    WorkflowSummaries workflowSummaries =
-        workflowService.getWorkflowSummaries(
-            TenantUtil.DEFAULT_TENANT_ID,
-            workflow.getDefinitionId(),
+    List<AttributeSearchCriteria> workflowAttributeSearchCriteria = new ArrayList<>();
+    workflowAttributeSearchCriteria.add(
+        new AttributeSearchCriteria(
+            "test_workflow_attribute_code", "test_workflow_attribute_value"));
+
+    List<ExternalReferenceSearchCriteria> workflowExternalReferencesSearchCriteria =
+        new ArrayList<>();
+    workflowExternalReferencesSearchCriteria.add(
+        new ExternalReferenceSearchCriteria(
+            "test_workflow_external_reference_code", "test_workflow_external_reference_value"));
+
+    List<VariableSearchCriteria> workflowVariableSearchCriteria = new ArrayList<>();
+    workflowVariableSearchCriteria.add(
+        new VariableSearchCriteria("testVariableName", "testVariableValue"));
+
+    SearchWorkflowsRequest searchWorkflowsRequest =
+        new SearchWorkflowsRequest(
+            workflowDefinition.getId(),
             WorkflowStatus.ACTIVE,
-            "test_workflow_attribute_value",
+            workflowAttributeSearchCriteria,
+            workflowExternalReferencesSearchCriteria,
+            workflowVariableSearchCriteria,
             WorkflowSortBy.INITIATED,
             SortDirection.ASCENDING,
             0,
             10);
+
+    WorkflowSummaries workflowSummaries =
+        workflowService.searchWorkflows(TenantUtil.DEFAULT_TENANT_ID, searchWorkflowsRequest);
+
+    assertEquals(1, workflowSummaries.getWorkflowSummaries().size());
 
     assertEquals(1, workflowSummaries.getTotal());
 
@@ -1144,7 +1170,7 @@ public class WorkflowServiceTests {
         new WorkflowDefinitionAttribute("process_definition_key", "process_definition_key_value"));
 
     sharedWorkflowDefinition.addDocumentDefinition(
-        sharedDocumentDefinition.getId(), true, true, true);
+        sharedDocumentDefinition.getId(), true, true, true, false);
 
     workflowService.createWorkflowDefinition(sharedWorkflowDefinition);
 
@@ -1209,9 +1235,9 @@ public class WorkflowServiceTests {
         new WorkflowVariableDefinition("testVariableName", true, "Test Variable Description"));
 
     tenantWorkflowDefinition.addDocumentDefinition(
-        tenantDocumentDefinition.getId(), true, false, true);
+        tenantDocumentDefinition.getId(), true, false, true, false);
     tenantWorkflowDefinition.addDocumentDefinition(
-        sharedDocumentDefinition.getId(), true, true, true, "P3M");
+        sharedDocumentDefinition.getId(), true, true, true, false, "P3M");
 
     tenantWorkflowDefinition.setPermissions(
         List.of(

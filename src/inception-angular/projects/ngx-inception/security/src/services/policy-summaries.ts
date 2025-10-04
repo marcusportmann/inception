@@ -25,11 +25,6 @@ import { PolicySummary } from './policy-summary';
  */
 export class PolicySummaries {
   /**
-   * The filter that was applied to the policy summaries.
-   */
-  filter: string | null = null;
-
-  /**
    * The page index.
    */
   pageIndex: number;
@@ -68,7 +63,6 @@ export class PolicySummaries {
    * @param sortDirection   The sort direction that was applied to the policy summaries.
    * @param pageIndex       The page index.
    * @param pageSize        The page size.
-   * @param filter          The filter that was applied to the policy summaries.
    */
   constructor(
     policySummaries: PolicySummary[],
@@ -76,8 +70,7 @@ export class PolicySummaries {
     sortBy: PolicySortBy,
     sortDirection: SortDirection,
     pageIndex: number,
-    pageSize: number,
-    filter?: string
+    pageSize: number
   ) {
     this.policySummaries = policySummaries;
     this.total = total;
@@ -85,6 +78,5 @@ export class PolicySummaries {
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-    this.filter = !!filter ? filter : null;
   }
 }

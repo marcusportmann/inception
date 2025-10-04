@@ -37,7 +37,6 @@ import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
-import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
@@ -397,31 +396,6 @@ public interface DocumentService {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
-
-  /**
-   * Retrieve the summaries for the documents.
-   *
-   * @param tenantId the ID for the tenant
-   * @param documentDefinitionId the document definition ID filter to apply to the document
-   *     summaries
-   * @param filter the filter to apply to the document summaries
-   * @param sortBy the method used to sort the document summaries e.g. by definition ID
-   * @param sortDirection the sort direction to apply to the document summaries
-   * @param pageIndex the page index
-   * @param pageSize the page size
-   * @return the summaries for the documents
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the document summaries could not be retrieved
-   */
-  DocumentSummaries getDocumentSummaries(
-      UUID tenantId,
-      String documentDefinitionId,
-      String filter,
-      DocumentSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the required document attribute definitions.

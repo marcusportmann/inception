@@ -42,10 +42,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "documentDefinitionId",
-  "status",
   "attributes",
   "externalReferences",
-  "variables",
   "sortBy",
   "sortDirection",
   "pageIndex",
@@ -57,10 +55,8 @@ import java.util.List;
     namespace = "https://inception.digital/operations",
     propOrder = {
       "documentDefinitionId",
-      "status",
       "attributes",
       "externalReferences",
-      "variables",
       "sortBy",
       "sortDirection",
       "pageIndex",
@@ -119,14 +115,6 @@ public class SearchDocumentsRequest implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The variable search criteria to apply when searching for documents. */
-  @Schema(description = "The variable search criteria to apply when searching for documents")
-  @JsonProperty
-  @XmlElementWrapper(name = "Variables")
-  @XmlElement(name = "Variable")
-  @Valid
-  private List<VariableSearchCriteria> variables;
-
   /** Constructs a new {@code SearchDocumentsRequest}. */
   public SearchDocumentsRequest() {}
 
@@ -137,7 +125,6 @@ public class SearchDocumentsRequest implements Serializable {
    * @param attributes the attribute search criteria to apply when searching for documents
    * @param externalReferences the external reference search criteria to apply when searching for
    *     documents
-   * @param variables the variable search criteria to apply when searching for documents
    * @param sortBy the method used to sort the documents e.g. by definition ID
    * @param sortDirection the sort direction to apply to the documents
    * @param pageIndex the page index
@@ -147,7 +134,6 @@ public class SearchDocumentsRequest implements Serializable {
       String documentDefinitionId,
       List<AttributeSearchCriteria> attributes,
       List<ExternalReferenceSearchCriteria> externalReferences,
-      List<VariableSearchCriteria> variables,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
@@ -155,7 +141,6 @@ public class SearchDocumentsRequest implements Serializable {
     this.documentDefinitionId = documentDefinitionId;
     this.attributes = attributes;
     this.externalReferences = externalReferences;
-    this.variables = variables;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
@@ -226,15 +211,6 @@ public class SearchDocumentsRequest implements Serializable {
   }
 
   /**
-   * Returns the variable search criteria to apply when searching for documents.
-   *
-   * @return the variable search criteria to apply when searching for documents
-   */
-  public List<VariableSearchCriteria> getVariables() {
-    return variables;
-  }
-
-  /**
    * Set the attribute search criteria to apply when searching for documents.
    *
    * @param attributes the attribute search criteria to apply when searching for documents
@@ -296,14 +272,5 @@ public class SearchDocumentsRequest implements Serializable {
    */
   public void setSortDirection(SortDirection sortDirection) {
     this.sortDirection = sortDirection;
-  }
-
-  /**
-   * Set the variable search criteria to apply when searching for documents.
-   *
-   * @param variables the variable search criteria to apply when searching for documents
-   */
-  public void setVariables(List<VariableSearchCriteria> variables) {
-    this.variables = variables;
   }
 }

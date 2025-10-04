@@ -36,6 +36,7 @@ import digital.inception.operations.model.InteractionNotes;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
+import digital.inception.operations.model.SearchInteractionsRequest;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -387,6 +388,20 @@ public interface InteractionStore {
    * @throws ServiceUnavailableException if the interaction locks could not be reset
    */
   void resetInteractionLocks(UUID tenantId, InteractionStatus status, InteractionStatus newStatus)
+      throws ServiceUnavailableException;
+
+  /**
+   * Search for interactions.
+   *
+   * @param tenantId the ID for the tenant
+   * @param searchInteractionsRequest the request to search for interactions matching specific
+   *     criteria
+   * @param maxResults the maximum number of interaction summaries that should be retrieved
+   * @return the summaries for the interactions matching the search criteria
+   * @throws ServiceUnavailableException if the interaction search failed
+   */
+  InteractionSummaries searchInteractions(
+      UUID tenantId, SearchInteractionsRequest searchInteractionsRequest, int maxResults)
       throws ServiceUnavailableException;
 
   /**

@@ -56,6 +56,7 @@ import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
+import digital.inception.operations.model.WorkflowStepId;
 import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowSummary;
@@ -68,9 +69,6 @@ import digital.inception.operations.persistence.jpa.WorkflowStepRepository;
 import digital.inception.operations.persistence.jpa.WorkflowSummaryRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.Expression;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -182,31 +180,6 @@ public class InternalWorkflowStore implements WorkflowStore {
       log.warn("Failed to check if we are using Oracle", e);
       usingOracle = false;
     }
-  }
-
-  private static Sort.Direction resolveSortDirection(
-      digital.inception.core.sorting.SortDirection sortDirection) {
-    if (sortDirection == null) {
-      return Sort.Direction.DESC;
-    } else if (sortDirection == SortDirection.ASCENDING) {
-      return Sort.Direction.ASC;
-    } else {
-      return Sort.Direction.DESC;
-    }
-  }
-
-  private static String resolveWorkflowSortByPropertyName(WorkflowSortBy sortBy) {
-    if (sortBy == null) return "initiated";
-    return switch (sortBy) {
-      case WorkflowSortBy.DEFINITION_ID -> "definitionId";
-      case WorkflowSortBy.FINALIZED -> "finalized";
-      case WorkflowSortBy.FINALIZED_BY -> "finalizedBy";
-      case WorkflowSortBy.INITIATED -> "initiated";
-      case WorkflowSortBy.INITIATED_BY -> "initiatedBy";
-      case WorkflowSortBy.UPDATED -> "updated";
-      case WorkflowSortBy.UPDATED_BY -> "updatedBy";
-      default -> "initiated";
-    };
   }
 
   @Override
@@ -379,6 +352,32 @@ public class InternalWorkflowStore implements WorkflowStore {
       throw new ServiceUnavailableException(
           "Failed to delete the workflow note ("
               + workflowNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void deleteWorkflowStep(UUID tenantId, UUID workflowId, String step)
+      throws WorkflowStepNotFoundException, ServiceUnavailableException {
+    try {
+      WorkflowStepId workflowStepId = new WorkflowStepId(workflowId, step);
+
+      if (!workflowStepRepository.existsById(workflowStepId)) {
+        throw new WorkflowStepNotFoundException(tenantId, workflowId, step);
+      }
+
+      workflowStepRepository.deleteById(workflowStepId);
+    } catch (WorkflowStepNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow step ("
+              + step
+              + ") for the workflow ("
+              + workflowId
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -967,178 +966,6 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
-  public WorkflowSummaries getWorkflowSummaries(
-      UUID tenantId,
-      String workflowDefinitionId,
-      WorkflowStatus status,
-      String filter,
-      WorkflowSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
-      throws ServiceUnavailableException {
-    try {
-      PageRequest pageRequest;
-
-      if (sortBy == WorkflowSortBy.FINALIZED) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "finalized");
-      } else if (sortBy == WorkflowSortBy.FINALIZED_BY) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "finalizedBy");
-      } else if (sortBy == WorkflowSortBy.INITIATED) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "initiated");
-      } else if (sortBy == WorkflowSortBy.INITIATED_BY) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "initiatedBy");
-      } else if (sortBy == WorkflowSortBy.UPDATED) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "updated");
-      } else if (sortBy == WorkflowSortBy.UPDATED_BY) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "updatedBy");
-      } else if (sortBy == WorkflowSortBy.DEFINITION_ID) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "definitionId");
-      } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "initiated");
-      }
-
-      Page<WorkflowSummary> workflowSummaryPage =
-          workflowSummaryRepository.findAll(
-              (Specification<WorkflowSummary>)
-                  (root, query, criteriaBuilder) -> {
-                    // LEFT join attributes for filtering
-                    Join<Workflow, WorkflowAttribute> attributesJoin =
-                        root.join("attributes", JoinType.LEFT);
-
-                    List<Predicate> predicates = new ArrayList<>();
-
-                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
-
-                    if (StringUtils.hasText(workflowDefinitionId)) {
-                      predicates.add(
-                          criteriaBuilder.equal(root.get("definitionId"), workflowDefinitionId));
-                    }
-
-                    if (status != null) {
-                      predicates.add(criteriaBuilder.equal(root.get("status"), status));
-                    }
-
-                    if (StringUtils.hasText(filter)) {
-                      String likeValue = "%" + filter.toLowerCase() + "%";
-
-                      // Common LIKEs for non-text-indexed columns
-                      Predicate initiatedByLike =
-                          criteriaBuilder.like(
-                              criteriaBuilder.lower(root.get("initiatedBy")), likeValue);
-                      Predicate updatedByLike =
-                          criteriaBuilder.like(
-                              criteriaBuilder.lower(root.get("updatedBy")), likeValue);
-                      Predicate finalizedByLike =
-                          criteriaBuilder.like(
-                              criteriaBuilder.lower(root.get("finalizedBy")), likeValue);
-
-                      Predicate attributeValuePredicate;
-                      if (usingOracle) {
-                        // Oracle Text: CONTAINS(value, '*term*', 1) > 0
-                        // Render contains(value, '*foo*', 1)
-                        Expression<Integer> containsExpr =
-                            criteriaBuilder.function(
-                                "contains",
-                                Integer.class,
-                                attributesJoin.get("value"),
-                                criteriaBuilder.literal("*" + filter + "*"),
-                                criteriaBuilder.literal(1));
-                        attributeValuePredicate = criteriaBuilder.greaterThan(containsExpr, 0);
-                      } else {
-                        attributeValuePredicate =
-                            criteriaBuilder.like(
-                                criteriaBuilder.lower(attributesJoin.get("value")), likeValue);
-                      }
-
-                      predicates.add(
-                          criteriaBuilder.or(
-                              attributeValuePredicate,
-                              initiatedByLike,
-                              updatedByLike,
-                              finalizedByLike));
-                    }
-
-                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                  },
-              pageRequest);
-
-      return new WorkflowSummaries(
-          tenantId,
-          workflowSummaryPage.toList(),
-          workflowSummaryPage.getTotalElements(),
-          workflowDefinitionId,
-          status,
-          filter,
-          sortBy,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered workflow summaries for the tenant (" + tenantId + ")",
-          e);
-    }
-  }
-
-  @Override
   public WorkflowStep initiateWorkflowStep(UUID tenantId, UUID workflowId, String step)
       throws WorkflowNotFoundException, ServiceUnavailableException {
     try {
@@ -1395,41 +1222,45 @@ public class InternalWorkflowStore implements WorkflowStore {
             // Avoid duplicates when joins or subqueries are involved
             query.distinct(true);
 
-            List<Predicate> predicates = new ArrayList<>();
+            // AND'ed top-level predicates
+            List<Predicate> andPredicates = new ArrayList<>();
 
             // Tenant filter
             if (tenantId != null) {
-              predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+              andPredicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
             }
 
             // Top-level filters
             if (StringUtils.hasText(searchWorkflowsRequest.getWorkflowDefinitionId())) {
-              predicates.add(
+              andPredicates.add(
                   criteriaBuilder.equal(
                       criteriaBuilder.lower(root.get("definitionId")),
                       searchWorkflowsRequest.getWorkflowDefinitionId().toLowerCase()));
             }
 
             if (searchWorkflowsRequest.getStatus() != null) {
-              predicates.add(
+              andPredicates.add(
                   criteriaBuilder.equal(root.get("status"), searchWorkflowsRequest.getStatus()));
             }
 
-            // Attribute criteria (EXISTS for each pair)
+            // Collect OR buckets from attributes, external refs, variables
+            List<Predicate> orBuckets = new ArrayList<>();
+
+            // Attribute criteria (OR all attribute pairs)
             if (searchWorkflowsRequest.getAttributes() != null
                 && !searchWorkflowsRequest.getAttributes().isEmpty()) {
+              List<Predicate> attributePredicates = new ArrayList<>();
+
               for (AttributeSearchCriteria attributeSearchCriteria :
                   searchWorkflowsRequest.getAttributes()) {
                 if (attributeSearchCriteria == null) continue;
 
                 var subQuery = query.subquery(Integer.class);
                 var workflowAttributeRoot = subQuery.from(WorkflowAttribute.class);
-                var subPredicate =
-                    criteriaBuilder.equal(
-                        workflowAttributeRoot.get("workflowId"), root.get("id"));
+                Predicate subPredicate =
+                    criteriaBuilder.equal(workflowAttributeRoot.get("workflowId"), root.get("id"));
 
-                if (attributeSearchCriteria.getCode() != null
-                    && !attributeSearchCriteria.getCode().isBlank()) {
+                if (StringUtils.hasText(attributeSearchCriteria.getCode())) {
                   subPredicate =
                       criteriaBuilder.and(
                           subPredicate,
@@ -1437,8 +1268,7 @@ public class InternalWorkflowStore implements WorkflowStore {
                               criteriaBuilder.lower(workflowAttributeRoot.get("code")),
                               attributeSearchCriteria.getCode().toLowerCase()));
                 }
-                if (attributeSearchCriteria.getValue() != null
-                    && !attributeSearchCriteria.getValue().isBlank()) {
+                if (StringUtils.hasText(attributeSearchCriteria.getValue())) {
                   subPredicate =
                       criteriaBuilder.and(
                           subPredicate,
@@ -1448,25 +1278,30 @@ public class InternalWorkflowStore implements WorkflowStore {
                 }
 
                 subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
-                predicates.add(criteriaBuilder.exists(subQuery));
+                attributePredicates.add(criteriaBuilder.exists(subQuery));
+              }
+
+              if (!attributePredicates.isEmpty()) {
+                orBuckets.add(criteriaBuilder.or(attributePredicates.toArray(new Predicate[0])));
               }
             }
 
-            // External reference criteria (EXISTS for each pair)
+            // External reference criteria (OR all external reference pairs)
             if (searchWorkflowsRequest.getExternalReferences() != null
                 && !searchWorkflowsRequest.getExternalReferences().isEmpty()) {
+              List<Predicate> externalReferencePredicates = new ArrayList<>();
+
               for (ExternalReferenceSearchCriteria externalReferenceSearchCriteria :
                   searchWorkflowsRequest.getExternalReferences()) {
                 if (externalReferenceSearchCriteria == null) continue;
 
                 var subQuery = query.subquery(Integer.class);
                 var workflowExternalReferenceRoot = subQuery.from(WorkflowExternalReference.class);
-                var subPredicate =
+                Predicate subPredicate =
                     criteriaBuilder.equal(
                         workflowExternalReferenceRoot.get("objectId"), root.get("id"));
 
-                if (externalReferenceSearchCriteria.getType() != null
-                    && !externalReferenceSearchCriteria.getType().isBlank()) {
+                if (StringUtils.hasText(externalReferenceSearchCriteria.getType())) {
                   subPredicate =
                       criteriaBuilder.and(
                           subPredicate,
@@ -1474,8 +1309,7 @@ public class InternalWorkflowStore implements WorkflowStore {
                               criteriaBuilder.lower(workflowExternalReferenceRoot.get("type")),
                               externalReferenceSearchCriteria.getType().toLowerCase()));
                 }
-                if (externalReferenceSearchCriteria.getValue() != null
-                    && !externalReferenceSearchCriteria.getValue().isBlank()) {
+                if (StringUtils.hasText(externalReferenceSearchCriteria.getValue())) {
                   subPredicate =
                       criteriaBuilder.and(
                           subPredicate,
@@ -1485,25 +1319,30 @@ public class InternalWorkflowStore implements WorkflowStore {
                 }
 
                 subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
-                predicates.add(criteriaBuilder.exists(subQuery));
+                externalReferencePredicates.add(criteriaBuilder.exists(subQuery));
+              }
+
+              if (!externalReferencePredicates.isEmpty()) {
+                orBuckets.add(
+                    criteriaBuilder.or(externalReferencePredicates.toArray(new Predicate[0])));
               }
             }
 
-            // Variable criteria (EXISTS for each pair)
+            // Variable criteria (OR all variable pairs)
             if (searchWorkflowsRequest.getVariables() != null
                 && !searchWorkflowsRequest.getVariables().isEmpty()) {
+              List<Predicate> variablePredicates = new ArrayList<>();
+
               for (VariableSearchCriteria variableSearchCriteria :
                   searchWorkflowsRequest.getVariables()) {
                 if (variableSearchCriteria == null) continue;
 
                 var subQuery = query.subquery(Integer.class);
                 var workflowVariableRoot = subQuery.from(WorkflowVariable.class);
-                var subPredicate =
-                    criteriaBuilder.equal(
-                        workflowVariableRoot.get("workflowId"), root.get("id"));
+                Predicate subPredicate =
+                    criteriaBuilder.equal(workflowVariableRoot.get("workflowId"), root.get("id"));
 
-                if (variableSearchCriteria.getName() != null
-                    && !variableSearchCriteria.getName().isBlank()) {
+                if (StringUtils.hasText(variableSearchCriteria.getName())) {
                   subPredicate =
                       criteriaBuilder.and(
                           subPredicate,
@@ -1511,8 +1350,7 @@ public class InternalWorkflowStore implements WorkflowStore {
                               criteriaBuilder.lower(workflowVariableRoot.get("name")),
                               variableSearchCriteria.getName().toLowerCase()));
                 }
-                if (variableSearchCriteria.getValue() != null
-                    && !variableSearchCriteria.getValue().isBlank()) {
+                if (StringUtils.hasText(variableSearchCriteria.getValue())) {
                   subPredicate =
                       criteriaBuilder.and(
                           subPredicate,
@@ -1522,12 +1360,20 @@ public class InternalWorkflowStore implements WorkflowStore {
                 }
 
                 subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
-                predicates.add(criteriaBuilder.exists(subQuery));
+                variablePredicates.add(criteriaBuilder.exists(subQuery));
+              }
+
+              if (!variablePredicates.isEmpty()) {
+                orBuckets.add(criteriaBuilder.or(variablePredicates.toArray(new Predicate[0])));
               }
             }
 
-            return criteriaBuilder.and(
-                predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
+            // If any of the three groups were supplied, OR the groups together
+            if (!orBuckets.isEmpty()) {
+              andPredicates.add(criteriaBuilder.or(orBuckets.toArray(new Predicate[0])));
+            }
+
+            return criteriaBuilder.and(andPredicates.toArray(new Predicate[0]));
           };
 
       // Sorting
@@ -1554,9 +1400,6 @@ public class InternalWorkflowStore implements WorkflowStore {
           tenantId,
           workflowSummaryPage.toList(),
           workflowSummaryPage.getTotalElements(),
-          searchWorkflowsRequest.getWorkflowDefinitionId(),
-          searchWorkflowsRequest.getStatus(),
-          null,
           searchWorkflowsRequest.getSortBy(),
           searchWorkflowsRequest.getSortDirection(),
           pageIndex,
@@ -1911,5 +1754,30 @@ public class InternalWorkflowStore implements WorkflowStore {
               + ")",
           e);
     }
+  }
+
+  private Sort.Direction resolveSortDirection(
+      digital.inception.core.sorting.SortDirection sortDirection) {
+    if (sortDirection == null) {
+      return Sort.Direction.DESC;
+    } else if (sortDirection == SortDirection.ASCENDING) {
+      return Sort.Direction.ASC;
+    } else {
+      return Sort.Direction.DESC;
+    }
+  }
+
+  private String resolveWorkflowSortByPropertyName(WorkflowSortBy sortBy) {
+    if (sortBy == null) return "initiated";
+    return switch (sortBy) {
+      case WorkflowSortBy.DEFINITION_ID -> "definitionId";
+      case WorkflowSortBy.FINALIZED -> "finalized";
+      case WorkflowSortBy.FINALIZED_BY -> "finalizedBy";
+      case WorkflowSortBy.INITIATED -> "initiated";
+      case WorkflowSortBy.INITIATED_BY -> "initiatedBy";
+      case WorkflowSortBy.UPDATED -> "updated";
+      case WorkflowSortBy.UPDATED_BY -> "updatedBy";
+      default -> "initiated";
+    };
   }
 }

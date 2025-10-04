@@ -41,6 +41,7 @@ import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
+import digital.inception.operations.model.DeleteWorkflowStepRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.Event;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
@@ -77,8 +78,6 @@ import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
 import digital.inception.operations.model.WorkflowPermissionType;
-import digital.inception.operations.model.WorkflowSortBy;
-import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.service.BackgroundWorkflowStatusVerifier;
@@ -342,6 +341,41 @@ public class WorkflowApiControllerImpl extends SecureApiController
     }
 
     workflowService.deleteWorkflowNote(tenantId, workflowNoteId);
+  }
+
+  @Override
+  public void deleteWorkflowStep(UUID tenantId, DeleteWorkflowStepRequest deleteWorkflowStepRequest)
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowStepNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    try {
+      if (!workflowService.workflowExists(tenantId, deleteWorkflowStepRequest.getWorkflowId())) {
+        throw new WorkflowNotFoundException(tenantId, deleteWorkflowStepRequest.getWorkflowId());
+      }
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow step ("
+              + deleteWorkflowStepRequest.getStep()
+              + ") for the workflow ("
+              + deleteWorkflowStepRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+
+    workflowService.deleteWorkflowStep(tenantId, deleteWorkflowStepRequest);
   }
 
   @Override
@@ -754,29 +788,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
     return workflowService.getWorkflowNotes(
         tenantId, workflowId, filter, sortBy, sortDirection, pageIndex, pageSize);
-  }
-
-  @Override
-  public WorkflowSummaries getWorkflowSummaries(
-      UUID tenantId,
-      String workflowDefinitionId,
-      WorkflowStatus status,
-      String filter,
-      WorkflowSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
-
-    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
-        && (!hasAccessToTenant(tenantId))) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    return workflowService.getWorkflowSummaries(
-        tenantId, workflowDefinitionId, status, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override

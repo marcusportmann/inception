@@ -78,11 +78,11 @@ public class BackgroundEventProcessorImpl implements BackgroundEventProcessor, S
    * The maximum number of events to queue for processing if no event processing threads are
    * available.
    */
-  @Value("${inception.operations.maximum-event-processing-queue-length:#{50}}")
+  @Value("${inception.operations.max-event-processing-queue-length:#{50}}")
   private int maximumEventProcessingQueueLength;
 
   /** The maximum number of event processing threads to create to execute tasks. */
-  @Value("${inception.operations.maximum-event-processing-threads:#{10}}")
+  @Value("${inception.operations.max-event-processing-threads:#{10}}")
   private int maximumEventProcessingThreads;
 
   /**

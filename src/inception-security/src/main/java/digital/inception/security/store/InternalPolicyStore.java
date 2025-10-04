@@ -195,7 +195,6 @@ public class InternalPolicyStore implements PolicyStore {
       return new PolicySummaries(
           policySummaryPage.toList(),
           policySummaryPage.getTotalElements(),
-          filter,
           sortBy,
           sortDirection,
           pageIndex,

@@ -255,9 +255,6 @@ public class ErrorServiceImpl extends AbstractServiceBase implements ErrorServic
       return new ErrorReportSummaries(
           errorReportSummaryPage.toList(),
           errorReportSummaryPage.getTotalElements(),
-          filter,
-          fromDate,
-          toDate,
           sortBy,
           sortDirection,
           pageIndex,

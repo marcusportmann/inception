@@ -16,24 +16,19 @@
 
 package digital.inception.error.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -48,13 +43,10 @@ import java.util.List;
 @JsonPropertyOrder({
   "errorReportSummaries",
   "total",
-  "fromDate",
-  "toDate",
   "sortBy",
   "sortDirection",
   "pageIndex",
-  "pageSize",
-  "filter"
+  "pageSize"
 })
 @XmlRootElement(name = "ErrorReportSummaries", namespace = "https://inception.digital/error")
 @XmlType(
@@ -63,13 +55,10 @@ import java.util.List;
     propOrder = {
       "errorReportSummaries",
       "total",
-      "fromDate",
-      "toDate",
       "sortBy",
       "sortDirection",
       "pageIndex",
-      "pageSize",
-      "filter"
+      "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
@@ -83,24 +72,6 @@ public class ErrorReportSummaries implements Serializable {
   @XmlElementWrapper(name = "ErrorReportSummaries", required = true)
   @XmlElement(name = "ErrorReportSummary", required = true)
   private List<ErrorReportSummary> errorReportSummaries;
-
-  /** The filter that was applied to the error report summaries. */
-  @Schema(description = "The filter that was applied to the error report summaries")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
-
-  /** The date to retrieve the error report summaries from. */
-  @Schema(
-      description =
-          "The ISO 8601 format date value for the date to retrieve the error report summaries from",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "FromDate", required = true)
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
-  private LocalDate fromDate;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -130,18 +101,6 @@ public class ErrorReportSummaries implements Serializable {
   @XmlElement(name = "SortDirection", required = true)
   private SortDirection sortDirection;
 
-  /** The date to retrieve the error report summaries to. */
-  @Schema(
-      description =
-          "The ISO 8601 format date value for the date to retrieve the error report summaries to",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "ToDate", required = true)
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
-  private LocalDate toDate;
-
   /** The total number of error report summaries. */
   @Schema(
       description = "The total number of error report summaries",
@@ -158,9 +117,6 @@ public class ErrorReportSummaries implements Serializable {
    *
    * @param errorReportSummaries the error report summaries
    * @param total the total number of error report summaries
-   * @param filter the filter that was applied to the error report summaries
-   * @param fromDate the date to retrieve the error report summaries from
-   * @param toDate the date to retrieve the error report summaries to
    * @param sortBy the method used to sort the error report summaries e.g. by who submitted them
    * @param sortDirection the sort direction that was applied to the error report summaries
    * @param pageIndex the page index
@@ -169,18 +125,12 @@ public class ErrorReportSummaries implements Serializable {
   public ErrorReportSummaries(
       List<ErrorReportSummary> errorReportSummaries,
       long total,
-      String filter,
-      LocalDate fromDate,
-      LocalDate toDate,
       ErrorReportSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
     this.errorReportSummaries = errorReportSummaries;
     this.total = total;
-    this.filter = filter;
-    this.fromDate = fromDate;
-    this.toDate = toDate;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
@@ -194,24 +144,6 @@ public class ErrorReportSummaries implements Serializable {
    */
   public List<ErrorReportSummary> getErrorReportSummaries() {
     return errorReportSummaries;
-  }
-
-  /**
-   * Returns the filter that was applied to the error report summaries.
-   *
-   * @return the filter that was applied to the error report summaries
-   */
-  public String getFilter() {
-    return filter;
-  }
-
-  /**
-   * Returns the date to retrieve the error report summaries from.
-   *
-   * @return the date to retrieve the error report summaries from
-   */
-  public LocalDate getFromDate() {
-    return fromDate;
   }
 
   /**
@@ -248,15 +180,6 @@ public class ErrorReportSummaries implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
-  }
-
-  /**
-   * Returns the date to retrieve the error report summaries to.
-   *
-   * @return the date to retrieve the error report summaries to
-   */
-  public LocalDate getToDate() {
-    return toDate;
   }
 
   /**

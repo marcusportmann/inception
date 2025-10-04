@@ -10,6 +10,10 @@ get {
   auth: inherit
 }
 
+vars:post-response {
+  documentId: res.body.workflowDocuments[1].documentId
+}
+
 assert {
   res.status: eq 200
 }

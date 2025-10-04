@@ -40,6 +40,7 @@ import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
+import digital.inception.operations.model.DeleteWorkflowStepRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.Event;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
@@ -76,7 +77,6 @@ import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
-import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowSummaries;
@@ -286,6 +286,18 @@ public interface WorkflowService {
    */
   void deleteWorkflowNote(UUID tenantId, UUID workflowNoteId)
       throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delete the workflow step.
+   *
+   * @param tenantId the ID for the tenant
+   * @param deleteWorkflowStepRequest the request to delete the workflow step
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowStepNotFoundException if the workflow step could not be found
+   * @throws ServiceUnavailableException if the workflow step could not be deleted
+   */
+  void deleteWorkflowStep(UUID tenantId, DeleteWorkflowStepRequest deleteWorkflowStepRequest)
+      throws InvalidArgumentException, WorkflowStepNotFoundException, ServiceUnavailableException;
 
   /**
    * Delink an interaction from a workflow.
@@ -742,33 +754,6 @@ public interface WorkflowService {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
-
-  /**
-   * Retrieve the summaries for the workflows.
-   *
-   * @param tenantId the ID for the tenant
-   * @param workflowDefinitionId the workflow definition ID filter to apply to the workflow
-   *     summaries
-   * @param status the status filter to apply to the workflow summaries
-   * @param filter the filter to apply to the workflow summaries
-   * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
-   * @param sortDirection the sort direction to apply to the workflow summaries
-   * @param pageIndex the page index
-   * @param pageSize the page size
-   * @return the summaries for the workflows
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the workflow summaries could not be retrieved
-   */
-  WorkflowSummaries getWorkflowSummaries(
-      UUID tenantId,
-      String workflowDefinitionId,
-      WorkflowStatus status,
-      String filter,
-      WorkflowSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Initiate a workflow.

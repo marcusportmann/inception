@@ -47,6 +47,7 @@ import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
+import digital.inception.operations.model.SearchInteractionsRequest;
 import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.service.InteractionService;
@@ -554,6 +555,21 @@ public class InteractionApiControllerImpl extends SecureApiController
     }
 
     interactionService.linkPartyToInteraction(tenantId, linkPartyToInteractionRequest);
+  }
+
+  @Override
+  public InteractionSummaries searchInteractions(
+      UUID tenantId, SearchInteractionsRequest searchInteractionsRequest)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return interactionService.searchInteractions(tenantId, searchInteractionsRequest);
   }
 
   @Override

@@ -39,6 +39,7 @@ import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionSummary;
+import digital.inception.operations.model.SearchInteractionsRequest;
 import digital.inception.operations.persistence.jpa.InteractionAttachmentRepository;
 import digital.inception.operations.persistence.jpa.InteractionAttachmentSummaryRepository;
 import digital.inception.operations.persistence.jpa.InteractionNoteRepository;
@@ -434,10 +435,8 @@ public class InternalInteractionStore implements InteractionStore {
 
       return new InteractionAttachmentSummaries(
           tenantId,
-          interactionId,
           interactionAttachmentSummaryPage.toList(),
           interactionAttachmentSummaryPage.getTotalElements(),
-          filter,
           sortBy,
           sortDirection,
           pageIndex,
@@ -709,8 +708,6 @@ public class InternalInteractionStore implements InteractionStore {
           tenantId,
           interactionSummaryPage.toList(),
           interactionSummaryPage.getTotalElements(),
-          interactionSourceId,
-          filter,
           sortBy,
           sortDirection,
           pageIndex,
@@ -858,6 +855,13 @@ public class InternalInteractionStore implements InteractionStore {
               + ")",
           e);
     }
+  }
+
+  @Override
+  public InteractionSummaries searchInteractions(
+      UUID tenantId, SearchInteractionsRequest searchInteractionsRequest, int maxResults)
+      throws ServiceUnavailableException {
+    throw new ServiceUnavailableException("Not Implemented");
   }
 
   @Override

@@ -24,11 +24,6 @@ import { GroupMember } from './group-member';
  */
 export class GroupMembers {
   /**
-   * The filter that was applied to the group members.
-   */
-  filter: string | null = null;
-
-  /**
    * The group members.
    */
   groupMembers: GroupMember[];
@@ -59,39 +54,28 @@ export class GroupMembers {
   total: number;
 
   /**
-   * The ID for the user directory the group members are associated with.
-   */
-  userDirectoryId: string;
-
-  /**
    * Constructs a new GroupMembers.
    *
-   * @param userDirectoryId The ID for the user directory the group members are associated with.
    * @param groupName       The name of the group the group members are associated with.
    * @param groupMembers    The group members.
    * @param total           The total number of groups.
    * @param sortDirection   The sort direction that was applied to the group members.
    * @param pageIndex       The page index.
    * @param pageSize        The page size.
-   * @param filter          The filter that was applied to the group members.
    */
   constructor(
-    userDirectoryId: string,
     groupName: string,
     groupMembers: GroupMember[],
     total: number,
     sortDirection: SortDirection,
     pageIndex: number,
-    pageSize: number,
-    filter?: string
+    pageSize: number
   ) {
-    this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
     this.groupMembers = groupMembers;
     this.total = total;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-    this.filter = !!filter ? filter : null;
   }
 }

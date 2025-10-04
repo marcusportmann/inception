@@ -540,6 +540,10 @@
         remarks="Should a document with the document definition ID be manually or automatically verified after being provided for a workflow with the workflow definition ID and workflow definition version">
         <constraints nullable="false"/>
       </column>
+      <column name="internal" type="boolean"
+        remarks="Is a document with the document definition ID internal-only and excluded for external users">
+        <constraints nullable="false"/>
+      </column>
       <column name="validity_period" type="nvarchar(50)"
         remarks="The ISO-8601 duration format validity period from a document's issue date during which the document, with the document definition ID, can be associated with a workflow with the workflow definition ID and workflow definition version"/>
     </createTable>

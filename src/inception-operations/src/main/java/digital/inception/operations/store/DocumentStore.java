@@ -26,7 +26,6 @@ import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
-import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import java.util.UUID;
@@ -167,40 +166,16 @@ public interface DocumentStore {
       throws DocumentNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the summaries for the documents.
-   *
-   * @param tenantId the ID for the tenant
-   * @param documentDefinitionId the document definition ID filter to apply to the document
-   *     summaries
-   * @param filter the filter to apply to the document summaries
-   * @param sortBy the method used to sort the document summaries e.g. by definition ID
-   * @param sortDirection the sort direction to apply to the document summaries
-   * @param pageIndex the page index
-   * @param pageSize the page size
-   * @param maxResults the maximum number of document summaries that should be retrieved
-   * @return the summaries for the documents
-   * @throws ServiceUnavailableException if the document summaries could not be retrieved
-   */
-  DocumentSummaries getDocumentSummaries(
-      UUID tenantId,
-      String documentDefinitionId,
-      String filter,
-      DocumentSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
-      throws ServiceUnavailableException;
-
-  /**
    * Search for documents.
    *
    * @param tenantId the ID for the tenant
    * @param searchDocumentsRequest the request to search for documents matching specific criteria
+   * @param maxResults the maximum number of document summaries that should be retrieved
    * @return the summaries for the documents matching the search criteria
    * @throws ServiceUnavailableException if the document search failed
    */
-  DocumentSummaries searchDocuments(UUID tenantId, SearchDocumentsRequest searchDocumentsRequest)
+  DocumentSummaries searchDocuments(
+      UUID tenantId, SearchDocumentsRequest searchDocumentsRequest, int maxResults)
       throws ServiceUnavailableException;
 
   /**

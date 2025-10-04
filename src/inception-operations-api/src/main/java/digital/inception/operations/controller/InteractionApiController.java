@@ -44,6 +44,7 @@ import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
+import digital.inception.operations.model.SearchInteractionsRequest;
 import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -1369,6 +1370,69 @@ public interface InteractionApiController {
           InteractionNotFoundException,
           PartyNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Search for interactions.
+   *
+   * @param tenantId the ID for the tenant
+   * @param searchInteractionsRequest the request to search for interactions matching specific
+   *     criteria
+   * @return the summaries for the interactions matching the search criteria
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the interaction search failed
+   */
+  @Operation(summary = "Search for interactions", description = "Search for interactions")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The interaction summaries were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/search-interactions",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  InteractionSummaries searchInteractions(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to search for interactions matching specific criteria",
+              required = true)
+          @RequestBody
+          SearchInteractionsRequest searchInteractionsRequest)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Transfer an interaction to an interaction source.

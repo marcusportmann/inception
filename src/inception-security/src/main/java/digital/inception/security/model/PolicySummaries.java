@@ -39,39 +39,17 @@ import java.util.List;
  */
 @Schema(description = "The results of a request to retrieve a list of policy summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "policySummaries",
-  "total",
-  "sortBy",
-  "sortDirection",
-  "pageIndex",
-  "pageSize",
-  "filter"
-})
+@JsonPropertyOrder({"policySummaries", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "PolicySummaries", namespace = "https://inception.digital/security")
 @XmlType(
     name = "PolicySummaries",
     namespace = "https://inception.digital/security",
-    propOrder = {
-      "policySummaries",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize",
-      "filter"
-    })
+    propOrder = {"policySummaries", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class PolicySummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the policy summaries. */
-  @Schema(description = "The filter that was applied to the policy summaries")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -120,7 +98,6 @@ public class PolicySummaries implements Serializable {
    *
    * @param policySummaries the policy summaries
    * @param total the total number of policy summaries
-   * @param filter the filter that was applied to the policy summaries
    * @param sortBy the method used to sort the policy summaries e.g. by name
    * @param sortDirection the sort direction that was applied to the policy summaries
    * @param pageIndex the page index
@@ -129,27 +106,16 @@ public class PolicySummaries implements Serializable {
   public PolicySummaries(
       List<PolicySummary> policySummaries,
       long total,
-      String filter,
       PolicySortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
     this.policySummaries = policySummaries;
     this.total = total;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the policy summaries.
-   *
-   * @return the filter that was applied to the policy summaries
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**

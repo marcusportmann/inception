@@ -1777,8 +1777,6 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
       return new TokenSummaries(
           tokenSummaryPage.toList(),
           tokenSummaryPage.getTotalElements(),
-          status,
-          filter,
           sortBy,
           sortDirection,
           pageIndex,
@@ -2121,7 +2119,6 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
       return new UserDirectorySummaries(
           userDirectorySummaryPage.toList(),
           userDirectorySummaryPage.getTotalElements(),
-          filter,
           sortDirection,
           pageIndex,
           pageSize);

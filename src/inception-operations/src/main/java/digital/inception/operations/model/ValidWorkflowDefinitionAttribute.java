@@ -80,7 +80,7 @@ public class ValidWorkflowDefinitionAttribute implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Required", required = true)
   @NotNull
-  private boolean required;
+  private Boolean required;
 
   /** Constructs a new {@code ValidWorkflowDefinitionAttribute}. */
   public ValidWorkflowDefinitionAttribute() {}

@@ -16,7 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -25,9 +24,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -36,14 +32,11 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
-import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -93,24 +86,6 @@ import java.util.UUID;
 public class WorkflowSummary implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /**
-   * The attributes for the workflow.
-   *
-   * <p>NOTE: This is only present so we can retrieve workflow summaries for workflows based on the
-   * values of the workflow attributes associated with the workflows.
-   */
-  @Schema(hidden = true)
-  @JsonIgnore
-  @XmlTransient
-  @OneToMany
-  @OrderBy("code")
-  @JoinColumn(
-      name = "workflow_id",
-      referencedColumnName = "id",
-      insertable = false,
-      updatable = false)
-  private final List<WorkflowAttribute> attributes = new ArrayList<>();
 
   /** The ID for the workflow definition the workflow is associated with. */
   @Schema(

@@ -47,6 +47,7 @@ import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
+import digital.inception.operations.model.SearchInteractionsRequest;
 import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import java.util.List;
@@ -578,6 +579,20 @@ public interface InteractionService {
    * @throws ServiceUnavailableException if the interaction locks could not be reset
    */
   void resetInteractionLocks(UUID tenantId, InteractionStatus status, InteractionStatus newStatus)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Search for interactions.
+   *
+   * @param tenantId the ID for the tenant
+   * @param searchInteractionsRequest the request to search for interactions matching specific
+   *     criteria
+   * @return the summaries for the interactions matching the search criteria
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the interaction search failed
+   */
+  InteractionSummaries searchInteractions(
+      UUID tenantId, SearchInteractionsRequest searchInteractionsRequest)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**

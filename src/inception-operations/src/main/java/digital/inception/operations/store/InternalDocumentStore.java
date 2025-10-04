@@ -22,13 +22,17 @@ import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentException;
 import digital.inception.operations.exception.DuplicateDocumentNoteException;
+import digital.inception.operations.model.AttributeSearchCriteria;
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.DocumentAttribute;
+import digital.inception.operations.model.DocumentExternalReference;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.DocumentSummary;
+import digital.inception.operations.model.ExternalReferenceSearchCriteria;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.persistence.jpa.DocumentNoteRepository;
 import digital.inception.operations.persistence.jpa.DocumentRepository;
@@ -45,6 +49,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -388,86 +393,157 @@ public class InternalDocumentStore implements DocumentStore {
   }
 
   @Override
-  public DocumentSummaries getDocumentSummaries(
-      UUID tenantId,
-      String documentDefinitionId,
-      String filter,
-      DocumentSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
+  public DocumentSummaries searchDocuments(
+      UUID tenantId, SearchDocumentsRequest searchDocumentsRequest, int maxResults)
       throws ServiceUnavailableException {
     try {
-      PageRequest pageRequest;
+      // Build Specification
+      Specification<DocumentSummary> specification =
+          (root, query, criteriaBuilder) -> {
+            // Avoid duplicates when joins or subqueries are involved
+            query.distinct(true);
 
-      if (sortBy == DocumentSortBy.DEFINITION_ID) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "definitionId");
-      } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "requested");
-      }
+            // AND'ed top-level predicates
+            List<Predicate> andPredicates = new ArrayList<>();
+
+            // Tenant filter
+            if (tenantId != null) {
+              andPredicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+            }
+
+            // Top-level filters
+            if (StringUtils.hasText(searchDocumentsRequest.getDocumentDefinitionId())) {
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      criteriaBuilder.lower(root.get("definitionId")),
+                      searchDocumentsRequest.getDocumentDefinitionId().toLowerCase()));
+            }
+
+            // Collect OR buckets from attributes, external refs, variables
+            List<Predicate> orBuckets = new ArrayList<>();
+
+            // Attribute criteria (OR all attribute pairs)
+            if (searchDocumentsRequest.getAttributes() != null
+                && !searchDocumentsRequest.getAttributes().isEmpty()) {
+              List<Predicate> attributePredicates = new ArrayList<>();
+
+              for (AttributeSearchCriteria attributeSearchCriteria :
+                  searchDocumentsRequest.getAttributes()) {
+                if (attributeSearchCriteria == null) continue;
+
+                var subQuery = query.subquery(Integer.class);
+                var documentAttributeRoot = subQuery.from(DocumentAttribute.class);
+                Predicate subPredicate =
+                    criteriaBuilder.equal(documentAttributeRoot.get("documentId"), root.get("id"));
+
+                if (StringUtils.hasText(attributeSearchCriteria.getCode())) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(documentAttributeRoot.get("code")),
+                              attributeSearchCriteria.getCode().toLowerCase()));
+                }
+                if (StringUtils.hasText(attributeSearchCriteria.getValue())) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(documentAttributeRoot.get("value")),
+                              attributeSearchCriteria.getValue().toLowerCase()));
+                }
+
+                subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
+                attributePredicates.add(criteriaBuilder.exists(subQuery));
+              }
+
+              if (!attributePredicates.isEmpty()) {
+                orBuckets.add(criteriaBuilder.or(attributePredicates.toArray(new Predicate[0])));
+              }
+            }
+
+            // External reference criteria (OR all external reference pairs)
+            if (searchDocumentsRequest.getExternalReferences() != null
+                && !searchDocumentsRequest.getExternalReferences().isEmpty()) {
+              List<Predicate> externalReferencePredicates = new ArrayList<>();
+
+              for (ExternalReferenceSearchCriteria externalReferenceSearchCriteria :
+                  searchDocumentsRequest.getExternalReferences()) {
+                if (externalReferenceSearchCriteria == null) continue;
+
+                var subQuery = query.subquery(Integer.class);
+                var documentExternalReferenceRoot = subQuery.from(DocumentExternalReference.class);
+                Predicate subPredicate =
+                    criteriaBuilder.equal(
+                        documentExternalReferenceRoot.get("objectId"), root.get("id"));
+
+                if (StringUtils.hasText(externalReferenceSearchCriteria.getType())) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(documentExternalReferenceRoot.get("type")),
+                              externalReferenceSearchCriteria.getType().toLowerCase()));
+                }
+                if (StringUtils.hasText(externalReferenceSearchCriteria.getValue())) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(documentExternalReferenceRoot.get("value")),
+                              externalReferenceSearchCriteria.getValue().toLowerCase()));
+                }
+
+                subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
+                externalReferencePredicates.add(criteriaBuilder.exists(subQuery));
+              }
+
+              if (!externalReferencePredicates.isEmpty()) {
+                orBuckets.add(
+                    criteriaBuilder.or(externalReferencePredicates.toArray(new Predicate[0])));
+              }
+            }
+
+            // If any of the groups were supplied, OR the groups together
+            if (!orBuckets.isEmpty()) {
+              andPredicates.add(criteriaBuilder.or(orBuckets.toArray(new Predicate[0])));
+            }
+
+            return criteriaBuilder.and(andPredicates.toArray(new Predicate[0]));
+          };
+
+      // Sorting
+      String sortByPropertyName =
+          resolveDocumentSortByPropertyName(searchDocumentsRequest.getSortBy());
+      Sort.Direction dir = resolveSortDirection(searchDocumentsRequest.getSortDirection());
+      Sort sort = Sort.by(dir, sortByPropertyName);
+
+      // Paging
+      int pageIndex =
+          searchDocumentsRequest.getPageIndex() == null
+              ? 0
+              : Math.max(0, searchDocumentsRequest.getPageIndex());
+      int pageSize =
+          searchDocumentsRequest.getPageSize() == null
+              ? 50
+              : Math.max(1, Math.min(searchDocumentsRequest.getPageSize(), maxResults));
+      Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
 
       Page<DocumentSummary> documentSummaryPage =
-          documentSummaryRepository.findAll(
-              (Specification<DocumentSummary>)
-                  (root, query, criteriaBuilder) -> {
-                    List<Predicate> predicates = new ArrayList<>();
-
-                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
-
-                    if (StringUtils.hasText(documentDefinitionId)) {
-                      predicates.add(
-                          criteriaBuilder.equal(root.get("definitionId"), documentDefinitionId));
-                    }
-
-                    if (StringUtils.hasText(filter)) {
-                      predicates.add(
-                          criteriaBuilder.or(
-                              criteriaBuilder.like(
-                                  criteriaBuilder.lower(root.get("name")),
-                                  "%" + filter.toLowerCase() + "%")));
-                    }
-
-                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-                  },
-              pageRequest);
+          documentSummaryRepository.findAll(specification, pageable);
 
       return new DocumentSummaries(
           tenantId,
           documentSummaryPage.toList(),
           documentSummaryPage.getTotalElements(),
-          documentDefinitionId,
-          filter,
-          sortBy,
-          sortDirection,
+          searchDocumentsRequest.getSortBy(),
+          searchDocumentsRequest.getSortDirection(),
           pageIndex,
           pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered document summaries for the tenant (" + tenantId + ")",
-          e);
+          "Failed to search for the documents for the tenant (" + tenantId + ")", e);
     }
-  }
-
-  @Override
-  public DocumentSummaries searchDocuments(
-      UUID tenantId, SearchDocumentsRequest searchDocumentsRequest)
-      throws ServiceUnavailableException {
-    throw new ServiceUnavailableException("Not Implemented");
   }
 
   @Override
@@ -513,6 +589,25 @@ public class InternalDocumentStore implements DocumentStore {
               + tenantId
               + ")",
           e);
+    }
+  }
+
+  private String resolveDocumentSortByPropertyName(DocumentSortBy sortBy) {
+    if (sortBy == null) return "definitionId";
+    return switch (sortBy) {
+      case DocumentSortBy.DEFINITION_ID -> "definitionId";
+      default -> "definitionId";
+    };
+  }
+
+  private Sort.Direction resolveSortDirection(
+      digital.inception.core.sorting.SortDirection sortDirection) {
+    if (sortDirection == null) {
+      return Sort.Direction.DESC;
+    } else if (sortDirection == SortDirection.ASCENDING) {
+      return Sort.Direction.ASC;
+    } else {
+      return Sort.Direction.DESC;
     }
   }
 }

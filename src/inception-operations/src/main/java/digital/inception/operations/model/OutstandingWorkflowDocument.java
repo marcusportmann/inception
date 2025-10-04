@@ -170,8 +170,8 @@ public class OutstandingWorkflowDocument implements Serializable {
    *     associated with
    * @param documentDefinitionName the name for the document definition the workflow document is
    *     associated with
-   * @param documentDefinitionDescription the description for the document definition the workflow document is
-   *     associated with
+   * @param documentDefinitionDescription the description for the document definition the workflow
+   *     document is associated with
    * @param status the status of the workflow document
    * @param requested the date and time the workflow document was requested
    * @param description the description for the workflow document

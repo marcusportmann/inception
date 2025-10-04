@@ -90,7 +90,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
   private HttpClient httpClient;
 
   /** The maximum number of times sending will be attempted for a SMS. */
-  @Value("${inception.sms.maximum-send-attempts:100}")
+  @Value("${inception.sms.max-send-attempts:100}")
   private int maximumSendAttempts;
 
   /** The delay in milliseconds to wait before re-attempting to send a SMS. */

@@ -47,10 +47,7 @@ import java.util.UUID;
   "sortBy",
   "sortDirection",
   "pageIndex",
-  "pageSize",
-  "workflowDefinitionId",
-  "status",
-  "filter"
+  "pageSize"
 })
 @XmlRootElement(name = "WorkflowSummaries", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -63,22 +60,13 @@ import java.util.UUID;
       "sortBy",
       "sortDirection",
       "pageIndex",
-      "pageSize",
-      "workflowDefinitionId",
-      "status",
-      "filter"
+      "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class WorkflowSummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the workflow summaries. */
-  @Schema(description = "The filter that was applied to the workflow summaries")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -104,12 +92,6 @@ public class WorkflowSummaries implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The status filter that was applied to the workflow summaries. */
-  @Schema(description = "The status filter that was applied to the workflow summaries")
-  @JsonProperty
-  @XmlElement(name = "Status")
-  private WorkflowStatus status;
-
   /** The ID for the tenant the workflow summaries are associated with. */
   @Schema(
       description = "The ID for the tenant the workflow summaries are associated with",
@@ -125,13 +107,6 @@ public class WorkflowSummaries implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
-
-  /** The workflow definition ID filter that was applied to the workflow summaries. */
-  @Schema(
-      description = "The workflow definition ID filter that was applied to the workflow summaries")
-  @JsonProperty
-  @XmlElement(name = "WorkflowDefinitionId")
-  private String workflowDefinitionId;
 
   /** The workflow summaries. */
   @Schema(description = "The workflow summaries", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -149,10 +124,6 @@ public class WorkflowSummaries implements Serializable {
    * @param tenantId the ID for the tenant the workflow summaries are associated with
    * @param workflowSummaries the workflow summaries
    * @param total the total number of workflow summaries
-   * @param workflowDefinitionId the workflow definition ID filter that was applied to the workflow
-   *     summaries
-   * @param status the status filter that was applied to the workflow summaries
-   * @param filter the filter that was applied to the workflow summaries
    * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
    * @param sortDirection the sort direction that was applied to the workflow summaries
    * @param pageIndex the page index
@@ -162,9 +133,6 @@ public class WorkflowSummaries implements Serializable {
       UUID tenantId,
       List<WorkflowSummary> workflowSummaries,
       long total,
-      String workflowDefinitionId,
-      WorkflowStatus status,
-      String filter,
       WorkflowSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
@@ -172,22 +140,10 @@ public class WorkflowSummaries implements Serializable {
     this.tenantId = tenantId;
     this.workflowSummaries = workflowSummaries;
     this.total = total;
-    this.workflowDefinitionId = workflowDefinitionId;
-    this.status = status;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the workflow summaries.
-   *
-   * @return the filter that was applied to the workflow summaries
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**
@@ -227,15 +183,6 @@ public class WorkflowSummaries implements Serializable {
   }
 
   /**
-   * Returns the status filter that was applied to the workflow summaries.
-   *
-   * @return the status filter that was applied to the workflow summaries
-   */
-  public WorkflowStatus getStatus() {
-    return status;
-  }
-
-  /**
    * Returns the ID for the tenant the workflow summaries are associated with.
    *
    * @return the ID for the tenant the workflow summaries are associated with
@@ -251,15 +198,6 @@ public class WorkflowSummaries implements Serializable {
    */
   public long getTotal() {
     return total;
-  }
-
-  /**
-   * Returns the workflow definition ID filter that was applied to the workflow summaries.
-   *
-   * @return the workflow definition ID filter that was applied to the workflow summaries
-   */
-  public String getWorkflowDefinitionId() {
-    return workflowDefinitionId;
   }
 
   /**

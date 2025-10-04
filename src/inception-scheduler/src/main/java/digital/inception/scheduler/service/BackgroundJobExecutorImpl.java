@@ -72,11 +72,11 @@ public class BackgroundJobExecutorImpl implements BackgroundJobExecutor, SmartLi
   /**
    * The maximum number of jobs to queue for execution if no job execution threads are available.
    */
-  @Value("${inception.scheduler.maximum-job-execution-queue-length:#{50}}")
+  @Value("${inception.scheduler.max-job-execution-queue-length:#{50}}")
   private int maximumJobExecutionQueueLength;
 
   /** The maximum number of job execution threads to create to execute jobs. */
-  @Value("${inception.scheduler.maximum-job-execution-threads:#{10}}")
+  @Value("${inception.scheduler.max-job-execution-threads:#{10}}")
   private int maximumJobExecutionThreads;
 
   /**

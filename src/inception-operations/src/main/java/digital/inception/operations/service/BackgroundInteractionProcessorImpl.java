@@ -82,11 +82,11 @@ public class BackgroundInteractionProcessorImpl
    * The maximum number of interactions to queue for processing if no interaction processing threads
    * are available.
    */
-  @Value("${inception.operations.maximum-interaction-processing-queue-length:#{50}}")
+  @Value("${inception.operations.max-interaction-processing-queue-length:#{50}}")
   private int maximumInteractionProcessingQueueLength;
 
   /** The maximum number of interaction processing threads to create to execute tasks. */
-  @Value("${inception.operations.maximum-interaction-processing-threads:#{10}}")
+  @Value("${inception.operations.max-interaction-processing-threads:#{10}}")
   private int maximumInteractionProcessingThreads;
 
   /**

@@ -43,7 +43,6 @@ import java.util.UUID;
   "tenantId",
   "parties",
   "total",
-  "filter",
   "sortBy",
   "sortDirection",
   "pageIndex",
@@ -57,7 +56,6 @@ import java.util.UUID;
       "tenantId",
       "parties",
       "total",
-      "filter",
       "sortBy",
       "sortDirection",
       "pageIndex",
@@ -68,12 +66,6 @@ import java.util.UUID;
 public class Parties implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the parties. */
-  @Schema(description = "The filter that was applied to the parties")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index")
@@ -129,7 +121,6 @@ public class Parties implements Serializable {
    * @param tenantId the ID for the tenant the parties are associated with
    * @param parties the parties
    * @param total the total number of parties
-   * @param filter the filter that was applied to the parties
    * @param sortBy the method used to sort the parties e.g. by name
    * @param sortDirection the sort direction that was applied to the parties
    * @param pageIndex the page index
@@ -139,7 +130,6 @@ public class Parties implements Serializable {
       UUID tenantId,
       List<Party> parties,
       long total,
-      String filter,
       PartySortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
@@ -147,20 +137,10 @@ public class Parties implements Serializable {
     this.tenantId = tenantId;
     this.parties = parties;
     this.total = total;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the parties.
-   *
-   * @return the filter that was applied to the parties
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**

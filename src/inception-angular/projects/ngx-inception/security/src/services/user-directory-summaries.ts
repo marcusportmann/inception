@@ -25,11 +25,6 @@ import { UserDirectorySummary } from './user-directory-summary';
  */
 export class UserDirectorySummaries {
   /**
-   * The filter that was applied to the user directory summaries.
-   */
-  filter: string | null = null;
-
-  /**
    * The page index.
    */
   pageIndex: number;
@@ -59,7 +54,6 @@ export class UserDirectorySummaries {
    *
    * @param userDirectorySummaries The user directory summaries.
    * @param total                  The total number of user directory summaries.
-   * @param filter                 The filter that was applied to the user directory summaries.
    * @param sortDirection          The sort direction that was applied to the user directory
    *                               summaries.
    * @param pageIndex              The page index.
@@ -70,14 +64,12 @@ export class UserDirectorySummaries {
     total: number,
     sortDirection: SortDirection,
     pageIndex: number,
-    pageSize: number,
-    filter?: string
+    pageSize: number
   ) {
     this.userDirectorySummaries = userDirectorySummaries;
     this.total = total;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-    this.filter = !!filter ? filter : null;
   }
 }

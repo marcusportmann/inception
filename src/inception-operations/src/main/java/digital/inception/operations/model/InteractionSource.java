@@ -104,7 +104,7 @@ public class InteractionSource implements Serializable {
   @XmlElement(name = "Enabled", required = true)
   @NotNull
   @Column(name = "enabled", nullable = false)
-  private boolean enabled;
+  private Boolean enabled;
 
   /** The ID for the interaction source. */
   @Schema(

@@ -44,7 +44,6 @@ import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
-import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowStepStatus;
@@ -145,6 +144,18 @@ public interface WorkflowStore {
    */
   void deleteWorkflowNote(UUID tenantId, UUID workflowNoteId)
       throws WorkflowNoteNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delete the workflow step.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow step is associated with
+   * @param step the code for the workflow step
+   * @throws WorkflowStepNotFoundException if the workflow step could not be found
+   * @throws ServiceUnavailableException if the workflow step could not be deleted
+   */
+  void deleteWorkflowStep(UUID tenantId, UUID workflowId, String step)
+      throws WorkflowStepNotFoundException, ServiceUnavailableException;
 
   /**
    * Delink an interaction from a workflow.
@@ -371,34 +382,6 @@ public interface WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the summaries for the workflows.
-   *
-   * @param tenantId the ID for the tenant
-   * @param workflowDefinitionId the workflow definition ID filter to apply to the workflow
-   *     summaries
-   * @param status the status filter to apply to the workflow summaries
-   * @param filter the filter to apply to the workflow summaries
-   * @param sortBy the method used to sort the workflow summaries e.g. by definition ID
-   * @param sortDirection the sort direction to apply to the workflow summaries
-   * @param pageIndex the page index
-   * @param pageSize the page size
-   * @param maxResults the maximum number of workflow summaries that should be retrieved
-   * @return the summaries for the workflows
-   * @throws ServiceUnavailableException if the workflow summaries could not be retrieved
-   */
-  WorkflowSummaries getWorkflowSummaries(
-      UUID tenantId,
-      String workflowDefinitionId,
-      WorkflowStatus status,
-      String filter,
-      WorkflowSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize,
-      int maxResults)
-      throws ServiceUnavailableException;
-
-  /**
    * Initiate the workflow step.
    *
    * @param tenantId the ID for the tenant
@@ -481,7 +464,8 @@ public interface WorkflowStore {
    * @return the summaries for the workflows matching the search criteria
    * @throws ServiceUnavailableException if the workflow search failed
    */
-  WorkflowSummaries searchWorkflows(UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest, int maxResults)
+  WorkflowSummaries searchWorkflows(
+      UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest, int maxResults)
       throws ServiceUnavailableException;
 
   /**

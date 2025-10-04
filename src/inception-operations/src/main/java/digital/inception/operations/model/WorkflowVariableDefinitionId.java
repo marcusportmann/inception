@@ -78,7 +78,7 @@ public class WorkflowVariableDefinitionId implements Serializable {
   @Override
   public int hashCode() {
     return ((definitionId == null) ? 0 : definitionId.hashCode())
-           + ((definitionVersion == 0) ? 0 : Integer.hashCode(definitionVersion))
+        + ((definitionVersion == 0) ? 0 : Integer.hashCode(definitionVersion))
         + ((name == null) ? 0 : name.hashCode());
   }
 }

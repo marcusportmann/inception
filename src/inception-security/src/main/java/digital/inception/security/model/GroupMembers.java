@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The {@code GroupMembers} class holds the results of a request to retrieve a list of group
@@ -40,41 +39,17 @@ import java.util.UUID;
  */
 @Schema(description = "The results of a request to retrieve a list of group members")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "userDirectoryId",
-  "groupName",
-  "groupMembers",
-  "total",
-  "sortDirection",
-  "pageIndex",
-  "pageSize",
-  "filter"
-})
+@JsonPropertyOrder({"groupMembers", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "GroupMembers", namespace = "https://inception.digital/security")
 @XmlType(
     name = "GroupMembers",
     namespace = "https://inception.digital/security",
-    propOrder = {
-      "userDirectoryId",
-      "groupName",
-      "groupMembers",
-      "total",
-      "sortDirection",
-      "pageIndex",
-      "pageSize",
-      "filter"
-    })
+    propOrder = {"groupMembers", "total", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class GroupMembers implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the group members. */
-  @Schema(description = "The filter that was applied to the group members")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The group members. */
   @Schema(description = "The group members", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -82,14 +57,6 @@ public class GroupMembers implements Serializable {
   @XmlElementWrapper(name = "GroupMembers", required = true)
   @XmlElement(name = "GroupMember", required = true)
   private List<GroupMember> groupMembers;
-
-  /** The name of the group the group members are associated with. */
-  @Schema(
-      description = "The name of the group the group members are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "GroupName", required = true)
-  private String groupName;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -119,55 +86,29 @@ public class GroupMembers implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** The ID for the user directory the group members are associated with. */
-  @Schema(
-      description = "The ID for the user directory the group members are associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "UserDirectoryId", required = true)
-  private UUID userDirectoryId;
-
   /** Constructs a new {@code GroupMembers}. */
   public GroupMembers() {}
 
   /**
    * Constructs a new {@code GroupMembers}.
    *
-   * @param userDirectoryId the ID for the user directory the group members are associated with
-   * @param groupName the name of the group the group members are associated with
    * @param groupMembers the group members
    * @param total the total number of group members
-   * @param filter the filter that was applied to the group members
    * @param sortDirection the sort direction that was applied to the group members
    * @param pageIndex the page index
    * @param pageSize the page size
    */
   public GroupMembers(
-      UUID userDirectoryId,
-      String groupName,
       List<GroupMember> groupMembers,
       long total,
-      String filter,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.userDirectoryId = userDirectoryId;
-    this.groupName = groupName;
     this.groupMembers = groupMembers;
     this.total = total;
-    this.filter = filter;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the group members.
-   *
-   * @return the filter that was applied to the group members
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**
@@ -177,15 +118,6 @@ public class GroupMembers implements Serializable {
    */
   public List<GroupMember> getGroupMembers() {
     return groupMembers;
-  }
-
-  /**
-   * Returns the name of the group the group members are associated with.
-   *
-   * @return the name of the group the group members are associated with
-   */
-  public String getGroupName() {
-    return groupName;
   }
 
   /**
@@ -222,14 +154,5 @@ public class GroupMembers implements Serializable {
    */
   public long getTotal() {
     return total;
-  }
-
-  /**
-   * Returns the ID for the user directory the group members are associated with.
-   *
-   * @return the ID for the user directory the group members are associated with
-   */
-  public UUID getUserDirectoryId() {
-    return userDirectoryId;
   }
 }

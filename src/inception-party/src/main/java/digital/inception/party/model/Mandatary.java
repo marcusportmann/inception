@@ -252,7 +252,6 @@ public class Mandatary implements Serializable {
     this.role = role;
   }
 
-
   /**
    * Called by the JAXB runtime when an instance of this class has been completely unmarshalled, but
    * before it is added to its parent.

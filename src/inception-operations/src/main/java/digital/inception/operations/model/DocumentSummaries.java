@@ -47,9 +47,7 @@ import java.util.UUID;
   "sortBy",
   "sortDirection",
   "pageIndex",
-  "pageSize",
-  "documentDefinitionId",
-  "filter"
+  "pageSize"
 })
 @XmlRootElement(name = "DocumentSummaries", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -62,9 +60,7 @@ import java.util.UUID;
       "sortBy",
       "sortDirection",
       "pageIndex",
-      "pageSize",
-      "documentDefinitionId",
-      "filter"
+      "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
@@ -72,25 +68,12 @@ public class DocumentSummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The document definition ID filter that was applied to the document summaries. */
-  @Schema(
-      description = "The document definition ID filter that was applied to the document summaries")
-  @JsonProperty
-  @XmlElement(name = "DocumentDefinitionId")
-  private String documentDefinitionId;
-
   /** The document summaries. */
   @Schema(description = "The document summaries", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "DocumentSummaries", required = true)
   @XmlElement(name = "DocumentSummary", required = true)
   private List<DocumentSummary> documentSummaries;
-
-  /** The filter that was applied to the document summaries. */
-  @Schema(description = "The filter that was applied to the document summaries")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -141,9 +124,6 @@ public class DocumentSummaries implements Serializable {
    * @param tenantId the ID for the tenant the document summaries are associated with
    * @param documentSummaries the document summaries
    * @param total the total number of document summaries
-   * @param documentDefinitionId the document definition ID filter that was applied to the document
-   *     summaries
-   * @param filter the filter that was applied to the document summaries
    * @param sortBy the method used to sort the document summaries e.g. by definition ID
    * @param sortDirection the sort direction that was applied to the document summaries
    * @param pageIndex the page index
@@ -153,8 +133,6 @@ public class DocumentSummaries implements Serializable {
       UUID tenantId,
       List<DocumentSummary> documentSummaries,
       long total,
-      String documentDefinitionId,
-      String filter,
       DocumentSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
@@ -162,21 +140,10 @@ public class DocumentSummaries implements Serializable {
     this.tenantId = tenantId;
     this.documentSummaries = documentSummaries;
     this.total = total;
-    this.documentDefinitionId = documentDefinitionId;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the document definition ID filter that was applied to the document summaries.
-   *
-   * @return the document definition ID filter that was applied to the document summaries
-   */
-  public String getDocumentDefinitionId() {
-    return documentDefinitionId;
   }
 
   /**
@@ -186,15 +153,6 @@ public class DocumentSummaries implements Serializable {
    */
   public List<DocumentSummary> getDocumentSummaries() {
     return documentSummaries;
-  }
-
-  /**
-   * Returns the filter that was applied to the document summaries.
-   *
-   * @return the filter that was applied to the document summaries
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**

@@ -16,10 +16,8 @@
 
 package digital.inception.template;
 
-import digital.inception.core.service.AbstractServiceBase;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
  * The {@code TemplateParserImpl} class provides the Template Parser implementation.
@@ -30,9 +28,7 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings("unused")
 public class TemplateParserImpl implements TemplateParser {
 
-  /**
-   * The Spring application context.
-   */
+  /** The Spring application context. */
   private final ApplicationContext applicationContext;
 
   /**

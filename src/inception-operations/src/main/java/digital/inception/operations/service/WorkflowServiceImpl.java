@@ -42,6 +42,7 @@ import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.exception.WorkflowStepNotFoundException;
 import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
+import digital.inception.operations.model.DeleteWorkflowStepRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.Event;
@@ -88,7 +89,6 @@ import digital.inception.operations.model.WorkflowInteractionLink;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
 import digital.inception.operations.model.WorkflowNotes;
-import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStep;
 import digital.inception.operations.model.WorkflowStepDefinition;
@@ -654,6 +654,33 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new ServiceUnavailableException(
           "Failed to delete the workflow note ("
               + workflowNoteId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void deleteWorkflowStep(UUID tenantId, DeleteWorkflowStepRequest deleteWorkflowStepRequest)
+      throws InvalidArgumentException, WorkflowStepNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("deleteWorkflowStepRequest", deleteWorkflowStepRequest);
+
+    try {
+      workflowStore.deleteWorkflowStep(
+          tenantId, deleteWorkflowStepRequest.getWorkflowId(), deleteWorkflowStepRequest.getStep());
+    } catch (WorkflowStepNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the workflow step ("
+              + deleteWorkflowStepRequest.getStep()
+              + ") for the workflow ("
+              + deleteWorkflowStepRequest.getWorkflowId()
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -1575,55 +1602,6 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + ") for the tenant ("
               + tenantId
               + ")",
-          e);
-    }
-  }
-
-  @Override
-  public WorkflowSummaries getWorkflowSummaries(
-      UUID tenantId,
-      String workflowDefinitionId,
-      WorkflowStatus status,
-      String filter,
-      WorkflowSortBy sortBy,
-      SortDirection sortDirection,
-      Integer pageIndex,
-      Integer pageSize)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    if ((pageIndex != null) && (pageIndex < 0)) {
-      throw new InvalidArgumentException("pageIndex");
-    }
-
-    if ((pageSize != null) && (pageSize <= 0)) {
-      throw new InvalidArgumentException("pageSize");
-    }
-
-    if (sortBy == null) {
-      sortBy = WorkflowSortBy.DEFINITION_ID;
-    }
-
-    if (sortDirection == null) {
-      sortDirection = SortDirection.DESCENDING;
-    }
-
-    try {
-      return workflowStore.getWorkflowSummaries(
-          tenantId,
-          workflowDefinitionId,
-          status,
-          filter,
-          sortBy,
-          sortDirection,
-          pageIndex,
-          pageSize,
-          maxFilteredWorkflows);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the filtered workflow summaries for the tenant (" + tenantId + ")",
           e);
     }
   }

@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.sorting.SortDirection;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -40,43 +39,17 @@ import java.util.List;
  */
 @Schema(description = "The results of a request to retrieve a list of task summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "taskSummaries",
-  "total",
-  "sortBy",
-  "sortDirection",
-  "pageIndex",
-  "pageSize",
-  "filter",
-  "type",
-  "status"
-})
+@JsonPropertyOrder({"taskSummaries", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "TaskSummaries", namespace = "https://inception.digital/executor")
 @XmlType(
     name = "TaskSummaries",
     namespace = "https://inception.digital/executor",
-    propOrder = {
-      "taskSummaries",
-      "total",
-      "sortBy",
-      "sortDirection",
-      "pageIndex",
-      "pageSize",
-      "filter",
-      "type",
-      "status"
-    })
+    propOrder = {"taskSummaries", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class TaskSummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the task summaries. */
-  @Schema(description = "The filter that was applied to the task summaries")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -102,12 +75,6 @@ public class TaskSummaries implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The status filter that was applied to the task summaries. */
-  @Schema(description = "The status filter that was applied to the task summaries")
-  @JsonProperty
-  @XmlElement(name = "Status")
-  private TaskStatus status;
-
   /** The task summaries. */
   @Schema(description = "The task summaries", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -123,13 +90,6 @@ public class TaskSummaries implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** The task type code filter that was applied to the task summaries. */
-  @Schema(description = "The task type code filter that was applied to the task summaries")
-  @JsonProperty
-  @XmlElement(name = "Type")
-  @Size(min = 1, max = 50)
-  private String type;
-
   /** Constructs a new {@code TaskSummaries}. */
   public TaskSummaries() {}
 
@@ -138,9 +98,6 @@ public class TaskSummaries implements Serializable {
    *
    * @param taskSummaries the task summaries
    * @param total the total number of task summaries
-   * @param type the task type code filter that was applied to the task summaries
-   * @param status the status filter that was applied to the task summaries
-   * @param filter the filter that was applied to the task summaries
    * @param sortBy the method used to sort the task summaries e.g. by name
    * @param sortDirection the sort direction that was applied to the task summaries
    * @param pageIndex the page index
@@ -149,31 +106,16 @@ public class TaskSummaries implements Serializable {
   public TaskSummaries(
       List<TaskSummary> taskSummaries,
       long total,
-      String type,
-      TaskStatus status,
-      String filter,
       TaskSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
     this.taskSummaries = taskSummaries;
     this.total = total;
-    this.type = type;
-    this.status = status;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the task summaries.
-   *
-   * @return the filter that was applied to the task summaries
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**
@@ -213,15 +155,6 @@ public class TaskSummaries implements Serializable {
   }
 
   /**
-   * Returns the status filter that was applied to the task summaries.
-   *
-   * @return the status filter that was applied to the task summaries
-   */
-  public TaskStatus getStatus() {
-    return status;
-  }
-
-  /**
    * Returns the task summaries.
    *
    * @return the task summaries
@@ -237,14 +170,5 @@ public class TaskSummaries implements Serializable {
    */
   public long getTotal() {
     return total;
-  }
-
-  /**
-   * Returns the task type code filter that was applied to the task summaries.
-   *
-   * @return the task type code filter that was applied to the task summaries
-   */
-  public String getType() {
-    return type;
   }
 }

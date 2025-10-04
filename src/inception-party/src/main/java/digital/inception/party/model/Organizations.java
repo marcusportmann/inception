@@ -44,7 +44,6 @@ import java.util.UUID;
   "tenantId",
   "organizations",
   "total",
-  "filter",
   "sortBy",
   "sortDirection",
   "pageIndex",
@@ -58,7 +57,6 @@ import java.util.UUID;
       "tenantId",
       "organizations",
       "total",
-      "filter",
       "sortBy",
       "sortDirection",
       "pageIndex",
@@ -69,12 +67,6 @@ import java.util.UUID;
 public class Organizations implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the organizations. */
-  @Schema(description = "The filter that was applied to the organizations")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The organizations. */
   @Schema(description = "The organizations", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -132,7 +124,6 @@ public class Organizations implements Serializable {
    * @param tenantId the ID for the tenant the organizations are associated with
    * @param organizations the organizations
    * @param total the total number of organizations
-   * @param filter the filter that was applied to the organizations
    * @param sortBy the method used to sort the organizations e.g. by name
    * @param sortDirection the sort direction that was applied to the organizations
    * @param pageIndex the page index
@@ -142,7 +133,6 @@ public class Organizations implements Serializable {
       UUID tenantId,
       List<Organization> organizations,
       long total,
-      String filter,
       OrganizationSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
@@ -150,20 +140,10 @@ public class Organizations implements Serializable {
     this.tenantId = tenantId;
     this.organizations = organizations;
     this.total = total;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the organizations.
-   *
-   * @return the filter that was applied to the organizations
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**

@@ -48,9 +48,7 @@ import java.util.UUID;
   "sortBy",
   "sortDirection",
   "pageIndex",
-  "pageSize",
-  "sourceId",
-  "filter"
+  "pageSize"
 })
 @XmlRootElement(
     name = "InteractionAttachmentSummaries",
@@ -65,21 +63,13 @@ import java.util.UUID;
       "sortBy",
       "sortDirection",
       "pageIndex",
-      "pageSize",
-      "sourceId",
-      "filter"
+      "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class InteractionAttachmentSummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the interaction attachment summaries. */
-  @Schema(description = "The filter that was applied to the interaction attachment summaries")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The interaction attachment summaries. */
   @Schema(
@@ -89,14 +79,6 @@ public class InteractionAttachmentSummaries implements Serializable {
   @XmlElementWrapper(name = "InteractionAttachmentSummaries", required = true)
   @XmlElement(name = "InteractionAttachmentSummary", required = true)
   private List<InteractionAttachmentSummary> interactionAttachmentSummaries;
-
-  /** The interaction ID filter that was applied to the interaction attachment summaries. */
-  @Schema(
-      description =
-          "The interaction ID filter that was applied to the interaction attachment summaries")
-  @JsonProperty
-  @XmlElement(name = "InteractionId")
-  private UUID interactionId;
 
   /** The page index. */
   @Schema(description = "The page index", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -147,11 +129,8 @@ public class InteractionAttachmentSummaries implements Serializable {
    * Constructs a new {@code InteractionAttachmentSummaries}.
    *
    * @param tenantId the ID for the tenant the interaction attachment summaries are associated with
-   * @param interactionId the interaction ID filter that was applied to the interaction attachment
-   *     summaries
    * @param interactionAttachmentSummaries the interaction attachment summaries
    * @param total the total number of interaction attachment summaries
-   * @param filter the filter that was applied to the interaction attachment summaries
    * @param sortBy the method used to sort the interaction attachment summaries e.g. by name
    * @param sortDirection the sort direction that was applied to the interaction attachment
    *     summaries
@@ -160,32 +139,19 @@ public class InteractionAttachmentSummaries implements Serializable {
    */
   public InteractionAttachmentSummaries(
       UUID tenantId,
-      UUID interactionId,
       List<InteractionAttachmentSummary> interactionAttachmentSummaries,
       long total,
-      String filter,
       InteractionAttachmentSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
     this.tenantId = tenantId;
-    this.interactionId = interactionId;
     this.interactionAttachmentSummaries = interactionAttachmentSummaries;
     this.total = total;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the interaction attachment summaries.
-   *
-   * @return the filter that was applied to the interaction attachment summaries
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**
@@ -195,15 +161,6 @@ public class InteractionAttachmentSummaries implements Serializable {
    */
   public List<InteractionAttachmentSummary> getInteractionAttachmentSummaries() {
     return interactionAttachmentSummaries;
-  }
-
-  /**
-   * Returns the interaction ID filter that was applied to the interaction attachment summaries.
-   *
-   * @return the interaction ID filter that was applied to the interaction attachment summaries
-   */
-  public UUID getInteractionId() {
-    return interactionId;
   }
 
   /**

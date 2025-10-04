@@ -24,11 +24,6 @@ import { Tenant } from './tenant';
  */
 export class Tenants {
   /**
-   * The filter that was applied to the tenants.
-   */
-  filter: string | null = null;
-
-  /**
    * The page index.
    */
   pageIndex: number;
@@ -61,21 +56,18 @@ export class Tenants {
    * @param sortDirection The sort direction that was applied to the tenants.
    * @param pageIndex     The page index.
    * @param pageSize      The page size.
-   * @param filter        The filter that was applied to the tenants.
    */
   constructor(
     tenants: Tenant[],
     total: number,
     sortDirection: SortDirection,
     pageIndex: number,
-    pageSize: number,
-    filter?: string
+    pageSize: number
   ) {
     this.tenants = tenants;
     this.total = total;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-    this.filter = !!filter ? filter : null;
   }
 }

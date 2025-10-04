@@ -35,6 +35,7 @@ import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
+import digital.inception.operations.model.AttributeSearchCriteria;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
@@ -50,9 +51,11 @@ import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.DocumentSummary;
+import digital.inception.operations.model.ExternalReferenceSearchCriteria;
 import digital.inception.operations.model.ExternalReferenceType;
 import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.RequiredDocumentAttribute;
+import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.service.DocumentService;
@@ -62,6 +65,7 @@ import digital.inception.test.TestConfiguration;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -369,15 +373,30 @@ public class DocumentServiceTests {
         retrievedDocument.getSourceDocumentId(),
         "Invalid value for the \"sourceDocumentId\" document property");
 
-    DocumentSummaries documentSummaries =
-        documentService.getDocumentSummaries(
-            TenantUtil.DEFAULT_TENANT_ID,
+    List<AttributeSearchCriteria> documentAttributeSearchCriteria = new ArrayList<>();
+    documentAttributeSearchCriteria.add(
+        new AttributeSearchCriteria(
+            "test_document_attribute_code", "test_document_attribute_updated_value"));
+
+    List<ExternalReferenceSearchCriteria> documentExternalReferenceSearchCriteria =
+        new ArrayList<>();
+    documentExternalReferenceSearchCriteria.add(
+        new ExternalReferenceSearchCriteria(
+            "test_document_external_reference_code",
+            "test_document_external_reference_updated_value"));
+
+    SearchDocumentsRequest searchDocumentsRequest =
+        new SearchDocumentsRequest(
             retrievedDocument.getDefinitionId(),
-            null,
+            documentAttributeSearchCriteria,
+            documentExternalReferenceSearchCriteria,
             DocumentSortBy.DEFINITION_ID,
             SortDirection.ASCENDING,
             0,
             10);
+
+    DocumentSummaries documentSummaries =
+        documentService.searchDocuments(TenantUtil.DEFAULT_TENANT_ID, searchDocumentsRequest);
 
     assertEquals(1, documentSummaries.getTotal());
 
@@ -720,7 +739,7 @@ public class DocumentServiceTests {
     updateDocumentRequest.setAttributes(
         List.of(
             new DocumentAttribute(
-                "test_document_attribute_code", "test_document_attribute_upated_value")));
+                "test_document_attribute_code", "test_document_attribute_updated_value")));
     updateDocumentRequest.setData(data);
     updateDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(3));
     updateDocumentRequest.setExternalReferences(

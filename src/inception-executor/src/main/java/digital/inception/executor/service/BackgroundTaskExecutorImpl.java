@@ -63,11 +63,11 @@ public class BackgroundTaskExecutorImpl implements BackgroundTaskExecutor, Smart
   /**
    * The maximum number of tasks to queue for execution if no task execution threads are available.
    */
-  @Value("${inception.executor.maximum-task-execution-queue-length:#{50}}")
+  @Value("${inception.executor.max-task-execution-queue-length:#{50}}")
   private int maximumTaskExecutionQueueLength;
 
   /** The maximum number of task execution threads to create to execute tasks. */
-  @Value("${inception.executor.maximum-task-execution-threads:#{10}}")
+  @Value("${inception.executor.max-task-execution-threads:#{10}}")
   private int maximumTaskExecutionThreads;
 
   /** The number of milliseconds to wait for an executing or queued task to complete. */

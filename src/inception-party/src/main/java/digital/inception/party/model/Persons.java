@@ -43,7 +43,6 @@ import java.util.UUID;
   "tenantId",
   "persons",
   "total",
-  "filter",
   "sortBy",
   "sortDirection",
   "pageIndex",
@@ -57,7 +56,6 @@ import java.util.UUID;
       "tenantId",
       "persons",
       "total",
-      "filter",
       "sortBy",
       "sortDirection",
       "pageIndex",
@@ -68,12 +66,6 @@ import java.util.UUID;
 public class Persons implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the persons. */
-  @Schema(description = "The filter that was applied to the persons")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The page index. */
   @Schema(description = "The page index")
@@ -129,7 +121,6 @@ public class Persons implements Serializable {
    * @param tenantId the ID for the tenant the persons are associated with
    * @param persons the persons
    * @param total the total number of persons
-   * @param filter the filter that was applied to the persons
    * @param sortBy the method used to sort the persons e.g. by name
    * @param sortDirection the sort direction that was applied to the persons
    * @param pageIndex the page index
@@ -139,7 +130,6 @@ public class Persons implements Serializable {
       UUID tenantId,
       List<Person> persons,
       long total,
-      String filter,
       PersonSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
@@ -147,20 +137,10 @@ public class Persons implements Serializable {
     this.tenantId = tenantId;
     this.persons = persons;
     this.total = total;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the persons.
-   *
-   * @return the filter that was applied to the persons
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**

@@ -47,9 +47,7 @@ import java.util.UUID;
   "sortBy",
   "sortDirection",
   "pageIndex",
-  "pageSize",
-  "sourceId",
-  "filter"
+  "pageSize"
 })
 @XmlRootElement(name = "InteractionSummaries", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -62,21 +60,13 @@ import java.util.UUID;
       "sortBy",
       "sortDirection",
       "pageIndex",
-      "pageSize",
-      "sourceId",
-      "filter"
+      "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class InteractionSummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The filter that was applied to the interaction summaries. */
-  @Schema(description = "The filter that was applied to the interaction summaries")
-  @JsonProperty
-  @XmlElement(name = "Filter")
-  private String filter;
 
   /** The interaction summaries. */
   @Schema(description = "The interaction summaries", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -109,12 +99,6 @@ public class InteractionSummaries implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The source ID filter that was applied to the interaction summaries. */
-  @Schema(description = "The source ID filter that was applied to the interaction summaries")
-  @JsonProperty
-  @XmlElement(name = "SourceId")
-  private UUID sourceId;
-
   /** The ID for the tenant the interaction summaries are associated with. */
   @Schema(
       description = "The ID for the tenant the interaction summaries are associated with",
@@ -140,8 +124,6 @@ public class InteractionSummaries implements Serializable {
    * @param tenantId the ID for the tenant the interaction summaries are associated with
    * @param interactionSummaries the interaction summaries
    * @param total the total number of interaction summaries
-   * @param sourceId the source ID filter that was applied to the interaction summaries
-   * @param filter the filter that was applied to the interaction summaries
    * @param sortBy the method used to sort the interaction summaries e.g. by timestamp
    * @param sortDirection the sort direction that was applied to the interaction summaries
    * @param pageIndex the page index
@@ -151,8 +133,6 @@ public class InteractionSummaries implements Serializable {
       UUID tenantId,
       List<InteractionSummary> interactionSummaries,
       long total,
-      UUID sourceId,
-      String filter,
       InteractionSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
@@ -160,21 +140,10 @@ public class InteractionSummaries implements Serializable {
     this.tenantId = tenantId;
     this.interactionSummaries = interactionSummaries;
     this.total = total;
-    this.sourceId = sourceId;
-    this.filter = filter;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-  }
-
-  /**
-   * Returns the filter that was applied to the interaction summaries.
-   *
-   * @return the filter that was applied to the interaction summaries
-   */
-  public String getFilter() {
-    return filter;
   }
 
   /**
@@ -220,15 +189,6 @@ public class InteractionSummaries implements Serializable {
    */
   public SortDirection getSortDirection() {
     return sortDirection;
-  }
-
-  /**
-   * Returns the source ID filter that was applied to the interaction summaries.
-   *
-   * @return the source ID filter that was applied to the interaction summaries
-   */
-  public UUID getSourceId() {
-    return sourceId;
   }
 
   /**

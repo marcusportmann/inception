@@ -82,7 +82,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
   /*
    * The maximum number of times the execution of a job will be attempted.
    */
-  @Value("${inception.scheduler.maximum-job-execution-attempts:144}")
+  @Value("${inception.scheduler.max-job-execution-attempts:144}")
   private int maximumJobExecutionAttempts;
 
   /**
