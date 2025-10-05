@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.sorting.SortDirection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -31,6 +32,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The {@code SearchWorkflowsRequest} class represents a request to search for workflows matching
@@ -41,8 +43,10 @@ import java.util.List;
 @Schema(description = "A request to search for workflows matching specific criteria")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+  "id",
   "definitionId",
   "status",
+  "interactionId",
   "attributes",
   "externalReferences",
   "variables",
@@ -56,8 +60,10 @@ import java.util.List;
     name = "SearchWorkflowsRequest",
     namespace = "https://inception.digital/operations",
     propOrder = {
+      "id",
       "definitionId",
       "status",
+      "interactionId",
       "attributes",
       "externalReferences",
       "variables",
@@ -80,8 +86,20 @@ public class SearchWorkflowsRequest implements Serializable {
   @Valid
   private List<AttributeSearchCriteria> attributes;
 
-  /** The workflow definition ID filter to apply to the workflows. */
-  @Schema(description = "The workflow definition ID filter to apply to the workflows")
+  /**
+   * The person or system who canceled the workflow search criteria to apply when searching for
+   * workflows.
+   */
+  @Schema(
+      description =
+          "The person or system who canceled the workflow search criteria to apply when searching for workflows")
+  @JsonProperty
+  @XmlElement(name = "CanceledBy")
+  @Size(min = 1, max = 100)
+  private String canceledBy;
+
+  /** The workflow definition ID search criteria to apply to the workflows. */
+  @Schema(description = "The workflow definition ID search criteria to apply to the workflows")
   @JsonProperty
   @XmlElement(name = "DefinitionId")
   private String definitionId;
@@ -95,6 +113,42 @@ public class SearchWorkflowsRequest implements Serializable {
   @Valid
   private List<ExternalReferenceSearchCriteria> externalReferences;
 
+  /**
+   * The person or system that finalized the workflow search criteria to apply when searching for
+   * workflows.
+   */
+  @Schema(
+      description =
+          "The person or system that finalized the workflow search criteria to apply when searching for workflows")
+  @JsonProperty
+  @XmlElement(name = "FinalizedBy")
+  @Size(min = 1, max = 100)
+  private String finalizedBy;
+
+  /** The ID search criteria to apply when searching for workflows. */
+  @Schema(description = "The ID search criteria to apply when searching for workflows")
+  @JsonProperty
+  @XmlElement(name = "Id")
+  private UUID id;
+
+  /**
+   * The person or system that initiated the workflow search criteria to apply when searching for
+   * workflows.
+   */
+  @Schema(
+      description =
+          "The person or system that initiated the workflow search criteria to apply when searching for workflows")
+  @JsonProperty
+  @XmlElement(name = "InitiatedBy")
+  @Size(min = 1, max = 100)
+  private String initiatedBy;
+
+  /** The interaction ID search criteria to apply when searching for workflows. */
+  @Schema(description = "The interaction ID search criteria to apply when searching for workflows")
+  @JsonProperty
+  @XmlElement(name = "InteractionId")
+  private UUID interactionId;
+
   /** The page index. */
   @Schema(description = "The page index")
   @JsonProperty
@@ -106,6 +160,18 @@ public class SearchWorkflowsRequest implements Serializable {
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
+
+  /** The parent ID search criteria to apply when searching for workflows. */
+  @Schema(description = "The parent ID search criteria to apply when searching for workflows")
+  @JsonProperty
+  @XmlElement(name = "ParentId")
+  private UUID parentId;
+
+  /** The party ID search criteria to apply when searching for workflows. */
+  @Schema(description = "The party ID search criteria to apply when searching for workflows")
+  @JsonProperty
+  @XmlElement(name = "PartyId")
+  private UUID partyId;
 
   /** The method used to sort the workflows e.g. by definition ID. */
   @Schema(description = "The method used to sort the workflows e.g. by definition ID")
@@ -119,11 +185,35 @@ public class SearchWorkflowsRequest implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The status filter to apply to the workflows. */
+  /** The status search criteria to apply to the workflows. */
   @Schema(description = "The ID for the workflow")
   @JsonProperty
   @XmlElement(name = "WorkflowDefinitionId")
   private WorkflowStatus status;
+
+  /**
+   * The person or system that suspended the workflow search criteria to apply when searching for
+   * workflows.
+   */
+  @Schema(
+      description =
+          "The person or system that suspended the workflow search criteria to apply when searching for workflows")
+  @JsonProperty
+  @XmlElement(name = "SuspendedBy")
+  @Size(min = 1, max = 100)
+  private String suspendedBy;
+
+  /**
+   * The person or system that last updated the workflow search criteria to apply when searching for
+   * workflows.
+   */
+  @Schema(
+      description =
+          "The person or system that last updated the workflow search criteria to apply when searching for workflows")
+  @JsonProperty
+  @XmlElement(name = "UpdatedBy")
+  @Size(min = 1, max = 100)
+  private String updatedBy;
 
   /** The variable search criteria to apply when searching for workflows. */
   @Schema(description = "The variable search criteria to apply when searching for workflows")
@@ -139,8 +229,22 @@ public class SearchWorkflowsRequest implements Serializable {
   /**
    * Constructs a new {@code SearchWorkflowsRequest}.
    *
-   * @param definitionId the workflow definition ID filter to apply to the workflows
-   * @param status the status filter to apply to the workflows
+   * @param id the ID search criteria to apply to the workflows
+   * @param definitionId the workflow definition ID search criteria to apply to the workflows
+   * @param status the status search criteria to apply to the workflows
+   * @param interactionId the interaction ID search criteria to apply when searching for workflows
+   * @param parentId the parent ID search criteria to apply when searching for workflows
+   * @param partyId the party ID search criteria to apply when searching for workflows
+   * @param initiatedBy the person or system that initiated the workflow search criteria to apply
+   *     when searching for workflows
+   * @param updatedBy the person or system that last updated the workflow search criteria to apply
+   *     when searching for workflows
+   * @param finalizedBy the person or system that finalized the workflow search criteria to apply
+   *     when searching for workflows
+   * @param suspendedBy the person or system that suspended the workflow search criteria to apply
+   *     when searching for workflows
+   * @param canceledBy the person or system who canceled the workflow search criteria to apply when
+   *     searching for workflows
    * @param attributes the attribute search criteria to apply when searching for workflows
    * @param externalReferences the external reference search criteria to apply when searching for
    *     workflows
@@ -151,8 +255,17 @@ public class SearchWorkflowsRequest implements Serializable {
    * @param pageSize the page size
    */
   public SearchWorkflowsRequest(
+      UUID id,
       String definitionId,
       WorkflowStatus status,
+      UUID interactionId,
+      UUID parentId,
+      UUID partyId,
+      String initiatedBy,
+      String updatedBy,
+      String finalizedBy,
+      String suspendedBy,
+      String canceledBy,
       List<AttributeSearchCriteria> attributes,
       List<ExternalReferenceSearchCriteria> externalReferences,
       List<VariableSearchCriteria> variables,
@@ -160,8 +273,17 @@ public class SearchWorkflowsRequest implements Serializable {
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
+    this.id = id;
     this.definitionId = definitionId;
     this.status = status;
+    this.interactionId = interactionId;
+    this.parentId = parentId;
+    this.partyId = partyId;
+    this.initiatedBy = initiatedBy;
+    this.updatedBy = updatedBy;
+    this.finalizedBy = finalizedBy;
+    this.suspendedBy = suspendedBy;
+    this.canceledBy = canceledBy;
     this.attributes = attributes;
     this.externalReferences = externalReferences;
     this.variables = variables;
@@ -181,9 +303,20 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Returns the workflow definition ID filter to apply to the workflows.
+   * Returns the person or system who canceled the workflow search criteria to apply when searching
+   * for workflows.
    *
-   * @return the workflow definition ID filter to apply to the workflows
+   * @return the person or system who canceled the workflow search criteria to apply when searching
+   *     for workflows
+   */
+  public String getCanceledBy() {
+    return canceledBy;
+  }
+
+  /**
+   * Returns the workflow definition ID search criteria to apply to the workflows.
+   *
+   * @return the workflow definition ID search criteria to apply to the workflows
    */
   public String getDefinitionId() {
     return definitionId;
@@ -196,6 +329,46 @@ public class SearchWorkflowsRequest implements Serializable {
    */
   public List<ExternalReferenceSearchCriteria> getExternalReferences() {
     return externalReferences;
+  }
+
+  /**
+   * Returns the person or system that finalized the workflow search criteria to apply when
+   * searching for workflows.
+   *
+   * @return the person or system that finalized the workflow search criteria to apply when
+   *     searching for workflows
+   */
+  public String getFinalizedBy() {
+    return finalizedBy;
+  }
+
+  /**
+   * Returns the ID search criteria to apply when searching for workflows.
+   *
+   * @return the ID search criteria to apply when searching for workflows
+   */
+  public UUID getId() {
+    return id;
+  }
+
+  /**
+   * Returns the person or system that initiated the workflow search criteria to apply when
+   * searching for workflows.
+   *
+   * @return the person or system that initiated the workflow search criteria to apply when
+   *     searching for workflows
+   */
+  public String getInitiatedBy() {
+    return initiatedBy;
+  }
+
+  /**
+   * Returns the interaction ID search criteria to apply when searching for workflows.
+   *
+   * @return the interaction ID search criteria to apply when searching for workflows
+   */
+  public UUID getInteractionId() {
+    return interactionId;
   }
 
   /**
@@ -217,6 +390,24 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
+   * Returns the parent ID search criteria to apply when searching for workflows.
+   *
+   * @return the parent ID search criteria to apply when searching for workflows
+   */
+  public UUID getParentId() {
+    return parentId;
+  }
+
+  /**
+   * Returns the party ID search criteria to apply when searching for workflows.
+   *
+   * @return the party ID search criteria to apply when searching for workflows
+   */
+  public UUID getPartyId() {
+    return partyId;
+  }
+
+  /**
    * Returns the method used to sort the workflows e.g. by definition ID.
    *
    * @return the method used to sort the workflows e.g. by definition ID
@@ -235,12 +426,34 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Returns the status filter to apply to the workflows.
+   * Returns the status search criteria to apply to the workflows.
    *
-   * @return the status filter to apply to the workflows
+   * @return the status search criteria to apply to the workflows
    */
   public WorkflowStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Returns the person or system that suspended the workflow search criteria to apply when
+   * searching for workflows.
+   *
+   * @return the person or system that suspended the workflow search criteria to apply when
+   *     searching for workflows
+   */
+  public String getSuspendedBy() {
+    return suspendedBy;
+  }
+
+  /**
+   * Returns the person or system that last updated the workflow search criteria to apply when
+   * searching for workflows.
+   *
+   * @return the person or system that last updated the workflow search criteria to apply when
+   *     searching for workflows
+   */
+  public String getUpdatedBy() {
+    return updatedBy;
   }
 
   /**
@@ -262,9 +475,20 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the workflow definition ID filter to apply to the workflows.
+   * Set the person or system who canceled the workflow search criteria to apply when searching for
+   * workflows.
    *
-   * @param definitionId the workflow definition ID filter to apply to the workflows
+   * @param canceledBy the person or system who canceled the workflow search criteria to apply when
+   *     searching for workflows
+   */
+  public void setCanceledBy(String canceledBy) {
+    this.canceledBy = canceledBy;
+  }
+
+  /**
+   * Set the workflow definition ID search criteria to apply to the workflows.
+   *
+   * @param definitionId the workflow definition ID search criteria to apply to the workflows
    */
   public void setDefinitionId(String definitionId) {
     this.definitionId = definitionId;
@@ -278,6 +502,46 @@ public class SearchWorkflowsRequest implements Serializable {
    */
   public void setExternalReferences(List<ExternalReferenceSearchCriteria> externalReferences) {
     this.externalReferences = externalReferences;
+  }
+
+  /**
+   * Set the person or system that finalized the workflow search criteria to apply when searching
+   * for workflows.
+   *
+   * @param finalizedBy the person or system that finalized the workflow search criteria to apply
+   *     when searching for workflows
+   */
+  public void setFinalizedBy(String finalizedBy) {
+    this.finalizedBy = finalizedBy;
+  }
+
+  /**
+   * Set the ID search criteria to apply when searching for workflows.
+   *
+   * @param id the ID search criteria to apply when searching for workflows
+   */
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the person or system that initiated the workflow search criteria to apply when searching
+   * for workflows.
+   *
+   * @param initiatedBy the person or system that initiated the workflow search criteria to apply
+   *     when searching for workflows
+   */
+  public void setInitiatedBy(String initiatedBy) {
+    this.initiatedBy = initiatedBy;
+  }
+
+  /**
+   * Set the interaction ID search criteria to apply when searching for workflows.
+   *
+   * @param interactionId the interaction ID search criteria to apply when searching for workflows
+   */
+  public void setInteractionId(UUID interactionId) {
+    this.interactionId = interactionId;
   }
 
   /**
@@ -299,6 +563,24 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
+   * Set the parent ID search criteria to apply when searching for workflows.
+   *
+   * @param parentId the parent ID search criteria to apply when searching for workflows
+   */
+  public void setParentId(UUID parentId) {
+    this.parentId = parentId;
+  }
+
+  /**
+   * Set the party ID search criteria to apply when searching for workflows.
+   *
+   * @param partyId the party ID search criteria to apply when searching for workflows
+   */
+  public void setPartyId(UUID partyId) {
+    this.partyId = partyId;
+  }
+
+  /**
    * Set the method used to sort the workflows e.g. by definition ID.
    *
    * @param sortBy the method used to sort the workflows e.g. by definition ID
@@ -317,12 +599,34 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the status filter to apply to the workflows.
+   * Set the status search criteria to apply to the workflows.
    *
-   * @param status the status filter to apply to the workflows
+   * @param status the status search criteria to apply to the workflows
    */
   public void setStatus(WorkflowStatus status) {
     this.status = status;
+  }
+
+  /**
+   * Set the person or system that suspended the workflow search criteria to apply when searching
+   * for workflows.
+   *
+   * @param suspendedBy the person or system that suspended the workflow search criteria to apply
+   *     when searching for workflows
+   */
+  public void setSuspendedBy(String suspendedBy) {
+    this.suspendedBy = suspendedBy;
+  }
+
+  /**
+   * Set the person or system that last updated the workflow search criteria to apply when searching
+   * for workflows.
+   *
+   * @param updatedBy the person or system that last updated the workflow search criteria to apply
+   *     when searching for workflows
+   */
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
   }
 
   /**

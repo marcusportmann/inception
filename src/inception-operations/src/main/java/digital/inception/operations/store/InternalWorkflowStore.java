@@ -1225,6 +1225,11 @@ public class InternalWorkflowStore implements WorkflowStore {
             }
 
             // Top-level filters
+            if (searchWorkflowsRequest.getId() != null) {
+              andPredicates.add(
+                  criteriaBuilder.equal(root.get("id"), searchWorkflowsRequest.getId()));
+            }
+
             if (StringUtils.hasText(searchWorkflowsRequest.getDefinitionId())) {
               andPredicates.add(
                   criteriaBuilder.equal(
@@ -1237,8 +1242,70 @@ public class InternalWorkflowStore implements WorkflowStore {
                   criteriaBuilder.equal(root.get("status"), searchWorkflowsRequest.getStatus()));
             }
 
-            // Collect OR buckets from attributes, external refs, variables
-            List<Predicate> orBuckets = new ArrayList<>();
+            if (searchWorkflowsRequest.getParentId() != null) {
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      root.get("parentId"), searchWorkflowsRequest.getParentId()));
+            }
+
+            if (searchWorkflowsRequest.getPartyId() != null) {
+              andPredicates.add(
+                  criteriaBuilder.equal(root.get("partyId"), searchWorkflowsRequest.getPartyId()));
+            }
+
+            if (StringUtils.hasText(searchWorkflowsRequest.getInitiatedBy())) {
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      criteriaBuilder.lower(root.get("initiatedBy")),
+                      searchWorkflowsRequest.getInitiatedBy().toLowerCase()));
+            }
+
+            if (StringUtils.hasText(searchWorkflowsRequest.getUpdatedBy())) {
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      criteriaBuilder.lower(root.get("updatedBy")),
+                      searchWorkflowsRequest.getUpdatedBy().toLowerCase()));
+            }
+
+            if (StringUtils.hasText(searchWorkflowsRequest.getFinalizedBy())) {
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      criteriaBuilder.lower(root.get("finalizedBy")),
+                      searchWorkflowsRequest.getFinalizedBy().toLowerCase()));
+            }
+
+            if (StringUtils.hasText(searchWorkflowsRequest.getSuspendedBy())) {
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      criteriaBuilder.lower(root.get("suspendedBy")),
+                      searchWorkflowsRequest.getSuspendedBy().toLowerCase()));
+            }
+
+            if (StringUtils.hasText(searchWorkflowsRequest.getCanceledBy())) {
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      criteriaBuilder.lower(root.get("canceledBy")),
+                      searchWorkflowsRequest.getCanceledBy().toLowerCase()));
+            }
+
+            // Interaction ID criteria
+            if (searchWorkflowsRequest.getInteractionId() != null) {
+              var subQuery = query.subquery(Integer.class);
+              var workflowInteractionLinkRoot = subQuery.from(WorkflowInteractionLink.class);
+              Predicate subPredicate =
+                  criteriaBuilder.equal(
+                      workflowInteractionLinkRoot.get("workflowId"), root.get("id"));
+
+              subPredicate =
+                  criteriaBuilder.and(
+                      subPredicate,
+                      criteriaBuilder.equal(
+                          workflowInteractionLinkRoot.get("interactionId"),
+                          searchWorkflowsRequest.getInteractionId()));
+
+              subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
+              andPredicates.add(criteriaBuilder.exists(subQuery));
+            }
 
             // Attribute criteria (OR all attribute pairs)
             if (searchWorkflowsRequest.getAttributes() != null
@@ -1276,7 +1343,8 @@ public class InternalWorkflowStore implements WorkflowStore {
               }
 
               if (!attributePredicates.isEmpty()) {
-                orBuckets.add(criteriaBuilder.or(attributePredicates.toArray(new Predicate[0])));
+                andPredicates.add(
+                    criteriaBuilder.or(attributePredicates.toArray(new Predicate[0])));
               }
             }
 
@@ -1317,7 +1385,7 @@ public class InternalWorkflowStore implements WorkflowStore {
               }
 
               if (!externalReferencePredicates.isEmpty()) {
-                orBuckets.add(
+                andPredicates.add(
                     criteriaBuilder.or(externalReferencePredicates.toArray(new Predicate[0])));
               }
             }
@@ -1358,13 +1426,8 @@ public class InternalWorkflowStore implements WorkflowStore {
               }
 
               if (!variablePredicates.isEmpty()) {
-                orBuckets.add(criteriaBuilder.or(variablePredicates.toArray(new Predicate[0])));
+                andPredicates.add(criteriaBuilder.or(variablePredicates.toArray(new Predicate[0])));
               }
-            }
-
-            // If any of the three groups were supplied, OR the groups together
-            if (!orBuckets.isEmpty()) {
-              andPredicates.add(criteriaBuilder.or(orBuckets.toArray(new Predicate[0])));
             }
 
             return criteriaBuilder.and(andPredicates.toArray(new Predicate[0]));

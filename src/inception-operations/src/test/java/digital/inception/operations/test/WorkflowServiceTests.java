@@ -503,8 +503,17 @@ public class WorkflowServiceTests {
 
     SearchWorkflowsRequest searchWorkflowsRequest =
         new SearchWorkflowsRequest(
+            null,
             workflowDefinition.getId(),
             WorkflowStatus.ACTIVE,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
             workflowAttributeSearchCriteria,
             workflowExternalReferencesSearchCriteria,
             workflowVariableSearchCriteria,

@@ -76,8 +76,8 @@ public class SearchDocumentsRequest implements Serializable {
   @Valid
   private List<AttributeSearchCriteria> attributes;
 
-  /** The document definition ID filter to apply to the documents. */
-  @Schema(description = "The document definition ID filter to apply to the documents")
+  /** The document definition ID search criteria to apply to the documents. */
+  @Schema(description = "The document definition ID search criteria to apply to the documents")
   @JsonProperty
   @XmlElement(name = "DefinitionId")
   private String definitionId;
@@ -121,7 +121,7 @@ public class SearchDocumentsRequest implements Serializable {
   /**
    * Constructs a new {@code SearchDocumentsRequest}.
    *
-   * @param definitionId the document definition ID filter to apply to the documents
+   * @param definitionId the document definition ID search criteria to apply to the documents
    * @param attributes the attribute search criteria to apply when searching for documents
    * @param externalReferences the external reference search criteria to apply when searching for
    *     documents
@@ -157,9 +157,9 @@ public class SearchDocumentsRequest implements Serializable {
   }
 
   /**
-   * Returns the document definition ID filter to apply to the documents.
+   * Returns the document definition ID search criteria to apply to the documents.
    *
-   * @return the document definition ID filter to apply to the documents
+   * @return the document definition ID search criteria to apply to the documents
    */
   public String getDefinitionId() {
     return definitionId;
@@ -220,9 +220,9 @@ public class SearchDocumentsRequest implements Serializable {
   }
 
   /**
-   * Set the document definition ID filter to apply to the documents.
+   * Set the document definition ID search criteria to apply to the documents.
    *
-   * @param definitionId the document definition ID filter to apply to the documents
+   * @param definitionId the document definition ID search criteria to apply to the documents
    */
   public void setDefinitionId(String definitionId) {
     this.definitionId = definitionId;

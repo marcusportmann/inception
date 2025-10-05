@@ -416,9 +416,6 @@ public class InternalDocumentStore implements DocumentStore {
                       searchDocumentsRequest.getDefinitionId().toLowerCase()));
             }
 
-            // Collect OR buckets from attributes, external refs, variables
-            List<Predicate> orBuckets = new ArrayList<>();
-
             // Attribute criteria (OR all attribute pairs)
             if (searchDocumentsRequest.getAttributes() != null
                 && !searchDocumentsRequest.getAttributes().isEmpty()) {
@@ -455,7 +452,8 @@ public class InternalDocumentStore implements DocumentStore {
               }
 
               if (!attributePredicates.isEmpty()) {
-                orBuckets.add(criteriaBuilder.or(attributePredicates.toArray(new Predicate[0])));
+                andPredicates.add(
+                    criteriaBuilder.or(attributePredicates.toArray(new Predicate[0])));
               }
             }
 
@@ -496,14 +494,9 @@ public class InternalDocumentStore implements DocumentStore {
               }
 
               if (!externalReferencePredicates.isEmpty()) {
-                orBuckets.add(
+                andPredicates.add(
                     criteriaBuilder.or(externalReferencePredicates.toArray(new Predicate[0])));
               }
-            }
-
-            // If any of the groups were supplied, OR the groups together
-            if (!orBuckets.isEmpty()) {
-              andPredicates.add(criteriaBuilder.or(orBuckets.toArray(new Predicate[0])));
             }
 
             return criteriaBuilder.and(andPredicates.toArray(new Predicate[0]));

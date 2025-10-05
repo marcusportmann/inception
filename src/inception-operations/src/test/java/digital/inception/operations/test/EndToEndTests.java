@@ -30,6 +30,7 @@ import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.OperationsConfiguration;
+import digital.inception.operations.model.AttributeSearchCriteria;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
@@ -39,6 +40,7 @@ import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentExternalReference;
+import digital.inception.operations.model.ExternalReferenceSearchCriteria;
 import digital.inception.operations.model.ExternalReferenceType;
 import digital.inception.operations.model.FinalizeWorkflowRequest;
 import digital.inception.operations.model.FinalizeWorkflowStepRequest;
@@ -62,7 +64,9 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
+import digital.inception.operations.model.VariableSearchCriteria;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
@@ -75,9 +79,12 @@ import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocuments;
 import digital.inception.operations.model.WorkflowExternalReference;
+import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
 import digital.inception.operations.model.WorkflowStepDefinition;
 import digital.inception.operations.model.WorkflowStepStatus;
+import digital.inception.operations.model.WorkflowSummaries;
+import digital.inception.operations.model.WorkflowVariable;
 import digital.inception.operations.service.BackgroundInteractionSourceSynchronizer;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.InteractionService;
@@ -91,6 +98,7 @@ import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
@@ -483,7 +491,7 @@ public class EndToEndTests {
                 new WorkflowAttribute(
                     "test_workflow_attribute_code", "test_workflow_attribute_value")),
             List.of(new InitiateWorkflowInteractionLink(firstInteractionId, firstConversationId)),
-            null,
+            List.of(new WorkflowVariable("testVariableName", "testVariableValue")),
             workflowDataJson);
 
     Workflow workflow =
@@ -643,6 +651,47 @@ public class EndToEndTests {
         "TEST1");
 
     workflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    List<AttributeSearchCriteria> workflowAttributeSearchCriteria = new ArrayList<>();
+    workflowAttributeSearchCriteria.add(
+        new AttributeSearchCriteria(
+            "test_workflow_attribute_code", "test_workflow_attribute_value"));
+
+    List<ExternalReferenceSearchCriteria> workflowExternalReferencesSearchCriteria =
+        new ArrayList<>();
+    workflowExternalReferencesSearchCriteria.add(
+        new ExternalReferenceSearchCriteria(
+            "test_workflow_external_reference_code", "test_workflow_external_reference_value"));
+
+    List<VariableSearchCriteria> workflowVariableSearchCriteria = new ArrayList<>();
+    workflowVariableSearchCriteria.add(
+        new VariableSearchCriteria("testVariableName", "testVariableValue"));
+
+    SearchWorkflowsRequest searchWorkflowsRequest =
+        new SearchWorkflowsRequest(
+            workflow.getId(),
+            workflowDefinition.getId(),
+            WorkflowStatus.COMPLETED,
+            firstInteractionId,
+            null,
+            null,
+            "TEST1",
+            null,
+            "TEST1",
+            null,
+            null,
+            workflowAttributeSearchCriteria,
+            workflowExternalReferencesSearchCriteria,
+            workflowVariableSearchCriteria,
+            WorkflowSortBy.INITIATED,
+            SortDirection.ASCENDING,
+            0,
+            10);
+
+    WorkflowSummaries workflowSummaries =
+        workflowService.searchWorkflows(TenantUtil.DEFAULT_TENANT_ID, searchWorkflowsRequest);
+
+    assertEquals(1, workflowSummaries.getTotal());
 
     //  __        __         _     __ _                  ____ _
     //  \ \      / /__  _ __| | __/ _| | _____      __  / ___| | ___  __ _ _ __  _   _ _ __
