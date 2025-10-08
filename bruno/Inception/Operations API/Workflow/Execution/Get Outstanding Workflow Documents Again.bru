@@ -1,0 +1,21 @@
+meta {
+  name: Get Outstanding Workflow Documents Again
+  type: http
+  seq: 32
+}
+
+get {
+  url: {{baseURL}}/api/operations/workflows/{{workflowId}}/outstanding-documents
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body.length: eq 1
+  res.body[0].id: eq {{anotherWorkflowDocumentId}}
+}
+
+settings {
+  encodeUrl: true
+}
