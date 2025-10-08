@@ -52,6 +52,7 @@ import java.util.UUID;
   "documentDefinitionName",
   "documentDefinitionDescription",
   "requested",
+  "requestedFromPartyId",
   "description"
 })
 @XmlRootElement(
@@ -68,6 +69,7 @@ import java.util.UUID;
       "documentDefinitionName",
       "documentDefinitionDescription",
       "requested",
+      "requestedFromPartyId",
       "description"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -121,6 +123,15 @@ public class OutstandingWorkflowDocument implements Serializable {
   @NotNull
   private UUID id;
 
+  /** Is the workflow document internal-only and excluded for external users. */
+  @Schema(
+      description = "Is the workflow document internal-only and excluded for external users",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Internal", required = true)
+  @NotNull
+  private boolean internal;
+
   /** The date and time the workflow document was requested. */
   @Schema(
       description = "The date and time the workflow document was requested",
@@ -131,6 +142,12 @@ public class OutstandingWorkflowDocument implements Serializable {
   @XmlSchemaType(name = "dateTime")
   @NotNull
   private OffsetDateTime requested;
+
+  /** The ID for the party the workflow document was requested from. */
+  @Schema(description = "The ID for the party the workflow document was requested from")
+  @JsonProperty
+  @XmlElement(name = "RequestedFromPartyId")
+  private UUID requestedFromPartyId;
 
   /** The status of the workflow document. */
   @Schema(
@@ -174,6 +191,8 @@ public class OutstandingWorkflowDocument implements Serializable {
    *     document is associated with
    * @param status the status of the workflow document
    * @param requested the date and time the workflow document was requested
+   * @param requestedFromPartyId the ID for the party the workflow document was requested from
+   * @param internal is the workflow document internal-only and excluded for external users
    * @param description the description for the workflow document
    */
   public OutstandingWorkflowDocument(
@@ -185,6 +204,8 @@ public class OutstandingWorkflowDocument implements Serializable {
       String documentDefinitionDescription,
       WorkflowDocumentStatus status,
       OffsetDateTime requested,
+      UUID requestedFromPartyId,
+      boolean internal,
       String description) {
     this.id = id;
     this.tenantId = tenantId;
@@ -194,6 +215,8 @@ public class OutstandingWorkflowDocument implements Serializable {
     this.documentDefinitionDescription = documentDefinitionDescription;
     this.status = status;
     this.requested = requested;
+    this.requestedFromPartyId = requestedFromPartyId;
+    this.internal = internal;
     this.description = description;
   }
 
@@ -252,6 +275,15 @@ public class OutstandingWorkflowDocument implements Serializable {
   }
 
   /**
+   * Returns the ID for the party the workflow document was requested from.
+   *
+   * @return the ID for the party the workflow document was requested from
+   */
+  public UUID getRequestedFromPartyId() {
+    return requestedFromPartyId;
+  }
+
+  /**
    * Returns the status of the workflow document.
    *
    * @return the status of the workflow document
@@ -279,6 +311,16 @@ public class OutstandingWorkflowDocument implements Serializable {
   }
 
   /**
+   * Returns whether the workflow document is internal-only and excluded for external users.
+   *
+   * @return {@code true} if the workflow document is internal-only and excluded for external users
+   *     or {@code false} otherwise
+   */
+  public boolean isInternal() {
+    return internal;
+  }
+
+  /**
    * Set the description for the workflow document.
    *
    * @param description the description for the workflow document
@@ -295,6 +337,25 @@ public class OutstandingWorkflowDocument implements Serializable {
    */
   public void setDocumentDefinitionDescription(String documentDefinitionDescription) {
     this.documentDefinitionDescription = documentDefinitionDescription;
+  }
+
+  /**
+   * Set whether the the workflow document is internal-only and excluded for external users.
+   *
+   * @param internal {@code true} if the workflow document is internal-only and excluded for
+   *     external users or {@code false} otherwise
+   */
+  public void setInternal(boolean internal) {
+    this.internal = internal;
+  }
+
+  /**
+   * Set the ID for the party the workflow document was requested from.
+   *
+   * @param requestedFromPartyId the ID for the party the workflow document was requested from
+   */
+  public void setRequestedFromPartyId(UUID requestedFromPartyId) {
+    this.requestedFromPartyId = requestedFromPartyId;
   }
 
   /**

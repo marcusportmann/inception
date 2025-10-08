@@ -46,7 +46,11 @@ import digital.inception.operations.persistence.jpa.InteractionNoteRepository;
 import digital.inception.operations.persistence.jpa.InteractionRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +61,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -856,7 +861,139 @@ public class InternalInteractionStore implements InteractionStore {
   public InteractionSummaries searchInteractions(
       UUID tenantId, SearchInteractionsRequest searchInteractionsRequest, int maxResults)
       throws ServiceUnavailableException {
-    throw new ServiceUnavailableException("Not Implemented");
+    try {
+      // Build Specification
+      Specification<Interaction> specification =
+          (root, query, criteriaBuilder) -> {
+            // Avoid duplicates when joins or subqueries are involved
+            query.distinct(true);
+
+            // AND'ed top-level predicates
+            List<Predicate> andPredicates = new ArrayList<>();
+
+            // Tenant filter
+            if (tenantId != null) {
+              andPredicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+            }
+
+            // Top-level filters
+            if (searchInteractionsRequest.getSourceId() != null) {
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      root.get("sourceId"), searchInteractionsRequest.getSourceId()));
+            }
+
+            // Match on any of the interaction IDs that have been specified
+            if ((searchInteractionsRequest.getInteractionIds() != null)
+                && (!searchInteractionsRequest.getInteractionIds().isEmpty())) {
+              andPredicates.add(root.get("id").in(searchInteractionsRequest.getInteractionIds()));
+            }
+
+            return criteriaBuilder.and(andPredicates.toArray(new Predicate[0]));
+          };
+
+      // Sorting
+      String sortByPropertyName =
+          resolveInteractionSortByPropertyName(searchInteractionsRequest.getSortBy());
+      Sort.Direction dir = resolveSortDirection(searchInteractionsRequest.getSortDirection());
+      Sort sort = Sort.by(dir, sortByPropertyName);
+
+      // Paging
+      int pageIndex =
+          searchInteractionsRequest.getPageIndex() == null
+              ? 0
+              : Math.max(0, searchInteractionsRequest.getPageIndex());
+      int pageSize =
+          searchInteractionsRequest.getPageSize() == null
+              ? 50
+              : Math.max(1, Math.min(searchInteractionsRequest.getPageSize(), maxResults));
+      Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
+
+      final int firstResult = pageIndex * pageSize;
+
+      // Retrieve the criteria builder
+      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+      // Create a query using the InteractionSummary projection
+      CriteriaQuery<InteractionSummary> dataCriteriaQuery =
+          criteriaBuilder.createQuery(InteractionSummary.class);
+
+      // Create the root
+      Root<Interaction> root = dataCriteriaQuery.from(Interaction.class);
+
+      // Apply the spec as predicate
+      Predicate predicate = specification.toPredicate(root, dataCriteriaQuery, criteriaBuilder);
+
+      // Select only the fields required by InteractionSummary (no counts variant)
+      dataCriteriaQuery
+          .select(
+              criteriaBuilder.construct(
+                  InteractionSummary.class,
+                  root.get("id"),
+                  root.get("tenantId"),
+                  root.get("status"),
+                  root.get("sourceId"),
+                  root.get("conversationId"),
+                  root.get("partyId"),
+                  root.get("type"),
+                  root.get("direction"),
+                  root.get("sender"),
+                  root.get("recipients"),
+                  root.get("subject"),
+                  root.get("mimeType"),
+                  root.get("occurred"),
+                  root.get("assigned"),
+                  root.get("assignedTo")))
+          .where(predicate);
+
+      SortDirection sortDirection =
+          (searchInteractionsRequest.getSortDirection() != null)
+              ? searchInteractionsRequest.getSortDirection()
+              : SortDirection.ASCENDING;
+
+      if (sortDirection == SortDirection.ASCENDING) {
+        dataCriteriaQuery.orderBy(
+            criteriaBuilder.asc(
+                root.get(
+                    resolveInteractionSortByPropertyName(searchInteractionsRequest.getSortBy()))));
+      } else {
+        dataCriteriaQuery.orderBy(
+            criteriaBuilder.desc(
+                root.get(
+                    resolveInteractionSortByPropertyName(searchInteractionsRequest.getSortBy()))));
+      }
+
+      TypedQuery<InteractionSummary> dataQuery = entityManager.createQuery(dataCriteriaQuery);
+      dataQuery.setFirstResult(firstResult);
+      dataQuery.setMaxResults(pageSize);
+
+      List<InteractionSummary> interactionSummaries = dataQuery.getResultList();
+
+      // Count query (for total elements)
+      CriteriaQuery<Long> countCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+      Root<Interaction> countRoot = countCriteriaQuery.from(Interaction.class);
+
+      Predicate countPredicate =
+          specification.toPredicate(countRoot, countCriteriaQuery, criteriaBuilder);
+
+      // Because we used query.distinct(true) above due to joins, prefer countDistinct on the PK
+      countCriteriaQuery
+          .select(criteriaBuilder.countDistinct(countRoot.get("id")))
+          .where(countPredicate);
+
+      Long total = entityManager.createQuery(countCriteriaQuery).getSingleResult();
+
+      return new InteractionSummaries(
+          interactionSummaries,
+          total,
+          searchInteractionsRequest.getSortBy(),
+          searchInteractionsRequest.getSortDirection(),
+          pageIndex,
+          pageSize);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to search for the interactions for the tenant (" + tenantId + ")", e);
+    }
   }
 
   @Override
@@ -976,6 +1113,24 @@ public class InternalInteractionStore implements InteractionStore {
               + tenantId
               + ")",
           e);
+    }
+  }
+
+  private String resolveInteractionSortByPropertyName(InteractionSortBy sortBy) {
+    if (sortBy == null) return "occurred";
+    return switch (sortBy) {
+      case InteractionSortBy.OCCURRED -> "occurred";
+      default -> "occurred";
+    };
+  }
+
+  private Sort.Direction resolveSortDirection(SortDirection sortDirection) {
+    if (sortDirection == null) {
+      return Sort.Direction.DESC;
+    } else if (sortDirection == SortDirection.ASCENDING) {
+      return Sort.Direction.ASC;
+    } else {
+      return Sort.Direction.DESC;
     }
   }
 }

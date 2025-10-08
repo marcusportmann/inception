@@ -778,6 +778,24 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Retrieve the document definition with the specified ID for the workflow definition.
+   *
+   * @param documentDefinitionId the ID for the document definition
+   * @return an Optional containing the document definition with the specified ID for the workflow
+   *     definition or an empty Optional if the document definition could not be found
+   */
+  public Optional<WorkflowDefinitionDocumentDefinition> getDocumentDefinition(
+      String documentDefinitionId) {
+    return documentDefinitions.stream()
+        .filter(
+            workflowDefinitionDocumentDefinition ->
+                StringUtil.equalsIgnoreCase(
+                    workflowDefinitionDocumentDefinition.getDocumentDefinitionId(),
+                    documentDefinitionId))
+        .findFirst();
+  }
+
+  /**
    * Returns the document definitions associated with the workflow definition.
    *
    * @return the document definitions associated with the workflow definition

@@ -2989,6 +2989,7 @@ public interface WorkflowApiController {
    * @param requestWorkflowDocumentRequest the request to request a workflow document
    * @return the ID for the workflow document
    * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the workflow document could not be requested
    */
@@ -3012,7 +3013,7 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The document definition could not be found",
+            description = "The workflow or document definition could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -3049,6 +3050,7 @@ public interface WorkflowApiController {
           @RequestBody
           RequestWorkflowDocumentRequest requestWorkflowDocumentRequest)
       throws InvalidArgumentException,
+          WorkflowNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 

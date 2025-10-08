@@ -1789,6 +1789,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
                   tenantId,
                   workflow.getId(),
                   documentDefinition.getDocumentDefinitionId(),
+                  documentDefinition.isInternal(),
                   now,
                   initiatedBy);
 
@@ -2035,6 +2036,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
       String requestedBy)
       throws InvalidArgumentException,
+          WorkflowNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
     if (tenantId == null) {
@@ -2048,6 +2050,24 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     try {
+      WorkflowDefinitionId workflowDefinitionId =
+          getWorkflowDefinitionIdForWorkflow(
+              tenantId, requestWorkflowDocumentRequest.getWorkflowId());
+
+      WorkflowDefinition workflowDefinition =
+          getWorkflowService()
+              .getWorkflowDefinitionVersion(
+                  workflowDefinitionId.getId(), workflowDefinitionId.getVersion());
+
+      Optional<WorkflowDefinitionDocumentDefinition> workflowDefinitionDocumentDefinitionOptional =
+          workflowDefinition.getDocumentDefinition(
+              requestWorkflowDocumentRequest.getDocumentDefinitionId());
+
+      if (workflowDefinitionDocumentDefinitionOptional.isEmpty()) {
+        throw new DocumentDefinitionNotFoundException(
+            requestWorkflowDocumentRequest.getDocumentDefinitionId());
+      }
+
       if (!documentService.documentDefinitionExists(
           requestWorkflowDocumentRequest.getDocumentDefinitionId())) {
         throw new DocumentDefinitionNotFoundException(
@@ -2056,7 +2076,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
       WorkflowDocument workflowDocument =
           workflowStore.requestWorkflowDocument(
-              tenantId, requestWorkflowDocumentRequest, requestedBy);
+              tenantId,
+              requestWorkflowDocumentRequest,
+              workflowDefinitionDocumentDefinitionOptional.get(),
+              requestedBy);
 
       eventService.publishEvent(
           tenantId,
@@ -2066,7 +2089,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           requestedBy);
 
       return workflowDocument.getId();
-    } catch (DocumentDefinitionNotFoundException e) {
+    } catch (WorkflowNotFoundException | DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(

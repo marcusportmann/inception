@@ -913,6 +913,10 @@
         remarks="The code for the status of the workflow document">
         <constraints nullable="false"/>
       </column>
+      <column name="internal" type="boolean"
+        remarks="Is the workflow document internal-only and excluded for external users">
+        <constraints nullable="false"/>
+      </column>
       <column name="requested" type="timestamp with time zone"
         remarks="The date and time the workflow document was requested">
         <constraints nullable="false"/>

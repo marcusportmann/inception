@@ -28,6 +28,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -38,25 +39,32 @@ import java.util.UUID;
  */
 @Schema(description = "A request to search for interactions matching specific criteria")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"interactionSourceId", "sortBy", "sortDirection", "pageIndex", "pageSize"})
+@JsonPropertyOrder({
+  "sourceId",
+  "interactionIds",
+  "sortBy",
+  "sortDirection",
+  "pageIndex",
+  "pageSize"
+})
 @XmlRootElement(
     name = "SearchInteractionsRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "SearchInteractionsRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"interactionSourceId", "sortBy", "sortDirection", "pageIndex", "pageSize"})
+    propOrder = {"sourceId", "interactionIds", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SearchInteractionsRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The ID for the interaction source the interactions are associated with. */
-  @Schema(description = "The ID for the interaction source the interactions are associated with")
+  /** The interaction ID search criteria to apply to the interactions. */
+  @Schema(description = "The interaction ID search criteria to apply to the interactions")
   @JsonProperty
-  @XmlElement(name = "InteractionSourceId")
-  private UUID interactionSourceId;
+  @XmlElement(name = "InteractionIds")
+  private List<UUID> interactionIds;
 
   /** The page index. */
   @Schema(description = "The page index")
@@ -82,26 +90,33 @@ public class SearchInteractionsRequest implements Serializable {
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
+  /** The interaction source ID search criteria to apply to the interactions. */
+  @Schema(description = "The interaction source ID search criteria to apply to the interactions")
+  @JsonProperty
+  @XmlElement(name = "InteractionSourceId")
+  private UUID sourceId;
+
   /** Constructs a new {@code SearchInteractionsRequest}. */
   public SearchInteractionsRequest() {}
 
   /**
    * Constructs a new {@code SearchInteractionsRequest}.
    *
-   * @param interactionSourceId the ID for the interaction source the interactions are associated
-   *     with
+   * @param sourceId the interaction source ID search criteria to apply to the interactions
+   * @param interactionIds the interaction ID search criteria to apply to the interactions
    * @param sortBy the method used to sort the interactions e.g. by occurred
    * @param sortDirection the sort direction to apply to the interactions
    * @param pageIndex the page index
    * @param pageSize the page size
    */
   public SearchInteractionsRequest(
-      UUID interactionSourceId,
+      UUID sourceId,
+      List<UUID> interactionIds,
       InteractionSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.interactionSourceId = interactionSourceId;
+    this.sourceId = sourceId;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
@@ -109,12 +124,12 @@ public class SearchInteractionsRequest implements Serializable {
   }
 
   /**
-   * Returns the ID for the interaction source the interactions are associated with.
+   * Returns the interaction ID search criteria to apply to the interactions.
    *
-   * @return the ID for the interaction source the interactions are associated with
+   * @return the interaction ID search criteria to apply to the interactions
    */
-  public UUID getInteractionSourceId() {
-    return interactionSourceId;
+  public List<UUID> getInteractionIds() {
+    return interactionIds;
   }
 
   /**
@@ -154,13 +169,21 @@ public class SearchInteractionsRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction source the interactions are associated with.
+   * Returns the interaction source ID search criteria to apply to the interactions.
    *
-   * @param interactionSourceId the ID for the interaction source the interactions are associated
-   *     with
+   * @return the interaction source ID search criteria to apply to the interactions
    */
-  public void setInteractionSourceId(UUID interactionSourceId) {
-    this.interactionSourceId = interactionSourceId;
+  public UUID getSourceId() {
+    return sourceId;
+  }
+
+  /**
+   * Set the interaction ID search criteria to apply to the interactions.
+   *
+   * @param interactionIds the interaction ID search criteria to apply to the interactions
+   */
+  public void setInteractionIds(List<UUID> interactionIds) {
+    this.interactionIds = interactionIds;
   }
 
   /**
@@ -197,5 +220,14 @@ public class SearchInteractionsRequest implements Serializable {
    */
   public void setSortDirection(SortDirection sortDirection) {
     this.sortDirection = sortDirection;
+  }
+
+  /**
+   * Set the interaction source ID search criteria to apply to the interactions.
+   *
+   * @param sourceId the interaction source ID search criteria to apply to the interactions
+   */
+  public void setSourceId(UUID sourceId) {
+    this.sourceId = sourceId;
   }
 }

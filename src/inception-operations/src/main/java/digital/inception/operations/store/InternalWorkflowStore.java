@@ -41,6 +41,7 @@ import digital.inception.operations.model.VariableSearchCriteria;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
+import digital.inception.operations.model.WorkflowDefinitionDocumentDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
@@ -1172,6 +1173,7 @@ public class InternalWorkflowStore implements WorkflowStore {
   public WorkflowDocument requestWorkflowDocument(
       UUID tenantId,
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
+      WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition,
       String requestedBy)
       throws DocumentDefinitionNotFoundException, ServiceUnavailableException {
 
@@ -1181,6 +1183,7 @@ public class InternalWorkflowStore implements WorkflowStore {
               tenantId,
               requestWorkflowDocumentRequest.getWorkflowId(),
               requestWorkflowDocumentRequest.getDocumentDefinitionId(),
+              workflowDefinitionDocumentDefinition.isInternal(),
               OffsetDateTime.now(),
               requestedBy,
               requestWorkflowDocumentRequest.getRequestedFromPartyId());

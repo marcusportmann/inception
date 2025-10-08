@@ -904,6 +904,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
   public UUID requestWorkflowDocument(
       UUID tenantId, RequestWorkflowDocumentRequest requestWorkflowDocumentRequest)
       throws InvalidArgumentException,
+          WorkflowNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;

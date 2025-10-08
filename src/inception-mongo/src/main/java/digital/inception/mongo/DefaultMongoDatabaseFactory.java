@@ -159,6 +159,20 @@ public class DefaultMongoDatabaseFactory
     this.mongoClient = createMongoClient(applicationContext, mongodbUri);
   }
 
+  /**
+   * Constructs a new {@code DefaultMongoDatabaseFactory} from a MongoDB URI.
+   *
+   * @param applicationContext the Spring application context
+   * @param uri the MongoDB URI
+   * @return the {@code DefaultMongoDatabaseFactory} instance for the MongoDB URI
+   */
+  public static DefaultMongoDatabaseFactory fromUri(
+      ApplicationContext applicationContext, String uri) {
+    ConnectionString connectionString = new ConnectionString(uri);
+
+    return new DefaultMongoDatabaseFactory(applicationContext, uri, connectionString.getDatabase());
+  }
+
   @Override
   public void destroy() throws Exception {
     try {

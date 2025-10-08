@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
@@ -50,6 +51,76 @@ public class MongoConfiguration {
 
   /** Constructs a new {@code MongoConfiguration}. */
   public MongoConfiguration() {}
+
+  /**
+   * Returns the application GridFsTemplate that leverages the application mongo database factory.
+   *
+   * @param applicationMongoDatabaseFactory the application mongo database factory
+   * @param applicationMongoTemplate the application mongo template
+   * @return the application GridFsTemplate that leverages the application mongo database factory
+   */
+  @Bean("applicationGridFsTemplate")
+  @Primary
+  @Conditional(ApplicationMongoDatabaseFactoryCondition.class)
+  public GridFsTemplate applicationGridFsTemplate(
+      @Qualifier("applicationMongoDatabaseFactory")
+          org.springframework.data.mongodb.MongoDatabaseFactory applicationMongoDatabaseFactory,
+      @Qualifier("applicationMongoTemplate") MongoTemplate applicationMongoTemplate) {
+    return new GridFsTemplate(
+        applicationMongoDatabaseFactory, applicationMongoTemplate.getConverter());
+  }
+
+  /**
+   * Returns the application MongoConverter that leverages the application mongo database factory.
+   *
+   * @param applicationMongoDatabaseFactory the application mongo database factory
+   * @param mongoCustomConversions the MongoCustomConversions
+   * @return the application MongoConverter that leverages the application mongo database factory
+   */
+  @Bean("applicationMongoConverter")
+  @Primary
+  @Conditional(ApplicationMongoDatabaseFactoryCondition.class)
+  public MongoConverter applicationMongoConverter(
+      @Qualifier("applicationMongoDatabaseFactory")
+          org.springframework.data.mongodb.MongoDatabaseFactory applicationMongoDatabaseFactory,
+      MongoCustomConversions mongoCustomConversions) {
+    return MongoUtil.createMongoConverter(applicationMongoDatabaseFactory, mongoCustomConversions);
+  }
+
+  /**
+   * Returns the application mongo database factory initialized from the nova.application.mongodb
+   * configuration if it is available.
+   *
+   * @param applicationContext the Spring application context
+   * @param applicationMongoDatabaseUri the URI for the application MongoDB database
+   * @return the application mongo database factory initialized from the nova.application.mongodb
+   *     configuration if it is available
+   */
+  @Bean("applicationMongoDatabaseFactory")
+  @Primary
+  @Conditional(ApplicationMongoDatabaseFactoryCondition.class)
+  public org.springframework.data.mongodb.MongoDatabaseFactory applicationMongoDatabaseFactory(
+      ApplicationContext applicationContext,
+      @Value("${nova.application.mongodb.uri}") String applicationMongoDatabaseUri) {
+    return DefaultMongoDatabaseFactory.fromUri(applicationContext, applicationMongoDatabaseUri);
+  }
+
+  /**
+   * Returns the application MonoTemplate that leverages the application mongo database factory.
+   *
+   * @param applicationMongoDatabaseFactory the application mongo database factory
+   * @param applicationMongoConverter the application mongo converter
+   * @return the application MonoTemplate that leverages the application mongo database factory
+   */
+  @Bean("applicationMongoTemplate")
+  @Primary
+  @Conditional(ApplicationMongoDatabaseFactoryCondition.class)
+  public MongoTemplate applicationMongoTemplate(
+      @Qualifier("applicationMongoDatabaseFactory")
+          org.springframework.data.mongodb.MongoDatabaseFactory applicationMongoDatabaseFactory,
+      @Qualifier("applicationMongoConverter") MongoConverter applicationMongoConverter) {
+    return new MongoTemplate(applicationMongoDatabaseFactory, applicationMongoConverter);
+  }
 
   /**
    * Returns the default GridFsTemplate that leverages the default mongo database factory.

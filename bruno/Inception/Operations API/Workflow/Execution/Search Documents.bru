@@ -42,6 +42,8 @@ body:json {
 
 assert {
   res.status: eq 200
+  res.body.documentSummaries.length: eq 1
+  res.body.documentSummaries[0].id: eq {{documentId}}
 }
 
 settings {

@@ -144,6 +144,8 @@ public interface WorkflowDocumentRepository
         dd.description,
         wd.status,
         wd.requested,
+        wd.requestedFromPartyId,
+        wd.internal,
         wd.description
       )
       from WorkflowDocument wd

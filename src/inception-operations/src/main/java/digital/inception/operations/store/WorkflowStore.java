@@ -36,6 +36,7 @@ import digital.inception.operations.model.RequestWorkflowDocumentRequest;
 import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowDefinitionDocumentDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
@@ -444,6 +445,8 @@ public interface WorkflowStore {
    *
    * @param tenantId the ID for the tenant
    * @param requestWorkflowDocumentRequest the request to request a workflow document
+   * @param workflowDefinitionDocumentDefinition the association of a document definition with a
+   *     workflow definition for the workflow document
    * @param requestedBy the person or system requesting the workflow document
    * @return the workflow document
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
@@ -452,6 +455,7 @@ public interface WorkflowStore {
   WorkflowDocument requestWorkflowDocument(
       UUID tenantId,
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
+      WorkflowDefinitionDocumentDefinition workflowDefinitionDocumentDefinition,
       String requestedBy)
       throws DocumentDefinitionNotFoundException, ServiceUnavailableException;
 

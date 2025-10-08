@@ -1,0 +1,66 @@
+/*
+ * Copyright Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package digital.inception.mongo;
+
+import com.mongodb.ConnectionString;
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.env.Environment;
+import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.util.StringUtils;
+
+/**
+ * The {@code ApplicationMongoDatabaseFactoryCondition} class implements the condition that must be
+ * matched to enable the application MongoDatabaseFactory, which is that the MongoDB configuration
+ * is specified under inception.application.mongodb.
+ *
+ * @author Marcus Portmann
+ */
+public class ApplicationMongoDatabaseFactoryCondition implements Condition {
+
+  /** Constructs a new {@code ApplicationMongoDatabaseFactoryCondition}. */
+  public ApplicationMongoDatabaseFactoryCondition() {}
+
+  @Override
+  public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+    try {
+      Environment environment = context.getEnvironment();
+
+      // Ensure that we have a MongoDB URI specified via inception.application.mongodb.uri
+      String mongodbUri = environment.getProperty("inception.application.mongodb.uri");
+
+      if (!StringUtils.hasText(mongodbUri)) {
+        return false;
+      }
+
+      /*
+       * Check if the MongoDB URI includes the database name, otherwise check for an explicit
+       * database name specified via inception.application.mongodb.database.
+       */
+      ConnectionString connectionString = new ConnectionString(mongodbUri);
+
+      if (!StringUtils.hasText(connectionString.getDatabase())) {
+        return StringUtils.hasText(
+            environment.getProperty("inception.application.mongodb.database"));
+      }
+
+      return true;
+    } catch (Throwable e) {
+      return true;
+    }
+  }
+}

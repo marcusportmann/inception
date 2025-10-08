@@ -60,8 +60,10 @@ import java.util.UUID;
   "documentDefinitionId",
   "documentId",
   "status",
+  "internal",
   "requested",
   "requestedBy",
+  "requestedFromPartyId",
   "provided",
   "providedBy",
   "rejected",
@@ -82,8 +84,10 @@ import java.util.UUID;
       "documentDefinitionId",
       "documentId",
       "status",
+      "internal",
       "requested",
       "requestedBy",
+      "requestedFromPartyId",
       "provided",
       "providedBy",
       "rejected",
@@ -148,6 +152,16 @@ public class WorkflowDocument implements Serializable {
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
+
+  /** Is the workflow document internal-only and excluded for external users. */
+  @Schema(
+      description = "Is the workflow document internal-only and excluded for external users",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Internal", required = true)
+  @NotNull
+  @Column(name = "internal", nullable = false)
+  private Boolean internal;
 
   /** The date and time the workflow document was provided. */
   @Schema(description = "The date and time the workflow document was provided")
@@ -276,6 +290,7 @@ public class WorkflowDocument implements Serializable {
    * @param workflowId the ID for the workflow
    * @param documentDefinitionId the ID for the document definition the workflow document is
    *     associated with
+   * @param internal is the workflow document internal-only and excluded for external users
    * @param requested the date and time the workflow document was requested
    * @param requestedBy the person or system that requested the workflow document
    */
@@ -283,12 +298,14 @@ public class WorkflowDocument implements Serializable {
       UUID tenantId,
       UUID workflowId,
       String documentDefinitionId,
+      boolean internal,
       OffsetDateTime requested,
       String requestedBy) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.workflowId = workflowId;
     this.documentDefinitionId = documentDefinitionId;
+    this.internal = internal;
     this.status = WorkflowDocumentStatus.REQUESTED;
     this.requested = requested;
     this.requestedBy = requestedBy;
@@ -301,6 +318,7 @@ public class WorkflowDocument implements Serializable {
    * @param workflowId the ID for the workflow
    * @param documentDefinitionId the ID for the document definition the workflow document is
    *     associated with
+   * @param internal is the workflow document internal-only and excluded for external users
    * @param requested the date and time the workflow document was requested
    * @param requestedBy the person or system that requested the workflow document
    * @param requestedFromPartyId the ID for the party the workflow document was requested from
@@ -309,6 +327,7 @@ public class WorkflowDocument implements Serializable {
       UUID tenantId,
       UUID workflowId,
       String documentDefinitionId,
+      boolean internal,
       OffsetDateTime requested,
       String requestedBy,
       UUID requestedFromPartyId) {
@@ -316,6 +335,7 @@ public class WorkflowDocument implements Serializable {
     this.tenantId = tenantId;
     this.workflowId = workflowId;
     this.documentDefinitionId = documentDefinitionId;
+    this.internal = internal;
     this.status = WorkflowDocumentStatus.REQUESTED;
     this.requested = requested;
     this.requestedBy = requestedBy;
@@ -382,6 +402,16 @@ public class WorkflowDocument implements Serializable {
    */
   public UUID getId() {
     return id;
+  }
+
+  /**
+   * Returns whether the workflow document is internal-only and excluded for external users.
+   *
+   * @return {@code true} if the workflow document is internal-only and excluded for external users
+   *     or {@code false} otherwise
+   */
+  public boolean getInternal() {
+    return internal;
   }
 
   /**
@@ -536,6 +566,16 @@ public class WorkflowDocument implements Serializable {
    */
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Set whether the workflow document is internal-only and excluded for external users
+   *
+   * @param internal {@code true} if the workflow document is internal-only and excluded for
+   *     external users or {@code} false otherwise
+   */
+  public void setInternal(boolean internal) {
+    this.internal = internal;
   }
 
   /**

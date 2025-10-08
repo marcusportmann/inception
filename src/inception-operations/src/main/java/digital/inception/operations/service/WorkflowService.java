@@ -852,6 +852,7 @@ public interface WorkflowService {
    * @param requestedBy the person or system requesting the workflow document
    * @return the ID for the workflow document
    * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the workflow document could not be requested
    */
@@ -860,6 +861,7 @@ public interface WorkflowService {
       RequestWorkflowDocumentRequest requestWorkflowDocumentRequest,
       String requestedBy)
       throws InvalidArgumentException,
+          WorkflowNotFoundException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
 

@@ -53,6 +53,8 @@ body:json {
 
 assert {
   res.status: eq 200
+  res.body.workflowSummaries.length: eq 1
+  res.body.workflowSummaries[0].id: eq {{workflowId}}
 }
 
 settings {
