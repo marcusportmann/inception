@@ -3199,6 +3199,7 @@ public interface WorkflowApiController {
    * @param suspendWorkflowRequest the request to suspend a workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws InvalidWorkflowStatusException the status of the workflow is invalid for the operation
    * @throws ServiceUnavailableException if the workflow could not be suspended
    */
   @Operation(summary = "Suspend a workflow", description = "Suspend a workflow")
@@ -3222,6 +3223,13 @@ public interface WorkflowApiController {
         @ApiResponse(
             responseCode = "404",
             description = "The workflow could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The  status of the workflow is invalid for the operation",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -3257,7 +3265,10 @@ public interface WorkflowApiController {
               required = true)
           @RequestBody
           SuspendWorkflowRequest suspendWorkflowRequest)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          InvalidWorkflowStatusException,
+          ServiceUnavailableException;
 
   /**
    * Suspend a workflow step.
@@ -3337,6 +3348,7 @@ public interface WorkflowApiController {
    * @param unsuspendWorkflowRequest the request to unsuspend a workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws InvalidWorkflowStatusException the status of the workflow is invalid for the operation
    * @throws ServiceUnavailableException if the workflow could not be unsuspended
    */
   @Operation(summary = "Unsuspend a workflow", description = "Unsuspend a workflow")
@@ -3360,6 +3372,13 @@ public interface WorkflowApiController {
         @ApiResponse(
             responseCode = "404",
             description = "The workflow could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The  status of the workflow is invalid for the operation",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -3395,7 +3414,10 @@ public interface WorkflowApiController {
               required = true)
           @RequestBody
           UnsuspendWorkflowRequest unsuspendWorkflowRequest)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          InvalidWorkflowStatusException,
+          ServiceUnavailableException;
 
   /**
    * Unsuspend a workflow step.

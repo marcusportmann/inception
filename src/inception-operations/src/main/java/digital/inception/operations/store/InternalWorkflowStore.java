@@ -961,6 +961,32 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
+  public WorkflowStatus getWorkflowStatus(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException {
+    try {
+      Optional<WorkflowStatus> workflowStatusOptional =
+          workflowRepository.findWorkflowStatusByTenantIdAndWorkflowId(tenantId, workflowId);
+
+      if (workflowStatusOptional.isPresent()) {
+        return workflowStatusOptional.get();
+      } else {
+        throw new WorkflowNotFoundException(tenantId, workflowId);
+      }
+
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the status for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public WorkflowStep initiateWorkflowStep(UUID tenantId, UUID workflowId, String step)
       throws WorkflowNotFoundException, ServiceUnavailableException {
     try {

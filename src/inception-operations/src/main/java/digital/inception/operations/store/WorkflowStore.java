@@ -383,6 +383,19 @@ public interface WorkflowStore {
       throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the workflow status for the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @return the workflow status for the workflow
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow status for the workflow could not be
+   *     retrieved
+   */
+  WorkflowStatus getWorkflowStatus(UUID tenantId, UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
    * Initiate the workflow step.
    *
    * @param tenantId the ID for the tenant

@@ -953,7 +953,10 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public void suspendWorkflow(UUID tenantId, SuspendWorkflowRequest suspendWorkflowRequest)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          InvalidWorkflowStatusException,
+          ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
@@ -1019,7 +1022,10 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
   @Override
   public void unsuspendWorkflow(UUID tenantId, UnsuspendWorkflowRequest unsuspendWorkflowRequest)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          InvalidWorkflowStatusException,
+          ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))

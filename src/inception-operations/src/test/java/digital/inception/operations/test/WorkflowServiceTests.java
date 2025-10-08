@@ -585,34 +585,6 @@ public class WorkflowServiceTests {
         documentDefinition.getId(),
         outstandingWorkflowDocuments.getFirst().getDocumentDefinitionId());
 
-    // Update the workflow
-    testWorkflowData.setName(testWorkflowData.getName() + " Updated");
-
-    testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
-
-    UpdateWorkflowRequest updateWorkflowRequest =
-        new UpdateWorkflowRequest(
-            workflow.getId(),
-            WorkflowStatus.COMPLETED,
-            null,
-            List.of(
-                new WorkflowAttribute(
-                    "test_workflow_attribute_code", "test_workflow_attribute_value_updated")),
-            null,
-            testWorkflowDataJson);
-
-    Workflow updatedWorkflow =
-        workflowService.updateWorkflow(
-            TenantUtil.DEFAULT_TENANT_ID, updateWorkflowRequest, "TEST2");
-
-    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
-
-    assertEquals(WorkflowStatus.COMPLETED, retrievedWorkflow.getStatus());
-    assertEquals(testWorkflowDataJson, retrievedWorkflow.getData());
-    assertEquals(
-        "test_workflow_attribute_value_updated",
-        retrievedWorkflow.getAttributes().getFirst().getValue());
-
     // Provide a workflow document
     byte[] multiPagePdfData = ResourceUtil.getClasspathResource("MultiPagePdf.pdf");
 
@@ -929,6 +901,34 @@ public class WorkflowServiceTests {
 
     // Verify the workflow statuses
     backgroundWorkflowStatusVerifier.verifyWorkflowStatuses();
+
+    // Update the workflow
+    testWorkflowData.setName(testWorkflowData.getName() + " Updated");
+
+    testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
+
+    UpdateWorkflowRequest updateWorkflowRequest =
+        new UpdateWorkflowRequest(
+            workflow.getId(),
+            WorkflowStatus.COMPLETED,
+            null,
+            List.of(
+                new WorkflowAttribute(
+                    "test_workflow_attribute_code", "test_workflow_attribute_value_updated")),
+            null,
+            testWorkflowDataJson);
+
+    Workflow updatedWorkflow =
+        workflowService.updateWorkflow(
+            TenantUtil.DEFAULT_TENANT_ID, updateWorkflowRequest, "TEST2");
+
+    retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
+
+    assertEquals(WorkflowStatus.COMPLETED, retrievedWorkflow.getStatus());
+    assertEquals(testWorkflowDataJson, retrievedWorkflow.getData());
+    assertEquals(
+        "test_workflow_attribute_value_updated",
+        retrievedWorkflow.getAttributes().getFirst().getValue());
 
     // Finalize the workflow
     workflowService.finalizeWorkflow(

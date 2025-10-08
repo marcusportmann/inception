@@ -1606,6 +1606,32 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
   }
 
+  @Override
+  public WorkflowStatus getWorkflowStatus(UUID tenantId, UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (workflowId == null) {
+      throw new InvalidArgumentException("workflowId");
+    }
+
+    try {
+      return workflowStore.getWorkflowStatus(tenantId, workflowId);
+    } catch (WorkflowNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the status for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
   /** Initialize the Workflow Service. */
   @PostConstruct
   public void init() {
@@ -2214,7 +2240,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   @Override
   public void suspendWorkflow(
       UUID tenantId, SuspendWorkflowRequest suspendWorkflowRequest, String suspendedBy)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          InvalidWorkflowStatusException,
+          ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -2226,6 +2255,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     try {
+      if (workflowStore.getWorkflowStatus(tenantId, suspendWorkflowRequest.getWorkflowId())
+          != WorkflowStatus.ACTIVE) {
+        throw new InvalidWorkflowStatusException(suspendWorkflowRequest.getWorkflowId());
+      }
+
       WorkflowEngineIds workflowEngineIds =
           workflowStore.getWorkflowEngineIdsForWorkflow(
               tenantId, suspendWorkflowRequest.getWorkflowId());
@@ -2241,7 +2275,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               workflowEngineIds.getEngineInstanceId());
 
       workflowStore.suspendWorkflow(tenantId, suspendWorkflowRequest.getWorkflowId(), suspendedBy);
-    } catch (WorkflowNotFoundException e) {
+    } catch (WorkflowNotFoundException | InvalidWorkflowStatusException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -2286,7 +2320,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
   @Override
   public void unsuspendWorkflow(UUID tenantId, UnsuspendWorkflowRequest unsuspendWorkflowRequest)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          InvalidWorkflowStatusException,
+          ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -2294,6 +2331,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     validateArgument("unsuspendWorkflowRequest", unsuspendWorkflowRequest);
 
     try {
+      if (workflowStore.getWorkflowStatus(tenantId, unsuspendWorkflowRequest.getWorkflowId())
+          != WorkflowStatus.SUSPENDED) {
+        throw new InvalidWorkflowStatusException(unsuspendWorkflowRequest.getWorkflowId());
+      }
+
       WorkflowEngineIds workflowEngineIds =
           workflowStore.getWorkflowEngineIdsForWorkflow(
               tenantId, unsuspendWorkflowRequest.getWorkflowId());
@@ -2309,7 +2351,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               workflowEngineIds.getEngineInstanceId());
 
       workflowStore.unsuspendWorkflow(tenantId, unsuspendWorkflowRequest.getWorkflowId());
-    } catch (WorkflowNotFoundException e) {
+    } catch (WorkflowNotFoundException | InvalidWorkflowStatusException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(

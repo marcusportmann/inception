@@ -190,6 +190,23 @@ public interface WorkflowRepository
       @Param("workflowId") UUID workflowId);
 
   /**
+   * Find the status for the workflow with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @return the Optional containing the status for the workflow with the specified ID or an empty
+   *     Optional if the workflow could not be found
+   */
+  @Query(
+      """
+         select w.status
+         from Workflow w
+         where w.tenantId = :tenantId and w.id = :workflowId
+         """)
+  Optional<WorkflowStatus> findWorkflowStatusByTenantIdAndWorkflowId(
+      @Param("tenantId") UUID tenantId, @Param("workflowId") UUID workflowId);
+
+  /**
    * Suspend a workflow instance.
    *
    * @param tenantId the ID for the tenant

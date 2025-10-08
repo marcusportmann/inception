@@ -756,6 +756,20 @@ public interface WorkflowService {
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
+   * Retrieve the workflow status for the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow
+   * @return the workflow status for the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow status for the workflow could not be
+   *     retrieved
+   */
+  WorkflowStatus getWorkflowStatus(UUID tenantId, UUID workflowId)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
    * Initiate a workflow.
    *
    * @param tenantId the ID for the tenant
@@ -916,11 +930,15 @@ public interface WorkflowService {
    * @param suspendedBy the person or system who suspended the workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws InvalidWorkflowStatusException the status of the workflow is invalid for the operation
    * @throws ServiceUnavailableException if the workflow could not be suspended
    */
   void suspendWorkflow(
       UUID tenantId, SuspendWorkflowRequest suspendWorkflowRequest, String suspendedBy)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          InvalidWorkflowStatusException,
+          ServiceUnavailableException;
 
   /**
    * Suspend a workflow step.
@@ -945,10 +963,14 @@ public interface WorkflowService {
    * @param unsuspendWorkflowRequest the request to unsuspend a workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws InvalidWorkflowStatusException the status of the workflow is invalid for the operation
    * @throws ServiceUnavailableException if the workflow could not be unsuspended
    */
   void unsuspendWorkflow(UUID tenantId, UnsuspendWorkflowRequest unsuspendWorkflowRequest)
-      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          InvalidWorkflowStatusException,
+          ServiceUnavailableException;
 
   /**
    * Unsuspend a workflow step.

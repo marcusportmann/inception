@@ -56,6 +56,7 @@ import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.InteractionType;
 import digital.inception.operations.model.MailboxProtocol;
+import digital.inception.operations.model.SearchInteractionsRequest;
 import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.service.BackgroundInteractionSourceSynchronizer;
@@ -403,6 +404,24 @@ public class InteractionServiceTests {
 
     UUID retrievedInteractionId =
         retrievedInteractionSummaries.getInteractionSummaries().getFirst().getId();
+
+    SearchInteractionsRequest searchInteractionsRequest =
+        new SearchInteractionsRequest(
+            mailboxInteractionSource.getId(),
+            List.of(retrievedInteractionId),
+            InteractionSortBy.OCCURRED,
+            SortDirection.ASCENDING,
+            0,
+            10);
+
+    retrievedInteractionSummaries =
+        interactionService.searchInteractions(
+            TenantUtil.DEFAULT_TENANT_ID, searchInteractionsRequest);
+
+    assertEquals(1, retrievedInteractionSummaries.getInteractionSummaries().size());
+    assertEquals(
+        retrievedInteractionId,
+        retrievedInteractionSummaries.getInteractionSummaries().get(0).getId());
 
     numberOfNewInteractions =
         backgroundInteractionSourceSynchronizer.synchronizeInteractionSources();
