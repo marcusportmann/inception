@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
@@ -63,7 +64,8 @@ public class SearchInteractionsRequest implements Serializable {
   /** The interaction ID search criteria to apply to the interactions. */
   @Schema(description = "The interaction ID search criteria to apply to the interactions")
   @JsonProperty
-  @XmlElement(name = "InteractionIds")
+  @XmlElementWrapper(name = "InteractionIds")
+  @XmlElement(name = "InteractionId")
   private List<UUID> interactionIds;
 
   /** The page index. */
@@ -93,7 +95,7 @@ public class SearchInteractionsRequest implements Serializable {
   /** The interaction source ID search criteria to apply to the interactions. */
   @Schema(description = "The interaction source ID search criteria to apply to the interactions")
   @JsonProperty
-  @XmlElement(name = "InteractionSourceId")
+  @XmlElement(name = "SourceId")
   private UUID sourceId;
 
   /** Constructs a new {@code SearchInteractionsRequest}. */

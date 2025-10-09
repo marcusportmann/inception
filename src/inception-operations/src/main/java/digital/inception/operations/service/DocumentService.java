@@ -33,7 +33,6 @@ import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
-import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
@@ -340,20 +339,20 @@ public interface DocumentService {
           ServiceUnavailableException;
 
   /**
-   * Retrieve the summaries for the document definitions associated with the document definition
-   * category with the specified ID.
+   * Retrieve the document definitions associated with the document definition category with the
+   * specified ID.
    *
    * @param tenantId the ID for the tenant
    * @param documentDefinitionCategoryId the ID for the document definition category the document
    *     definitions are associated with
-   * @return the summaries for the document definitions associated with the document definition
-   *     category with the specified ID
+   * @return the document definitions associated with the document definition category with the
+   *     specified ID
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
    *     not be found
-   * @throws ServiceUnavailableException if the document definition summaries could not be retrieved
+   * @throws ServiceUnavailableException if the document definitions could not be retrieved
    */
-  List<DocumentDefinitionSummary> getDocumentDefinitionSummaries(
+  List<DocumentDefinition> getDocumentDefinitions(
       UUID tenantId, String documentDefinitionCategoryId)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,

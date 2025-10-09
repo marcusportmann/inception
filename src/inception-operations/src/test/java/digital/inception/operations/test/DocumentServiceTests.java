@@ -43,7 +43,6 @@ import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
-import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentExternalReference;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
@@ -240,8 +239,10 @@ public class DocumentServiceTests {
         new DocumentDefinition(
             "test_shared_document_definition_" + randomId(),
             sharedDocumentDefinitionCategory.getId(),
+            null,
             "Test Shared Document Definition",
             "The description for the test shared document definition",
+            null,
             List.of(RequiredDocumentAttribute.EXPIRY_DATE, RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
@@ -269,7 +270,10 @@ public class DocumentServiceTests {
             "test_tenant_document_definition_" + randomId(),
             tenantDocumentDefinitionCategory.getId(),
             TenantUtil.DEFAULT_TENANT_ID,
-            "Test Tenant Document Definition");
+            "Test Tenant Document Definition",
+            "The description for the test tenant document definition",
+            null,
+            null);
 
     documentService.createDocumentDefinition(tenantDocumentDefinition);
 
@@ -284,32 +288,32 @@ public class DocumentServiceTests {
 
     compareDocumentDefinitions(tenantDocumentDefinition, retrievedDocumentDefinition);
 
-    List<DocumentDefinitionSummary> documentDefinitionSummaries =
-        documentService.getDocumentDefinitionSummaries(
+    List<DocumentDefinition> documentDefinitions =
+        documentService.getDocumentDefinitions(
             TenantUtil.DEFAULT_TENANT_ID, sharedDocumentDefinitionCategory.getId());
 
-    assertEquals(1, documentDefinitionSummaries.size());
-    assertEquals(sharedDocumentDefinition.getId(), documentDefinitionSummaries.getFirst().getId());
+    assertEquals(1, documentDefinitions.size());
+    assertEquals(sharedDocumentDefinition.getId(), documentDefinitions.getFirst().getId());
 
-    documentDefinitionSummaries =
-        documentService.getDocumentDefinitionSummaries(
+    documentDefinitions =
+        documentService.getDocumentDefinitions(
             UUID.randomUUID(), sharedDocumentDefinitionCategory.getId());
 
-    assertEquals(1, documentDefinitionSummaries.size());
-    assertEquals(sharedDocumentDefinition.getId(), documentDefinitionSummaries.getFirst().getId());
+    assertEquals(1, documentDefinitions.size());
+    assertEquals(sharedDocumentDefinition.getId(), documentDefinitions.getFirst().getId());
 
-    documentDefinitionSummaries =
-        documentService.getDocumentDefinitionSummaries(
+    documentDefinitions =
+        documentService.getDocumentDefinitions(
             TenantUtil.DEFAULT_TENANT_ID, tenantDocumentDefinitionCategory.getId());
 
-    assertEquals(1, documentDefinitionSummaries.size());
-    assertEquals(tenantDocumentDefinition.getId(), documentDefinitionSummaries.getFirst().getId());
+    assertEquals(1, documentDefinitions.size());
+    assertEquals(tenantDocumentDefinition.getId(), documentDefinitions.getFirst().getId());
 
-    documentDefinitionSummaries =
-        documentService.getDocumentDefinitionSummaries(
+    documentDefinitions =
+        documentService.getDocumentDefinitions(
             UUID.randomUUID(), tenantDocumentDefinitionCategory.getId());
 
-    assertEquals(0, documentDefinitionSummaries.size());
+    assertEquals(0, documentDefinitions.size());
 
     tenantDocumentDefinition.setName("Updated Test Tenant Document Definition");
     tenantDocumentDefinition.setCategoryId(sharedDocumentDefinitionCategory.getId());

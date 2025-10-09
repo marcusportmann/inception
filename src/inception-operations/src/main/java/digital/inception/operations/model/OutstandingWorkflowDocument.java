@@ -90,7 +90,7 @@ public class OutstandingWorkflowDocument implements Serializable {
       description =
           "The description for the document definition the workflow document is associated with")
   @JsonProperty
-  @XmlElement(name = "DocumentDefinitionName")
+  @XmlElement(name = "DocumentDefinitionDescription")
   @Size(min = 1, max = 500)
   private String documentDefinitionDescription;
 

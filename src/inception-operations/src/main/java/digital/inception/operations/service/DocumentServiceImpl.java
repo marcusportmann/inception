@@ -35,7 +35,6 @@ import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
-import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
@@ -47,7 +46,6 @@ import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.persistence.jpa.DocumentAttributeDefinitionRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository;
-import digital.inception.operations.persistence.jpa.DocumentDefinitionSummaryRepository;
 import digital.inception.operations.store.DocumentStore;
 import jakarta.annotation.PostConstruct;
 import java.time.OffsetDateTime;
@@ -79,9 +77,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   /** The Document Definition Repository. */
   private final DocumentDefinitionRepository documentDefinitionRepository;
 
-  /** The Document Definition Summary Repository. */
-  private final DocumentDefinitionSummaryRepository documentDefinitionSummaryRepository;
-
   /** The Document Store. */
   private final DocumentStore documentStore;
 
@@ -107,7 +102,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
    * @param documentAttributeDefinitionRepository the Document Attribute Definition Repository
    * @param documentDefinitionCategoryRepository the Document Definition Category Repository
    * @param documentDefinitionRepository the Document Definition Repository
-   * @param documentDefinitionSummaryRepository the Document Definition Summary Repository
    * @param validationService the Validation Service
    */
   public DocumentServiceImpl(
@@ -116,7 +110,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       DocumentAttributeDefinitionRepository documentAttributeDefinitionRepository,
       DocumentDefinitionCategoryRepository documentDefinitionCategoryRepository,
       DocumentDefinitionRepository documentDefinitionRepository,
-      DocumentDefinitionSummaryRepository documentDefinitionSummaryRepository,
       ValidationService validationService) {
     super(applicationContext);
 
@@ -124,7 +117,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     this.documentAttributeDefinitionRepository = documentAttributeDefinitionRepository;
     this.documentDefinitionCategoryRepository = documentDefinitionCategoryRepository;
     this.documentDefinitionRepository = documentDefinitionRepository;
-    this.documentDefinitionSummaryRepository = documentDefinitionSummaryRepository;
     this.validationService = validationService;
   }
 
@@ -668,7 +660,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public List<DocumentDefinitionSummary> getDocumentDefinitionSummaries(
+  public List<DocumentDefinition> getDocumentDefinitions(
       UUID tenantId, String documentDefinitionCategoryId)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
@@ -682,13 +674,13 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategoryId);
       }
 
-      return documentDefinitionSummaryRepository.findForCategoryAndTenantOrGlobal(
+      return documentDefinitionRepository.findForCategoryAndTenantOrGlobal(
           documentDefinitionCategoryId, tenantId);
     } catch (DocumentDefinitionCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the summaries for the document definitions associated with the document definition category ("
+          "Failed to retrieve the document definitions associated with the document definition category ("
               + documentDefinitionCategoryId
               + ") for the tenant ("
               + tenantId

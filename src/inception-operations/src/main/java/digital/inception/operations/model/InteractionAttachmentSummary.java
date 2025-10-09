@@ -55,7 +55,9 @@ import java.util.UUID;
   "name",
   "hash"
 })
-@XmlRootElement(name = "InteractionAttachment", namespace = "https://inception.digital/operations")
+@XmlRootElement(
+    name = "InteractionAttachmentSummary",
+    namespace = "https://inception.digital/operations")
 @XmlType(
     name = "InteractionAttachmentSummary",
     namespace = "https://inception.digital/operations",

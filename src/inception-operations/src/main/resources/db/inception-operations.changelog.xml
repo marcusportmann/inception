@@ -123,6 +123,66 @@
       <column name="value"/>
     </createIndex>
 
+    <createTable tableName="operations_document_template_categories"
+      remarks="Document Template Categories">
+      <column name="id" type="nvarchar(50)" remarks="The ID for the document template category">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid"
+        remarks="The ID for the tenant the document template category is specific to"/>
+      <column name="name" type="nvarchar(100)"
+        remarks="The name of the document template category">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex indexName="operations_document_template_categories_tenant_id_ix"
+      tableName="operations_document_template_categories">
+      <column name="tenant_id"/>
+    </createIndex>
+
+
+    <createTable tableName="operations_document_templates" remarks="Document Templates">
+      <column name="id" type="nvarchar(50)" remarks="The ID for the document template">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="category_id" type="nvarchar(50)"
+        remarks="The ID for the document template category the document template is associated with">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenant_id" type="uuid"
+        remarks="The ID for the tenant the document template is specific to"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the document template">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data" type="${blob_type}"
+        remarks="The data for the document template if not stored in an external repository"/>
+      <column name="created" type="timestamp with time zone"
+        remarks="The date and time the document template was created">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="nvarchar(100)"
+        remarks="The person or system who created the document template">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated" type="timestamp with time zone"
+        remarks="The date and time the document template was last updated"/>
+      <column name="updated_by" type="nvarchar(100)"
+        remarks="The person or system who last updated the document template"/>
+    </createTable>
+    <addForeignKeyConstraint
+      constraintName="operations_document_templates_document_template_category_fk"
+      baseTableName="operations_document_templates" baseColumnNames="category_id"
+      referencedTableName="operations_document_template_categories" referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <createIndex indexName="operations_document_templates_category_id_ix"
+      tableName="operations_document_templates">
+      <column name="category_id"/>
+    </createIndex>
+    <createIndex indexName="operations_document_templates_tenant_id_ix"
+      tableName="operations_document_templates">
+      <column name="tenant_id"/>
+    </createIndex>
+
     <createTable tableName="operations_document_definition_categories"
       remarks="Document Definition Categories">
       <column name="id" type="nvarchar(50)" remarks="The ID for the document definition category">
@@ -156,11 +216,18 @@
       <column name="description" type="nvarchar(500)" defaultValue="" remarks="The description for the document definition"/>
       <column name="required_document_attributes" type="nvarchar(510)"
         remarks="The comma-delimited list of codes for the required attributes for a document associated with the document definition"/>
+      <column name="template_id" type="nvarchar(50)"
+        remarks="The ID for the document template for the document definition"/>
     </createTable>
     <addForeignKeyConstraint
       constraintName="operations_document_definitions_document_definition_category_fk"
       baseTableName="operations_document_definitions" baseColumnNames="category_id"
       referencedTableName="operations_document_definition_categories" referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <addForeignKeyConstraint
+      constraintName="operations_document_definitions_document_template_fk"
+      baseTableName="operations_document_definitions" baseColumnNames="template_id"
+      referencedTableName="operations_document_templates" referencedColumnNames="id"
       onDelete="CASCADE"/>
     <createIndex indexName="operations_document_definitions_category_id_ix"
       tableName="operations_document_definitions">

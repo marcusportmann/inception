@@ -35,7 +35,6 @@ import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
-import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
@@ -294,12 +293,11 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public List<DocumentDefinitionSummary>
-      getDocumentDefinitionSummariesForDocumentDefinitionCategory(
-          UUID tenantId, String documentDefinitionCategoryId)
-          throws InvalidArgumentException,
-              DocumentDefinitionCategoryNotFoundException,
-              ServiceUnavailableException {
+  public List<DocumentDefinition> getDocumentDefinitionsForDocumentDefinitionCategory(
+      UUID tenantId, String documentDefinitionCategoryId)
+      throws InvalidArgumentException,
+          DocumentDefinitionCategoryNotFoundException,
+          ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
@@ -308,7 +306,7 @@ public class DocumentApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return documentService.getDocumentDefinitionSummaries(tenantId, documentDefinitionCategoryId);
+    return documentService.getDocumentDefinitions(tenantId, documentDefinitionCategoryId);
   }
 
   @Override

@@ -53,6 +53,7 @@ import java.util.UUID;
   "tenantId",
   "name",
   "description",
+  "templateId",
   "requiredDocumentAttributes"
 })
 @XmlRootElement(name = "DocumentDefinition", namespace = "https://inception.digital/operations")
@@ -65,6 +66,7 @@ import java.util.UUID;
       "tenantId",
       "name",
       "description",
+      "templateId",
       "requiredDocumentAttributes"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -89,6 +91,7 @@ public class DocumentDefinition implements Serializable {
   /** The description for the document definition. */
   @Schema(description = "The description for the document definition")
   @JsonProperty
+  @XmlElement(name = "Description")
   @Size(min = 1, max = 500)
   @Column(name = "description", length = 500)
   private String description;
@@ -128,6 +131,14 @@ public class DocumentDefinition implements Serializable {
   @Column(name = "required_document_attributes", length = 510)
   private List<RequiredDocumentAttribute> requiredDocumentAttributes;
 
+  /** The ID for the document template for the document definition. */
+  @Schema(description = "The ID for the document template for the document definition")
+  @JsonProperty
+  @XmlElement(name = "TemplateId")
+  @Size(min = 1, max = 50)
+  @Column(name = "template_id", length = 50)
+  private String templateId;
+
   /** The ID for the tenant the document definition is specific to. */
   @Schema(description = "The ID for the tenant the document definition is specific to")
   @JsonProperty
@@ -144,143 +155,10 @@ public class DocumentDefinition implements Serializable {
    * @param id ID for the document definition
    * @param categoryId the ID for the document definition category the document definition is
    *     associated with
-   * @param name name of the document definition
-   */
-  public DocumentDefinition(String id, String categoryId, String name) {
-    this.id = id;
-    this.categoryId = categoryId;
-    this.name = name;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
-   * @param categoryId the ID for the document definition category the document definition is
-   *     associated with
-   * @param tenantId ID for the tenant the document definition is specific to
-   * @param name name of the document definition
-   */
-  public DocumentDefinition(String id, String categoryId, UUID tenantId, String name) {
-    this.id = id;
-    this.categoryId = categoryId;
-    this.tenantId = tenantId;
-    this.name = name;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
-   * @param categoryId the ID for the document definition category the document definition is
-   *     associated with
-   * @param name name of the document definition
-   * @param requiredDocumentAttributes the required attributes for a document associated with the
-   *     document definition
-   */
-  public DocumentDefinition(
-      String id,
-      String categoryId,
-      String name,
-      List<RequiredDocumentAttribute> requiredDocumentAttributes) {
-    this.id = id;
-    this.categoryId = categoryId;
-    this.name = name;
-    this.requiredDocumentAttributes = requiredDocumentAttributes;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
-   * @param categoryId the ID for the document definition category the document definition is
-   *     associated with
-   * @param tenantId ID for the tenant the document definition is specific to
-   * @param name name of the document definition
-   * @param requiredDocumentAttributes the required attributes for a document associated with the
-   *     document definition
-   */
-  public DocumentDefinition(
-      String id,
-      String categoryId,
-      UUID tenantId,
-      String name,
-      List<RequiredDocumentAttribute> requiredDocumentAttributes) {
-    this.id = id;
-    this.categoryId = categoryId;
-    this.tenantId = tenantId;
-    this.name = name;
-    this.requiredDocumentAttributes = requiredDocumentAttributes;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
-   * @param categoryId the ID for the document definition category the document definition is
-   *     associated with
-   * @param name name of the document definition
-   * @param description the description for the document definition
-   */
-  public DocumentDefinition(String id, String categoryId, String name, String description) {
-    this.id = id;
-    this.categoryId = categoryId;
-    this.name = name;
-    this.description = description;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
-   * @param categoryId the ID for the document definition category the document definition is
-   *     associated with
    * @param tenantId ID for the tenant the document definition is specific to
    * @param name name of the document definition
    * @param description the description for the document definition
-   */
-  public DocumentDefinition(
-      String id, String categoryId, UUID tenantId, String name, String description) {
-    this.id = id;
-    this.categoryId = categoryId;
-    this.tenantId = tenantId;
-    this.name = name;
-    this.description = description;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
-   * @param categoryId the ID for the document definition category the document definition is
-   *     associated with
-   * @param name name of the document definition
-   * @param description the description for the document definition
-   * @param requiredDocumentAttributes the required attributes for a document associated with the
-   *     document definition
-   */
-  public DocumentDefinition(
-      String id,
-      String categoryId,
-      String name,
-      String description,
-      List<RequiredDocumentAttribute> requiredDocumentAttributes) {
-    this.id = id;
-    this.categoryId = categoryId;
-    this.name = name;
-    this.description = description;
-    this.requiredDocumentAttributes = requiredDocumentAttributes;
-  }
-
-  /**
-   * Constructs a new {@code DocumentDefinition}.
-   *
-   * @param id ID for the document definition
-   * @param categoryId the ID for the document definition category the document definition is
-   *     associated with
-   * @param tenantId ID for the tenant the document definition is specific to
-   * @param name name of the document definition
-   * @param description the description for the document definition
+   * @param templateId the ID for the document template for the document definition
    * @param requiredDocumentAttributes the required attributes for a document associated with the
    *     document definition
    */
@@ -290,12 +168,14 @@ public class DocumentDefinition implements Serializable {
       UUID tenantId,
       String name,
       String description,
+      String templateId,
       List<RequiredDocumentAttribute> requiredDocumentAttributes) {
     this.id = id;
     this.categoryId = categoryId;
     this.tenantId = tenantId;
     this.name = name;
     this.description = description;
+    this.templateId = templateId;
     this.requiredDocumentAttributes = requiredDocumentAttributes;
   }
 
@@ -370,6 +250,15 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
+   * Returns the ID for the document template for the document definition.
+   *
+   * @return the ID for the document template for the document definition
+   */
+  public String getTemplateId() {
+    return templateId;
+  }
+
+  /**
    * Returns the ID for the tenant the document definition is specific to.
    *
    * @return the ID for the tenant the document definition is specific to
@@ -434,6 +323,15 @@ public class DocumentDefinition implements Serializable {
   public void setRequiredDocumentAttributes(
       List<RequiredDocumentAttribute> requiredDocumentAttributes) {
     this.requiredDocumentAttributes = requiredDocumentAttributes;
+  }
+
+  /**
+   * Set the ID for the document template for the document definition.
+   *
+   * @param templateId the ID for the document template for the document definition
+   */
+  public void setTemplateId(String templateId) {
+    this.templateId = templateId;
   }
 
   /**

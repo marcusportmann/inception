@@ -19,6 +19,7 @@ package digital.inception.operations.model;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
@@ -32,18 +33,23 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum WorkflowPermissionType implements CodeEnum {
 
   /** Cancel Workflow. */
+  @XmlEnumValue("CancelWorkflow")
   CANCEL_WORKFLOW("cancel_workflow", "Cancel Workflow"),
 
   /** Initiate Workflow. */
+  @XmlEnumValue("InitiateWorkflow")
   INITIATE_WORKFLOW("initiate_workflow", "Initiate Workflow"),
 
   /** Suspend Workflow. */
+  @XmlEnumValue("SuspendWorkflow")
   SUSPEND_WORKFLOW("suspend_workflow", "Suspend Workflow"),
 
   /** Unsuspend Workflow. */
+  @XmlEnumValue("UnsuspendWorkflow")
   UNSUSPEND_WORKFLOW("unsuspend_workflow", "Unsuspend Workflow"),
 
   /** View Workflow. */
+  @XmlEnumValue("ViewWorkflow")
   VIEW_WORKFLOW("view_workflow", "View Workflow");
 
   private final String code;

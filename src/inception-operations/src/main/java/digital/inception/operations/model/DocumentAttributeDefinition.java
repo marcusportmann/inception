@@ -98,6 +98,7 @@ public class DocumentAttributeDefinition implements Serializable {
       description = "The name of the document attribute",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
+  @XmlElement(name = "Name")
   @NotNull
   @Size(min = 1, max = 100)
   @Column(name = "name", length = 100, nullable = false)

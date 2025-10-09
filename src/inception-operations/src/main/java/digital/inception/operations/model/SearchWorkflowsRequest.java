@@ -186,9 +186,9 @@ public class SearchWorkflowsRequest implements Serializable {
   private SortDirection sortDirection;
 
   /** The status search criteria to apply to the workflows. */
-  @Schema(description = "The ID for the workflow")
+  @Schema(description = "The status search criteria to apply to the workflows")
   @JsonProperty
-  @XmlElement(name = "WorkflowDefinitionId")
+  @XmlElement(name = "Status")
   private WorkflowStatus status;
 
   /**

@@ -38,7 +38,6 @@ import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
-import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentExternalReference;
 import digital.inception.operations.model.ExternalReferenceSearchCriteria;
 import digital.inception.operations.model.ExternalReferenceType;
@@ -266,7 +265,11 @@ public class EndToEndTests {
         new DocumentDefinition(
             "test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
-            "Test Document Definition");
+            null,
+            "Test Document Definition",
+            null,
+            null,
+            null);
 
     documentService.createDocumentDefinition(documentDefinition);
 
@@ -274,7 +277,11 @@ public class EndToEndTests {
         new DocumentDefinition(
             "another_test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
-            "Another Test Document Definition");
+            null,
+            "Another Test Document Definition",
+            null,
+            null,
+            null);
 
     documentService.createDocumentDefinition(anotherDocumentDefinition);
 
@@ -732,13 +739,13 @@ public class EndToEndTests {
     }
 
     for (String documentDefinitionCategoryId : List.of(documentDefinitionCategory.getId())) {
-      List<DocumentDefinitionSummary> documentDefinitionSummaries =
-          documentService.getDocumentDefinitionSummaries(
+      List<DocumentDefinition> documentDefinitions =
+          documentService.getDocumentDefinitions(
               TenantUtil.DEFAULT_TENANT_ID, documentDefinitionCategoryId);
 
       // Delete the document definitions
       for (String documentDefinitionId :
-          documentDefinitionSummaries.stream().map(DocumentDefinitionSummary::getId).toList()) {
+          documentDefinitions.stream().map(DocumentDefinition::getId).toList()) {
 
         documentService.deleteDocumentDefinition(documentDefinitionId);
       }
@@ -813,7 +820,11 @@ public class EndToEndTests {
         new DocumentDefinition(
             "test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
-            "Test Document Definition");
+            null,
+            "Test Document Definition",
+            null,
+            null,
+            null);
 
     documentService.createDocumentDefinition(documentDefinition);
 
@@ -821,7 +832,11 @@ public class EndToEndTests {
         new DocumentDefinition(
             "another_test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
-            "Another Test Document Definition");
+            null,
+            "Another Test Document Definition",
+            null,
+            null,
+            null);
 
     documentService.createDocumentDefinition(anotherDocumentDefinition);
 

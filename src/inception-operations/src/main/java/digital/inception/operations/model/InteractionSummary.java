@@ -96,7 +96,7 @@ public class InteractionSummary implements Serializable {
   /** The date and time the interaction was assigned. */
   @Schema(description = "The date and time the interaction was assigned")
   @JsonProperty
-  @XmlElement(name = "Timestamp")
+  @XmlElement(name = "Assigned")
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   private OffsetDateTime assigned;

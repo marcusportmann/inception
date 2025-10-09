@@ -59,7 +59,7 @@ import java.util.UUID;
   "status",
   "securityCodeHash"
 })
-@XmlRootElement(name = "GroupMember", namespace = "https://inception.digital/security")
+@XmlRootElement(name = "PasswordReset", namespace = "https://inception.digital/security")
 @XmlType(
     name = "PasswordReset",
     namespace = "https://inception.digital/security",
@@ -130,7 +130,7 @@ public class PasswordReset implements Serializable {
       description = "The status of the password reset",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "Reason", required = true)
+  @XmlElement(name = "Status", required = true)
   @NotNull
   @Column(name = "status", length = 50, nullable = false)
   private PasswordResetStatus status;

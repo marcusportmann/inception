@@ -34,7 +34,6 @@ import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
-import digital.inception.operations.model.DocumentDefinitionSummary;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
@@ -1122,29 +1121,27 @@ public interface DocumentApiController {
           ServiceUnavailableException;
 
   /**
-   * Retrieve the summaries for the document definitions associated with the document definition
-   * category with the specified ID.
+   * Retrieve the document definitions associated with the document definition category with the
+   * specified ID.
    *
    * @param tenantId the ID for the tenant
    * @param documentDefinitionCategoryId the ID for the document definition category the document
    *     definitions are associated with
-   * @return the summaries for the document definitions associated with the document definition
-   *     category with the specified ID
+   * @return the document definitions associated with the document definition category with the
+   *     specified ID
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionCategoryNotFoundException if the document definition category could
    *     not be found
-   * @throws ServiceUnavailableException if the document definition summaries could not be retrieved
+   * @throws ServiceUnavailableException if the document definitions could not be retrieved
    */
   @Operation(
       summary =
-          "Retrieve the summaries for the document definitions associated with the document definition category",
+          "Retrieve the document definitions associated with the document definition category",
       description =
-          "Retrieve the summaries for the document definitions associated with the document definition category")
+          "Retrieve the document definitions associated with the document definition category")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "The document definition summaries were retrieved"),
+        @ApiResponse(responseCode = "200", description = "The document definitions were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1169,14 +1166,13 @@ public interface DocumentApiController {
                     schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value =
-          "/document-definition-categories/{documentDefinitionCategoryId}/document-definition-summaries",
+      value = "/document-definition-categories/{documentDefinitionCategoryId}/document-definitions",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  List<DocumentDefinitionSummary> getDocumentDefinitionSummariesForDocumentDefinitionCategory(
+  List<DocumentDefinition> getDocumentDefinitionsForDocumentDefinitionCategory(
       @Parameter(
               name = "Tenant-ID",
               description = "The ID for the tenant",

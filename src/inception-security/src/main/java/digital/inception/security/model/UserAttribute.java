@@ -43,7 +43,7 @@ import java.util.List;
 @Schema(description = "A user attribute in the form of a name-value pair")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
-@XmlRootElement(name = "Attribute", namespace = "https://inception.digital/security")
+@XmlRootElement(name = "UserAttribute", namespace = "https://inception.digital/security")
 @XmlType(
     name = "UserAttribute",
     namespace = "https://inception.digital/security",

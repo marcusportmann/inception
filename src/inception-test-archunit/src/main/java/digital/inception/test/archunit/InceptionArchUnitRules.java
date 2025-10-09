@@ -77,5 +77,10 @@ public final class InceptionArchUnitRules {
      * Check the ArchUnit rules for the Inception Scheduler module.
      */
     SchedulerConventionsRules.check(classes);
+
+    /*
+     * Check the ArchUnit rules for XML.
+     */
+    XmlConventionsRules.check(classes);
   }
 }

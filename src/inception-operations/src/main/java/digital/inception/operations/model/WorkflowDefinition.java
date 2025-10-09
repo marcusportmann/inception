@@ -276,6 +276,8 @@ public class WorkflowDefinition implements Serializable {
       description =
           "The codes for the required external reference types for the workflow definition")
   @JsonProperty
+  @XmlElementWrapper(name = "RequiredExternalReferenceTypes")
+  @XmlElement(name = "RequiredExternalReferenceType")
   @Size(max = 10)
   @Convert(converter = StringListAttributeConverter.class)
   @Column(name = "required_external_reference_types", length = 510)
@@ -284,6 +286,8 @@ public class WorkflowDefinition implements Serializable {
   /** The supported workflow form types for the workflow definition. */
   @Schema(description = "The supported workflow form types for the workflow definition")
   @JsonProperty
+  @XmlElementWrapper(name = "SupportedWorkflowFormTypes")
+  @XmlElement(name = "SupportedWorkflowFormType")
   @Size(max = 10)
   @Convert(converter = WorkflowFormTypeListAttributeConverter.class)
   @Column(name = "supported_workflow_form_types", length = 510)

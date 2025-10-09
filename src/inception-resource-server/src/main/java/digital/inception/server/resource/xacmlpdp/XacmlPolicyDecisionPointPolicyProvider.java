@@ -18,6 +18,8 @@ package digital.inception.server.resource.xacmlpdp;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import org.ow2.authzforce.xmlns.pdp.ext.AbstractPolicyProvider;
 
@@ -30,18 +32,23 @@ import org.ow2.authzforce.xmlns.pdp.ext.AbstractPolicyProvider;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XacmlPolicyDecisionPointPolicyProvider")
+@XmlRootElement(name = "XacmlPolicyDecisionPointPolicyProvider")
 public class XacmlPolicyDecisionPointPolicyProvider extends AbstractPolicyProvider {
 
   /** Should policy sets and policies be loaded from the classpath under pdp/policies? */
+  @XmlElement(name = "ClasspathPoliciesEnabled")
   private Boolean classpathPoliciesEnabled;
 
   /** Should policy sets and policies be loaded by invoking an external API. */
+  @XmlElement(name = "ExternalPoliciesEnabled")
   private Boolean externalPoliciesEnabled;
 
   /** The external API endpoint used to retrieve policy sets and policies. */
+  @XmlElement(name = "ExternalPoliciesEndpoint")
   private String externalPoliciesEndpoint;
 
   /** The reload period in seconds for external policies. */
+  @XmlElement(name = "ExternalPoliciesReloadPeriod")
   private int externalPoliciesReloadPeriod;
 
   /** Constructs a new {@code XacmlPolicyDecisionPointPolicyProvider}. */

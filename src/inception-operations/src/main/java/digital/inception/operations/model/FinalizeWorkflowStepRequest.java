@@ -55,6 +55,7 @@ public class FinalizeWorkflowStepRequest implements Serializable {
   /** The code for the next workflow step to initiate. */
   @Schema(description = "The code for the next workflow step to initiate")
   @JsonProperty
+  @XmlElement(name = "NextStep")
   @Size(min = 1, max = 50)
   private String nextStep;
 

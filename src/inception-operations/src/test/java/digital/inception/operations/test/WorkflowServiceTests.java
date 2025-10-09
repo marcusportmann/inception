@@ -304,7 +304,10 @@ public class WorkflowServiceTests {
         new DocumentDefinition(
             "test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
+            null,
             "Test Document Definition",
+            null,
+            null,
             List.of(RequiredDocumentAttribute.EXPIRY_DATE, RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(documentDefinition);
@@ -313,7 +316,11 @@ public class WorkflowServiceTests {
         new DocumentDefinition(
             "another_test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
-            "Another Test Document Definition");
+            null,
+            "Another Test Document Definition",
+            null,
+            null,
+            null);
 
     documentService.createDocumentDefinition(anotherDocumentDefinition);
 
@@ -1110,7 +1117,10 @@ public class WorkflowServiceTests {
         new DocumentDefinition(
             "test_shared_document_definition_" + randomId(),
             sharedDocumentDefinitionCategory.getId(),
+            null,
             "Test Shared Document Definition",
+            null,
+            null,
             List.of(RequiredDocumentAttribute.EXPIRY_DATE, RequiredDocumentAttribute.ISSUE_DATE));
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
@@ -1120,7 +1130,10 @@ public class WorkflowServiceTests {
             "test_tenant_document_definition_" + randomId(),
             tenantDocumentDefinitionCategory.getId(),
             TenantUtil.DEFAULT_TENANT_ID,
-            "Test Tenant Document Definition");
+            "Test Tenant Document Definition",
+            null,
+            null,
+            null);
 
     documentService.createDocumentDefinition(tenantDocumentDefinition);
 

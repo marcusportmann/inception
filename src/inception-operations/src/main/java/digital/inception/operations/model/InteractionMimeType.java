@@ -33,11 +33,11 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum InteractionMimeType implements CodeEnum {
 
   /** Text/Plain. */
-  @XmlEnumValue("text/plain")
+  @XmlEnumValue("TextPlain")
   TEXT_PLAIN("text/plain", "Text/Plain"),
 
   /** Text/HTML. */
-  @XmlEnumValue("text/html")
+  @XmlEnumValue("TextHtml")
   TEXT_HTML("text/html", "Text/HTML");
 
   private final String code;
