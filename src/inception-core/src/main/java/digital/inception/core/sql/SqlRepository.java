@@ -89,9 +89,9 @@ public class SqlRepository {
   public SqlRepository(ApplicationContext applicationContext) {
     Environment environment = applicationContext.getEnvironment();
 
-    boolean enabled = environment.getProperty("nova.sql.enabled", Boolean.class, Boolean.TRUE);
-    String basePath = environment.getProperty("nova.sql.base-path", "sql").trim();
-    String vendor = environment.getProperty("nova.sql.vendor", "").trim();
+    boolean enabled = environment.getProperty("inception.sql.enabled", Boolean.class, Boolean.TRUE);
+    String basePath = environment.getProperty("inception.sql.base-path", "sql").trim();
+    String vendor = environment.getProperty("inception.sql.vendor", "").trim();
 
     // Attempt to determine the database vendor from the application data source
     if (!StringUtils.hasText(vendor)) {
@@ -132,7 +132,7 @@ public class SqlRepository {
     }
 
     if (!enabled) {
-      log.debug("SQL loading disabled via property 'nova.sql.enabled=false'");
+      log.debug("SQL loading disabled via property 'inception.sql.enabled=false'");
       this.sql = Collections.emptyMap();
       return;
     }
