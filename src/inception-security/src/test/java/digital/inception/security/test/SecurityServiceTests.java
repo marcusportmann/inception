@@ -141,112 +141,6 @@ public class SecurityServiceTests {
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
-  private static synchronized Policy getInternalClientAccessPolicy() {
-    Policy policy = new Policy();
-
-    policy.setId("InternalClientAccess");
-    policy.setVersion("1.0");
-    policy.setName("Internal Client Access Policy");
-    policy.setType(PolicyType.XACML_POLICY);
-    policy.setData(
-        ResourceUtil.getStringClasspathResource("pdp/policies/InternalClientAccessPolicy.xml"));
-
-    return policy;
-  }
-
-  private static synchronized User getNumberedTestUserDetails(UUID userDirectoryId, int number) {
-    User user = new User();
-
-    user.setUserDirectoryId(userDirectoryId);
-    user.setUsername("Numbered Test Username " + number);
-    user.setStatus(UserStatus.ACTIVE);
-    user.setEmail("testing" + String.format("%03d", number) + "@inception.digital");
-    user.setName("Numbered Test Name " + number);
-    user.setPreferredName("Numbered Test Preferred Name " + number);
-    user.setPhoneNumber("Numbered Test Phone Number " + number);
-    user.setMobileNumber("+2782666" + String.format("%03d", number));
-    user.setPassword("Numbered Test Password " + number);
-
-    return user;
-  }
-
-  private static synchronized Function getTestFunctionDetails() {
-    functionCount++;
-
-    Function function = new Function();
-
-    function.setCode("TestFunctionCode" + functionCount);
-    function.setName("Test Function Name " + functionCount);
-    function.setDescription("Test Function Description " + functionCount);
-
-    return function;
-  }
-
-  private static synchronized Group getTestGroupDetails(UUID userDirectoryId) {
-    groupCount++;
-
-    Group group = new Group();
-
-    group.setUserDirectoryId(userDirectoryId);
-    group.setName("Test Group " + groupCount);
-    group.setDescription("Test Group Description " + groupCount);
-
-    return group;
-  }
-
-  private static synchronized Tenant getTestTenantDetails() {
-    tenantCount++;
-
-    Tenant tenant = new Tenant();
-
-    tenant.setId(UuidCreator.getTimeOrderedEpoch());
-    tenant.setName("Test Tenant Name " + tenantCount);
-    tenant.setStatus(TenantStatus.ACTIVE);
-
-    return tenant;
-  }
-
-  private static synchronized User getTestUserDetails(UUID userDirectoryId) {
-    userCount++;
-
-    User user = new User();
-
-    user.setUserDirectoryId(userDirectoryId);
-    user.setUsername("Test User Username " + userCount);
-    user.setStatus(UserStatus.ACTIVE);
-    user.setEmail("test" + String.format("%03d", userCount) + "@inception.digital");
-    user.setName("Test User Name " + userCount);
-    user.setPreferredName("Test User Preferred Name " + userCount);
-    user.setPhoneNumber("Test User Phone Number " + userCount);
-    user.setMobileNumber("+2782555" + String.format("%03d", userCount));
-    user.setPassword("Test User Password " + userCount);
-
-    return user;
-  }
-
-  private static synchronized UserDirectory getTestUserDirectoryDetails() throws Exception {
-    userDirectoryCount++;
-
-    UserDirectory userDirectory = new UserDirectory();
-
-    userDirectory.setId(UuidCreator.getTimeOrderedEpoch());
-    userDirectory.setType(SecurityServiceImpl.INTERNAL_USER_DIRECTORY_TYPE);
-    userDirectory.setName("Test User Directory Name " + userDirectoryCount);
-
-    String buffer =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "
-            + "SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>"
-            + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
-            + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
-            + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"
-            + "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>"
-            + "</userDirectory>";
-
-    userDirectory.setConfiguration(buffer);
-
-    return userDirectory;
-  }
-
   /** Test the functionality to add a user to a group. */
   @Test
   public void addUserToGroupTest() throws Exception {
@@ -361,113 +255,6 @@ public class SecurityServiceTests {
     assertEquals(
         userDirectory.getId(), userDirectoryId, "The correct user directory ID was not returned");
   }
-
-  //  /** Test the name-value attribute functionality. */
-  //  @Test
-  //  public void attributeTest() throws AttributeException {
-  //    byte[] byteArrayValue = "Hello World".getBytes();
-  //
-  //    BigDecimal bigDecimalValue = new BigDecimal(12345.12345);
-  //
-  //    double doubleValue = 12345.12345;
-  //
-  //    long longValue = 12345L;
-  //
-  //    String stringValue = "Hello World";
-  //
-  //    List<Attribute> attributes = new ArrayList<>();
-  //
-  //    Attribute bigDecimalAttribute = new Attribute("BigDecimal", bigDecimalValue);
-  //    attributes.add(bigDecimalAttribute);
-  //
-  //    Attribute binaryBufferAttribute =
-  //        new Attribute("BinaryBuffer", new BinaryBuffer(byteArrayValue));
-  //    attributes.add(binaryBufferAttribute);
-  //
-  //    Attribute byteArrayAttribute = new Attribute("ByteArray", byteArrayValue);
-  //    attributes.add(byteArrayAttribute);
-  //
-  //    Attribute doubleAttribute = new Attribute("Double", doubleValue);
-  //    attributes.add(doubleAttribute);
-  //
-  //    Attribute longAttribute = new Attribute("Long", longValue);
-  //    attributes.add(longAttribute);
-  //
-  //    Attribute stringAttribute = new Attribute("String", stringValue);
-  //    attributes.add(stringAttribute);
-  //
-  //    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "ByteArray"));
-  //
-  //    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "BinaryBuffer"));
-  //
-  //    assertEquals(bigDecimalValue, Attribute.getDecimalValue(attributes, "BigDecimal"));
-  //
-  //    assertEquals(doubleValue, Attribute.getDoubleValue(attributes, "Double"), 0);
-  //
-  //    assertEquals(longValue, Attribute.getLongValue(attributes, "Long"));
-  //
-  //    assertEquals(stringValue, Attribute.getStringValue(attributes, "String"));
-  //
-  //    Attribute.setBinaryValue(attributes, "BinaryBuffer", new BinaryBuffer(byteArrayValue));
-  //
-  //    Attribute.setBinaryValue(attributes, "ByteArray", byteArrayValue);
-  //
-  //    Attribute.setDecimalValue(attributes, "BigDecimal", bigDecimalValue);
-  //
-  //    Attribute.setDoubleValue(attributes, "Double", doubleValue);
-  //
-  //    Attribute.setLongValue(attributes, "Long", longValue);
-  //
-  //    Attribute.setStringValue(attributes, "String", stringValue);
-  //
-  //    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
-  //
-  //    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
-  //
-  //    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
-  //
-  //    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
-  //
-  //    assertEquals(longValue, longAttribute.getLongValue());
-  //
-  //    assertEquals(stringValue, stringAttribute.getStringValue());
-  //
-  //    binaryBufferAttribute.setBinaryValue(new BinaryBuffer(byteArrayValue));
-  //
-  //    byteArrayAttribute.setBinaryValue(byteArrayValue);
-  //
-  //    bigDecimalAttribute.setDecimalValue(bigDecimalValue);
-  //
-  //    doubleAttribute.setDoubleValue(doubleValue);
-  //
-  //    longAttribute.setLongValue(longValue);
-  //
-  //    stringAttribute.setStringValue(stringValue);
-  //
-  //    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
-  //
-  //    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
-  //
-  //    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
-  //
-  //    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
-  //
-  //    assertEquals(longValue, longAttribute.getLongValue());
-  //
-  //    assertEquals(stringValue, stringAttribute.getStringValue());
-  //
-  //    assertEquals("BinaryBuffer", binaryBufferAttribute.getName());
-  //
-  //    assertEquals("ByteArray", byteArrayAttribute.getName());
-  //
-  //    assertEquals("BigDecimal", bigDecimalAttribute.getName());
-  //
-  //    assertEquals("Double", doubleAttribute.getName());
-  //
-  //    assertEquals("Long", longAttribute.getName());
-  //
-  //    assertEquals("String", stringAttribute.getName());
-  //  }
 
   /** Test the functionality to delete a group with existing members. */
   @Test
@@ -615,6 +402,113 @@ public class SecurityServiceTests {
           securityService.createTenant(tenant, false);
         });
   }
+
+  //  /** Test the name-value attribute functionality. */
+  //  @Test
+  //  public void attributeTest() throws AttributeException {
+  //    byte[] byteArrayValue = "Hello World".getBytes();
+  //
+  //    BigDecimal bigDecimalValue = new BigDecimal(12345.12345);
+  //
+  //    double doubleValue = 12345.12345;
+  //
+  //    long longValue = 12345L;
+  //
+  //    String stringValue = "Hello World";
+  //
+  //    List<Attribute> attributes = new ArrayList<>();
+  //
+  //    Attribute bigDecimalAttribute = new Attribute("BigDecimal", bigDecimalValue);
+  //    attributes.add(bigDecimalAttribute);
+  //
+  //    Attribute binaryBufferAttribute =
+  //        new Attribute("BinaryBuffer", new BinaryBuffer(byteArrayValue));
+  //    attributes.add(binaryBufferAttribute);
+  //
+  //    Attribute byteArrayAttribute = new Attribute("ByteArray", byteArrayValue);
+  //    attributes.add(byteArrayAttribute);
+  //
+  //    Attribute doubleAttribute = new Attribute("Double", doubleValue);
+  //    attributes.add(doubleAttribute);
+  //
+  //    Attribute longAttribute = new Attribute("Long", longValue);
+  //    attributes.add(longAttribute);
+  //
+  //    Attribute stringAttribute = new Attribute("String", stringValue);
+  //    attributes.add(stringAttribute);
+  //
+  //    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "ByteArray"));
+  //
+  //    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "BinaryBuffer"));
+  //
+  //    assertEquals(bigDecimalValue, Attribute.getDecimalValue(attributes, "BigDecimal"));
+  //
+  //    assertEquals(doubleValue, Attribute.getDoubleValue(attributes, "Double"), 0);
+  //
+  //    assertEquals(longValue, Attribute.getLongValue(attributes, "Long"));
+  //
+  //    assertEquals(stringValue, Attribute.getStringValue(attributes, "String"));
+  //
+  //    Attribute.setBinaryValue(attributes, "BinaryBuffer", new BinaryBuffer(byteArrayValue));
+  //
+  //    Attribute.setBinaryValue(attributes, "ByteArray", byteArrayValue);
+  //
+  //    Attribute.setDecimalValue(attributes, "BigDecimal", bigDecimalValue);
+  //
+  //    Attribute.setDoubleValue(attributes, "Double", doubleValue);
+  //
+  //    Attribute.setLongValue(attributes, "Long", longValue);
+  //
+  //    Attribute.setStringValue(attributes, "String", stringValue);
+  //
+  //    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
+  //
+  //    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
+  //
+  //    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
+  //
+  //    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
+  //
+  //    assertEquals(longValue, longAttribute.getLongValue());
+  //
+  //    assertEquals(stringValue, stringAttribute.getStringValue());
+  //
+  //    binaryBufferAttribute.setBinaryValue(new BinaryBuffer(byteArrayValue));
+  //
+  //    byteArrayAttribute.setBinaryValue(byteArrayValue);
+  //
+  //    bigDecimalAttribute.setDecimalValue(bigDecimalValue);
+  //
+  //    doubleAttribute.setDoubleValue(doubleValue);
+  //
+  //    longAttribute.setLongValue(longValue);
+  //
+  //    stringAttribute.setStringValue(stringValue);
+  //
+  //    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
+  //
+  //    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
+  //
+  //    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
+  //
+  //    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
+  //
+  //    assertEquals(longValue, longAttribute.getLongValue());
+  //
+  //    assertEquals(stringValue, stringAttribute.getStringValue());
+  //
+  //    assertEquals("BinaryBuffer", binaryBufferAttribute.getName());
+  //
+  //    assertEquals("ByteArray", byteArrayAttribute.getName());
+  //
+  //    assertEquals("BigDecimal", bigDecimalAttribute.getName());
+  //
+  //    assertEquals("Double", doubleAttribute.getName());
+  //
+  //    assertEquals("Long", longAttribute.getName());
+  //
+  //    assertEquals("String", stringAttribute.getName());
+  //  }
 
   /** Test the duplicate user functionality. */
   @Test
@@ -1765,6 +1659,112 @@ public class SecurityServiceTests {
       fail("Retrieved the user (" + user.getUsername() + ") that should have been deleted");
     } catch (UserNotFoundException ignored) {
     }
+  }
+
+  private static synchronized Policy getInternalClientAccessPolicy() {
+    Policy policy = new Policy();
+
+    policy.setId("InternalClientAccess");
+    policy.setVersion("1.0");
+    policy.setName("Internal Client Access Policy");
+    policy.setType(PolicyType.XACML_POLICY);
+    policy.setData(
+        ResourceUtil.getStringClasspathResource("pdp/policies/InternalClientAccessPolicy.xml"));
+
+    return policy;
+  }
+
+  private static synchronized User getNumberedTestUserDetails(UUID userDirectoryId, int number) {
+    User user = new User();
+
+    user.setUserDirectoryId(userDirectoryId);
+    user.setUsername("Numbered Test Username " + number);
+    user.setStatus(UserStatus.ACTIVE);
+    user.setEmail("testing" + String.format("%03d", number) + "@inception.digital");
+    user.setName("Numbered Test Name " + number);
+    user.setPreferredName("Numbered Test Preferred Name " + number);
+    user.setPhoneNumber("Numbered Test Phone Number " + number);
+    user.setMobileNumber("+2782666" + String.format("%03d", number));
+    user.setPassword("Numbered Test Password " + number);
+
+    return user;
+  }
+
+  private static synchronized Function getTestFunctionDetails() {
+    functionCount++;
+
+    Function function = new Function();
+
+    function.setCode("TestFunctionCode" + functionCount);
+    function.setName("Test Function Name " + functionCount);
+    function.setDescription("Test Function Description " + functionCount);
+
+    return function;
+  }
+
+  private static synchronized Group getTestGroupDetails(UUID userDirectoryId) {
+    groupCount++;
+
+    Group group = new Group();
+
+    group.setUserDirectoryId(userDirectoryId);
+    group.setName("Test Group " + groupCount);
+    group.setDescription("Test Group Description " + groupCount);
+
+    return group;
+  }
+
+  private static synchronized Tenant getTestTenantDetails() {
+    tenantCount++;
+
+    Tenant tenant = new Tenant();
+
+    tenant.setId(UuidCreator.getTimeOrderedEpoch());
+    tenant.setName("Test Tenant Name " + tenantCount);
+    tenant.setStatus(TenantStatus.ACTIVE);
+
+    return tenant;
+  }
+
+  private static synchronized User getTestUserDetails(UUID userDirectoryId) {
+    userCount++;
+
+    User user = new User();
+
+    user.setUserDirectoryId(userDirectoryId);
+    user.setUsername("Test User Username " + userCount);
+    user.setStatus(UserStatus.ACTIVE);
+    user.setEmail("test" + String.format("%03d", userCount) + "@inception.digital");
+    user.setName("Test User Name " + userCount);
+    user.setPreferredName("Test User Preferred Name " + userCount);
+    user.setPhoneNumber("Test User Phone Number " + userCount);
+    user.setMobileNumber("+2782555" + String.format("%03d", userCount));
+    user.setPassword("Test User Password " + userCount);
+
+    return user;
+  }
+
+  private static synchronized UserDirectory getTestUserDirectoryDetails() throws Exception {
+    userDirectoryCount++;
+
+    UserDirectory userDirectory = new UserDirectory();
+
+    userDirectory.setId(UuidCreator.getTimeOrderedEpoch());
+    userDirectory.setType(SecurityServiceImpl.INTERNAL_USER_DIRECTORY_TYPE);
+    userDirectory.setName("Test User Directory Name " + userDirectoryCount);
+
+    String buffer =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "
+            + "SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>"
+            + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
+            + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
+            + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"
+            + "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>"
+            + "</userDirectory>";
+
+    userDirectory.setConfiguration(buffer);
+
+    return userDirectory;
   }
 
   private void compareFunctions(Function function1, Function function2) {

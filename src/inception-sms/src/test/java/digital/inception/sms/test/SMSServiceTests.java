@@ -69,16 +69,6 @@ public class SMSServiceTests {
   /** The SMS Service. */
   @Autowired private SMSService smsService;
 
-  private static synchronized SMS getTestSMSDetails() {
-    SMS sms = new SMS();
-    sms.setId(UuidCreator.getTimeOrderedEpoch());
-    sms.setMobileNumber("0832763107");
-    sms.setMessage("Testing 1.. 2.. 3..");
-    sms.setStatus(SMSStatus.SENT);
-
-    return sms;
-  }
-
   /** Test the get number of SMS credits remaining functionality. */
   @Test
   public void getNumberOfSMSCreditsRemainingTest() throws Exception {
@@ -160,6 +150,16 @@ public class SMSServiceTests {
 
     assertEquals(
         SMSStatus.FAILED, retrievedSMS.getStatus(), "The status for the SMS is not correct");
+  }
+
+  private static synchronized SMS getTestSMSDetails() {
+    SMS sms = new SMS();
+    sms.setId(UuidCreator.getTimeOrderedEpoch());
+    sms.setMobileNumber("0832763107");
+    sms.setMessage("Testing 1.. 2.. 3..");
+    sms.setStatus(SMSStatus.SENT);
+
+    return sms;
   }
 
   private void compareSMSs(SMS sms1, SMS sms2) {

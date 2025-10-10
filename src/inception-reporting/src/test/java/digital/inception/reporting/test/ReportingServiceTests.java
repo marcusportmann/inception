@@ -73,20 +73,6 @@ public class ReportingServiceTests {
   /** The Reporting Service. */
   @Autowired private ReportingService reportingService;
 
-  private static synchronized ReportDefinition getTestReportDefinitionDetails() {
-    reportDefinitionCount++;
-
-    byte[] testReportTemplate =
-        ResourceUtil.getClasspathResource("digital/inception/reporting/test/TestReport.jasper");
-
-    ReportDefinition reportDefinition = new ReportDefinition();
-    reportDefinition.setId("TestReport" + reportDefinitionCount);
-    reportDefinition.setName("Test Report Definition " + reportDefinitionCount);
-    reportDefinition.setTemplate(testReportTemplate);
-
-    return reportDefinition;
-  }
-
   /** Test the create report PDF functionality. */
   @Test
   public void createReportPDFTest() throws Exception {
@@ -175,6 +161,20 @@ public class ReportingServiceTests {
       fail("The report definition that should have been deleted was retrieved successfully");
     } catch (ReportDefinitionNotFoundException ignored) {
     }
+  }
+
+  private static synchronized ReportDefinition getTestReportDefinitionDetails() {
+    reportDefinitionCount++;
+
+    byte[] testReportTemplate =
+        ResourceUtil.getClasspathResource("digital/inception/reporting/test/TestReport.jasper");
+
+    ReportDefinition reportDefinition = new ReportDefinition();
+    reportDefinition.setId("TestReport" + reportDefinitionCount);
+    reportDefinition.setName("Test Report Definition " + reportDefinitionCount);
+    reportDefinition.setTemplate(testReportTemplate);
+
+    return reportDefinition;
   }
 
   private void compareReportDefinitionToReportDefinitionSummary(

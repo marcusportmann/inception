@@ -65,15 +65,6 @@ public class UserTransactionProxy implements UserTransaction {
     this.userTransaction = userTransaction;
   }
 
-  /**
-   * Returns the active transaction stack traces for the current thread.
-   *
-   * @return the active transaction stack traces for the current thread
-   */
-  static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces() {
-    return activeTransactionStackTraces.get();
-  }
-
   @Override
   public void begin() throws NotSupportedException, SystemException {
     try {
@@ -137,6 +128,15 @@ public class UserTransactionProxy implements UserTransaction {
   @Override
   public void setTransactionTimeout(int i) throws SystemException {
     userTransaction.setTransactionTimeout(i);
+  }
+
+  /**
+   * Returns the active transaction stack traces for the current thread.
+   *
+   * @return the active transaction stack traces for the current thread
+   */
+  static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces() {
+    return activeTransactionStackTraces.get();
   }
 
   /**

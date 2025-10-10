@@ -103,16 +103,6 @@ public class WebServiceConfiguration {
   }
 
   /**
-   * Returns the web services bean factory post processor.
-   *
-   * @return web services bean factory post processor
-   */
-  @Bean
-  protected static BeanFactoryPostProcessor webServicesBeanFactoryPostProcessor() {
-    return beanFactory -> beanFactory.registerSingleton("cxf", new SpringBus());
-  }
-
-  /**
    * Returns the Apache CXF servlet registration bean.
    *
    * @return the Apache CXF servlet registration bean
@@ -122,6 +112,16 @@ public class WebServiceConfiguration {
     CXFServlet cxfServlet = new CXFServlet();
 
     return new ServletRegistrationBean<>(cxfServlet, "/service/*");
+  }
+
+  /**
+   * Returns the web services bean factory post processor.
+   *
+   * @return web services bean factory post processor
+   */
+  @Bean
+  protected static BeanFactoryPostProcessor webServicesBeanFactoryPostProcessor() {
+    return beanFactory -> beanFactory.registerSingleton("cxf", new SpringBus());
   }
 
   /**

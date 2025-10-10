@@ -131,378 +131,6 @@ public class PartyServiceTests {
   /** The Party Service. */
   @Autowired private PartyService partyService;
 
-  private static synchronized Organization getTestBasicOrganizationDetails() {
-    com.devskiller.jfairy.producer.person.DefaultPersonProvider xxx;
-
-    Fairy fairy = Fairy.create();
-
-    com.devskiller.jfairy.producer.person.Person generatedPerson = fairy.person();
-
-    Company generatedCompany = generatedPerson.getCompany();
-
-    return new Organization(TenantUtil.DEFAULT_TENANT_ID, generatedCompany.getName());
-  }
-
-  private static synchronized Person getTestBasicPersonDetails() {
-    Fairy fairy = Fairy.create();
-
-    com.devskiller.jfairy.producer.person.Person generatedPerson =
-        fairy.person(PersonProperties.male(), PersonProperties.minAge(21));
-
-    return new Person(
-        TenantUtil.DEFAULT_TENANT_ID,
-        generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
-  }
-
-  private static synchronized Person getTestCompletePersonDetails(boolean isMarried) {
-    Fairy fairy = Fairy.create();
-
-    com.devskiller.jfairy.producer.person.Person generatedPerson =
-        fairy.person(PersonProperties.female(), PersonProperties.minAge(21));
-
-    boolean hasMiddleName = StringUtils.hasText(generatedPerson.getMiddleName());
-
-    Person person;
-
-    if (hasMiddleName) {
-      person =
-          new Person(
-              TenantUtil.DEFAULT_TENANT_ID,
-              generatedPerson.getFirstName()
-                  + " "
-                  + generatedPerson.getMiddleName()
-                  + " "
-                  + generatedPerson.getLastName());
-    } else {
-      person =
-          new Person(
-              TenantUtil.DEFAULT_TENANT_ID,
-              generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
-    }
-
-    person.setCountryOfBirth("US");
-    person.setCountryOfResidence("ZA");
-    person.setDateOfBirth(LocalDate.of(1976, 3, 7));
-    person.setEmploymentStatus("employed");
-    person.setEmploymentType("self_employed");
-    person.setGender("female");
-    person.setGivenName(generatedPerson.getFirstName());
-    person.setId(UuidCreator.getTimeOrderedEpoch());
-
-    if (hasMiddleName) {
-      person.setInitials(
-          generatedPerson.getFirstName().charAt(0)
-              + " "
-              + generatedPerson.getMiddleName().charAt(0));
-    } else {
-      person.setInitials("" + generatedPerson.getFirstName().charAt(0));
-    }
-    person.setLanguage("EN");
-
-    if (isMarried) {
-      person.setMaidenName(
-          fairy.person(PersonProperties.female(), PersonProperties.minAge(21)).getLastName());
-
-      person.setMaritalStatus("married");
-      person.setMarriageType("anc_with_accrual");
-      person.setMaritalStatusDate(LocalDate.of(2015, 10, 10));
-    } else {
-      person.setMaritalStatus("single");
-    }
-
-    person.setMeasurementSystem(MeasurementSystem.METRIC);
-    if (hasMiddleName) {
-      person.setMiddleNames(generatedPerson.getMiddleName());
-    }
-    person.setOccupation("professional_legal");
-    person.setPreferredName(generatedPerson.getFirstName());
-    person.setRace("white");
-    person.setResidencyStatus("permanent_resident");
-    person.setResidentialType("renter");
-    person.setSurname(generatedPerson.getLastName());
-    person.setTimeZone("Africa/Johannesburg");
-    person.setTitle("ms");
-
-    Attribute weightAttribute =
-        new Attribute("weight", new BigDecimal("52.7"), MeasurementUnit.METRIC_KILOGRAM);
-    weightAttribute.setDecimalValue(60);
-    weightAttribute.setDecimalValue(52.7);
-    weightAttribute.setDecimalValue(new BigDecimal("52.7"));
-
-    person.addAttribute(weightAttribute);
-
-    assertTrue(person.hasAttributeWithType("weight"));
-
-    assertTrue(
-        person.hasAttributeWithType("weight"),
-        "Failed to confirm that the person has an attribute with type (weight)");
-
-    person.setCountryOfTaxResidence("ZA");
-    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789"));
-
-    person.addContactMechanism(
-        new ContactMechanism(
-            ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27835551234"));
-
-    person.addContactMechanism(
-        new ContactMechanism(
-            ContactMechanismType.EMAIL_ADDRESS,
-            ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
-            "giveName@test.com",
-            "marketing"));
-
-    Optional<ContactMechanism> contactMechanismOptional =
-        person.getContactMechanismWithTypeAndPurpose(
-            ContactMechanismType.EMAIL_ADDRESS, "marketing");
-
-    if (contactMechanismOptional.isEmpty()) {
-      fail(
-          "Failed to retrieve the contact mechanism for the person with the type ("
-              + ContactMechanismType.EMAIL_ADDRESS
-              + ") and purpose (marketing)");
-    }
-
-    contactMechanismOptional =
-        person.getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS);
-
-    if (contactMechanismOptional.isEmpty()) {
-      fail(
-          "Failed to retrieve the contact mechanism for the person with the role ("
-              + ContactMechanismRole.PERSONAL_EMAIL_ADDRESS
-              + ")");
-    }
-
-    person.addEducation(
-        new Education(
-            "ZA",
-            "University of the Witwatersrand",
-            "bachelors_degree",
-            "Bachelor of Science in Electrical Engineering",
-            1998,
-            "electrical_engineering"));
-
-    person.setIdentificationType("za_id");
-    person.setIdentificationNumber("8904085800089");
-    person.setIdentificationIssueDate(LocalDate.of(2012, 5, 1));
-    person.setIdentificationExpiryDate(LocalDate.of(2040, 2, 28));
-    person.setIdentificationCountryOfIssue("ZA");
-
-    assertEquals("za_id", person.getIdentificationType());
-    assertEquals("8904085800089", person.getIdentificationNumber());
-    assertEquals(LocalDate.of(2012, 5, 1), person.getIdentificationIssueDate());
-    assertEquals(LocalDate.of(2040, 2, 28), person.getIdentificationExpiryDate());
-    assertEquals("ZA", person.getIdentificationCountryOfIssue());
-
-    Identification identification =
-        new Identification("za_id", "ZA", LocalDate.of(2012, 5, 1), "8904085800089");
-
-    assertEquals("ZA", identification.getCountryOfIssue());
-    assertEquals(LocalDate.of(2012, 5, 1), identification.getIssueDate());
-
-    person.addIdentification(identification);
-
-    LocalDate currentDate = LocalDate.now();
-
-    identification.setCountryOfIssue("ZA");
-    identification.setIssueDate(LocalDate.of(2014, 7, 6));
-    identification.setExpiryDate(LocalDate.of(2050, 3, 4));
-    identification.setProvidedDate(currentDate);
-
-    assertEquals("ZA", identification.getCountryOfIssue());
-    assertEquals(LocalDate.of(2014, 7, 6), identification.getIssueDate());
-    assertEquals(currentDate, identification.getProvidedDate());
-    assertEquals(LocalDate.of(2050, 3, 4), identification.getExpiryDate());
-
-    PhysicalAddress residentialAddress =
-        new PhysicalAddress(
-            PhysicalAddressType.STREET,
-            PhysicalAddressRole.RESIDENTIAL,
-            List.of(
-                new String[] {
-                  PhysicalAddressPurpose.BILLING,
-                  PhysicalAddressPurpose.CORRESPONDENCE,
-                  PhysicalAddressPurpose.DELIVERY
-                }));
-    residentialAddress.setStreetNumber("13");
-    residentialAddress.setStreetName("Kraalbessie Avenue");
-    residentialAddress.setSuburb("Weltevreden Park");
-    residentialAddress.setCity("Johannesburg");
-    residentialAddress.setRegion("ZA-GP");
-    residentialAddress.setCountry("ZA");
-    residentialAddress.setPostalCode("1709");
-
-    person.addPhysicalAddress(residentialAddress);
-
-    Optional<PhysicalAddress> physicalAddressOptional =
-        person.getPhysicalAddressWithTypeAndPurpose(
-            PhysicalAddressType.STREET, PhysicalAddressPurpose.CORRESPONDENCE);
-
-    if (physicalAddressOptional.isEmpty()) {
-      fail(
-          "Failed to retrieve the physical address for the person with the type ("
-              + PhysicalAddressType.STREET
-              + ") and purpose ("
-              + PhysicalAddressPurpose.CORRESPONDENCE
-              + ")");
-    }
-
-    physicalAddressOptional = person.getPhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL);
-
-    if (physicalAddressOptional.isEmpty()) {
-      fail(
-          "Failed to retrieve the physical address for the person with the role ("
-              + PhysicalAddressRole.RESIDENTIAL
-              + ")");
-    }
-
-    PhysicalAddress correspondenceAddress =
-        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressRole.WORK);
-
-    correspondenceAddress.setLine1("1 Galaxy Place");
-    correspondenceAddress.setLine2("Sandhurst");
-    correspondenceAddress.setCity("Sandton");
-    correspondenceAddress.setRegion("ZA-GP");
-    correspondenceAddress.setCountry("ZA");
-    correspondenceAddress.setPostalCode("2194");
-
-    person.addPhysicalAddress(correspondenceAddress);
-
-    person.addPreference(new Preference("correspondence_language", "EN"));
-
-    person.addSkill(new Skill("administration", SkillProficiencyLevel.EXPERT));
-
-    return person;
-  }
-
-  private static synchronized Person getTestForeignPersonDetails() {
-    Fairy fairy = Fairy.create();
-
-    com.devskiller.jfairy.producer.person.Person generatedPerson =
-        fairy.person(PersonProperties.male(), PersonProperties.minAge(21));
-
-    boolean hasMiddleName = StringUtils.hasText(generatedPerson.getMiddleName());
-
-    Person person;
-
-    if (hasMiddleName) {
-      person =
-          new Person(
-              TenantUtil.DEFAULT_TENANT_ID,
-              generatedPerson.getFirstName()
-                  + " "
-                  + generatedPerson.getMiddleName()
-                  + " "
-                  + generatedPerson.getLastName());
-    } else {
-      person =
-          new Person(
-              TenantUtil.DEFAULT_TENANT_ID,
-              generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
-    }
-
-    person.setCountryOfBirth("ZW");
-    person.setCountryOfResidence("ZA");
-    person.setDateOfBirth(LocalDate.of(1976, 3, 7));
-    person.setEmploymentStatus("employed");
-    person.setEmploymentType("contractor");
-    person.setGender("male");
-    person.setGivenName(generatedPerson.getFirstName());
-    person.setId(UuidCreator.getTimeOrderedEpoch());
-    if (hasMiddleName) {
-      person.setInitials(
-          generatedPerson.getFirstName().charAt(0)
-              + " "
-              + generatedPerson.getMiddleName().charAt(0));
-    } else {
-      person.setInitials("" + generatedPerson.getFirstName().charAt(0));
-    }
-    person.setLanguage("EN");
-    person.setMaritalStatus("single");
-    person.setOccupation("driver");
-    person.setPreferredName(generatedPerson.getFirstName());
-    person.setRace("black");
-    person.setResidencyStatus("foreign_national");
-    person.setResidentialType("renter");
-    person.setSurname(generatedPerson.getLastName());
-    person.setTitle("mr");
-
-    person.addContactMechanism(
-        new ContactMechanism(
-            ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27825551234"));
-
-    person.addIdentification(
-        new Identification("passport", "ZW", LocalDate.of(2010, 5, 20), "A01524783"));
-
-    person.addResidencePermit(
-        new ResidencePermit("za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "AA0187236"));
-
-    PhysicalAddress residentialAddress =
-        new PhysicalAddress(
-            PhysicalAddressType.STREET,
-            PhysicalAddressRole.RESIDENTIAL,
-            List.of(
-                new String[] {
-                  PhysicalAddressPurpose.BILLING,
-                  PhysicalAddressPurpose.CORRESPONDENCE,
-                  PhysicalAddressPurpose.DELIVERY
-                }));
-    residentialAddress.setStreetNumber("4");
-    residentialAddress.setStreetName("Princess Avenue");
-    residentialAddress.setSuburb("Windsor East");
-    residentialAddress.setCity("Johannesburg");
-    residentialAddress.setRegion("ZA-GP");
-    residentialAddress.setCountry("ZA");
-    residentialAddress.setPostalCode("2194");
-
-    person.addPhysicalAddress(residentialAddress);
-
-    return person;
-  }
-
-  private static synchronized Organization getTestOrganizationDetails() {
-    Fairy fairy = Fairy.create();
-
-    com.devskiller.jfairy.producer.person.Person generatedPerson = fairy.person();
-
-    Company generatedCompany = generatedPerson.getCompany();
-
-    Organization organization =
-        new Organization(TenantUtil.DEFAULT_TENANT_ID, generatedCompany.getName());
-
-    organization.setIdentificationType("za_company_registration_certificate");
-    organization.setIdentificationNumber("2006/123456/23");
-    organization.setIdentificationIssueDate(LocalDate.of(2006, 4, 2));
-    organization.setIdentificationExpiryDate(LocalDate.of(2040, 2, 28));
-    organization.setIdentificationCountryOfIssue("ZA");
-
-    assertEquals("za_company_registration_certificate", organization.getIdentificationType());
-    assertEquals("2006/123456/23", organization.getIdentificationNumber());
-    assertEquals(LocalDate.of(2006, 4, 2), organization.getIdentificationIssueDate());
-    assertEquals(LocalDate.of(2040, 2, 28), organization.getIdentificationExpiryDate());
-    assertEquals("ZA", organization.getIdentificationCountryOfIssue());
-
-    organization.addIdentification(
-        new Identification(
-            "za_company_registration_certificate",
-            "ZA",
-            LocalDate.of(2006, 4, 2),
-            "2006/123456/23"));
-
-    organization.addIndustryAllocation(
-        new IndustryAllocation("sars_sic", "63", LocalDate.now(), LocalDate.of(2036, 4, 2)));
-
-    organization.addRole(new Role("employer"));
-
-    return organization;
-  }
-
-  private static synchronized Party getTestPartyDetails() {
-    partyCount++;
-
-    return new Party(
-        TenantUtil.DEFAULT_TENANT_ID, PartyType.ORGANIZATION, "Party Name " + partyCount);
-  }
-
   /** Test the association functionality. */
   @Test
   public void associationTest() throws Exception {
@@ -3822,6 +3450,378 @@ public class PartyServiceTests {
     if (!constraintViolations.isEmpty()) {
       fail("Failed to successfully validate the person");
     }
+  }
+
+  private static synchronized Organization getTestBasicOrganizationDetails() {
+    com.devskiller.jfairy.producer.person.DefaultPersonProvider xxx;
+
+    Fairy fairy = Fairy.create();
+
+    com.devskiller.jfairy.producer.person.Person generatedPerson = fairy.person();
+
+    Company generatedCompany = generatedPerson.getCompany();
+
+    return new Organization(TenantUtil.DEFAULT_TENANT_ID, generatedCompany.getName());
+  }
+
+  private static synchronized Person getTestBasicPersonDetails() {
+    Fairy fairy = Fairy.create();
+
+    com.devskiller.jfairy.producer.person.Person generatedPerson =
+        fairy.person(PersonProperties.male(), PersonProperties.minAge(21));
+
+    return new Person(
+        TenantUtil.DEFAULT_TENANT_ID,
+        generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
+  }
+
+  private static synchronized Person getTestCompletePersonDetails(boolean isMarried) {
+    Fairy fairy = Fairy.create();
+
+    com.devskiller.jfairy.producer.person.Person generatedPerson =
+        fairy.person(PersonProperties.female(), PersonProperties.minAge(21));
+
+    boolean hasMiddleName = StringUtils.hasText(generatedPerson.getMiddleName());
+
+    Person person;
+
+    if (hasMiddleName) {
+      person =
+          new Person(
+              TenantUtil.DEFAULT_TENANT_ID,
+              generatedPerson.getFirstName()
+                  + " "
+                  + generatedPerson.getMiddleName()
+                  + " "
+                  + generatedPerson.getLastName());
+    } else {
+      person =
+          new Person(
+              TenantUtil.DEFAULT_TENANT_ID,
+              generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
+    }
+
+    person.setCountryOfBirth("US");
+    person.setCountryOfResidence("ZA");
+    person.setDateOfBirth(LocalDate.of(1976, 3, 7));
+    person.setEmploymentStatus("employed");
+    person.setEmploymentType("self_employed");
+    person.setGender("female");
+    person.setGivenName(generatedPerson.getFirstName());
+    person.setId(UuidCreator.getTimeOrderedEpoch());
+
+    if (hasMiddleName) {
+      person.setInitials(
+          generatedPerson.getFirstName().charAt(0)
+              + " "
+              + generatedPerson.getMiddleName().charAt(0));
+    } else {
+      person.setInitials("" + generatedPerson.getFirstName().charAt(0));
+    }
+    person.setLanguage("EN");
+
+    if (isMarried) {
+      person.setMaidenName(
+          fairy.person(PersonProperties.female(), PersonProperties.minAge(21)).getLastName());
+
+      person.setMaritalStatus("married");
+      person.setMarriageType("anc_with_accrual");
+      person.setMaritalStatusDate(LocalDate.of(2015, 10, 10));
+    } else {
+      person.setMaritalStatus("single");
+    }
+
+    person.setMeasurementSystem(MeasurementSystem.METRIC);
+    if (hasMiddleName) {
+      person.setMiddleNames(generatedPerson.getMiddleName());
+    }
+    person.setOccupation("professional_legal");
+    person.setPreferredName(generatedPerson.getFirstName());
+    person.setRace("white");
+    person.setResidencyStatus("permanent_resident");
+    person.setResidentialType("renter");
+    person.setSurname(generatedPerson.getLastName());
+    person.setTimeZone("Africa/Johannesburg");
+    person.setTitle("ms");
+
+    Attribute weightAttribute =
+        new Attribute("weight", new BigDecimal("52.7"), MeasurementUnit.METRIC_KILOGRAM);
+    weightAttribute.setDecimalValue(60);
+    weightAttribute.setDecimalValue(52.7);
+    weightAttribute.setDecimalValue(new BigDecimal("52.7"));
+
+    person.addAttribute(weightAttribute);
+
+    assertTrue(person.hasAttributeWithType("weight"));
+
+    assertTrue(
+        person.hasAttributeWithType("weight"),
+        "Failed to confirm that the person has an attribute with type (weight)");
+
+    person.setCountryOfTaxResidence("ZA");
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "0123456789"));
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27835551234"));
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismRole.PERSONAL_EMAIL_ADDRESS,
+            "giveName@test.com",
+            "marketing"));
+
+    Optional<ContactMechanism> contactMechanismOptional =
+        person.getContactMechanismWithTypeAndPurpose(
+            ContactMechanismType.EMAIL_ADDRESS, "marketing");
+
+    if (contactMechanismOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the contact mechanism for the person with the type ("
+              + ContactMechanismType.EMAIL_ADDRESS
+              + ") and purpose (marketing)");
+    }
+
+    contactMechanismOptional =
+        person.getContactMechanismWithRole(ContactMechanismRole.PERSONAL_EMAIL_ADDRESS);
+
+    if (contactMechanismOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the contact mechanism for the person with the role ("
+              + ContactMechanismRole.PERSONAL_EMAIL_ADDRESS
+              + ")");
+    }
+
+    person.addEducation(
+        new Education(
+            "ZA",
+            "University of the Witwatersrand",
+            "bachelors_degree",
+            "Bachelor of Science in Electrical Engineering",
+            1998,
+            "electrical_engineering"));
+
+    person.setIdentificationType("za_id");
+    person.setIdentificationNumber("8904085800089");
+    person.setIdentificationIssueDate(LocalDate.of(2012, 5, 1));
+    person.setIdentificationExpiryDate(LocalDate.of(2040, 2, 28));
+    person.setIdentificationCountryOfIssue("ZA");
+
+    assertEquals("za_id", person.getIdentificationType());
+    assertEquals("8904085800089", person.getIdentificationNumber());
+    assertEquals(LocalDate.of(2012, 5, 1), person.getIdentificationIssueDate());
+    assertEquals(LocalDate.of(2040, 2, 28), person.getIdentificationExpiryDate());
+    assertEquals("ZA", person.getIdentificationCountryOfIssue());
+
+    Identification identification =
+        new Identification("za_id", "ZA", LocalDate.of(2012, 5, 1), "8904085800089");
+
+    assertEquals("ZA", identification.getCountryOfIssue());
+    assertEquals(LocalDate.of(2012, 5, 1), identification.getIssueDate());
+
+    person.addIdentification(identification);
+
+    LocalDate currentDate = LocalDate.now();
+
+    identification.setCountryOfIssue("ZA");
+    identification.setIssueDate(LocalDate.of(2014, 7, 6));
+    identification.setExpiryDate(LocalDate.of(2050, 3, 4));
+    identification.setProvidedDate(currentDate);
+
+    assertEquals("ZA", identification.getCountryOfIssue());
+    assertEquals(LocalDate.of(2014, 7, 6), identification.getIssueDate());
+    assertEquals(currentDate, identification.getProvidedDate());
+    assertEquals(LocalDate.of(2050, 3, 4), identification.getExpiryDate());
+
+    PhysicalAddress residentialAddress =
+        new PhysicalAddress(
+            PhysicalAddressType.STREET,
+            PhysicalAddressRole.RESIDENTIAL,
+            List.of(
+                new String[] {
+                  PhysicalAddressPurpose.BILLING,
+                  PhysicalAddressPurpose.CORRESPONDENCE,
+                  PhysicalAddressPurpose.DELIVERY
+                }));
+    residentialAddress.setStreetNumber("13");
+    residentialAddress.setStreetName("Kraalbessie Avenue");
+    residentialAddress.setSuburb("Weltevreden Park");
+    residentialAddress.setCity("Johannesburg");
+    residentialAddress.setRegion("ZA-GP");
+    residentialAddress.setCountry("ZA");
+    residentialAddress.setPostalCode("1709");
+
+    person.addPhysicalAddress(residentialAddress);
+
+    Optional<PhysicalAddress> physicalAddressOptional =
+        person.getPhysicalAddressWithTypeAndPurpose(
+            PhysicalAddressType.STREET, PhysicalAddressPurpose.CORRESPONDENCE);
+
+    if (physicalAddressOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the physical address for the person with the type ("
+              + PhysicalAddressType.STREET
+              + ") and purpose ("
+              + PhysicalAddressPurpose.CORRESPONDENCE
+              + ")");
+    }
+
+    physicalAddressOptional = person.getPhysicalAddressWithRole(PhysicalAddressRole.RESIDENTIAL);
+
+    if (physicalAddressOptional.isEmpty()) {
+      fail(
+          "Failed to retrieve the physical address for the person with the role ("
+              + PhysicalAddressRole.RESIDENTIAL
+              + ")");
+    }
+
+    PhysicalAddress correspondenceAddress =
+        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressRole.WORK);
+
+    correspondenceAddress.setLine1("1 Galaxy Place");
+    correspondenceAddress.setLine2("Sandhurst");
+    correspondenceAddress.setCity("Sandton");
+    correspondenceAddress.setRegion("ZA-GP");
+    correspondenceAddress.setCountry("ZA");
+    correspondenceAddress.setPostalCode("2194");
+
+    person.addPhysicalAddress(correspondenceAddress);
+
+    person.addPreference(new Preference("correspondence_language", "EN"));
+
+    person.addSkill(new Skill("administration", SkillProficiencyLevel.EXPERT));
+
+    return person;
+  }
+
+  private static synchronized Person getTestForeignPersonDetails() {
+    Fairy fairy = Fairy.create();
+
+    com.devskiller.jfairy.producer.person.Person generatedPerson =
+        fairy.person(PersonProperties.male(), PersonProperties.minAge(21));
+
+    boolean hasMiddleName = StringUtils.hasText(generatedPerson.getMiddleName());
+
+    Person person;
+
+    if (hasMiddleName) {
+      person =
+          new Person(
+              TenantUtil.DEFAULT_TENANT_ID,
+              generatedPerson.getFirstName()
+                  + " "
+                  + generatedPerson.getMiddleName()
+                  + " "
+                  + generatedPerson.getLastName());
+    } else {
+      person =
+          new Person(
+              TenantUtil.DEFAULT_TENANT_ID,
+              generatedPerson.getFirstName() + " " + generatedPerson.getLastName());
+    }
+
+    person.setCountryOfBirth("ZW");
+    person.setCountryOfResidence("ZA");
+    person.setDateOfBirth(LocalDate.of(1976, 3, 7));
+    person.setEmploymentStatus("employed");
+    person.setEmploymentType("contractor");
+    person.setGender("male");
+    person.setGivenName(generatedPerson.getFirstName());
+    person.setId(UuidCreator.getTimeOrderedEpoch());
+    if (hasMiddleName) {
+      person.setInitials(
+          generatedPerson.getFirstName().charAt(0)
+              + " "
+              + generatedPerson.getMiddleName().charAt(0));
+    } else {
+      person.setInitials("" + generatedPerson.getFirstName().charAt(0));
+    }
+    person.setLanguage("EN");
+    person.setMaritalStatus("single");
+    person.setOccupation("driver");
+    person.setPreferredName(generatedPerson.getFirstName());
+    person.setRace("black");
+    person.setResidencyStatus("foreign_national");
+    person.setResidentialType("renter");
+    person.setSurname(generatedPerson.getLastName());
+    person.setTitle("mr");
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27825551234"));
+
+    person.addIdentification(
+        new Identification("passport", "ZW", LocalDate.of(2010, 5, 20), "A01524783"));
+
+    person.addResidencePermit(
+        new ResidencePermit("za_general_work_visa", "ZA", LocalDate.of(2011, 4, 2), "AA0187236"));
+
+    PhysicalAddress residentialAddress =
+        new PhysicalAddress(
+            PhysicalAddressType.STREET,
+            PhysicalAddressRole.RESIDENTIAL,
+            List.of(
+                new String[] {
+                  PhysicalAddressPurpose.BILLING,
+                  PhysicalAddressPurpose.CORRESPONDENCE,
+                  PhysicalAddressPurpose.DELIVERY
+                }));
+    residentialAddress.setStreetNumber("4");
+    residentialAddress.setStreetName("Princess Avenue");
+    residentialAddress.setSuburb("Windsor East");
+    residentialAddress.setCity("Johannesburg");
+    residentialAddress.setRegion("ZA-GP");
+    residentialAddress.setCountry("ZA");
+    residentialAddress.setPostalCode("2194");
+
+    person.addPhysicalAddress(residentialAddress);
+
+    return person;
+  }
+
+  private static synchronized Organization getTestOrganizationDetails() {
+    Fairy fairy = Fairy.create();
+
+    com.devskiller.jfairy.producer.person.Person generatedPerson = fairy.person();
+
+    Company generatedCompany = generatedPerson.getCompany();
+
+    Organization organization =
+        new Organization(TenantUtil.DEFAULT_TENANT_ID, generatedCompany.getName());
+
+    organization.setIdentificationType("za_company_registration_certificate");
+    organization.setIdentificationNumber("2006/123456/23");
+    organization.setIdentificationIssueDate(LocalDate.of(2006, 4, 2));
+    organization.setIdentificationExpiryDate(LocalDate.of(2040, 2, 28));
+    organization.setIdentificationCountryOfIssue("ZA");
+
+    assertEquals("za_company_registration_certificate", organization.getIdentificationType());
+    assertEquals("2006/123456/23", organization.getIdentificationNumber());
+    assertEquals(LocalDate.of(2006, 4, 2), organization.getIdentificationIssueDate());
+    assertEquals(LocalDate.of(2040, 2, 28), organization.getIdentificationExpiryDate());
+    assertEquals("ZA", organization.getIdentificationCountryOfIssue());
+
+    organization.addIdentification(
+        new Identification(
+            "za_company_registration_certificate",
+            "ZA",
+            LocalDate.of(2006, 4, 2),
+            "2006/123456/23"));
+
+    organization.addIndustryAllocation(
+        new IndustryAllocation("sars_sic", "63", LocalDate.now(), LocalDate.of(2036, 4, 2)));
+
+    organization.addRole(new Role("employer"));
+
+    return organization;
+  }
+
+  private static synchronized Party getTestPartyDetails() {
+    partyCount++;
+
+    return new Party(
+        TenantUtil.DEFAULT_TENANT_ID, PartyType.ORGANIZATION, "Party Name " + partyCount);
   }
 
   private void compareAssociationProperties(

@@ -686,24 +686,6 @@ public class Predictor {
     }
 
     /**
-     * This utility method changes an alias to an integer value.
-     *
-     * @param value the value
-     * @param aliases the aliases list
-     * @param offset the offset applied to the aliases list indices
-     * @return the parsed value
-     */
-    private static int parseAlias(String value, String[] aliases, int offset) throws Exception {
-      for (int i = 0; i < aliases.length; i++) {
-        if (aliases[i].equalsIgnoreCase(value)) {
-          return offset + i;
-        }
-      }
-
-      throw new Exception("Invalid alias \"%s\"".formatted(value));
-    }
-
-    /**
      * Returns {@code true} if the EPOCH timestamp in milliseconds matches the pattern, according to
      * the given time zone.
      *
@@ -766,6 +748,24 @@ public class Predictor {
      */
     public String toString() {
       return asString;
+    }
+
+    /**
+     * This utility method changes an alias to an integer value.
+     *
+     * @param value the value
+     * @param aliases the aliases list
+     * @param offset the offset applied to the aliases list indices
+     * @return the parsed value
+     */
+    private static int parseAlias(String value, String[] aliases, int offset) throws Exception {
+      for (int i = 0; i < aliases.length; i++) {
+        if (aliases[i].equalsIgnoreCase(value)) {
+          return offset + i;
+        }
+      }
+
+      throw new Exception("Invalid alias \"%s\"".formatted(value));
     }
 
     /**

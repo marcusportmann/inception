@@ -94,18 +94,6 @@ public class ExecutorServiceTests {
   /** The Jackson ObjectMapper. */
   @Autowired private ObjectMapper objectMapper;
 
-  private static String generateSuffix() {
-    StringBuilder suffix = new StringBuilder(6);
-    Random random = new Random();
-
-    for (int i = 0; i < 6; i++) {
-      char randomChar = (char) ('a' + random.nextInt(26));
-      suffix.append(randomChar);
-    }
-
-    return suffix.toString();
-  }
-
   /** Test the cancel batch functionality. */
   @Test
   public void cancelBatchTest() throws Exception {
@@ -1194,6 +1182,18 @@ public class ExecutorServiceTests {
     retrievedTask = executorService.getTask(taskId);
 
     assertEquals(TaskStatus.COMPLETED, retrievedTask.getStatus());
+  }
+
+  private static String generateSuffix() {
+    StringBuilder suffix = new StringBuilder(6);
+    Random random = new Random();
+
+    for (int i = 0; i < 6; i++) {
+      char randomChar = (char) ('a' + random.nextInt(26));
+      suffix.append(randomChar);
+    }
+
+    return suffix.toString();
   }
 
   private <TaskDataType> TaskDataType deserializeTaskData(

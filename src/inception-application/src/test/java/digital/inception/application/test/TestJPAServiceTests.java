@@ -61,15 +61,6 @@ public class TestJPAServiceTests {
 
   @Autowired private TestJPAService testJPAService;
 
-  private static synchronized TestData getTestData() {
-    testDataCount++;
-
-    return new TestData(
-        "Test Data ID " + testDataCount,
-        "Test Name " + testDataCount,
-        "Test Description " + testDataCount);
-  }
-
   /** testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback */
   @Test
   public void testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback()
@@ -443,5 +434,14 @@ public class TestJPAServiceTests {
           "Failed to invoked the Test JPA Service without an existing transaction: "
               + "Failed to retrieve the test data");
     }
+  }
+
+  private static synchronized TestData getTestData() {
+    testDataCount++;
+
+    return new TestData(
+        "Test Data ID " + testDataCount,
+        "Test Name " + testDataCount,
+        "Test Description " + testDataCount);
   }
 }

@@ -163,7 +163,9 @@ public final class XmlConventionsRules {
                     }
                   }
 
-                  if (field.isAnnotatedWith(XML_IGNORE) || field.isAnnotatedWith(XML_TRANSIENT) || field.isAnnotatedWith(TRANSIENT)) {
+                  if (field.isAnnotatedWith(XML_IGNORE)
+                      || field.isAnnotatedWith(XML_TRANSIENT)
+                      || field.isAnnotatedWith(TRANSIENT)) {
                     return;
                   }
 

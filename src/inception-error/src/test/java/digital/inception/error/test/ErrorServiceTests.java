@@ -65,20 +65,6 @@ public class ErrorServiceTests {
   /** The Error Service. */
   @Autowired private ErrorService errorService;
 
-  private static synchronized ErrorReport getTestErrorReport() {
-    return new ErrorReport(
-        UuidCreator.getTimeOrderedEpoch(),
-        "ApplicationId",
-        "ApplicationVersion",
-        "Description",
-        "Detail",
-        OffsetDateTime.now(),
-        "Who",
-        UuidCreator.getTimeOrderedEpoch(),
-        "Feedback",
-        Base64.getEncoder().encodeToString("Data".getBytes()));
-  }
-
   /** Test the error report functionality. */
   @Test
   public void errorReportTest() throws Exception {
@@ -149,6 +135,20 @@ public class ErrorServiceTests {
           errorReports.get((errorReports.size() - 1) - i).getId(),
           "The error report summary does not match the error report");
     }
+  }
+
+  private static synchronized ErrorReport getTestErrorReport() {
+    return new ErrorReport(
+        UuidCreator.getTimeOrderedEpoch(),
+        "ApplicationId",
+        "ApplicationVersion",
+        "Description",
+        "Detail",
+        OffsetDateTime.now(),
+        "Who",
+        UuidCreator.getTimeOrderedEpoch(),
+        "Feedback",
+        Base64.getEncoder().encodeToString("Data".getBytes()));
   }
 
   private void compareErrorReportAndErrorReportSummary(

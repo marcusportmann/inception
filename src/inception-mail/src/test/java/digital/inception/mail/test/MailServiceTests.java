@@ -67,21 +67,6 @@ public class MailServiceTests {
   /** The Mail Service. */
   @Autowired private MailService mailService;
 
-  private static synchronized MailTemplate getTestMailTemplateDetails() {
-    mailTemplateCount++;
-
-    byte[] testMailTemplate =
-        ResourceUtil.getClasspathResource("digital/inception/mail/test/TestMailTemplate");
-
-    MailTemplate mailTemplate = new MailTemplate();
-    mailTemplate.setId("TestMailTemplate" + mailTemplateCount);
-    mailTemplate.setName("Test Mail Template " + mailTemplateCount);
-    mailTemplate.setContentType(MailTemplateContentType.HTML);
-    mailTemplate.setTemplate(testMailTemplate);
-
-    return mailTemplate;
-  }
-
   /** Test the mail template functionality. */
   @Test
   public void mailTemplateTest() throws Exception {
@@ -169,6 +154,21 @@ public class MailServiceTests {
         "Inception",
         mailTemplate.getId(),
         mapTemplateParameters);
+  }
+
+  private static synchronized MailTemplate getTestMailTemplateDetails() {
+    mailTemplateCount++;
+
+    byte[] testMailTemplate =
+        ResourceUtil.getClasspathResource("digital/inception/mail/test/TestMailTemplate");
+
+    MailTemplate mailTemplate = new MailTemplate();
+    mailTemplate.setId("TestMailTemplate" + mailTemplateCount);
+    mailTemplate.setName("Test Mail Template " + mailTemplateCount);
+    mailTemplate.setContentType(MailTemplateContentType.HTML);
+    mailTemplate.setTemplate(testMailTemplate);
+
+    return mailTemplate;
   }
 
   private void compareMailTemplateToMailTemplateSummary(

@@ -55,27 +55,6 @@ public class TransactionAwareXAResource implements XAResource {
     this.xaResource = xaResource;
   }
 
-  private static String flagsToString(int flags) {
-    if (flags == 0) {
-      return "NONE";
-    }
-    StringBuilder sb = new StringBuilder();
-    if ((flags & XAResource.TMNOFLAGS) != 0) sb.append("TMNOFLAGS|");
-    if ((flags & XAResource.TMJOIN) != 0) sb.append("TMJOIN|");
-    if ((flags & XAResource.TMRESUME) != 0) sb.append("TMRESUME|");
-    if ((flags & XAResource.TMSUCCESS) != 0) sb.append("TMSUCCESS|");
-    if ((flags & XAResource.TMFAIL) != 0) sb.append("TMFAIL|");
-    if ((flags & XAResource.TMSUSPEND) != 0) sb.append("TMSUSPEND|");
-    if ((flags & XAResource.TMSTARTRSCAN) != 0) sb.append("TMSTARTRSCAN|");
-    if ((flags & XAResource.TMENDRSCAN) != 0) sb.append("TMENDRSCAN|");
-
-    // Trim trailing '|'
-    if (!sb.isEmpty() && sb.charAt(sb.length() - 1) == '|') {
-      sb.setLength(sb.length() - 1);
-    }
-    return sb.toString();
-  }
-
   @Override
   public void commit(Xid xid, boolean onePhase) throws XAException {
     try {
@@ -255,5 +234,26 @@ public class TransactionAwareXAResource implements XAResource {
           "Failed to start the transaction (" + xid + ") for the XA resource: " + e.getMessage(),
           e);
     }
+  }
+
+  private static String flagsToString(int flags) {
+    if (flags == 0) {
+      return "NONE";
+    }
+    StringBuilder sb = new StringBuilder();
+    if ((flags & XAResource.TMNOFLAGS) != 0) sb.append("TMNOFLAGS|");
+    if ((flags & XAResource.TMJOIN) != 0) sb.append("TMJOIN|");
+    if ((flags & XAResource.TMRESUME) != 0) sb.append("TMRESUME|");
+    if ((flags & XAResource.TMSUCCESS) != 0) sb.append("TMSUCCESS|");
+    if ((flags & XAResource.TMFAIL) != 0) sb.append("TMFAIL|");
+    if ((flags & XAResource.TMSUSPEND) != 0) sb.append("TMSUSPEND|");
+    if ((flags & XAResource.TMSTARTRSCAN) != 0) sb.append("TMSTARTRSCAN|");
+    if ((flags & XAResource.TMENDRSCAN) != 0) sb.append("TMENDRSCAN|");
+
+    // Trim trailing '|'
+    if (!sb.isEmpty() && sb.charAt(sb.length() - 1) == '|') {
+      sb.setLength(sb.length() - 1);
+    }
+    return sb.toString();
   }
 }

@@ -111,30 +111,6 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
     this.crlStore = crlStore;
   }
 
-  private static String createKeyStoreErrorMessage(KeyStore keyStore) throws KeyStoreException {
-    Enumeration<String> aliases = keyStore.aliases();
-    StringBuilder buffer = new StringBuilder(keyStore.size() * 7);
-    boolean firstAlias = true;
-    while (aliases.hasMoreElements()) {
-      if (!firstAlias) {
-        buffer.append(", ");
-      }
-
-      buffer.append(aliases.nextElement());
-      firstAlias = false;
-    }
-
-    return " in key store of type ("
-        + keyStore.getType()
-        + ") from provider ("
-        + keyStore.getProvider()
-        + ") with size ("
-        + keyStore.size()
-        + ") and aliases: {"
-        + buffer
-        + "}";
-  }
-
   /**
    * Get the private key associated with the public key.
    *
@@ -395,6 +371,30 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
     if (!matchesIssuerDnPattern(certs[0], issuerCertConstraints)) {
       throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
     }
+  }
+
+  private static String createKeyStoreErrorMessage(KeyStore keyStore) throws KeyStoreException {
+    Enumeration<String> aliases = keyStore.aliases();
+    StringBuilder buffer = new StringBuilder(keyStore.size() * 7);
+    boolean firstAlias = true;
+    while (aliases.hasMoreElements()) {
+      if (!firstAlias) {
+        buffer.append(", ");
+      }
+
+      buffer.append(aliases.nextElement());
+      firstAlias = false;
+    }
+
+    return " in key store of type ("
+        + keyStore.getType()
+        + ") from provider ("
+        + keyStore.getProvider()
+        + ") with size ("
+        + keyStore.size()
+        + ") and aliases: {"
+        + buffer
+        + "}";
   }
 
   /**

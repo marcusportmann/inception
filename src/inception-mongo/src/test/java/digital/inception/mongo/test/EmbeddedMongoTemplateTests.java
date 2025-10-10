@@ -59,28 +59,6 @@ public class EmbeddedMongoTemplateTests {
   @Autowired
   private MongoTemplate defaultMongoTemplate;
 
-  /** Shutdown the embedded MongoDB process. */
-  @AfterAll
-  static void shutdownEmbeddedMongoDBProcess() {
-    if (embeddedMongodProcessRunningState != null) {
-      embeddedMongodProcessRunningState.close();
-    }
-  }
-
-  /** Start the embedded MongoDB process. */
-  @BeforeAll
-  static void startEmbeddedMongoDBProcess() {
-    Mongod mongod =
-        Mongod.builder()
-            .net(Start.to(Net.class).initializedWith(Net.defaults().withPort(49017)))
-            .build();
-
-    Transitions transitions = mongod.transitions(Version.V6_0_18);
-
-    embeddedMongodProcessRunningState =
-        transitions.walker().initState(StateID.of(RunningMongodProcess.class));
-  }
-
   /**
    * Test the functionality to read and write a document to the embedded MongoDB process using the
    * default MongoTemplate initialised by the MongoDBConfiguration class.
@@ -161,5 +139,27 @@ public class EmbeddedMongoTemplateTests {
     //
     //    assertNull(deletedDocument, "The document should be deleted from the database");
     //    }
+  }
+
+  /** Shutdown the embedded MongoDB process. */
+  @AfterAll
+  static void shutdownEmbeddedMongoDBProcess() {
+    if (embeddedMongodProcessRunningState != null) {
+      embeddedMongodProcessRunningState.close();
+    }
+  }
+
+  /** Start the embedded MongoDB process. */
+  @BeforeAll
+  static void startEmbeddedMongoDBProcess() {
+    Mongod mongod =
+        Mongod.builder()
+            .net(Start.to(Net.class).initializedWith(Net.defaults().withPort(49017)))
+            .build();
+
+    Transitions transitions = mongod.transitions(Version.V6_0_18);
+
+    embeddedMongodProcessRunningState =
+        transitions.walker().initState(StateID.of(RunningMongodProcess.class));
   }
 }

@@ -66,42 +66,6 @@ public class CodesServiceTests {
   /** The Codes Service. */
   @Autowired private CodesService codesService;
 
-  private static synchronized CodeCategory getTestCodeCategoryDetails() {
-    codeCategoryCount++;
-
-    CodeCategory codeCategory = new CodeCategory();
-
-    codeCategory.setId("TestCodeCategory" + codeCategoryCount);
-    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
-    codeCategory.setData("Test Code Category Data " + codeCategoryCount);
-
-    return codeCategory;
-  }
-
-  private static synchronized Code getTestCodeDetails(String codeCategoryId) {
-    codeCount++;
-
-    Code code = new Code();
-    code.setId("Test Code Id " + codeCount);
-    code.setCodeCategoryId(codeCategoryId);
-    code.setName("Test Code Name " + codeCount);
-    code.setValue("Test Code Value " + codeCount);
-
-    return code;
-  }
-
-  @SuppressWarnings("unused")
-  private static synchronized Code getTestCodeWithoutIdDetails(String codeCategoryId) {
-    codeCount++;
-
-    Code code = new Code();
-    code.setCodeCategoryId(codeCategoryId);
-    code.setName("Test Code Name " + codeCount);
-    code.setValue("Test Code Value " + codeCount);
-
-    return code;
-  }
-
   /** Test the local custom code category functionality. */
   @Test
   public void codeCategoryTest() throws Exception {
@@ -301,6 +265,42 @@ public class CodesServiceTests {
         "The correct number of code categories was not retrieved");
 
     compareCodeCategories(codeCategory, retrievedCodeCategories.get(0));
+  }
+
+  private static synchronized CodeCategory getTestCodeCategoryDetails() {
+    codeCategoryCount++;
+
+    CodeCategory codeCategory = new CodeCategory();
+
+    codeCategory.setId("TestCodeCategory" + codeCategoryCount);
+    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
+    codeCategory.setData("Test Code Category Data " + codeCategoryCount);
+
+    return codeCategory;
+  }
+
+  private static synchronized Code getTestCodeDetails(String codeCategoryId) {
+    codeCount++;
+
+    Code code = new Code();
+    code.setId("Test Code Id " + codeCount);
+    code.setCodeCategoryId(codeCategoryId);
+    code.setName("Test Code Name " + codeCount);
+    code.setValue("Test Code Value " + codeCount);
+
+    return code;
+  }
+
+  @SuppressWarnings("unused")
+  private static synchronized Code getTestCodeWithoutIdDetails(String codeCategoryId) {
+    codeCount++;
+
+    Code code = new Code();
+    code.setCodeCategoryId(codeCategoryId);
+    code.setName("Test Code Name " + codeCount);
+    code.setValue("Test Code Value " + codeCount);
+
+    return code;
   }
 
   private void compareCodeCategories(CodeCategory codeCategory1, CodeCategory codeCategory2) {

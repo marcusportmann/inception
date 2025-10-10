@@ -61,27 +61,6 @@ public class SchedulerServiceTests {
   /** The Scheduler Service. */
   @Autowired private SchedulerService schedulerService;
 
-  private static synchronized Job getTestJobDetails() {
-    jobCount++;
-
-    Job job = new Job();
-    job.setId("TestJob" + jobCount);
-    job.setName("Test Job Name " + jobCount);
-    job.setSchedulingPattern("5 * * * *");
-    job.setJobClass("digital.inception.scheduler.job.TestJob");
-    job.setEnabled(true);
-    job.setStatus(JobStatus.UNSCHEDULED);
-
-    for (int i = 1; i <= 10; i++) {
-      JobParameter parameter =
-          new JobParameter("Job Parameter Name " + i, "Job Parameter Value " + i);
-
-      job.addParameter(parameter);
-    }
-
-    return job;
-  }
-
   /** Test the execute job functionality. */
   @Test
   public void executeJobTest() throws Exception {
@@ -220,6 +199,27 @@ public class SchedulerServiceTests {
       fail("Retrieved the job (" + job.getId() + ") that should have been deleted");
     } catch (JobNotFoundException ignore) {
     }
+  }
+
+  private static synchronized Job getTestJobDetails() {
+    jobCount++;
+
+    Job job = new Job();
+    job.setId("TestJob" + jobCount);
+    job.setName("Test Job Name " + jobCount);
+    job.setSchedulingPattern("5 * * * *");
+    job.setJobClass("digital.inception.scheduler.job.TestJob");
+    job.setEnabled(true);
+    job.setStatus(JobStatus.UNSCHEDULED);
+
+    for (int i = 1; i <= 10; i++) {
+      JobParameter parameter =
+          new JobParameter("Job Parameter Name " + i, "Job Parameter Value " + i);
+
+      job.addParameter(parameter);
+    }
+
+    return job;
   }
 
   private void compareJobs(Job job1, Job job2) {

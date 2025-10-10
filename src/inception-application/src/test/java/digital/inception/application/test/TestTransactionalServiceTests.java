@@ -61,15 +61,6 @@ public class TestTransactionalServiceTests {
 
   @Autowired private TestTransactionalService testTransactionalService;
 
-  private static synchronized TestData getTestData() {
-    testDataCount++;
-
-    return new TestData(
-        "Test Data ID " + testDataCount,
-        "Test Name " + testDataCount,
-        "Test Description " + testDataCount);
-  }
-
   /** testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback */
   @Test
   public void testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback()
@@ -451,5 +442,14 @@ public class TestTransactionalServiceTests {
           "Failed to invoked the Test Transactional Service without an existing transaction: "
               + "Failed to retrieve the test data");
     }
+  }
+
+  private static synchronized TestData getTestData() {
+    testDataCount++;
+
+    return new TestData(
+        "Test Data ID " + testDataCount,
+        "Test Name " + testDataCount,
+        "Test Description " + testDataCount);
   }
 }

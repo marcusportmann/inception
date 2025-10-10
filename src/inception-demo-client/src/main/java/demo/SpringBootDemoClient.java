@@ -73,19 +73,6 @@ public class SpringBootDemoClient {
     application.run(args);
   }
 
-  private static void invokeTestApi() {
-    try {
-      TestApi testApi = new TestApi();
-
-      OffsetDateTime offsetDateTime = testApi.testOffsetDateTime(OffsetDateTime.now()).block();
-
-      System.out.println("Found time = " + offsetDateTime);
-    } catch (Throwable e) {
-      System.err.println("[ERROR] " + e.getMessage());
-      e.printStackTrace(System.err);
-    }
-  }
-
   /** Run the tests. */
   @PostConstruct
   protected void runTests() {
@@ -130,6 +117,19 @@ public class SpringBootDemoClient {
       for (CodeCategory codeCategory : codeCategories) {
         System.out.println(codeCategory.getName());
       }
+    } catch (Throwable e) {
+      System.err.println("[ERROR] " + e.getMessage());
+      e.printStackTrace(System.err);
+    }
+  }
+
+  private static void invokeTestApi() {
+    try {
+      TestApi testApi = new TestApi();
+
+      OffsetDateTime offsetDateTime = testApi.testOffsetDateTime(OffsetDateTime.now()).block();
+
+      System.out.println("Found time = " + offsetDateTime);
     } catch (Throwable e) {
       System.err.println("[ERROR] " + e.getMessage());
       e.printStackTrace(System.err);

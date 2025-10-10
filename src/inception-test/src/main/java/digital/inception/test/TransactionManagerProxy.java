@@ -53,15 +53,6 @@ public class TransactionManagerProxy implements TransactionManager {
     this.transactionManager = transactionManager;
   }
 
-  /**
-   * Returns the active transaction stack traces for the current thread.
-   *
-   * @return the active transaction stack traces for the current thread
-   */
-  static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces() {
-    return activeTransactionStackTraces.get();
-  }
-
   @Override
   public void begin() throws NotSupportedException, SystemException {
     try {
@@ -148,5 +139,14 @@ public class TransactionManagerProxy implements TransactionManager {
   @Override
   public Transaction suspend() throws SystemException {
     return transactionManager.suspend();
+  }
+
+  /**
+   * Returns the active transaction stack traces for the current thread.
+   *
+   * @return the active transaction stack traces for the current thread
+   */
+  static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces() {
+    return activeTransactionStackTraces.get();
   }
 }

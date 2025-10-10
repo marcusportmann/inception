@@ -48,27 +48,6 @@ public class NarayanaFactory {
   public NarayanaFactory() {}
 
   /**
-   * Retrieve the XA node name.
-   *
-   * @return the XA node name
-   */
-  private static String nodeName() {
-    try {
-      java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
-
-      String nodeName = localMachine.getHostName().toLowerCase();
-
-      if (nodeName.length() > 23) {
-        nodeName = FNV1aHash.fnv1a64Base64(nodeName.getBytes(StandardCharsets.UTF_8));
-      }
-
-      return nodeName;
-    } catch (Throwable e) {
-      return "Unknown";
-    }
-  }
-
-  /**
    * Returns the Narayana recovery manager.
    *
    * @return the Narayana recovery manager
@@ -131,6 +110,27 @@ public class NarayanaFactory {
       return new JtaTransactionManager(userTransaction, transactionManager);
     } catch (Throwable e) {
       throw new RuntimeException("Failed to initialize the JTA transaction manager");
+    }
+  }
+
+  /**
+   * Retrieve the XA node name.
+   *
+   * @return the XA node name
+   */
+  private static String nodeName() {
+    try {
+      java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
+
+      String nodeName = localMachine.getHostName().toLowerCase();
+
+      if (nodeName.length() > 23) {
+        nodeName = FNV1aHash.fnv1a64Base64(nodeName.getBytes(StandardCharsets.UTF_8));
+      }
+
+      return nodeName;
+    } catch (Throwable e) {
+      return "Unknown";
     }
   }
 

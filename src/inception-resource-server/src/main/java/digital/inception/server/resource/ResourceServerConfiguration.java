@@ -138,18 +138,6 @@ public class ResourceServerConfiguration implements InitializingBean {
   /** Constructs a new {@code ResourceServerConfiguration}. */
   public ResourceServerConfiguration() {}
 
-  /**
-   * Returns the method security expression handler.
-   *
-   * @param applicationContext the Spring application context
-   * @return the method security expression handler
-   */
-  @Bean
-  static MethodSecurityExpressionHandler methodSecurityExpressionHandler(
-      ApplicationContext applicationContext) {
-    return new PolicyDecisionPointMethodSecurityExpressionHandler(applicationContext);
-  }
-
   @Override
   public void afterPropertiesSet() throws Exception {
     try {
@@ -598,6 +586,18 @@ public class ResourceServerConfiguration implements InitializingBean {
   public void setXacmlPolicyDecisionPoint(
       XacmlPolicyDecisionPointConfiguration xacmlPolicyDecisionPoint) {
     this.xacmlPolicyDecisionPoint = xacmlPolicyDecisionPoint;
+  }
+
+  /**
+   * Returns the method security expression handler.
+   *
+   * @param applicationContext the Spring application context
+   * @return the method security expression handler
+   */
+  @Bean
+  static MethodSecurityExpressionHandler methodSecurityExpressionHandler(
+      ApplicationContext applicationContext) {
+    return new PolicyDecisionPointMethodSecurityExpressionHandler(applicationContext);
   }
 
   private Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
