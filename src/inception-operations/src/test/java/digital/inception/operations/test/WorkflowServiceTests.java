@@ -35,12 +35,12 @@ import digital.inception.core.util.TenantUtil;
 import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
-import digital.inception.operations.exception.WorkflowAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
 import digital.inception.operations.exception.WorkflowNoteNotFoundException;
 import digital.inception.operations.model.AttributeSearchCriteria;
+import digital.inception.operations.model.AttributeType;
 import digital.inception.operations.model.CancelWorkflowRequest;
 import digital.inception.operations.model.CreateWorkflowNoteRequest;
 import digital.inception.operations.model.Document;
@@ -60,7 +60,6 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
-import digital.inception.operations.model.RequiredDocumentAttribute;
 import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.SuspendWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowStepRequest;
@@ -178,10 +177,20 @@ public class WorkflowServiceTests {
             "test_workflow_definition_" + randomId(),
             1,
             workflowDefinitionCategory.getId(),
+            null,
             "Test Workflow Definition",
             "dummy",
+            null,
             ValidationSchemaType.JSON,
-            ResourceUtil.getStringClasspathResource("TestData.schema.json"));
+            ResourceUtil.getStringClasspathResource("TestData.schema.json"),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -280,18 +289,6 @@ public class WorkflowServiceTests {
 
     operationsReferenceService.createExternalReferenceType(workflowReferenceType);
 
-    // Create the document attribute definition
-    DocumentAttributeDefinition documentAttributeDefinition =
-        new DocumentAttributeDefinition(
-            "test_document_attribute_code",
-            "Test Document Attribute",
-            "Test Document Attribute Description",
-            true,
-            null,
-            TenantUtil.DEFAULT_TENANT_ID);
-
-    documentService.createDocumentAttributeDefinition(documentAttributeDefinition);
-
     // Create the document definition category
     DocumentDefinitionCategory documentDefinitionCategory =
         new DocumentDefinitionCategory(
@@ -308,7 +305,14 @@ public class WorkflowServiceTests {
             "Test Document Definition",
             null,
             null,
-            List.of(RequiredDocumentAttribute.EXPIRY_DATE, RequiredDocumentAttribute.ISSUE_DATE));
+            List.of(
+                new DocumentAttributeDefinition(
+                    "test_document_attribute_code",
+                    AttributeType.STRING,
+                    "Test Document Attribute",
+                    "Test Document Attribute Description",
+                    true,
+                    null)));
 
     documentService.createDocumentDefinition(documentDefinition);
 
@@ -323,18 +327,6 @@ public class WorkflowServiceTests {
             null);
 
     documentService.createDocumentDefinition(anotherDocumentDefinition);
-
-    // Create the workflow attribute definition
-    WorkflowAttributeDefinition workflowAttributeDefinition =
-        new WorkflowAttributeDefinition(
-            "test_workflow_attribute_code",
-            "Test Workflow Attribute",
-            "Test Workflow Attribute Description",
-            true,
-            null,
-            TenantUtil.DEFAULT_TENANT_ID);
-
-    workflowService.createWorkflowAttributeDefinition(workflowAttributeDefinition);
 
     // Create the workflow definition category
     WorkflowDefinitionCategory workflowDefinitionCategory =
@@ -358,10 +350,27 @@ public class WorkflowServiceTests {
             "test_json_workflow_definition_" + randomId(),
             1,
             workflowDefinitionCategory.getId(),
+            null,
             "Test JSON Workflow Definition",
             "dummy",
+            null,
             ValidationSchemaType.JSON,
-            ResourceUtil.getStringClasspathResource("TestData.schema.json"));
+            ResourceUtil.getStringClasspathResource("TestData.schema.json"),
+            null,
+            List.of(
+                new WorkflowAttributeDefinition(
+                    "test_workflow_attribute_code",
+                    AttributeType.STRING,
+                    "Test Workflow Attribute",
+                    "Test Workflow Attribute Description",
+                    true,
+                    null)),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
 
     workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false, true, false);
     workflowDefinition.addDocumentDefinition(
@@ -645,8 +654,6 @@ public class WorkflowServiceTests {
     assertEquals("MultiPagePdf.pdf", retrievedDocument.getName());
     assertEquals(FileType.PDF, retrievedDocument.getFileType());
     assertEquals(multiPagePdfData.length, retrievedDocument.getData().length);
-    assertEquals(LocalDate.of(2015, 10, 10), retrievedDocument.getIssueDate());
-    assertEquals(LocalDate.of(2050, 11, 11), retrievedDocument.getExpiryDate());
     assertEquals(1, retrievedDocument.getAttributes().size());
     assertEquals(
         "test_document_attribute_code", retrievedDocument.getAttributes().getFirst().getCode());
@@ -677,8 +684,6 @@ public class WorkflowServiceTests {
     assertEquals("AnotherMultiPagePdf.pdf", retrievedDocument.getName());
     assertEquals(FileType.PDF, retrievedDocument.getFileType());
     assertEquals(multiPagePdfData.length, retrievedDocument.getData().length);
-    assertEquals(LocalDate.of(2016, 10, 10), retrievedDocument.getIssueDate());
-    assertEquals(LocalDate.of(2060, 11, 11), retrievedDocument.getExpiryDate());
 
     // Verify the workflow document
     VerifyWorkflowDocumentRequest verifyWorkflowDocumentRequest =
@@ -967,17 +972,11 @@ public class WorkflowServiceTests {
     // Delete the workflow definition category
     workflowService.deleteWorkflowDefinitionCategory(workflowDefinitionCategory.getId());
 
-    // Delete the workflow attribute definition
-    workflowService.deleteWorkflowAttributeDefinition(workflowAttributeDefinition.getCode());
-
     // Delete the document definition
     documentService.deleteDocumentDefinition(documentDefinition.getId());
 
     // Delete the document definition category
     documentService.deleteDocumentDefinitionCategory(documentDefinitionCategory.getId());
-
-    // Delete the document attribute definition
-    documentService.deleteDocumentAttributeDefinition(documentAttributeDefinition.getCode());
 
     operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference_code");
 
@@ -1034,41 +1033,6 @@ public class WorkflowServiceTests {
     assertEquals(ObjectType.WORKFLOW, retrievedExternalReferenceType.getObjectType());
     assertEquals(TenantUtil.DEFAULT_TENANT_ID, retrievedExternalReferenceType.getTenantId());
 
-    WorkflowAttributeDefinition workflowAttributeDefinition =
-        new WorkflowAttributeDefinition(
-            "test_workflow_attribute_code",
-            "Test Workflow Attribute",
-            "Test Workflow Attribute Description",
-            true,
-            null,
-            TenantUtil.DEFAULT_TENANT_ID);
-
-    workflowService.createWorkflowAttributeDefinition(workflowAttributeDefinition);
-
-    WorkflowAttributeDefinition retrievedWorkflowAttributeDefinition =
-        workflowService.getWorkflowAttributeDefinition(workflowAttributeDefinition.getCode());
-
-    compareWorkflowAttributeDefinitions(
-        workflowAttributeDefinition, retrievedWorkflowAttributeDefinition);
-
-    List<WorkflowAttributeDefinition> workflowAttributeDefinitions =
-        workflowService.getWorkflowAttributeDefinitions(TenantUtil.DEFAULT_TENANT_ID);
-
-    assertEquals(1, workflowAttributeDefinitions.size());
-
-    compareWorkflowAttributeDefinitions(
-        workflowAttributeDefinition, workflowAttributeDefinitions.getFirst());
-
-    workflowAttributeDefinition.setDescription("Updated Test Workflow Attribute");
-
-    workflowService.updateWorkflowAttributeDefinition(workflowAttributeDefinition);
-
-    retrievedWorkflowAttributeDefinition =
-        workflowService.getWorkflowAttributeDefinition(workflowAttributeDefinition.getCode());
-
-    compareWorkflowAttributeDefinitions(
-        workflowAttributeDefinition, retrievedWorkflowAttributeDefinition);
-
     WorkflowEngineAttribute workflowEngineAttribute =
         new WorkflowEngineAttribute(
             "test_workflow_engine_attribute_name_" + randomId(),
@@ -1121,7 +1085,7 @@ public class WorkflowServiceTests {
             "Test Shared Document Definition",
             null,
             null,
-            List.of(RequiredDocumentAttribute.EXPIRY_DATE, RequiredDocumentAttribute.ISSUE_DATE));
+            null);
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
 
@@ -1183,10 +1147,27 @@ public class WorkflowServiceTests {
             "test_shared_workflow_definition_" + randomId(),
             1,
             sharedWorkflowDefinitionCategory.getId(),
+            null,
             "Test Shared Workflow Definition",
             workflowEngine.getId(),
+            null,
             ValidationSchemaType.JSON,
-            ResourceUtil.getStringClasspathResource("TestData.schema.json"));
+            ResourceUtil.getStringClasspathResource("TestData.schema.json"),
+            null,
+            List.of(
+                new WorkflowAttributeDefinition(
+                    "test_workflow_attribute_code",
+                    AttributeType.STRING,
+                    "Test Workflow Attribute",
+                    "Test Workflow Attribute Description",
+                    true,
+                    null)),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
 
     sharedWorkflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("process_definition_key", "process_definition_key_value"));
@@ -1215,13 +1196,38 @@ public class WorkflowServiceTests {
             TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Workflow Definition",
             workflowEngine.getId(),
+            null,
             ValidationSchemaType.JSON,
-            ResourceUtil.getStringClasspathResource("TestData.schema.json"));
+            ResourceUtil.getStringClasspathResource("TestData.schema.json"),
+            null,
+            List.of(
+                new WorkflowAttributeDefinition(
+                    "test_workflow_attribute_code",
+                    AttributeType.STRING,
+                    "Test Workflow Attribute",
+                    "Test Workflow Attribute Description",
+                    true,
+                    null)),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
 
     tenantWorkflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("attribute_name", "attribute_value"));
     tenantWorkflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("another_attribute_name", "another_attribute_value"));
+
+    tenantWorkflowDefinition.addAttributeDefinition(
+        new WorkflowAttributeDefinition(
+            "another_test_workflow_attribute_code",
+            AttributeType.STRING,
+            "Another Test Workflow Attribute",
+            "Another Test Workflow Attribute Description",
+            true,
+            null));
 
     tenantWorkflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -1327,6 +1333,8 @@ public class WorkflowServiceTests {
 
     tenantWorkflowDefinition.removeAttribute("another_attribute_name");
 
+    tenantWorkflowDefinition.removeAttributeDefinition("test_workflow_attribute_code");
+
     tenantWorkflowDefinition.removeStepDefinition("test_workflow_step_2");
 
     workflowService.updateWorkflowDefinition(tenantWorkflowDefinition);
@@ -1422,14 +1430,6 @@ public class WorkflowServiceTests {
           workflowService.deleteWorkflowEngine(workflowEngine.getId());
         });
 
-    workflowService.deleteWorkflowAttributeDefinition(workflowAttributeDefinition.getCode());
-
-    assertThrows(
-        WorkflowAttributeDefinitionNotFoundException.class,
-        () -> {
-          workflowService.getWorkflowAttributeDefinition(workflowAttributeDefinition.getCode());
-        });
-
     operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference_code");
 
     operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
@@ -1447,17 +1447,9 @@ public class WorkflowServiceTests {
         workflowAttributeDefinition2.getDescription(),
         "The description values for the workflow attribute definitions do not match");
     assertEquals(
-        workflowAttributeDefinition1.getWorkflowDefinitionId(),
-        workflowAttributeDefinition2.getWorkflowDefinitionId(),
-        "The workflow definition ID values for the workflow attribute definitions do not match");
-    assertEquals(
         workflowAttributeDefinition1.isRequired(),
         workflowAttributeDefinition2.isRequired(),
         "The required values for the workflow attribute definitions do not match");
-    assertEquals(
-        workflowAttributeDefinition1.getTenantId(),
-        workflowAttributeDefinition2.getTenantId(),
-        "The tenant ID values for the workflow attribute definitions do not match");
   }
 
   private void compareWorkflowDefinitionCategories(
@@ -1595,6 +1587,29 @@ public class WorkflowServiceTests {
                         + workflowDefinition1.getVersion()
                         + ")");
               }
+            });
+
+    assertEquals(
+        workflowDefinition1.getAttributeDefinitions().size(),
+        workflowDefinition2.getAttributeDefinitions().size(),
+        "The number of attribute definitions for the workflow definitions do not match");
+
+    workflowDefinition1
+        .getAttributeDefinitions()
+        .forEach(
+            workflowAttributeDefinition1 -> {
+              List<WorkflowAttributeDefinition> foundAttributeDefinitions =
+                  workflowDefinition2.getAttributeDefinitions().stream()
+                      .filter(
+                          workflowAttributeDefinition2 ->
+                              Objects.equals(
+                                  workflowAttributeDefinition1, workflowAttributeDefinition2))
+                      .toList();
+
+              assertEquals(1, foundAttributeDefinitions.size());
+
+              compareWorkflowAttributeDefinitions(
+                  workflowAttributeDefinition1, foundAttributeDefinitions.get(0));
             });
 
     assertEquals(

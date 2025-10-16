@@ -18,7 +18,6 @@ package digital.inception.operations.test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -28,7 +27,6 @@ import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.OperationsConfiguration;
-import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
@@ -36,6 +34,7 @@ import digital.inception.operations.exception.DocumentNoteNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
 import digital.inception.operations.model.AttributeSearchCriteria;
+import digital.inception.operations.model.AttributeType;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.Document;
@@ -53,7 +52,6 @@ import digital.inception.operations.model.DocumentSummary;
 import digital.inception.operations.model.ExternalReferenceSearchCriteria;
 import digital.inception.operations.model.ExternalReferenceType;
 import digital.inception.operations.model.ObjectType;
-import digital.inception.operations.model.RequiredDocumentAttribute;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
@@ -151,41 +149,6 @@ public class DocumentServiceTests {
     assertEquals(ObjectType.DOCUMENT, retrievedExternalReferenceType.getObjectType());
     assertEquals(TenantUtil.DEFAULT_TENANT_ID, retrievedExternalReferenceType.getTenantId());
 
-    DocumentAttributeDefinition documentAttributeDefinition =
-        new DocumentAttributeDefinition(
-            "test_document_attribute_code",
-            "Test Document Attribute",
-            "Test Document Attribute Description",
-            true,
-            null,
-            TenantUtil.DEFAULT_TENANT_ID);
-
-    documentService.createDocumentAttributeDefinition(documentAttributeDefinition);
-
-    DocumentAttributeDefinition retrievedDocumentAttributeDefinition =
-        documentService.getDocumentAttributeDefinition(documentAttributeDefinition.getCode());
-
-    compareDocumentAttributeDefinitions(
-        documentAttributeDefinition, retrievedDocumentAttributeDefinition);
-
-    List<DocumentAttributeDefinition> documentAttributeDefinitions =
-        documentService.getDocumentAttributeDefinitions(TenantUtil.DEFAULT_TENANT_ID);
-
-    assertEquals(1, documentAttributeDefinitions.size());
-
-    compareDocumentAttributeDefinitions(
-        documentAttributeDefinition, documentAttributeDefinitions.getFirst());
-
-    documentAttributeDefinition.setDescription("Updated Test Document Attribute");
-
-    documentService.updateDocumentAttributeDefinition(documentAttributeDefinition);
-
-    retrievedDocumentAttributeDefinition =
-        documentService.getDocumentAttributeDefinition(documentAttributeDefinition.getCode());
-
-    compareDocumentAttributeDefinitions(
-        documentAttributeDefinition, retrievedDocumentAttributeDefinition);
-
     DocumentDefinitionCategory sharedDocumentDefinitionCategory =
         new DocumentDefinitionCategory(
             "test_shared_document_definition_category_" + randomId(),
@@ -243,7 +206,14 @@ public class DocumentServiceTests {
             "Test Shared Document Definition",
             "The description for the test shared document definition",
             null,
-            List.of(RequiredDocumentAttribute.EXPIRY_DATE, RequiredDocumentAttribute.ISSUE_DATE));
+            List.of(
+                new DocumentAttributeDefinition(
+                    "test_document_attribute_code",
+                    AttributeType.STRING,
+                    "Test Document Attribute",
+                    "Test Document Attribute Description",
+                    true,
+                    "(?i).*value.*")));
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
 
@@ -255,13 +225,6 @@ public class DocumentServiceTests {
 
     DocumentDefinition retrievedDocumentDefinition =
         documentService.getDocumentDefinition(sharedDocumentDefinition.getId());
-
-    assertNotNull(retrievedDocumentDefinition.getRequiredDocumentAttributes());
-
-    assertTrue(
-        retrievedDocumentDefinition
-            .getRequiredDocumentAttributes()
-            .contains(RequiredDocumentAttribute.EXPIRY_DATE));
 
     compareDocumentDefinitions(sharedDocumentDefinition, retrievedDocumentDefinition);
 
@@ -317,8 +280,6 @@ public class DocumentServiceTests {
 
     tenantDocumentDefinition.setName("Updated Test Tenant Document Definition");
     tenantDocumentDefinition.setCategoryId(sharedDocumentDefinitionCategory.getId());
-    tenantDocumentDefinition.setRequiredDocumentAttributes(
-        List.of(RequiredDocumentAttribute.EXPIRY_DATE));
 
     documentService.updateDocumentDefinition(tenantDocumentDefinition);
 
@@ -353,10 +314,6 @@ public class DocumentServiceTests {
         retrievedDocument.getData(),
         "Invalid value for the \"data\" document property");
     assertEquals(
-        updateDocumentRequest.getExpiryDate(),
-        retrievedDocument.getExpiryDate(),
-        "Invalid value for the \"expiryDate\" document property");
-    assertEquals(
         updateDocumentRequest.getFileType(),
         retrievedDocument.getFileType(),
         "Invalid value for the \"fileType\" document property");
@@ -364,10 +321,6 @@ public class DocumentServiceTests {
         updateDocumentRequest.getDocumentId(),
         retrievedDocument.getId(),
         "Invalid value for the \"id\" document property");
-    assertEquals(
-        updateDocumentRequest.getIssueDate(),
-        retrievedDocument.getIssueDate(),
-        "Invalid value for the \"issueDate\" document property");
     assertEquals(
         updateDocumentRequest.getName(),
         retrievedDocument.getName(),
@@ -407,10 +360,6 @@ public class DocumentServiceTests {
     DocumentSummary documentSummary = documentSummaries.getDocumentSummaries().getFirst();
 
     assertEquals(
-        retrievedDocument.getExpiryDate(),
-        documentSummary.getExpiryDate(),
-        "Invalid value for the \"expiryDate\" document summary property");
-    assertEquals(
         retrievedDocument.getFileType(),
         documentSummary.getFileType(),
         "Invalid value for the \"fileType\" document summary property");
@@ -418,10 +367,6 @@ public class DocumentServiceTests {
         retrievedDocument.getId(),
         documentSummary.getId(),
         "Invalid value for the \"id\" document summary property");
-    assertEquals(
-        retrievedDocument.getIssueDate(),
-        documentSummary.getIssueDate(),
-        "Invalid value for the \"issueDate\" document summary property");
     assertEquals(
         retrievedDocument.getName(),
         documentSummary.getName(),
@@ -521,14 +466,6 @@ public class DocumentServiceTests {
           documentService.getDocumentDefinitionCategory(sharedDocumentDefinitionCategory.getId());
         });
 
-    documentService.deleteDocumentAttributeDefinition(documentAttributeDefinition.getCode());
-
-    assertThrows(
-        DocumentAttributeDefinitionNotFoundException.class,
-        () -> {
-          documentService.getDocumentAttributeDefinition(documentAttributeDefinition.getCode());
-        });
-
     operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
   }
 
@@ -544,17 +481,9 @@ public class DocumentServiceTests {
         documentAttributeDefinition2.getDescription(),
         "The description values for the document attribute definitions do not match");
     assertEquals(
-        documentAttributeDefinition1.getDocumentDefinitionId(),
-        documentAttributeDefinition2.getDocumentDefinitionId(),
-        "The document definition ID values for the document attribute definitions do not match");
-    assertEquals(
         documentAttributeDefinition1.isRequired(),
         documentAttributeDefinition2.isRequired(),
         "The required values for the document attribute definitions do not match");
-    assertEquals(
-        documentAttributeDefinition1.getTenantId(),
-        documentAttributeDefinition2.getTenantId(),
-        "The tenant ID values for the document attribute definitions do not match");
   }
 
   private void compareDocumentDefinitionCategories(
@@ -596,15 +525,33 @@ public class DocumentServiceTests {
         documentDefinition1.getDescription(),
         documentDefinition2.getDescription(),
         "The description values for the document definitions do not match");
+    assertEquals(
+        documentDefinition1.getTemplateId(),
+        documentDefinition2.getTemplateId(),
+        "The template ID values for the document definitions do not match");
 
     assertEquals(
-        (documentDefinition1.getRequiredDocumentAttributes() != null)
-            ? documentDefinition1.getRequiredDocumentAttributes()
-            : List.of(),
-        (documentDefinition2.getRequiredDocumentAttributes() != null)
-            ? documentDefinition2.getRequiredDocumentAttributes()
-            : List.of(),
-        "The required document attributes values for the document definitions do not match");
+        documentDefinition1.getAttributeDefinitions().size(),
+        documentDefinition2.getAttributeDefinitions().size(),
+        "The number of attribute definitions for the documents definitions do not match");
+
+    documentDefinition1
+        .getAttributeDefinitions()
+        .forEach(
+            documentAttributeDefinition1 -> {
+              List<DocumentAttributeDefinition> foundAttributeDefinitions =
+                  documentDefinition2.getAttributeDefinitions().stream()
+                      .filter(
+                          documentAttributeDefinition2 ->
+                              Objects.equals(
+                                  documentAttributeDefinition1, documentAttributeDefinition2))
+                      .toList();
+
+              assertEquals(1, foundAttributeDefinitions.size());
+
+              compareDocumentAttributeDefinitions(
+                  documentAttributeDefinition1, foundAttributeDefinitions.get(0));
+            });
   }
 
   private void compareDocumentNotes(DocumentNote documentNote1, DocumentNote documentNote2) {
@@ -650,10 +597,6 @@ public class DocumentServiceTests {
         document2.getDefinitionId(),
         "The definition ID values for the documents do not match");
     assertEquals(
-        document1.getExpiryDate(),
-        document2.getExpiryDate(),
-        "The expiry date values for the documents do not match");
-    assertEquals(
         document1.getFileType(),
         document2.getFileType(),
         "The file type values for the documents do not match");
@@ -661,10 +604,6 @@ public class DocumentServiceTests {
         document1.getHash(), document2.getHash(), "The hash values for the documents do not match");
     assertEquals(
         document1.getId(), document2.getId(), "The ID values for the documents do not match");
-    assertEquals(
-        document1.getIssueDate(),
-        document2.getIssueDate(),
-        "The issue date values for the documents do not match");
     assertEquals(
         document1.getName(), document2.getName(), "The name values for the documents do not match");
     assertEquals(

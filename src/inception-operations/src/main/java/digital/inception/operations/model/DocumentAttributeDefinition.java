@@ -16,6 +16,8 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -23,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -30,11 +33,11 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code DocumentAttributeDefinition} class holds the information for a document attribute
@@ -44,17 +47,18 @@ import java.util.UUID;
  */
 @Schema(description = "A document attribute definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "documentDefinitionId", "tenantId", "required", "description"})
+@JsonPropertyOrder({"code", "type", "name", "description", "required", "pattern"})
 @XmlRootElement(
     name = "DocumentAttributeDefinition",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "DocumentAttributeDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "documentDefinitionId", "tenantId", "required", "description"})
+    propOrder = {"code", "type", "name", "description", "required", "pattern"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_document_attribute_definitions")
+@IdClass(DocumentAttributeDefinitionId.class)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class DocumentAttributeDefinition implements Serializable {
 
@@ -72,6 +76,14 @@ public class DocumentAttributeDefinition implements Serializable {
   @Column(name = "code", length = 50, nullable = false)
   private String code;
 
+  /** The ID for the document definition the document attribute definition is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "definition_id", nullable = false)
+  private String definitionId;
+
   /** The description for the document attribute. */
   @Schema(
       description = "The description for the document attribute",
@@ -82,16 +94,6 @@ public class DocumentAttributeDefinition implements Serializable {
   @Size(min = 1, max = 200)
   @Column(name = "description", length = 200, nullable = false)
   private String description;
-
-  /** The ID for the document definition the document attribute definition is specific to. */
-  @Schema(
-      description =
-          "The ID for the document definition the document attribute definition is specific to")
-  @JsonProperty
-  @XmlElement(name = "DocumentDefinitionId")
-  @Size(min = 1, max = 50)
-  @Column(name = "document_definition_id", length = 50)
-  private String documentDefinitionId;
 
   /** The name of the document attribute. */
   @Schema(
@@ -104,6 +106,19 @@ public class DocumentAttributeDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /**
+   * The regular expression pattern used to validate the value for a document attribute associated
+   * with the document attribute definition.
+   */
+  @Schema(
+      description =
+          "The regular expression pattern used to validate the value for a document attribute associated with the document attribute definition")
+  @JsonProperty
+  @XmlElement(name = "Pattern")
+  @Size(min = 1, max = 1000)
+  @Column(name = "pattern", length = 1000)
+  private String pattern;
+
   /** Is the document attribute required? */
   @Schema(
       description = "Is the document attribute required",
@@ -114,12 +129,15 @@ public class DocumentAttributeDefinition implements Serializable {
   @Column(name = "required", nullable = false)
   private Boolean required;
 
-  /** The ID for the tenant the document attribute definition is specific to. */
-  @Schema(description = "The ID for the tenant the document attribute definition is specific to")
-  @JsonProperty
-  @XmlElement(name = "TenantId")
-  @Column(name = "tenant_id")
-  private UUID tenantId;
+  /** The attribute type for the document attribute. */
+  @Schema(
+      description = "The code for the attribute type for the document attribute",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
+  @NotNull
+  @Column(name = "type", nullable = false)
+  private AttributeType type;
 
   /** Constructs a new {@code DocumentAttributeDefinition}. */
   public DocumentAttributeDefinition() {}
@@ -128,26 +146,26 @@ public class DocumentAttributeDefinition implements Serializable {
    * Constructs a new {@code DocumentAttributeDefinition}.
    *
    * @param code the code for the document attribute
+   * @param type the attribute type for the document attribute
    * @param name the name of the document attribute
    * @param description the description for the document attribute
    * @param required is the document attribute required
-   * @param documentDefinitionId the ID for the document definition the document attribute
-   *     definition is specific to
-   * @param tenantId the ID for the tenant the document attribute definition is specific to
+   * @param pattern the regular expression pattern used to validate the value for a document
+   *     attribute associated with the document attribute definition
    */
   public DocumentAttributeDefinition(
       String code,
+      AttributeType type,
       String name,
       String description,
       boolean required,
-      String documentDefinitionId,
-      UUID tenantId) {
+      String pattern) {
     this.code = code;
+    this.type = type;
     this.name = name;
     this.description = description;
     this.required = required;
-    this.documentDefinitionId = documentDefinitionId;
-    this.tenantId = tenantId;
+    this.pattern = pattern;
   }
 
   /**
@@ -194,15 +212,6 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
-   * Returns the ID for the document definition the document attribute definition is specific to.
-   *
-   * @return the ID for the document definition the document attribute definition is specific to
-   */
-  public String getDocumentDefinitionId() {
-    return documentDefinitionId;
-  }
-
-  /**
    * Returns the name of the document attribute.
    *
    * @return the name of the document attribute
@@ -212,12 +221,23 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
-   * Returns the ID for the tenant the document attribute definition is specific to.
+   * Returns the regular expression pattern used to validate the value for a document attribute
+   * associated with the document attribute definition.
    *
-   * @return the ID for the tenant the document attribute definition is specific to
+   * @return the regular expression pattern used to validate the value for a document attribute
+   *     associated with the document attribute definition
    */
-  public UUID getTenantId() {
-    return tenantId;
+  public String getPattern() {
+    return pattern;
+  }
+
+  /**
+   * Returns the attribute type for the document attribute.
+   *
+   * @return the attribute type for the document attribute
+   */
+  public AttributeType getType() {
+    return type;
   }
 
   /**
@@ -258,13 +278,19 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the document definition the document attribute definition is specific to.
+   * Set the document definition the document attribute definition is associated with.
    *
-   * @param documentDefinitionId the ID for the document definition the document attribute
-   *     definition is specific to
+   * @param documentDefinition the document definition the document attribute definition is
+   *     associated with
    */
-  public void setDocumentDefinitionId(String documentDefinitionId) {
-    this.documentDefinitionId = documentDefinitionId;
+  @JsonBackReference("documentDefinitionAttributeDefinitionReference")
+  @Schema(hidden = true)
+  public void setDocumentDefinition(DocumentDefinition documentDefinition) {
+    if (documentDefinition != null) {
+      this.definitionId = documentDefinition.getId();
+    } else {
+      this.definitionId = null;
+    }
   }
 
   /**
@@ -277,6 +303,17 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
+   * Set the regular expression pattern used to validate the value for a document attribute
+   * associated with the document attribute definition.
+   *
+   * @param pattern the regular expression pattern used to validate the value for a document
+   *     attribute associated with the document attribute definition
+   */
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
+  }
+
+  /**
    * Set whether the document attribute is required.
    *
    * @param required {@code true} if the document attribute is required or {@code false} otherwise
@@ -286,11 +323,11 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the document attribute definition is specific to.
+   * Set the attribute type for the document attribute.
    *
-   * @param tenantId the ID for the tenant the document attribute definition is specific to
+   * @param type the attribute type for the document attribute
    */
-  public void setTenantId(UUID tenantId) {
-    this.tenantId = tenantId;
+  public void setType(AttributeType type) {
+    this.type = type;
   }
 }

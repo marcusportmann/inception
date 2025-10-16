@@ -22,6 +22,7 @@ import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
+import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.ExternalReference;
 import digital.inception.operations.model.ExternalReferenceType;
 import digital.inception.operations.model.ObjectType;
@@ -34,9 +35,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * The {@code ValidationServiceImpl} class provides the Validation Service implementation.
@@ -66,32 +69,46 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   @Override
   public boolean isValidDocumentAttribute(
-      UUID tenantId, String documentDefinitionId, String attributeCode)
-      throws ServiceUnavailableException {
-    try {
-      List<DocumentAttributeDefinition> documentAttributeDefinitions =
-          getDocumentService().getDocumentAttributeDefinitions(tenantId);
+      DocumentDefinition documentDefinition, String attributeCode, String attributeValue)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (documentDefinition == null) {
+      throw new InvalidArgumentException("documentDefinition");
+    }
 
-      return documentAttributeDefinitions.stream()
-          .filter(
-              documentAttributeDefinition ->
-                  (documentAttributeDefinition.getDocumentDefinitionId() == null
-                          || documentAttributeDefinition
-                              .getDocumentDefinitionId()
-                              .equals(documentDefinitionId))
-                      && (documentAttributeDefinition.getTenantId() == null
-                          || documentAttributeDefinition.getTenantId().equals(tenantId)))
-          .anyMatch(
-              documentAttributeDefinition ->
-                  documentAttributeDefinition.getCode().equals(attributeCode));
+    if (!StringUtils.hasText(attributeCode)) {
+      throw new InvalidArgumentException("attributeCode");
+    }
+
+    try {
+      // Find the attribute definition by code
+      DocumentAttributeDefinition documentAttributeDefinition =
+          documentDefinition.getAttributeDefinitions().stream()
+              .filter(attributeDefinition -> attributeCode.equals(attributeDefinition.getCode()))
+              .findFirst()
+              .orElse(null);
+
+      // If no matching attribute definition, it's not valid
+      if (documentAttributeDefinition == null) {
+        return false;
+      }
+
+      // If no pattern is defined, existence is sufficient for validity
+      String pattern = documentAttributeDefinition.getPattern();
+      if (!StringUtils.hasText(pattern)) {
+        return true;
+      }
+
+      // Validate the value against the regex pattern (full match)
+      if (!StringUtils.hasText(attributeValue)) {
+        return false;
+      }
+      return Pattern.compile(pattern).matcher(attributeValue).matches();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the document attribute ("
               + attributeCode
               + ") for the document with the document definition ("
-              + documentDefinitionId
-              + ") for the tenant ("
-              + tenantId
+              + documentDefinition.getId()
               + ")",
           e);
     }
@@ -99,32 +116,46 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   @Override
   public boolean isValidWorkflowAttribute(
-      UUID tenantId, String workflowDefinitionId, String attributeCode)
+      WorkflowDefinition workflowDefinition, String attributeCode, String attributeValue)
       throws InvalidArgumentException, ServiceUnavailableException {
-    try {
-      List<WorkflowAttributeDefinition> workflowAttributeDefinitions =
-          getWorkflowService().getWorkflowAttributeDefinitions(tenantId);
+    if (workflowDefinition == null) {
+      throw new InvalidArgumentException("workflowDefinition");
+    }
 
-      return workflowAttributeDefinitions.stream()
-          .filter(
-              workflowAttributeDefinition ->
-                  (workflowAttributeDefinition.getWorkflowDefinitionId() == null
-                          || workflowAttributeDefinition
-                              .getWorkflowDefinitionId()
-                              .equals(workflowDefinitionId))
-                      && (workflowAttributeDefinition.getTenantId() == null
-                          || workflowAttributeDefinition.getTenantId().equals(tenantId)))
-          .anyMatch(
-              workflowAttributeDefinition ->
-                  workflowAttributeDefinition.getCode().equals(attributeCode));
+    if (!StringUtils.hasText(attributeCode)) {
+      throw new InvalidArgumentException("attributeCode");
+    }
+
+    try {
+      // Find the attribute definition by code
+      WorkflowAttributeDefinition workflowAttributeDefinition =
+          workflowDefinition.getAttributeDefinitions().stream()
+              .filter(attributeDefinition -> attributeCode.equals(attributeDefinition.getCode()))
+              .findFirst()
+              .orElse(null);
+
+      // If no matching attribute definition, it's not valid
+      if (workflowAttributeDefinition == null) {
+        return false;
+      }
+
+      // If no pattern is defined, existence is sufficient for validity
+      String pattern = workflowAttributeDefinition.getPattern();
+      if (!StringUtils.hasText(pattern)) {
+        return true;
+      }
+
+      // Validate the value against the regex pattern (full match)
+      if (!StringUtils.hasText(attributeValue)) {
+        return false;
+      }
+      return Pattern.compile(pattern).matcher(attributeValue).matches();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the workflow attribute ("
               + attributeCode
               + ") for the workflow with the workflow definition ("
-              + workflowDefinitionId
-              + ") for the tenant ("
-              + tenantId
+              + workflowDefinition.getId()
               + ")",
           e);
     }
@@ -132,9 +163,8 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   @Override
   public void validateAllowedDocumentAttributes(
-      UUID tenantId,
       String parameter,
-      String documentDefinitionId,
+      DocumentDefinition documentDefinition,
       List<DocumentAttribute> documentAttributes)
       throws InvalidArgumentException, ServiceUnavailableException {
     // Early exit if no document attributes to validate
@@ -143,7 +173,8 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     }
 
     for (DocumentAttribute documentAttribute : documentAttributes) {
-      if (!isValidDocumentAttribute(tenantId, documentDefinitionId, documentAttribute.getCode())) {
+      if (!isValidDocumentAttribute(
+          documentDefinition, documentAttribute.getCode(), documentAttribute.getValue())) {
         throw new InvalidArgumentException(
             parameter, "the document attribute (" + documentAttribute.getCode() + ") is invalid");
       }
@@ -152,9 +183,8 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   @Override
   public void validateAllowedWorkflowAttributes(
-      UUID tenantId,
       String parameter,
-      String workflowDefinitionId,
+      WorkflowDefinition workflowDefinition,
       List<WorkflowAttribute> workflowAttributes)
       throws InvalidArgumentException, ServiceUnavailableException {
     // Early exit if no workflow attributes to validate
@@ -163,7 +193,8 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     }
 
     for (WorkflowAttribute workflowAttribute : workflowAttributes) {
-      if (!isValidWorkflowAttribute(tenantId, workflowDefinitionId, workflowAttribute.getCode())) {
+      if (!isValidWorkflowAttribute(
+          workflowDefinition, workflowAttribute.getCode(), workflowAttribute.getValue())) {
         throw new InvalidArgumentException(
             parameter, "the workflow attribute (" + workflowAttribute.getCode() + ") is invalid");
       }
@@ -172,7 +203,9 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   @Override
   public void validateAllowedWorkflowVariables(
-      String parameter, String workflowDefinitionId, List<WorkflowVariable> workflowVariables)
+      String parameter,
+      WorkflowDefinition workflowDefinition,
+      List<WorkflowVariable> workflowVariables)
       throws InvalidArgumentException, ServiceUnavailableException {
     // Early exit if no workflow variables to validate
     if (workflowVariables == null || workflowVariables.isEmpty()) {
@@ -180,9 +213,6 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     }
 
     try {
-      WorkflowDefinition workflowDefinition =
-          getWorkflowService().getWorkflowDefinition(workflowDefinitionId);
-
       if (!workflowDefinition.getVariableDefinitions().isEmpty()) {
         // Create a Set of valid variable names for O(1) lookup
         Set<String> validVariableNames =
@@ -209,7 +239,9 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the allowed workflow variables for the workflow definition ("
-              + workflowDefinitionId
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
               + ")",
           e);
     }
@@ -271,14 +303,15 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   @Override
   public void validateRequiredDocumentAttributes(
-      UUID tenantId,
       String parameter,
-      String documentDefinitionId,
+      DocumentDefinition documentDefinition,
       List<DocumentAttribute> documentAttributes)
       throws InvalidArgumentException, ServiceUnavailableException {
     try {
       List<DocumentAttributeDefinition> requiredDocumentAttributeDefinitions =
-          getDocumentService().getRequiredDocumentAttributeDefinitions(tenantId);
+          documentDefinition.getAttributeDefinitions().stream()
+              .filter(DocumentAttributeDefinition::isRequired)
+              .toList();
 
       // Early exit if no required document attribute definitions exist
       if (requiredDocumentAttributeDefinitions.isEmpty()) {
@@ -292,12 +325,6 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
       // Filter and validate in a single pass
       String missingDocumentAttributeCode =
           requiredDocumentAttributeDefinitions.stream()
-              .filter(
-                  definition ->
-                      (definition.getDocumentDefinitionId() == null
-                              || definition.getDocumentDefinitionId().equals(documentDefinitionId))
-                          && (definition.getTenantId() == null
-                              || definition.getTenantId().equals(tenantId)))
               .map(DocumentAttributeDefinition::getCode)
               .filter(code -> providedDocumentAttributeCodes.stream().noneMatch(code::equals))
               .findFirst()
@@ -312,7 +339,7 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the required document attributes for the document definition ("
-              + documentDefinitionId
+              + documentDefinition.getId()
               + ")",
           e);
     }
@@ -320,14 +347,15 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   @Override
   public void validateRequiredWorkflowAttributes(
-      UUID tenantId,
       String parameter,
-      String workflowDefinitionId,
+      WorkflowDefinition workflowDefinition,
       List<WorkflowAttribute> workflowAttributes)
       throws InvalidArgumentException, ServiceUnavailableException {
     try {
       List<WorkflowAttributeDefinition> requiredWorkflowAttributeDefinitions =
-          getWorkflowService().getRequiredWorkflowAttributeDefinitions(tenantId);
+          workflowDefinition.getAttributeDefinitions().stream()
+              .filter(WorkflowAttributeDefinition::isRequired)
+              .toList();
 
       // Early exit if no required workflow attribute definitions exist
       if (requiredWorkflowAttributeDefinitions.isEmpty()) {
@@ -341,12 +369,6 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
       // Filter and validate in a single pass
       String missingWorkflowAttributeCode =
           requiredWorkflowAttributeDefinitions.stream()
-              .filter(
-                  definition ->
-                      (definition.getWorkflowDefinitionId() == null
-                              || definition.getWorkflowDefinitionId().equals(workflowDefinitionId))
-                          && (definition.getTenantId() == null
-                              || definition.getTenantId().equals(tenantId)))
               .map(WorkflowAttributeDefinition::getCode)
               .filter(code -> providedWorkflowAttributeCodes.stream().noneMatch(code::equals))
               .findFirst()
@@ -361,7 +383,9 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the required workflow attributes for the workflow definition ("
-              + workflowDefinitionId
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
               + ")",
           e);
     }
@@ -369,12 +393,11 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   @Override
   public void validateRequiredWorkflowVariables(
-      String parameter, String workflowDefinitionId, List<WorkflowVariable> workflowVariables)
+      String parameter,
+      WorkflowDefinition workflowDefinition,
+      List<WorkflowVariable> workflowVariables)
       throws InvalidArgumentException, ServiceUnavailableException {
     try {
-      WorkflowDefinition workflowDefinition =
-          getWorkflowService().getWorkflowDefinition(workflowDefinitionId);
-
       if (!workflowDefinition.getVariableDefinitions().isEmpty()) {
         // Create a Set of provided variable names for O(1) lookup
         Set<String> providedVariableNames =
@@ -403,7 +426,9 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the required workflow variables for the workflow definition ("
-              + workflowDefinitionId
+              + workflowDefinition.getId()
+              + ") version ("
+              + workflowDefinition.getVersion()
               + ")",
           e);
     }

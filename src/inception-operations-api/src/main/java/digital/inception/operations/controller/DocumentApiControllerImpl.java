@@ -21,27 +21,35 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
-import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
-import digital.inception.operations.exception.DuplicateDocumentAttributeDefinitionException;
+import digital.inception.operations.exception.DocumentTemplateCategoryNotFoundException;
+import digital.inception.operations.exception.DocumentTemplateNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
+import digital.inception.operations.exception.DuplicateDocumentTemplateCategoryException;
+import digital.inception.operations.exception.DuplicateDocumentTemplateException;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
+import digital.inception.operations.model.CreateDocumentTemplateRequest;
 import digital.inception.operations.model.Document;
-import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSummaries;
+import digital.inception.operations.model.DocumentTemplate;
+import digital.inception.operations.model.DocumentTemplateCategory;
+import digital.inception.operations.model.DocumentTemplateSortBy;
+import digital.inception.operations.model.DocumentTemplateSummaries;
+import digital.inception.operations.model.DocumentTemplateSummary;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
+import digital.inception.operations.model.UpdateDocumentTemplateRequest;
 import digital.inception.operations.service.DocumentService;
 import java.util.List;
 import java.util.Objects;
@@ -99,15 +107,6 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void createDocumentAttributeDefinition(
-      DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException,
-          DuplicateDocumentAttributeDefinitionException,
-          ServiceUnavailableException {
-    documentService.createDocumentAttributeDefinition(documentAttributeDefinition);
-  }
-
-  @Override
   public void createDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionException,
@@ -144,6 +143,23 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void createDocumentTemplate(CreateDocumentTemplateRequest createDocumentTemplateRequest)
+      throws InvalidArgumentException,
+          DuplicateDocumentTemplateException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException {
+    documentService.createDocumentTemplate(createDocumentTemplateRequest, getAuthenticationName());
+  }
+
+  @Override
+  public void createDocumentTemplateCategory(DocumentTemplateCategory documentTemplateCategory)
+      throws InvalidArgumentException,
+          DuplicateDocumentTemplateCategoryException,
+          ServiceUnavailableException {
+    documentService.createDocumentTemplateCategory(documentTemplateCategory);
+  }
+
+  @Override
   public void deleteDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
@@ -155,14 +171,6 @@ public class DocumentApiControllerImpl extends SecureApiController
     }
 
     documentService.deleteDocument(tenantId, documentId);
-  }
-
-  @Override
-  public void deleteDocumentAttributeDefinition(String documentAttributeDefinitionCode)
-      throws InvalidArgumentException,
-          DocumentAttributeDefinitionNotFoundException,
-          ServiceUnavailableException {
-    documentService.deleteDocumentAttributeDefinition(documentAttributeDefinitionCode);
   }
 
   @Override
@@ -225,6 +233,22 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void deleteDocumentTemplate(String documentTemplateId)
+      throws InvalidArgumentException,
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException {
+    documentService.deleteDocumentTemplate(documentTemplateId);
+  }
+
+  @Override
+  public void deleteDocumentTemplateCategory(String documentTemplateCategoryId)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException {
+    documentService.deleteDocumentTemplateCategory(documentTemplateCategoryId);
+  }
+
+  @Override
   public Document getDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
@@ -236,29 +260,6 @@ public class DocumentApiControllerImpl extends SecureApiController
     }
 
     return documentService.getDocument(tenantId, documentId);
-  }
-
-  @Override
-  public DocumentAttributeDefinition getDocumentAttributeDefinition(
-      String documentAttributeDefinitionCode)
-      throws InvalidArgumentException,
-          DocumentAttributeDefinitionNotFoundException,
-          ServiceUnavailableException {
-    return documentService.getDocumentAttributeDefinition(documentAttributeDefinitionCode);
-  }
-
-  @Override
-  public List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
-
-    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToFunction("Operations.DocumentAdministration"))
-        && (!hasAccessToTenant(tenantId))) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    return documentService.getDocumentAttributeDefinitions(tenantId);
   }
 
   @Override
@@ -371,6 +372,74 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public DocumentTemplate getDocumentTemplate(String documentTemplateId)
+      throws InvalidArgumentException,
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException {
+    return documentService.getDocumentTemplate(documentTemplateId);
+  }
+
+  @Override
+  public List<DocumentTemplateCategory> getDocumentTemplateCategories(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return documentService.getDocumentTemplateCategories(tenantId);
+  }
+
+  @Override
+  public DocumentTemplateCategory getDocumentTemplateCategory(String documentTemplateCategoryId)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException {
+    return documentService.getDocumentTemplateCategory(documentTemplateCategoryId);
+  }
+
+  @Override
+  public DocumentTemplateSummaries getDocumentTemplateSummaries(
+      UUID tenantId,
+      String filter,
+      DocumentTemplateSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return documentService.getDocumentTemplateSummaries(
+        tenantId, filter, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  @Override
+  public List<DocumentTemplateSummary> getDocumentTemplateSummaries(
+      UUID tenantId, String documentTemplateCategoryId)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.DocumentAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    return documentService.getDocumentTemplateSummaries(tenantId, documentTemplateCategoryId);
+  }
+
+  @Override
   public DocumentSummaries searchDocuments(
       UUID tenantId, SearchDocumentsRequest searchDocumentsRequest)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -398,24 +467,6 @@ public class DocumentApiControllerImpl extends SecureApiController
 
     Document document =
         documentService.updateDocument(tenantId, updateDocumentRequest, getAuthenticationName());
-  }
-
-  @Override
-  public void updateDocumentAttributeDefinition(
-      String documentAttributeDefinitionCode,
-      DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException,
-          DocumentAttributeDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
-      throw new InvalidArgumentException("documentAttributeDefinitionCode");
-    }
-
-    if (!Objects.equals(documentAttributeDefinitionCode, documentAttributeDefinition.getCode())) {
-      throw new InvalidArgumentException("documentAttributeDefinition.code");
-    }
-
-    documentService.updateDocumentAttributeDefinition(documentAttributeDefinition);
   }
 
   @Override
@@ -467,5 +518,31 @@ public class DocumentApiControllerImpl extends SecureApiController
     DocumentNote documentNote =
         documentService.updateDocumentNote(
             tenantId, updateDocumentNoteRequest, getAuthenticationName());
+  }
+
+  @Override
+  public void updateDocumentTemplate(UpdateDocumentTemplateRequest updateDocumentTemplateRequest)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException {
+    documentService.updateDocumentTemplate(updateDocumentTemplateRequest, getAuthenticationName());
+  }
+
+  @Override
+  public void updateDocumentTemplateCategory(
+      String documentTemplateCategoryId, DocumentTemplateCategory documentTemplateCategory)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentTemplateCategoryId)) {
+      throw new InvalidArgumentException("documentTemplateCategoryId");
+    }
+
+    if (!Objects.equals(documentTemplateCategoryId, documentTemplateCategory.getId())) {
+      throw new InvalidArgumentException("documentTemplateCategory.id");
+    }
+
+    documentService.updateDocumentTemplateCategory(documentTemplateCategory);
   }
 }

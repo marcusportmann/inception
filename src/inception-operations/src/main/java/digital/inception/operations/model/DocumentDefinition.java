@@ -17,16 +17,22 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
-import digital.inception.operations.persistence.jpa.RequiredDocumentAttributeListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -37,6 +43,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,7 +61,7 @@ import java.util.UUID;
   "name",
   "description",
   "templateId",
-  "requiredDocumentAttributes"
+  "attributeDefinitions"
 })
 @XmlRootElement(name = "DocumentDefinition", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -67,7 +74,7 @@ import java.util.UUID;
       "name",
       "description",
       "templateId",
-      "requiredDocumentAttributes"
+      "attributeDefinitions"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -75,6 +82,24 @@ import java.util.UUID;
 public class DocumentDefinition implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** The document attribute definitions for the document definition. */
+  @Schema(description = "The document attribute definitions for the document definition")
+  @JsonProperty
+  @JsonManagedReference("documentDefinitionAttributeDefinitionReference")
+  @XmlElementWrapper(name = "AttributeDefinitions")
+  @XmlElement(name = "AttributeDefinition")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OrderBy("code")
+  @JoinColumns({
+    @JoinColumn(
+        name = "definition_id",
+        referencedColumnName = "id",
+        insertable = false,
+        updatable = false)
+  })
+  private final List<DocumentAttributeDefinition> attributeDefinitions = new ArrayList<>();
 
   /** The ID for the document definition category the document definition is associated with. */
   @Schema(
@@ -119,18 +144,6 @@ public class DocumentDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The required attributes for a document associated with the document definition. */
-  @Schema(
-      description =
-          "The required attributes for a document associated with the document definition")
-  @JsonProperty
-  @XmlElementWrapper(name = "RequiredDocumentAttributes")
-  @XmlElement(name = "RequiredDocumentAttribute")
-  @Size(max = 10)
-  @Convert(converter = RequiredDocumentAttributeListAttributeConverter.class)
-  @Column(name = "required_document_attributes", length = 510)
-  private List<RequiredDocumentAttribute> requiredDocumentAttributes;
-
   /** The ID for the document template for the document definition. */
   @Schema(description = "The ID for the document template for the document definition")
   @JsonProperty
@@ -159,8 +172,7 @@ public class DocumentDefinition implements Serializable {
    * @param name name of the document definition
    * @param description the description for the document definition
    * @param templateId the ID for the document template for the document definition
-   * @param requiredDocumentAttributes the required attributes for a document associated with the
-   *     document definition
+   * @param attributeDefinitions the document attribute definitions for the document definition
    */
   public DocumentDefinition(
       String id,
@@ -169,14 +181,37 @@ public class DocumentDefinition implements Serializable {
       String name,
       String description,
       String templateId,
-      List<RequiredDocumentAttribute> requiredDocumentAttributes) {
+      List<DocumentAttributeDefinition> attributeDefinitions) {
     this.id = id;
     this.categoryId = categoryId;
     this.tenantId = tenantId;
     this.name = name;
     this.description = description;
     this.templateId = templateId;
-    this.requiredDocumentAttributes = requiredDocumentAttributes;
+
+    if (attributeDefinitions != null) {
+      for (DocumentAttributeDefinition attributeDefinition : attributeDefinitions) {
+        attributeDefinition.setDocumentDefinition(this);
+      }
+
+      this.attributeDefinitions.addAll(attributeDefinitions);
+    }
+  }
+
+  /**
+   * Add the document attribute definition for the document definition.
+   *
+   * @param attributeDefinition the document attribute definition
+   */
+  public void addAttributeDefinition(DocumentAttributeDefinition attributeDefinition) {
+    attributeDefinitions.removeIf(
+        existingAttributeDefinition ->
+            StringUtil.equalsIgnoreCase(
+                existingAttributeDefinition.getCode(), attributeDefinition.getCode()));
+
+    attributeDefinition.setDocumentDefinition(this);
+
+    attributeDefinitions.add(attributeDefinition);
   }
 
   /**
@@ -202,6 +237,15 @@ public class DocumentDefinition implements Serializable {
     DocumentDefinition other = (DocumentDefinition) object;
 
     return StringUtil.equalsIgnoreCase(id, other.id);
+  }
+
+  /**
+   * Returns the document attribute definitions for the document definition.
+   *
+   * @return the document attribute definitions for the document definition
+   */
+  public List<DocumentAttributeDefinition> getAttributeDefinitions() {
+    return attributeDefinitions;
   }
 
   /**
@@ -241,15 +285,6 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Returns the required attributes for a document associated with the document definition.
-   *
-   * @return the required attributes for a document associated with the document definition
-   */
-  public List<RequiredDocumentAttribute> getRequiredDocumentAttributes() {
-    return requiredDocumentAttributes;
-  }
-
-  /**
    * Returns the ID for the document template for the document definition.
    *
    * @return the ID for the document template for the document definition
@@ -275,6 +310,29 @@ public class DocumentDefinition implements Serializable {
   @Override
   public int hashCode() {
     return ((id == null) ? 0 : id.hashCode());
+  }
+
+  /**
+   * Remove the document attribute definition with the specified code for the document definition.
+   *
+   * @param code the code for the document attribute definition
+   */
+  public void removeAttributeDefinition(String code) {
+    attributeDefinitions.removeIf(
+        existingAttributeDefinition ->
+            StringUtil.equalsIgnoreCase(existingAttributeDefinition.getCode(), code));
+  }
+
+  /**
+   * Set the document attribute definitions for the document definition.
+   *
+   * @param attributeDefinitions the document attribute definitions for the document definition
+   */
+  public void setAttributeDefinitions(List<DocumentAttributeDefinition> attributeDefinitions) {
+    attributeDefinitions.forEach(
+        attributeDefinition -> attributeDefinition.setDocumentDefinition(this));
+    this.attributeDefinitions.clear();
+    this.attributeDefinitions.addAll(attributeDefinitions);
   }
 
   /**
@@ -312,17 +370,6 @@ public class DocumentDefinition implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * Set the required attributes for a document associated with the document definition.
-   *
-   * @param requiredDocumentAttributes the required attributes for a document associated with the
-   *     document definition
-   */
-  public void setRequiredDocumentAttributes(
-      List<RequiredDocumentAttribute> requiredDocumentAttributes) {
-    this.requiredDocumentAttributes = requiredDocumentAttributes;
   }
 
   /**

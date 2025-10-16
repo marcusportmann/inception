@@ -21,31 +21,40 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.json.JsonClasspathResource;
-import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
-import digital.inception.operations.exception.DuplicateDocumentAttributeDefinitionException;
+import digital.inception.operations.exception.DocumentTemplateCategoryNotFoundException;
+import digital.inception.operations.exception.DocumentTemplateNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
+import digital.inception.operations.exception.DuplicateDocumentTemplateCategoryException;
+import digital.inception.operations.exception.DuplicateDocumentTemplateException;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
+import digital.inception.operations.model.CreateDocumentTemplateRequest;
 import digital.inception.operations.model.Document;
-import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSummaries;
+import digital.inception.operations.model.DocumentTemplate;
+import digital.inception.operations.model.DocumentTemplateCategory;
+import digital.inception.operations.model.DocumentTemplateSortBy;
+import digital.inception.operations.model.DocumentTemplateSummaries;
+import digital.inception.operations.model.DocumentTemplateSummary;
 import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
-import digital.inception.operations.persistence.jpa.DocumentAttributeDefinitionRepository;
+import digital.inception.operations.model.UpdateDocumentTemplateRequest;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository;
+import digital.inception.operations.persistence.jpa.DocumentTemplateCategoryRepository;
+import digital.inception.operations.persistence.jpa.DocumentTemplateRepository;
 import digital.inception.operations.store.DocumentStore;
 import jakarta.annotation.PostConstruct;
 import java.time.OffsetDateTime;
@@ -54,9 +63,10 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -68,9 +78,6 @@ import org.springframework.util.StringUtils;
 @Service
 public class DocumentServiceImpl extends AbstractServiceBase implements DocumentService {
 
-  /** The Document Attribute Definition Repository. */
-  private final DocumentAttributeDefinitionRepository documentAttributeDefinitionRepository;
-
   /** The Document Definition Category Repository. */
   private final DocumentDefinitionCategoryRepository documentDefinitionCategoryRepository;
 
@@ -79,6 +86,12 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
   /** The Document Store. */
   private final DocumentStore documentStore;
+
+  /** The Document Template Category Repository. */
+  private final DocumentTemplateCategoryRepository documentTemplateCategoryRepository;
+
+  /** The Document Template Repository. */
+  private final DocumentTemplateRepository documentTemplateRepository;
 
   /** The Validation Service. */
   private final ValidationService validationService;
@@ -90,6 +103,10 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   @Value("${inception.operations.max-filtered-document-notes:#{100}}")
   private int maxFilteredDocumentNotes;
 
+  /** The maximum number of filtered document templates that will be returned by the service. */
+  @Value("${inception.operations.max-filtered-document-templates:#{100}}")
+  private int maxFilteredDocumentTemplates;
+
   /** The maximum number of filtered documents that will be returned by the service. */
   @Value("${inception.operations.max-filtered-documents:#{100}}")
   private int maxFilteredDocuments;
@@ -99,31 +116,34 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
    *
    * @param applicationContext the Spring application context
    * @param documentStore the Document Store
-   * @param documentAttributeDefinitionRepository the Document Attribute Definition Repository
    * @param documentDefinitionCategoryRepository the Document Definition Category Repository
    * @param documentDefinitionRepository the Document Definition Repository
+   * @param documentTemplateRepository the Document Template Repository
+   * @param documentTemplateCategoryRepository the Document Template Category Repository
    * @param validationService the Validation Service
    */
   public DocumentServiceImpl(
       ApplicationContext applicationContext,
       DocumentStore documentStore,
-      DocumentAttributeDefinitionRepository documentAttributeDefinitionRepository,
       DocumentDefinitionCategoryRepository documentDefinitionCategoryRepository,
       DocumentDefinitionRepository documentDefinitionRepository,
+      DocumentTemplateCategoryRepository documentTemplateCategoryRepository,
+      DocumentTemplateRepository documentTemplateRepository,
       ValidationService validationService) {
     super(applicationContext);
 
     this.documentStore = documentStore;
-    this.documentAttributeDefinitionRepository = documentAttributeDefinitionRepository;
     this.documentDefinitionCategoryRepository = documentDefinitionCategoryRepository;
     this.documentDefinitionRepository = documentDefinitionRepository;
+    this.documentTemplateCategoryRepository = documentTemplateCategoryRepository;
+    this.documentTemplateRepository = documentTemplateRepository;
     this.validationService = validationService;
   }
 
   @Override
-  public String calculateDocumentDataHash(byte[] documentData) {
+  public String calculateDataHash(byte[] data) {
     try {
-      return documentStore.calculateDocumentDataHash(documentData);
+      return documentStore.calculateDocumentDataHash(data);
     } catch (Throwable e) {
       throw new RuntimeException("Failed to calculate the hash for the document data", e);
     }
@@ -142,9 +162,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     validateArgument("createDocumentRequest", createDocumentRequest);
 
     try {
-      if (!documentDefinitionRepository.existsById(createDocumentRequest.getDefinitionId())) {
-        throw new DocumentDefinitionNotFoundException(createDocumentRequest.getDefinitionId());
-      }
+      DocumentDefinition documentDefinition =
+          getDocumentService().getDocumentDefinition(createDocumentRequest.getDefinitionId());
 
       Document document = new Document(createDocumentRequest.getDefinitionId());
 
@@ -162,16 +181,14 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       if (createDocumentRequest.getAttributes() != null) {
         // Validate the allowed document attributes
         validationService.validateAllowedDocumentAttributes(
-            tenantId,
             "createDocumentRequest.attributes",
-            createDocumentRequest.getDefinitionId(),
+            documentDefinition,
             createDocumentRequest.getAttributes());
 
         // Validate the required document attributes
         validationService.validateRequiredDocumentAttributes(
-            tenantId,
             "createDocumentRequest.attributes",
-            createDocumentRequest.getDefinitionId(),
+            documentDefinition,
             createDocumentRequest.getAttributes());
 
         document.setAttributes(createDocumentRequest.getAttributes());
@@ -180,10 +197,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       document.setCreated(OffsetDateTime.now());
       document.setCreatedBy(createdBy);
       document.setData(createDocumentRequest.getData());
-      document.setExpiryDate(createDocumentRequest.getExpiryDate());
       document.setFileType(createDocumentRequest.getFileType());
-      document.setHash(calculateDocumentDataHash(createDocumentRequest.getData()));
-      document.setIssueDate(createDocumentRequest.getIssueDate());
+      document.setHash(calculateDataHash(createDocumentRequest.getData()));
       document.setName(createDocumentRequest.getName());
       document.setSourceDocumentId(createDocumentRequest.getSourceDocumentId());
       document.setTenantId(tenantId);
@@ -197,33 +212,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + createDocumentRequest.getDefinitionId()
               + ") for the tenant ("
               + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  @CacheEvict(cacheNames = "documentAttributeDefinitions", allEntries = true)
-  public void createDocumentAttributeDefinition(
-      DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException,
-          DuplicateDocumentAttributeDefinitionException,
-          ServiceUnavailableException {
-    validateArgument("documentAttributeDefinition", documentAttributeDefinition);
-
-    try {
-      if (documentAttributeDefinitionRepository.existsById(documentAttributeDefinition.getCode())) {
-        throw new DuplicateDocumentAttributeDefinitionException(
-            documentAttributeDefinition.getCode());
-      }
-
-      documentAttributeDefinitionRepository.saveAndFlush(documentAttributeDefinition);
-    } catch (DuplicateDocumentAttributeDefinitionException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to create the document attribute definition ("
-              + documentAttributeDefinition.getCode()
               + ")",
           e);
     }
@@ -322,6 +310,71 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  public void createDocumentTemplate(
+      CreateDocumentTemplateRequest createDocumentTemplateRequest, String createdBy)
+      throws InvalidArgumentException,
+          DuplicateDocumentTemplateException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException {
+    validateArgument("createDocumentTemplateRequest", createDocumentTemplateRequest);
+
+    try {
+      if (!documentTemplateCategoryRepository.existsById(
+          createDocumentTemplateRequest.getCategoryId())) {
+        throw new DocumentTemplateCategoryNotFoundException(
+            createDocumentTemplateRequest.getCategoryId());
+      }
+
+      if (documentTemplateRepository.existsById(createDocumentTemplateRequest.getId())) {
+        throw new DuplicateDocumentTemplateException(createDocumentTemplateRequest.getId());
+      }
+
+      DocumentTemplate documentTemplate = new DocumentTemplate();
+      documentTemplate.setCategoryId(createDocumentTemplateRequest.getCategoryId());
+      documentTemplate.setCreated(OffsetDateTime.now());
+      documentTemplate.setCreatedBy(createdBy);
+      documentTemplate.setData(createDocumentTemplateRequest.getData());
+      documentTemplate.setDescription(createDocumentTemplateRequest.getDescription());
+      documentTemplate.setHash(calculateDataHash(createDocumentTemplateRequest.getData()));
+      documentTemplate.setId(createDocumentTemplateRequest.getId());
+      documentTemplate.setName(createDocumentTemplateRequest.getName());
+      documentTemplate.setTenantId(createDocumentTemplateRequest.getTenantId());
+
+      documentTemplateRepository.saveAndFlush(documentTemplate);
+    } catch (DuplicateDocumentTemplateException | DocumentTemplateCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the document template (" + createDocumentTemplateRequest.getId() + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void createDocumentTemplateCategory(DocumentTemplateCategory documentTemplateCategory)
+      throws InvalidArgumentException,
+          DuplicateDocumentTemplateCategoryException,
+          ServiceUnavailableException {
+    validateArgument("documentTemplateCategory", documentTemplateCategory);
+
+    try {
+      if (documentTemplateCategoryRepository.existsById(documentTemplateCategory.getId())) {
+        throw new DuplicateDocumentTemplateCategoryException(documentTemplateCategory.getId());
+      }
+
+      documentTemplateCategoryRepository.saveAndFlush(documentTemplateCategory);
+    } catch (DuplicateDocumentTemplateCategoryException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the document template category ("
+              + documentTemplateCategory.getId()
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public void deleteDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -333,33 +386,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     }
 
     documentStore.deleteDocument(tenantId, documentId);
-  }
-
-  @Override
-  @CacheEvict(cacheNames = "documentAttributeDefinitions", allEntries = true)
-  public void deleteDocumentAttributeDefinition(String documentAttributeDefinitionCode)
-      throws InvalidArgumentException,
-          DocumentAttributeDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
-      throw new InvalidArgumentException("documentAttributeDefinitionCode");
-    }
-
-    try {
-      if (!documentAttributeDefinitionRepository.existsById(documentAttributeDefinitionCode)) {
-        throw new DocumentAttributeDefinitionNotFoundException(documentAttributeDefinitionCode);
-      }
-
-      documentAttributeDefinitionRepository.deleteById(documentAttributeDefinitionCode);
-    } catch (DocumentAttributeDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the document attribute definition ("
-              + documentAttributeDefinitionCode
-              + ")",
-          e);
-    }
   }
 
   @Override
@@ -433,6 +459,53 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + ") for the tenant ("
               + tenantId
               + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void deleteDocumentTemplate(String documentTemplateId)
+      throws InvalidArgumentException,
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentTemplateId)) {
+      throw new InvalidArgumentException("documentTemplateId");
+    }
+
+    try {
+      if (!documentTemplateRepository.existsById(documentTemplateId)) {
+        throw new DocumentTemplateNotFoundException(documentTemplateId);
+      }
+
+      documentTemplateRepository.deleteById(documentTemplateId);
+    } catch (DocumentTemplateNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the document template (" + documentTemplateId + ")", e);
+    }
+  }
+
+  @Override
+  public void deleteDocumentTemplateCategory(String documentTemplateCategoryId)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentTemplateCategoryId)) {
+      throw new InvalidArgumentException("documentTemplateCategoryId");
+    }
+
+    try {
+      if (!documentTemplateCategoryRepository.existsById(documentTemplateCategoryId)) {
+        throw new DocumentTemplateCategoryNotFoundException(documentTemplateCategoryId);
+      }
+
+      documentTemplateCategoryRepository.deleteById(documentTemplateCategoryId);
+    } catch (DocumentTemplateCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the document template category (" + documentTemplateCategoryId + ")",
           e);
     }
   }
@@ -542,53 +615,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     }
 
     return documentStore.getDocument(tenantId, documentId);
-  }
-
-  @Override
-  public DocumentAttributeDefinition getDocumentAttributeDefinition(
-      String documentAttributeDefinitionCode)
-      throws InvalidArgumentException,
-          DocumentAttributeDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(documentAttributeDefinitionCode)) {
-      throw new InvalidArgumentException("documentAttributeDefinitionCode");
-    }
-
-    try {
-      Optional<DocumentAttributeDefinition> documentAttributeDefinitionOptional =
-          documentAttributeDefinitionRepository.findById(documentAttributeDefinitionCode);
-
-      if (documentAttributeDefinitionOptional.isEmpty()) {
-        throw new DocumentAttributeDefinitionNotFoundException(documentAttributeDefinitionCode);
-      }
-
-      return documentAttributeDefinitionOptional.get();
-    } catch (DocumentAttributeDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the document attribute definition ("
-              + documentAttributeDefinitionCode
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  @Cacheable(cacheNames = "documentAttributeDefinitions", key = "#tenantId")
-  public List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    try {
-      return documentAttributeDefinitionRepository.findForTenantOrGlobal(tenantId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the document attribute definitions for the tenant (" + tenantId + ")",
-          e);
-    }
   }
 
   @Override
@@ -757,23 +783,172 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  @Cacheable(cacheNames = "documentAttributeDefinitions", key = "#tenantId.toString + '-REQUIRED'")
-  public List<DocumentAttributeDefinition> getRequiredDocumentAttributeDefinitions(UUID tenantId)
+  public DocumentTemplate getDocumentTemplate(String documentTemplateId)
+      throws InvalidArgumentException,
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentTemplateId)) {
+      throw new InvalidArgumentException("documentTemplateId");
+    }
+
+    try {
+      Optional<DocumentTemplate> documentTemplateOptional =
+          documentTemplateRepository.findById(documentTemplateId);
+
+      if (documentTemplateOptional.isEmpty()) {
+        throw new DocumentTemplateNotFoundException(documentTemplateId);
+      }
+
+      return documentTemplateOptional.get();
+    } catch (DocumentTemplateNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document template (" + documentTemplateId + ")", e);
+    }
+  }
+
+  @Override
+  public List<DocumentTemplateCategory> getDocumentTemplateCategories(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    try {
+      return documentTemplateCategoryRepository.findForTenantOrGlobal(tenantId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document template categories for the tenant (" + tenantId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public DocumentTemplateCategory getDocumentTemplateCategory(String documentTemplateCategoryId)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentTemplateCategoryId)) {
+      throw new InvalidArgumentException("documentTemplateCategoryId");
+    }
+
+    try {
+      Optional<DocumentTemplateCategory> documentTemplateCategoryOptional =
+          documentTemplateCategoryRepository.findById(documentTemplateCategoryId);
+
+      if (documentTemplateCategoryOptional.isEmpty()) {
+        throw new DocumentTemplateCategoryNotFoundException(documentTemplateCategoryId);
+      }
+
+      return documentTemplateCategoryOptional.get();
+    } catch (DocumentTemplateCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document template category (" + documentTemplateCategoryId + ")",
+          e);
+    }
+  }
+
+  @Override
+  public List<DocumentTemplateSummary> getDocumentTemplateSummaries(
+      UUID tenantId, String documentTemplateCategoryId)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException {
+    if (!StringUtils.hasText(documentTemplateCategoryId)) {
+      throw new InvalidArgumentException("documentTemplateCategoryId");
+    }
+
+    try {
+      if (!documentTemplateCategoryRepository.existsById(documentTemplateCategoryId)) {
+        throw new DocumentTemplateCategoryNotFoundException(documentTemplateCategoryId);
+      }
+
+      return documentTemplateRepository.findDocumentTemplateSummariesForCategoryAndTenantOrGlobal(
+          documentTemplateCategoryId, tenantId);
+    } catch (DocumentTemplateCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the summaries for the document templates associated with the document template category ("
+              + documentTemplateCategoryId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public DocumentTemplateSummaries getDocumentTemplateSummaries(
+      UUID tenantId,
+      String filter,
+      DocumentTemplateSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
 
-    try {
-      List<DocumentAttributeDefinition> documentAttributeDefinitions =
-          getDocumentService().getDocumentAttributeDefinitions(tenantId);
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
 
-      return documentAttributeDefinitions.stream()
-          .filter(DocumentAttributeDefinition::isRequired)
-          .toList();
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
+    if (sortBy == null) {
+      sortBy = DocumentTemplateSortBy.ID;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.DESCENDING;
+    }
+
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+
+    if (pageSize == null) {
+      pageSize = maxFilteredDocumentTemplates;
+    }
+
+    String filterLike = (filter == null) ? null : "%" + filter.toLowerCase() + "%";
+
+    PageRequest pageRequest;
+
+    if (sortBy == DocumentTemplateSortBy.NAME) {
+      pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, maxFilteredDocumentTemplates),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              "name");
+    } else {
+      pageRequest =
+          PageRequest.of(
+              pageIndex,
+              Math.min(pageSize, maxFilteredDocumentTemplates),
+              (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
+              "id");
+    }
+
+    try {
+      Page<DocumentTemplateSummary> documentTemplateSummaryPage =
+          documentTemplateRepository.findDocumentTemplateSummaries(
+              tenantId, filterLike, pageRequest);
+
+      return new DocumentTemplateSummaries(
+          documentTemplateSummaryPage.toList(),
+          documentTemplateSummaryPage.getTotalElements(),
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to retrieve the required document attribute definitions for the tenant ("
+          "Failed to retrieve the summaries for the document templates for the tenant ("
               + tenantId
               + ")",
           e);
@@ -857,27 +1032,26 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       }
 
       if (updateDocumentRequest.getAttributes() != null) {
+        DocumentDefinition documentDefinition =
+            getDocumentService().getDocumentDefinition(document.getDefinitionId());
+
         // Validate the allowed document attributes
         validationService.validateAllowedDocumentAttributes(
-            tenantId,
             "updateDocumentRequest.attributes",
-            document.getDefinitionId(),
+            documentDefinition,
             updateDocumentRequest.getAttributes());
 
         // Validate the required document attributes
         validationService.validateRequiredDocumentAttributes(
-            tenantId,
             "updateDocumentRequest.attributes",
-            document.getDefinitionId(),
+            documentDefinition,
             updateDocumentRequest.getAttributes());
 
         document.setAttributes(updateDocumentRequest.getAttributes());
       }
 
       document.setData(updateDocumentRequest.getData());
-      document.setExpiryDate(updateDocumentRequest.getExpiryDate());
       document.setFileType(updateDocumentRequest.getFileType());
-      document.setIssueDate(updateDocumentRequest.getIssueDate());
       document.setName(updateDocumentRequest.getName());
       document.setSourceDocumentId(updateDocumentRequest.getSourceDocumentId());
       document.setUpdated(OffsetDateTime.now());
@@ -892,34 +1066,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + updateDocumentRequest.getDocumentId()
               + ") for the tenant ("
               + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  @CacheEvict(cacheNames = "documentAttributeDefinitions", allEntries = true)
-  public void updateDocumentAttributeDefinition(
-      DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException,
-          DocumentAttributeDefinitionNotFoundException,
-          ServiceUnavailableException {
-    validateArgument("documentAttributeDefinition", documentAttributeDefinition);
-
-    try {
-      if (!documentAttributeDefinitionRepository.existsById(
-          documentAttributeDefinition.getCode())) {
-        throw new DocumentAttributeDefinitionNotFoundException(
-            documentAttributeDefinition.getCode());
-      }
-
-      documentAttributeDefinitionRepository.saveAndFlush(documentAttributeDefinition);
-    } catch (DocumentAttributeDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to update the document attribute definition ("
-              + documentAttributeDefinition.getCode()
               + ")",
           e);
     }
@@ -1003,6 +1149,75 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               + updateDocumentNoteRequest.getDocumentNoteId()
               + ") for the tenant ("
               + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void updateDocumentTemplate(
+      UpdateDocumentTemplateRequest updateDocumentTemplateRequest, String updatedBy)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException {
+    validateArgument("updateDocumentTemplateRequest", updateDocumentTemplateRequest);
+
+    try {
+      if (!documentTemplateCategoryRepository.existsById(
+          updateDocumentTemplateRequest.getCategoryId())) {
+        throw new DocumentTemplateCategoryNotFoundException(
+            updateDocumentTemplateRequest.getCategoryId());
+      }
+
+      Optional<DocumentTemplate> documentTemplateOptional =
+          documentTemplateRepository.findById(updateDocumentTemplateRequest.getId());
+
+      if (documentTemplateOptional.isEmpty()) {
+        throw new DocumentTemplateNotFoundException(updateDocumentTemplateRequest.getId());
+      }
+
+      DocumentTemplate documentTemplate = documentTemplateOptional.get();
+
+      documentTemplate.setCategoryId(updateDocumentTemplateRequest.getCategoryId());
+      documentTemplate.setData(updateDocumentTemplateRequest.getData());
+      documentTemplate.setDescription(updateDocumentTemplateRequest.getDescription());
+      documentTemplate.setHash(calculateDataHash(updateDocumentTemplateRequest.getData()));
+      documentTemplate.setId(updateDocumentTemplateRequest.getId());
+      documentTemplate.setName(updateDocumentTemplateRequest.getName());
+      documentTemplate.setTenantId(updateDocumentTemplateRequest.getTenantId());
+      documentTemplate.setUpdated(OffsetDateTime.now());
+      documentTemplate.setUpdatedBy(updatedBy);
+
+      documentTemplateRepository.saveAndFlush(documentTemplate);
+    } catch (DocumentTemplateCategoryNotFoundException | DocumentTemplateNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the document template (" + updateDocumentTemplateRequest.getId() + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void updateDocumentTemplateCategory(DocumentTemplateCategory documentTemplateCategory)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException {
+    validateArgument("documentTemplateCategory", documentTemplateCategory);
+
+    try {
+      if (!documentTemplateCategoryRepository.existsById(documentTemplateCategory.getId())) {
+        throw new DocumentTemplateCategoryNotFoundException(documentTemplateCategory.getId());
+      }
+
+      documentTemplateCategoryRepository.saveAndFlush(documentTemplateCategory);
+    } catch (DocumentTemplateCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the document template category ("
+              + documentTemplateCategory.getId()
               + ")",
           e);
     }

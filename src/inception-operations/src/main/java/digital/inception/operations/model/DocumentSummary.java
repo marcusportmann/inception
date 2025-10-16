@@ -16,12 +16,10 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.file.FileType;
-import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,12 +31,9 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -56,25 +51,13 @@ import java.util.UUID;
   "fileType",
   "name",
   "hash",
-  "sourceDocumentId",
-  "issueDate",
-  "expiryDate"
+  "sourceDocumentId"
 })
 @XmlRootElement(name = "DocumentSummary", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "DocumentSummary",
     namespace = "https://inception.digital/operations",
-    propOrder = {
-      "id",
-      "tenantId",
-      "definitionId",
-      "fileType",
-      "name",
-      "hash",
-      "sourceDocumentId",
-      "issueDate",
-      "expiryDate"
-    })
+    propOrder = {"id", "tenantId", "definitionId", "fileType", "name", "hash", "sourceDocumentId"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_documents")
@@ -94,16 +77,6 @@ public class DocumentSummary implements Serializable {
   @Column(name = "definition_id", length = 50, nullable = false)
   private String definitionId;
 
-  /** The expiry date for the document. */
-  @Schema(description = "The ISO 8601 format expiry date for the document")
-  @JsonProperty
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "ExpiryDate")
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
-  @Column(name = "expiry_date")
-  private LocalDate expiryDate;
-
   /** The file type for the document. */
   @Schema(
       description = "The file type for the document",
@@ -122,16 +95,6 @@ public class DocumentSummary implements Serializable {
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
-
-  /** The issue date for the document. */
-  @Schema(description = "The ISO 8601 format issue date for the document")
-  @JsonProperty
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "IssueDate")
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
-  @Column(name = "issue_date")
-  private LocalDate issueDate;
 
   /** The name of the document. */
   @Schema(description = "The name of the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -197,15 +160,6 @@ public class DocumentSummary implements Serializable {
   }
 
   /**
-   * Returns the expiry date for the document.
-   *
-   * @return the expiry date for the document
-   */
-  public LocalDate getExpiryDate() {
-    return expiryDate;
-  }
-
-  /**
    * Returns the file type for the document.
    *
    * @return the file type for the document
@@ -221,15 +175,6 @@ public class DocumentSummary implements Serializable {
    */
   public UUID getId() {
     return id;
-  }
-
-  /**
-   * Returns the issue date for the document.
-   *
-   * @return the issue date for the document
-   */
-  public LocalDate getIssueDate() {
-    return issueDate;
   }
 
   /**

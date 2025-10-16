@@ -18,7 +18,6 @@ package digital.inception.operations.constraint;
 
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentDefinition;
-import digital.inception.operations.model.RequiredDocumentAttribute;
 import digital.inception.operations.service.DocumentService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -80,38 +79,6 @@ public class ValidDocumentValidator implements ConstraintValidator<ValidDocument
         } else {
           DocumentDefinition documentDefinition =
               documentService.getDocumentDefinition(document.getDefinitionId());
-
-          for (RequiredDocumentAttribute requiredDocumentAttribute :
-              documentDefinition.getRequiredDocumentAttributes()) {
-            switch (requiredDocumentAttribute) {
-              case EXPIRY_DATE -> {
-                if (document.getExpiryDate() == null) {
-                  hibernateConstraintValidatorContext
-                      .addMessageParameter("documentDefinitionId", document.getDefinitionId())
-                      .buildConstraintViolationWithTemplate(
-                          "{digital.inception.operations.constraint.ValidDocument.expiryDateRequired.message}")
-                      .addPropertyNode("expiryDate")
-                      .addConstraintViolation();
-
-                  isValid = false;
-                }
-              }
-
-              case ISSUE_DATE -> {
-                if (document.getIssueDate() == null) {
-                  hibernateConstraintValidatorContext
-                      .addMessageParameter("documentDefinitionId", document.getDefinitionId())
-                      .buildConstraintViolationWithTemplate(
-                          "{digital.inception.operations.constraint.ValidDocument.issueDateRequired.message}")
-                      .addPropertyNode("issueDate")
-                      .addConstraintViolation();
-
-                  isValid = false;
-                }
-              }
-              case null, default -> {}
-            }
-          }
         }
       } catch (Throwable e) {
         throw new ValidationException("Failed to validate the document", e);

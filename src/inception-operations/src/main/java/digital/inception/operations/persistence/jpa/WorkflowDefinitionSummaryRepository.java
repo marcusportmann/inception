@@ -35,7 +35,7 @@ public interface WorkflowDefinitionSummaryRepository
 
   /**
    * Find the latest versions of all the workflow definitions that are associated with the workflow
-   * definition category with the specified ID and either
+   * definition category with the specified ID and are either
    *
    * <ul>
    *   <li>specific to the given tenant ({@code tenantId} matches), or

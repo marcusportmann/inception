@@ -19,27 +19,35 @@ package digital.inception.operations.service;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.operations.exception.DocumentAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
-import digital.inception.operations.exception.DuplicateDocumentAttributeDefinitionException;
+import digital.inception.operations.exception.DocumentTemplateCategoryNotFoundException;
+import digital.inception.operations.exception.DocumentTemplateNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
+import digital.inception.operations.exception.DuplicateDocumentTemplateCategoryException;
+import digital.inception.operations.exception.DuplicateDocumentTemplateException;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
+import digital.inception.operations.model.CreateDocumentTemplateRequest;
 import digital.inception.operations.model.Document;
-import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSummaries;
+import digital.inception.operations.model.DocumentTemplate;
+import digital.inception.operations.model.DocumentTemplateCategory;
+import digital.inception.operations.model.DocumentTemplateSortBy;
+import digital.inception.operations.model.DocumentTemplateSummaries;
+import digital.inception.operations.model.DocumentTemplateSummary;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
+import digital.inception.operations.model.UpdateDocumentTemplateRequest;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,12 +60,12 @@ import java.util.UUID;
 public interface DocumentService {
 
   /**
-   * Calculate the hash for the document data.
+   * Calculate the hash for the data.
    *
-   * @param documentData the document data
-   * @return the hash for the document data
+   * @param data the data
+   * @return the hash for the data
    */
-  String calculateDocumentDataHash(byte[] documentData);
+  String calculateDataHash(byte[] data);
 
   /**
    * Create a new document.
@@ -74,20 +82,6 @@ public interface DocumentService {
       UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
-          ServiceUnavailableException;
-
-  /**
-   * Create the document attribute definition.
-   *
-   * @param documentAttributeDefinition the document attribute definition
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws DuplicateDocumentAttributeDefinitionException if the document attribute definition
-   *     already exists
-   * @throws ServiceUnavailableException if the document attribute definition could not be created
-   */
-  void createDocumentAttributeDefinition(DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException,
-          DuplicateDocumentAttributeDefinitionException,
           ServiceUnavailableException;
 
   /**
@@ -136,6 +130,38 @@ public interface DocumentService {
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**
+   * Create the document template.
+   *
+   * @param createDocumentTemplateRequest the request to create the document template
+   * @param createdBy the person or system creating the document template
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateDocumentTemplateException if the document template already exists
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
+   * @throws ServiceUnavailableException if the document template could not be created
+   */
+  void createDocumentTemplate(
+      CreateDocumentTemplateRequest createDocumentTemplateRequest, String createdBy)
+      throws InvalidArgumentException,
+          DuplicateDocumentTemplateException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Create the document template category.
+   *
+   * @param documentTemplateCategory the document template category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateDocumentTemplateCategoryException if the document template category already
+   *     exists
+   * @throws ServiceUnavailableException if the document template category could not be created
+   */
+  void createDocumentTemplateCategory(DocumentTemplateCategory documentTemplateCategory)
+      throws InvalidArgumentException,
+          DuplicateDocumentTemplateCategoryException,
+          ServiceUnavailableException;
+
+  /**
    * Delete the document.
    *
    * @param tenantId the ID for the tenant
@@ -146,20 +172,6 @@ public interface DocumentService {
    */
   void deleteDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
-
-  /**
-   * Delete the document attribute definition.
-   *
-   * @param documentAttributeDefinitionCode the code for the document attribute definition
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
-   *     not be found
-   * @throws ServiceUnavailableException if the document attribute definition could not be deleted
-   */
-  void deleteDocumentAttributeDefinition(String documentAttributeDefinitionCode)
-      throws InvalidArgumentException,
-          DocumentAttributeDefinitionNotFoundException,
-          ServiceUnavailableException;
 
   /**
    * Delete the document definition.
@@ -199,6 +211,33 @@ public interface DocumentService {
    */
   void deleteDocumentNote(UUID tenantId, UUID documentNoteId)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Delete the document template.
+   *
+   * @param documentTemplateId the ID for the document template
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentTemplateNotFoundException if the document template could not be found
+   * @throws ServiceUnavailableException if the document template could not be deleted
+   */
+  void deleteDocumentTemplate(String documentTemplateId)
+      throws InvalidArgumentException,
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Delete the document template category.
+   *
+   * @param documentTemplateCategoryId the ID for the document template category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
+   * @throws ServiceUnavailableException if the document template category could not be deleted
+   */
+  void deleteDocumentTemplateCategory(String documentTemplateCategoryId)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Check whether the document definition category exists.
@@ -270,33 +309,6 @@ public interface DocumentService {
    */
   Document getDocument(UUID tenantId, UUID documentId)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
-
-  /**
-   * Retrieve the document attribute definition.
-   *
-   * @param documentAttributeDefinitionCode the code for the document attribute definition
-   * @return the document attribute definition
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
-   *     not be found
-   * @throws ServiceUnavailableException if the document attribute definition could not be retrieved
-   */
-  DocumentAttributeDefinition getDocumentAttributeDefinition(String documentAttributeDefinitionCode)
-      throws InvalidArgumentException,
-          DocumentAttributeDefinitionNotFoundException,
-          ServiceUnavailableException;
-
-  /**
-   * Retrieve the document attribute definitions.
-   *
-   * @param tenantId the ID for the tenant
-   * @return the document attribute definitions
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the document attribute definitions could not be
-   *     retrieved
-   */
-  List<DocumentAttributeDefinition> getDocumentAttributeDefinitions(UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the document definition.
@@ -397,15 +409,85 @@ public interface DocumentService {
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**
-   * Retrieve the required document attribute definitions.
+   * Retrieve the document template.
+   *
+   * @param documentTemplateId the ID for the document template
+   * @return the document template
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentTemplateNotFoundException if the document template could not be found
+   * @throws ServiceUnavailableException if the document template could not be retrieved
+   */
+  DocumentTemplate getDocumentTemplate(String documentTemplateId)
+      throws InvalidArgumentException,
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the document template categories.
    *
    * @param tenantId the ID for the tenant
-   * @return the required document attribute definitions
+   * @return the document template categories
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the required document attribute definitions could not be
-   *     retrieved
+   * @throws ServiceUnavailableException if the document template categories could not be retrieved
    */
-  List<DocumentAttributeDefinition> getRequiredDocumentAttributeDefinitions(UUID tenantId)
+  List<DocumentTemplateCategory> getDocumentTemplateCategories(UUID tenantId)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the document template category.
+   *
+   * @param documentTemplateCategoryId the ID for the document template category
+   * @return the document template category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
+   * @throws ServiceUnavailableException if the document template category could not be retrieved
+   */
+  DocumentTemplateCategory getDocumentTemplateCategory(String documentTemplateCategoryId)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the document templates associated with the document template
+   * category with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param documentTemplateCategoryId the ID for the document template category the document
+   *     templates are associated with
+   * @return the summaries for the document templates associated with the document template category
+   *     with the specified ID
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
+   * @throws ServiceUnavailableException if the document templates could not be retrieved
+   */
+  List<DocumentTemplateSummary> getDocumentTemplateSummaries(
+      UUID tenantId, String documentTemplateCategoryId)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the document templates.
+   *
+   * @param tenantId the ID for the tenant
+   * @param filter the filter to apply to the document templates
+   * @param sortBy the method used to sort the document templates e.g. by name
+   * @param sortDirection the sort direction to apply to the document templates
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the document templates
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the document template summaries could not be retrieved
+   */
+  DocumentTemplateSummaries getDocumentTemplateSummaries(
+      UUID tenantId,
+      String filter,
+      DocumentTemplateSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -434,20 +516,6 @@ public interface DocumentService {
   Document updateDocument(
       UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
-
-  /**
-   * Update the document attribute definition.
-   *
-   * @param documentAttributeDefinition the document attribute definition
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentAttributeDefinitionNotFoundException if the document attribute definition could
-   *     not be found
-   * @throws ServiceUnavailableException if the document attribute definition could not be updated
-   */
-  void updateDocumentAttributeDefinition(DocumentAttributeDefinition documentAttributeDefinition)
-      throws InvalidArgumentException,
-          DocumentAttributeDefinitionNotFoundException,
-          ServiceUnavailableException;
 
   /**
    * Update the document definition.
@@ -493,4 +561,36 @@ public interface DocumentService {
   DocumentNote updateDocumentNote(
       UUID tenantId, UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Update the document template.
+   *
+   * @param updateDocumentTemplateRequest the request to update the document template
+   * @param updatedBy the person or system updating the document template
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
+   * @throws DocumentTemplateNotFoundException if the document template could not be found
+   * @throws ServiceUnavailableException if the document template could not be updated
+   */
+  void updateDocumentTemplate(
+      UpdateDocumentTemplateRequest updateDocumentTemplateRequest, String updatedBy)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Update the document template category.
+   *
+   * @param documentTemplateCategory the document template category
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
+   * @throws ServiceUnavailableException if the document template category could not be updated
+   */
+  void updateDocumentTemplateCategory(DocumentTemplateCategory documentTemplateCategory)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
 }

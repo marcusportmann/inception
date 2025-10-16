@@ -31,6 +31,7 @@ import digital.inception.core.util.TenantUtil;
 import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.model.AttributeSearchCriteria;
+import digital.inception.operations.model.AttributeType;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
 import digital.inception.operations.model.DelinkInteractionFromWorkflowRequest;
 import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
@@ -241,18 +242,6 @@ public class EndToEndTests {
 
     operationsReferenceService.createExternalReferenceType(documentExternalReferenceType);
 
-    // Create the document attribute definition
-    DocumentAttributeDefinition documentAttributeDefinition =
-        new DocumentAttributeDefinition(
-            "test_document_attribute_code",
-            "Test Document Attribute",
-            "Test Document Attribute Description",
-            true,
-            null,
-            TenantUtil.DEFAULT_TENANT_ID);
-
-    documentService.createDocumentAttributeDefinition(documentAttributeDefinition);
-
     // Create the document definition category
     DocumentDefinitionCategory documentDefinitionCategory =
         new DocumentDefinitionCategory(
@@ -261,6 +250,15 @@ public class EndToEndTests {
     documentService.createDocumentDefinitionCategory(documentDefinitionCategory);
 
     // Create the document definitions
+    DocumentAttributeDefinition documentAttributeDefinition =
+        new DocumentAttributeDefinition(
+            "test_document_attribute_code",
+            AttributeType.STRING,
+            "Test Document Attribute",
+            "Test Document Attribute Description",
+            true,
+            null);
+
     DocumentDefinition documentDefinition =
         new DocumentDefinition(
             "test_document_definition_" + randomId(),
@@ -269,7 +267,7 @@ public class EndToEndTests {
             "Test Document Definition",
             null,
             null,
-            null);
+            List.of(documentAttributeDefinition));
 
     documentService.createDocumentDefinition(documentDefinition);
 
@@ -281,7 +279,7 @@ public class EndToEndTests {
             "Another Test Document Definition",
             null,
             null,
-            null);
+            List.of(documentAttributeDefinition));
 
     documentService.createDocumentDefinition(anotherDocumentDefinition);
 
@@ -303,18 +301,6 @@ public class EndToEndTests {
 
     operationsReferenceService.createExternalReferenceType(workflowExternalReferenceType);
 
-    // Create the workflow attribute definition
-    WorkflowAttributeDefinition workflowAttributeDefinition =
-        new WorkflowAttributeDefinition(
-            "test_workflow_attribute_code",
-            "Test Workflow Attribute",
-            "Test Workflow Attribute Description",
-            true,
-            null,
-            TenantUtil.DEFAULT_TENANT_ID);
-
-    workflowService.createWorkflowAttributeDefinition(workflowAttributeDefinition);
-
     // Create the workflow definition category
     WorkflowDefinitionCategory workflowDefinitionCategory =
         new WorkflowDefinitionCategory(
@@ -328,10 +314,29 @@ public class EndToEndTests {
             "test_json_workflow_definition_" + randomId(),
             1,
             workflowDefinitionCategory.getId(),
+            null,
             "Test JSON Workflow Definition",
             "dummy",
+            null,
             ValidationSchemaType.JSON,
-            ResourceUtil.getStringClasspathResource("TestData.schema.json"));
+            ResourceUtil.getStringClasspathResource("TestData.schema.json"),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
+
+    workflowDefinition.addAttributeDefinition(
+        new WorkflowAttributeDefinition(
+            "test_workflow_attribute_code",
+            AttributeType.STRING,
+            "Test Workflow Attribute",
+            "Test Workflow Attribute Description",
+            true,
+            "(?i).*value.*"));
 
     workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false, true, false);
     workflowDefinition.addDocumentDefinition(
@@ -724,8 +729,6 @@ public class EndToEndTests {
       workflowService.deleteWorkflowDefinitionCategory(workflowDefinitionCategoryId);
     }
 
-    workflowService.deleteWorkflowAttributeDefinition(workflowAttributeDefinition.getCode());
-
     operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference_code");
 
     //   ____                                        _      ____ _
@@ -753,8 +756,6 @@ public class EndToEndTests {
       // Delete the document definition category
       documentService.deleteDocumentDefinitionCategory(documentDefinitionCategoryId);
     }
-
-    documentService.deleteDocumentAttributeDefinition(documentAttributeDefinition.getCode());
 
     operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
 

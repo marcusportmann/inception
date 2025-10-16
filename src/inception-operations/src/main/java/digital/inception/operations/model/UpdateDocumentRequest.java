@@ -23,8 +23,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.file.FileType;
 import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -102,7 +100,6 @@ public class UpdateDocumentRequest implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "DocumentId", required = true)
   @NotNull
-  @Id
   private UUID documentId;
 
   /** The expiry date for the document. */
@@ -138,7 +135,6 @@ public class UpdateDocumentRequest implements Serializable {
   @XmlElement(name = "IssueDate")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @Column(name = "issue_date")
   private LocalDate issueDate;
 
   /** The name of the document. */
@@ -147,14 +143,12 @@ public class UpdateDocumentRequest implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 200)
-  @Column(name = "name", length = 200, nullable = false)
   private String name;
 
   /** The ID for the source document that was split to create this document. */
   @Schema(description = "The ID for the source document that was split to create this document")
   @JsonProperty
   @XmlElement(name = "SourceDocumentId")
-  @Column(name = "source_document_id")
   private UUID sourceDocumentId;
 
   /** Constructs a new {@code UpdateDocumentRequest}. */

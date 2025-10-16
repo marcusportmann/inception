@@ -22,14 +22,12 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
-import digital.inception.operations.exception.DuplicateWorkflowAttributeDefinitionException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
 import digital.inception.operations.exception.FormDefinitionNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
-import digital.inception.operations.exception.WorkflowAttributeDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionVersionNotFoundException;
@@ -64,7 +62,6 @@ import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
-import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionId;
@@ -150,15 +147,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public void createWorkflowAttributeDefinition(
-      WorkflowAttributeDefinition workflowAttributeDefinition)
-      throws InvalidArgumentException,
-          DuplicateWorkflowAttributeDefinitionException,
-          ServiceUnavailableException {
-    workflowService.createWorkflowAttributeDefinition(workflowAttributeDefinition);
-  }
-
-  @Override
   public void createWorkflowDefinition(WorkflowDefinition workflowDefinition)
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionVersionException,
@@ -216,14 +204,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
     }
 
     workflowService.deleteWorkflow(tenantId, workflowId);
-  }
-
-  @Override
-  public void deleteWorkflowAttributeDefinition(String workflowAttributeDefinitionCode)
-      throws InvalidArgumentException,
-          WorkflowAttributeDefinitionNotFoundException,
-          ServiceUnavailableException {
-    workflowService.deleteWorkflowAttributeDefinition(workflowAttributeDefinitionCode);
   }
 
   @Override
@@ -512,29 +492,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
     }
 
     return workflowService.getWorkflow(tenantId, workflowId);
-  }
-
-  @Override
-  public WorkflowAttributeDefinition getWorkflowAttributeDefinition(
-      String workflowAttributeDefinitionCode)
-      throws InvalidArgumentException,
-          WorkflowAttributeDefinitionNotFoundException,
-          ServiceUnavailableException {
-    return workflowService.getWorkflowAttributeDefinition(workflowAttributeDefinitionCode);
-  }
-
-  @Override
-  public List<WorkflowAttributeDefinition> getWorkflowAttributeDefinitions(UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
-
-    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
-        && (!hasAccessToTenant(tenantId))) {
-      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    return workflowService.getWorkflowAttributeDefinitions(tenantId);
   }
 
   @Override
@@ -1102,24 +1059,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
 
     Workflow workflow =
         workflowService.updateWorkflow(tenantId, updateWorkflowRequest, getAuthenticationName());
-  }
-
-  @Override
-  public void updateWorkflowAttributeDefinition(
-      String workflowAttributeDefinitionCode,
-      WorkflowAttributeDefinition workflowAttributeDefinition)
-      throws InvalidArgumentException,
-          WorkflowAttributeDefinitionNotFoundException,
-          ServiceUnavailableException {
-    if (!StringUtils.hasText(workflowAttributeDefinitionCode)) {
-      throw new InvalidArgumentException("workflowAttributeDefinitionCode");
-    }
-
-    if (!Objects.equals(workflowAttributeDefinitionCode, workflowAttributeDefinition.getCode())) {
-      throw new InvalidArgumentException("workflowAttributeDefinition.code");
-    }
-
-    workflowService.updateWorkflowAttributeDefinition(workflowAttributeDefinition);
   }
 
   @Override

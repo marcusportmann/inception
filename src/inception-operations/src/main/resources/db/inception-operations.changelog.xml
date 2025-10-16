@@ -140,7 +140,6 @@
       <column name="tenant_id"/>
     </createIndex>
 
-
     <createTable tableName="operations_document_templates" remarks="Document Templates">
       <column name="id" type="nvarchar(50)" remarks="The ID for the document template">
         <constraints primaryKey="true" nullable="false"/>
@@ -152,6 +151,10 @@
       <column name="tenant_id" type="uuid"
         remarks="The ID for the tenant the document template is specific to"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the document template">
+        <constraints nullable="false"/>
+      </column>
+      <column name="hash" type="nvarchar(50)"
+        remarks="The base-64 encoded SHA-256 hash of the data for the document template">
         <constraints nullable="false"/>
       </column>
       <column name="data" type="${blob_type}"
@@ -214,8 +217,6 @@
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(500)" defaultValue="" remarks="The description for the document definition"/>
-      <column name="required_document_attributes" type="nvarchar(510)"
-        remarks="The comma-delimited list of codes for the required attributes for a document associated with the document definition"/>
       <column name="template_id" type="nvarchar(50)"
         remarks="The ID for the document template for the document definition"/>
     </createTable>
@@ -241,12 +242,15 @@
     <createTable tableName="operations_document_attribute_definitions"
       remarks="Document Attribute Definitions">
       <column name="code" type="nvarchar(50)" remarks="The code for the document attribute">
-        <constraints primaryKey="true" nullable="false" unique="true"/>
+        <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="document_definition_id" type="nvarchar(50)"
-        remarks="The ID for the document definition the document attribute definition is specific to"/>
-      <column name="tenant_id" type="uuid"
-        remarks="The ID for the tenant the document attribute definition is specific to"/>
+      <column name="type" type="nvarchar(50)" remarks="The code for the attribute type for the document attribute">
+        <constraints nullable="false"/>
+      </column>
+      <column name="definition_id" type="nvarchar(50)"
+        remarks="The ID for the document definition the document attribute definition is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
       <column name="name" type="nvarchar(100)" remarks="The name of the document attribute">
         <constraints nullable="false"/>
       </column>
@@ -258,16 +262,19 @@
         remarks="Is the document attribute required">
         <constraints nullable="false"/>
       </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate the value for a document attribute associated with the document attribute definition"/>
     </createTable>
-    <createIndex indexName="operations_document_attribute_definitions_document_definition_id_ix"
+    <addForeignKeyConstraint
+      constraintName="operations_document_attribute_definitions_document_definition_fk"
+      baseTableName="operations_document_attribute_definitions"
+      baseColumnNames="definition_id"
+      referencedTableName="operations_document_definitions" referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <createIndex indexName="operations_document_attribute_definitions_definition_id_ix"
       tableName="operations_document_attribute_definitions">
-      <column name="document_definition_id"/>
+      <column name="definition_id"/>
     </createIndex>
-    <createIndex indexName="operations_document_attribute_definitions_tenant_id_ix"
-      tableName="operations_document_attribute_definitions">
-      <column name="tenant_id"/>
-    </createIndex>
-
+    
     <createTable tableName="operations_form_definitions" remarks="Form Definitions">
       <column name="id" type="nvarchar(50)" remarks="The ID for the form definition">
         <constraints primaryKey="true" nullable="false"/>
@@ -473,12 +480,19 @@
     <createTable tableName="operations_workflow_attribute_definitions"
       remarks="Workflow Attribute Definitions">
       <column name="code" type="nvarchar(50)" remarks="The code for the workflow attribute">
-        <constraints primaryKey="true" nullable="false" unique="true"/>
+        <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="workflow_definition_id" type="nvarchar(50)"
-        remarks="The ID for the workflow definition the workflow attribute definition is specific to"/>
-      <column name="tenant_id" type="uuid"
-        remarks="The ID for the tenant the workflow attribute definition is specific to"/>
+      <column name="type" type="nvarchar(50)" remarks="The code for the attribute type for the workflow attribute">
+        <constraints nullable="false"/>
+      </column>
+      <column name="definition_id" type="nvarchar(50)"
+        remarks="The ID for the workflow definition the workflow attribute definition is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="definition_version" type="integer"
+        remarks="The version of the workflow definition the workflow attribute definition is associated with">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
       <column name="name" type="nvarchar(100)" remarks="The name of the workflow attribute">
         <constraints nullable="false"/>
       </column>
@@ -490,14 +504,18 @@
         remarks="Is the workflow attribute required">
         <constraints nullable="false"/>
       </column>
+      <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate the value for a workflow attribute associated with the workflow attribute definition"/>
     </createTable>
-    <createIndex indexName="operations_workflow_attribute_definitions_workflow_definition_id_ix"
+    <addForeignKeyConstraint
+      constraintName="operations_workflow_attribute_definitions_workflow_definition_fk"
+      baseTableName="operations_workflow_attribute_definitions"
+      baseColumnNames="definition_id,definition_version"
+      referencedTableName="operations_workflow_definitions" referencedColumnNames="id,version"
+      onDelete="CASCADE"/>
+    <createIndex indexName="operations_workflow_attribute_definitions_definition_ix"
       tableName="operations_workflow_attribute_definitions">
-      <column name="workflow_definition_id"/>
-    </createIndex>
-    <createIndex indexName="operations_workflow_attribute_definitions_tenant_id_ix"
-      tableName="operations_workflow_attribute_definitions">
-      <column name="tenant_id"/>
+      <column name="definition_id"/>
+      <column name="definition_version"/>
     </createIndex>
 
     <createTable tableName="operations_workflow_step_definitions"
@@ -864,8 +882,6 @@
         remarks="The base-64 encoded SHA-256 hash of the data for the document">
         <constraints nullable="false"/>
       </column>
-      <column name="issue_date" type="date" remarks="The issue date for the document"/>
-      <column name="expiry_date" type="date" remarks="The expiry date for the document"/>
       <column name="source_document_id" type="uuid"
         remarks="The ID for the source document that was split to create this document"/>
       <column name="data" type="${blob_type}"
@@ -1544,9 +1560,7 @@
 
       <dropAllForeignKeyConstraints baseTableName="operations_workflow_attribute_definitions"/>
       <dropIndex tableName="operations_workflow_attribute_definitions"
-        indexName="operations_workflow_attribute_definitions_tenant_id_ix"/>
-      <dropIndex tableName="operations_workflow_attribute_definitions"
-        indexName="operations_workflow_attribute_definitions_workflow_definition_id_ix"/>
+        indexName="operations_workflow_attribute_definitions_definition_ix"/>
       <dropTable tableName="operations_workflow_attribute_definitions"/>
 
       <dropAllForeignKeyConstraints baseTableName="operations_workflow_definition_permissions"/>
@@ -1596,8 +1610,6 @@
       <dropTable tableName="operations_workflow_definition_document_definitions"/>
 
       <dropAllForeignKeyConstraints baseTableName="operations_document_attribute_definitions"/>
-      <dropIndex tableName="operations_document_attribute_definitions"
-        indexName="operations_document_attribute_definitions_tenant_id_ix"/>
       <dropIndex tableName="operations_document_attribute_definitions"
         indexName="operations_document_attribute_definitions_definition_id_ix"/>
       <dropTable tableName="operations_document_attribute_definitions"/>

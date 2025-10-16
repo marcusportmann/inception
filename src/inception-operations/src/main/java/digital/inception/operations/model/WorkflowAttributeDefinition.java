@@ -16,6 +16,8 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -23,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -30,11 +33,11 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The {@code WorkflowAttributeDefinition} class holds the information for a workflow attribute
@@ -44,17 +47,18 @@ import java.util.UUID;
  */
 @Schema(description = "A workflow attribute definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "workflowDefinitionId", "tenantId", "required", "description"})
+@JsonPropertyOrder({"code", "type", "name", "description", "required", "pattern"})
 @XmlRootElement(
     name = "WorkflowAttributeDefinition",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowAttributeDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "workflowDefinitionId", "tenantId", "required", "description"})
+    propOrder = {"code", "type", "name", "description", "required", "pattern"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_attribute_definitions")
+@IdClass(WorkflowAttributeDefinitionId.class)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class WorkflowAttributeDefinition implements Serializable {
 
@@ -71,6 +75,24 @@ public class WorkflowAttributeDefinition implements Serializable {
   @Id
   @Column(name = "code", length = 50, nullable = false)
   private String code;
+
+  /** The ID for the workflow definition the workflow attribute definition is associated with. */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "definition_id", nullable = false)
+  private String definitionId;
+
+  /**
+   * The version of the workflow definition the workflow attribute definition is associated with.
+   */
+  @Schema(hidden = true)
+  @JsonIgnore
+  @XmlTransient
+  @Id
+  @Column(name = "definition_version", nullable = false)
+  private int definitionVersion;
 
   /** The description for the workflow attribute. */
   @Schema(
@@ -94,6 +116,19 @@ public class WorkflowAttributeDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /**
+   * The regular expression pattern used to validate the value for a workflow attribute associated
+   * with the workflow attribute definition.
+   */
+  @Schema(
+      description =
+          "The regular expression pattern used to validate the value for a workflow attribute associated with the workflow attribute definition")
+  @JsonProperty
+  @XmlElement(name = "Pattern")
+  @Size(min = 1, max = 1000)
+  @Column(name = "pattern", length = 1000)
+  private String pattern;
+
   /** Is the workflow attribute required? */
   @Schema(
       description = "Is the workflow attribute required",
@@ -104,22 +139,15 @@ public class WorkflowAttributeDefinition implements Serializable {
   @Column(name = "required", nullable = false)
   private Boolean required;
 
-  /** The ID for the tenant the workflow attribute definition is specific to. */
-  @Schema(description = "The ID for the tenant the workflow attribute definition is specific to")
-  @JsonProperty
-  @XmlElement(name = "TenantId")
-  @Column(name = "tenant_id")
-  private UUID tenantId;
-
-  /** The ID for the workflow definition the workflow attribute definition is specific to. */
+  /** The attribute type for the workflow attribute. */
   @Schema(
-      description =
-          "The ID for the workflow definition the workflow attribute definition is specific to")
-  @JsonProperty
-  @XmlElement(name = "WorkflowDefinitionId")
-  @Size(min = 1, max = 50)
-  @Column(name = "workflow_definition_id", length = 50)
-  private String workflowDefinitionId;
+      description = "The code for the attribute type for the workflow attribute",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
+  @NotNull
+  @Column(name = "type", nullable = false)
+  private AttributeType type;
 
   /** Constructs a new {@code WorkflowAttributeDefinition}. */
   public WorkflowAttributeDefinition() {}
@@ -128,26 +156,26 @@ public class WorkflowAttributeDefinition implements Serializable {
    * Constructs a new {@code WorkflowAttributeDefinition}.
    *
    * @param code the code for the workflow attribute
+   * @param type the attribute type for the workflow attribute
    * @param name the name of the workflow attribute
    * @param description the description for the workflow attribute
    * @param required is the workflow attribute required
-   * @param workflowDefinitionId the ID for the workflow definition the workflow attribute
-   *     definition is specific to
-   * @param tenantId the ID for the tenant the workflow attribute definition is specific to
+   * @param pattern the regular expression pattern used to validate the value for a workflow
+   *     attribute associated with the workflow attribute definition
    */
   public WorkflowAttributeDefinition(
       String code,
+      AttributeType type,
       String name,
       String description,
       boolean required,
-      String workflowDefinitionId,
-      UUID tenantId) {
+      String pattern) {
     this.code = code;
+    this.type = type;
     this.name = name;
     this.description = description;
     this.required = required;
-    this.workflowDefinitionId = workflowDefinitionId;
-    this.tenantId = tenantId;
+    this.pattern = pattern;
   }
 
   /**
@@ -203,21 +231,23 @@ public class WorkflowAttributeDefinition implements Serializable {
   }
 
   /**
-   * Returns the ID for the tenant the workflow attribute definition is specific to.
+   * Returns the regular expression pattern used to validate the value for a workflow attribute
+   * associated with the workflow attribute definition.
    *
-   * @return the ID for the tenant the workflow attribute definition is specific to
+   * @return the regular expression pattern used to validate the value for a workflow attribute
+   *     associated with the workflow attribute definition
    */
-  public UUID getTenantId() {
-    return tenantId;
+  public String getPattern() {
+    return pattern;
   }
 
   /**
-   * Returns the ID for the workflow definition the workflow attribute definition is specific to.
+   * Returns the attribute type for the workflow attribute.
    *
-   * @return the ID for the workflow definition the workflow attribute definition is specific to
+   * @return the attribute type for the workflow attribute
    */
-  public String getWorkflowDefinitionId() {
-    return workflowDefinitionId;
+  public AttributeType getType() {
+    return type;
   }
 
   /**
@@ -267,6 +297,17 @@ public class WorkflowAttributeDefinition implements Serializable {
   }
 
   /**
+   * Set the regular expression pattern used to validate the value for a workflow attribute
+   * associated with the workflow attribute definition.
+   *
+   * @param pattern the regular expression pattern used to validate the value for a workflow
+   *     attribute associated with the workflow attribute definition
+   */
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
+  }
+
+  /**
    * Set whether the workflow attribute is required.
    *
    * @param required {@code true} if the workflow attribute is required or {@code false} otherwise
@@ -276,21 +317,29 @@ public class WorkflowAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the workflow attribute definition is specific to.
+   * Set the attribute type for the workflow attribute.
    *
-   * @param tenantId the ID for the tenant the workflow attribute definition is specific to
+   * @param type the attribute type for the workflow attribute
    */
-  public void setTenantId(UUID tenantId) {
-    this.tenantId = tenantId;
+  public void setType(AttributeType type) {
+    this.type = type;
   }
 
   /**
-   * Set the ID for the workflow definition the workflow attribute definition is specific to.
+   * Set the workflow definition the workflow attribute definition is associated with.
    *
-   * @param workflowDefinitionId the ID for the workflow definition the workflow attribute
-   *     definition is specific to
+   * @param workflowDefinition the workflow definition the workflow attribute definition is
+   *     associated with
    */
-  public void setWorkflowDefinitionId(String workflowDefinitionId) {
-    this.workflowDefinitionId = workflowDefinitionId;
+  @JsonBackReference("workflowDefinitionAttributeDefinitionReference")
+  @Schema(hidden = true)
+  public void setWorkflowDefinition(WorkflowDefinition workflowDefinition) {
+    if (workflowDefinition != null) {
+      this.definitionId = workflowDefinition.getId();
+      this.definitionVersion = workflowDefinition.getVersion();
+    } else {
+      this.definitionId = null;
+      this.definitionVersion = 0;
+    }
   }
 }

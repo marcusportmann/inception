@@ -20,16 +20,21 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
+import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
@@ -39,14 +44,36 @@ import java.util.UUID;
  */
 @Schema(description = "A document template summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "categoryId", "tenantId", "name", "description"})
+@JsonPropertyOrder({
+  "id",
+  "categoryId",
+  "tenantId",
+  "name",
+  "description",
+  "hash",
+  "created",
+  "createdBy",
+  "updated",
+  "updatedBy"
+})
 @XmlRootElement(
     name = "DocumentTemplateSummary",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "DocumentTemplateSummary",
     namespace = "https://inception.digital/operations",
-    propOrder = {"id", "categoryId", "tenantId", "name", "description"})
+    propOrder = {
+      "id",
+      "categoryId",
+      "tenantId",
+      "name",
+      "description",
+      "hash",
+      "created",
+      "createdBy",
+      "updated",
+      "updatedBy"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DocumentTemplateSummary implements Serializable {
 
@@ -63,12 +90,45 @@ public class DocumentTemplateSummary implements Serializable {
   @Size(min = 1, max = 50)
   private String categoryId;
 
+  /** The date and time the document template was created. */
+  @Schema(
+      description = "The date and time the document template was created",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Created", required = true)
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @NotNull
+  @Column(name = "created", nullable = false)
+  private OffsetDateTime created;
+
+  /** The person or system that created the document template. */
+  @Schema(
+      description = "The person or system that created the document template",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "CreatedBy", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "created_by", length = 100, nullable = false)
+  private String createdBy;
+
   /** The description for the document template. */
   @Schema(description = "The description for the document template")
   @JsonProperty
   @XmlElement(name = "Description")
   @Size(min = 1, max = 500)
   private String description;
+
+  /** The base-64 encoded SHA-256 hash of the data for the document template. */
+  @Schema(
+      description = "The base-64 encoded SHA-256 hash of the data for the document template",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Hash", required = true)
+  @NotNull
+  @Size(min = 1, max = 50)
+  private String hash;
 
   /** The ID for the document template. */
   @Schema(
@@ -96,6 +156,23 @@ public class DocumentTemplateSummary implements Serializable {
   @XmlElement(name = "TenantId")
   private UUID tenantId;
 
+  /** The date and time the document template was last updated. */
+  @Schema(description = "The date and time the document template was last updated")
+  @JsonProperty
+  @XmlElement(name = "Updated")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "updated")
+  private OffsetDateTime updated;
+
+  /** The person or system that last updated the document template. */
+  @Schema(description = "The person or system that last updated the document template")
+  @JsonProperty
+  @XmlElement(name = "UpdatedBy")
+  @Size(min = 1, max = 100)
+  @Column(name = "updated_by", length = 100)
+  private String updatedBy;
+
   /** Constructs a new {@code DocumentTemplate}. */
   public DocumentTemplateSummary() {}
 
@@ -108,14 +185,33 @@ public class DocumentTemplateSummary implements Serializable {
    * @param tenantId ID for the tenant the document template is specific to
    * @param name name of the document template
    * @param description the description for the document template
+   * @param hash the base-64 encoded SHA-256 hash of the data for the document template
+   * @param created the date and time the document template was created
+   * @param createdBy the person or system that created the document template
+   * @param updated the date and time the document template was last updated
+   * @param updatedBy the person or system that last updated the document template
    */
   public DocumentTemplateSummary(
-      String id, String categoryId, UUID tenantId, String name, String description) {
+      String id,
+      String categoryId,
+      UUID tenantId,
+      String name,
+      String description,
+      String hash,
+      OffsetDateTime created,
+      String createdBy,
+      OffsetDateTime updated,
+      String updatedBy) {
     this.id = id;
     this.categoryId = categoryId;
     this.tenantId = tenantId;
     this.name = name;
     this.description = description;
+    this.hash = hash;
+    this.created = created;
+    this.createdBy = createdBy;
+    this.updated = updated;
+    this.updatedBy = updatedBy;
   }
 
   /**
@@ -153,12 +249,39 @@ public class DocumentTemplateSummary implements Serializable {
   }
 
   /**
+   * Returns the date and time the document template was created.
+   *
+   * @return the date and time the document template was created
+   */
+  public OffsetDateTime getCreated() {
+    return created;
+  }
+
+  /**
+   * Returns the person or system that created the document template.
+   *
+   * @return the person or system that created the document template
+   */
+  public String getCreatedBy() {
+    return createdBy;
+  }
+
+  /**
    * Returns the description for the document template.
    *
    * @return the description for the document template
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the base-64 encoded SHA-256 hash of the data for the document template.
+   *
+   * @return the base-64 encoded SHA-256 hash of the data for the document template
+   */
+  public String getHash() {
+    return hash;
   }
 
   /**
@@ -186,6 +309,24 @@ public class DocumentTemplateSummary implements Serializable {
    */
   public UUID getTenantId() {
     return tenantId;
+  }
+
+  /**
+   * Returns the date and time the document template was last updated.
+   *
+   * @return the date and time the document template was last updated
+   */
+  public OffsetDateTime getUpdated() {
+    return updated;
+  }
+
+  /**
+   * Returns the person or system that last updated the document template.
+   *
+   * @return the person or system that last updated the document template
+   */
+  public String getUpdatedBy() {
+    return updatedBy;
   }
 
   /**

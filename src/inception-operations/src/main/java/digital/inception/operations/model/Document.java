@@ -16,7 +16,6 @@
 
 package digital.inception.operations.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.file.FileType;
 import digital.inception.core.util.StringUtil;
-import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import digital.inception.operations.constraint.ValidDocument;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -50,7 +48,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +70,6 @@ import java.util.UUID;
   "name",
   "hash",
   "sourceDocumentId",
-  "issueDate",
-  "expiryDate",
   "attributes",
   "externalReferences",
   "data",
@@ -95,8 +90,6 @@ import java.util.UUID;
       "name",
       "hash",
       "sourceDocumentId",
-      "issueDate",
-      "expiryDate",
       "attributes",
       "externalReferences",
       "data",
@@ -189,16 +182,6 @@ public class Document implements Serializable {
   @Column(name = "definition_id", length = 50, nullable = false)
   private String definitionId;
 
-  /** The expiry date for the document. */
-  @Schema(description = "The ISO 8601 format expiry date for the document")
-  @JsonProperty
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "ExpiryDate")
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
-  @Column(name = "expiry_date")
-  private LocalDate expiryDate;
-
   /** The file type for the document. */
   @Schema(
       description = "The file type for the document",
@@ -225,16 +208,6 @@ public class Document implements Serializable {
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
-
-  /** The issue date for the document. */
-  @Schema(description = "The ISO 8601 format issue date for the document")
-  @JsonProperty
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "IssueDate")
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
-  @Column(name = "issue_date")
-  private LocalDate issueDate;
 
   /** The name of the document. */
   @Schema(description = "The name of the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -407,15 +380,6 @@ public class Document implements Serializable {
   }
 
   /**
-   * Returns the expiry date for the document.
-   *
-   * @return the expiry date for the document
-   */
-  public LocalDate getExpiryDate() {
-    return expiryDate;
-  }
-
-  /**
    * Retrieve the external reference with the specified type for the document.
    *
    * @param type the code for the external reference type
@@ -462,15 +426,6 @@ public class Document implements Serializable {
    */
   public UUID getId() {
     return id;
-  }
-
-  /**
-   * Returns the issue date for the document.
-   *
-   * @return the issue date for the document
-   */
-  public LocalDate getIssueDate() {
-    return issueDate;
   }
 
   /**
@@ -586,15 +541,6 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the expiry date for the document.
-   *
-   * @param expiryDate the expiry date for the document
-   */
-  public void setExpiryDate(LocalDate expiryDate) {
-    this.expiryDate = expiryDate;
-  }
-
-  /**
    * Set the external references for the document.
    *
    * @param externalReferences the external references for the document
@@ -630,15 +576,6 @@ public class Document implements Serializable {
    */
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   * Set the issue date for the document.
-   *
-   * @param issueDate the issue date for the document
-   */
-  public void setIssueDate(LocalDate issueDate) {
-    this.issueDate = issueDate;
   }
 
   /**

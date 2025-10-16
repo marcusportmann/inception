@@ -23,46 +23,45 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The {@code RequiredDocumentAttribute} enumeration defines the possible required document
- * attributes.
+ * The {@code DocumentTemplateSortBy} enumeration defines the possible methods used to sort a list
+ * of document templates.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The required document attribute")
+@Schema(description = "The method used to sort the list of document templates")
 @XmlEnum
-@XmlType(name = "RequiredDocumentAttribute", namespace = "https://inception.digital/operations")
-public enum RequiredDocumentAttribute implements CodeEnum {
+@XmlType(name = "DocumentTemplateSortBy", namespace = "https://inception.digital/operations")
+public enum DocumentTemplateSortBy implements CodeEnum {
+  /** Sort by ID. */
+  @XmlEnumValue("ID")
+  ID("id", "Sort By ID"),
 
-  /** Expiry Date. */
-  @XmlEnumValue("ExpiryDate")
-  EXPIRY_DATE("expiry_date", "Expiry Date"),
-
-  /** Issue Date. */
-  @XmlEnumValue("IssueDate")
-  ISSUE_DATE("issue_date", "Issue Date");
+  /** Sort by name. */
+  @XmlEnumValue("Name")
+  NAME("name", "Sort By Name");
 
   private final String code;
 
   private final String description;
 
-  RequiredDocumentAttribute(String code, String description) {
+  DocumentTemplateSortBy(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the code for the required document attribute.
+   * Returns the code for the method used to sort a list of document templates.
    *
-   * @return the code for the required document attribute
+   * @return the code for the method used to sort a list of document templates
    */
   public String code() {
     return code;
   }
 
   /**
-   * Returns the description for the required document attribute.
+   * Returns the description for the method used to sort a list of document templates.
    *
-   * @return the description for the required document attribute
+   * @return the description for the method used to sort a list of document templates
    */
   public String description() {
     return description;

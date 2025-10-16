@@ -44,7 +44,7 @@ public interface DocumentDefinitionRepository extends JpaRepository<DocumentDefi
 
   /**
    * Find all the document definitions that are associated with the document definition category
-   * with the specified ID and either
+   * with the specified ID and are either
    *
    * <ul>
    *   <li>specific to the given tenant ({@code tenantId} matches), or
