@@ -36,11 +36,14 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.ResetWorkflowDocumentRequest;
 import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.VariableSearchCriteria;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
+import digital.inception.operations.model.WaiveWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
+import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionDocumentDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
 import digital.inception.operations.model.WorkflowDocument;
@@ -67,10 +70,14 @@ import digital.inception.operations.persistence.jpa.WorkflowInteractionLinkRepos
 import digital.inception.operations.persistence.jpa.WorkflowNoteRepository;
 import digital.inception.operations.persistence.jpa.WorkflowRepository;
 import digital.inception.operations.persistence.jpa.WorkflowStepRepository;
-import digital.inception.operations.persistence.jpa.WorkflowSummaryRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.time.OffsetDateTime;
@@ -85,7 +92,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -125,9 +131,6 @@ public class InternalWorkflowStore implements WorkflowStore {
   /** The Workflow Step Repository. */
   private final WorkflowStepRepository workflowStepRepository;
 
-  /** The Workflow Summary Repository. */
-  private final WorkflowSummaryRepository workflowSummaryRepository;
-
   /* Entity Manager */
   @PersistenceContext(unitName = "operations")
   private EntityManager entityManager;
@@ -144,7 +147,6 @@ public class InternalWorkflowStore implements WorkflowStore {
    * @param workflowNoteRepository the Workflow Note Repository
    * @param workflowRepository the Workflow Repository
    * @param workflowStepRepository the Workflow Step Repository
-   * @param workflowSummaryRepository the Workflow Summary Repository
    * @param documentStore the Document Store
    * @param interactionStore the Interaction Store
    */
@@ -155,7 +157,6 @@ public class InternalWorkflowStore implements WorkflowStore {
       WorkflowNoteRepository workflowNoteRepository,
       WorkflowRepository workflowRepository,
       WorkflowStepRepository workflowStepRepository,
-      WorkflowSummaryRepository workflowSummaryRepository,
       DocumentStore documentStore,
       InteractionStore interactionStore) {
     this.workflowDocumentRepository = workflowDocumentRepository;
@@ -163,7 +164,6 @@ public class InternalWorkflowStore implements WorkflowStore {
     this.workflowNoteRepository = workflowNoteRepository;
     this.workflowRepository = workflowRepository;
     this.workflowStepRepository = workflowStepRepository;
-    this.workflowSummaryRepository = workflowSummaryRepository;
     this.documentStore = documentStore;
     this.interactionStore = interactionStore;
 
@@ -304,6 +304,10 @@ public class InternalWorkflowStore implements WorkflowStore {
   public void deleteWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
       throws WorkflowDocumentNotFoundException, ServiceUnavailableException {
     try {
+      if (!workflowDocumentRepository.existsByTenantIdAndId(tenantId, workflowDocumentId)) {
+        throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
+      }
+
       /*
        * NOTE: The search by both tenant ID and workflow document ID includes a security check to
        * ensure that the workflow document not only exists, but is also associated with the
@@ -312,15 +316,14 @@ public class InternalWorkflowStore implements WorkflowStore {
       Optional<UUID> documentIdOptional =
           workflowDocumentRepository.findDocumentIdByTenantIdAndId(tenantId, workflowDocumentId);
 
-      if (documentIdOptional.isEmpty()) {
-        throw new WorkflowDocumentNotFoundException(tenantId, workflowDocumentId);
-      }
-      UUID documentId = documentIdOptional.get();
+      if (documentIdOptional.isPresent()) {
+        UUID documentId = documentIdOptional.get();
 
-      if (workflowDocumentRepository.countByDocumentId(documentId) == 1L) {
-        try {
-          documentStore.deleteDocument(tenantId, documentId);
-        } catch (DocumentNotFoundException ignored) {
+        if (workflowDocumentRepository.countByDocumentId(documentId) == 1L) {
+          try {
+            documentStore.deleteDocument(tenantId, documentId);
+          } catch (DocumentNotFoundException ignored) {
+          }
         }
       }
 
@@ -1233,12 +1236,58 @@ public class InternalWorkflowStore implements WorkflowStore {
   }
 
   @Override
+  public void resetWorkflowDocument(
+      UUID tenantId, ResetWorkflowDocumentRequest resetWorkflowDocumentRequest)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException {
+    try {
+      if (!workflowDocumentRepository.existsByTenantIdAndId(
+          tenantId, resetWorkflowDocumentRequest.getWorkflowDocumentId())) {
+        throw new WorkflowDocumentNotFoundException(
+            tenantId, resetWorkflowDocumentRequest.getWorkflowDocumentId());
+      }
+
+      /*
+       * NOTE: The search by both tenant ID and workflow document ID includes a security check to
+       * ensure that the workflow document not only exists, but is also associated with the
+       * specified tenant.
+       */
+      Optional<UUID> documentIdOptional =
+          workflowDocumentRepository.findDocumentIdByTenantIdAndId(
+              tenantId, resetWorkflowDocumentRequest.getWorkflowDocumentId());
+
+      if (documentIdOptional.isPresent()) {
+        UUID documentId = documentIdOptional.get();
+
+        if (workflowDocumentRepository.countByDocumentId(documentId) == 1L) {
+          try {
+            documentStore.deleteDocument(tenantId, documentId);
+          } catch (DocumentNotFoundException ignored) {
+          }
+        }
+      }
+
+      workflowDocumentRepository.resetWorkflowDocument(
+          tenantId, resetWorkflowDocumentRequest.getWorkflowDocumentId());
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to reset the workflow document ("
+              + resetWorkflowDocumentRequest.getWorkflowDocumentId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
   public WorkflowSummaries searchWorkflows(
       UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest, int maxResults)
       throws ServiceUnavailableException {
     try {
       // Build Specification
-      Specification<WorkflowSummary> specification =
+      Specification<Workflow> specification =
           (root, query, criteriaBuilder) -> {
             // Avoid duplicates when joins or subqueries are involved
             query.distinct(true);
@@ -1460,12 +1509,6 @@ public class InternalWorkflowStore implements WorkflowStore {
             return criteriaBuilder.and(andPredicates.toArray(new Predicate[0]));
           };
 
-      // Sorting
-      String sortByPropertyName =
-          resolveWorkflowSortByPropertyName(searchWorkflowsRequest.getSortBy());
-      Sort.Direction dir = resolveSortDirection(searchWorkflowsRequest.getSortDirection());
-      Sort sort = Sort.by(dir, sortByPropertyName);
-
       // Paging
       int pageIndex =
           searchWorkflowsRequest.getPageIndex() == null
@@ -1475,14 +1518,106 @@ public class InternalWorkflowStore implements WorkflowStore {
           searchWorkflowsRequest.getPageSize() == null
               ? 50
               : Math.max(1, Math.min(searchWorkflowsRequest.getPageSize(), maxResults));
-      Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
 
-      Page<WorkflowSummary> workflowSummaryPage =
-          workflowSummaryRepository.findAll(specification, pageable);
+      final int firstResult = pageIndex * pageSize;
+
+      // Retrieve the criteria builder
+      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+      // Create a query using the WorkflowSummary projection
+      CriteriaQuery<WorkflowSummary> dataCriteriaQuery =
+          criteriaBuilder.createQuery(WorkflowSummary.class);
+
+      // Create the root
+      Root<Workflow> root = dataCriteriaQuery.from(Workflow.class);
+      Root<WorkflowDefinition> definitionRoot = dataCriteriaQuery.from(WorkflowDefinition.class);
+
+      // Apply the spec as predicate
+      Predicate predicate = specification.toPredicate(root, dataCriteriaQuery, criteriaBuilder);
+
+      // Join Workflow -> WorkflowDefinition on (definitionId, definitionVersion)
+      predicate =
+          criteriaBuilder.and(
+              predicate,
+              criteriaBuilder.equal(definitionRoot.get("id"), root.get("definitionId")),
+              criteriaBuilder.equal(definitionRoot.get("version"), root.get("definitionVersion")));
+
+      // Build "effectiveDescription":
+      // IF (workflow.description is not null AND length(trim(workflow.description)) > 0)
+      //    THEN workflow.description
+      //    ELSE workflowDefinition.description
+      Expression<String> workflowDescription = root.get("description");
+      Expression<Integer> workflowDescriptionTrimmed =
+          criteriaBuilder.length(criteriaBuilder.trim(workflowDescription));
+
+      Expression<String> effectiveDescription =
+          criteriaBuilder.<String>selectCase()
+              .when(
+                  criteriaBuilder.and(
+                      criteriaBuilder.isNotNull(workflowDescription),
+                      criteriaBuilder.greaterThan(workflowDescriptionTrimmed, 0)),
+                  workflowDescription)
+              .otherwise(definitionRoot.get("description"));
+
+      // Select only the fields required by WorkflowSummary
+      dataCriteriaQuery
+          .select(
+              criteriaBuilder.construct(
+                  WorkflowSummary.class,
+                  root.get("id"),
+                  root.get("tenantId"),
+                  root.get("parentId"),
+                  root.get("definitionId"),
+                  root.get("definitionVersion"),
+                  definitionRoot.get("name"),
+                  root.get("status"),
+                  root.get("initiated"),
+                  root.get("initiatedBy"),
+                  root.get("updated"),
+                  root.get("updatedBy"),
+                  root.get("finalized"),
+                  root.get("finalizedBy"),
+                  effectiveDescription))
+          .where(predicate);
+
+      SortDirection sortDirection =
+          (searchWorkflowsRequest.getSortDirection() != null)
+              ? searchWorkflowsRequest.getSortDirection()
+              : SortDirection.ASCENDING;
+
+      if (sortDirection == SortDirection.ASCENDING) {
+        dataCriteriaQuery.orderBy(
+            criteriaBuilder.asc(
+                root.get(resolveWorkflowSortByPropertyName(searchWorkflowsRequest.getSortBy()))));
+      } else {
+        dataCriteriaQuery.orderBy(
+            criteriaBuilder.desc(
+                root.get(resolveWorkflowSortByPropertyName(searchWorkflowsRequest.getSortBy()))));
+      }
+
+      TypedQuery<WorkflowSummary> dataQuery = entityManager.createQuery(dataCriteriaQuery);
+      dataQuery.setFirstResult(firstResult);
+      dataQuery.setMaxResults(pageSize);
+
+      List<WorkflowSummary> workflowSummaries = dataQuery.getResultList();
+
+      // Count query (for total elements)
+      CriteriaQuery<Long> countCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+      Root<Workflow> countRoot = countCriteriaQuery.from(Workflow.class);
+
+      Predicate countPredicate =
+          specification.toPredicate(countRoot, countCriteriaQuery, criteriaBuilder);
+
+      // Because we used query.distinct(true) above due to joins, prefer countDistinct on the PK
+      countCriteriaQuery
+          .select(criteriaBuilder.countDistinct(countRoot.get("id")))
+          .where(countPredicate);
+
+      Long total = entityManager.createQuery(countCriteriaQuery).getSingleResult();
 
       return new WorkflowSummaries(
-          workflowSummaryPage.toList(),
-          workflowSummaryPage.getTotalElements(),
+          workflowSummaries,
+          total,
           searchWorkflowsRequest.getSortBy(),
           searchWorkflowsRequest.getSortDirection(),
           pageIndex,
@@ -1763,6 +1898,39 @@ public class InternalWorkflowStore implements WorkflowStore {
       throw new ServiceUnavailableException(
           "Failed to verify the workflow document ("
               + verifyWorkflowDocumentRequest.getWorkflowDocumentId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void waiveWorkflowDocument(
+      UUID tenantId, WaiveWorkflowDocumentRequest waiveWorkflowDocumentRequest, String waivedBy)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException {
+    try {
+      if (workflowDocumentRepository.waiveWorkflowDocument(
+              waiveWorkflowDocumentRequest.getWorkflowDocumentId(),
+              OffsetDateTime.now(),
+              waivedBy,
+              waiveWorkflowDocumentRequest.getWaiveReason())
+          == 0) {
+        throw new WorkflowDocumentNotFoundException(
+            tenantId, waiveWorkflowDocumentRequest.getWorkflowDocumentId());
+      }
+
+      if (waiveWorkflowDocumentRequest.getDescription() != null) {
+        workflowDocumentRepository.updateWorkflowDocumentDescription(
+            waiveWorkflowDocumentRequest.getWorkflowDocumentId(),
+            waiveWorkflowDocumentRequest.getDescription());
+      }
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to waive the workflow document ("
+              + waiveWorkflowDocumentRequest.getWorkflowDocumentId()
               + ") for the tenant ("
               + tenantId
               + ")",

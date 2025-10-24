@@ -157,6 +157,7 @@
         remarks="The base-64 encoded SHA-256 hash of the data for the document template">
         <constraints nullable="false"/>
       </column>
+      <column name="description" type="nvarchar(500)" remarks="The description for the document template"/>
       <column name="data" type="${blob_type}"
         remarks="The data for the document template if not stored in an external repository"/>
       <column name="created" type="timestamp with time zone"
@@ -382,6 +383,7 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the workflow definition">
         <constraints nullable="false"/>
       </column>
+      <column name="description" type="nvarchar(500)" defaultValue="" remarks="The description for the workflow definition"/>
       <column name="engine_id" type="nvarchar(50)"
         remarks="The ID for the workflow engine the workflow definition is associated with">
         <constraints nullable="false"/>
@@ -555,6 +557,8 @@
       </column>
       <column name="time_to_complete" type="nvarchar(50)"
         remarks="The ISO-8601 duration format amount of time to complete the workflow step"/>
+      <column name="previous_steps" type="nvarchar(510)" remarks="The code(s) for the previous workflow step(s)"/>
+      <column name="next_steps" type="nvarchar(510)" remarks="The code(s) for the next workflow step(s)"/>
     </createTable>
     <addForeignKeyConstraint
       constraintName="operations_workflow_step_definitions_workflow_definition_fk"
@@ -708,6 +712,8 @@
         remarks="The date and time the workflow was last updated"/>
       <column name="updated_by" type="nvarchar(100)"
         remarks="The person or system who last updated the workflow"/>
+      <column name="description" type="nvarchar(500)"
+        remarks="The description for the workflow"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_workflows_workflow_definition_fk"
       baseTableName="operations_workflows" baseColumnNames="definition_id,definition_version"
@@ -1024,6 +1030,12 @@
         remarks="The date and time the workflow document was verified"/>
       <column name="verified_by" type="nvarchar(100)"
         remarks="The person or system that verified the workflow document"/>
+      <column name="waived" type="timestamp with time zone"
+        remarks="The date and time the workflow document was waived"/>
+      <column name="waived_by" type="nvarchar(100)"
+        remarks="The person or system that waived the workflow document"/>
+      <column name="waive_reason" type="nvarchar(500)"
+        remarks="The reason the workflow document was waived"/>
       <column name="description" type="nvarchar(500)"
         remarks="The description for the workflow document"/>
     </createTable>

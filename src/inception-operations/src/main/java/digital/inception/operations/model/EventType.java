@@ -44,6 +44,10 @@ public enum EventType implements CodeEnum {
   @XmlEnumValue("WorkflowDocumentRejected")
   WORKFLOW_DOCUMENT_REJECTED("workflow_document_rejected", "Workflow Document Rejected"),
 
+  /** Workflow Document Reset. */
+  @XmlEnumValue("WorkflowDocumentReset")
+  WORKFLOW_DOCUMENT_RESET("workflow_document_reset", "Workflow Document Reset"),
+
   /** Workflow Document Verified. */
   @XmlEnumValue("WorkflowDocumentVerified")
   WORKFLOW_DOCUMENT_VERIFIED("workflow_document_verified", "Workflow Document Verified"),

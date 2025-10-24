@@ -44,6 +44,7 @@ import java.util.UUID;
 @JsonPropertyOrder({
   "workflowId",
   "status",
+  "description",
   "externalReferences",
   "attributes",
   "variables",
@@ -53,7 +54,15 @@ import java.util.UUID;
 @XmlType(
     name = "UpdateWorkflowRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowId", "status", "externalReferences", "attributes", "variables", "data"})
+    propOrder = {
+      "workflowId",
+      "status",
+      "description",
+      "externalReferences",
+      "attributes",
+      "variables",
+      "data"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class UpdateWorkflowRequest implements Serializable {
@@ -74,6 +83,13 @@ public class UpdateWorkflowRequest implements Serializable {
   @XmlElement(name = "Data")
   @Size(min = 1, max = 10485760)
   private String data;
+
+  /** The description for the workflow. */
+  @Schema(description = "The description for the workflow")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 500)
+  private String description;
 
   /** The external references for the workflow. */
   @Schema(description = "The external reference for the workflow")
@@ -112,6 +128,7 @@ public class UpdateWorkflowRequest implements Serializable {
    *
    * @param workflowId the ID for the workflow
    * @param status the updated status of the workflow
+   * @param description the description for the workflow
    * @param externalReferences the external references for the workflow
    * @param attributes the attributes for the workflow
    * @param variables the variables for the workflow
@@ -120,12 +137,14 @@ public class UpdateWorkflowRequest implements Serializable {
   public UpdateWorkflowRequest(
       UUID workflowId,
       WorkflowStatus status,
+      String description,
       List<WorkflowExternalReference> externalReferences,
       List<WorkflowAttribute> attributes,
       List<WorkflowVariable> variables,
       String data) {
     this.workflowId = workflowId;
     this.status = status;
+    this.description = description;
     this.externalReferences = externalReferences;
     this.attributes = attributes;
     this.variables = variables;
@@ -148,6 +167,15 @@ public class UpdateWorkflowRequest implements Serializable {
    */
   public String getData() {
     return data;
+  }
+
+  /**
+   * Returns the description for the workflow.
+   *
+   * @return the description for the workflow
+   */
+  public String getDescription() {
+    return description;
   }
 
   /**
@@ -202,6 +230,15 @@ public class UpdateWorkflowRequest implements Serializable {
    */
   public void setData(String data) {
     this.data = data;
+  }
+
+  /**
+   * Set the description for the workflow.
+   *
+   * @param description the description for the workflow
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

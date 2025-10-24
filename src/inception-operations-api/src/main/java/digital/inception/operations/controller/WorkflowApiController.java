@@ -51,6 +51,7 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.ResetWorkflowDocumentRequest;
 import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.StartWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowRequest;
@@ -60,6 +61,7 @@ import digital.inception.operations.model.UnsuspendWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
+import digital.inception.operations.model.WaiveWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
@@ -2705,7 +2707,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration')")
   void rejectWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -2795,6 +2797,75 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           WorkflowNotFoundException,
           DocumentDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Reset a workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param resetWorkflowDocumentRequest the request to reset a workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be reset
+   */
+  @Operation(summary = "Reset a workflow document", description = "Reset a workflow document")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The workflow document was reset"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow document could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/reset-workflow-document",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration')")
+  void resetWorkflowDocument(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to reset a workflow document",
+              required = true)
+          @RequestBody
+          ResetWorkflowDocumentRequest resetWorkflowDocumentRequest)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
           ServiceUnavailableException;
 
   /**
@@ -3691,4 +3762,73 @@ public interface WorkflowApiController {
   @PreAuthorize(
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void verifyWorkflowStatuses() throws ServiceUnavailableException;
+
+  /**
+   * Waive a workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param waiveWorkflowDocumentRequest the request to waive a workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be waived
+   */
+  @Operation(summary = "Waive a workflow document", description = "Waive a workflow document")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "The workflow document was waived"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow document could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/waive-workflow-document",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration')")
+  void waiveWorkflowDocument(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to waive a workflow document",
+              required = true)
+          @RequestBody
+          WaiveWorkflowDocumentRequest waiveWorkflowDocumentRequest)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException;
 }

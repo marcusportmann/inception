@@ -23,8 +23,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.validation.constraint.ValidISO8601DurationOrPeriod;
+import digital.inception.jpa.StringListAttributeConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -35,13 +37,16 @@ import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Duration;
+import java.util.List;
 import org.springframework.boot.convert.DurationStyle;
+import org.springframework.util.StringUtils;
 
 /**
  * The {@code WorkflowStepDefinition} class encapsulates the definition of a step within a workflow.
@@ -67,7 +72,9 @@ import org.springframework.boot.convert.DurationStyle;
   "external",
   "internal",
   "optional",
-  "timeToComplete"
+  "previousSteps",
+  "nextSteps",
+  "timeToComplete",
 })
 @XmlRootElement(name = "WorkflowStepDefinition", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -81,6 +88,8 @@ import org.springframework.boot.convert.DurationStyle;
       "external",
       "internal",
       "optional",
+      "previousSteps",
+      "nextSteps",
       "timeToComplete"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -161,6 +170,16 @@ public class WorkflowStepDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /** The code(s) for the next workflow step(s). */
+  @Schema(description = "The code(s) for the next workflow step(s)")
+  @JsonProperty
+  @XmlElementWrapper(name = "NextSteps")
+  @XmlElement(name = "NextStep")
+  @Size(max = 10)
+  @Convert(converter = StringListAttributeConverter.class)
+  @Column(name = "next_steps", length = 510)
+  private List<String> nextSteps;
+
   /** Is this workflow step optional? */
   @Schema(
       description = "Is this workflow step optional",
@@ -170,6 +189,16 @@ public class WorkflowStepDefinition implements Serializable {
   @NotNull
   @Column(name = "optional", nullable = false)
   private Boolean optional;
+
+  /** The code(s) for the previous workflow step(s). */
+  @Schema(description = "The code(s) for the previous workflow step(s)")
+  @JsonProperty
+  @XmlElementWrapper(name = "PreviousSteps")
+  @XmlElement(name = "PreviousStep")
+  @Size(max = 10)
+  @Convert(converter = StringListAttributeConverter.class)
+  @Column(name = "previous_steps", length = 510)
+  private List<String> previousSteps;
 
   /** The sequence number for the workflow step. */
   @Schema(
@@ -202,34 +231,8 @@ public class WorkflowStepDefinition implements Serializable {
    * @param external is this workflow step completed by one or more external users
    * @param internal is this workflow step internal-only and excluded for external users
    * @param optional is this workflow step optional
-   */
-  public WorkflowStepDefinition(
-      int sequence,
-      String code,
-      String name,
-      String description,
-      boolean external,
-      boolean internal,
-      boolean optional) {
-    this.sequence = sequence;
-    this.code = code;
-    this.name = name;
-    this.description = description;
-    this.external = external;
-    this.internal = internal;
-    this.optional = optional;
-  }
-
-  /**
-   * Constructs a new {@code WorkflowStepDefinition}.
-   *
-   * @param sequence the sequence number for the workflow step
-   * @param code the code for the workflow step
-   * @param name the name of the workflow step
-   * @param description the description for the workflow step
-   * @param external is this workflow step completed by one or more external users
-   * @param internal is this workflow step internal-only and excluded for external users
-   * @param optional is this workflow step optional
+   * @param previousSteps the codes for the previous workflow steps
+   * @param nextSteps the codes for the next workflow steps
    * @param timeToComplete the ISO-8601 duration format amount of time to complete the workflow step
    */
   public WorkflowStepDefinition(
@@ -240,6 +243,8 @@ public class WorkflowStepDefinition implements Serializable {
       boolean external,
       boolean internal,
       boolean optional,
+      List<String> previousSteps,
+      List<String> nextSteps,
       String timeToComplete) {
     this.sequence = sequence;
     this.code = code;
@@ -248,6 +253,8 @@ public class WorkflowStepDefinition implements Serializable {
     this.external = external;
     this.internal = internal;
     this.optional = optional;
+    this.previousSteps = previousSteps;
+    this.nextSteps = nextSteps;
     this.timeToComplete = timeToComplete;
   }
 
@@ -313,6 +320,24 @@ public class WorkflowStepDefinition implements Serializable {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Returns the code(s) for the next workflow step(s).
+   *
+   * @return the code(s) for the next workflow step(s)
+   */
+  public List<String> getNextSteps() {
+    return nextSteps;
+  }
+
+  /**
+   * Returns the code(s) for the previous workflow step(s).
+   *
+   * @return the code(s) for the previous workflow step(s)
+   */
+  public List<String> getPreviousStep() {
+    return previousSteps;
   }
 
   /**
@@ -429,12 +454,30 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
+   * Set the code(s) for the next workflow step(s).
+   *
+   * @param nextSteps the code(s) for the next workflow step(s)
+   */
+  public void setNextSteps(List<String> nextSteps) {
+    this.nextSteps = nextSteps;
+  }
+
+  /**
    * Set whether the workflow step is optional.
    *
    * @param optional {@code true} if the workflow step is optional or {@code false} otherwise
    */
   public void setOptional(Boolean optional) {
     this.optional = optional;
+  }
+
+  /**
+   * Set the code(s) for the previous workflow step(s).
+   *
+   * @param previousSteps the code(s) for the previous workflow step(s)
+   */
+  public void setPreviousSteps(List<String> previousSteps) {
+    this.previousSteps = previousSteps;
   }
 
   /**

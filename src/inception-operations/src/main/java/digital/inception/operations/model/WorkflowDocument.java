@@ -71,6 +71,9 @@ import java.util.UUID;
   "rejectionReason",
   "verified",
   "verifiedBy",
+  "waived",
+  "waivedBy",
+  "waiveReason",
   "description"
 })
 @XmlRootElement(name = "WorkflowDocument", namespace = "https://inception.digital/operations")
@@ -95,6 +98,9 @@ import java.util.UUID;
       "rejectionReason",
       "verified",
       "verifiedBy",
+      "waived",
+      "waivedBy",
+      "waiveReason",
       "description"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -201,8 +207,8 @@ public class WorkflowDocument implements Serializable {
   @Schema(description = "The reason the workflow document was rejected")
   @JsonProperty
   @XmlElement(name = "RejectionReason")
-  @Size(min = 1, max = 100)
-  @Column(name = "rejection_reason", length = 100)
+  @Size(min = 1, max = 500)
+  @Column(name = "rejection_reason", length = 500)
   private String rejectionReason;
 
   /** The date and time the workflow document was requested. */
@@ -271,6 +277,31 @@ public class WorkflowDocument implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "verified_by", length = 100)
   private String verifiedBy;
+
+  /** The reason the workflow document was waived. */
+  @Schema(description = "The reason the workflow document was waived")
+  @JsonProperty
+  @XmlElement(name = "WaiveReason")
+  @Size(min = 1, max = 500)
+  @Column(name = "waive_reason", length = 500)
+  private String waiveReason;
+
+  /** The date and time the workflow document was waived. */
+  @Schema(description = "The date and time the workflow document was waived")
+  @JsonProperty
+  @XmlElement(name = "Waived")
+  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "waived")
+  private OffsetDateTime waived;
+
+  /** The person or system that waived the workflow document. */
+  @Schema(description = "The person or system that waived the workflow document")
+  @JsonProperty
+  @XmlElement(name = "WaivedBy")
+  @Size(min = 1, max = 100)
+  @Column(name = "waived_by", length = 100)
+  private String waivedBy;
 
   /** The ID for the workflow. */
   @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -523,6 +554,33 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
+   * Returns the reason the workflow document was waived.
+   *
+   * @return the reason the workflow document was waived
+   */
+  public String getWaiveReason() {
+    return waiveReason;
+  }
+
+  /**
+   * Returns the date and time the workflow document was waived.
+   *
+   * @return the date and time the workflow document was waived
+   */
+  public OffsetDateTime getWaived() {
+    return waived;
+  }
+
+  /**
+   * Returns the person or system that waived the workflow document.
+   *
+   * @return the person or system that waived the workflow document
+   */
+  public String getWaivedBy() {
+    return waivedBy;
+  }
+
+  /**
    * Returns the ID for the workflow.
    *
    * @return the ID for the workflow
@@ -684,6 +742,33 @@ public class WorkflowDocument implements Serializable {
    */
   public void setVerifiedBy(String verifiedBy) {
     this.verifiedBy = verifiedBy;
+  }
+
+  /**
+   * Set the reason the workflow document was waived.
+   *
+   * @param waiveReason the reason the workflow document was waived
+   */
+  public void setWaiveReason(String waiveReason) {
+    this.waiveReason = waiveReason;
+  }
+
+  /**
+   * Set the date and time the workflow document was waived.
+   *
+   * @param waived the date and time the workflow document was waived
+   */
+  public void setWaived(OffsetDateTime waived) {
+    this.waived = waived;
+  }
+
+  /**
+   * Set the person or system that waived the workflow document.
+   *
+   * @param waivedBy the person or system that waived the workflow document
+   */
+  public void setWaivedBy(String waivedBy) {
+    this.waivedBy = waivedBy;
   }
 
   /**

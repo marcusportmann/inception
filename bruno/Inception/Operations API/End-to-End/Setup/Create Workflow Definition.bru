@@ -16,6 +16,7 @@ body:json {
     "version": 1,
     "categoryId": "test_workflow_definition_category",
     "name": "Test Workflow Definition",
+    "description": "Test Workflow Definition Description",
     "tenantId": "00000000-0000-0000-0000-000000000000",
     "engineId": "test_workflow_engine",
     "timeToComplete": "P14D",
@@ -28,12 +29,12 @@ body:json {
     "attributeDefinitions": [
       {
         "code": "test_workflow_attribute_code",
+        "type": "string",
         "name": "Test Workflow Attribute",
         "description": "Test Workflow Attribute Description",
         "required": true
       }    
     ],
-  
     "documentDefinitions": [
       {
         "documentDefinitionId": "test_document_definition",
@@ -99,4 +100,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

@@ -57,6 +57,7 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.ResetWorkflowDocumentRequest;
 import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.StartWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowRequest;
@@ -67,6 +68,7 @@ import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
+import digital.inception.operations.model.WaiveWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
@@ -1632,6 +1634,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               initiateWorkflowRequest.getPendWorkflow()
                   ? WorkflowStatus.PENDING
                   : WorkflowStatus.ACTIVE,
+              initiateWorkflowRequest.getDescription(),
               initiateWorkflowRequest.getExternalReferences(),
               initiateWorkflowRequest.getAttributes(),
               initiateWorkflowRequest.getVariables(),
@@ -1965,6 +1968,33 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + requestWorkflowDocumentRequest.getDocumentDefinitionId()
               + ") for the workflow ("
               + requestWorkflowDocumentRequest.getWorkflowId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void resetWorkflowDocument(
+      UUID tenantId, ResetWorkflowDocumentRequest resetWorkflowDocumentRequest)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("resetWorkflowDocumentRequest", resetWorkflowDocumentRequest);
+
+    try {
+      workflowStore.resetWorkflowDocument(tenantId, resetWorkflowDocumentRequest);
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to reset the workflow document ("
+              + resetWorkflowDocumentRequest.getWorkflowDocumentId()
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -2329,6 +2359,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         workflow.setStatus(updateWorkflowRequest.getStatus());
       }
 
+      if (updateWorkflowRequest.getDescription() != null) {
+        workflow.setDescription(updateWorkflowRequest.getDescription());
+      }
+
       workflow.setUpdated(OffsetDateTime.now());
       workflow.setUpdatedBy(updatedBy);
 
@@ -2506,6 +2540,44 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throw new ServiceUnavailableException(
           "Failed to verify the workflow document ("
               + verifyWorkflowDocumentRequest.getWorkflowDocumentId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void waiveWorkflowDocument(
+      UUID tenantId, WaiveWorkflowDocumentRequest waiveWorkflowDocumentRequest, String waivedBy)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("waiveWorkflowDocumentRequest", waiveWorkflowDocumentRequest);
+
+    if (!StringUtils.hasText(waivedBy)) {
+      throw new InvalidArgumentException("waivedBy");
+    }
+
+    try {
+      workflowStore.waiveWorkflowDocument(tenantId, waiveWorkflowDocumentRequest, waivedBy);
+
+      eventService.publishEvent(
+          tenantId,
+          EventType.WORKFLOW_DOCUMENT_WAIVED,
+          ObjectType.WORKFLOW_DOCUMENT,
+          waiveWorkflowDocumentRequest.getWorkflowDocumentId(),
+          waivedBy);
+    } catch (WorkflowDocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to waive the workflow document ("
+              + waiveWorkflowDocumentRequest.getWorkflowDocumentId()
               + ") for the tenant ("
               + tenantId
               + ")",

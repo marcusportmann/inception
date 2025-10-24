@@ -16,6 +16,7 @@ body:json {
     "version": 2,
     "categoryId": "test_workflow_definition_category",
     "name": "Test Workflow Definition",
+    "name": "Test Workflow Definition Description",
     "tenantId": "00000000-0000-0000-0000-000000000000",
     "engineId": "test_workflow_engine",
     "attributes": [
@@ -27,6 +28,7 @@ body:json {
       "attributeDefinitions": [
       {
         "code": "test_workflow_attribute_code",
+        "type": "string",
         "name": "Test Workflow Attribute",
         "description": "Test Workflow Attribute Description",
         "required": true
@@ -110,4 +112,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

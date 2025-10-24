@@ -142,7 +142,17 @@ public class WorkflowAttributeDefinition implements Serializable {
   /** The attribute type for the workflow attribute. */
   @Schema(
       description = "The code for the attribute type for the workflow attribute",
-      requiredMode = Schema.RequiredMode.REQUIRED)
+      requiredMode = Schema.RequiredMode.REQUIRED,
+      allowableValues = {
+        "boolean",
+        "date",
+        "date_time",
+        "decimal",
+        "double",
+        "integer",
+        "long",
+        "string"
+      })
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull

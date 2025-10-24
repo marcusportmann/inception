@@ -51,6 +51,7 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.ResetWorkflowDocumentRequest;
 import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.StartWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowRequest;
@@ -60,6 +61,7 @@ import digital.inception.operations.model.UnsuspendWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
+import digital.inception.operations.model.WaiveWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
@@ -810,6 +812,21 @@ public interface WorkflowService {
           ServiceUnavailableException;
 
   /**
+   * Reset a workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param resetWorkflowDocumentRequest the request to reset a workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be reset
+   */
+  void resetWorkflowDocument(
+      UUID tenantId, ResetWorkflowDocumentRequest resetWorkflowDocumentRequest)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException;
+
+  /**
    * Search for workflows.
    *
    * @param tenantId the ID for the tenant
@@ -1008,6 +1025,22 @@ public interface WorkflowService {
    */
   void verifyWorkflowDocument(
       UUID tenantId, VerifyWorkflowDocumentRequest verifyWorkflowDocumentRequest, String verifiedBy)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Waive a workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param waiveWorkflowDocumentRequest the request to waive a workflow document
+   * @param waivedBy the person or system waiving the workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be waived
+   */
+  void waiveWorkflowDocument(
+      UUID tenantId, WaiveWorkflowDocumentRequest waiveWorkflowDocumentRequest, String waivedBy)
       throws InvalidArgumentException,
           WorkflowDocumentNotFoundException,
           ServiceUnavailableException;

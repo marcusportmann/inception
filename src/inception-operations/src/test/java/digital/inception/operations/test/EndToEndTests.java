@@ -64,6 +64,7 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.ResetWorkflowDocumentRequest;
 import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.model.VariableSearchCriteria;
@@ -316,6 +317,7 @@ public class EndToEndTests {
             workflowDefinitionCategory.getId(),
             null,
             "Test JSON Workflow Definition",
+            "Test JSON Workflow Definition Description",
             "dummy",
             null,
             ValidationSchemaType.JSON,
@@ -350,7 +352,10 @@ public class EndToEndTests {
             "The description for Test Workflow Step 1",
             false,
             false,
-            false));
+            false,
+            null,
+            List.of("test_workflow_step_2"),
+            null));
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -361,6 +366,8 @@ public class EndToEndTests {
             false,
             true,
             true,
+            List.of("test_workflow_step_1"),
+            List.of("test_workflow_step_3"),
             "P1D"));
 
     workflowDefinition.addStepDefinition(
@@ -371,7 +378,10 @@ public class EndToEndTests {
             "The description for Test Workflow Step 3",
             false,
             false,
-            false));
+            false,
+            List.of("test_workflow_step_2"),
+            null,
+            null));
 
     workflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("process_definition_key", UUID.randomUUID().toString()));
@@ -495,6 +505,7 @@ public class EndToEndTests {
             null,
             UUID.randomUUID(),
             false,
+            "This is the workflow description",
             List.of(
                 new WorkflowExternalReference(
                     "test_workflow_external_reference_code",
@@ -514,8 +525,9 @@ public class EndToEndTests {
     RequestWorkflowDocumentRequest requestWorkflowDocumentRequest =
         new RequestWorkflowDocumentRequest(workflow.getId(), anotherDocumentDefinition.getId());
 
-    workflowService.requestWorkflowDocument(
-        TenantUtil.DEFAULT_TENANT_ID, requestWorkflowDocumentRequest, "TEST1");
+    UUID requestedWorkflowDocumentId =
+        workflowService.requestWorkflowDocument(
+            TenantUtil.DEFAULT_TENANT_ID, requestWorkflowDocumentRequest, "TEST1");
 
     // Retrieve the outstanding workflow documents for the workflow
     List<OutstandingWorkflowDocument> outstandingWorkflowDocuments =
@@ -523,6 +535,13 @@ public class EndToEndTests {
             TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
     assertEquals(2, outstandingWorkflowDocuments.size());
+
+    // Reset the workflow document
+    ResetWorkflowDocumentRequest resetWorkflowDocumentRequest =
+        new ResetWorkflowDocumentRequest(requestedWorkflowDocumentId);
+
+    workflowService.resetWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, resetWorkflowDocumentRequest);
 
     // Provide the workflow documents
     byte[] multiPagePdfData = ResourceUtil.getClasspathResource("MultiPagePdf.pdf");

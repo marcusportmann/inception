@@ -69,6 +69,7 @@ import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VariableSearchCriteria;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
+import digital.inception.operations.model.WaiveWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowAttributeDefinition;
@@ -179,6 +180,7 @@ public class WorkflowServiceTests {
             workflowDefinitionCategory.getId(),
             null,
             "Test Workflow Definition",
+            "Test Workflow Definition Description",
             "dummy",
             null,
             ValidationSchemaType.JSON,
@@ -200,7 +202,10 @@ public class WorkflowServiceTests {
             "The description for Test Workflow Step 1",
             false,
             false,
-            false));
+            false,
+            null,
+            null,
+            null));
 
     workflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("process_definition_key", UUID.randomUUID().toString()));
@@ -224,6 +229,7 @@ public class WorkflowServiceTests {
             null,
             UUID.randomUUID(),
             false,
+            null,
             List.of(),
             List.of(),
             List.of(),
@@ -352,6 +358,7 @@ public class WorkflowServiceTests {
             workflowDefinitionCategory.getId(),
             null,
             "Test JSON Workflow Definition",
+            "Test JSON Workflow Definition Description",
             "dummy",
             null,
             ValidationSchemaType.JSON,
@@ -384,7 +391,10 @@ public class WorkflowServiceTests {
             "The description for Test Workflow Step 1",
             false,
             false,
-            false));
+            false,
+            null,
+            List.of("test_workflow_step_2"),
+            null));
 
     workflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -395,6 +405,8 @@ public class WorkflowServiceTests {
             false,
             true,
             true,
+            List.of("test_workflow_step_1"),
+            List.of("test_workflow_step_3"),
             "P1D"));
 
     workflowDefinition.addStepDefinition(
@@ -405,7 +417,10 @@ public class WorkflowServiceTests {
             "The description for Test Workflow Step 3",
             false,
             false,
-            false));
+            false,
+            List.of("test_workflow_step_2"),
+            null,
+            null));
 
     workflowDefinition.addVariableDefinition(
         new WorkflowVariableDefinition("testVariableName", true, "Test Variable Description"));
@@ -478,6 +493,7 @@ public class WorkflowServiceTests {
             null,
             UUID.randomUUID(),
             false,
+            "This is the workflow description",
             List.of(
                 new WorkflowExternalReference(
                     "test_workflow_external_reference_code",
@@ -737,8 +753,9 @@ public class WorkflowServiceTests {
             anotherDocumentDefinition.getId(),
             "The request workflow document description.");
 
-    workflowService.requestWorkflowDocument(
-        TenantUtil.DEFAULT_TENANT_ID, requestWorkflowDocumentRequest, "TEST1");
+    UUID requestedWorkflowDocumentId =
+        workflowService.requestWorkflowDocument(
+            TenantUtil.DEFAULT_TENANT_ID, requestWorkflowDocumentRequest, "TEST1");
 
     retrievedWorkflowDocuments =
         workflowService.getWorkflowDocuments(
@@ -760,7 +777,7 @@ public class WorkflowServiceTests {
 
     // Delete the workflow document
     workflowService.deleteWorkflowDocument(
-        TenantUtil.DEFAULT_TENANT_ID, retrievedWorkflowDocument.getId());
+        TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest.getWorkflowDocumentId());
 
     retrievedWorkflowDocuments =
         workflowService.getWorkflowDocuments(
@@ -779,6 +796,30 @@ public class WorkflowServiceTests {
             TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
     assertEquals(1, outstandingWorkflowDocuments.size());
+
+    // Waive the workflow document
+    WaiveWorkflowDocumentRequest waiveWorkflowDocumentRequest =
+        new WaiveWorkflowDocumentRequest(
+            requestedWorkflowDocumentId,
+            "This is a test waive reason.",
+            "The waive workflow document description.");
+
+    workflowService.waiveWorkflowDocument(
+        TenantUtil.DEFAULT_TENANT_ID, waiveWorkflowDocumentRequest, "TEST2");
+
+    retrievedWorkflowDocument =
+        workflowService.getWorkflowDocument(
+            TenantUtil.DEFAULT_TENANT_ID, requestedWorkflowDocumentId);
+
+    assertEquals(requestedWorkflowDocumentId, retrievedWorkflowDocument.getId());
+    assertEquals(WorkflowDocumentStatus.WAIVED, retrievedWorkflowDocument.getStatus());
+    assertEquals("TEST2", retrievedWorkflowDocument.getWaivedBy());
+    assertEquals("This is a test waive reason.", retrievedWorkflowDocument.getWaiveReason());
+    assertNotNull(retrievedWorkflowDocument.getWaived());
+    assertNull(retrievedWorkflowDocument.getVerified());
+    assertNull(retrievedWorkflowDocument.getVerifiedBy());
+    assertEquals(
+        "The waive workflow document description.", retrievedWorkflowDocument.getDescription());
 
     // Create a workflow note for the workflow
     CreateWorkflowNoteRequest createWorkflowNoteRequest =
@@ -923,6 +964,7 @@ public class WorkflowServiceTests {
         new UpdateWorkflowRequest(
             workflow.getId(),
             WorkflowStatus.COMPLETED,
+            "This is the updated workflow description",
             null,
             List.of(
                 new WorkflowAttribute(
@@ -937,6 +979,7 @@ public class WorkflowServiceTests {
     retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
     assertEquals(WorkflowStatus.COMPLETED, retrievedWorkflow.getStatus());
+    assertEquals("This is the updated workflow description", retrievedWorkflow.getDescription());
     assertEquals(testWorkflowDataJson, retrievedWorkflow.getData());
     assertEquals(
         "test_workflow_attribute_value_updated",
@@ -1149,6 +1192,7 @@ public class WorkflowServiceTests {
             sharedWorkflowDefinitionCategory.getId(),
             null,
             "Test Shared Workflow Definition",
+            "Test Shared Workflow Definition Description",
             workflowEngine.getId(),
             null,
             ValidationSchemaType.JSON,
@@ -1195,6 +1239,7 @@ public class WorkflowServiceTests {
             tenantWorkflowDefinitionCategory.getId(),
             TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Workflow Definition",
+            "Test Tenant Workflow Definition Description",
             workflowEngine.getId(),
             null,
             ValidationSchemaType.JSON,
@@ -1237,7 +1282,10 @@ public class WorkflowServiceTests {
             "The description for Test Workflow Step 1",
             false,
             false,
-            false));
+            false,
+            null,
+            List.of("test_workflow_step_2"),
+            null));
 
     tenantWorkflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -1247,7 +1295,10 @@ public class WorkflowServiceTests {
             "The description for Test Workflow Step 2",
             false,
             false,
-            true));
+            true,
+            List.of("test_workflow_step_1"),
+            List.of("test_workflow_step_3"),
+            null));
 
     tenantWorkflowDefinition.addStepDefinition(
         new WorkflowStepDefinition(
@@ -1257,7 +1308,10 @@ public class WorkflowServiceTests {
             "The description for Test Workflow Step 3",
             false,
             false,
-            false));
+            false,
+            List.of("test_workflow_step_2"),
+            null,
+            null));
 
     tenantWorkflowDefinition.addVariableDefinition(
         new WorkflowVariableDefinition("testVariableName", true, "Test Variable Description"));
@@ -1936,6 +1990,10 @@ public class WorkflowServiceTests {
         workflow1.getCanceledBy(),
         workflow2.getCanceledBy(),
         "The canceled by values for the workflows do not match");
+    assertEquals(
+        workflow1.getDescription(),
+        workflow2.getDescription(),
+        "The description values for the workflows do not match");
     assertEquals(
         workflow1.getId(), workflow2.getId(), "The ID values for the workflows do not match");
     assertEquals(

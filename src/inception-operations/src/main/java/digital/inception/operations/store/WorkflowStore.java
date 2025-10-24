@@ -33,8 +33,10 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.ResetWorkflowDocumentRequest;
 import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
+import digital.inception.operations.model.WaiveWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinitionDocumentDefinition;
 import digital.inception.operations.model.WorkflowDefinitionId;
@@ -473,6 +475,18 @@ public interface WorkflowStore {
       throws DocumentDefinitionNotFoundException, ServiceUnavailableException;
 
   /**
+   * Reset a workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param resetWorkflowDocumentRequest the request to reset a workflow document
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be reset
+   */
+  void resetWorkflowDocument(
+      UUID tenantId, ResetWorkflowDocumentRequest resetWorkflowDocumentRequest)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException;
+
+  /**
    * Search for workflows.
    *
    * @param tenantId the ID for the tenant
@@ -592,6 +606,19 @@ public interface WorkflowStore {
    */
   void verifyWorkflowDocument(
       UUID tenantId, VerifyWorkflowDocumentRequest verifyWorkflowDocumentRequest, String verifiedBy)
+      throws WorkflowDocumentNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Waive a workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param waiveWorkflowDocumentRequest the request to waive a workflow document
+   * @param waivedBy the person or system waiving the workflow document
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the workflow document could not be waived
+   */
+  void waiveWorkflowDocument(
+      UUID tenantId, WaiveWorkflowDocumentRequest waiveWorkflowDocumentRequest, String waivedBy)
       throws WorkflowDocumentNotFoundException, ServiceUnavailableException;
 
   /**

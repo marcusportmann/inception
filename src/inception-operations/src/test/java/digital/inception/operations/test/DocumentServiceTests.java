@@ -18,6 +18,8 @@ package digital.inception.operations.test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -31,12 +33,14 @@ import digital.inception.operations.exception.DocumentDefinitionCategoryNotFound
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DocumentNotFoundException;
 import digital.inception.operations.exception.DocumentNoteNotFoundException;
+import digital.inception.operations.exception.DocumentTemplateCategoryNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
 import digital.inception.operations.model.AttributeSearchCriteria;
 import digital.inception.operations.model.AttributeType;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
+import digital.inception.operations.model.CreateDocumentTemplateRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentAttributeDefinition;
@@ -49,12 +53,18 @@ import digital.inception.operations.model.DocumentNotes;
 import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
 import digital.inception.operations.model.DocumentSummary;
+import digital.inception.operations.model.DocumentTemplate;
+import digital.inception.operations.model.DocumentTemplateCategory;
+import digital.inception.operations.model.DocumentTemplateSortBy;
+import digital.inception.operations.model.DocumentTemplateSummaries;
+import digital.inception.operations.model.DocumentTemplateSummary;
 import digital.inception.operations.model.ExternalReferenceSearchCriteria;
 import digital.inception.operations.model.ExternalReferenceType;
 import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
 import digital.inception.operations.model.UpdateDocumentRequest;
+import digital.inception.operations.model.UpdateDocumentTemplateRequest;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.OperationsReferenceService;
 import digital.inception.test.InceptionExtension;
@@ -469,6 +479,159 @@ public class DocumentServiceTests {
     operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
   }
 
+  /** Test the document template functionality. */
+  @Test
+  void documentTemplateTest() throws Exception {
+    DocumentTemplateCategory sharedDocumentTemplateCategory =
+        new DocumentTemplateCategory(
+            "test_shared_document_template_category_" + randomId(),
+            null,
+            "Test Shared Document Template Category");
+
+    documentService.createDocumentTemplateCategory(sharedDocumentTemplateCategory);
+
+    DocumentTemplateCategory retrievedDocumentTemplateCategory =
+        documentService.getDocumentTemplateCategory(sharedDocumentTemplateCategory.getId());
+
+    compareDocumentTemplateCategories(
+        sharedDocumentTemplateCategory, retrievedDocumentTemplateCategory);
+
+    DocumentTemplateCategory tenantDocumentTemplateCategory =
+        new DocumentTemplateCategory(
+            "test_tenant_document_template_category_" + randomId(),
+            TenantUtil.DEFAULT_TENANT_ID,
+            "Test Tenant Document Template Category");
+
+    documentService.createDocumentTemplateCategory(tenantDocumentTemplateCategory);
+
+    retrievedDocumentTemplateCategory =
+        documentService.getDocumentTemplateCategory(tenantDocumentTemplateCategory.getId());
+
+    compareDocumentTemplateCategories(
+        tenantDocumentTemplateCategory, retrievedDocumentTemplateCategory);
+
+    List<DocumentTemplateCategory> retrievedDocumentTemplateCategories =
+        documentService.getDocumentTemplateCategories(TenantUtil.DEFAULT_TENANT_ID);
+
+    assertEquals(2, retrievedDocumentTemplateCategories.size());
+
+    retrievedDocumentTemplateCategories =
+        documentService.getDocumentTemplateCategories(UUID.randomUUID());
+
+    assertEquals(1, retrievedDocumentTemplateCategories.size());
+
+    compareDocumentTemplateCategories(
+        sharedDocumentTemplateCategory, retrievedDocumentTemplateCategories.getFirst());
+
+    CreateDocumentTemplateRequest createSharedDocumentTemplateRequest =
+        getCreateDocumentTemplateRequest(
+            "test_shared_document_template_" + randomId(),
+            sharedDocumentTemplateCategory.getId(),
+            null,
+            "Test Shared Document Template",
+            "Test Shared Document Template Description");
+
+    documentService.createDocumentTemplate(createSharedDocumentTemplateRequest, "TEST1");
+
+    DocumentTemplate retrievedDocumentTemplate =
+        documentService.getDocumentTemplate(createSharedDocumentTemplateRequest.getId());
+
+    CreateDocumentTemplateRequest createTenantDocumentTemplateRequest =
+        getCreateDocumentTemplateRequest(
+            "test_tenant_document_template_" + randomId(),
+            sharedDocumentTemplateCategory.getId(),
+            TenantUtil.DEFAULT_TENANT_ID,
+            "Test Tenant Document Template",
+            "Test Tenant Document Template Description");
+
+    documentService.createDocumentTemplate(createTenantDocumentTemplateRequest, "TEST1");
+
+    retrievedDocumentTemplate =
+        documentService.getDocumentTemplate(createTenantDocumentTemplateRequest.getId());
+
+    assertEquals(createTenantDocumentTemplateRequest.getId(), retrievedDocumentTemplate.getId());
+    assertEquals(
+        createTenantDocumentTemplateRequest.getCategoryId(),
+        retrievedDocumentTemplate.getCategoryId());
+    assertEquals(
+        createTenantDocumentTemplateRequest.getTenantId(), retrievedDocumentTemplate.getTenantId());
+    assertEquals(
+        createTenantDocumentTemplateRequest.getName(), retrievedDocumentTemplate.getName());
+    assertEquals(
+        createTenantDocumentTemplateRequest.getDescription(),
+        retrievedDocumentTemplate.getDescription());
+    assertArrayEquals(
+        createTenantDocumentTemplateRequest.getData(), retrievedDocumentTemplate.getData());
+    assertNotNull(retrievedDocumentTemplate.getCreated());
+    assertEquals("TEST1", retrievedDocumentTemplate.getCreatedBy());
+    assertNull(retrievedDocumentTemplate.getUpdated());
+    assertNull(retrievedDocumentTemplate.getUpdatedBy());
+
+    UpdateDocumentTemplateRequest updateTenantDocumentTemplateRequest =
+        getUpdateDocumentTemplateRequest(createTenantDocumentTemplateRequest);
+
+    documentService.updateDocumentTemplate(updateTenantDocumentTemplateRequest, "TEST2");
+
+    retrievedDocumentTemplate =
+        documentService.getDocumentTemplate(createTenantDocumentTemplateRequest.getId());
+
+    assertEquals(updateTenantDocumentTemplateRequest.getId(), retrievedDocumentTemplate.getId());
+    assertEquals(
+        updateTenantDocumentTemplateRequest.getCategoryId(),
+        retrievedDocumentTemplate.getCategoryId());
+    assertEquals(
+        updateTenantDocumentTemplateRequest.getName(), retrievedDocumentTemplate.getName());
+    assertEquals(
+        updateTenantDocumentTemplateRequest.getDescription(),
+        retrievedDocumentTemplate.getDescription());
+    assertArrayEquals(
+        updateTenantDocumentTemplateRequest.getData(), retrievedDocumentTemplate.getData());
+    assertNotNull(retrievedDocumentTemplate.getCreated());
+    assertEquals("TEST1", retrievedDocumentTemplate.getCreatedBy());
+    assertNotNull(retrievedDocumentTemplate.getUpdated());
+    assertEquals("TEST2", retrievedDocumentTemplate.getUpdatedBy());
+
+    DocumentTemplateSummaries documentTemplateSummaries =
+        documentService.getDocumentTemplateSummaries(
+            TenantUtil.DEFAULT_TENANT_ID,
+            "Test",
+            DocumentTemplateSortBy.NAME,
+            SortDirection.ASCENDING,
+            0,
+            10);
+
+    assertEquals(2, documentTemplateSummaries.getTotal());
+    assertEquals(
+        createSharedDocumentTemplateRequest.getId(),
+        documentTemplateSummaries.getDocumentTemplateSummaries().getFirst().getId());
+
+    tenantDocumentTemplateCategory.setName(tenantDocumentTemplateCategory.getName() + " Updated");
+
+    documentService.updateDocumentTemplateCategory(tenantDocumentTemplateCategory);
+
+    retrievedDocumentTemplateCategory =
+        documentService.getDocumentTemplateCategory(tenantDocumentTemplateCategory.getId());
+
+    compareDocumentTemplateCategories(
+        tenantDocumentTemplateCategory, retrievedDocumentTemplateCategory);
+
+    List<DocumentTemplateSummary> retrievedDocumentTemplateSummaries =
+        documentService.getDocumentTemplateSummaries(
+            TenantUtil.DEFAULT_TENANT_ID, sharedDocumentTemplateCategory.getId());
+
+    assertEquals(2, retrievedDocumentTemplateSummaries.size());
+
+    documentService.deleteDocumentTemplateCategory(tenantDocumentTemplateCategory.getId());
+
+    documentService.deleteDocumentTemplateCategory(sharedDocumentTemplateCategory.getId());
+
+    assertThrows(
+        DocumentTemplateCategoryNotFoundException.class,
+        () -> {
+          documentService.getDocumentTemplateCategory(sharedDocumentTemplateCategory.getId());
+        });
+  }
+
   private void compareDocumentAttributeDefinitions(
       DocumentAttributeDefinition documentAttributeDefinition1,
       DocumentAttributeDefinition documentAttributeDefinition2) {
@@ -581,6 +744,23 @@ public class DocumentServiceTests {
         "The updated by values for the document notes do not match");
   }
 
+  private void compareDocumentTemplateCategories(
+      DocumentTemplateCategory documentTemplateCategory1,
+      DocumentTemplateCategory documentTemplateCategory2) {
+    assertEquals(
+        documentTemplateCategory1.getId(),
+        documentTemplateCategory2.getId(),
+        "The ID values for the document template categories do not match");
+    assertEquals(
+        documentTemplateCategory1.getTenantId(),
+        documentTemplateCategory2.getTenantId(),
+        "The ID values for the document template categories do not match");
+    assertEquals(
+        documentTemplateCategory1.getName(),
+        documentTemplateCategory2.getName(),
+        "The name values for the document template categories do not match");
+  }
+
   private void compareDocuments(Document document1, Document document2) {
     assertEquals(
         document1.getCreated(),
@@ -673,6 +853,23 @@ public class DocumentServiceTests {
     return createDocumentRequest;
   }
 
+  private CreateDocumentTemplateRequest getCreateDocumentTemplateRequest(
+      String id, String categoryId, UUID tenantId, String name, String description) {
+    byte[] data = "This is some test data.".getBytes(StandardCharsets.UTF_8);
+
+    CreateDocumentTemplateRequest createDocumentTemplateRequest =
+        new CreateDocumentTemplateRequest();
+
+    createDocumentTemplateRequest.setId(id);
+    createDocumentTemplateRequest.setCategoryId(categoryId);
+    createDocumentTemplateRequest.setTenantId(tenantId);
+    createDocumentTemplateRequest.setName(name);
+    createDocumentTemplateRequest.setDescription(description);
+    createDocumentTemplateRequest.setData(data);
+
+    return createDocumentTemplateRequest;
+  }
+
   private UpdateDocumentRequest getUpdateDocumentRequest(Document document) {
     byte[] data =
         "<html><body>This is some HTML test data.</body></html>".getBytes(StandardCharsets.UTF_8);
@@ -697,6 +894,24 @@ public class DocumentServiceTests {
     updateDocumentRequest.setSourceDocumentId(UUID.randomUUID());
 
     return updateDocumentRequest;
+  }
+
+  private UpdateDocumentTemplateRequest getUpdateDocumentTemplateRequest(
+      CreateDocumentTemplateRequest createDocumentTemplateRequest) {
+    byte[] data = "This is some updated test data.".getBytes(StandardCharsets.UTF_8);
+
+    UpdateDocumentTemplateRequest updateDocumentTemplateRequest =
+        new UpdateDocumentTemplateRequest();
+
+    updateDocumentTemplateRequest.setId(createDocumentTemplateRequest.getId());
+    updateDocumentTemplateRequest.setCategoryId(createDocumentTemplateRequest.getCategoryId());
+    updateDocumentTemplateRequest.setTenantId(createDocumentTemplateRequest.getTenantId());
+    updateDocumentTemplateRequest.setName(createDocumentTemplateRequest.getName() + " Updated");
+    updateDocumentTemplateRequest.setDescription(
+        createDocumentTemplateRequest.getDescription() + " Updated");
+    updateDocumentTemplateRequest.setData(data);
+
+    return updateDocumentTemplateRequest;
   }
 
   private String randomId() {

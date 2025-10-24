@@ -86,7 +86,8 @@ import java.util.UUID;
   "canceledBy",
   "cancellationReason",
   "updated",
-  "updatedBy"
+  "updatedBy",
+  "description"
 })
 @XmlRootElement(name = "Workflow", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -117,7 +118,8 @@ import java.util.UUID;
       "canceledBy",
       "cancellationReason",
       "updated",
-      "updatedBy"
+      "updatedBy",
+      "description"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidWorkflow
@@ -258,6 +260,14 @@ public class Workflow implements Serializable {
   @Column(name = "definition_version", nullable = false)
   private int definitionVersion;
 
+  /** The description for the workflow. */
+  @Schema(description = "The description for the workflow")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 500)
+  @Column(name = "description", length = 500)
+  private String description;
+
   /** The ID for the corresponding process or case instance in the workflow engine. */
   @Schema(
       description = "The ID for the corresponding process or case instance in the workflow engine")
@@ -393,6 +403,7 @@ public class Workflow implements Serializable {
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param definitionVersion the version of the workflow definition the workflow is associated with
    * @param status the status of the workflow
+   * @param description the description for the workflow
    * @param externalReferences the external references for the workflow
    * @param attributes the attributes for the workflow
    * @param variables the variables for the workflow
@@ -406,6 +417,7 @@ public class Workflow implements Serializable {
       String definitionId,
       int definitionVersion,
       WorkflowStatus status,
+      String description,
       List<WorkflowExternalReference> externalReferences,
       List<WorkflowAttribute> attributes,
       List<WorkflowVariable> variables,
@@ -418,6 +430,7 @@ public class Workflow implements Serializable {
     this.definitionId = definitionId;
     this.definitionVersion = definitionVersion;
     this.status = status;
+    this.description = description;
     this.data = data;
     this.initiated = initiated;
     this.initiatedBy = initiatedBy;
@@ -697,6 +710,15 @@ public class Workflow implements Serializable {
    */
   public int getDefinitionVersion() {
     return definitionVersion;
+  }
+
+  /**
+   * Returns the description for the workflow.
+   *
+   * @return the description for the workflow
+   */
+  public String getDescription() {
+    return description;
   }
 
   /**
@@ -1001,6 +1023,15 @@ public class Workflow implements Serializable {
    */
   public void setDefinitionVersion(int definitionVersion) {
     this.definitionVersion = definitionVersion;
+  }
+
+  /**
+   * Set the description for the workflow.
+   *
+   * @param description the description for the workflow
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

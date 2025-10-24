@@ -96,17 +96,6 @@ public class DocumentTemplateCategory implements Serializable {
    * Constructs a new {@code DocumentTemplateCategory}.
    *
    * @param id the ID for the document template category
-   * @param name the name of the document template category
-   */
-  public DocumentTemplateCategory(String id, String name) {
-    this.id = id;
-    this.name = name;
-  }
-
-  /**
-   * Constructs a new {@code DocumentTemplateCategory}.
-   *
-   * @param id the ID for the document template category
    * @param tenantId the ID for the tenant the document template category is specific to
    * @param name the name of the document template category
    */

@@ -52,6 +52,7 @@ import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
 import digital.inception.operations.model.RejectWorkflowDocumentRequest;
 import digital.inception.operations.model.RequestWorkflowDocumentRequest;
+import digital.inception.operations.model.ResetWorkflowDocumentRequest;
 import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.StartWorkflowRequest;
 import digital.inception.operations.model.SuspendWorkflowRequest;
@@ -61,6 +62,7 @@ import digital.inception.operations.model.UnsuspendWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
+import digital.inception.operations.model.WaiveWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
@@ -877,6 +879,23 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
+  public void resetWorkflowDocument(
+      UUID tenantId, ResetWorkflowDocumentRequest resetWorkflowDocumentRequest)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    workflowService.resetWorkflowDocument(tenantId, resetWorkflowDocumentRequest);
+  }
+
+  @Override
   public WorkflowSummaries searchWorkflows(
       UUID tenantId, SearchWorkflowsRequest searchWorkflowsRequest)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1184,6 +1203,24 @@ public class WorkflowApiControllerImpl extends SecureApiController
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to verify the workflow statuses", e);
     }
+  }
+
+  @Override
+  public void waiveWorkflowDocument(
+      UUID tenantId, WaiveWorkflowDocumentRequest waiveWorkflowDocumentRequest)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    workflowService.waiveWorkflowDocument(
+        tenantId, waiveWorkflowDocumentRequest, getAuthenticationName());
   }
 
   /**

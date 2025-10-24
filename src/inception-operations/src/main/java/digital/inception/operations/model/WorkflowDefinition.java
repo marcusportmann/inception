@@ -69,6 +69,7 @@ import org.springframework.util.StringUtils;
   "categoryId",
   "tenantId",
   "name",
+  "description",
   "engineId",
   "timeToComplete",
   "attributes",
@@ -89,6 +90,7 @@ import org.springframework.util.StringUtils;
       "categoryId",
       "tenantId",
       "name",
+      "description",
       "engineId",
       "timeToComplete",
       "attributes",
@@ -259,6 +261,14 @@ public class WorkflowDefinition implements Serializable {
   @Column(name = "category_id", length = 50, nullable = false)
   private String categoryId;
 
+  /** The description for the workflow definition. */
+  @Schema(description = "The description for the workflow definition")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(min = 1, max = 500)
+  @Column(name = "description", length = 500)
+  private String description;
+
   /** The ID for the workflow engine the workflow definition is associated with. */
   @Schema(
       description = "The ID for the workflow engine the workflow definition is associated with",
@@ -373,6 +383,7 @@ public class WorkflowDefinition implements Serializable {
    *     associated with
    * @param tenantId the ID for the tenant the workflow definition is specific to
    * @param name the name of the workflow definition
+   * @param description the description for the workflow definition
    * @param engineId the ID for the workflow engine the workflow definition is associated with
    * @param timeToComplete the ISO-8601 duration format amount of time to complete a workflow
    *     associated with the workflow definition
@@ -394,6 +405,7 @@ public class WorkflowDefinition implements Serializable {
       String categoryId,
       UUID tenantId,
       String name,
+      String description,
       String engineId,
       String timeToComplete,
       ValidationSchemaType validationSchemaType,
@@ -411,6 +423,7 @@ public class WorkflowDefinition implements Serializable {
     this.categoryId = categoryId;
     this.tenantId = tenantId;
     this.name = name;
+    this.description = description;
     this.engineId = engineId;
     this.timeToComplete = timeToComplete;
 
@@ -692,6 +705,15 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns the description for the workflow definition.
+   *
+   * @return the description for the workflow definition
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
    * Retrieve the document definition with the specified ID for the workflow definition.
    *
    * @param documentDefinitionId the ID for the document definition
@@ -959,6 +981,15 @@ public class WorkflowDefinition implements Serializable {
    */
   public void setCategoryId(String categoryId) {
     this.categoryId = categoryId;
+  }
+
+  /**
+   * Set the description for the workflow definition.
+   *
+   * @param description the description for the workflow definition
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

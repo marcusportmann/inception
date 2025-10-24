@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -46,6 +47,7 @@ import java.util.UUID;
   "parentId",
   "partyId",
   "pendWorkflow",
+  "description",
   "externalReferences",
   "attributes",
   "interactionLinks",
@@ -63,6 +65,7 @@ import java.util.UUID;
       "parentId",
       "partyId",
       "pendWorkflow",
+      "description",
       "externalReferences",
       "attributes",
       "interactionLinks",
@@ -74,6 +77,34 @@ import java.util.UUID;
 public class InitiateWorkflowRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+
+
+  /**
+   * Returns the description for the workflow.
+   * @return the description for the workflow
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * Set the description for the workflow.
+   * @param description the description for the workflow
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /** The description for the workflow. */
+  @Schema(description = "The description for the workflow")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 500)
+  private String description;
+
+
+
 
   /** The attributes for the workflow. */
   @Schema(description = "The attributes for the workflow")
@@ -156,6 +187,7 @@ public class InitiateWorkflowRequest implements Serializable {
    * @param parentId the ID for the parent workflow
    * @param partyId the ID for the party the workflow is associated with
    * @param pendWorkflow pend the workflow
+   * @param description the description for the workflow
    * @param externalReferences the external references for the workflow
    * @param attributes the attributes for the workflow
    * @param interactionLinks the interaction links for the workflow
@@ -167,6 +199,7 @@ public class InitiateWorkflowRequest implements Serializable {
       UUID parentId,
       UUID partyId,
       boolean pendWorkflow,
+      String description,
       List<WorkflowExternalReference> externalReferences,
       List<WorkflowAttribute> attributes,
       List<InitiateWorkflowInteractionLink> interactionLinks,
@@ -176,6 +209,7 @@ public class InitiateWorkflowRequest implements Serializable {
     this.parentId = parentId;
     this.partyId = partyId;
     this.pendWorkflow = pendWorkflow;
+    this.description = description;
     this.externalReferences = externalReferences;
     this.attributes = attributes;
     this.interactionLinks = interactionLinks;

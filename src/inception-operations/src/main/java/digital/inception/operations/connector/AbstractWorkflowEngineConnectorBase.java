@@ -16,9 +16,11 @@
 
 package digital.inception.operations.connector;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.operations.model.WorkflowEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -49,6 +51,27 @@ public abstract class AbstractWorkflowEngineConnectorBase {
       ApplicationContext applicationContext, WorkflowEngine workflowEngine) {
     this.applicationContext = applicationContext;
     this.workflowEngine = workflowEngine;
+
+    try {
+      objectMapper = applicationContext.getBean(ObjectMapper.class);
+    } catch (Throwable e) {
+      throw new BeanCreationException(
+          "Failed to retrieve the Jackson Object Mapper from the Spring application context", e);
+    }
+  }
+
+  /**
+   * The Jackson Object Mapper.
+   */
+  private final ObjectMapper objectMapper;
+
+  /**
+   * Returns the Jackson Object Mapper.
+   *
+   * @return the Jackson Object Mapper
+   */
+  protected ObjectMapper getObjectMapper() {
+    return objectMapper;
   }
 
   /**
@@ -56,7 +79,7 @@ public abstract class AbstractWorkflowEngineConnectorBase {
    *
    * @return the Spring application context
    */
-  public ApplicationContext getApplicationContext() {
+  protected ApplicationContext getApplicationContext() {
     return applicationContext;
   }
 
@@ -65,7 +88,7 @@ public abstract class AbstractWorkflowEngineConnectorBase {
    *
    * @return the workflow engine the workflow engine connector is associated with
    */
-  public WorkflowEngine getWorkflowEngine() {
+  protected WorkflowEngine getWorkflowEngine() {
     return workflowEngine;
   }
 }

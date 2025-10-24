@@ -218,6 +218,33 @@ public interface WorkflowDocumentRepository
       @Param("rejectionReason") String rejectionReason);
 
   /**
+   * Reset the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocumentId the ID for the workflow document
+   * @return the number of workflow documents that were reset
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      "update WorkflowDocument wd "
+          + "set wd.status = digital.inception.operations.model.WorkflowDocumentStatus.REQUESTED, "
+          + " wd.documentId = null, "
+          + " wd.provided = null, "
+          + " wd.providedBy = null, "
+          + " wd.rejected = null, "
+          + " wd.rejectedBy = null, "
+          + " wd.rejectionReason = null, "
+          + " wd.verified = null, "
+          + " wd.verifiedBy = null, "
+          + " wd.waived = null, "
+          + " wd.waivedBy = null, "
+          + " wd.waiveReason = null "
+          + "where wd.tenantId = :tenantId and wd.id = :workflowDocumentId")
+  int resetWorkflowDocument(
+      @Param("tenantId") UUID tenantId, @Param("workflowDocumentId") UUID workflowDocumentId);
+
+  /**
    * Update the description for the workflow document.
    *
    * @param workflowDocumentId the ID for the workflow document
@@ -257,4 +284,30 @@ public interface WorkflowDocumentRepository
       @Param("workflowDocumentId") UUID workflowDocumentId,
       @Param("verified") OffsetDateTime verified,
       @Param("verifiedBy") String verifiedBy);
+
+  /**
+   * Waive the workflow document.
+   *
+   * @param workflowDocumentId the ID for the workflow document
+   * @param waived the date and time the workflow document was waived
+   * @param waivedBy the person or system that waived the workflow document
+   * @param waiveReason the reason the workflow document was waived
+   * @return the number of workflow documents that were waived
+   */
+  @Transactional
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query(
+      "update WorkflowDocument wd "
+          + "set wd.status = digital.inception.operations.model.WorkflowDocumentStatus.WAIVED, "
+          + " wd.waived = :waived, "
+          + " wd.waivedBy = :waivedBy, "
+          + " wd.waiveReason = :waiveReason, "
+          + " wd.verified = null, "
+          + " wd.verifiedBy = null "
+          + "where wd.id = :workflowDocumentId")
+  int waiveWorkflowDocument(
+      @Param("workflowDocumentId") UUID workflowDocumentId,
+      @Param("waived") OffsetDateTime waived,
+      @Param("waivedBy") String waivedBy,
+      @Param("waiveReason") String waiveReason);
 }
