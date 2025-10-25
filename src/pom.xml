@@ -124,6 +124,7 @@
     <jasperreports.version>7.0.3</jasperreports.version>
     <jaxb-xew-plugin.version>2.1</jaxb-xew-plugin.version>
     <jboss-transaction-spi.version>8.0.1.Final</jboss-transaction-spi.version>
+    <json-path.version>2.9.0</json-path.version>
     <jsoup.version>1.21.2</jsoup.version>
     <liquibase-slf4j.version>5.1.0</liquibase-slf4j.version>
     <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
@@ -188,6 +189,11 @@
         <groupId>com.icegreen</groupId>
         <artifactId>greenmail</artifactId>
         <version>${greenmail.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jayway.jsonpath</groupId>
+        <artifactId>json-path</artifactId>
+        <version>${json-path.version}</version>
       </dependency>
       <dependency>
         <groupId>com.mattbertolini</groupId>

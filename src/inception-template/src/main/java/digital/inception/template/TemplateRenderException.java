@@ -19,50 +19,50 @@ package digital.inception.template;
 import java.io.Serial;
 
 /**
- * The {@code TemplateParserException} exception is thrown to indicate an error condition when
- * parsing a template.
+ * The {@code TemplateRenderException} exception is thrown to indicate an error condition when
+ * rendering a template.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class TemplateParserException extends Exception {
+public class TemplateRenderException extends Exception {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new {@code TemplateParserException} instance with {@code null} as its message. */
-  public TemplateParserException() {
+  /** Constructs a new {@code TemplateRenderException} instance with {@code null} as its message. */
+  public TemplateRenderException() {
     super();
   }
 
   /**
-   * Constructs a new {@code TemplateParserException} instance with the specified message.
+   * Constructs a new {@code TemplateRenderException} instance with the specified message.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    */
-  public TemplateParserException(String message) {
+  public TemplateRenderException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new {@code TemplateParserException} instance with the specified cause and a
+   * Constructs a new {@code TemplateRenderException} instance with the specified cause and a
    * message of {@code (cause==null ? null : cause.toString())} (which typically contains the class
    * and message of cause).
    *
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
    *     null} value is permitted if the cause is nonexistent or unknown)
    */
-  public TemplateParserException(Throwable cause) {
+  public TemplateRenderException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Constructs a new {@code TemplateParserException} instance with the specified message and cause.
+   * Constructs a new {@code TemplateRenderException} instance with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the {@code getMessage()} method.
    * @param cause The cause saved for later retrieval by the {@code getCause()} method. (A {@code
    *     null} value is permitted if the cause is nonexistent or unknown)
    */
-  public TemplateParserException(String message, Throwable cause) {
+  public TemplateRenderException(String message, Throwable cause) {
     super(message, cause);
   }
 }
