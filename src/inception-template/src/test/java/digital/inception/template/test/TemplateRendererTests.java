@@ -60,8 +60,6 @@ public class TemplateRendererTests {
   /** Test the template renderer. */
   @Test
   public void templateRendererTest() throws Exception {
-    TemplateRenderer templateRenderer = new TemplateRenderer();
-
     // Example 1: XML data with XPath
     String xmlData =
         """
