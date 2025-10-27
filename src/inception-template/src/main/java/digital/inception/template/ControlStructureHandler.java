@@ -103,7 +103,6 @@ public record ControlStructureHandler(TemplateRenderer templateRenderer) {
             switch (block.kind) {
               case IF -> renderIf(block, context);
               case EACH -> renderEach(block, context); // currently stub
-              case WITH -> renderWith(block, context); // currently stub
             };
       } catch (TemplateRenderException e) {
         // Fail-safe: replace the block with empty string on error
@@ -132,7 +131,6 @@ public record ControlStructureHandler(TemplateRenderer templateRenderer) {
         switch (directive) {
           case "if" -> Kind.IF;
           case "each" -> Kind.EACH;
-          case "with" -> Kind.WITH;
           default -> null;
         };
     if (kind == null) return null;
@@ -246,20 +244,9 @@ public record ControlStructureHandler(TemplateRenderer templateRenderer) {
     return templateRenderer.renderFragment(chosen, context);
   }
 
-  private String renderWith(Block block, TemplateContext context) {
-    // TODO: Implement when TemplateContext exposes a way to push/pop a scoped object.
-    // For now, render block with current context (no scope change) to be minimally useful.
-    try {
-      return templateRenderer.renderFragment(block.truePart, context);
-    } catch (TemplateRenderException e) {
-      return "";
-    }
-  }
-
   private enum Kind {
     IF,
-    EACH,
-    WITH
+    EACH
   }
 
   private static final class Block {
