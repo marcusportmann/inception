@@ -83,7 +83,7 @@ public class TemplateRendererTests {
                     <body>
                         <h1>{{ xpath:/document/title }}</h1>
                         <p>{{ uppercase(xpath:/document/content) }}</p>
-                        <p>Author: {{ json:$.author }}</p>
+                        <p>Author: {{ xpath:/document/author }}</p>
                         <p>Created: {{ xpath:/document/metadata/created }}</p>
                         <p>Generated: {{ now('yyyy-MM-dd') }}</p>
                     </body>
@@ -155,6 +155,22 @@ public class TemplateRendererTests {
 
     assertEquals("12", templateRenderer.render(numberOfBooksTemplate, document));
     assertEquals("XML Developer's Guide", templateRenderer.render(bookTitleTemplate, document));
+
+    String eachTemplate =
+        """
+              {{#each xpath:/catalog/book as book}}
+              Book {{$index}}: {{xpath:@/title}}
+              {{else}}
+              No books found.
+
+              {{/each}}
+              """;
+
+    xmlDoc = TemplateRenderer.parseXml(getXMLData());
+
+    String eachResult = templateRenderer.render(eachTemplate, xmlDoc);
+    System.out.println("=== Each Result ===");
+    System.out.println(eachResult);
   }
 
   private static String getXMLData() {

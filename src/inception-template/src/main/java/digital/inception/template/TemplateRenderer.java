@@ -206,7 +206,11 @@ public class TemplateRenderer {
 
     // Variable reference: {{$varName}}
     if (expression.startsWith("$")) {
-      Object variable = context.getVariable(expression.substring(1));
+      String name = expression.substring(1);
+      Object variable = context.getLocal(name);           // <-- local has priority
+      if (variable == null) {
+        variable = context.getVariable(name);             // then global
+      }
       return variable != null ? variable.toString() : "";
     }
 
@@ -255,9 +259,7 @@ public class TemplateRenderer {
   }
 
   private String handleControlStructures(String template, TemplateContext context) {
-    // Placeholder behavior: strip control tags.
-    // A complete implementation would evaluate and render the block logic.
-    return template.replaceAll("\\{\\{#.*?\\}\\}", "").replaceAll("\\{\\{/.*?\\}\\}", "");
+    return controlHandler.render(template, context);
   }
 
   private String processTemplate(String template, TemplateContext context)
