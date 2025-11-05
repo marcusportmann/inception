@@ -48,8 +48,8 @@ public class Country implements Serializable {
   /** The short name for the country. */
   private String shortName;
 
-  /** The sort index for the country. */
-  private Integer sortIndex;
+  /** The sort order for the country. */
+  private Integer sortOrder;
 
   /** The ISO 3166-1 alpha-2 code for the sovereign state the country is associated with. */
   private String sovereignState;
@@ -62,7 +62,7 @@ public class Country implements Serializable {
    *
    * @param code the ISO 3166-1 alpha-2 code for the country
    * @param iso3Code the ISO 3166-1 alpha-3 code for the country
-   * @param sortIndex the sort index for the country
+   * @param sortOrder the sort order for the country
    * @param name the name of the country
    * @param shortName the short name for the country
    * @param description the description for the country
@@ -73,7 +73,7 @@ public class Country implements Serializable {
   public Country(
       String code,
       String iso3Code,
-      Integer sortIndex,
+      Integer sortOrder,
       String name,
       String shortName,
       String description,
@@ -81,7 +81,7 @@ public class Country implements Serializable {
       String nationality) {
     this.code = code;
     this.iso3Code = iso3Code;
-    this.sortIndex = sortIndex;
+    this.sortOrder = sortOrder;
     this.name = name;
     this.shortName = shortName;
     this.description = description;
@@ -169,12 +169,12 @@ public class Country implements Serializable {
   }
 
   /**
-   * Returns the sort index for the country.
+   * Returns the sort order for the country.
    *
-   * @return the sort index for the country
+   * @return the sort order for the country
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -251,12 +251,12 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the sort index for the country.
+   * Set the sort order for the country.
    *
-   * @param sortIndex the sort index for the country
+   * @param sortOrder the sort order for the country
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

@@ -44,12 +44,12 @@ import java.util.UUID;
  */
 @Schema(description = "A type of source of funds")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "SourceOfFundsType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "SourceOfFundsType",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_source_of_funds_types")
@@ -104,15 +104,15 @@ public class SourceOfFundsType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the source of funds type. */
+  /** The sort order for the source of funds type. */
   @Schema(
-      description = "The sort index for the source of funds type",
+      description = "The sort order for the source of funds type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the source of funds type is specific to. */
   @Schema(description = "The ID for the tenant the source of funds type is specific to")
@@ -186,12 +186,12 @@ public class SourceOfFundsType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the source of funds type.
+   * Returns the sort order for the source of funds type.
    *
-   * @return the sort index for the source of funds type
+   * @return the sort order for the source of funds type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -250,12 +250,12 @@ public class SourceOfFundsType implements Serializable {
   }
 
   /**
-   * Set the sort index for the source of funds type.
+   * Set the sort order for the source of funds type.
    *
-   * @param sortIndex the sort index for the source of funds type
+   * @param sortOrder the sort order for the source of funds type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

@@ -54,7 +54,7 @@ import org.springframework.util.StringUtils;
   "category",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "partyTypes"
@@ -68,7 +68,7 @@ import org.springframework.util.StringUtils;
       "category",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "description",
       "partyTypes"
@@ -147,15 +147,15 @@ public class StatusType implements Serializable {
   @Column(name = "party_types", length = 510, nullable = false)
   private List<String> partyTypes;
 
-  /** The sort index for the status type. */
+  /** The sort order for the status type. */
   @Schema(
-      description = "The sort index for the status type",
+      description = "The sort order for the status type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the status type is specific to. */
   @Schema(description = "The ID for the tenant the status type is specific to")
@@ -247,12 +247,12 @@ public class StatusType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the status type.
+   * Returns the sort order for the status type.
    *
-   * @return the sort index for the status type
+   * @return the sort order for the status type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -343,12 +343,12 @@ public class StatusType implements Serializable {
   }
 
   /**
-   * Set the sort index for the status type.
+   * Set the sort order for the status type.
    *
-   * @param sortIndex the sort index for the status type
+   * @param sortOrder the sort order for the status type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

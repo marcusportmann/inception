@@ -50,7 +50,7 @@ import java.util.Objects;
   "code",
   "iso3Code",
   "localeId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "shortName",
   "description"
@@ -59,7 +59,7 @@ import java.util.Objects;
 @XmlType(
     name = "Language",
     namespace = "https://inception.digital/reference",
-    propOrder = {"code", "iso3Code", "localeId", "sortIndex", "name", "shortName", "description"})
+    propOrder = {"code", "iso3Code", "localeId", "sortOrder", "name", "shortName", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "reference_languages")
@@ -134,12 +134,12 @@ public class Language implements Serializable {
   @Column(name = "short_name", length = 50, nullable = false)
   private String shortName;
 
-  /** The sort index for the language. */
-  @Schema(description = "The sort index for the language")
+  /** The sort order for the language. */
+  @Schema(description = "The sort order for the language")
   @JsonProperty
-  @XmlElement(name = "SortIndex")
+  @XmlElement(name = "SortOrder")
   @Column(name = "sort_index")
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** Constructs a new {@code Language}. */
   public Language() {}
@@ -224,12 +224,12 @@ public class Language implements Serializable {
   }
 
   /**
-   * Returns the sort index for the language.
+   * Returns the sort order for the language.
    *
-   * @return the sort index for the language
+   * @return the sort order for the language
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -297,11 +297,11 @@ public class Language implements Serializable {
   }
 
   /**
-   * Set the sort index for the language.
+   * Set the sort order for the language.
    *
-   * @param sortIndex the sort index for the language
+   * @param sortOrder the sort order for the language
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 }

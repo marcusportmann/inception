@@ -56,7 +56,7 @@ import org.springframework.util.StringUtils;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "partyTypes",
@@ -71,7 +71,7 @@ import org.springframework.util.StringUtils;
       "code",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "description",
       "partyTypes",
@@ -237,15 +237,15 @@ public class ContactMechanismRole implements Serializable {
   @Column(name = "pattern", length = 1000)
   private String pattern;
 
-  /** The sort index for the contact mechanism role. */
+  /** The sort order for the contact mechanism role. */
   @Schema(
-      description = "The sort index for the contact mechanism role",
+      description = "The sort order for the contact mechanism role",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the contact mechanism role is specific to. */
   @Schema(description = "The ID for the tenant the contact mechanism role is specific to")
@@ -364,12 +364,12 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Returns the sort index for the contact mechanism role.
+   * Returns the sort order for the contact mechanism role.
    *
-   * @return the sort index for the contact mechanism role
+   * @return the sort order for the contact mechanism role
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -475,12 +475,12 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Set the sort index for the contact mechanism role.
+   * Set the sort order for the contact mechanism role.
    *
-   * @param sortIndex the sort index for the contact mechanism role
+   * @param sortOrder the sort order for the contact mechanism role
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

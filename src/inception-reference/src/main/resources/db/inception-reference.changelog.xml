@@ -28,7 +28,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the country">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="sort_index" type="int" remarks="The sort index for the country"/>
+      <column name="sort_index" type="int" remarks="The sort order for the country"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the country">
         <constraints nullable="false"/>
       </column>
@@ -64,7 +64,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the language">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="sort_index" type="int" remarks="The sort index for the language"/>
+      <column name="sort_index" type="int" remarks="The sort order for the language"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the language">
         <constraints nullable="false"/>
       </column>
@@ -87,7 +87,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the measurement system">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="sort_index" type="int" remarks="The sort index for the measurement system"/>
+      <column name="sort_index" type="int" remarks="The sort order for the measurement system"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the measurement system">
         <constraints nullable="false"/>
       </column>
@@ -107,7 +107,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the measurement unit type">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="sort_index" type="int" remarks="The sort index for the measurement unit type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the measurement unit type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the measurement unit type">
         <constraints nullable="false"/>
       </column>
@@ -127,7 +127,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the measurement unit">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="sort_index" type="int" remarks="The sort index for the measurement unit"/>
+      <column name="sort_index" type="int" remarks="The sort order for the measurement unit"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the measurement unit">
         <constraints nullable="false"/>
       </column>
@@ -160,7 +160,7 @@
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the region">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="sort_index" type="int" remarks="The sort index for the region"/>
+      <column name="sort_index" type="int" remarks="The sort order for the region"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the region">
         <constraints nullable="false"/>
       </column>

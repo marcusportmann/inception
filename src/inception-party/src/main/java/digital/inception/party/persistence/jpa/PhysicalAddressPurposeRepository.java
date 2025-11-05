@@ -32,11 +32,11 @@ public interface PhysicalAddressPurposeRepository
     extends JpaRepository<PhysicalAddressPurpose, PhysicalAddressPurposeId> {
 
   /**
-   * Find all the physical address purposes sorted by locale ID, sort index, and name.
+   * Find all the physical address purposes sorted by locale ID, sort order, and name.
    *
-   * @return all the physical address purposes sorted by locale ID, sort index, and name.
+   * @return all the physical address purposes sorted by locale ID, sort order, and name.
    */
   @Query(
-      "select pap from PhysicalAddressPurpose pap order by pap.localeId, pap.sortIndex DESC, pap.name")
+      "select pap from PhysicalAddressPurpose pap order by pap.localeId, pap.sortOrder DESC, pap.name")
   List<PhysicalAddressPurpose> findAllPhysicalAddressPurposes();
 }

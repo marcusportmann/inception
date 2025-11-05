@@ -46,9 +46,9 @@ export class Region {
   name: string;
 
   /**
-   * The sort index for the region.
+   * The sort order for the region.
    */
-  sortIndex: number;
+  sortOrder: number;
 
   /**
    * Constructs a new Region.
@@ -56,7 +56,7 @@ export class Region {
    * @param country     The ISO 3166-1 alpha-2 code for the country the region is associated with.
    * @param code        The ISO 3166-2 subdivision code for the region.
    * @param localeId    The Unicode locale identifier for the region.
-   * @param sortIndex   The sort index for the region.
+   * @param sortOrder   The sort order for the region.
    * @param name        The name of the region.
    * @param description The description for the region.
    */
@@ -64,14 +64,14 @@ export class Region {
     country: string,
     code: string,
     localeId: string,
-    sortIndex: number,
+    sortOrder: number,
     name: string,
     description: string
   ) {
     this.country = country;
     this.code = code;
     this.localeId = localeId;
-    this.sortIndex = sortIndex;
+    this.sortOrder = sortOrder;
     this.name = name;
     this.description = description;
   }

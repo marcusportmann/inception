@@ -56,9 +56,9 @@ export class Country {
   shortName: string;
 
   /**
-   * The sort index for the country.
+   * The sort order for the country.
    */
-  sortIndex: number;
+  sortOrder: number;
 
   /**
    * The code for the sovereign state the country is associated with.
@@ -71,7 +71,7 @@ export class Country {
    * @param code           The ISO 3166-1 alpha-2 code for the country.
    * @param iso3Code       The ISO 3166-1 alpha-3 code for the country.
    * @param localeId       The Unicode locale identifier for the country.
-   * @param sortIndex      The sort index for the country.
+   * @param sortOrder      The sort order for the country.
    * @param name           The name of the country.
    * @param shortName      The short name for the country.
    * @param description    The description for the country.
@@ -82,7 +82,7 @@ export class Country {
     code: string,
     iso3Code: string,
     localeId: string,
-    sortIndex: number,
+    sortOrder: number,
     name: string,
     shortName: string,
     description: string,
@@ -92,7 +92,7 @@ export class Country {
     this.code = code;
     this.iso3Code = iso3Code;
     this.localeId = localeId;
-    this.sortIndex = sortIndex;
+    this.sortOrder = sortOrder;
     this.name = name;
     this.shortName = shortName;
     this.description = description;

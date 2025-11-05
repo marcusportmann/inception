@@ -52,7 +52,7 @@ import java.util.UUID;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "abbreviation",
   "description",
@@ -66,7 +66,7 @@ import java.util.UUID;
       "code",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "abbreviation",
       "description",
@@ -146,12 +146,12 @@ public class Title implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the title. */
-  @Schema(description = "The sort index for the title")
+  /** The sort order for the title. */
+  @Schema(description = "The sort order for the title")
   @JsonProperty
-  @XmlElement(name = "SortIndex")
+  @XmlElement(name = "SortOrder")
   @Column(name = "sort_index")
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the title is specific to. */
   @Schema(description = "The ID for the tenant the title is specific to")
@@ -243,12 +243,12 @@ public class Title implements Serializable {
   }
 
   /**
-   * Returns the sort index for the title.
+   * Returns the sort order for the title.
    *
-   * @return the sort index for the title
+   * @return the sort order for the title
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -325,12 +325,12 @@ public class Title implements Serializable {
   }
 
   /**
-   * Set the sort index for the title.
+   * Set the sort order for the title.
    *
-   * @param sortIndex the sort index for the title
+   * @param sortOrder the sort order for the title
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

@@ -55,7 +55,7 @@ import org.springframework.util.StringUtils;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "countryOfIssue",
@@ -70,7 +70,7 @@ import org.springframework.util.StringUtils;
       "code",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "description",
       "countryOfIssue",
@@ -169,15 +169,15 @@ public class TaxNumberType implements Serializable {
   @Column(name = "pattern", length = 1000)
   private String pattern;
 
-  /** The sort index for the tax number type. */
+  /** The sort order for the tax number type. */
   @Schema(
-      description = "The sort index for the tax number type",
+      description = "The sort order for the tax number type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the tax number type is specific to. */
   @Schema(description = "The ID for the tenant the tax number type is specific to")
@@ -292,12 +292,12 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the tax number type.
+   * Returns the sort order for the tax number type.
    *
-   * @return the sort index for the tax number type
+   * @return the sort order for the tax number type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -399,12 +399,12 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the sort index for the tax number type.
+   * Set the sort order for the tax number type.
    *
-   * @param sortIndex the sort index for the tax number type
+   * @param sortOrder the sort order for the tax number type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

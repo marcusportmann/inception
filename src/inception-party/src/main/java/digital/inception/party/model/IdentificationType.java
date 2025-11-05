@@ -55,7 +55,7 @@ import org.springframework.util.StringUtils;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "countryOfIssue",
@@ -70,7 +70,7 @@ import org.springframework.util.StringUtils;
       "code",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "description",
       "countryOfIssue",
@@ -169,15 +169,15 @@ public class IdentificationType implements Serializable {
   @Column(name = "pattern", length = 1000)
   private String pattern;
 
-  /** The sort index for the identification type. */
+  /** The sort order for the identification type. */
   @Schema(
-      description = "The sort index for the identification type",
+      description = "The sort order for the identification type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the identification type is specific to. */
   @Schema(description = "The ID for the tenant the identification type is specific to")
@@ -292,12 +292,12 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the identification type.
+   * Returns the sort order for the identification type.
    *
-   * @return the sort index for the identification type
+   * @return the sort order for the identification type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -399,12 +399,12 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Set the sort index for the identification type.
+   * Set the sort order for the identification type.
    *
-   * @param sortIndex the sort index for the identification type
+   * @param sortOrder the sort order for the identification type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface MarriageTypeRepository extends JpaRepository<MarriageType, MarriageTypeId> {
 
   /**
-   * Find all the marriage types sorted by locale ID, sort index, and name.
+   * Find all the marriage types sorted by locale ID, sort order, and name.
    *
-   * @return all the marriage types sorted by locale ID, sort index, and name.
+   * @return all the marriage types sorted by locale ID, sort order, and name.
    */
-  @Query("select mt from MarriageType mt order by mt.localeId, mt.sortIndex DESC, mt.name")
+  @Query("select mt from MarriageType mt order by mt.localeId, mt.sortOrder DESC, mt.name")
   List<MarriageType> findAllMarriageTypes();
 }

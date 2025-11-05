@@ -43,12 +43,12 @@ import java.util.Objects;
  */
 @Schema(description = "A time zone")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "localeId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"id", "localeId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "TimeZone", namespace = "https://inception.digital/reference")
 @XmlType(
     name = "TimeZone",
     namespace = "https://inception.digital/reference",
-    propOrder = {"id", "localeId", "sortIndex", "name", "description"})
+    propOrder = {"id", "localeId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TimeZone implements Serializable {
 
@@ -90,14 +90,14 @@ public class TimeZone implements Serializable {
   @Size(min = 1, max = 100)
   private String name;
 
-  /** The sort index for the time zone. */
+  /** The sort order for the time zone. */
   @Schema(
-      description = "The sort index for the time zone",
+      description = "The sort order for the time zone",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** Constructs a new {@code TimeZone}. */
   public TimeZone() {}
@@ -109,14 +109,14 @@ public class TimeZone implements Serializable {
    * @param localeId the Unicode locale identifier for the time zone
    * @param name the name of the time zone
    * @param description the description for the time zone
-   * @param sortIndex the sort index for the time zone
+   * @param sortOrder the sort order for the time zone
    */
-  public TimeZone(String id, String localeId, String name, String description, Integer sortIndex) {
+  public TimeZone(String id, String localeId, String name, String description, Integer sortOrder) {
     this.id = id;
     this.localeId = localeId;
     this.name = name;
     this.description = description;
-    this.sortIndex = sortIndex;
+    this.sortOrder = sortOrder;
   }
 
   /**
@@ -181,12 +181,12 @@ public class TimeZone implements Serializable {
   }
 
   /**
-   * Returns the sort index for the time zone.
+   * Returns the sort order for the time zone.
    *
-   * @return the sort index for the time zone
+   * @return the sort order for the time zone
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -236,11 +236,11 @@ public class TimeZone implements Serializable {
   }
 
   /**
-   * Set the sort index for the time zone.
+   * Set the sort order for the time zone.
    *
-   * @param sortIndex the sort index for the time zone
+   * @param sortOrder the sort order for the time zone
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 }

@@ -32,11 +32,11 @@ public interface AssociationPropertyTypeRepository
     extends JpaRepository<AssociationPropertyType, AssociationPropertyTypeId> {
 
   /**
-   * Find all the association property types sorted by locale ID, sort index, and name.
+   * Find all the association property types sorted by locale ID, sort order, and name.
    *
-   * @return all the association property types sorted by locale ID, sort index, and name.
+   * @return all the association property types sorted by locale ID, sort order, and name.
    */
   @Query(
-      "select apt from AssociationPropertyType apt order by apt.localeId, apt.sortIndex DESC, apt.name")
+      "select apt from AssociationPropertyType apt order by apt.localeId, apt.sortOrder DESC, apt.name")
   List<AssociationPropertyType> findAllAssociationPropertyTypes();
 }

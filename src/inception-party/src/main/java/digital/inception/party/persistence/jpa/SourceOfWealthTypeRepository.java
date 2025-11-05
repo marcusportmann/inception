@@ -32,11 +32,11 @@ public interface SourceOfWealthTypeRepository
     extends JpaRepository<SourceOfWealthType, SourceOfWealthTypeId> {
 
   /**
-   * Find all the source of wealth types sorted by locale ID, sort index, and name.
+   * Find all the source of wealth types sorted by locale ID, sort order, and name.
    *
-   * @return all the source of wealth types sorted by locale ID, sort index, and name.
+   * @return all the source of wealth types sorted by locale ID, sort order, and name.
    */
   @Query(
-      "select sowt from SourceOfWealthType sowt order by sowt.localeId, sowt.sortIndex DESC, sowt.name")
+      "select sowt from SourceOfWealthType sowt order by sowt.localeId, sowt.sortOrder DESC, sowt.name")
   List<SourceOfWealthType> findAllSourceOfWealthTypes();
 }

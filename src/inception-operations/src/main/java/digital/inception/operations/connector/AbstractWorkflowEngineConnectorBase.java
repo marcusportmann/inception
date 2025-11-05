@@ -38,6 +38,9 @@ public abstract class AbstractWorkflowEngineConnectorBase {
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
 
+  /** The Jackson Object Mapper. */
+  private final ObjectMapper objectMapper;
+
   /** The workflow engine the workflow engine connector is associated with. */
   private final WorkflowEngine workflowEngine;
 
@@ -61,9 +64,13 @@ public abstract class AbstractWorkflowEngineConnectorBase {
   }
 
   /**
-   * The Jackson Object Mapper.
+   * Returns the Spring application context.
+   *
+   * @return the Spring application context
    */
-  private final ObjectMapper objectMapper;
+  protected ApplicationContext getApplicationContext() {
+    return applicationContext;
+  }
 
   /**
    * Returns the Jackson Object Mapper.
@@ -72,15 +79,6 @@ public abstract class AbstractWorkflowEngineConnectorBase {
    */
   protected ObjectMapper getObjectMapper() {
     return objectMapper;
-  }
-
-  /**
-   * Returns the Spring application context.
-   *
-   * @return the Spring application context
-   */
-  protected ApplicationContext getApplicationContext() {
-    return applicationContext;
   }
 
   /**

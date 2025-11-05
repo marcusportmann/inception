@@ -32,10 +32,10 @@ public interface SourceOfFundsTypeRepository
     extends JpaRepository<SourceOfFundsType, SourceOfFundsTypeId> {
 
   /**
-   * Find all the source of funds types sorted by locale ID, sort index, and name.
+   * Find all the source of funds types sorted by locale ID, sort order, and name.
    *
-   * @return all the source of funds types sorted by locale ID, sort index, and name.
+   * @return all the source of funds types sorted by locale ID, sort order, and name.
    */
-  @Query("select soft from SourceOfFundsType soft order by soft.sortIndex DESC, soft.name")
+  @Query("select soft from SourceOfFundsType soft order by soft.sortOrder DESC, soft.name")
   List<SourceOfFundsType> findAllSourceOfFundsTypes();
 }

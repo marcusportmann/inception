@@ -46,12 +46,12 @@ import java.util.UUID;
     description =
         "A subdivision of the human species on the basis of inherited physical and behavioral differences")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "Race", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Race",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_races")
@@ -100,13 +100,13 @@ public class Race implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the race. */
-  @Schema(description = "The sort index for the race", requiredMode = Schema.RequiredMode.REQUIRED)
+  /** The sort order for the race. */
+  @Schema(description = "The sort order for the race", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the race is specific to. */
   @Schema(description = "The ID for the tenant the race is specific to")
@@ -180,12 +180,12 @@ public class Race implements Serializable {
   }
 
   /**
-   * Returns the sort index for the race.
+   * Returns the sort order for the race.
    *
-   * @return the sort index for the race
+   * @return the sort order for the race
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -244,12 +244,12 @@ public class Race implements Serializable {
   }
 
   /**
-   * Set the sort index for the race.
+   * Set the sort order for the race.
    *
-   * @param sortIndex the sort index for the race
+   * @param sortOrder the sort order for the race
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

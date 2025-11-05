@@ -41,29 +41,29 @@ export class TimeZone {
   name: string;
 
   /**
-   * The sort index for the time zone.
+   * The sort order for the time zone.
    */
-  sortIndex: number;
+  sortOrder: number;
 
   /**
    * Constructs a new TimeZone.
    *
    * @param id          The ID for the time zone.
    * @param localeId    The Unicode locale identifier for the time zone.
-   * @param sortIndex   The sort index for the time zone.
+   * @param sortOrder   The sort order for the time zone.
    * @param name        The name of the time zone.
    * @param description The description for the time zone.
    */
   constructor(
     id: string,
     localeId: string,
-    sortIndex: number,
+    sortOrder: number,
     name: string,
     description: string
   ) {
     this.id = id;
     this.localeId = localeId;
-    this.sortIndex = sortIndex;
+    this.sortOrder = sortOrder;
     this.name = name;
     this.description = description;
   }

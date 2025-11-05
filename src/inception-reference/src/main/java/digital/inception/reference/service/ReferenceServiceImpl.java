@@ -288,7 +288,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
     try {
       List<TimeZone> timeZones = new ArrayList<>();
 
-      int sortIndex = 1;
+      int sortOrder = 1;
 
       Locale locale = Locale.forLanguageTag("en-US");
 
@@ -305,9 +305,9 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
 
         String zoneName = com.ibm.icu.util.TimeZone.getTimeZone(timeZoneId).getDisplayName(locale);
 
-        timeZones.add(new TimeZone(timeZoneId, "en-US", zoneName, zoneName, sortIndex));
+        timeZones.add(new TimeZone(timeZoneId, "en-US", zoneName, zoneName, sortOrder));
 
-        sortIndex++;
+        sortOrder++;
       }
 
       return timeZones;
@@ -327,7 +327,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
     try {
       List<TimeZone> timeZones = new ArrayList<>();
 
-      int sortIndex = 1;
+      int sortOrder = 1;
 
       Locale locale = Locale.forLanguageTag(localeId);
 
@@ -344,9 +344,9 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
 
         String zoneName = com.ibm.icu.util.TimeZone.getTimeZone(timeZoneId).getDisplayName(locale);
 
-        timeZones.add(new TimeZone(timeZoneId, localeId, zoneName, zoneName, sortIndex));
+        timeZones.add(new TimeZone(timeZoneId, localeId, zoneName, zoneName, sortOrder));
 
-        sortIndex++;
+        sortOrder++;
       }
 
       return timeZones;

@@ -44,12 +44,12 @@ import java.util.UUID;
  */
 @Schema(description = "A field of study")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "FieldOfStudy", namespace = "https://inception.digital/party")
 @XmlType(
     name = "FieldOfStudy",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_fields_of_study")
@@ -105,15 +105,15 @@ public class FieldOfStudy implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the field of study. */
+  /** The sort order for the field of study. */
   @Schema(
-      description = "The sort index for the field of study",
+      description = "The sort order for the field of study",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the field of study is specific to. */
   @Schema(description = "The ID for the tenant the field of study is specific to")
@@ -187,12 +187,12 @@ public class FieldOfStudy implements Serializable {
   }
 
   /**
-   * Returns the sort index for the field of study.
+   * Returns the sort order for the field of study.
    *
-   * @return the sort index for the field of study
+   * @return the sort order for the field of study
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -251,12 +251,12 @@ public class FieldOfStudy implements Serializable {
   }
 
   /**
-   * Set the sort index for the field of study.
+   * Set the sort order for the field of study.
    *
-   * @param sortIndex the sort index for the field of study
+   * @param sortOrder the sort order for the field of study
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

@@ -53,7 +53,7 @@ import org.springframework.util.StringUtils;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "firstPartyTypes",
@@ -69,7 +69,7 @@ import org.springframework.util.StringUtils;
       "code",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "description",
       "firstPartyTypes",
@@ -180,15 +180,15 @@ public class AssociationType implements Serializable {
   @Column(name = "second_party_types", length = 510, nullable = false)
   private List<String> secondPartyTypes;
 
-  /** The sort index for the association type. */
+  /** The sort order for the association type. */
   @Schema(
-      description = "The sort index for the association type",
+      description = "The sort order for the association type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the association type is specific to. */
   @Schema(description = "The ID for the tenant the association type is specific to")
@@ -298,12 +298,12 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the association type.
+   * Returns the sort order for the association type.
    *
-   * @return the sort index for the association type
+   * @return the sort order for the association type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -426,12 +426,12 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the sort index for the association type.
+   * Set the sort order for the association type.
    *
-   * @param sortIndex the sort index for the association type
+   * @param sortOrder the sort order for the association type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

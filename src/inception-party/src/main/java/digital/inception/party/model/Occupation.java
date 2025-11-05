@@ -44,12 +44,12 @@ import java.util.UUID;
  */
 @Schema(description = "A job or profession")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "Occupation", namespace = "https://inception.digital/party")
 @XmlType(
     name = "Occupation",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_occupations")
@@ -100,15 +100,15 @@ public class Occupation implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the occupation. */
+  /** The sort order for the occupation. */
   @Schema(
-      description = "The sort index for the occupation",
+      description = "The sort order for the occupation",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the occupation is specific to. */
   @Schema(description = "The ID for the tenant the occupation is specific to")
@@ -182,12 +182,12 @@ public class Occupation implements Serializable {
   }
 
   /**
-   * Returns the sort index for the occupation.
+   * Returns the sort order for the occupation.
    *
-   * @return the sort index for the occupation
+   * @return the sort order for the occupation
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -246,12 +246,12 @@ public class Occupation implements Serializable {
   }
 
   /**
-   * Set the sort index for the occupation.
+   * Set the sort order for the occupation.
    *
-   * @param sortIndex the sort index for the occupation
+   * @param sortOrder the sort order for the occupation
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

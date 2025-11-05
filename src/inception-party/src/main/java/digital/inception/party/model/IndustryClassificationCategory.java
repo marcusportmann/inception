@@ -45,14 +45,14 @@ import java.util.UUID;
  */
 @Schema(description = "A collection of related industry classifications")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"system", "code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"system", "code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlRootElement(
     name = "IndustryClassificationCategory",
     namespace = "https://inception.digital/party")
 @XmlType(
     name = "IndustryClassificationCategory",
     namespace = "https://inception.digital/party",
-    propOrder = {"system", "code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"system", "code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_industry_classification_categories")
@@ -107,15 +107,15 @@ public class IndustryClassificationCategory implements Serializable {
   @Column(name = "name", length = 200, nullable = false)
   private String name;
 
-  /** The sort index for the industry classification category. */
+  /** The sort order for the industry classification category. */
   @Schema(
-      description = "The sort index for the industry classification category",
+      description = "The sort order for the industry classification category",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The code for the industry classification system for the industry classification category. */
   @Schema(
@@ -204,12 +204,12 @@ public class IndustryClassificationCategory implements Serializable {
   }
 
   /**
-   * Returns the sort index for the industry classification category.
+   * Returns the sort order for the industry classification category.
    *
-   * @return the sort index for the industry classification category
+   * @return the sort order for the industry classification category
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -281,12 +281,12 @@ public class IndustryClassificationCategory implements Serializable {
   }
 
   /**
-   * Set the sort index for the industry classification category.
+   * Set the sort order for the industry classification category.
    *
-   * @param sortIndex the sort index for the industry classification category
+   * @param sortOrder the sort order for the industry classification category
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

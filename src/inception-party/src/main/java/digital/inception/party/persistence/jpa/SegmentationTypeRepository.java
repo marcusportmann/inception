@@ -32,10 +32,10 @@ public interface SegmentationTypeRepository
     extends JpaRepository<SegmentationType, SegmentationTypeId> {
 
   /**
-   * Find all the segmentation types sorted by locale ID, sort index, and name.
+   * Find all the segmentation types sorted by locale ID, sort order, and name.
    *
-   * @return all the segmentation types sorted by locale ID, sort index, and name.
+   * @return all the segmentation types sorted by locale ID, sort order, and name.
    */
-  @Query("select st from SegmentationType st order by st.localeId, st.sortIndex DESC, st.name")
+  @Query("select st from SegmentationType st order by st.localeId, st.sortOrder DESC, st.name")
   List<SegmentationType> findAllSegmentationTypes();
 }

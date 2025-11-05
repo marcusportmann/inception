@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -78,34 +77,6 @@ public class InitiateWorkflowRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-
-
-  /**
-   * Returns the description for the workflow.
-   * @return the description for the workflow
-   */
-  public String getDescription() {
-    return description;
-  }
-
-  /**
-   * Set the description for the workflow.
-   * @param description the description for the workflow
-   */
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  /** The description for the workflow. */
-  @Schema(description = "The description for the workflow")
-  @JsonProperty
-  @XmlElement(name = "Description")
-  @Size(max = 500)
-  private String description;
-
-
-
-
   /** The attributes for the workflow. */
   @Schema(description = "The attributes for the workflow")
   @JsonProperty
@@ -130,6 +101,13 @@ public class InitiateWorkflowRequest implements Serializable {
   @NotNull
   @Size(min = 1, max = 50)
   private String definitionId;
+
+  /** The description for the workflow. */
+  @Schema(description = "The description for the workflow")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 500)
+  private String description;
 
   /** The external references for the workflow. */
   @Schema(description = "The external reference for the workflow")
@@ -245,6 +223,14 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
+   * Returns the description for the workflow.
+   * @return the description for the workflow
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
    * Returns the external references for the workflow.
    *
    * @return the external references for the workflow
@@ -324,6 +310,14 @@ public class InitiateWorkflowRequest implements Serializable {
    */
   public void setDefinitionId(String definitionId) {
     this.definitionId = definitionId;
+  }
+
+  /**
+   * Set the description for the workflow.
+   * @param description the description for the workflow
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

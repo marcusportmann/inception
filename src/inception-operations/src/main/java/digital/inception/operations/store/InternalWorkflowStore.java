@@ -1551,7 +1551,8 @@ public class InternalWorkflowStore implements WorkflowStore {
           criteriaBuilder.length(criteriaBuilder.trim(workflowDescription));
 
       Expression<String> effectiveDescription =
-          criteriaBuilder.<String>selectCase()
+          criteriaBuilder
+              .<String>selectCase()
               .when(
                   criteriaBuilder.and(
                       criteriaBuilder.isNotNull(workflowDescription),

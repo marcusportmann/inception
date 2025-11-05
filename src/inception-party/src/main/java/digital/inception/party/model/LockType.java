@@ -54,7 +54,7 @@ import org.springframework.util.StringUtils;
   "category",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "partyTypes"
@@ -68,7 +68,7 @@ import org.springframework.util.StringUtils;
       "category",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "description",
       "partyTypes"
@@ -147,15 +147,15 @@ public class LockType implements Serializable {
   @Column(name = "party_types", length = 510, nullable = false)
   private List<String> partyTypes;
 
-  /** The sort index for the lock type. */
+  /** The sort order for the lock type. */
   @Schema(
-      description = "The sort index for the lock type",
+      description = "The sort order for the lock type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the lock type is specific to. */
   @Schema(description = "The ID for the tenant the lock type is specific to")
@@ -247,12 +247,12 @@ public class LockType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the lock type.
+   * Returns the sort order for the lock type.
    *
-   * @return the sort index for the lock type
+   * @return the sort order for the lock type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -343,12 +343,12 @@ public class LockType implements Serializable {
   }
 
   /**
-   * Set the sort index for the lock type.
+   * Set the sort order for the lock type.
    *
-   * @param sortIndex the sort index for the lock type
+   * @param sortOrder the sort order for the lock type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

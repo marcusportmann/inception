@@ -44,12 +44,12 @@ import java.util.UUID;
  */
 @Schema(description = "A residency status")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "ResidencyStatus", namespace = "https://inception.digital/party")
 @XmlType(
     name = "ResidencyStatus",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_residency_statuses")
@@ -104,15 +104,15 @@ public class ResidencyStatus implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the residency status. */
+  /** The sort order for the residency status. */
   @Schema(
-      description = "The sort index for the residency status",
+      description = "The sort order for the residency status",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the residency status is specific to. */
   @Schema(description = "The ID for the tenant the residency status is specific to")
@@ -186,12 +186,12 @@ public class ResidencyStatus implements Serializable {
   }
 
   /**
-   * Returns the sort index for the residency status.
+   * Returns the sort order for the residency status.
    *
-   * @return the sort index for the residency status
+   * @return the sort order for the residency status
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -250,12 +250,12 @@ public class ResidencyStatus implements Serializable {
   }
 
   /**
-   * Set the sort index for the residency status.
+   * Set the sort order for the residency status.
    *
-   * @param sortIndex the sort index for the residency status
+   * @param sortOrder the sort order for the residency status
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

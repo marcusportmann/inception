@@ -44,12 +44,12 @@ import java.util.UUID;
  */
 @Schema(description = "A type of skill that a person can possess")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"parent", "code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"parent", "code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "SkillType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "SkillType",
     namespace = "https://inception.digital/party",
-    propOrder = {"parent", "code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"parent", "code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_skill_types")
@@ -108,15 +108,15 @@ public class SkillType implements Serializable {
   @Column(name = "parent", length = 50)
   private String parent;
 
-  /** The sort index for the skill type. */
+  /** The sort order for the skill type. */
   @Schema(
-      description = "The sort index for the skill type",
+      description = "The sort order for the skill type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the skill type is specific to. */
   @Schema(description = "The ID for the tenant the skill type is specific to")
@@ -199,12 +199,12 @@ public class SkillType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the skill type.
+   * Returns the sort order for the skill type.
    *
-   * @return the sort index for the skill type
+   * @return the sort order for the skill type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -272,12 +272,12 @@ public class SkillType implements Serializable {
   }
 
   /**
-   * Set the sort index for the skill type.
+   * Set the sort order for the skill type.
    *
-   * @param sortIndex the sort index for the skill type
+   * @param sortOrder the sort order for the skill type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

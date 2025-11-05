@@ -44,12 +44,12 @@ import java.util.UUID;
  */
 @Schema(description = "A type of consent")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "ConsentType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "ConsentType",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_consent_types")
@@ -102,15 +102,15 @@ public class ConsentType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the consent type. */
+  /** The sort order for the consent type. */
   @Schema(
-      description = "The sort index for the consent type",
+      description = "The sort order for the consent type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the consent type is specific to. */
   @Schema(description = "The ID for the tenant the consent type is specific to")
@@ -184,12 +184,12 @@ public class ConsentType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the consent type.
+   * Returns the sort order for the consent type.
    *
-   * @return the sort index for the consent type
+   * @return the sort order for the consent type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -248,12 +248,12 @@ public class ConsentType implements Serializable {
   }
 
   /**
-   * Set the sort index for the consent type.
+   * Set the sort order for the consent type.
    *
-   * @param sortIndex the sort index for the consent type
+   * @param sortOrder the sort order for the consent type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

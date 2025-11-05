@@ -45,12 +45,12 @@ import java.util.Objects;
     description =
         "An area, especially part of a country or the world having definable characteristics but not always fixed boundaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"country", "code", "localeId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"country", "code", "localeId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "Region", namespace = "https://inception.digital/reference")
 @XmlType(
     name = "Region",
     namespace = "https://inception.digital/reference",
-    propOrder = {"country", "code", "localeId", "sortIndex", "name", "description"})
+    propOrder = {"country", "code", "localeId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "reference_regions")
@@ -115,12 +115,12 @@ public class Region implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The sort index for the region. */
-  @Schema(description = "The sort index for the region")
+  /** The sort order for the region. */
+  @Schema(description = "The sort order for the region")
   @JsonProperty
-  @XmlElement(name = "SortIndex")
+  @XmlElement(name = "SortOrder")
   @Column(name = "sort_index")
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** Constructs a new {@code Region}. */
   public Region() {}
@@ -198,12 +198,12 @@ public class Region implements Serializable {
   }
 
   /**
-   * Returns the sort index for the region.
+   * Returns the sort order for the region.
    *
-   * @return the sort index for the region
+   * @return the sort order for the region
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -264,11 +264,11 @@ public class Region implements Serializable {
   }
 
   /**
-   * Set the sort index for the region.
+   * Set the sort order for the region.
    *
-   * @param sortIndex the sort index for the region
+   * @param sortOrder the sort order for the region
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 }

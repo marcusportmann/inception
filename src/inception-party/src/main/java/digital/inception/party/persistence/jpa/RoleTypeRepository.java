@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface RoleTypeRepository extends JpaRepository<RoleType, RoleTypeId> {
 
   /**
-   * Find all the role types sorted by locale ID, sort index, and name.
+   * Find all the role types sorted by locale ID, sort order, and name.
    *
-   * @return all the role types sorted by locale ID, sort index, and name.
+   * @return all the role types sorted by locale ID, sort order, and name.
    */
-  @Query("select rt from RoleType rt order by rt.localeId, rt.sortIndex DESC, rt.name")
+  @Query("select rt from RoleType rt order by rt.localeId, rt.sortOrder DESC, rt.name")
   List<RoleType> findAllRoleTypes();
 }

@@ -207,9 +207,9 @@ public class TemplateRenderer {
     // Variable reference: {{$varName}}
     if (expression.startsWith("$")) {
       String name = expression.substring(1);
-      Object variable = context.getLocal(name);           // <-- local has priority
+      Object variable = context.getLocal(name); // <-- local has priority
       if (variable == null) {
-        variable = context.getVariable(name);             // then global
+        variable = context.getVariable(name); // then global
       }
       return variable != null ? variable.toString() : "";
     }

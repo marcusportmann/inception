@@ -44,12 +44,12 @@ import java.util.UUID;
  */
 @Schema(description = "A type of living relative for a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "NextOfKinType", namespace = "https://inception.digital/party")
 @XmlType(
     name = "NextOfKinType",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_next_of_kin_types")
@@ -104,15 +104,15 @@ public class NextOfKinType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the next of kin type. */
+  /** The sort order for the next of kin type. */
   @Schema(
-      description = "The sort index for the next of kin type",
+      description = "The sort order for the next of kin type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the next of kin type is specific to. */
   @Schema(description = "The ID for the tenant the next of kin type is specific to")
@@ -186,12 +186,12 @@ public class NextOfKinType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the next of kin type.
+   * Returns the sort order for the next of kin type.
    *
-   * @return the sort index for the next of kin type
+   * @return the sort order for the next of kin type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -250,12 +250,12 @@ public class NextOfKinType implements Serializable {
   }
 
   /**
-   * Set the sort index for the next of kin type.
+   * Set the sort order for the next of kin type.
    *
-   * @param sortIndex the sort index for the next of kin type
+   * @param sortOrder the sort order for the next of kin type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

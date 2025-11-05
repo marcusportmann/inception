@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface LockTypeRepository extends JpaRepository<LockType, LockTypeId> {
 
   /**
-   * Find all the lock types sorted by locale ID, sort index, and name.
+   * Find all the lock types sorted by locale ID, sort order, and name.
    *
-   * @return all the lock types sorted by locale ID, sort index, and name.
+   * @return all the lock types sorted by locale ID, sort order, and name.
    */
-  @Query("select lt from LockType lt order by lt.localeId, lt.sortIndex DESC, lt.name")
+  @Query("select lt from LockType lt order by lt.localeId, lt.sortOrder DESC, lt.name")
   List<LockType> findAllLockTypes();
 }

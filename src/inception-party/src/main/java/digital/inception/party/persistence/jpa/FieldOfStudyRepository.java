@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface FieldOfStudyRepository extends JpaRepository<FieldOfStudy, FieldOfStudyId> {
 
   /**
-   * Find all the fields of study sorted by locale ID, sort index, and name.
+   * Find all the fields of study sorted by locale ID, sort order, and name.
    *
-   * @return all the fields of study sorted by locale ID, sort index, and name.
+   * @return all the fields of study sorted by locale ID, sort order, and name.
    */
-  @Query("select fos from FieldOfStudy fos order by fos.localeId, fos.sortIndex DESC, fos.name")
+  @Query("select fos from FieldOfStudy fos order by fos.localeId, fos.sortOrder DESC, fos.name")
   List<FieldOfStudy> findAllFieldsOfStudy();
 }

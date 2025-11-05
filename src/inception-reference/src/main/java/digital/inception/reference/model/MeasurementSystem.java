@@ -49,12 +49,12 @@ import java.util.Objects;
  */
 @Schema(description = "A system of measurement")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "MeasurementSystem", namespace = "https://inception.digital/reference")
 @XmlType(
     name = "MeasurementSystem",
     namespace = "https://inception.digital/reference",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "reference_measurement_systems")
@@ -109,12 +109,12 @@ public class MeasurementSystem implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The sort index for the measurement system. */
-  @Schema(description = "The sort index for the measurement system")
+  /** The sort order for the measurement system. */
+  @Schema(description = "The sort order for the measurement system")
   @JsonProperty
-  @XmlElement(name = "SortIndex")
+  @XmlElement(name = "SortOrder")
   @Column(name = "sort_index")
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** Constructs a new {@code MeasurementSystem}. */
   public MeasurementSystem() {}
@@ -181,12 +181,12 @@ public class MeasurementSystem implements Serializable {
   }
 
   /**
-   * Returns the sort index for the measurement system.
+   * Returns the sort order for the measurement system.
    *
-   * @return the sort index for the measurement system
+   * @return the sort order for the measurement system
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -236,11 +236,11 @@ public class MeasurementSystem implements Serializable {
   }
 
   /**
-   * Set the sort index for the measurement system.
+   * Set the sort order for the measurement system.
    *
-   * @param sortIndex the sort index for the measurement system
+   * @param sortOrder the sort order for the measurement system
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 }

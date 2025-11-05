@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface LinkTypeRepository extends JpaRepository<LinkType, LinkTypeId> {
 
   /**
-   * Find all the link types sorted by locale ID, sort index, and name.
+   * Find all the link types sorted by locale ID, sort order, and name.
    *
-   * @return all the link types sorted by locale ID, sort index, and name.
+   * @return all the link types sorted by locale ID, sort order, and name.
    */
-  @Query("select lt from LinkType lt order by lt.localeId, lt.sortIndex DESC, lt.name")
+  @Query("select lt from LinkType lt order by lt.localeId, lt.sortOrder DESC, lt.name")
   List<LinkType> findAllLinkTypes();
 }

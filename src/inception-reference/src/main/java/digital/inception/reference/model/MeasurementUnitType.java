@@ -43,12 +43,12 @@ import java.util.Objects;
  */
 @Schema(description = "A type of unit of measurement")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "MeasurementUnitType", namespace = "https://inception.digital/reference")
 @XmlType(
     name = "MeasurementUnitType",
     namespace = "https://inception.digital/reference",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "reference_measurement_unit_types")
@@ -103,12 +103,12 @@ public class MeasurementUnitType implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The sort index for the measurement unit type. */
-  @Schema(description = "The sort index for the measurement unit type")
+  /** The sort order for the measurement unit type. */
+  @Schema(description = "The sort order for the measurement unit type")
   @JsonProperty
-  @XmlElement(name = "SortIndex")
+  @XmlElement(name = "SortOrder")
   @Column(name = "sort_index")
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** Constructs a new {@code MeasurementUnitType}. */
   public MeasurementUnitType() {}
@@ -175,12 +175,12 @@ public class MeasurementUnitType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the measurement unit type.
+   * Returns the sort order for the measurement unit type.
    *
-   * @return the sort index for the measurement unit type
+   * @return the sort order for the measurement unit type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -230,11 +230,11 @@ public class MeasurementUnitType implements Serializable {
   }
 
   /**
-   * Set the sort index for the measurement unit type.
+   * Set the sort order for the measurement unit type.
    *
-   * @param sortIndex the sort index for the measurement unit type
+   * @param sortOrder the sort order for the measurement unit type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 }

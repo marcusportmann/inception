@@ -50,7 +50,7 @@ import java.util.UUID;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description"
 })
@@ -64,7 +64,7 @@ import java.util.UUID;
       "code",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "description"
     })
@@ -132,15 +132,15 @@ public class IndustryClassification implements Serializable {
   @Column(name = "name", length = 200, nullable = false)
   private String name;
 
-  /** The sort index for the industry classification. */
+  /** The sort order for the industry classification. */
   @Schema(
-      description = "The sort index for the industry classification",
+      description = "The sort order for the industry classification",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The code for the industry classification system for the industry classification. */
   @Schema(
@@ -238,12 +238,12 @@ public class IndustryClassification implements Serializable {
   }
 
   /**
-   * Returns the sort index for the industry classification.
+   * Returns the sort order for the industry classification.
    *
-   * @return the sort index for the industry classification
+   * @return the sort order for the industry classification
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -323,12 +323,12 @@ public class IndustryClassification implements Serializable {
   }
 
   /**
-   * Set the sort index for the industry classification.
+   * Set the sort order for the industry classification.
    *
-   * @param sortIndex the sort index for the industry classification
+   * @param sortOrder the sort order for the industry classification
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

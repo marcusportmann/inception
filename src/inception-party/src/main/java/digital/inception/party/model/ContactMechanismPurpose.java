@@ -53,7 +53,7 @@ import org.springframework.util.StringUtils;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "contactMechanismTypes",
@@ -67,7 +67,7 @@ import org.springframework.util.StringUtils;
       "code",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "description",
       "contactMechanismTypes",
@@ -165,15 +165,15 @@ public class ContactMechanismPurpose implements Serializable {
   @Column(name = "party_types", length = 510, nullable = false)
   private List<String> partyTypes;
 
-  /** The sort index for the contact mechanism purpose. */
+  /** The sort order for the contact mechanism purpose. */
   @Schema(
-      description = "The sort index for the contact mechanism purpose",
+      description = "The sort order for the contact mechanism purpose",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the contact mechanism purpose is specific to. */
   @Schema(description = "The ID for the tenant the contact mechanism purpose is specific to")
@@ -267,12 +267,12 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Returns the sort index for the contact mechanism purpose.
+   * Returns the sort order for the contact mechanism purpose.
    *
-   * @return the sort index for the contact mechanism purpose
+   * @return the sort order for the contact mechanism purpose
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -381,12 +381,12 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Set the sort index for the contact mechanism purpose.
+   * Set the sort order for the contact mechanism purpose.
    *
-   * @param sortIndex the sort index for the contact mechanism purpose
+   * @param sortOrder the sort order for the contact mechanism purpose
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

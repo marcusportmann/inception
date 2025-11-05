@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface LanguageRepository extends JpaRepository<Language, LanguageId> {
 
   /**
-   * Find all the languages sorted by locale ID, sort index, and name.
+   * Find all the languages sorted by locale ID, sort order, and name.
    *
-   * @return all the languages sorted by locale ID, sort index, and name.
+   * @return all the languages sorted by locale ID, sort order, and name.
    */
-  @Query("select l from Language l order by l.localeId, l.sortIndex DESC, l.shortName")
+  @Query("select l from Language l order by l.localeId, l.sortOrder DESC, l.shortName")
   List<Language> findAllLanguages();
 }

@@ -358,49 +358,50 @@ public interface DocumentApiController {
    * @param createDocumentTemplateRequest the request to create the document template
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateDocumentTemplateException if the document template already exists
-   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not be found
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
    * @throws ServiceUnavailableException if the document template could not be created
    */
   @Operation(summary = "Create the document template", description = "Create the document template")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204", description = "The document template was created"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The document template category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "409",
-              description = "A document template with the specified ID already exists",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(responseCode = "204", description = "The document template was created"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document template category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A document template with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/create-document-template",
@@ -411,22 +412,22 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createDocumentTemplate(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
-          description = "The request to create the document template",
-          required = true)
-      @RequestBody
-      CreateDocumentTemplateRequest createDocumentTemplateRequest)
+              description = "The request to create the document template",
+              required = true)
+          @RequestBody
+          CreateDocumentTemplateRequest createDocumentTemplateRequest)
       throws InvalidArgumentException,
-      DuplicateDocumentTemplateException,
-      DocumentTemplateCategoryNotFoundException,
-      ServiceUnavailableException;
+          DuplicateDocumentTemplateException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Create the document template category.
    *
    * @param documentTemplateCategory the document template category
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DuplicateDocumentTemplateCategoryException if the document template category
-   *     already exists
+   * @throws DuplicateDocumentTemplateCategoryException if the document template category already
+   *     exists
    * @throws ServiceUnavailableException if the document template category could not be created
    */
   @Operation(
@@ -434,38 +435,38 @@ public interface DocumentApiController {
       description = "Create the document template category")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The document template category was created"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "409",
-              description = "A document template category with the specified ID already exists",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(
+            responseCode = "204",
+            description = "The document template category was created"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A document template category with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/document-template-categories",
@@ -476,13 +477,13 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createDocumentTemplateCategory(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
-          description = "The document template category to create",
-          required = true)
-      @RequestBody
-      DocumentTemplateCategory documentTemplateCategory)
+              description = "The document template category to create",
+              required = true)
+          @RequestBody
+          DocumentTemplateCategory documentTemplateCategory)
       throws InvalidArgumentException,
-      DuplicateDocumentTemplateCategoryException,
-      ServiceUnavailableException;
+          DuplicateDocumentTemplateCategoryException,
+          ServiceUnavailableException;
 
   /**
    * Delete the document.
@@ -760,41 +761,39 @@ public interface DocumentApiController {
    * @throws DocumentTemplateNotFoundException if the document template could not be found
    * @throws ServiceUnavailableException if the document template could not be deleted
    */
-  @Operation(
-      summary = "Delete the document template",
-      description = "Delete the document template")
+  @Operation(summary = "Delete the document template", description = "Delete the document template")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204", description = "The document template was deleted"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The document template could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(responseCode = "204", description = "The document template was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document template could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/document-templates/{documentTemplateId}",
@@ -805,22 +804,22 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteDocumentTemplate(
       @Parameter(
-          name = "documentTemplateId",
-          description = "The ID for the document template",
-          required = true)
-      @PathVariable
-      String documentTemplateId)
+              name = "documentTemplateId",
+              description = "The ID for the document template",
+              required = true)
+          @PathVariable
+          String documentTemplateId)
       throws InvalidArgumentException,
-      DocumentTemplateNotFoundException,
-      ServiceUnavailableException;
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Delete the document template category.
    *
    * @param documentTemplateCategoryId the ID for the document template category
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentTemplateCategoryNotFoundException if the document template category could
-   *     not be found
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
    * @throws ServiceUnavailableException if the document template category could not be deleted
    */
   @Operation(
@@ -828,38 +827,38 @@ public interface DocumentApiController {
       description = "Delete the document template category")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The document template category was deleted"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The document template category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(
+            responseCode = "204",
+            description = "The document template category was deleted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document template category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/document-template-categories/{documentTemplateCategoryId}",
@@ -870,14 +869,14 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteDocumentTemplateCategory(
       @Parameter(
-          name = "documentTemplateCategoryId",
-          description = "The ID for the document template category",
-          required = true)
-      @PathVariable
-      String documentTemplateCategoryId)
+              name = "documentTemplateCategoryId",
+              description = "The ID for the document template category",
+              required = true)
+          @PathVariable
+          String documentTemplateCategoryId)
       throws InvalidArgumentException,
-      DocumentTemplateCategoryNotFoundException,
-      ServiceUnavailableException;
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Retrieve the document.
@@ -1383,36 +1382,36 @@ public interface DocumentApiController {
       description = "Retrieve the document template")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "The document template was retrieved"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The document template could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(responseCode = "200", description = "The document template was retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document template could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/document-templates/{documentTemplateId}",
@@ -1423,14 +1422,14 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentTemplate getDocumentTemplate(
       @Parameter(
-          name = "documentTemplateId",
-          description = "The ID for the document template",
-          required = true)
-      @PathVariable
-      String documentTemplateId)
+              name = "documentTemplateId",
+              description = "The ID for the document template",
+              required = true)
+          @PathVariable
+          String documentTemplateId)
       throws InvalidArgumentException,
-      DocumentTemplateNotFoundException,
-      ServiceUnavailableException;
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Retrieve the document template categories.
@@ -1438,39 +1437,38 @@ public interface DocumentApiController {
    * @param tenantId the ID for the tenant
    * @return the document template categories
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the document template categories could not be
-   *     retrieved
+   * @throws ServiceUnavailableException if the document template categories could not be retrieved
    */
   @Operation(
       summary = "Retrieve the document template categories",
       description = "Retrieve the document template categories")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "200",
-              description = "The document template categories were retrieved"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(
+            responseCode = "200",
+            description = "The document template categories were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/document-template-categories",
@@ -1481,14 +1479,14 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<DocumentTemplateCategory> getDocumentTemplateCategories(
       @Parameter(
-          name = "Tenant-ID",
-          description = "The ID for the tenant",
-          example = "00000000-0000-0000-0000-000000000000")
-      @RequestHeader(
-          name = "Tenant-ID",
-          defaultValue = "00000000-0000-0000-0000-000000000000",
-          required = false)
-      UUID tenantId)
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
@@ -1497,8 +1495,8 @@ public interface DocumentApiController {
    * @param documentTemplateCategoryId the ID for the document template category
    * @return the document template category
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentTemplateCategoryNotFoundException if the document template category could
-   *     not be found
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
    * @throws ServiceUnavailableException if the document template category could not be retrieved
    */
   @Operation(
@@ -1506,38 +1504,38 @@ public interface DocumentApiController {
       description = "Retrieve the document template category")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "200",
-              description = "The document template category was retrieved"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The document template category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(
+            responseCode = "200",
+            description = "The document template category was retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document template category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/document-template-categories/{documentTemplateCategoryId}",
@@ -1548,27 +1546,27 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentTemplateCategory getDocumentTemplateCategory(
       @Parameter(
-          name = "documentTemplateCategoryId",
-          description = "The ID for the document template category",
-          required = true)
-      @PathVariable
-      String documentTemplateCategoryId)
+              name = "documentTemplateCategoryId",
+              description = "The ID for the document template category",
+              required = true)
+          @PathVariable
+          String documentTemplateCategoryId)
       throws InvalidArgumentException,
-      DocumentTemplateCategoryNotFoundException,
-      ServiceUnavailableException;
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
 
   /**
-   * Retrieve the summaries for the document templates associated with the document template category with the
-   * specified ID.
+   * Retrieve the summaries for the document templates associated with the document template
+   * category with the specified ID.
    *
    * @param tenantId the ID for the tenant
    * @param documentTemplateCategoryId the ID for the document template category the document
    *     templates are associated with
-   * @return the summaries for the document templates associated with the document template category with the
-   *     specified ID
+   * @return the summaries for the document templates associated with the document template category
+   *     with the specified ID
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentTemplateCategoryNotFoundException if the document template category could
-   *     not be found
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
    * @throws ServiceUnavailableException if the document templates could not be retrieved
    */
   @Operation(
@@ -1578,32 +1576,35 @@ public interface DocumentApiController {
           "Retrieve the summaries for the document templates associated with the document template category")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "The document template summaries were retrieved"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(
+            responseCode = "200",
+            description = "The document template summaries were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
-      value = "/document-template-categories/{documentTemplateCategoryId}/document-template-summaries",
+      value =
+          "/document-template-categories/{documentTemplateCategoryId}/document-template-summaries",
       method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
@@ -1611,23 +1612,23 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<DocumentTemplateSummary> getDocumentTemplateSummaries(
       @Parameter(
-          name = "Tenant-ID",
-          description = "The ID for the tenant",
-          example = "00000000-0000-0000-0000-000000000000")
-      @RequestHeader(
-          name = "Tenant-ID",
-          defaultValue = "00000000-0000-0000-0000-000000000000",
-          required = false)
-      UUID tenantId,
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
       @Parameter(
-          name = "documentTemplateCategoryId",
-          description = "The ID for the document template category",
-          required = true)
-      @PathVariable
-      String documentTemplateCategoryId)
+              name = "documentTemplateCategoryId",
+              description = "The ID for the document template category",
+              required = true)
+          @PathVariable
+          String documentTemplateCategoryId)
       throws InvalidArgumentException,
-      DocumentTemplateCategoryNotFoundException,
-      ServiceUnavailableException;
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Retrieve the summaries for the document templates.
@@ -1647,31 +1648,31 @@ public interface DocumentApiController {
       description = "Retrieve the summaries for the document templates")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "200",
-              description = "The document template summaries were retrieved"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(
+            responseCode = "200",
+            description = "The document template summaries were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/document-template-summaries",
@@ -1682,35 +1683,36 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentTemplateSummaries getDocumentTemplateSummaries(
       @Parameter(
-          name = "Tenant-ID",
-          description = "The ID for the tenant",
-          example = "00000000-0000-0000-0000-000000000000")
-      @RequestHeader(
-          name = "Tenant-ID",
-          defaultValue = "00000000-0000-0000-0000-000000000000",
-          required = false)
-      UUID tenantId,
-      @Parameter(name = "filter", description = "The filter to apply to the document template summaries")
-      @RequestParam(value = "filter", required = false)
-      String filter,
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
       @Parameter(
-          name = "sortBy",
-          description = "The method used to sort the document template summaries e.g. by name")
-      @RequestParam(value = "sortBy", required = false)
-      DocumentTemplateSortBy sortBy,
+              name = "filter",
+              description = "The filter to apply to the document template summaries")
+          @RequestParam(value = "filter", required = false)
+          String filter,
       @Parameter(
-          name = "sortDirection",
-          description = "The sort direction to apply to the document template summaries")
-      @RequestParam(value = "sortDirection", required = false)
-      SortDirection sortDirection,
+              name = "sortBy",
+              description = "The method used to sort the document template summaries e.g. by name")
+          @RequestParam(value = "sortBy", required = false)
+          DocumentTemplateSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The sort direction to apply to the document template summaries")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The page index", example = "0")
-      @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
-      Integer pageIndex,
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
       @Parameter(name = "pageSize", description = "The page size", example = "10")
-      @RequestParam(value = "pageSize", required = false, defaultValue = "10")
-      Integer pageSize)
-      throws InvalidArgumentException,
-      ServiceUnavailableException;
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Search for documents.
@@ -2053,43 +2055,44 @@ public interface DocumentApiController {
    *
    * @param updateDocumentTemplateRequest the request to update the document template
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not be found
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
    * @throws DocumentTemplateNotFoundException if the document template could not be found
    * @throws ServiceUnavailableException if the document template could not be updated
    */
   @Operation(summary = "Update the document template", description = "Update the document template")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204", description = "The document template was updated"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The document template category or document template could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(responseCode = "204", description = "The document template was updated"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document template category or document template could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/update-document-template",
@@ -2100,11 +2103,14 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateDocumentTemplate(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
-          description = "The request to update the document template",
-          required = true)
-      @RequestBody
-      UpdateDocumentTemplateRequest updateDocumentTemplateRequest)
-      throws InvalidArgumentException, DocumentTemplateCategoryNotFoundException, DocumentTemplateNotFoundException, ServiceUnavailableException;
+              description = "The request to update the document template",
+              required = true)
+          @RequestBody
+          UpdateDocumentTemplateRequest updateDocumentTemplateRequest)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          DocumentTemplateNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Update the document template category.
@@ -2112,8 +2118,8 @@ public interface DocumentApiController {
    * @param documentTemplateCategoryId the ID for the document template category
    * @param documentTemplateCategory the document template category
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentTemplateCategoryNotFoundException if the document template category could
-   *     not be found
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
    * @throws ServiceUnavailableException if the document template category could not be updated
    */
   @Operation(
@@ -2121,38 +2127,38 @@ public interface DocumentApiController {
       description = "Update the document template category")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The document template category was updated"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "403",
-              description = "Access denied",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The document template category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ProblemDetails.class)))
+        @ApiResponse(
+            responseCode = "204",
+            description = "The document template category was updated"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The document template category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
       })
   @RequestMapping(
       value = "/document-template-categories/{documentTemplateCategoryId}",
@@ -2163,30 +2169,17 @@ public interface DocumentApiController {
       "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateDocumentTemplateCategory(
       @Parameter(
-          name = "documentTemplateCategoryId",
-          description = "The ID for the document template category",
-          required = true)
-      @PathVariable
-      String documentTemplateCategoryId,
+              name = "documentTemplateCategoryId",
+              description = "The ID for the document template category",
+              required = true)
+          @PathVariable
+          String documentTemplateCategoryId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
-          description = "The document template category",
-          required = true)
-      @RequestBody
-      DocumentTemplateCategory documentTemplateCategory)
+              description = "The document template category",
+              required = true)
+          @RequestBody
+          DocumentTemplateCategory documentTemplateCategory)
       throws InvalidArgumentException,
-      DocumentTemplateCategoryNotFoundException,
-      ServiceUnavailableException;
-
-
-
-
-
-
-
-
-
-
-
-
-
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
 }

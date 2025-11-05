@@ -53,7 +53,7 @@ import org.springframework.util.StringUtils;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "partyTypes"
@@ -62,7 +62,7 @@ import org.springframework.util.StringUtils;
 @XmlType(
     name = "RoleType",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description", "partyTypes"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_role_types")
@@ -126,15 +126,15 @@ public class RoleType implements Serializable {
   @Column(name = "party_types", length = 510, nullable = false)
   private List<String> partyTypes;
 
-  /** The sort index for the role type. */
+  /** The sort order for the role type. */
   @Schema(
-      description = "The sort index for the role type",
+      description = "The sort order for the role type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the role type is specific to. */
   @Schema(description = "The ID for the tenant the role type is specific to")
@@ -217,12 +217,12 @@ public class RoleType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the role type.
+   * Returns the sort order for the role type.
    *
-   * @return the sort index for the role type
+   * @return the sort order for the role type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -304,12 +304,12 @@ public class RoleType implements Serializable {
   }
 
   /**
-   * Set the sort index for the role type.
+   * Set the sort order for the role type.
    *
-   * @param sortIndex the sort index for the role type
+   * @param sortOrder the sort order for the role type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

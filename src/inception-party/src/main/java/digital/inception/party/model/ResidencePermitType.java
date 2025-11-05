@@ -53,7 +53,7 @@ import java.util.regex.Pattern;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "countryOfIssue",
@@ -67,7 +67,7 @@ import java.util.regex.Pattern;
       "code",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "description",
       "countryOfIssue",
@@ -153,15 +153,15 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "pattern", length = 1000)
   private String pattern;
 
-  /** The sort index for the residence permit type. */
+  /** The sort order for the residence permit type. */
   @Schema(
-      description = "The sort index for the residence permit type",
+      description = "The sort order for the residence permit type",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the residence permit type is specific to. */
   @Schema(description = "The ID for the tenant the residence permit type is specific to")
@@ -267,12 +267,12 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Returns the sort index for the residence permit type.
+   * Returns the sort order for the residence permit type.
    *
-   * @return the sort index for the residence permit type
+   * @return the sort order for the residence permit type
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -351,12 +351,12 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the sort index for the residence permit type.
+   * Set the sort order for the residence permit type.
    *
-   * @param sortIndex the sort index for the residence permit type
+   * @param sortOrder the sort order for the residence permit type
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

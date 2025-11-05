@@ -148,9 +148,9 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
         writer.println(
             "      <column name=\"locale_id\" value=\"" + country.getLocaleId() + "\"/>");
 
-        if (country.getSortIndex() != null) {
+        if (country.getSortOrder() != null) {
           writer.println(
-              "      <column name=\"sort_index\" value=\"" + country.getSortIndex() + "\"/>");
+              "      <column name=\"sort_index\" value=\"" + country.getSortOrder() + "\"/>");
         }
 
         writer.println("      <column name=\"name\" value=\"" + country.getName() + "\"/>");
@@ -182,9 +182,9 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
         writer.println(
             "      <column name=\"locale_id\" value=\"" + language.getLocaleId() + "\"/>");
 
-        if (language.getSortIndex() != null) {
+        if (language.getSortOrder() != null) {
           writer.println(
-              "      <column name=\"sort_index\" value=\"" + language.getSortIndex() + "\"/>");
+              "      <column name=\"sort_index\" value=\"" + language.getSortOrder() + "\"/>");
         }
 
         writer.println("      <column name=\"name\" value=\"" + language.getName() + "\"/>");
@@ -206,10 +206,10 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
         writer.println(
             "      <column name=\"locale_id\" value=\"" + measurementSystem.getLocaleId() + "\"/>");
 
-        if (measurementSystem.getSortIndex() != null) {
+        if (measurementSystem.getSortOrder() != null) {
           writer.println(
               "      <column name=\"sort_index\" value=\""
-                  + measurementSystem.getSortIndex()
+                  + measurementSystem.getSortOrder()
                   + "\"/>");
         }
 
@@ -237,10 +237,10 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
                 + measurementUnitType.getLocaleId()
                 + "\"/>");
 
-        if (measurementUnitType.getSortIndex() != null) {
+        if (measurementUnitType.getSortOrder() != null) {
           writer.println(
               "      <column name=\"sort_index\" value=\""
-                  + measurementUnitType.getSortIndex()
+                  + measurementUnitType.getSortOrder()
                   + "\"/>");
         }
 
@@ -263,10 +263,10 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
         writer.println(
             "      <column name=\"locale_id\" value=\"" + measurementUnit.getLocaleId() + "\"/>");
 
-        if (measurementUnit.getSortIndex() != null) {
+        if (measurementUnit.getSortOrder() != null) {
           writer.println(
               "      <column name=\"sort_index\" value=\""
-                  + measurementUnit.getSortIndex()
+                  + measurementUnit.getSortOrder()
                   + "\"/>");
         }
 
@@ -291,9 +291,9 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
         writer.println("      <column name=\"code\" value=\"" + region.getCode() + "\"/>");
         writer.println("      <column name=\"locale_id\" value=\"" + region.getLocaleId() + "\"/>");
 
-        if (region.getSortIndex() != null) {
+        if (region.getSortOrder() != null) {
           writer.println(
-              "      <column name=\"sort_index\" value=\"" + region.getSortIndex() + "\"/>");
+              "      <column name=\"sort_index\" value=\"" + region.getSortOrder() + "\"/>");
         }
 
         writer.println("      <column name=\"name\" value=\"" + region.getName() + "\"/>");

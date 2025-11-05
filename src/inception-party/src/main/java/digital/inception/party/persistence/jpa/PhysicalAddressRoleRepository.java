@@ -32,11 +32,11 @@ public interface PhysicalAddressRoleRepository
     extends JpaRepository<PhysicalAddressRole, PhysicalAddressRoleId> {
 
   /**
-   * Find all the physical address roles sorted by locale ID, sort index, and name.
+   * Find all the physical address roles sorted by locale ID, sort order, and name.
    *
-   * @return all the physical address roles sorted by locale ID, sort index, and name.
+   * @return all the physical address roles sorted by locale ID, sort order, and name.
    */
   @Query(
-      "select par from PhysicalAddressRole par order by par.localeId, par.sortIndex DESC, par.name")
+      "select par from PhysicalAddressRole par order by par.localeId, par.sortOrder DESC, par.name")
   List<PhysicalAddressRole> findAllPhysicalAddressRoles();
 }

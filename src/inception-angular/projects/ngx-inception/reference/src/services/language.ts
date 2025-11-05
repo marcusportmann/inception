@@ -51,9 +51,9 @@ export class Language {
   shortName: string;
 
   /**
-   * The sort index for the language.
+   * The sort order for the language.
    */
-  sortIndex: number;
+  sortOrder: number;
 
   /**
    * Constructs a new Language.
@@ -61,7 +61,7 @@ export class Language {
    * @param code        The ISO 639-1 alpha-2 for the language.
    * @param iso3Code    The ISO 639-2 alpha-3 code for the language.
    * @param localeId    The Unicode locale identifier for the language.
-   * @param sortIndex   The sort index for the language.
+   * @param sortOrder   The sort order for the language.
    * @param name        The name of the language.
    * @param shortName   The short name for the language.
    * @param description The description for the language.
@@ -70,7 +70,7 @@ export class Language {
     code: string,
     iso3Code: string,
     localeId: string,
-    sortIndex: number,
+    sortOrder: number,
     name: string,
     shortName: string,
     description: string
@@ -78,7 +78,7 @@ export class Language {
     this.code = code;
     this.iso3Code = iso3Code;
     this.localeId = localeId;
-    this.sortIndex = sortIndex;
+    this.sortOrder = sortOrder;
     this.name = name;
     this.shortName = shortName;
     this.description = description;

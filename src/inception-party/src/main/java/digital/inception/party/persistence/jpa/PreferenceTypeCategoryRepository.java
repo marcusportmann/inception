@@ -32,11 +32,11 @@ public interface PreferenceTypeCategoryRepository
     extends JpaRepository<PreferenceTypeCategory, PreferenceTypeCategoryId> {
 
   /**
-   * Find all the preference type categories sorted by locale ID, sort index, and name.
+   * Find all the preference type categories sorted by locale ID, sort order, and name.
    *
-   * @return all the preference type categories sorted by locale ID, sort index, and name.
+   * @return all the preference type categories sorted by locale ID, sort order, and name.
    */
   @Query(
-      "select ptc from PreferenceTypeCategory ptc order by ptc.localeId, ptc.sortIndex DESC, ptc.name")
+      "select ptc from PreferenceTypeCategory ptc order by ptc.localeId, ptc.sortOrder DESC, ptc.name")
   List<PreferenceTypeCategory> findAllPreferenceTypeCategories();
 }

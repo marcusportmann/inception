@@ -32,8 +32,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The {@code WaiveWorkflowDocumentRequest} class represents a request to waive a workflow
- * document.
+ * The {@code WaiveWorkflowDocumentRequest} class represents a request to waive a workflow document.
  *
  * @author Marcus Portmann
  */

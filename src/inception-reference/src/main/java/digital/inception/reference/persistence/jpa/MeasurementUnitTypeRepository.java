@@ -32,11 +32,11 @@ public interface MeasurementUnitTypeRepository
     extends JpaRepository<MeasurementUnitType, MeasurementUnitTypeId> {
 
   /**
-   * Find all the measurement unit types sorted by locale ID, sort index, and name.
+   * Find all the measurement unit types sorted by locale ID, sort order, and name.
    *
-   * @return all the measurement unit types sorted by locale ID, sort index, and name.
+   * @return all the measurement unit types sorted by locale ID, sort order, and name.
    */
   @Query(
-      "select mut from MeasurementUnitType mut order by mut.localeId, mut.sortIndex DESC, mut.name")
+      "select mut from MeasurementUnitType mut order by mut.localeId, mut.sortOrder DESC, mut.name")
   List<MeasurementUnitType> findAllMeasurementUnitTypes();
 }

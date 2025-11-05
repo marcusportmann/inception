@@ -30,7 +30,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the attribute type category is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the attribute type category"/>
+      <column name="sort_index" type="int" remarks="The sort order for the attribute type category"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the attribute type category">
         <constraints nullable="false"/>
       </column>
@@ -59,7 +59,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the attribute type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the attribute type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the attribute type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the attribute type">
         <constraints nullable="false"/>
       </column>
@@ -96,7 +96,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the consent type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the consent type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the consent type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the consent type">
         <constraints nullable="false"/>
       </column>
@@ -119,7 +119,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the contact mechanism purpose is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the contact mechanism purpose"/>
+      <column name="sort_index" type="int" remarks="The sort order for the contact mechanism purpose"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the contact mechanism purpose">
         <constraints nullable="false"/>
       </column>
@@ -148,7 +148,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the contact mechanism type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the contact mechanism type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the contact mechanism type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the contact mechanism type">
         <constraints nullable="false"/>
       </column>
@@ -178,7 +178,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the contact mechanism role is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the contact mechanism role"/>
+      <column name="sort_index" type="int" remarks="The sort order for the contact mechanism role"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the contact mechanism role">
         <constraints nullable="false"/>
       </column>
@@ -215,7 +215,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the employment status is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the employment status"/>
+      <column name="sort_index" type="int" remarks="The sort order for the employment status"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the employment status">
         <constraints nullable="false"/>
       </column>
@@ -241,7 +241,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the employment type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the employment type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the employment type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the employment type">
         <constraints nullable="false"/>
       </column>
@@ -270,7 +270,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the external reference type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the external reference type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the external reference type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the external reference type">
         <constraints nullable="false"/>
       </column>
@@ -297,7 +297,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the field of study is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the field of study"/>
+      <column name="sort_index" type="int" remarks="The sort order for the field of study"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the field of study">
         <constraints nullable="false"/>
       </column>
@@ -320,7 +320,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the gender is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the gender"/>
+      <column name="sort_index" type="int" remarks="The sort order for the gender"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the gender">
         <constraints nullable="false"/>
       </column>
@@ -343,7 +343,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the identification type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the identification type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the identification type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the identification type">
         <constraints nullable="false"/>
       </column>
@@ -374,7 +374,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the industry classification system is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the industry classification system"/>
+      <column name="sort_index" type="int" remarks="The sort order for the industry classification system"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the industry classification system">
         <constraints nullable="false"/>
       </column>
@@ -400,7 +400,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the industry classification category is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the industry classification category"/>
+      <column name="sort_index" type="int" remarks="The sort order for the industry classification category"/>
       <column name="name" type="nvarchar(200)" remarks="The name of the industry classification category">
         <constraints nullable="false"/>
       </column>
@@ -433,7 +433,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the industry classification is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the industry classification"/>
+      <column name="sort_index" type="int" remarks="The sort order for the industry classification"/>
       <column name="name" type="nvarchar(200)" remarks="The name of the industry classification">
         <constraints nullable="false"/>
       </column>
@@ -465,7 +465,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the lock type category is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the lock type category"/>
+      <column name="sort_index" type="int" remarks="The sort order for the lock type category"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the lock type category">
         <constraints nullable="false"/>
       </column>
@@ -491,7 +491,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the lock type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the lock type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the lock type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the lock type">
         <constraints nullable="false"/>
       </column>
@@ -523,7 +523,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the marital status is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the marital status"/>
+      <column name="sort_index" type="int" remarks="The sort order for the marital status"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the marital status">
         <constraints nullable="false"/>
       </column>
@@ -549,7 +549,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the marriage type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the marriage type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the marriage type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the marriage type">
         <constraints nullable="false"/>
       </column>
@@ -578,7 +578,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the minor type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the minor type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the minor type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the minor type">
         <constraints nullable="false"/>
       </column>
@@ -601,7 +601,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the next of kin type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the next of kin type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the next of kin type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the next of kin type">
         <constraints nullable="false"/>
       </column>
@@ -624,7 +624,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the occupation is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the occupation"/>
+      <column name="sort_index" type="int" remarks="The sort order for the occupation"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the occupation">
         <constraints nullable="false"/>
       </column>
@@ -647,7 +647,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the physical address type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the physical address type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the physical address type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the physical address type">
         <constraints nullable="false"/>
       </column>
@@ -670,7 +670,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the physical address purpose is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the physical address purpose"/>
+      <column name="sort_index" type="int" remarks="The sort order for the physical address purpose"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the physical address purpose">
         <constraints nullable="false"/>
       </column>
@@ -696,7 +696,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the physical address role is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the physical address role"/>
+      <column name="sort_index" type="int" remarks="The sort order for the physical address role"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the physical address role">
         <constraints nullable="false"/>
       </column>
@@ -722,7 +722,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the preference type category is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the preference type category"/>
+      <column name="sort_index" type="int" remarks="The sort order for the preference type category"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the preference type category">
         <constraints nullable="false"/>
       </column>
@@ -751,7 +751,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the preference type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the preference type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the preference type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the preference type">
         <constraints nullable="false"/>
       </column>
@@ -785,7 +785,7 @@
       </column>
       <column name="field_of_study" type="nvarchar(50)" remarks="The code for the field of study for the qualification type"/>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the qualification type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the qualification type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the qualification type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the qualification type">
         <constraints nullable="false"/>
       </column>
@@ -811,7 +811,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the race is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the race"/>
+      <column name="sort_index" type="int" remarks="The sort order for the race"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the race">
         <constraints nullable="false"/>
       </column>
@@ -834,7 +834,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the residence permit type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the residence permit type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the residence permit type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the residence permit type">
         <constraints nullable="false"/>
       </column>
@@ -864,7 +864,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the residency status is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the residency status"/>
+      <column name="sort_index" type="int" remarks="The sort order for the residency status"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the residency status">
         <constraints nullable="false"/>
       </column>
@@ -887,7 +887,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the residential type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the residential type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the residential type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the residential type">
         <constraints nullable="false"/>
       </column>
@@ -910,7 +910,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the role purpose is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the role purpose"/>
+      <column name="sort_index" type="int" remarks="The sort order for the role purpose"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the role purpose">
         <constraints nullable="false"/>
       </column>
@@ -933,7 +933,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the role type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the role type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the role type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the role type">
         <constraints nullable="false"/>
       </column>
@@ -994,7 +994,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the segmentation type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the segmentation type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the segmentation type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the segmentation type">
         <constraints nullable="false"/>
       </column>
@@ -1023,7 +1023,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the segment is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the segment"/>
+      <column name="sort_index" type="int" remarks="The sort order for the segment"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the segment">
         <constraints nullable="false"/>
       </column>
@@ -1056,7 +1056,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the skill type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the skill type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the skill type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the skill type">
         <constraints nullable="false"/>
       </column>
@@ -1085,7 +1085,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the source of funds type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the source of funds type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the source of funds type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the source of funds type">
         <constraints nullable="false"/>
       </column>
@@ -1108,7 +1108,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the source of wealth type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the source of wealth type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the source of wealth type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the source of wealth type">
         <constraints nullable="false"/>
       </column>
@@ -1131,7 +1131,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the status type category is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the status type category"/>
+      <column name="sort_index" type="int" remarks="The sort order for the status type category"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the status type category">
         <constraints nullable="false"/>
       </column>
@@ -1160,7 +1160,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the status type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the status type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the status type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the status type">
         <constraints nullable="false"/>
       </column>
@@ -1192,7 +1192,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the tax number type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the tax number type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the tax number type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the tax number type">
         <constraints nullable="false"/>
       </column>
@@ -1225,7 +1225,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the time to contact is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the time to contact"/>
+      <column name="sort_index" type="int" remarks="The sort order for the time to contact"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the time to contact">
         <constraints nullable="false"/>
       </column>
@@ -1248,7 +1248,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the title is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the title"/>
+      <column name="sort_index" type="int" remarks="The sort order for the title"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the title">
         <constraints nullable="false"/>
       </column>
@@ -1594,7 +1594,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the link type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the link type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the link type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the link type">
         <constraints nullable="false"/>
       </column>
@@ -1917,7 +1917,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the association type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the association type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the association type">
         <constraints nullable="false"/>
       </column>
@@ -1958,7 +1958,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the association property type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the association property type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the association property type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the association property type">
         <constraints nullable="false"/>
       </column>
@@ -2047,7 +2047,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the mandate type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the mandate type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the mandate type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the mandate type">
         <constraints nullable="false"/>
       </column>
@@ -2070,7 +2070,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the mandate property type is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the mandate property type"/>
+      <column name="sort_index" type="int" remarks="The sort order for the mandate property type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the mandate property type">
         <constraints nullable="false"/>
       </column>
@@ -2103,7 +2103,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid" remarks="The ID for the tenant the mandatary role is specific to"/>
-      <column name="sort_index" type="int" remarks="The sort index for the mandatary role"/>
+      <column name="sort_index" type="int" remarks="The sort order for the mandatary role"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the mandatary role">
         <constraints nullable="false"/>
       </column>

@@ -47,7 +47,7 @@ import java.util.Objects;
   "code",
   "iso3Code",
   "localeId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "shortName",
   "description",
@@ -62,7 +62,7 @@ import java.util.Objects;
       "code",
       "iso3Code",
       "localeId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "shortName",
       "description",
@@ -154,12 +154,12 @@ public class Country implements Serializable {
   @Column(name = "short_name", length = 50, nullable = false)
   private String shortName;
 
-  /** The sort index for the country. */
-  @Schema(description = "The sort index for the country")
+  /** The sort order for the country. */
+  @Schema(description = "The sort order for the country")
   @JsonProperty
-  @XmlElement(name = "SortIndex")
+  @XmlElement(name = "SortOrder")
   @Column(name = "sort_index")
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ISO 3166-1 alpha-2 code for the sovereign state the country is associated with. */
   @Schema(
@@ -265,12 +265,12 @@ public class Country implements Serializable {
   }
 
   /**
-   * Returns the sort index for the country.
+   * Returns the sort order for the country.
    *
-   * @return the sort index for the country
+   * @return the sort order for the country
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -356,12 +356,12 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the sort index for the country.
+   * Set the sort order for the country.
    *
-   * @param sortIndex the sort index for the country
+   * @param sortOrder the sort order for the country
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

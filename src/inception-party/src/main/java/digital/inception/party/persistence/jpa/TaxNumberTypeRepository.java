@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface TaxNumberTypeRepository extends JpaRepository<TaxNumberType, TaxNumberTypeId> {
 
   /**
-   * Find all the tax number types sorted by locale ID, sort index, and name.
+   * Find all the tax number types sorted by locale ID, sort order, and name.
    *
-   * @return all the tax number types sorted by locale ID, sort index, and name.
+   * @return all the tax number types sorted by locale ID, sort order, and name.
    */
-  @Query("select tnt from TaxNumberType tnt order by tnt.localeId, tnt.sortIndex DESC, tnt.name")
+  @Query("select tnt from TaxNumberType tnt order by tnt.localeId, tnt.sortOrder DESC, tnt.name")
   List<TaxNumberType> findAllTaxNumberTypes();
 }

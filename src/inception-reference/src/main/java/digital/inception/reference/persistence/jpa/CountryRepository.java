@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface CountryRepository extends JpaRepository<Country, CountryId> {
 
   /**
-   * Find all the countries sorted by locale ID, sort index, and name.
+   * Find all the countries sorted by locale ID, sort order, and name.
    *
-   * @return all the countries sorted by locale ID, sort index, and name.
+   * @return all the countries sorted by locale ID, sort order, and name.
    */
-  @Query("select c from Country c order by c.localeId, c.sortIndex DESC, c.shortName")
+  @Query("select c from Country c order by c.localeId, c.sortOrder DESC, c.shortName")
   List<Country> findAllCountries();
 }

@@ -49,7 +49,7 @@ import java.util.UUID;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description"
 })
@@ -57,7 +57,7 @@ import java.util.UUID;
 @XmlType(
     name = "MandataryRole",
     namespace = "https://inception.digital/party",
-    propOrder = {"mandateType", "code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"mandateType", "code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_mandatary_roles")
@@ -125,15 +125,15 @@ public class MandataryRole implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the mandatary role. */
+  /** The sort order for the mandatary role. */
   @Schema(
-      description = "The sort index for the mandatary role",
+      description = "The sort order for the mandatary role",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the mandatary role is specific to. */
   @Schema(description = "The ID for the tenant the mandatary role is specific to")
@@ -218,12 +218,12 @@ public class MandataryRole implements Serializable {
   }
 
   /**
-   * Returns the sort index for the mandatary role.
+   * Returns the sort order for the mandatary role.
    *
-   * @return the sort index for the mandatary role
+   * @return the sort order for the mandatary role
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -293,12 +293,12 @@ public class MandataryRole implements Serializable {
   }
 
   /**
-   * Set the sort index for the mandatary role.
+   * Set the sort order for the mandatary role.
    *
-   * @param sortIndex the sort index for the mandatary role
+   * @param sortOrder the sort order for the mandatary role
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

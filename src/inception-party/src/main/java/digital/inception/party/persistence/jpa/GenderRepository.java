@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface GenderRepository extends JpaRepository<Gender, GenderId> {
 
   /**
-   * Find all the genders sorted by locale ID, sort index, and name.
+   * Find all the genders sorted by locale ID, sort order, and name.
    *
-   * @return all the genders sorted by locale ID, sort index, and name.
+   * @return all the genders sorted by locale ID, sort order, and name.
    */
-  @Query("select g from Gender g order by g.localeId, g.sortIndex DESC, g.name")
+  @Query("select g from Gender g order by g.localeId, g.sortOrder DESC, g.name")
   List<Gender> findAllGenders();
 }

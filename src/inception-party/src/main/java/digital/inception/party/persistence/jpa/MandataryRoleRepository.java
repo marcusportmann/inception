@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface MandataryRoleRepository extends JpaRepository<MandataryRole, MandataryRoleId> {
 
   /**
-   * Find all the mandatary roles sorted by locale ID, sort index, and name.
+   * Find all the mandatary roles sorted by locale ID, sort order, and name.
    *
-   * @return all the mandatary roles sorted by locale ID, sort index, and name.
+   * @return all the mandatary roles sorted by locale ID, sort order, and name.
    */
-  @Query("select mr from MandataryRole mr order by mr.localeId, mr.sortIndex DESC, mr.name")
+  @Query("select mr from MandataryRole mr order by mr.localeId, mr.sortOrder DESC, mr.name")
   List<MandataryRole> findAllMandataryRoles();
 }

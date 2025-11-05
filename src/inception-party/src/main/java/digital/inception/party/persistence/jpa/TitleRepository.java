@@ -30,10 +30,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface TitleRepository extends JpaRepository<Title, TitleId> {
 
   /**
-   * Find all the titles sorted by locale ID, sort index, and name.
+   * Find all the titles sorted by locale ID, sort order, and name.
    *
-   * @return all the titles sorted by locale ID, sort index, and name.
+   * @return all the titles sorted by locale ID, sort order, and name.
    */
-  @Query("select t from Title t order by t.sortIndex DESC, t.name")
+  @Query("select t from Title t order by t.sortOrder DESC, t.name")
   List<Title> findAllTitles();
 }

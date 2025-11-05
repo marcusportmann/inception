@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface NextOfKinTypeRepository extends JpaRepository<NextOfKinType, NextOfKinTypeId> {
 
   /**
-   * Find all the next of kin types sorted by locale ID, sort index, and name.
+   * Find all the next of kin types sorted by locale ID, sort order, and name.
    *
-   * @return all the next of kin types sorted by locale ID, sort index, and name.
+   * @return all the next of kin types sorted by locale ID, sort order, and name.
    */
-  @Query("select nok from NextOfKinType nok order by nok.localeId, nok.sortIndex DESC, nok.name")
+  @Query("select nok from NextOfKinType nok order by nok.localeId, nok.sortOrder DESC, nok.name")
   List<NextOfKinType> findAllNextOfKinTypes();
 }

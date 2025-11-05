@@ -44,12 +44,12 @@ import java.util.UUID;
  */
 @Schema(description = "A marital status")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlRootElement(name = "MaritalStatus", namespace = "https://inception.digital/party")
 @XmlType(
     name = "MaritalStatus",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_marital_statuses")
@@ -104,15 +104,15 @@ public class MaritalStatus implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the marital status. */
+  /** The sort order for the marital status. */
   @Schema(
-      description = "The sort index for the marital status",
+      description = "The sort order for the marital status",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the marital status is specific to. */
   @Schema(description = "The ID for the tenant the marital status is specific to")
@@ -186,12 +186,12 @@ public class MaritalStatus implements Serializable {
   }
 
   /**
-   * Returns the sort index for the marital status.
+   * Returns the sort order for the marital status.
    *
-   * @return the sort index for the marital status
+   * @return the sort order for the marital status
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -250,12 +250,12 @@ public class MaritalStatus implements Serializable {
   }
 
   /**
-   * Set the sort index for the marital status.
+   * Set the sort order for the marital status.
    *
-   * @param sortIndex the sort index for the marital status
+   * @param sortOrder the sort order for the marital status
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface ConsentTypeRepository extends JpaRepository<ConsentType, ConsentTypeId> {
 
   /**
-   * Find all the consent types sorted by locale ID, sort index, and name.
+   * Find all the consent types sorted by locale ID, sort order, and name.
    *
-   * @return all the consent types sorted by locale ID, sort index, and name.
+   * @return all the consent types sorted by locale ID, sort order, and name.
    */
-  @Query("select ct from ConsentType ct order by ct.localeId, ct.sortIndex DESC, ct.name")
+  @Query("select ct from ConsentType ct order by ct.localeId, ct.sortOrder DESC, ct.name")
   List<ConsentType> findAllConsentTypes();
 }

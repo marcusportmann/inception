@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface TimeToContactRepository extends JpaRepository<TimeToContact, TimeToContactId> {
 
   /**
-   * Find all the times to contact sorted by locale ID, sort index, and name.
+   * Find all the times to contact sorted by locale ID, sort order, and name.
    *
-   * @return all the times to contact sorted by locale ID, sort index, and name.
+   * @return all the times to contact sorted by locale ID, sort order, and name.
    */
-  @Query("select ttc from TimeToContact ttc order by ttc.localeId, ttc.sortIndex DESC, ttc.name")
+  @Query("select ttc from TimeToContact ttc order by ttc.localeId, ttc.sortOrder DESC, ttc.name")
   List<TimeToContact> findAllTimesToContact();
 }

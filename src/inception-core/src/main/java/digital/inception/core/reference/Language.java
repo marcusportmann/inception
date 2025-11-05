@@ -47,8 +47,8 @@ public class Language implements Serializable {
   /** The short name for the language. */
   private String shortName;
 
-  /** The sort index for the language. */
-  private Integer sortIndex;
+  /** The sort order for the language. */
+  private Integer sortOrder;
 
   /** Constructs a new {@code Language}. */
   public Language() {}
@@ -58,7 +58,7 @@ public class Language implements Serializable {
    *
    * @param code the ISO 639-1 alpha-2 code for the language
    * @param iso3Code the ISO 639-2 alpha-3 code for the language
-   * @param sortIndex the sort index for the language
+   * @param sortOrder the sort order for the language
    * @param name the name of the language
    * @param shortName the short name for the language
    * @param description description for the language
@@ -66,13 +66,13 @@ public class Language implements Serializable {
   public Language(
       String code,
       String iso3Code,
-      Integer sortIndex,
+      Integer sortOrder,
       String name,
       String shortName,
       String description) {
     this.code = code;
     this.iso3Code = iso3Code;
-    this.sortIndex = sortIndex;
+    this.sortOrder = sortOrder;
     this.name = name;
     this.shortName = shortName;
     this.description = description;
@@ -149,12 +149,12 @@ public class Language implements Serializable {
   }
 
   /**
-   * Returns the sort index for the language.
+   * Returns the sort order for the language.
    *
-   * @return the sort index for the language
+   * @return the sort order for the language
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -213,11 +213,11 @@ public class Language implements Serializable {
   }
 
   /**
-   * Set the sort index for the language.
+   * Set the sort order for the language.
    *
-   * @param sortIndex the sort index for the language
+   * @param sortOrder the sort order for the language
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 }

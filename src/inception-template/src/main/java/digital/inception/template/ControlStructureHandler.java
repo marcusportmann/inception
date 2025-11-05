@@ -80,34 +80,36 @@ public record ControlStructureHandler(TemplateRenderer templateRenderer) {
   /**
    * Expands and evaluates all supported control structures in the given template.
    *
-   * <p>This method repeatedly scans the input for the next outermost control block,
-   * evaluates it in the provided {@link TemplateContext}, replaces the block with its
-   * rendered output, and continues until no more control structures remain. Nested blocks
-   * are supported: the chosen body of each block is re-rendered via
-   * {@link TemplateRenderer#renderFragment(String, TemplateContext)} so that nested
-   * placeholders and inner control structures are processed.
+   * <p>This method repeatedly scans the input for the next outermost control block, evaluates it in
+   * the provided {@link TemplateContext}, replaces the block with its rendered output, and
+   * continues until no more control structures remain. Nested blocks are supported: the chosen body
+   * of each block is re-rendered via {@link TemplateRenderer#renderFragment(String,
+   * TemplateContext)} so that nested placeholders and inner control structures are processed.
    *
    * <p><b>Supported directives</b>
+   *
    * <ul>
-   *   <li>{@code {{#if <expr>}}} <i>then-body</i>
-   *       [{@code {{else}}} <i>else-body</i>] {@code {{/if}}}</li>
-   *   <li>{@code {{#each <expr> [as <alias>]}}} <i>item-body</i>
-   *       [{@code {{else}}} <i>empty-body</i>] {@code {{/each}}}</li>
+   *   <li>{@code {{#if <expr>}}} <i>then-body</i> [{@code {{else}}} <i>else-body</i>] {@code
+   *       {{/if}}}
+   *   <li>{@code {{#each <expr> [as <alias>]}}} <i>item-body</i> [{@code {{else}}}
+   *       <i>empty-body</i>] {@code {{/each}}}
    * </ul>
    *
    * <p><b>#each loop variables</b> (available as locals during each iteration):
+   *
    * <ul>
-   *   <li>{@code $index} — zero-based index</li>
-   *   <li>{@code $first} — {@code "true"} for the first item, else empty</li>
-   *   <li>{@code $last}  — {@code "true"} for the last item, else empty</li>
-   *   <li>{@code $this}  — current item’s string value</li>
-   *   <li>Optional alias via {@code as <alias>} (e.g., {@code {{$item}}})</li>
+   *   <li>{@code $index} — zero-based index
+   *   <li>{@code $first} — {@code "true"} for the first item, else empty
+   *   <li>{@code $last} — {@code "true"} for the last item, else empty
+   *   <li>{@code $this} — current item’s string value
+   *   <li>Optional alias via {@code as <alias>} (e.g., {@code {{$item}}})
    * </ul>
    *
    * <p><b>Error handling:</b> if a block fails to render, it is replaced with an empty string.
    * Unmatched or malformed block tags are left unexpanded.
    *
    * <p><b>Example</b>
+   *
    * <pre>{@code
    * {{#if json:$.title}}
    *   <h1>{{ json:$.title }}</h1>
@@ -124,8 +126,10 @@ public record ControlStructureHandler(TemplateRenderer templateRenderer) {
    * </ul>
    * }</pre>
    *
-   * @param template the raw template text containing control-structure directives; must not be {@code null}
-   * @param context  the current rendering context providing the data source and variable scopes; must not be {@code null}
+   * @param template the raw template text containing control-structure directives; must not be
+   *     {@code null}
+   * @param context the current rendering context providing the data source and variable scopes;
+   *     must not be {@code null}
    * @return the template with all recognized control structures expanded and rendered
    * @throws NullPointerException if {@code template} or {@code context} is {@code null}
    */

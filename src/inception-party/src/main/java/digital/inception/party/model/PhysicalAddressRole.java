@@ -53,7 +53,7 @@ import org.springframework.util.StringUtils;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "partyTypes"
@@ -62,7 +62,7 @@ import org.springframework.util.StringUtils;
 @XmlType(
     name = "PhysicalAddressRole",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description", "partyTypes"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_physical_address_roles")
@@ -164,15 +164,15 @@ public class PhysicalAddressRole implements Serializable {
   @Column(name = "party_types", length = 510, nullable = false)
   private List<String> partyTypes;
 
-  /** The sort index for the physical address role. */
+  /** The sort order for the physical address role. */
   @Schema(
-      description = "The sort index for the physical address role",
+      description = "The sort order for the physical address role",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the physical address role is specific to. */
   @Schema(description = "The ID for the tenant the physical address role is specific to")
@@ -255,12 +255,12 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Returns the sort index for the physical address role.
+   * Returns the sort order for the physical address role.
    *
-   * @return the sort index for the physical address role
+   * @return the sort order for the physical address role
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -343,12 +343,12 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Set the sort index for the physical address role.
+   * Set the sort order for the physical address role.
    *
-   * @param sortIndex the sort index for the physical address role
+   * @param sortOrder the sort order for the physical address role
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

@@ -31,10 +31,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface SkillTypeRepository extends JpaRepository<SkillType, SkillTypeId> {
 
   /**
-   * Find all the skill types sorted by locale ID, sort index, and name.
+   * Find all the skill types sorted by locale ID, sort order, and name.
    *
-   * @return all the skill types sorted by locale ID, sort index, and name.
+   * @return all the skill types sorted by locale ID, sort order, and name.
    */
-  @Query("select st from SkillType st order by st.localeId, st.sortIndex DESC, st.name")
+  @Query("select st from SkillType st order by st.localeId, st.sortOrder DESC, st.name")
   List<SkillType> findAllSkillTypes();
 }

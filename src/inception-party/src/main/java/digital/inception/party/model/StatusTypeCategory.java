@@ -53,7 +53,7 @@ import org.springframework.util.StringUtils;
   "code",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "partyTypes"
@@ -62,7 +62,7 @@ import org.springframework.util.StringUtils;
 @XmlType(
     name = "StatusTypeCategory",
     namespace = "https://inception.digital/party",
-    propOrder = {"code", "localeId", "tenantId", "sortIndex", "name", "description", "partyTypes"})
+    propOrder = {"code", "localeId", "tenantId", "sortOrder", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "party_status_type_categories")
@@ -130,15 +130,15 @@ public class StatusTypeCategory implements Serializable {
   @Column(name = "party_types", length = 510, nullable = false)
   private List<String> partyTypes;
 
-  /** The sort index for the status type category. */
+  /** The sort order for the status type category. */
   @Schema(
-      description = "The sort index for the status type category",
+      description = "The sort order for the status type category",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the status type category is specific to. */
   @Schema(description = "The ID for the tenant the status type category is specific to")
@@ -221,12 +221,12 @@ public class StatusTypeCategory implements Serializable {
   }
 
   /**
-   * Returns the sort index for the status type category.
+   * Returns the sort order for the status type category.
    *
-   * @return the sort index for the status type category
+   * @return the sort order for the status type category
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -309,12 +309,12 @@ public class StatusTypeCategory implements Serializable {
   }
 
   /**
-   * Set the sort index for the status type category.
+   * Set the sort order for the status type category.
    *
-   * @param sortIndex the sort index for the status type category
+   * @param sortOrder the sort order for the status type category
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**

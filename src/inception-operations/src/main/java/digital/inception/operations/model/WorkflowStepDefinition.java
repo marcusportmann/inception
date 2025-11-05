@@ -46,7 +46,6 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.List;
 import org.springframework.boot.convert.DurationStyle;
-import org.springframework.util.StringUtils;
 
 /**
  * The {@code WorkflowStepDefinition} class encapsulates the definition of a step within a workflow.

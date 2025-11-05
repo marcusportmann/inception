@@ -32,11 +32,11 @@ public interface ContactMechanismRoleRepository
     extends JpaRepository<ContactMechanismRole, ContactMechanismRoleId> {
 
   /**
-   * Find all the contact mechanism roles sorted by locale ID, sort index, and name.
+   * Find all the contact mechanism roles sorted by locale ID, sort order, and name.
    *
-   * @return all the contact mechanism roles sorted by locale ID, sort index, and name.
+   * @return all the contact mechanism roles sorted by locale ID, sort order, and name.
    */
   @Query(
-      "select cmr from ContactMechanismRole cmr order by cmr.localeId, cmr.sortIndex DESC, cmr.name")
+      "select cmr from ContactMechanismRole cmr order by cmr.localeId, cmr.sortOrder DESC, cmr.name")
   List<ContactMechanismRole> findAllContactMechanismRoles();
 }

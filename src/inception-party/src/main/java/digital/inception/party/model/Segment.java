@@ -57,7 +57,7 @@ import org.springframework.util.StringUtils;
   "type",
   "localeId",
   "tenantId",
-  "sortIndex",
+  "sortOrder",
   "name",
   "description",
   "partyTypes"
@@ -71,7 +71,7 @@ import org.springframework.util.StringUtils;
       "type",
       "localeId",
       "tenantId",
-      "sortIndex",
+      "sortOrder",
       "name",
       "description",
       "partyTypes"
@@ -139,15 +139,15 @@ public class Segment implements Serializable {
   @Column(name = "party_types", length = 510, nullable = false)
   private List<String> partyTypes;
 
-  /** The sort index for the segment. */
+  /** The sort order for the segment. */
   @Schema(
-      description = "The sort index for the segment",
+      description = "The sort order for the segment",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "SortIndex", required = true)
+  @XmlElement(name = "SortOrder", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
-  private Integer sortIndex;
+  private Integer sortOrder;
 
   /** The ID for the tenant the segment is specific to. */
   @Schema(description = "The ID for the tenant the segment is specific to")
@@ -241,12 +241,12 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Returns the sort index for the segment.
+   * Returns the sort order for the segment.
    *
-   * @return the sort index for the segment
+   * @return the sort order for the segment
    */
-  public Integer getSortIndex() {
-    return sortIndex;
+  public Integer getSortOrder() {
+    return sortOrder;
   }
 
   /**
@@ -337,12 +337,12 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Set the sort index for the segment.
+   * Set the sort order for the segment.
    *
-   * @param sortIndex the sort index for the segment
+   * @param sortOrder the sort order for the segment
    */
-  public void setSortIndex(Integer sortIndex) {
-    this.sortIndex = sortIndex;
+  public void setSortOrder(Integer sortOrder) {
+    this.sortOrder = sortOrder;
   }
 
   /**
