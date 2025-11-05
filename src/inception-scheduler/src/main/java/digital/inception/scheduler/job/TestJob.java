@@ -23,12 +23,16 @@ import digital.inception.scheduler.service.SchedulerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * The {@code TestJob} class implements the test job.
  *
  * @author Marcus Portmann
  */
+@Component
+@Scope("prototype")
 @SuppressWarnings({"unused", "SpringJavaAutowiredMembersInspection"})
 public class TestJob implements JobImplementation {
 

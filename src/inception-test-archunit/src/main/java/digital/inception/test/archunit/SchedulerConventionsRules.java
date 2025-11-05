@@ -18,8 +18,15 @@ package digital.inception.test.archunit;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * The {@code SchedulerConventionsRules} class holds the ArchUnit rules that verify structural
@@ -40,9 +47,12 @@ public final class SchedulerConventionsRules {
           .and()
           .doNotHaveFullyQualifiedName("digital.inception.scheduler.model.JobImplementation")
           .should()
-          .haveSimpleNameEndingWith("Job") // 2. naming
+          .haveSimpleNameEndingWith("Job")
           .andShould()
-          .resideInAPackage("..job..") // 4. package
+          .resideInAPackage("..job..")
+          .andShould()
+          .beAnnotatedWith(Component.class)
+          .andShould(haveScopePrototype())
           .allowEmptyShould(true);
 
   /** Constructs a new {@code SchedulerConventionsRules}. */
@@ -61,5 +71,32 @@ public final class SchedulerConventionsRules {
     }
 
     JOB_IMPLEMENTATION_IMPLS_FOLLOW_NAMING_AND_LOCATION.check(classes);
+  }
+
+  private static ArchCondition<JavaClass> haveScopePrototype() {
+    return new ArchCondition<JavaClass>("be annotated with @Scope(\"prototype\")") {
+      @Override
+      public void check(JavaClass item, ConditionEvents events) {
+        boolean hasScope = item.isAnnotatedWith(Scope.class);
+        boolean ok = false;
+        String actual = null;
+
+        if (hasScope) {
+          Scope scope = item.getAnnotationOfType(Scope.class);
+          String value = scope.value();
+          String alias = scope.scopeName(); // Spring alias for 'value'
+          actual = (value != null && !value.isEmpty()) ? value : alias;
+          ok = ConfigurableBeanFactory.SCOPE_PROTOTYPE.equals(actual);
+        }
+
+        String message =
+            item.getName()
+                + (ok ? " has" : " does not have")
+                + " @Scope(\"prototype\")"
+                + (hasScope ? " (was \"" + actual + "\")" : " (annotation missing)");
+
+        events.add(new SimpleConditionEvent(item, ok, message));
+      }
+    };
   }
 }

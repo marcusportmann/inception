@@ -21,12 +21,16 @@ import digital.inception.scheduler.model.JobExecutionContext;
 import digital.inception.scheduler.model.JobImplementation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * The {@code DemoJob} class.
  *
  * @author Marcus Portmann
  */
+@Component
+@Scope("prototype")
 public class DemoJob implements JobImplementation {
 
   /* Logger */

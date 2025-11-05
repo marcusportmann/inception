@@ -60,6 +60,8 @@ import org.springframework.util.StringUtils;
 @Service
 public class SchedulerServiceImpl extends AbstractServiceBase implements SchedulerService {
 
+  private final ApplicationContext applicationContext;
+
   /** The Spring application event publisher. */
   private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -100,6 +102,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
 
     this.applicationEventPublisher = applicationEventPublisher;
     this.jobRepository = jobRepository;
+    this.applicationContext = applicationContext;
   }
 
   @Override
@@ -169,7 +172,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
 
     try {
       // Create a new instance of the job
-      Object jobObject = jobClass.getConstructor().newInstance();
+      Object jobObject = applicationContext.getBean(jobClass);
 
       // Check if the job is a valid job
       if (!(jobObject instanceof JobImplementation)) {
@@ -180,9 +183,6 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
       }
 
       jobImplementation = (JobImplementation) jobObject;
-
-      // Perform dependency injection for the job implementation
-      getApplicationContext().getAutowireCapableBeanFactory().autowireBean(jobImplementation);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to execute the job ("
