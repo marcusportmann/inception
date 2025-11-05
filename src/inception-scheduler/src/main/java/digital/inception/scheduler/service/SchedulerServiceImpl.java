@@ -171,7 +171,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
     JobImplementation jobImplementation;
 
     try {
-      // Create a new instance of the job
+      // Get the prototype scoped Spring managed bean for the job
       Object jobObject = applicationContext.getBean(jobClass);
 
       // Check if the job is a valid job
