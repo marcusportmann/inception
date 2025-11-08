@@ -38,35 +38,35 @@ import java.util.UUID;
 public interface ValidationService {
 
   /**
-   * Check whether a document attribute with the specified code is valid for a document.
+   * Check whether a document attribute with the specified name is valid for a document.
    *
    * @param documentDefinition the document definition the document is associated with
-   * @param attributeCode the code for the document attribute
+   * @param attributeName the name of the document attribute
    * @param attributeValue the value for the document attribute
-   * @return {@code true} if a document attribute with the specified code is valid or {@code false}
+   * @return {@code true} if a document attribute with the specified name is valid or {@code false}
    *     otherwise
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the validity of the document attribute code could not be
+   * @throws ServiceUnavailableException if the validity of the document attribute name could not be
    *     verified
    */
   boolean isValidDocumentAttribute(
-      DocumentDefinition documentDefinition, String attributeCode, String attributeValue)
+      DocumentDefinition documentDefinition, String attributeName, String attributeValue)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Check whether a workflow attribute with the specified code is valid for a workflow.
+   * Check whether a workflow attribute with the specified name is valid for a workflow.
    *
    * @param workflowDefinition the workflow definition the workflow is associated with
-   * @param attributeCode the code for the workflow attribute
+   * @param attributeName the name for the workflow attribute
    * @param attributeValue the value for the document attribute
-   * @return {@code true} if a workflow attribute with the specified code is valid or {@code false}
+   * @return {@code true} if a workflow attribute with the specified name is valid or {@code false}
    *     otherwise
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the validity of the workflow attribute code could not be
+   * @throws ServiceUnavailableException if the validity of the workflow attribute name could not be
    *     verified
    */
   boolean isValidWorkflowAttribute(
-      WorkflowDefinition workflowDefinition, String attributeCode, String attributeValue)
+      WorkflowDefinition workflowDefinition, String attributeName, String attributeValue)
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**

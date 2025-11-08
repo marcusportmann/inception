@@ -69,21 +69,21 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   @Override
   public boolean isValidDocumentAttribute(
-      DocumentDefinition documentDefinition, String attributeCode, String attributeValue)
+      DocumentDefinition documentDefinition, String attributeName, String attributeValue)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (documentDefinition == null) {
       throw new InvalidArgumentException("documentDefinition");
     }
 
-    if (!StringUtils.hasText(attributeCode)) {
-      throw new InvalidArgumentException("attributeCode");
+    if (!StringUtils.hasText(attributeName)) {
+      throw new InvalidArgumentException("attributeName");
     }
 
     try {
       // Find the attribute definition by code
       DocumentAttributeDefinition documentAttributeDefinition =
           documentDefinition.getAttributeDefinitions().stream()
-              .filter(attributeDefinition -> attributeCode.equals(attributeDefinition.getCode()))
+              .filter(attributeDefinition -> attributeName.equals(attributeDefinition.getName()))
               .findFirst()
               .orElse(null);
 
@@ -106,7 +106,7 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the document attribute ("
-              + attributeCode
+              + attributeName
               + ") for the document with the document definition ("
               + documentDefinition.getId()
               + ")",
@@ -116,21 +116,21 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
   @Override
   public boolean isValidWorkflowAttribute(
-      WorkflowDefinition workflowDefinition, String attributeCode, String attributeValue)
+      WorkflowDefinition workflowDefinition, String attributeName, String attributeValue)
       throws InvalidArgumentException, ServiceUnavailableException {
     if (workflowDefinition == null) {
       throw new InvalidArgumentException("workflowDefinition");
     }
 
-    if (!StringUtils.hasText(attributeCode)) {
-      throw new InvalidArgumentException("attributeCode");
+    if (!StringUtils.hasText(attributeName)) {
+      throw new InvalidArgumentException("attributeName");
     }
 
     try {
       // Find the attribute definition by code
       WorkflowAttributeDefinition workflowAttributeDefinition =
           workflowDefinition.getAttributeDefinitions().stream()
-              .filter(attributeDefinition -> attributeCode.equals(attributeDefinition.getCode()))
+              .filter(attributeDefinition -> attributeName.equals(attributeDefinition.getName()))
               .findFirst()
               .orElse(null);
 
@@ -153,7 +153,7 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to validate the workflow attribute ("
-              + attributeCode
+              + attributeName
               + ") for the workflow with the workflow definition ("
               + workflowDefinition.getId()
               + ")",
@@ -174,9 +174,9 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
     for (DocumentAttribute documentAttribute : documentAttributes) {
       if (!isValidDocumentAttribute(
-          documentDefinition, documentAttribute.getCode(), documentAttribute.getValue())) {
+          documentDefinition, documentAttribute.getName(), documentAttribute.getValue())) {
         throw new InvalidArgumentException(
-            parameter, "the document attribute (" + documentAttribute.getCode() + ") is invalid");
+            parameter, "the document attribute (" + documentAttribute.getName() + ") is invalid");
       }
     }
   }
@@ -194,9 +194,9 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
     for (WorkflowAttribute workflowAttribute : workflowAttributes) {
       if (!isValidWorkflowAttribute(
-          workflowDefinition, workflowAttribute.getCode(), workflowAttribute.getValue())) {
+          workflowDefinition, workflowAttribute.getName(), workflowAttribute.getValue())) {
         throw new InvalidArgumentException(
-            parameter, "the workflow attribute (" + workflowAttribute.getCode() + ") is invalid");
+            parameter, "the workflow attribute (" + workflowAttribute.getName() + ") is invalid");
       }
     }
   }
@@ -320,13 +320,13 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
       // Create a Set for O(1) lookup performance instead of O(n) stream operations
       Set<String> providedDocumentAttributeCodes =
-          documentAttributes.stream().map(DocumentAttribute::getCode).collect(Collectors.toSet());
+          documentAttributes.stream().map(DocumentAttribute::getName).collect(Collectors.toSet());
 
       // Filter and validate in a single pass
       String missingDocumentAttributeCode =
           requiredDocumentAttributeDefinitions.stream()
-              .map(DocumentAttributeDefinition::getCode)
-              .filter(code -> providedDocumentAttributeCodes.stream().noneMatch(code::equals))
+              .map(DocumentAttributeDefinition::getName)
+              .filter(name -> providedDocumentAttributeCodes.stream().noneMatch(name::equals))
               .findFirst()
               .orElse(null);
 
@@ -364,13 +364,13 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
 
       // Create a Set for O(1) lookup performance instead of O(n) stream operations
       Set<String> providedWorkflowAttributeCodes =
-          workflowAttributes.stream().map(WorkflowAttribute::getCode).collect(Collectors.toSet());
+          workflowAttributes.stream().map(WorkflowAttribute::getName).collect(Collectors.toSet());
 
       // Filter and validate in a single pass
       String missingWorkflowAttributeCode =
           requiredWorkflowAttributeDefinitions.stream()
-              .map(WorkflowAttributeDefinition::getCode)
-              .filter(code -> providedWorkflowAttributeCodes.stream().noneMatch(code::equals))
+              .map(WorkflowAttributeDefinition::getName)
+              .filter(name -> providedWorkflowAttributeCodes.stream().noneMatch(name::equals))
               .findFirst()
               .orElse(null);
 

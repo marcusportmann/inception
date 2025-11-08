@@ -46,6 +46,7 @@ import java.util.UUID;
   "parentId",
   "partyId",
   "pendWorkflow",
+  "name",
   "description",
   "externalReferences",
   "attributes",
@@ -64,6 +65,7 @@ import java.util.UUID;
       "parentId",
       "partyId",
       "pendWorkflow",
+      "name",
       "description",
       "externalReferences",
       "attributes",
@@ -125,6 +127,13 @@ public class InitiateWorkflowRequest implements Serializable {
   @Valid
   private List<InitiateWorkflowInteractionLink> interactionLinks;
 
+  /** The name of the workflow. */
+  @Schema(description = "The name of the workflow")
+  @JsonProperty
+  @XmlElement(name = "Name")
+  @Size(min = 1, max = 100)
+  private String name;
+
   /** The ID for the parent workflow. */
   @Schema(description = "The ID for the parent workflow")
   @JsonProperty
@@ -165,6 +174,7 @@ public class InitiateWorkflowRequest implements Serializable {
    * @param parentId the ID for the parent workflow
    * @param partyId the ID for the party the workflow is associated with
    * @param pendWorkflow pend the workflow
+   * @param name the name of the workflow
    * @param description the description for the workflow
    * @param externalReferences the external references for the workflow
    * @param attributes the attributes for the workflow
@@ -177,6 +187,7 @@ public class InitiateWorkflowRequest implements Serializable {
       UUID parentId,
       UUID partyId,
       boolean pendWorkflow,
+      String name,
       String description,
       List<WorkflowExternalReference> externalReferences,
       List<WorkflowAttribute> attributes,
@@ -187,6 +198,7 @@ public class InitiateWorkflowRequest implements Serializable {
     this.parentId = parentId;
     this.partyId = partyId;
     this.pendWorkflow = pendWorkflow;
+    this.name = name;
     this.description = description;
     this.externalReferences = externalReferences;
     this.attributes = attributes;
@@ -224,6 +236,7 @@ public class InitiateWorkflowRequest implements Serializable {
 
   /**
    * Returns the description for the workflow.
+   *
    * @return the description for the workflow
    */
   public String getDescription() {
@@ -246,6 +259,15 @@ public class InitiateWorkflowRequest implements Serializable {
    */
   public List<InitiateWorkflowInteractionLink> getInteractionLinks() {
     return interactionLinks;
+  }
+
+  /**
+   * Returns the name of the workflow.
+   *
+   * @return the name of the workflow
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -314,6 +336,7 @@ public class InitiateWorkflowRequest implements Serializable {
 
   /**
    * Set the description for the workflow.
+   *
    * @param description the description for the workflow
    */
   public void setDescription(String description) {
@@ -336,6 +359,15 @@ public class InitiateWorkflowRequest implements Serializable {
    */
   public void setInteractionLinks(List<InitiateWorkflowInteractionLink> interactionLinks) {
     this.interactionLinks = interactionLinks;
+  }
+
+  /**
+   * Set the name of the workflow.
+   *
+   * @param name the name of the workflow
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

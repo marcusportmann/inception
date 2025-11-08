@@ -253,7 +253,7 @@ public class EndToEndTests {
     // Create the document definitions
     DocumentAttributeDefinition documentAttributeDefinition =
         new DocumentAttributeDefinition(
-            "test_document_attribute_code",
+            "testDocumentAttribute",
             AttributeType.STRING,
             "Test Document Attribute",
             "Test Document Attribute Description",
@@ -319,6 +319,7 @@ public class EndToEndTests {
             "Test JSON Workflow Definition",
             "Test JSON Workflow Definition Description",
             "dummy",
+            "Test JSON Workflow",
             null,
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"),
@@ -333,7 +334,7 @@ public class EndToEndTests {
 
     workflowDefinition.addAttributeDefinition(
         new WorkflowAttributeDefinition(
-            "test_workflow_attribute_code",
+            "testWorkflowAttribute",
             AttributeType.STRING,
             "Test Workflow Attribute",
             "Test Workflow Attribute Description",
@@ -505,14 +506,14 @@ public class EndToEndTests {
             null,
             UUID.randomUUID(),
             false,
+            null,
             "This is the workflow description",
             List.of(
                 new WorkflowExternalReference(
                     "test_workflow_external_reference_code",
                     "test_workflow_external_reference_value")),
             List.of(
-                new WorkflowAttribute(
-                    "test_workflow_attribute_code", "test_workflow_attribute_value")),
+                new WorkflowAttribute("testWorkflowAttribute", "Test Workflow Attribute Value")),
             List.of(new InitiateWorkflowInteractionLink(firstInteractionId, firstConversationId)),
             List.of(new WorkflowVariable("testVariableName", "testVariableValue")),
             workflowDataJson);
@@ -560,8 +561,7 @@ public class EndToEndTests {
                       "test_document_external_reference_code",
                       "test_document_external_reference_value")),
               List.of(
-                  new DocumentAttribute(
-                      "test_document_attribute_code", "test_document_attribute_value")),
+                  new DocumentAttribute("testDocumentAttribute", "test_document_attribute_value")),
               null,
               multiPagePdfData);
 
@@ -685,8 +685,7 @@ public class EndToEndTests {
 
     List<AttributeSearchCriteria> workflowAttributeSearchCriteria = new ArrayList<>();
     workflowAttributeSearchCriteria.add(
-        new AttributeSearchCriteria(
-            "test_workflow_attribute_code", "test_workflow_attribute_value"));
+        new AttributeSearchCriteria("testWorkflowAttribute", "Test Workflow Attribute Value"));
 
     List<ExternalReferenceSearchCriteria> workflowExternalReferencesSearchCriteria =
         new ArrayList<>();

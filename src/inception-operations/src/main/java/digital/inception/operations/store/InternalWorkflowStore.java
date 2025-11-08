@@ -1397,13 +1397,13 @@ public class InternalWorkflowStore implements WorkflowStore {
                 Predicate subPredicate =
                     criteriaBuilder.equal(workflowAttributeRoot.get("workflowId"), root.get("id"));
 
-                if (StringUtils.hasText(attributeSearchCriteria.getCode())) {
+                if (StringUtils.hasText(attributeSearchCriteria.getName())) {
                   subPredicate =
                       criteriaBuilder.and(
                           subPredicate,
                           criteriaBuilder.equal(
-                              criteriaBuilder.lower(workflowAttributeRoot.get("code")),
-                              attributeSearchCriteria.getCode().toLowerCase()));
+                              criteriaBuilder.lower(workflowAttributeRoot.get("name")),
+                              attributeSearchCriteria.getName().toLowerCase()));
                 }
                 if (StringUtils.hasText(attributeSearchCriteria.getValue())) {
                   subPredicate =
@@ -1571,6 +1571,7 @@ public class InternalWorkflowStore implements WorkflowStore {
                   root.get("definitionId"),
                   root.get("definitionVersion"),
                   definitionRoot.get("name"),
+                  root.get("name"),
                   root.get("status"),
                   root.get("initiated"),
                   root.get("initiatedBy"),

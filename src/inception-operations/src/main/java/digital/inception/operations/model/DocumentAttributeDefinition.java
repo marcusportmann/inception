@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,7 +38,6 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The {@code DocumentAttributeDefinition} class holds the information for a document attribute
@@ -47,14 +47,14 @@ import java.util.Objects;
  */
 @Schema(description = "A document attribute definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "type", "name", "description", "required", "pattern"})
+@JsonPropertyOrder({"name", "type", "label", "description", "required", "pattern"})
 @XmlRootElement(
     name = "DocumentAttributeDefinition",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "DocumentAttributeDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "type", "name", "description", "required", "pattern"})
+    propOrder = {"name", "type", "label", "description", "required", "pattern"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_document_attribute_definitions")
@@ -63,18 +63,6 @@ import java.util.Objects;
 public class DocumentAttributeDefinition implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The code for the document attribute. */
-  @Schema(
-      description = "The code for the document attribute",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Code", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Id
-  @Column(name = "code", length = 50, nullable = false)
-  private String code;
 
   /** The ID for the document definition the document attribute definition is associated with. */
   @Schema(hidden = true)
@@ -95,6 +83,17 @@ public class DocumentAttributeDefinition implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
+  /** The label for the document attribute. */
+  @Schema(
+      description = "The label for the document attribute",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Label", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "label", length = 100, nullable = false)
+  private String label;
+
   /** The name of the document attribute. */
   @Schema(
       description = "The name of the document attribute",
@@ -103,6 +102,7 @@ public class DocumentAttributeDefinition implements Serializable {
   @XmlElement(name = "Name")
   @NotNull
   @Size(min = 1, max = 100)
+  @Id
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
@@ -155,24 +155,24 @@ public class DocumentAttributeDefinition implements Serializable {
   /**
    * Constructs a new {@code DocumentAttributeDefinition}.
    *
-   * @param code the code for the document attribute
-   * @param type the attribute type for the document attribute
    * @param name the name of the document attribute
+   * @param type the attribute type for the document attribute
+   * @param label the label for the document attribute
    * @param description the description for the document attribute
    * @param required is the document attribute required
    * @param pattern the regular expression pattern used to validate the value for a document
    *     attribute associated with the document attribute definition
    */
   public DocumentAttributeDefinition(
-      String code,
-      AttributeType type,
       String name,
+      AttributeType type,
+      String label,
       String description,
       boolean required,
       String pattern) {
-    this.code = code;
-    this.type = type;
     this.name = name;
+    this.type = type;
+    this.label = label;
     this.description = description;
     this.required = required;
     this.pattern = pattern;
@@ -200,16 +200,8 @@ public class DocumentAttributeDefinition implements Serializable {
 
     DocumentAttributeDefinition other = (DocumentAttributeDefinition) object;
 
-    return Objects.equals(code, other.code);
-  }
-
-  /**
-   * Returns the code for the document attribute.
-   *
-   * @return the code for the document attribute
-   */
-  public String getCode() {
-    return code;
+    return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
@@ -219,6 +211,15 @@ public class DocumentAttributeDefinition implements Serializable {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the label for the document attribute.
+   *
+   * @return the label for the document attribute
+   */
+  public String getLabel() {
+    return label;
   }
 
   /**
@@ -257,7 +258,8 @@ public class DocumentAttributeDefinition implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (code == null) ? 0 : code.hashCode();
+    return ((definitionId == null) ? 0 : definitionId.hashCode())
+        + ((name == null) ? 0 : name.hashCode());
   }
 
   /**
@@ -267,15 +269,6 @@ public class DocumentAttributeDefinition implements Serializable {
    */
   public boolean isRequired() {
     return required;
-  }
-
-  /**
-   * Set the code for the document attribute.
-   *
-   * @param code the code for the document attribute
-   */
-  public void setCode(String code) {
-    this.code = code;
   }
 
   /**
@@ -301,6 +294,15 @@ public class DocumentAttributeDefinition implements Serializable {
     } else {
       this.definitionId = null;
     }
+  }
+
+  /**
+   * Set the label for the document attribute.
+   *
+   * @param label the label for the document attribute
+   */
+  public void setLabel(String label) {
+    this.label = label;
   }
 
   /**

@@ -33,11 +33,11 @@ public class DocumentAttributeId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the document attribute. */
-  private String code;
-
   /** The ID for the document the document attribute is associated with. */
   private UUID documentId;
+
+  /** The name of the document attribute. */
+  private String name;
 
   /** Constructs a new {@code DocumentAttributeId}. */
   public DocumentAttributeId() {}
@@ -65,7 +65,7 @@ public class DocumentAttributeId implements Serializable {
     DocumentAttributeId other = (DocumentAttributeId) object;
 
     return Objects.equals(documentId, other.documentId)
-        && StringUtil.equalsIgnoreCase(code, other.code);
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
@@ -76,6 +76,6 @@ public class DocumentAttributeId implements Serializable {
   @Override
   public int hashCode() {
     return ((documentId == null) ? 0 : documentId.hashCode())
-        + ((code == null) ? 0 : code.hashCode());
+        + ((name == null) ? 0 : name.hashCode());
   }
 }

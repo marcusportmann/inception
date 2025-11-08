@@ -430,13 +430,13 @@ public class InternalDocumentStore implements DocumentStore {
                 Predicate subPredicate =
                     criteriaBuilder.equal(documentAttributeRoot.get("documentId"), root.get("id"));
 
-                if (StringUtils.hasText(attributeSearchCriteria.getCode())) {
+                if (StringUtils.hasText(attributeSearchCriteria.getName())) {
                   subPredicate =
                       criteriaBuilder.and(
                           subPredicate,
                           criteriaBuilder.equal(
-                              criteriaBuilder.lower(documentAttributeRoot.get("code")),
-                              attributeSearchCriteria.getCode().toLowerCase()));
+                              criteriaBuilder.lower(documentAttributeRoot.get("name")),
+                              attributeSearchCriteria.getName().toLowerCase()));
                 }
                 if (StringUtils.hasText(attributeSearchCriteria.getValue())) {
                   subPredicate =

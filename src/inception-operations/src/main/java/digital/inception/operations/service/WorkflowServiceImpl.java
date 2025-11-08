@@ -20,6 +20,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.util.TokenReplacer;
 import digital.inception.json.JsonClasspathResource;
 import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
@@ -70,6 +71,7 @@ import digital.inception.operations.model.ValidWorkflowDefinitionAttribute;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.WaiveWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
+import digital.inception.operations.model.WorkflowAttribute;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
@@ -99,6 +101,7 @@ import digital.inception.operations.store.WorkflowStore;
 import jakarta.annotation.PostConstruct;
 import java.lang.reflect.Constructor;
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -1625,12 +1628,32 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
+      // Determine the name of the workflow
+      String workflowName;
+
+      if (StringUtils.hasText(initiateWorkflowRequest.getName())) {
+        workflowName = initiateWorkflowRequest.getName();
+      } else if (StringUtils.hasText(workflowDefinition.getNameTemplate())) {
+        Map<String, String> templateParameters = new HashMap<>();
+
+        for (WorkflowAttribute workflowAttribute : initiateWorkflowRequest.getAttributes()) {
+          templateParameters.put(workflowAttribute.getName(), workflowAttribute.getValue());
+        }
+
+        TokenReplacer tokenReplacer = TokenReplacer.defaultStyle();
+
+        workflowName = tokenReplacer.replace(workflowDefinition.getNameTemplate(), templateParameters);
+      } else {
+        workflowName = workflowDefinition.getName();
+      }
+
       Workflow workflow =
           new Workflow(
               tenantId,
               initiateWorkflowRequest.getParentId(),
               workflowDefinition.getId(),
               workflowDefinition.getVersion(),
+              workflowName,
               initiateWorkflowRequest.getPendWorkflow()
                   ? WorkflowStatus.PENDING
                   : WorkflowStatus.ACTIVE,
@@ -2343,6 +2366,10 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         workflow.setVariables(updateWorkflowRequest.getVariables());
       }
 
+      if (StringUtils.hasText(updateWorkflowRequest.getName())) {
+        workflow.setName(updateWorkflowRequest.getName());
+      }
+
       if (StringUtils.hasText(updateWorkflowRequest.getData())) {
         workflow.setData(updateWorkflowRequest.getData());
 
@@ -2809,7 +2836,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     Set<String> providedWorkflowDefinitionAttributeCodes =
         workflowDefinition.getAttributes().stream()
-            .map(WorkflowDefinitionAttribute::getCode)
+            .map(WorkflowDefinitionAttribute::getName)
             .collect(Collectors.toSet());
 
     // Check for missing required workflow definition attributes

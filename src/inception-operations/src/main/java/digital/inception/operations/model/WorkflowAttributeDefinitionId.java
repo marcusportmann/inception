@@ -31,9 +31,6 @@ public class WorkflowAttributeDefinitionId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the workflow attribute. */
-  private String code;
-
   /** The ID for the workflow definition the workflow attribute definition is associated with. */
   private String definitionId;
 
@@ -41,6 +38,9 @@ public class WorkflowAttributeDefinitionId implements Serializable {
    * The version of the workflow definition the workflow attribute definition is associated with.
    */
   private int definitionVersion;
+
+  /** The name of the workflow attribute. */
+  private String name;
 
   /** Constructs a new {@code WorkflowAttributeDefinitionId}. */
   public WorkflowAttributeDefinitionId() {}
@@ -69,7 +69,7 @@ public class WorkflowAttributeDefinitionId implements Serializable {
 
     return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
         && definitionVersion == other.definitionVersion
-        && StringUtil.equalsIgnoreCase(code, other.code);
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
@@ -81,6 +81,6 @@ public class WorkflowAttributeDefinitionId implements Serializable {
   public int hashCode() {
     return ((definitionId == null) ? 0 : definitionId.hashCode())
         + ((definitionVersion == 0) ? 0 : Integer.hashCode(definitionVersion))
-        + ((code == null) ? 0 : code.hashCode());
+        + ((name == null) ? 0 : name.hashCode());
   }
 }

@@ -65,21 +65,16 @@ public class WorkflowVariable implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /**
-   * The name for the workflow variable.
-   *
-   * <p>NOTE: The length of this attribute aligns with the length of variable names in Camunda and
-   * Flowable.
-   */
+  /** The name for the workflow variable. */
   @Schema(
       description = "The name for the workflow variable",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 255)
+  @Size(min = 1, max = 100)
   @Id
-  @Column(name = "name", length = 255, nullable = false)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The variable type for the workflow variable. */

@@ -242,17 +242,17 @@
 
     <createTable tableName="operations_document_attribute_definitions"
       remarks="Document Attribute Definitions">
-      <column name="code" type="nvarchar(50)" remarks="The code for the document attribute">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="type" type="nvarchar(50)" remarks="The code for the attribute type for the document attribute">
-        <constraints nullable="false"/>
-      </column>
       <column name="definition_id" type="nvarchar(50)"
         remarks="The ID for the document definition the document attribute definition is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="name" type="nvarchar(100)" remarks="The name of the document attribute">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(50)" remarks="The code for the attribute type for the document attribute">
+        <constraints nullable="false"/>
+      </column>
+      <column name="label" type="nvarchar(100)" remarks="The label for the document attribute">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue=""
@@ -310,7 +310,7 @@
         remarks="The ID for the workflow engine the workflow engine attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="code" type="nvarchar(50)" remarks="The code for the workflow engine attribute">
+      <column name="name" type="nvarchar(100)" remarks="The name of the workflow engine attribute">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="value" type="nvarchar(1000)"
@@ -388,6 +388,7 @@
         remarks="The ID for the workflow engine the workflow definition is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="name_template" type="nvarchar(100)" remarks="The template string used to generate the names of workflows associated with the workflow definition"/>
       <column name="time_to_complete" type="nvarchar(50)"
         remarks="The ISO-8601 duration format amount of time to complete a workflow associated with the workflow definition"/>
       <column name="required_external_reference_types" type="nvarchar(510)"
@@ -427,8 +428,8 @@
         remarks="The version of the workflow definition the workflow definition attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="code" type="nvarchar(50)"
-        remarks="The code for the workflow definition attribute">
+      <column name="name" type="nvarchar(100)"
+        remarks="The name of the workflow definition attribute">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="value" type="nvarchar(1000)"
@@ -481,12 +482,6 @@
 
     <createTable tableName="operations_workflow_attribute_definitions"
       remarks="Workflow Attribute Definitions">
-      <column name="code" type="nvarchar(50)" remarks="The code for the workflow attribute">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="type" type="nvarchar(50)" remarks="The code for the attribute type for the workflow attribute">
-        <constraints nullable="false"/>
-      </column>
       <column name="definition_id" type="nvarchar(50)"
         remarks="The ID for the workflow definition the workflow attribute definition is associated with">
         <constraints primaryKey="true" nullable="false"/>
@@ -496,6 +491,12 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="name" type="nvarchar(100)" remarks="The name of the workflow attribute">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="nvarchar(50)" remarks="The code for the attribute type for the workflow attribute">
+        <constraints nullable="false"/>
+      </column>
+      <column name="label" type="nvarchar(100)" remarks="The label for the workflow attribute">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(200)" defaultValue=""
@@ -677,6 +678,9 @@
         remarks="The version of the workflow definition the workflow is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="name" type="nvarchar(100)" remarks="The name of the workflow">
+        <constraints nullable="false"/>
+      </column>
       <column name="status" type="nvarchar(50)" remarks="The code for the status of the workflow">
         <constraints nullable="false"/>
       </column>
@@ -750,7 +754,7 @@
         remarks="The ID for the workflow the workflow attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="code" type="nvarchar(50)" remarks="The code for the workflow attribute">
+      <column name="name" type="nvarchar(100)" remarks="The name of the workflow attribute">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="value" type="nvarchar(1000)" remarks="The value for the workflow attribute">
@@ -845,7 +849,7 @@
         remarks="The ID for the workflow the workflow variable is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="name" type="nvarchar(255)" remarks="The name of the workflow variable">
+      <column name="name" type="nvarchar(100)" remarks="The name of the workflow variable">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="type" type="nvarchar(50)" remarks="The code for the variable type for the workflow variable">
@@ -923,7 +927,7 @@
         remarks="The ID for the document the document attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="code" type="nvarchar(50)" remarks="The code for the document attribute">
+      <column name="name" type="nvarchar(100)" remarks="The name of the document attribute">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="value" type="nvarchar(1000)" remarks="The value for the document attribute">
@@ -1104,8 +1108,8 @@
         remarks="The ID for the interaction source the interaction source attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="code" type="nvarchar(50)"
-        remarks="The code for the interaction source attribute">
+      <column name="name" type="nvarchar(100)"
+        remarks="The name of the interaction source attribute">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="value" type="nvarchar(1000)"

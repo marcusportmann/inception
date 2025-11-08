@@ -67,6 +67,7 @@ import java.util.UUID;
   "parentId",
   "definitionId",
   "definitionVersion",
+  "name",
   "status",
   "partyId",
   "engineInstanceId",
@@ -99,6 +100,7 @@ import java.util.UUID;
       "parentId",
       "definitionId",
       "definitionVersion",
+      "name",
       "status",
       "partyId",
       "engineInstanceId",
@@ -138,7 +140,7 @@ public class Workflow implements Serializable {
   @XmlElement(name = "Attribute")
   @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @OrderBy("code")
+  @OrderBy("name")
   @JoinColumn(
       name = "workflow_id",
       referencedColumnName = "id",
@@ -326,6 +328,15 @@ public class Workflow implements Serializable {
   @Column(name = "initiated_by", length = 100, nullable = false)
   private String initiatedBy;
 
+  /** The name of the workflow. */
+  @Schema(description = "The name of the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "name", length = 100, nullable = false)
+  private String name;
+
   /** The ID for the parent workflow. */
   @Schema(description = "The ID for the parent workflow")
   @JsonProperty
@@ -402,6 +413,7 @@ public class Workflow implements Serializable {
    * @param parentId the ID for the parent workflow
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param definitionVersion the version of the workflow definition the workflow is associated with
+   * @param name the name of the workflow
    * @param status the status of the workflow
    * @param description the description for the workflow
    * @param externalReferences the external references for the workflow
@@ -416,6 +428,7 @@ public class Workflow implements Serializable {
       UUID parentId,
       String definitionId,
       int definitionVersion,
+      String name,
       WorkflowStatus status,
       String description,
       List<WorkflowExternalReference> externalReferences,
@@ -429,6 +442,7 @@ public class Workflow implements Serializable {
     this.parentId = parentId;
     this.definitionId = definitionId;
     this.definitionVersion = definitionVersion;
+    this.name = name;
     this.status = status;
     this.description = description;
     this.data = data;
@@ -445,7 +459,7 @@ public class Workflow implements Serializable {
 
     if ((attributes != null) && (!attributes.isEmpty())) {
       for (WorkflowAttribute attribute : attributes) {
-        addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
+        addAttribute(new WorkflowAttribute(attribute.getName(), attribute.getValue()));
       }
     }
 
@@ -457,85 +471,6 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Constructs a new {@code Workflow}.
-   *
-   * @param tenantId the ID for the tenant the workflow is associated with
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param definitionVersion the version of the workflow definition the workflow is associated with
-   * @param status the status of the workflow
-   * @param attributes the attributes for the workflow
-   * @param variables the variables for the workflow
-   * @param initiated the date and time the workflow was initiated
-   * @param initiatedBy the person or system that initiated the workflow
-   */
-  public Workflow(
-      UUID tenantId,
-      String definitionId,
-      int definitionVersion,
-      WorkflowStatus status,
-      List<WorkflowAttribute> attributes,
-      List<WorkflowVariable> variables,
-      OffsetDateTime initiated,
-      String initiatedBy) {
-    this.id = UuidCreator.getTimeOrderedEpoch();
-    this.tenantId = tenantId;
-    this.definitionId = definitionId;
-    this.definitionVersion = definitionVersion;
-    this.status = status;
-    this.initiated = initiated;
-    this.initiatedBy = initiatedBy;
-
-    for (WorkflowAttribute attribute : attributes) {
-      addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
-    }
-
-    for (WorkflowVariable variable : variables) {
-      addVariable(variable.cloneWorkflowVariable());
-    }
-  }
-
-  /**
-   * Constructs a new {@code Workflow}.
-   *
-   * @param tenantId the ID for the tenant the workflow is associated with
-   * @param parentId the ID for the parent workflow
-   * @param definitionId the ID for the workflow definition the workflow is associated with
-   * @param definitionVersion the version of the workflow definition the workflow is associated with
-   * @param status the status of the workflow
-   * @param attributes the attributes for the workflow
-   * @param variables the variables for the workflow
-   * @param initiated the date and time the workflow was initiated
-   * @param initiatedBy the person or system that initiated the workflow
-   */
-  public Workflow(
-      UUID tenantId,
-      UUID parentId,
-      String definitionId,
-      int definitionVersion,
-      WorkflowStatus status,
-      List<WorkflowAttribute> attributes,
-      List<WorkflowVariable> variables,
-      OffsetDateTime initiated,
-      String initiatedBy) {
-    this.id = UuidCreator.getTimeOrderedEpoch();
-    this.tenantId = tenantId;
-    this.parentId = parentId;
-    this.definitionId = definitionId;
-    this.definitionVersion = definitionVersion;
-    this.status = status;
-    this.initiated = initiated;
-    this.initiatedBy = initiatedBy;
-
-    for (WorkflowAttribute attribute : attributes) {
-      addAttribute(new WorkflowAttribute(attribute.getCode(), attribute.getValue()));
-    }
-
-    for (WorkflowVariable variable : variables) {
-      addVariable(variable.cloneWorkflowVariable());
-    }
-  }
-
-  /**
    * Add the attribute for the workflow.
    *
    * @param attribute the attribute
@@ -543,7 +478,7 @@ public class Workflow implements Serializable {
   public void addAttribute(WorkflowAttribute attribute) {
     attributes.removeIf(
         existingAttribute ->
-            StringUtil.equalsIgnoreCase(existingAttribute.getCode(), attribute.getCode()));
+            StringUtil.equalsIgnoreCase(existingAttribute.getName(), attribute.getName()));
 
     attribute.setWorkflow(this);
 
@@ -637,15 +572,15 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Retrieve the attribute with the specified code for the workflow.
+   * Retrieve the attribute with the specified name for the workflow.
    *
-   * @param code the code for the attribute
-   * @return an Optional containing the attribute with the specified code for the workflow or an
+   * @param name the name of the attribute
+   * @return an Optional containing the attribute with the specified name for the workflow or an
    *     empty Optional if the attribute could not be found
    */
-  public Optional<WorkflowAttribute> getAttribute(String code) {
+  public Optional<WorkflowAttribute> getAttribute(String name) {
     return attributes.stream()
-        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getName(), name))
         .findFirst();
   }
 
@@ -807,6 +742,15 @@ public class Workflow implements Serializable {
   }
 
   /**
+   * Returns the name of the workflow.
+   *
+   * @return the name of the workflow
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
    * Returns the ID for the parent workflow.
    *
    * @return the ID for the parent workflow
@@ -920,13 +864,13 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Remove the attribute with the specified code for the workflow.
+   * Remove the attribute with the specified name for the workflow.
    *
-   * @param code the code for the attribute
+   * @param name the name of the attribute
    */
-  public void removeAttribute(String code) {
+  public void removeAttribute(String name) {
     attributes.removeIf(
-        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
+        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getName(), name));
   }
 
   /**
@@ -1109,6 +1053,15 @@ public class Workflow implements Serializable {
     interactionLinks.forEach(interactionLink -> interactionLink.setWorkflow(this));
     this.interactionLinks.clear();
     this.interactionLinks.addAll(interactionLinks);
+  }
+
+  /**
+   * Set the name of the workflow.
+   *
+   * @param name the name of the workflow
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

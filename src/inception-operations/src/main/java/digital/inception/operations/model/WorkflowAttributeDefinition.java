@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,7 +38,6 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The {@code WorkflowAttributeDefinition} class holds the information for a workflow attribute
@@ -47,14 +47,14 @@ import java.util.Objects;
  */
 @Schema(description = "A workflow attribute definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "type", "name", "description", "required", "pattern"})
+@JsonPropertyOrder({"name", "type", "label", "description", "required", "pattern"})
 @XmlRootElement(
     name = "WorkflowAttributeDefinition",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowAttributeDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "type", "name", "description", "required", "pattern"})
+    propOrder = {"name", "type", "label", "description", "required", "pattern"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_attribute_definitions")
@@ -63,18 +63,6 @@ import java.util.Objects;
 public class WorkflowAttributeDefinition implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The code for the workflow attribute. */
-  @Schema(
-      description = "The code for the workflow attribute",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Code", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Id
-  @Column(name = "code", length = 50, nullable = false)
-  private String code;
 
   /** The ID for the workflow definition the workflow attribute definition is associated with. */
   @Schema(hidden = true)
@@ -105,6 +93,17 @@ public class WorkflowAttributeDefinition implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
+  /** The label for the workflow attribute. */
+  @Schema(
+      description = "The label for the workflow attribute",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Label", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "label", length = 100, nullable = false)
+  private String label;
+
   /** The name of the workflow attribute. */
   @Schema(
       description = "The name of the workflow attribute",
@@ -113,6 +112,7 @@ public class WorkflowAttributeDefinition implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Id
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
@@ -165,24 +165,24 @@ public class WorkflowAttributeDefinition implements Serializable {
   /**
    * Constructs a new {@code WorkflowAttributeDefinition}.
    *
-   * @param code the code for the workflow attribute
-   * @param type the attribute type for the workflow attribute
    * @param name the name of the workflow attribute
+   * @param type the attribute type for the workflow attribute
+   * @param label the label for the workflow attribute
    * @param description the description for the workflow attribute
    * @param required is the workflow attribute required
    * @param pattern the regular expression pattern used to validate the value for a workflow
    *     attribute associated with the workflow attribute definition
    */
   public WorkflowAttributeDefinition(
-      String code,
-      AttributeType type,
       String name,
+      AttributeType type,
+      String label,
       String description,
       boolean required,
       String pattern) {
-    this.code = code;
-    this.type = type;
     this.name = name;
+    this.type = type;
+    this.label = label;
     this.description = description;
     this.required = required;
     this.pattern = pattern;
@@ -210,16 +210,9 @@ public class WorkflowAttributeDefinition implements Serializable {
 
     WorkflowAttributeDefinition other = (WorkflowAttributeDefinition) object;
 
-    return Objects.equals(code, other.code);
-  }
-
-  /**
-   * Returns the code for the workflow attribute.
-   *
-   * @return the code for the workflow attribute
-   */
-  public String getCode() {
-    return code;
+    return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
+        && definitionVersion == other.definitionVersion
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
@@ -229,6 +222,15 @@ public class WorkflowAttributeDefinition implements Serializable {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the label for the workflow attribute.
+   *
+   * @return the label for the workflow attribute
+   */
+  public String getLabel() {
+    return label;
   }
 
   /**
@@ -267,7 +269,9 @@ public class WorkflowAttributeDefinition implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (code == null) ? 0 : code.hashCode();
+    return ((definitionId == null) ? 0 : definitionId.hashCode())
+        + (Integer.hashCode(definitionVersion))
+        + ((name == null) ? 0 : name.hashCode());
   }
 
   /**
@@ -280,21 +284,21 @@ public class WorkflowAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the code for the workflow attribute.
-   *
-   * @param code the code for the workflow attribute
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
    * Set the description for the workflow attribute.
    *
    * @param description the description for the workflow attribute
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Set the label for the workflow attribute.
+   *
+   * @param label the label for the workflow attribute
+   */
+  public void setLabel(String label) {
+    this.label = label;
   }
 
   /**

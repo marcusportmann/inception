@@ -183,6 +183,7 @@ public class WorkflowServiceTests {
             "Test Workflow Definition Description",
             "dummy",
             null,
+            null,
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"),
             null,
@@ -229,6 +230,7 @@ public class WorkflowServiceTests {
             null,
             UUID.randomUUID(),
             false,
+            null,
             null,
             List.of(),
             List.of(),
@@ -313,7 +315,7 @@ public class WorkflowServiceTests {
             null,
             List.of(
                 new DocumentAttributeDefinition(
-                    "test_document_attribute_code",
+                    "testDocumentAttribute",
                     AttributeType.STRING,
                     "Test Document Attribute",
                     "Test Document Attribute Description",
@@ -360,13 +362,14 @@ public class WorkflowServiceTests {
             "Test JSON Workflow Definition",
             "Test JSON Workflow Definition Description",
             "dummy",
+            "Test JSON Workflow (${testWorkflowAttribute})",
             null,
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"),
             null,
             List.of(
                 new WorkflowAttributeDefinition(
-                    "test_workflow_attribute_code",
+                    "testWorkflowAttribute",
                     AttributeType.STRING,
                     "Test Workflow Attribute",
                     "Test Workflow Attribute Description",
@@ -493,14 +496,14 @@ public class WorkflowServiceTests {
             null,
             UUID.randomUUID(),
             false,
+            null,
             "This is the workflow description",
             List.of(
                 new WorkflowExternalReference(
                     "test_workflow_external_reference_code",
                     "test_workflow_external_reference_value")),
             List.of(
-                new WorkflowAttribute(
-                    "test_workflow_attribute_code", "test_workflow_attribute_value")),
+                new WorkflowAttribute("testWorkflowAttribute", "Test Workflow Attribute Value")),
             List.of(),
             List.of(new WorkflowVariable("testVariableName", "testVariableValue")),
             null);
@@ -520,8 +523,7 @@ public class WorkflowServiceTests {
 
     List<AttributeSearchCriteria> workflowAttributeSearchCriteria = new ArrayList<>();
     workflowAttributeSearchCriteria.add(
-        new AttributeSearchCriteria(
-            "test_workflow_attribute_code", "test_workflow_attribute_value"));
+        new AttributeSearchCriteria("testWorkflowAttribute", "Test Workflow Attribute Value"));
 
     List<ExternalReferenceSearchCriteria> workflowExternalReferencesSearchCriteria =
         new ArrayList<>();
@@ -633,8 +635,7 @@ public class WorkflowServiceTests {
                     "test_document_external_reference_code",
                     "test_document_external_reference_value")),
             List.of(
-                new DocumentAttribute(
-                    "test_document_attribute_code", "test_document_attribute_value")),
+                new DocumentAttribute("testDocumentAttribute", "test_document_attribute_value")),
             null,
             multiPagePdfData);
 
@@ -671,8 +672,7 @@ public class WorkflowServiceTests {
     assertEquals(FileType.PDF, retrievedDocument.getFileType());
     assertEquals(multiPagePdfData.length, retrievedDocument.getData().length);
     assertEquals(1, retrievedDocument.getAttributes().size());
-    assertEquals(
-        "test_document_attribute_code", retrievedDocument.getAttributes().getFirst().getCode());
+    assertEquals("testDocumentAttribute", retrievedDocument.getAttributes().getFirst().getName());
     assertEquals(
         "test_document_attribute_value", retrievedDocument.getAttributes().getFirst().getValue());
 
@@ -964,11 +964,12 @@ public class WorkflowServiceTests {
         new UpdateWorkflowRequest(
             workflow.getId(),
             WorkflowStatus.COMPLETED,
+            null,
             "This is the updated workflow description",
             null,
             List.of(
                 new WorkflowAttribute(
-                    "test_workflow_attribute_code", "test_workflow_attribute_value_updated")),
+                    "testWorkflowAttribute", "Test Workflow Attribute Value_updated")),
             null,
             testWorkflowDataJson);
 
@@ -982,7 +983,7 @@ public class WorkflowServiceTests {
     assertEquals("This is the updated workflow description", retrievedWorkflow.getDescription());
     assertEquals(testWorkflowDataJson, retrievedWorkflow.getData());
     assertEquals(
-        "test_workflow_attribute_value_updated",
+        "Test Workflow Attribute Value_updated",
         retrievedWorkflow.getAttributes().getFirst().getValue());
 
     // Finalize the workflow
@@ -1194,13 +1195,14 @@ public class WorkflowServiceTests {
             "Test Shared Workflow Definition",
             "Test Shared Workflow Definition Description",
             workflowEngine.getId(),
+            "Test Shared Workflow (${testWorkflowAttribute})",
             null,
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"),
             null,
             List.of(
                 new WorkflowAttributeDefinition(
-                    "test_workflow_attribute_code",
+                    "testWorkflowAttribute",
                     AttributeType.STRING,
                     "Test Workflow Attribute",
                     "Test Workflow Attribute Description",
@@ -1241,13 +1243,14 @@ public class WorkflowServiceTests {
             "Test Tenant Workflow Definition",
             "Test Tenant Workflow Definition Description",
             workflowEngine.getId(),
+            "Test Tenant Workflow (${testWorkflowAttribute})",
             null,
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"),
             null,
             List.of(
                 new WorkflowAttributeDefinition(
-                    "test_workflow_attribute_code",
+                    "testWorkflowAttribute",
                     AttributeType.STRING,
                     "Test Workflow Attribute",
                     "Test Workflow Attribute Description",
@@ -1267,7 +1270,7 @@ public class WorkflowServiceTests {
 
     tenantWorkflowDefinition.addAttributeDefinition(
         new WorkflowAttributeDefinition(
-            "another_test_workflow_attribute_code",
+            "anotherTestWorkflowAttribute",
             AttributeType.STRING,
             "Another Test Workflow Attribute",
             "Another Test Workflow Attribute Description",
@@ -1493,13 +1496,25 @@ public class WorkflowServiceTests {
       WorkflowAttributeDefinition workflowAttributeDefinition1,
       WorkflowAttributeDefinition workflowAttributeDefinition2) {
     assertEquals(
-        workflowAttributeDefinition1.getCode(),
-        workflowAttributeDefinition2.getCode(),
-        "The code values for the workflow attribute definitions do not match");
-    assertEquals(
         workflowAttributeDefinition1.getDescription(),
         workflowAttributeDefinition2.getDescription(),
         "The description values for the workflow attribute definitions do not match");
+    assertEquals(
+        workflowAttributeDefinition1.getLabel(),
+        workflowAttributeDefinition2.getLabel(),
+        "The label values for the workflow attribute definitions do not match");
+    assertEquals(
+        workflowAttributeDefinition1.getName(),
+        workflowAttributeDefinition2.getName(),
+        "The name values for the workflow attribute definitions do not match");
+    assertEquals(
+        workflowAttributeDefinition1.getPattern(),
+        workflowAttributeDefinition2.getPattern(),
+        "The pattern values for the workflow attribute definitions do not match");
+    assertEquals(
+        workflowAttributeDefinition1.getType(),
+        workflowAttributeDefinition2.getType(),
+        "The type values for the workflow attribute definitions do not match");
     assertEquals(
         workflowAttributeDefinition1.isRequired(),
         workflowAttributeDefinition2.isRequired(),
@@ -1630,11 +1645,11 @@ public class WorkflowServiceTests {
                       .anyMatch(
                           attribute2 ->
                               StringUtil.equalsIgnoreCase(
-                                  attribute1.getCode(), attribute2.getCode()));
+                                  attribute1.getName(), attribute2.getName()));
               if (!foundAttribute) {
                 fail(
                     "Failed to find the attribute ("
-                        + attribute1.getCode()
+                        + attribute1.getName()
                         + ") for the workflow definition ("
                         + workflowDefinition1.getId()
                         + ") version ("
@@ -1900,7 +1915,7 @@ public class WorkflowServiceTests {
               if (!foundAttribute) {
                 fail(
                     "Failed to find the attribute ("
-                        + workflowEngineAttribute1.getCode()
+                        + workflowEngineAttribute1.getName()
                         + ") for the workflow engine ("
                         + workflowEngine1.getId()
                         + ")");
@@ -2077,7 +2092,7 @@ public class WorkflowServiceTests {
               if (!foundAttribute) {
                 fail(
                     "Failed to find the attribute ("
-                        + workflowAttribute1.getCode()
+                        + workflowAttribute1.getName()
                         + ") for the workflow ("
                         + workflow1.getId()
                         + ")");

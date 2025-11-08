@@ -33,8 +33,8 @@ public class InteractionSourceAttributeId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the interaction source attribute. */
-  private String code;
+  /** The name of the interaction source attribute. */
+  private String name;
 
   /** The ID for the interaction source the interaction source attribute is associated with. */
   private UUID sourceId;
@@ -65,7 +65,7 @@ public class InteractionSourceAttributeId implements Serializable {
     InteractionSourceAttributeId other = (InteractionSourceAttributeId) object;
 
     return Objects.equals(sourceId, other.sourceId)
-        && StringUtil.equalsIgnoreCase(code, other.code);
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
@@ -75,6 +75,6 @@ public class InteractionSourceAttributeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((sourceId == null) ? 0 : sourceId.hashCode()) + ((code == null) ? 0 : code.hashCode());
+    return ((sourceId == null) ? 0 : sourceId.hashCode()) + ((name == null) ? 0 : name.hashCode());
   }
 }

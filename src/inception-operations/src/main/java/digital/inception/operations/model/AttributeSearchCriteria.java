@@ -39,26 +39,26 @@ import java.io.Serializable;
     description =
         "The attribute search criteria to apply when searching for documents or workflows")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "value"})
+@JsonPropertyOrder({"name", "value"})
 @XmlRootElement(
     name = "AttributeSearchCriteria",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "AttributeSearchCriteria",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "value"})
+    propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AttributeSearchCriteria implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the attribute. */
-  @Schema(description = "The code for the attribute")
+  /** The name of the attribute. */
+  @Schema(description = "The name of the attribute")
   @JsonProperty
-  @XmlElement(name = "Code")
+  @XmlElement(name = "Name")
   @Size(min = 1, max = 50)
-  private String code;
+  private String name;
 
   /** The value for the attribute. */
   @Schema(description = "The value for the attribute")
@@ -73,21 +73,21 @@ public class AttributeSearchCriteria implements Serializable {
   /**
    * Constructs a new {@code AttributeSearchCriteria}.
    *
-   * @param code the code for the attribute
+   * @param name the name of the attribute
    * @param value the value for the attribute
    */
-  public AttributeSearchCriteria(String code, String value) {
-    this.code = code;
+  public AttributeSearchCriteria(String name, String value) {
+    this.name = name;
     this.value = value;
   }
 
   /**
-   * Returns the code for the attribute.
+   * Returns the name of the attribute.
    *
-   * @return the code for the attribute
+   * @return the name of the attribute
    */
-  public String getCode() {
-    return code;
+  public String getName() {
+    return name;
   }
 
   /**
@@ -100,12 +100,12 @@ public class AttributeSearchCriteria implements Serializable {
   }
 
   /**
-   * Set the code for the attribute.
+   * Set the name of the attribute.
    *
-   * @param code the code for the attribute
+   * @param name the name of the attribute
    */
-  public void setCode(String code) {
-    this.code = code;
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

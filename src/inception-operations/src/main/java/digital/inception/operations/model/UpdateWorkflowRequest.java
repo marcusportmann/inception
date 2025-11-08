@@ -44,6 +44,7 @@ import java.util.UUID;
 @JsonPropertyOrder({
   "workflowId",
   "status",
+  "name",
   "description",
   "externalReferences",
   "attributes",
@@ -57,6 +58,7 @@ import java.util.UUID;
     propOrder = {
       "workflowId",
       "status",
+      "name",
       "description",
       "externalReferences",
       "attributes",
@@ -99,6 +101,13 @@ public class UpdateWorkflowRequest implements Serializable {
   @Valid
   private List<WorkflowExternalReference> externalReferences;
 
+  /** The name of the workflow. */
+  @Schema(description = "The name of the workflow")
+  @JsonProperty
+  @XmlElement(name = "Name")
+  @Size(min = 1, max = 100)
+  private String name;
+
   /** The updated status of the workflow. */
   @Schema(description = "The updated status of the workflow")
   @JsonProperty
@@ -128,6 +137,7 @@ public class UpdateWorkflowRequest implements Serializable {
    *
    * @param workflowId the ID for the workflow
    * @param status the updated status of the workflow
+   * @param name the name of the workflow
    * @param description the description for the workflow
    * @param externalReferences the external references for the workflow
    * @param attributes the attributes for the workflow
@@ -137,6 +147,7 @@ public class UpdateWorkflowRequest implements Serializable {
   public UpdateWorkflowRequest(
       UUID workflowId,
       WorkflowStatus status,
+      String name,
       String description,
       List<WorkflowExternalReference> externalReferences,
       List<WorkflowAttribute> attributes,
@@ -144,6 +155,7 @@ public class UpdateWorkflowRequest implements Serializable {
       String data) {
     this.workflowId = workflowId;
     this.status = status;
+    this.name = name;
     this.description = description;
     this.externalReferences = externalReferences;
     this.attributes = attributes;
@@ -185,6 +197,15 @@ public class UpdateWorkflowRequest implements Serializable {
    */
   public List<WorkflowExternalReference> getExternalReferences() {
     return externalReferences;
+  }
+
+  /**
+   * Returns the name of the workflow.
+   *
+   * @return the name of the workflow
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -248,6 +269,15 @@ public class UpdateWorkflowRequest implements Serializable {
    */
   public void setExternalReferences(List<WorkflowExternalReference> externalReferences) {
     this.externalReferences = externalReferences;
+  }
+
+  /**
+   * Set the name of the workflow.
+   *
+   * @param name the name of the workflow
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

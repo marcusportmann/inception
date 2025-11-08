@@ -71,6 +71,7 @@ import org.springframework.util.StringUtils;
   "name",
   "description",
   "engineId",
+  "nameTemplate",
   "timeToComplete",
   "attributes",
   "documentDefinitions",
@@ -92,6 +93,7 @@ import org.springframework.util.StringUtils;
       "name",
       "description",
       "engineId",
+      "nameTemplate",
       "timeToComplete",
       "attributes",
       "documentDefinitions",
@@ -117,7 +119,7 @@ public class WorkflowDefinition implements Serializable {
   @XmlElement(name = "AttributeDefinition")
   @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @OrderBy("code")
+  @OrderBy("name")
   @JoinColumns({
     @JoinColumn(
         name = "definition_id",
@@ -140,7 +142,7 @@ public class WorkflowDefinition implements Serializable {
   @XmlElement(name = "Attribute")
   @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @OrderBy("code")
+  @OrderBy("name")
   @JoinColumns({
     @JoinColumn(
         name = "definition_id",
@@ -303,6 +305,14 @@ public class WorkflowDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /** The template string used to generate the names of workflows associated with the workflow definition. */
+  @Schema(description = "The template string used to generate the names of workflows associated with the workflow definition")
+  @JsonProperty
+  @XmlElement(name = "NameTemplate")
+  @Size(min = 1, max = 100)
+  @Column(name = "name_template", length = 100)
+  private String nameTemplate;
+
   /** The codes for the required external reference types for the workflow definition. */
   @Schema(
       description =
@@ -385,6 +395,7 @@ public class WorkflowDefinition implements Serializable {
    * @param name the name of the workflow definition
    * @param description the description for the workflow definition
    * @param engineId the ID for the workflow engine the workflow definition is associated with
+   * @param nameTemplate the template string used to generate the names of workflows associated with the workflow definition
    * @param timeToComplete the ISO-8601 duration format amount of time to complete a workflow
    *     associated with the workflow definition
    * @param validationSchemaType the validation schema type for the workflow definition
@@ -407,6 +418,7 @@ public class WorkflowDefinition implements Serializable {
       String name,
       String description,
       String engineId,
+      String nameTemplate,
       String timeToComplete,
       ValidationSchemaType validationSchemaType,
       String validationSchema,
@@ -425,6 +437,7 @@ public class WorkflowDefinition implements Serializable {
     this.name = name;
     this.description = description;
     this.engineId = engineId;
+    this.nameTemplate = nameTemplate;
     this.timeToComplete = timeToComplete;
 
     this.validationSchemaType = validationSchemaType;
@@ -491,7 +504,7 @@ public class WorkflowDefinition implements Serializable {
   public void addAttribute(WorkflowDefinitionAttribute attribute) {
     attributes.removeIf(
         existingAttribute ->
-            StringUtil.equalsIgnoreCase(existingAttribute.getCode(), attribute.getCode()));
+            StringUtil.equalsIgnoreCase(existingAttribute.getName(), attribute.getName()));
 
     attribute.setWorkflowDefinition(this);
 
@@ -507,7 +520,7 @@ public class WorkflowDefinition implements Serializable {
     attributeDefinitions.removeIf(
         existingAttributeDefinition ->
             StringUtil.equalsIgnoreCase(
-                existingAttributeDefinition.getCode(), attributeDefinition.getCode()));
+                existingAttributeDefinition.getName(), attributeDefinition.getName()));
 
     attributeDefinition.setWorkflowDefinition(this);
 
@@ -652,15 +665,15 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Retrieve the attribute with the specified code for the workflow definition.
+   * Retrieve the attribute with the specified name for the workflow definition.
    *
-   * @param code the code for the attribute
-   * @return an Optional containing the attribute with the specified code for the workflow
+   * @param name the name of the attribute
+   * @return an Optional containing the attribute with the specified name for the workflow
    *     definition or an empty Optional if the attribute could not be found
    */
-  public Optional<WorkflowDefinitionAttribute> getAttribute(String code) {
+  public Optional<WorkflowDefinitionAttribute> getAttribute(String name) {
     return attributes.stream()
-        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getName(), name))
         .findFirst();
   }
 
@@ -768,6 +781,17 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns the template string used to generate the names of workflows associated with the
+   * workflow definition.
+   *
+   * @return the template string used to generate the names of workflows associated with the
+   *     workflow definition
+   */
+  public String getNameTemplate() {
+    return nameTemplate;
+  }
+
+  /**
    * Returns the permissions for the workflow definition.
    *
    * @return the permissions for the workflow definition
@@ -870,24 +894,24 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Remove the attribute with the specified code for the workflow definition.
+   * Remove the attribute with the specified name for the workflow definition.
    *
-   * @param code the code for the attribute
+   * @param name the name of the attribute
    */
-  public void removeAttribute(String code) {
+  public void removeAttribute(String name) {
     attributes.removeIf(
-        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
+        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getName(), name));
   }
 
   /**
    * Remove the workflow attribute definition with the specified code for the workflow definition.
    *
-   * @param code the code for the workflow attribute definition
+   * @param name the name of the workflow attribute definition
    */
-  public void removeAttributeDefinition(String code) {
+  public void removeAttributeDefinition(String name) {
     attributeDefinitions.removeIf(
         existingAttributeDefinition ->
-            StringUtil.equalsIgnoreCase(existingAttributeDefinition.getCode(), code));
+            StringUtil.equalsIgnoreCase(existingAttributeDefinition.getName(), name));
   }
 
   /**
@@ -1031,6 +1055,17 @@ public class WorkflowDefinition implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the template string used to generate the names of workflows associated with the workflow
+   * definition.
+   *
+   * @param nameTemplate the template string used to generate the names of workflows associated with
+   *     the workflow definition
+   */
+  public void setNameTemplate(String nameTemplate) {
+    this.nameTemplate = nameTemplate;
   }
 
   /**

@@ -49,12 +49,12 @@ import java.util.UUID;
  */
 @Schema(description = "An attribute for a workflow")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "value"})
+@JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "WorkflowAttribute", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowAttribute",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "value"})
+    propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_attributes")
@@ -63,17 +63,17 @@ public class WorkflowAttribute implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the workflow attribute. */
+  /** The name of the workflow attribute. */
   @Schema(
-      description = "The code for the workflow attribute",
+      description = "The name of the workflow attribute",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElement(name = "Code", required = true)
+  @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 50)
+  @Size(min = 1, max = 100)
   @Id
-  @Column(name = "code", length = 50, nullable = false)
-  private String code;
+  @Column(name = "name", length = 100, nullable = false)
+  private String name;
 
   /** The value for the workflow attribute. */
   @Schema(
@@ -100,11 +100,11 @@ public class WorkflowAttribute implements Serializable {
   /**
    * Constructs a new {@code WorkflowAttribute}.
    *
-   * @param code the code for the workflow attribute
+   * @param name the name of the workflow attribute
    * @param value the value for the workflow attribute
    */
-  public WorkflowAttribute(String code, String value) {
-    this.code = code;
+  public WorkflowAttribute(String name, String value) {
+    this.name = name;
     this.value = value;
   }
 
@@ -131,16 +131,16 @@ public class WorkflowAttribute implements Serializable {
     WorkflowAttribute other = (WorkflowAttribute) object;
 
     return Objects.equals(workflowId, other.workflowId)
-        && StringUtil.equalsIgnoreCase(code, other.code);
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
-   * Returns the code for the workflow attribute.
+   * Returns the name of the workflow attribute.
    *
-   * @return the code for the workflow attribute
+   * @return the name of the workflow attribute
    */
-  public String getCode() {
-    return code;
+  public String getName() {
+    return name;
   }
 
   /**
@@ -160,16 +160,16 @@ public class WorkflowAttribute implements Serializable {
   @Override
   public int hashCode() {
     return ((workflowId == null) ? 0 : workflowId.hashCode())
-        + ((code == null) ? 0 : code.hashCode());
+        + ((name == null) ? 0 : name.hashCode());
   }
 
   /**
-   * Set the code for the workflow attribute.
+   * Set the name of the workflow attribute.
    *
-   * @param code the code for the workflow attribute
+   * @param name the name of the workflow attribute
    */
-  public void setCode(String code) {
-    this.code = code;
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

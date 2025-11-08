@@ -31,11 +31,11 @@ public class WorkflowEngineAttributeId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the workflow engine attribute. */
-  private String code;
-
   /** The ID for the workflow engine the workflow engine attribute is associated with. */
   private String engineId;
+
+  /** The name of the workflow engine attribute. */
+  private String name;
 
   /** Constructs a new {@code WorkflowEngineAttributeId}. */
   public WorkflowEngineAttributeId() {}
@@ -63,7 +63,7 @@ public class WorkflowEngineAttributeId implements Serializable {
     WorkflowEngineAttributeId other = (WorkflowEngineAttributeId) object;
 
     return StringUtil.equalsIgnoreCase(engineId, other.engineId)
-        && StringUtil.equalsIgnoreCase(code, other.code);
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
@@ -73,6 +73,6 @@ public class WorkflowEngineAttributeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((engineId == null) ? 0 : engineId.hashCode()) + ((code == null) ? 0 : code.hashCode());
+    return ((engineId == null) ? 0 : engineId.hashCode()) + ((name == null) ? 0 : name.hashCode());
   }
 }

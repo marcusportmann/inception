@@ -33,8 +33,8 @@ public class WorkflowAttributeId implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the workflow attribute. */
-  private String code;
+  /** The name of the workflow attribute. */
+  private String name;
 
   /** The ID for the workflow the workflow attribute is associated with. */
   private UUID workflowId;
@@ -65,7 +65,7 @@ public class WorkflowAttributeId implements Serializable {
     WorkflowAttributeId other = (WorkflowAttributeId) object;
 
     return Objects.equals(workflowId, other.workflowId)
-        && StringUtil.equalsIgnoreCase(code, other.code);
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
@@ -76,6 +76,6 @@ public class WorkflowAttributeId implements Serializable {
   @Override
   public int hashCode() {
     return ((workflowId == null) ? 0 : workflowId.hashCode())
-        + ((code == null) ? 0 : code.hashCode());
+        + ((name == null) ? 0 : name.hashCode());
   }
 }

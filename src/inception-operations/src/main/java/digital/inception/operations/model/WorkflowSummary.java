@@ -50,6 +50,7 @@ import java.util.UUID;
   "definitionId",
   "definitionVersion",
   "definitionName",
+  "name",
   "status",
   "initiated",
   "initiatedBy",
@@ -70,6 +71,7 @@ import java.util.UUID;
       "definitionId",
       "definitionVersion",
       "definitionName",
+      "name",
       "status",
       "initiated",
       "initiatedBy",
@@ -164,6 +166,14 @@ public class WorkflowSummary implements Serializable {
   @Size(min = 1, max = 100)
   private String initiatedBy;
 
+  /** The name of the workflow. */
+  @Schema(description = "The name of the workflow", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  private String name;
+
   /** The ID for the parent workflow. */
   @Schema(description = "The ID for the parent workflow")
   @JsonProperty
@@ -213,6 +223,7 @@ public class WorkflowSummary implements Serializable {
    * @param definitionId the ID for the workflow definition the workflow is associated with
    * @param definitionVersion the version of the workflow definition the workflow is associated
    * @param definitionName the name of the workflow definition the workflow is associated with
+   * @param name the name of the workflow
    * @param status the status of the workflow
    * @param initiated the date and time the workflow was initiated
    * @param initiatedBy the person or system that initiated the workflow
@@ -229,6 +240,7 @@ public class WorkflowSummary implements Serializable {
       String definitionId,
       int definitionVersion,
       String definitionName,
+      String name,
       WorkflowStatus status,
       OffsetDateTime initiated,
       String initiatedBy,
@@ -243,6 +255,7 @@ public class WorkflowSummary implements Serializable {
     this.definitionId = definitionId;
     this.definitionVersion = definitionVersion;
     this.definitionName = definitionName;
+    this.name = name;
     this.status = status;
     this.initiated = initiated;
     this.initiatedBy = initiatedBy;
@@ -357,6 +370,15 @@ public class WorkflowSummary implements Serializable {
    */
   public String getInitiatedBy() {
     return initiatedBy;
+  }
+
+  /**
+   * Returns the name of the workflow.
+   *
+   * @return the name of the workflow
+   */
+  public String getName() {
+    return name;
   }
 
   /**

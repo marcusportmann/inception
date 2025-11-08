@@ -218,7 +218,7 @@ public class DocumentServiceTests {
             null,
             List.of(
                 new DocumentAttributeDefinition(
-                    "test_document_attribute_code",
+                    "testDocumentAttribute",
                     AttributeType.STRING,
                     "Test Document Attribute",
                     "Test Document Attribute Description",
@@ -343,7 +343,7 @@ public class DocumentServiceTests {
     List<AttributeSearchCriteria> documentAttributeSearchCriteria = new ArrayList<>();
     documentAttributeSearchCriteria.add(
         new AttributeSearchCriteria(
-            "test_document_attribute_code", "test_document_attribute_updated_value"));
+            "testDocumentAttribute", "test_document_attribute_updated_value"));
 
     List<ExternalReferenceSearchCriteria> documentExternalReferenceSearchCriteria =
         new ArrayList<>();
@@ -636,13 +636,25 @@ public class DocumentServiceTests {
       DocumentAttributeDefinition documentAttributeDefinition1,
       DocumentAttributeDefinition documentAttributeDefinition2) {
     assertEquals(
-        documentAttributeDefinition1.getCode(),
-        documentAttributeDefinition2.getCode(),
-        "The code values for the document attribute definitions do not match");
-    assertEquals(
         documentAttributeDefinition1.getDescription(),
         documentAttributeDefinition2.getDescription(),
         "The description values for the document attribute definitions do not match");
+    assertEquals(
+        documentAttributeDefinition1.getLabel(),
+        documentAttributeDefinition2.getLabel(),
+        "The label values for the document attribute definitions do not match");
+    assertEquals(
+        documentAttributeDefinition1.getName(),
+        documentAttributeDefinition2.getName(),
+        "The name values for the document attribute definitions do not match");
+    assertEquals(
+        documentAttributeDefinition1.getPattern(),
+        documentAttributeDefinition2.getPattern(),
+        "The pattern values for the document attribute definitions do not match");
+    assertEquals(
+        documentAttributeDefinition1.getType(),
+        documentAttributeDefinition2.getType(),
+        "The type values for the document attribute definitions do not match");
     assertEquals(
         documentAttributeDefinition1.isRequired(),
         documentAttributeDefinition2.isRequired(),
@@ -820,7 +832,7 @@ public class DocumentServiceTests {
               if (!foundAttribute) {
                 fail(
                     "Failed to find the attribute ("
-                        + documentAttribute1.getCode()
+                        + documentAttribute1.getName()
                         + ") for the document ("
                         + document1.getId()
                         + ")");
@@ -834,9 +846,7 @@ public class DocumentServiceTests {
     CreateDocumentRequest createDocumentRequest = new CreateDocumentRequest();
 
     createDocumentRequest.setAttributes(
-        List.of(
-            new DocumentAttribute(
-                "test_document_attribute_code", "test_document_attribute_value")));
+        List.of(new DocumentAttribute("testDocumentAttribute", "test_document_attribute_value")));
     createDocumentRequest.setData(data);
     createDocumentRequest.setDefinitionId(documentDefinitionId);
     createDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(6));
@@ -879,7 +889,7 @@ public class DocumentServiceTests {
     updateDocumentRequest.setAttributes(
         List.of(
             new DocumentAttribute(
-                "test_document_attribute_code", "test_document_attribute_updated_value")));
+                "testDocumentAttribute", "test_document_attribute_updated_value")));
     updateDocumentRequest.setData(data);
     updateDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(3));
     updateDocumentRequest.setExternalReferences(

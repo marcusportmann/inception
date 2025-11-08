@@ -825,14 +825,14 @@ public class InteractionServiceTests {
       for (InteractionSourceAttribute interactionSourceAttribute2 :
           interactionSource2.getAttributes()) {
         if (StringUtil.equalsIgnoreCase(
-            interactionSourceAttribute1.getCode(), interactionSourceAttribute2.getCode())) {
+            interactionSourceAttribute1.getName(), interactionSourceAttribute2.getName())) {
           foundInteractionSourceAttribute = true;
 
           if (!Objects.equals(
               interactionSourceAttribute1.getValue(), interactionSourceAttribute2.getValue())) {
             fail(
                 "The \""
-                    + interactionSourceAttribute1.getCode()
+                    + interactionSourceAttribute1.getName()
                     + "\" attributes for the interaction sources do not match");
           }
 
@@ -843,7 +843,7 @@ public class InteractionServiceTests {
       if (!foundInteractionSourceAttribute) {
         fail(
             "The \""
-                + interactionSourceAttribute1.getCode()
+                + interactionSourceAttribute1.getName()
                 + "\" attributes for the interaction sources do not match");
       }
     }

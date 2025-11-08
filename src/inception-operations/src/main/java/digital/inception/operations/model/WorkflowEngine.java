@@ -75,7 +75,7 @@ public class WorkflowEngine implements Serializable {
   @XmlElement(name = "Attribute")
   @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @OrderBy("code")
+  @OrderBy("name")
   @JoinColumn(name = "engine_id", insertable = false, updatable = false)
   private final List<WorkflowEngineAttribute> attributes = new ArrayList<>();
 
@@ -155,7 +155,7 @@ public class WorkflowEngine implements Serializable {
   public void addAttribute(WorkflowEngineAttribute attribute) {
     attributes.removeIf(
         existingAttribute ->
-            StringUtil.equalsIgnoreCase(existingAttribute.getCode(), attribute.getCode()));
+            StringUtil.equalsIgnoreCase(existingAttribute.getName(), attribute.getName()));
 
     attribute.setWorkflowEngine(this);
 
@@ -188,15 +188,15 @@ public class WorkflowEngine implements Serializable {
   }
 
   /**
-   * Retrieve the attribute with the specified code for the workflow engine.
+   * Retrieve the attribute with the specified name for the workflow engine.
    *
-   * @param code the code for the attribute
-   * @return an Optional containing the attribute with the specified code for the workflow engine or
+   * @param name the name of the attribute
+   * @return an Optional containing the attribute with the specified name for the workflow engine or
    *     an empty Optional if the attribute could not be found
    */
-  public Optional<WorkflowEngineAttribute> getAttribute(String code) {
+  public Optional<WorkflowEngineAttribute> getAttribute(String name) {
     return attributes.stream()
-        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getName(), name))
         .findFirst();
   }
 
@@ -237,15 +237,15 @@ public class WorkflowEngine implements Serializable {
   }
 
   /**
-   * Returns whether the workflow engine has an attribute with the specified code.
+   * Returns whether the workflow engine has an attribute with the specified name.
    *
-   * @param code the code for the attribute
-   * @return {@code true} if the workflow engine has an attribute with the specified code or {@code
+   * @param name the name of the attribute
+   * @return {@code true} if the workflow engine has an attribute with the specified name or {@code
    *     false} otherwise
    */
-  public boolean hasAttribute(String code) {
+  public boolean hasAttribute(String name) {
     return attributes.stream()
-        .anyMatch(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code));
+        .anyMatch(attribute -> StringUtil.equalsIgnoreCase(attribute.getName(), name));
   }
 
   /**
@@ -259,12 +259,12 @@ public class WorkflowEngine implements Serializable {
   }
 
   /**
-   * Remove the attribute with the specified code for the workflow engine.
+   * Remove the attribute with the specified name for the workflow engine.
    *
-   * @param code the code for the attribute
+   * @param name the name of the attribute
    */
-  public void removeAttribute(String code) {
-    attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getCode(), code));
+  public void removeAttribute(String name) {
+    attributes.removeIf(existingAttribute -> Objects.equals(existingAttribute.getName(), name));
   }
 
   /**

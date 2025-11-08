@@ -91,7 +91,7 @@ public class DocumentDefinition implements Serializable {
   @XmlElement(name = "AttributeDefinition")
   @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @OrderBy("code")
+  @OrderBy("name")
   @JoinColumns({
     @JoinColumn(
         name = "definition_id",
@@ -207,7 +207,7 @@ public class DocumentDefinition implements Serializable {
     attributeDefinitions.removeIf(
         existingAttributeDefinition ->
             StringUtil.equalsIgnoreCase(
-                existingAttributeDefinition.getCode(), attributeDefinition.getCode()));
+                existingAttributeDefinition.getName(), attributeDefinition.getName()));
 
     attributeDefinition.setDocumentDefinition(this);
 
@@ -315,12 +315,12 @@ public class DocumentDefinition implements Serializable {
   /**
    * Remove the document attribute definition with the specified code for the document definition.
    *
-   * @param code the code for the document attribute definition
+   * @param name the name of the document attribute definition
    */
-  public void removeAttributeDefinition(String code) {
+  public void removeAttributeDefinition(String name) {
     attributeDefinitions.removeIf(
         existingAttributeDefinition ->
-            StringUtil.equalsIgnoreCase(existingAttributeDefinition.getCode(), code));
+            StringUtil.equalsIgnoreCase(existingAttributeDefinition.getName(), name));
   }
 
   /**

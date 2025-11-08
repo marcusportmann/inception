@@ -49,12 +49,12 @@ import java.util.UUID;
  */
 @Schema(description = "An attribute for a document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "value"})
+@JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "DocumentAttribute", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "DocumentAttribute",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "value"})
+    propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_document_attributes")
@@ -63,18 +63,6 @@ public class DocumentAttribute implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The code for the document attribute. */
-  @Schema(
-      description = "The code for the document attribute",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Code", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Id
-  @Column(name = "code", length = 50, nullable = false)
-  private String code;
-
   /** The ID for the document the document attribute is associated with. */
   @Schema(hidden = true)
   @JsonIgnore
@@ -82,6 +70,18 @@ public class DocumentAttribute implements Serializable {
   @Id
   @Column(name = "document_id", nullable = false)
   private UUID documentId;
+
+  /** The name of the document attribute. */
+  @Schema(
+      description = "The name of the document attribute",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Id
+  @Column(name = "name", length = 100, nullable = false)
+  private String name;
 
   /** The value for the document attribute. */
   @Schema(
@@ -100,11 +100,11 @@ public class DocumentAttribute implements Serializable {
   /**
    * Constructs a new {@code DocumentAttribute}.
    *
-   * @param code the code for the document attribute
+   * @param name the name of the document attribute
    * @param value the value for the document attribute
    */
-  public DocumentAttribute(String code, String value) {
-    this.code = code;
+  public DocumentAttribute(String name, String value) {
+    this.name = name;
     this.value = value;
   }
 
@@ -131,16 +131,16 @@ public class DocumentAttribute implements Serializable {
     DocumentAttribute other = (DocumentAttribute) object;
 
     return Objects.equals(documentId, other.documentId)
-        && StringUtil.equalsIgnoreCase(code, other.code);
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
-   * Returns the code for the document attribute.
+   * Returns the name of the document attribute.
    *
-   * @return the code for the document attribute
+   * @return the name of the document attribute
    */
-  public String getCode() {
-    return code;
+  public String getName() {
+    return name;
   }
 
   /**
@@ -160,16 +160,7 @@ public class DocumentAttribute implements Serializable {
   @Override
   public int hashCode() {
     return ((documentId == null) ? 0 : documentId.hashCode())
-        + ((code == null) ? 0 : code.hashCode());
-  }
-
-  /**
-   * Set the code for the document attribute.
-   *
-   * @param code the code for the document attribute
-   */
-  public void setCode(String code) {
-    this.code = code;
+        + ((name == null) ? 0 : name.hashCode());
   }
 
   /**
@@ -185,6 +176,15 @@ public class DocumentAttribute implements Serializable {
     } else {
       this.documentId = null;
     }
+  }
+
+  /**
+   * Set the name of the document attribute.
+   *
+   * @param name the name of the document attribute
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

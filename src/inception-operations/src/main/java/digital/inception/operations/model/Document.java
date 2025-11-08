@@ -115,7 +115,7 @@ public class Document implements Serializable {
   @XmlElement(name = "Attribute")
   @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @OrderBy("code")
+  @OrderBy("name")
   @JoinColumn(
       name = "document_id",
       referencedColumnName = "id",
@@ -273,7 +273,7 @@ public class Document implements Serializable {
   public void addAttribute(DocumentAttribute attribute) {
     attributes.removeIf(
         existingAttribute ->
-            StringUtil.equalsIgnoreCase(existingAttribute.getCode(), attribute.getCode()));
+            StringUtil.equalsIgnoreCase(existingAttribute.getName(), attribute.getName()));
 
     attribute.setDocument(this);
 
@@ -322,15 +322,15 @@ public class Document implements Serializable {
   }
 
   /**
-   * Retrieve the attribute with the specified code for the document.
+   * Retrieve the attribute with the specified name for the document.
    *
-   * @param code the code for the attribute
-   * @return an Optional containing the attribute with the specified code for the document or an
+   * @param name the name of the attribute
+   * @return an Optional containing the attribute with the specified name for the document or an
    *     empty Optional if the attribute could not be found
    */
-  public Optional<DocumentAttribute> getAttribute(String code) {
+  public Optional<DocumentAttribute> getAttribute(String name) {
     return attributes.stream()
-        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getCode(), code))
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getName(), name))
         .findFirst();
   }
 
@@ -474,13 +474,13 @@ public class Document implements Serializable {
   }
 
   /**
-   * Remove the attribute with the specified code for the workflow.
+   * Remove the attribute with the specified name for the workflow.
    *
-   * @param code the code for the attribute
+   * @param name the name of the attribute
    */
-  public void removeAttribute(String code) {
+  public void removeAttribute(String name) {
     attributes.removeIf(
-        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getCode(), code));
+        existingAttribute -> StringUtil.equalsIgnoreCase(existingAttribute.getName(), name));
   }
 
   /**

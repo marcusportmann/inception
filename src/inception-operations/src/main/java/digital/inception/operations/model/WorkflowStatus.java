@@ -36,6 +36,14 @@ public enum WorkflowStatus implements CodeEnum {
   @XmlEnumValue("Pending")
   PENDING("pending", "Pending"),
 
+  /** Staged. */
+  @XmlEnumValue("Staged")
+  STAGED("staged", "Staged"),
+
+  /** Starting. */
+  @XmlEnumValue("Starting")
+  STARTING("starting", "Starting"),
+
   /**
    * Active.
    *

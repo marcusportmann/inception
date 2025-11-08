@@ -48,14 +48,14 @@ import java.io.Serializable;
  */
 @Schema(description = "An attribute for a workflow definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "value"})
+@JsonPropertyOrder({"name", "value"})
 @XmlRootElement(
     name = "WorkflowDefinitionAttribute",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowDefinitionAttribute",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "value"})
+    propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_definition_attributes")
@@ -63,18 +63,6 @@ import java.io.Serializable;
 public class WorkflowDefinitionAttribute implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The code for the workflow definition attribute. */
-  @Schema(
-      description = "The code for the workflow definition attribute",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Code", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Id
-  @Column(name = "code", length = 50, nullable = false)
-  private String code;
 
   /** The ID for the workflow definition the workflow definition attribute is associated with. */
   @Schema(hidden = true)
@@ -94,6 +82,18 @@ public class WorkflowDefinitionAttribute implements Serializable {
   @Column(name = "definition_version", nullable = false)
   private int definitionVersion;
 
+  /** The name of the workflow definition attribute. */
+  @Schema(
+      description = "The name of the workflow definition attribute",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Id
+  @Column(name = "name", length = 100, nullable = false)
+  private String name;
+
   /** The value for the workflow definition attribute. */
   @Schema(
       description = "The value for the workflow definition attribute",
@@ -111,11 +111,11 @@ public class WorkflowDefinitionAttribute implements Serializable {
   /**
    * Constructs a new {@code WorkflowDefinitionAttribute}.
    *
-   * @param code the code for the workflow definition attribute
+   * @param name the name of the workflow definition attribute
    * @param value the value for the workflow definition attribute
    */
-  public WorkflowDefinitionAttribute(String code, String value) {
-    this.code = code;
+  public WorkflowDefinitionAttribute(String name, String value) {
+    this.name = name;
     this.value = value;
   }
 
@@ -143,16 +143,16 @@ public class WorkflowDefinitionAttribute implements Serializable {
 
     return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
         && definitionVersion == other.definitionVersion
-        && StringUtil.equalsIgnoreCase(code, other.code);
+        && StringUtil.equalsIgnoreCase(name, other.name);
   }
 
   /**
-   * Returns the code for the workflow definition attribute.
+   * Returns the name of the workflow definition attribute.
    *
-   * @return the code for the workflow definition attribute
+   * @return the name of the workflow definition attribute
    */
-  public String getCode() {
-    return code;
+  public String getName() {
+    return name;
   }
 
   /**
@@ -173,16 +173,16 @@ public class WorkflowDefinitionAttribute implements Serializable {
   public int hashCode() {
     return ((definitionId == null) ? 0 : definitionId.hashCode())
         + ((definitionVersion == 0) ? 0 : Integer.hashCode(definitionVersion))
-        + ((code == null) ? 0 : code.hashCode());
+        + ((name == null) ? 0 : name.hashCode());
   }
 
   /**
-   * Set the code for the workflow definition attribute.
+   * Set the name of the workflow definition attribute.
    *
-   * @param code the code for the workflow definition attribute
+   * @param name the name of the workflow definition attribute
    */
-  public void setCode(String code) {
-    this.code = code;
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
