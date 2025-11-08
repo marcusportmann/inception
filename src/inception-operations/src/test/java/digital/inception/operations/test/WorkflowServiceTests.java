@@ -426,7 +426,7 @@ public class WorkflowServiceTests {
             null));
 
     workflowDefinition.addVariableDefinition(
-        new WorkflowVariableDefinition("testVariableName", true, "Test Variable Description"));
+        new WorkflowVariableDefinition("testVariable", true, "Test Variable Description"));
 
     String processDefinitionKey = UUID.randomUUID().toString();
 
@@ -473,7 +473,7 @@ public class WorkflowServiceTests {
 
     assertTrue(workflowDefinition.getPermissions().isEmpty());
 
-    workflowDefinition.removeVariableDefinition("testVariableName");
+    workflowDefinition.removeVariableDefinition("testVariable");
 
     assertTrue(workflowDefinition.getVariableDefinitions().isEmpty());
 
@@ -505,7 +505,7 @@ public class WorkflowServiceTests {
             List.of(
                 new WorkflowAttribute("testWorkflowAttribute", "Test Workflow Attribute Value")),
             List.of(),
-            List.of(new WorkflowVariable("testVariableName", "testVariableValue")),
+            List.of(new WorkflowVariable("testVariable", "Test Variable Value")),
             null);
 
     Workflow workflow =
@@ -533,7 +533,7 @@ public class WorkflowServiceTests {
 
     List<VariableSearchCriteria> workflowVariableSearchCriteria = new ArrayList<>();
     workflowVariableSearchCriteria.add(
-        new VariableSearchCriteria("testVariableName", "testVariableValue"));
+        new VariableSearchCriteria("testVariable", "Test Variable Value"));
 
     SearchWorkflowsRequest searchWorkflowsRequest =
         new SearchWorkflowsRequest(
@@ -1264,9 +1264,7 @@ public class WorkflowServiceTests {
             null);
 
     tenantWorkflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("attribute_name", "attribute_value"));
-    tenantWorkflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("another_attribute_name", "another_attribute_value"));
+        new WorkflowDefinitionAttribute("processDefinitionKey", "testProcess"));
 
     tenantWorkflowDefinition.addAttributeDefinition(
         new WorkflowAttributeDefinition(
@@ -1317,7 +1315,7 @@ public class WorkflowServiceTests {
             null));
 
     tenantWorkflowDefinition.addVariableDefinition(
-        new WorkflowVariableDefinition("testVariableName", true, "Test Variable Description"));
+        new WorkflowVariableDefinition("testVariable", true, "Test Variable Description"));
 
     tenantWorkflowDefinition.addDocumentDefinition(
         tenantDocumentDefinition.getId(), true, false, true, false);
@@ -1386,11 +1384,11 @@ public class WorkflowServiceTests {
     tenantWorkflowDefinition.removeDocumentDefinition(sharedDocumentDefinition.getId());
 
     tenantWorkflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("attribute_name", "updated_attribute_value"));
+        new WorkflowDefinitionAttribute("processDefinitionKey", "testProcessUpdated"));
 
-    tenantWorkflowDefinition.removeAttribute("another_attribute_name");
+    tenantWorkflowDefinition.removeAttribute("anotherAttribute");
 
-    tenantWorkflowDefinition.removeAttributeDefinition("test_workflow_attribute_code");
+    tenantWorkflowDefinition.removeAttributeDefinition("anotherTestWorkflowAttribute");
 
     tenantWorkflowDefinition.removeStepDefinition("test_workflow_step_2");
 

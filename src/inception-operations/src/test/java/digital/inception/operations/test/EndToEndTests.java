@@ -515,7 +515,7 @@ public class EndToEndTests {
             List.of(
                 new WorkflowAttribute("testWorkflowAttribute", "Test Workflow Attribute Value")),
             List.of(new InitiateWorkflowInteractionLink(firstInteractionId, firstConversationId)),
-            List.of(new WorkflowVariable("testVariableName", "testVariableValue")),
+            List.of(new WorkflowVariable("testVariable", "Test Variable Value")),
             workflowDataJson);
 
     Workflow workflow =
@@ -695,7 +695,7 @@ public class EndToEndTests {
 
     List<VariableSearchCriteria> workflowVariableSearchCriteria = new ArrayList<>();
     workflowVariableSearchCriteria.add(
-        new VariableSearchCriteria("testVariableName", "testVariableValue"));
+        new VariableSearchCriteria("testVariable", "Test Variable Value"));
 
     SearchWorkflowsRequest searchWorkflowsRequest =
         new SearchWorkflowsRequest(

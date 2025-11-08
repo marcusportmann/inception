@@ -343,7 +343,7 @@ public class DocumentServiceTests {
     List<AttributeSearchCriteria> documentAttributeSearchCriteria = new ArrayList<>();
     documentAttributeSearchCriteria.add(
         new AttributeSearchCriteria(
-            "testDocumentAttribute", "test_document_attribute_updated_value"));
+            "testDocumentAttribute", "Test Document Attribute Value Updated"));
 
     List<ExternalReferenceSearchCriteria> documentExternalReferenceSearchCriteria =
         new ArrayList<>();
@@ -889,7 +889,7 @@ public class DocumentServiceTests {
     updateDocumentRequest.setAttributes(
         List.of(
             new DocumentAttribute(
-                "testDocumentAttribute", "test_document_attribute_updated_value")));
+                "testDocumentAttribute", "Test Document Attribute Value Updated")));
     updateDocumentRequest.setData(data);
     updateDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(3));
     updateDocumentRequest.setExternalReferences(
