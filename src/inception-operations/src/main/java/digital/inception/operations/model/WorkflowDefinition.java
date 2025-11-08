@@ -305,8 +305,13 @@ public class WorkflowDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** The template string used to generate the names of workflows associated with the workflow definition. */
-  @Schema(description = "The template string used to generate the names of workflows associated with the workflow definition")
+  /**
+   * The template string used to generate the names of workflows associated with the workflow
+   * definition.
+   */
+  @Schema(
+      description =
+          "The template string used to generate the names of workflows associated with the workflow definition")
   @JsonProperty
   @XmlElement(name = "NameTemplate")
   @Size(min = 1, max = 100)
@@ -395,7 +400,8 @@ public class WorkflowDefinition implements Serializable {
    * @param name the name of the workflow definition
    * @param description the description for the workflow definition
    * @param engineId the ID for the workflow engine the workflow definition is associated with
-   * @param nameTemplate the template string used to generate the names of workflows associated with the workflow definition
+   * @param nameTemplate the template string used to generate the names of workflows associated with
+   *     the workflow definition
    * @param timeToComplete the ISO-8601 duration format amount of time to complete a workflow
    *     associated with the workflow definition
    * @param validationSchemaType the validation schema type for the workflow definition
@@ -687,14 +693,14 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Retrieve the value for the attribute with the specified code for the workflow definition.
+   * Retrieve the value for the attribute with the specified name for the workflow definition.
    *
-   * @param code the code for the attribute
-   * @return an Optional containing the value for the attribute with the specified code for the
+   * @param name the name of the attribute
+   * @return an Optional containing the value for the attribute with the specified name for the
    *     workflow definition or an empty Optional if the attribute could not be found
    */
-  public Optional<String> getAttributeValue(String code) {
-    Optional<WorkflowDefinitionAttribute> attribute = getAttribute(code);
+  public Optional<String> getAttributeValue(String name) {
+    Optional<WorkflowDefinitionAttribute> attribute = getAttribute(name);
 
     return attribute.map(WorkflowDefinitionAttribute::getValue);
   }
@@ -904,7 +910,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Remove the workflow attribute definition with the specified code for the workflow definition.
+   * Remove the workflow attribute definition with the specified name for the workflow definition.
    *
    * @param name the name of the workflow attribute definition
    */

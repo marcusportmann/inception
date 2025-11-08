@@ -313,7 +313,7 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Remove the document attribute definition with the specified code for the document definition.
+   * Remove the document attribute definition with the specified name for the document definition.
    *
    * @param name the name of the document attribute definition
    */
