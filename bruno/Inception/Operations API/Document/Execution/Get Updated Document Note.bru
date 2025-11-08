@@ -1,0 +1,20 @@
+meta {
+  name: Get Updated Document Note
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseURL}}/api/operations/documents/{{documentId}}/notes/{{documentNoteId}}
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
