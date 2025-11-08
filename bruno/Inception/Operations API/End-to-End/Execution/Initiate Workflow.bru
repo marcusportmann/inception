@@ -23,8 +23,8 @@ body:json {
     ],  
     "attributes": [
       {
-        "code": "test_workflow_attribute_code",
-        "value": "test_workflow_attribute_value"
+        "name": "testWorkflowAttribute",
+        "value": "Test Workflow Attribute Value"
       }
     ],
     "interactionLinks": [
@@ -36,8 +36,8 @@ body:json {
     "variables": [
       {
         "type": "string",
-        "name": "test_workflow_variable_name",
-        "value": "test_workflow_variable_value"
+        "name": "testWorkflowVariable",
+        "value": "Test Workflow Variable Value"
       }
     ],  
     "data": "eyJuYW1lIjogInZhbHVlIn0="
@@ -54,4 +54,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

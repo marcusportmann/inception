@@ -20,8 +20,9 @@ body:json {
     "tenantId": "00000000-0000-0000-0000-000000000000",
     "attributeDefinitions": [
       {
-        "code": "test_document_attribute_code",
-        "name": "Test Document Attribute",
+        "name": "testDocumentAttribute",
+        "type": "string",
+        "label": "Test Document Attribute",
         "description": "Test Document Attribute Description",
         "required": false
       }
@@ -43,4 +44,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

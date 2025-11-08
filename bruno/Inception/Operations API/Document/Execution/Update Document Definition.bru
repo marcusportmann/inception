@@ -1,7 +1,7 @@
 meta {
   name: Update Document Definition
   type: http
-  seq: 15
+  seq: 10
 }
 
 put {
@@ -17,6 +17,15 @@ body:json {
     "categoryId": "test_document_definition_category",
     "name": "Updated Test Document Definition",
     "tenantId": "00000000-0000-0000-0000-000000000000",
+    "attributeDefinitions": [
+      {
+        "name": "testDocumentAttribute",
+        "type": "string",
+        "label": "Test Document Attribute",
+        "description": "Test Document Attribute Description",
+        "required": false
+      }
+    ], 
     "requiredDocumentAttributes": [
       "expiry_date"
     ]
@@ -34,4 +43,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

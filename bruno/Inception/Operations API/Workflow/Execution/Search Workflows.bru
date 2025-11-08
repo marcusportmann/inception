@@ -20,12 +20,12 @@ body:json {
     "status": "active",
     "attributes": [
       {
-        "code": "test_workflow_attribute_code",
-        "value": "test_workflow_attribute_value"
+        "name": "testWorkflowAttribute",
+        "value": "Test Workflow Attribute Value"
       },
       {
-        "code": "another_workflow_attribute_code",
-        "value": "another_workflow_attribute_value"
+        "code": "anotherWorkflowAttribute",
+        "value": "Another Workflow Attribute Value"
       }
     ],  
     "externalReferences": [
@@ -40,12 +40,12 @@ body:json {
     ],
     "variables": [
       {
-        "name": "test_variable_name",
-        "value": "Test variable value"
+        "name": "testVariable",
+        "value": "Test Variable Value"
       },
       {
-        "name": "another_variable_name",
-        "value": "Another variable value"
+        "name": "anotherVariable",
+        "value": "Another Variable Value"
       }
     ]
   }
@@ -59,4 +59,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

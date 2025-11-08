@@ -77,7 +77,7 @@ public class DummyWorkflowEngineConnector extends AbstractWorkflowEngineConnecto
   public List<ValidWorkflowDefinitionAttribute> getValidWorkflowDefinitionAttributes() {
     return List.of(
         new ValidWorkflowDefinitionAttribute(
-            "process_definition_key", "Process Definition Key", true));
+            "processDefinitionKey", "Process Definition Key", true));
   }
 
   @Override

@@ -255,7 +255,7 @@ public class EndToEndTests {
         new DocumentAttributeDefinition(
             "testDocumentAttribute",
             AttributeType.STRING,
-            "Test Document Attribute",
+            "Test Document Attribute Value",
             "Test Document Attribute Description",
             true,
             null);
@@ -385,7 +385,7 @@ public class EndToEndTests {
             null));
 
     workflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("process_definition_key", UUID.randomUUID().toString()));
+        new WorkflowDefinitionAttribute("processDefinitionKey", UUID.randomUUID().toString()));
 
     workflowService.createWorkflowDefinition(workflowDefinition);
 
@@ -561,7 +561,7 @@ public class EndToEndTests {
                       "test_document_external_reference_code",
                       "test_document_external_reference_value")),
               List.of(
-                  new DocumentAttribute("testDocumentAttribute", "test_document_attribute_value")),
+                  new DocumentAttribute("testDocumentAttribute", "Test Document Attribute Value")),
               null,
               multiPagePdfData);
 

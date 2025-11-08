@@ -290,7 +290,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       validateWorkflowDefinition(workflowDefinition);
 
       workflowDefinitionRepository.saveAndFlush(workflowDefinition);
-    } catch (DuplicateWorkflowDefinitionVersionException
+    } catch (InvalidArgumentException
+        | DuplicateWorkflowDefinitionVersionException
         | WorkflowDefinitionCategoryNotFoundException
         | WorkflowEngineNotFoundException
         | DocumentDefinitionNotFoundException e) {
@@ -1642,7 +1643,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
         TokenReplacer tokenReplacer = TokenReplacer.defaultStyle();
 
-        workflowName = tokenReplacer.replace(workflowDefinition.getNameTemplate(), templateParameters);
+        workflowName =
+            tokenReplacer.replace(workflowDefinition.getNameTemplate(), templateParameters);
       } else {
         workflowName = workflowDefinition.getName();
       }

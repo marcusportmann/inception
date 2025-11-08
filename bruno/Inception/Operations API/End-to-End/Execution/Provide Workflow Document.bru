@@ -15,18 +15,18 @@ body:json {
     "workflowDocumentId": "{{workflowDocumentId}}",
     "fileType": "text",
     "name": "test.txt",
+    "attributes": [
+      {
+        "name": "testDocumentAttribute",
+        "value": "Test Document Attribute Value"
+      }
+    ],    
     "externalReferences": [
       {
         "type": "test_document_external_reference_code",
         "value": "test_document_external_reference_value"
       }
     ],
-    "attributes": [
-      {
-        "code": "test_document_attribute_code",
-        "value": "test_document_attribute_value"
-      }
-    ],  
     "issueDate": "2015-10-10",
     "expiryDate": "2030-03-07",
     "data": "VGhpcyBpcyBzb21lIHRlc3QgdGV4dC4="
@@ -39,4 +39,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

@@ -81,7 +81,7 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
   public List<ValidWorkflowDefinitionAttribute> getValidWorkflowDefinitionAttributes() {
     return List.of(
         new ValidWorkflowDefinitionAttribute(
-            "process_definition_key", "Process Definition Key", false),
+            "processDefinitionKey", "Process Definition Key", false),
         new ValidWorkflowDefinitionAttribute("attribute_name", "Attribute Name", false),
         new ValidWorkflowDefinitionAttribute(
             "another_attribute_name", "Another Attribute Name", false));

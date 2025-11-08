@@ -19,12 +19,12 @@ body:json {
     "definitionId": "test_document_definition",
     "attributes": [
       {
-        "code": "test_document_attribute_code",
-        "value": "test_document_attribute_value"
+        "name": "testDocumentAttribute",
+        "value": "Test Document Attribute Value"
       },
       {
-        "code": "another_document_attribute_code",
-        "value": "another_document_attribute_value"
+        "code": "anotherDocumentAttribute",
+        "value": "Another Document Attribute Value"
       }
     ],
     "externalReferences": [
@@ -48,4 +48,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

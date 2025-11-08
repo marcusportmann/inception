@@ -220,7 +220,7 @@ public class DocumentServiceTests {
                 new DocumentAttributeDefinition(
                     "testDocumentAttribute",
                     AttributeType.STRING,
-                    "Test Document Attribute",
+                    "Test Document Attribute Value",
                     "Test Document Attribute Description",
                     true,
                     "(?i).*value.*")));
@@ -846,7 +846,7 @@ public class DocumentServiceTests {
     CreateDocumentRequest createDocumentRequest = new CreateDocumentRequest();
 
     createDocumentRequest.setAttributes(
-        List.of(new DocumentAttribute("testDocumentAttribute", "test_document_attribute_value")));
+        List.of(new DocumentAttribute("testDocumentAttribute", "Test Document Attribute Value")));
     createDocumentRequest.setData(data);
     createDocumentRequest.setDefinitionId(documentDefinitionId);
     createDocumentRequest.setExpiryDate(LocalDate.now().plusMonths(6));

@@ -16,8 +16,8 @@ body:json {
     "startWorkflow": true,
     "attributes": [
       {
-        "code": "test_workflow_attribute_code",
-        "value": "test_workflow_attribute_value"
+        "name": "testWorkflowAttribute",
+        "value": "Test Workflow Attribute Value"
       }
     ],
     "externalReferences": [
@@ -28,9 +28,9 @@ body:json {
     ],
     "variables": [
       {
-        "name": "test_variable_name",
+        "name": "testVariable",
         "type": "string",
-        "value": "Test variable value"
+        "value": "Test Variable Value"
       }
     ],
     "data": "eyJuYW1lIjogInZhbHVlIn0="
@@ -47,4 +47,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

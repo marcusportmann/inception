@@ -209,7 +209,7 @@ public class WorkflowServiceTests {
             null));
 
     workflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("process_definition_key", UUID.randomUUID().toString()));
+        new WorkflowDefinitionAttribute("processDefinitionKey", UUID.randomUUID().toString()));
 
     workflowService.createWorkflowDefinition(workflowDefinition);
 
@@ -317,7 +317,7 @@ public class WorkflowServiceTests {
                 new DocumentAttributeDefinition(
                     "testDocumentAttribute",
                     AttributeType.STRING,
-                    "Test Document Attribute",
+                    "Test Document Attribute Value",
                     "Test Document Attribute Description",
                     true,
                     null)));
@@ -431,7 +431,7 @@ public class WorkflowServiceTests {
     String processDefinitionKey = UUID.randomUUID().toString();
 
     workflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("process_definition_key", processDefinitionKey));
+        new WorkflowDefinitionAttribute("processDefinitionKey", processDefinitionKey));
 
     workflowDefinition.setSupportedWorkflowFormTypes(
         List.of(WorkflowFormType.START_FORM, WorkflowFormType.WORK_FORM));
@@ -451,21 +451,21 @@ public class WorkflowServiceTests {
     assertEquals(
         processDefinitionKey,
         retrievedWorkflowDefinition
-            .getAttribute("process_definition_key")
+            .getAttribute("processDefinitionKey")
             .orElseThrow(
                 () ->
                     new RuntimeException(
-                        "Failed to retrieve the process_definition_key workflow definition attribute"))
+                        "Failed to retrieve the processDefinitionKey workflow definition attribute"))
             .getValue());
 
     assertEquals(
         processDefinitionKey,
         retrievedWorkflowDefinition
-            .getAttributeValue("process_definition_key")
+            .getAttributeValue("processDefinitionKey")
             .orElseThrow(
                 () ->
                     new RuntimeException(
-                        "Failed to retrieve the process_definition_key workflow definition attribute")));
+                        "Failed to retrieve the processDefinitionKey workflow definition attribute")));
 
     compareWorkflowDefinitions(workflowDefinition, retrievedWorkflowDefinition);
 
@@ -635,7 +635,7 @@ public class WorkflowServiceTests {
                     "test_document_external_reference_code",
                     "test_document_external_reference_value")),
             List.of(
-                new DocumentAttribute("testDocumentAttribute", "test_document_attribute_value")),
+                new DocumentAttribute("testDocumentAttribute", "Test Document Attribute Value")),
             null,
             multiPagePdfData);
 
@@ -674,7 +674,7 @@ public class WorkflowServiceTests {
     assertEquals(1, retrievedDocument.getAttributes().size());
     assertEquals("testDocumentAttribute", retrievedDocument.getAttributes().getFirst().getName());
     assertEquals(
-        "test_document_attribute_value", retrievedDocument.getAttributes().getFirst().getValue());
+        "Test Document Attribute Value", retrievedDocument.getAttributes().getFirst().getValue());
 
     // Provide the workflow document again, replacing the existing document
     provideWorkflowDocumentRequest.setName("AnotherMultiPagePdf.pdf");
@@ -969,7 +969,7 @@ public class WorkflowServiceTests {
             null,
             List.of(
                 new WorkflowAttribute(
-                    "testWorkflowAttribute", "Test Workflow Attribute Value_updated")),
+                    "testWorkflowAttribute", "Test Workflow Attribute Value Update")),
             null,
             testWorkflowDataJson);
 
@@ -983,7 +983,7 @@ public class WorkflowServiceTests {
     assertEquals("This is the updated workflow description", retrievedWorkflow.getDescription());
     assertEquals(testWorkflowDataJson, retrievedWorkflow.getData());
     assertEquals(
-        "Test Workflow Attribute Value_updated",
+        "Test Workflow Attribute Value Update",
         retrievedWorkflow.getAttributes().getFirst().getValue());
 
     // Finalize the workflow
@@ -1216,7 +1216,7 @@ public class WorkflowServiceTests {
             null);
 
     sharedWorkflowDefinition.addAttribute(
-        new WorkflowDefinitionAttribute("process_definition_key", "process_definition_key_value"));
+        new WorkflowDefinitionAttribute("processDefinitionKey", "testProcessDefinition"));
 
     sharedWorkflowDefinition.addDocumentDefinition(
         sharedDocumentDefinition.getId(), true, true, true, false);

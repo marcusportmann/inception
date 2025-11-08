@@ -17,8 +17,8 @@ body:json {
     "connectorClassName": "digital.inception.operations.connector.DummyWorkflowEngineConnector",
     "attributes": [
       {
-        "code": "test_name",
-        "value": "test_value"
+        "name": "testAttribute",
+        "value": "Test Attribute Value"
       }
     ]
   }
@@ -30,4 +30,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

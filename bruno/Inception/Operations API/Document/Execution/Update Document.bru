@@ -1,7 +1,7 @@
 meta {
   name: Update Document
   type: http
-  seq: 17
+  seq: 13
 }
 
 post {
@@ -15,6 +15,12 @@ body:json {
     "documentId": "{{documentId}}",
     "fileType": "text",
     "name": "test.txt",
+    "attributes": [
+      {
+        "name": "testDocumentAttribute",
+        "value": "Test Document Attribute Value Updated"
+      }
+    ],    
     "externalReferences": [
       {
         "type": "test_document_external_reference_code",
@@ -31,4 +37,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }
