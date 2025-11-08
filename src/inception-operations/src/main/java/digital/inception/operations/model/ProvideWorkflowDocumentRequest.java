@@ -55,8 +55,8 @@ import java.util.UUID;
   "sourceDocumentId",
   "issueDate",
   "expiryDate",
-  "externalReferences",
   "attributes",
+  "externalReferences",
   "description",
   "data"
 })
@@ -73,8 +73,8 @@ import java.util.UUID;
       "sourceDocumentId",
       "issueDate",
       "expiryDate",
-      "externalReferences",
       "attributes",
+      "externalReferences",
       "description",
       "data"
     })
