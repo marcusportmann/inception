@@ -1678,7 +1678,7 @@ public class WorkflowServiceTests {
               assertEquals(1, foundAttributeDefinitions.size());
 
               compareWorkflowAttributeDefinitions(
-                  workflowAttributeDefinition1, foundAttributeDefinitions.get(0));
+                  workflowAttributeDefinition1, foundAttributeDefinitions.getFirst());
             });
 
     assertEquals(
