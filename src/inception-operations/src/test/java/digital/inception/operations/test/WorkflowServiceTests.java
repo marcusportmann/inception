@@ -279,7 +279,7 @@ public class WorkflowServiceTests {
   public void jsonWorkflowTest() throws Exception {
     ExternalReferenceType documentExternalReferenceType =
         new ExternalReferenceType(
-            "test_document_external_reference_code",
+            "test_document_external_reference",
             "Test Document External Reference",
             "Test Document External Reference Description",
             ObjectType.DOCUMENT,
@@ -289,7 +289,7 @@ public class WorkflowServiceTests {
 
     ExternalReferenceType workflowReferenceType =
         new ExternalReferenceType(
-            "test_workflow_external_reference_code",
+            "test_workflow_external_reference",
             "Test Workflow External Reference",
             "Test Workflow External Reference Description",
             ObjectType.WORKFLOW,
@@ -441,7 +441,7 @@ public class WorkflowServiceTests {
             "Administrator", WorkflowPermissionType.INITIATE_WORKFLOW));
 
     workflowDefinition.setRequiredExternalReferenceTypes(
-        List.of("test_workflow_external_reference_code"));
+        List.of("test_workflow_external_reference"));
 
     workflowService.createWorkflowDefinition(workflowDefinition);
 
@@ -500,7 +500,7 @@ public class WorkflowServiceTests {
             "This is the workflow description",
             List.of(
                 new WorkflowExternalReference(
-                    "test_workflow_external_reference_code",
+                    "test_workflow_external_reference",
                     "test_workflow_external_reference_value")),
             List.of(
                 new WorkflowAttribute("testWorkflowAttribute", "Test Workflow Attribute Value")),
@@ -529,7 +529,7 @@ public class WorkflowServiceTests {
         new ArrayList<>();
     workflowExternalReferencesSearchCriteria.add(
         new ExternalReferenceSearchCriteria(
-            "test_workflow_external_reference_code", "test_workflow_external_reference_value"));
+            "test_workflow_external_reference", "test_workflow_external_reference_value"));
 
     List<VariableSearchCriteria> workflowVariableSearchCriteria = new ArrayList<>();
     workflowVariableSearchCriteria.add(
@@ -632,8 +632,8 @@ public class WorkflowServiceTests {
             null,
             List.of(
                 new DocumentExternalReference(
-                    "test_document_external_reference_code",
-                    "test_document_external_reference_value")),
+                    "test_document_external_reference",
+                    "Test Document External Reference Value")),
             List.of(
                 new DocumentAttribute("testDocumentAttribute", "Test Document Attribute Value")),
             null,
@@ -1022,9 +1022,9 @@ public class WorkflowServiceTests {
     // Delete the document definition category
     documentService.deleteDocumentDefinitionCategory(documentDefinitionCategory.getId());
 
-    operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference_code");
+    operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference");
 
-    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
+    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference");
   }
 
   /** Test the workflow service functionality. */
@@ -1032,7 +1032,7 @@ public class WorkflowServiceTests {
   public void workflowServiceTest() throws Exception {
     ExternalReferenceType documentExternalReferenceType =
         new ExternalReferenceType(
-            "test_document_external_reference_code",
+            "test_document_external_reference",
             "Test Document External Reference",
             "Test Document External Reference Description",
             ObjectType.DOCUMENT,
@@ -1042,7 +1042,7 @@ public class WorkflowServiceTests {
 
     ExternalReferenceType workflowExternalReferenceType =
         new ExternalReferenceType(
-            "test_workflow_external_reference_code",
+            "test_workflow_external_reference",
             "Test Workflow External Reference",
             "Test Workflow External Reference Description",
             ObjectType.WORKFLOW,
@@ -1067,9 +1067,9 @@ public class WorkflowServiceTests {
 
     ExternalReferenceType retrievedExternalReferenceType =
         operationsReferenceService.getExternalReferenceType(
-            "test_workflow_external_reference_code");
+            "test_workflow_external_reference");
 
-    assertEquals("test_workflow_external_reference_code", retrievedExternalReferenceType.getCode());
+    assertEquals("test_workflow_external_reference", retrievedExternalReferenceType.getCode());
     assertEquals("Test Workflow External Reference", retrievedExternalReferenceType.getName());
     assertEquals(
         "Test Workflow External Reference Description",
@@ -1079,8 +1079,8 @@ public class WorkflowServiceTests {
 
     WorkflowEngineAttribute workflowEngineAttribute =
         new WorkflowEngineAttribute(
-            "test_workflow_engine_attribute_name_" + randomId(),
-            "test_workflow_engine_attribute_value");
+            "testWorkflowEngineAttribute" + randomId(),
+            "Test Workflow Engine Attribute Value");
 
     List<WorkflowEngineAttribute> workflowEngineAttributes = List.of(workflowEngineAttribute);
 
@@ -1465,8 +1465,8 @@ public class WorkflowServiceTests {
 
     workflowEngineAttribute =
         new WorkflowEngineAttribute(
-            "test_workflow_engine_attribute_name_" + randomId(),
-            "test_workflow_engine_attribute_value");
+            "testWorkflowEngineAttribute" + randomId(),
+            "Test Workflow Engine Attribute Value");
 
     workflowEngine.addAttribute(workflowEngineAttribute);
     workflowEngine.setName("Test Workflow Engine Updated");
@@ -1485,9 +1485,9 @@ public class WorkflowServiceTests {
           workflowService.deleteWorkflowEngine(workflowEngine.getId());
         });
 
-    operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference_code");
+    operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference");
 
-    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
+    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference");
   }
 
   private void compareWorkflowAttributeDefinitions(

@@ -236,7 +236,7 @@ public class EndToEndTests {
     // Create the document external reference type
     ExternalReferenceType documentExternalReferenceType =
         new ExternalReferenceType(
-            "test_document_external_reference_code",
+            "test_document_external_reference",
             "Test Document External Reference",
             "Test Document External Reference Description",
             ObjectType.DOCUMENT);
@@ -294,7 +294,7 @@ public class EndToEndTests {
     // Create the workflow external reference type
     ExternalReferenceType workflowExternalReferenceType =
         new ExternalReferenceType(
-            "test_workflow_external_reference_code",
+            "test_workflow_external_reference",
             "Test Workflow External Reference",
             "Test Workflow External Reference Description",
             ObjectType.WORKFLOW,
@@ -510,7 +510,7 @@ public class EndToEndTests {
             "This is the workflow description",
             List.of(
                 new WorkflowExternalReference(
-                    "test_workflow_external_reference_code",
+                    "test_workflow_external_reference",
                     "test_workflow_external_reference_value")),
             List.of(
                 new WorkflowAttribute("testWorkflowAttribute", "Test Workflow Attribute Value")),
@@ -558,8 +558,8 @@ public class EndToEndTests {
               null,
               List.of(
                   new DocumentExternalReference(
-                      "test_document_external_reference_code",
-                      "test_document_external_reference_value")),
+                      "test_document_external_reference",
+                      "Test Document External Reference Value")),
               List.of(
                   new DocumentAttribute("testDocumentAttribute", "Test Document Attribute Value")),
               null,
@@ -691,7 +691,7 @@ public class EndToEndTests {
         new ArrayList<>();
     workflowExternalReferencesSearchCriteria.add(
         new ExternalReferenceSearchCriteria(
-            "test_workflow_external_reference_code", "test_workflow_external_reference_value"));
+            "test_workflow_external_reference", "test_workflow_external_reference_value"));
 
     List<VariableSearchCriteria> workflowVariableSearchCriteria = new ArrayList<>();
     workflowVariableSearchCriteria.add(
@@ -747,7 +747,7 @@ public class EndToEndTests {
       workflowService.deleteWorkflowDefinitionCategory(workflowDefinitionCategoryId);
     }
 
-    operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference_code");
+    operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference");
 
     //   ____                                        _      ____ _
     //  |  _ \  ___   ___ _   _ _ __ ___   ___ _ __ | |_   / ___| | ___  __ _ _ __  _   _ _ __
@@ -775,7 +775,7 @@ public class EndToEndTests {
       documentService.deleteDocumentDefinitionCategory(documentDefinitionCategoryId);
     }
 
-    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
+    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference");
 
     //   ___       _                      _   _                ____ _
     //  |_ _|_ __ | |_ ___ _ __ __ _  ___| |_(_) ___  _ __    / ___| | ___  __ _ _ __  _   _ _ __

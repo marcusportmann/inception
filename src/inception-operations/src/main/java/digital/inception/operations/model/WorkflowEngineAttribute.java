@@ -79,9 +79,9 @@ public class WorkflowEngineAttribute implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 50)
+  @Size(min = 1, max = 100)
   @Id
-  @Column(name = "name", length = 50, nullable = false)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The value for the workflow engine attribute. */

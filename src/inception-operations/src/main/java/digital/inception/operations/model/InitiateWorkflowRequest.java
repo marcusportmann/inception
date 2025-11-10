@@ -48,8 +48,8 @@ import java.util.UUID;
   "pendWorkflow",
   "name",
   "description",
-  "externalReferences",
   "attributes",
+  "externalReferences",
   "interactionLinks",
   "variables",
   "data"
@@ -67,8 +67,8 @@ import java.util.UUID;
       "pendWorkflow",
       "name",
       "description",
-      "externalReferences",
       "attributes",
+      "externalReferences",
       "interactionLinks",
       "variables",
       "data"

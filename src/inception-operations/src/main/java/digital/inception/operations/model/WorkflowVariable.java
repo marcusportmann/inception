@@ -92,9 +92,11 @@ public class WorkflowVariable implements Serializable {
    *
    * <p>NOTE: All values are stored as a {@code String} with a maximum length of 4000 characters.
    */
-  @Schema(description = "The value for the workflow variable")
-  @JsonProperty
-  @XmlElement(name = "Value")
+  @Schema(description = "The value for the workflow variable",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Value", required = true)
+  @NotNull
   @Size(min = 1, max = 4000)
   @Column(name = "value", length = 4000)
   private String value;

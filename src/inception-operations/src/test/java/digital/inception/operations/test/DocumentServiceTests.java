@@ -124,7 +124,7 @@ public class DocumentServiceTests {
 
     ExternalReferenceType externalReferenceType =
         new ExternalReferenceType(
-            "test_document_external_reference_code",
+            "test_document_external_reference",
             "Test Document External Reference",
             "Test Document External Reference Description",
             ObjectType.DOCUMENT,
@@ -149,9 +149,9 @@ public class DocumentServiceTests {
 
     ExternalReferenceType retrievedExternalReferenceType =
         operationsReferenceService.getExternalReferenceType(
-            "test_document_external_reference_code");
+            "test_document_external_reference");
 
-    assertEquals("test_document_external_reference_code", retrievedExternalReferenceType.getCode());
+    assertEquals("test_document_external_reference", retrievedExternalReferenceType.getCode());
     assertEquals("Test Document External Reference", retrievedExternalReferenceType.getName());
     assertEquals(
         "Test Document External Reference Description",
@@ -220,7 +220,7 @@ public class DocumentServiceTests {
                 new DocumentAttributeDefinition(
                     "testDocumentAttribute",
                     AttributeType.STRING,
-                    "Test Document Attribute Value",
+                    "Test Document Attribute",
                     "Test Document Attribute Description",
                     true,
                     "(?i).*value.*")));
@@ -349,8 +349,8 @@ public class DocumentServiceTests {
         new ArrayList<>();
     documentExternalReferenceSearchCriteria.add(
         new ExternalReferenceSearchCriteria(
-            "test_document_external_reference_code",
-            "test_document_external_reference_updated_value"));
+            "test_document_external_reference",
+            "Test Document External Reference Updated Value"));
 
     SearchDocumentsRequest searchDocumentsRequest =
         new SearchDocumentsRequest(
@@ -476,7 +476,7 @@ public class DocumentServiceTests {
           documentService.getDocumentDefinitionCategory(sharedDocumentDefinitionCategory.getId());
         });
 
-    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference_code");
+    operationsReferenceService.deleteExternalReferenceType("test_document_external_reference");
   }
 
   /** Test the document template functionality. */
@@ -853,8 +853,8 @@ public class DocumentServiceTests {
     createDocumentRequest.setExternalReferences(
         List.of(
             new DocumentExternalReference(
-                "test_document_external_reference_code",
-                "test_document_external_reference_value")));
+                "test_document_external_reference",
+                "Test Document External Reference Value")));
     createDocumentRequest.setFileType(FileType.TEXT);
     createDocumentRequest.setIssueDate(LocalDate.of(2016, 7, 16));
     createDocumentRequest.setName("test.txt");
@@ -895,8 +895,8 @@ public class DocumentServiceTests {
     updateDocumentRequest.setExternalReferences(
         List.of(
             new DocumentExternalReference(
-                "test_document_external_reference_code",
-                "test_document_external_reference_updated_value")));
+                "test_document_external_reference",
+                "Test Document External Reference Updated Value")));
     updateDocumentRequest.setFileType(FileType.HTML);
     updateDocumentRequest.setDocumentId(document.getId());
     updateDocumentRequest.setIssueDate(LocalDate.of(2017, 8, 17));
