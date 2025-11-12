@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.server.authorization.token.model;
+package digital.inception.server.authorization.token;
 
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -24,7 +24,6 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTClaimsSet.Builder;
 import com.nimbusds.jwt.SignedJWT;
 import digital.inception.security.model.User;
-import digital.inception.server.authorization.token.exception.OAuth2AccessTokenException;
 import java.io.Serial;
 import java.security.interfaces.RSAPrivateKey;
 import java.time.Duration;

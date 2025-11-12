@@ -238,6 +238,10 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
   /** The user directories. */
   private Map<UUID, UserDirectoryProvider> userDirectories = new ConcurrentHashMap<>();
 
+  /* The issuer. */
+  private String issuer;
+
+
   /**
    * Constructs a new {@code SecurityServiceImpl}.
    *
@@ -306,6 +310,15 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
     }
 
     log.info("Using the JWT RSA key ID (" + jwtRsaKeyId + ") when issuing JWT tokens");
+
+    this.issuer =
+        applicationContext.getEnvironment().getProperty("inception.authorization-server.issuer");
+
+    if (!StringUtils.hasText(this.issuer)) {
+      this.issuer = this.jwtRsaKeyId;
+    }
+
+    log.info("Using the issuer (" + issuer + ") when issuing JWT tokens");
 
     String jwtRsaPrivateKeyLocation =
         applicationContext.getEnvironment().getProperty("inception.security.jwt.rsa-private-key");
@@ -1008,7 +1021,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
 
         jwtClaimsSetBuilder.issueTime(Date.from(issuedAt.toInstant()));
 
-        jwtClaimsSetBuilder.issuer(jwtRsaKeyId);
+        jwtClaimsSetBuilder.issuer(issuer);
 
         jwtClaimsSetBuilder.subject(generateTokenRequest.getName());
 

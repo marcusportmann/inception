@@ -1614,6 +1614,10 @@ public class WorkflowServiceTests {
         workflowDefinition2.getTenantId(),
         "The tenant ID values for the workflow definitions do not match");
     assertEquals(
+        workflowDefinition1.getSupportedWorkflowFormTypes(),
+        workflowDefinition2.getSupportedWorkflowFormTypes(),
+        "The supported workflow form type values for the workflow definitions do not match");
+    assertEquals(
         workflowDefinition1.getTimeToComplete(),
         workflowDefinition2.getTimeToComplete(),
         "The time to complete values for the workflow definitions do not match");

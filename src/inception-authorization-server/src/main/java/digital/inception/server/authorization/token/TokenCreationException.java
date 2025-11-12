@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package digital.inception.server.authorization.token.exception;
+package digital.inception.server.authorization.token;
 
 import digital.inception.core.exception.Problem;
-import digital.inception.core.exception.ServiceException;
 import java.io.Serial;
 
 /**
@@ -31,7 +30,7 @@ import java.io.Serial;
 @Problem(
     type = "https://inception.digital/problems/oauth2/token-creation",
     title = "The OAuth2 token could not be created.")
-public class TokenCreationException extends ServiceException {
+public class TokenCreationException extends Exception {
 
   @Serial private static final long serialVersionUID = 1000000;
 

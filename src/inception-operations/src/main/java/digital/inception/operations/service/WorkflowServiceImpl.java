@@ -137,6 +137,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   /** The Event Service. */
   private final EventService eventService;
 
+  /** The Interaction Service. */
   private final InteractionService interactionService;
 
   /** The Validation Service. */

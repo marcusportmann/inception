@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package digital.inception.server.authorization.token.service;
+package digital.inception.server.authorization.token;
 
+import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import digital.inception.core.exception.ServiceUnavailableException;
@@ -24,11 +27,6 @@ import digital.inception.core.util.ResourceException;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.security.model.User;
 import digital.inception.security.service.SecurityService;
-import digital.inception.server.authorization.token.exception.InvalidOAuth2RefreshTokenException;
-import digital.inception.server.authorization.token.exception.TokenCreationException;
-import digital.inception.server.authorization.token.model.OAuth2AccessToken;
-import digital.inception.server.authorization.token.model.OAuth2RefreshToken;
-import digital.inception.server.authorization.token.model.RefreshedOAuth2Tokens;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
@@ -38,20 +36,19 @@ import java.util.Set;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
- * The {@code TokenServiceImpl} class provides the Token Service implementation.
+ * The {@code TokenService} class provides the Token Service implementation.
  *
  * @author Marcus Portmann
  */
 @Component
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class TokenServiceImpl implements TokenService {
+public class TokenService {
 
   /** The access token validity in seconds. */
   public static final int ACCESS_TOKEN_VALIDITY = 5 * 60;
@@ -66,14 +63,16 @@ public class TokenServiceImpl implements TokenService {
   public static final int REFRESH_TOKEN_VALIDITY = 365 * 24 * 60 * 60;
 
   /* Logger */
-  private static final Logger log = LoggerFactory.getLogger(TokenServiceImpl.class);
+  private static final Logger log = LoggerFactory.getLogger(TokenService.class);
 
   /* Security Service */
   private final SecurityService securityService;
 
-  /* The application name. */
-  @Value("${spring.application.name:#{null}}")
-  private String applicationName;
+  /* The issuer. */
+  private String issuer;
+
+  /* The JWK for the RSA key-pair used to sign and verify the JWTs. */
+  private RSAKey jwtRsaJwk;
 
   /* The ID of the RSA key used to sign the JWTs. */
   private String jwtRsaKeyId;
@@ -84,18 +83,30 @@ public class TokenServiceImpl implements TokenService {
   /* The RSA public key used to verify the JWTs. */
   private RSAPublicKey jwtRsaPublicKey;
 
+  /* The public JWK for the RSA public key used to verify the JWTs. */
+  private RSAKey jwtRsaPublicKeyJwk;
+
   /**
-   * Constructs a new {@code TokenServiceImpl}.
+   * Constructs a new {@code TokenService}.
    *
    * @param applicationContext the Spring application context
    * @param resourceLoader the Spring resource loader
    * @param securityService the Security Service
    */
-  public TokenServiceImpl(
+  public TokenService(
       ApplicationContext applicationContext,
       ResourceLoader resourceLoader,
       SecurityService securityService) {
     this.securityService = securityService;
+
+    this.issuer =
+        applicationContext.getEnvironment().getProperty("inception.authorization-server.issuer");
+
+    if (StringUtils.hasText(this.issuer)) {
+      this.issuer = trimTrailingSlash(this.issuer);
+    } else {
+      this.issuer = applicationContext.getEnvironment().getProperty("spring.application.name");
+    }
 
     this.jwtRsaKeyId =
         applicationContext
@@ -150,6 +161,78 @@ public class TokenServiceImpl implements TokenService {
             "Failed to initialize the JWT RSA public key (" + jwtRsaPublicKeyLocation + ")", e);
       }
     }
+
+    if (this.jwtRsaPrivateKey != null && this.jwtRsaPublicKey != null) {
+      try {
+        this.jwtRsaJwk =
+            new RSAKey.Builder(this.jwtRsaPublicKey)
+                .privateKey(this.jwtRsaPrivateKey)
+                .keyUse(KeyUse.SIGNATURE)
+                .algorithm(JWSAlgorithm.RS256)
+                .keyID(this.jwtRsaKeyId)
+                .build();
+        this.jwtRsaPublicKeyJwk =
+            new RSAKey.Builder(this.jwtRsaPublicKey).keyID(this.jwtRsaKeyId).build();
+      } catch (Throwable e) {
+        log.error("Failed to initialize the JWKs for the JWT RSA key pair", e);
+      }
+    } else {
+      log.error("Failed to initialize the JWKs for the JWT RSA key pair");
+    }
+  }
+
+  /**
+   * Returns the issuer.
+   *
+   * @return the issuer
+   */
+  public String getIssuer() {
+    return issuer;
+  }
+
+  /**
+   * Returns the JWK for the RSA key-pair used to sign and verify the JWTs.
+   *
+   * @return the JWK for the RSA key-pair used to sign and verify the JWTs
+   */
+  public RSAKey getJwtRsaJwk() {
+    return jwtRsaJwk;
+  }
+
+  /**
+   * Returns the ID of the RSA key used to sign the JWTs.
+   *
+   * @return the ID of the RSA key used to sign the JWTs
+   */
+  public String getJwtRsaKeyId() {
+    return jwtRsaKeyId;
+  }
+
+  /**
+   * Returns the RSA private key used to sign the JWTs.
+   *
+   * @return the RSA private key used to sign the JWTs
+   */
+  public RSAPrivateKey getJwtRsaPrivateKey() {
+    return jwtRsaPrivateKey;
+  }
+
+  /**
+   * Returns the RSA public key used to verify the JWTs.
+   *
+   * @return the RSA public key used to verify the JWTs
+   */
+  public RSAPublicKey getJwtRsaPublicKey() {
+    return jwtRsaPublicKey;
+  }
+
+  /**
+   * Returns the public JWK for the RSA public key used to verify the JWTs.
+   *
+   * @return the public JWK for the RSA public key used to verify the JWTs
+   */
+  public RSAKey getJwtRsaPublicKeyJwk() {
+    return jwtRsaPublicKeyJwk;
   }
 
   /**
@@ -158,6 +241,7 @@ public class TokenServiceImpl implements TokenService {
    * @param username the username for the user
    * @param scopes the scope(s) for the access token
    * @return the OAuth2 access token
+   * @throws ServiceUnavailableException if the OAuth2 access token could not be issued for the user
    */
   public OAuth2AccessToken issueOAuth2AccessToken(String username, Set<String> scopes)
       throws ServiceUnavailableException {
@@ -175,6 +259,8 @@ public class TokenServiceImpl implements TokenService {
    * @param username the username for the user
    * @param scopes the scope(s) for the refresh token
    * @return the OAuth2 refresh token
+   * @throws ServiceUnavailableException if the OAuth2 refresh token could not be issued for the
+   *     user
    */
   public OAuth2RefreshToken issueOAuth2RefreshToken(String username, Set<String> scopes)
       throws ServiceUnavailableException {
@@ -191,6 +277,9 @@ public class TokenServiceImpl implements TokenService {
    *
    * @param encodedOAuth2RefreshToken the encoded OAuth2 refresh token
    * @return the refreshed tokens
+   * @throws InvalidOAuth2RefreshTokenException if the OAuth2 refresh token is invalid
+   * @throws ServiceUnavailableException if the OAuth2 access token and refresh token could not be
+   *     refreshed
    */
   public RefreshedOAuth2Tokens refreshOAuth2Tokens(String encodedOAuth2RefreshToken)
       throws InvalidOAuth2RefreshTokenException, ServiceUnavailableException {
@@ -234,6 +323,10 @@ public class TokenServiceImpl implements TokenService {
     }
   }
 
+  private static String trimTrailingSlash(String v) {
+    return (v != null && v.endsWith("/")) ? v.substring(0, v.length() - 1) : v;
+  }
+
   private OAuth2AccessToken createOAuth2AccessToken(String username, Set<String> scopes)
       throws TokenCreationException {
     try {
@@ -265,7 +358,7 @@ public class TokenServiceImpl implements TokenService {
             functionCodes,
             tenantIds,
             scopes,
-            applicationName,
+            issuer,
             ACCESS_TOKEN_VALIDITY,
             jwtRsaKeyId,
             jwtRsaPrivateKey);

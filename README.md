@@ -593,6 +593,7 @@ Complete the following steps to create a new application based on the Inception 
           enabled: true
 
         authorization-server:
+          issuer: http://localhost:8080
           jwt:
             rsa-private-key: classpath:META-INF/wt-key
             rsa-public-key: classpath:META-INF/jwt-key.pub

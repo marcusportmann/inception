@@ -422,6 +422,13 @@ public class ResourceServerConfiguration implements InitializingBean {
               .permitAll();
 
           /*
+           * Enable non-authenticated access to the well-known endpoints.
+           */
+          authorizeRequests
+              .requestMatchers(pathPatternRequestMatcherBuilder.matcher("/.well-known/**"))
+              .permitAll();
+
+          /*
            * Enable non-authenticated access to the OAuth endpoints.
            */
           authorizeRequests

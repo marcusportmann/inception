@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package digital.inception.server.authorization.token.model;
+package digital.inception.server.authorization.token;
 
 /**
  * The {@code RefreshedOAuth2Tokens} class holds a refreshed OAuth2 access token and optionally a
  * refreshed OAuth2 refresh token.
  *
  * @author Marcus Portmann
+ * @param accessToken The OAuth2 access token.
+ * @param refreshToken The OAuth2 refresh token.
  */
-public class RefreshedOAuth2Tokens {
-
-  /** The OAuth2 access token. */
-  private final OAuth2AccessToken accessToken;
-
-  /** The OAuth2 refresh token. */
-  private final OAuth2RefreshToken refreshToken;
+public record RefreshedOAuth2Tokens(
+    OAuth2AccessToken accessToken, OAuth2RefreshToken refreshToken) {
 
   /**
    * Constructs a new {@code RefreshedOAuth2Tokens}.
@@ -36,17 +33,15 @@ public class RefreshedOAuth2Tokens {
    * @param accessToken the OAuth2 access token
    * @param refreshToken the OAuth2 refresh token
    */
-  public RefreshedOAuth2Tokens(OAuth2AccessToken accessToken, OAuth2RefreshToken refreshToken) {
-    this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
-  }
+  public RefreshedOAuth2Tokens {}
 
   /**
    * Returns the OAuth2 access token.
    *
    * @return the OAuth2 access token
    */
-  public OAuth2AccessToken getAccessToken() {
+  @Override
+  public OAuth2AccessToken accessToken() {
     return accessToken;
   }
 
@@ -55,7 +50,8 @@ public class RefreshedOAuth2Tokens {
    *
    * @return the OAuth2 refresh token
    */
-  public OAuth2RefreshToken getRefreshToken() {
+  @Override
+  public OAuth2RefreshToken refreshToken() {
     return refreshToken;
   }
 }

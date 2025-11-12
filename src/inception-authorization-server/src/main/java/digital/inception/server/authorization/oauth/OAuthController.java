@@ -21,12 +21,13 @@ import digital.inception.security.exception.ExpiredPasswordException;
 import digital.inception.security.exception.UserLockedException;
 import digital.inception.security.exception.UserNotFoundException;
 import digital.inception.security.service.SecurityService;
-import digital.inception.server.authorization.token.exception.InvalidOAuth2RefreshTokenException;
-import digital.inception.server.authorization.token.model.OAuth2AccessToken;
-import digital.inception.server.authorization.token.model.OAuth2RefreshToken;
-import digital.inception.server.authorization.token.model.RefreshedOAuth2Tokens;
-import digital.inception.server.authorization.token.service.TokenService;
+import digital.inception.server.authorization.token.InvalidOAuth2RefreshTokenException;
+import digital.inception.server.authorization.token.OAuth2AccessToken;
+import digital.inception.server.authorization.token.OAuth2RefreshToken;
+import digital.inception.server.authorization.token.RefreshedOAuth2Tokens;
+import digital.inception.server.authorization.token.TokenService;
 import io.github.bucket4j.Bucket;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Map;
@@ -53,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("oauth")
 @CrossOrigin
+@Tag(name = "OAuth")
 public class OAuthController {
 
   /* Logger */
@@ -124,17 +126,6 @@ public class OAuthController {
     return new ResponseEntity<>(response.getBody(), httpHeaders, response.getStatus());
   }
 
-  private boolean authenticateClient(HttpServletRequest request) {
-
-    /* TODO: Authenticate the client using the HTTP basic authentication scheme or the client ID
-     *       and client secret request body parameters for the x-www-form-urlencoded request.
-     *
-     *       See: https://tools.ietf.org/html/rfc6749#section-2.3.1
-     */
-
-    return true;
-  }
-
   private Response processAccessTokenRequest(
       HttpServletRequest request, Map<String, String> parameters) {
 
@@ -175,15 +166,15 @@ public class OAuthController {
       RefreshedOAuth2Tokens refreshedOAuth2Tokens =
           tokenService.refreshOAuth2Tokens(request.getRefreshToken());
 
-      if (refreshedOAuth2Tokens.getRefreshToken() == null) {
+      if (refreshedOAuth2Tokens.refreshToken() == null) {
         return new ResourceOwnerPasswordCredentialsGrantResponse(
-            refreshedOAuth2Tokens.getAccessToken().getTokenValue(),
-            refreshedOAuth2Tokens.getAccessToken().getExpiresIn());
+            refreshedOAuth2Tokens.accessToken().getTokenValue(),
+            refreshedOAuth2Tokens.accessToken().getExpiresIn());
       } else {
         return new ResourceOwnerPasswordCredentialsGrantResponse(
-            refreshedOAuth2Tokens.getAccessToken().getTokenValue(),
-            refreshedOAuth2Tokens.getAccessToken().getExpiresIn(),
-            refreshedOAuth2Tokens.getRefreshToken().getTokenValue());
+            refreshedOAuth2Tokens.accessToken().getTokenValue(),
+            refreshedOAuth2Tokens.accessToken().getExpiresIn(),
+            refreshedOAuth2Tokens.refreshToken().getTokenValue());
       }
     } catch (InvalidOAuth2RefreshTokenException e) {
       return new InvalidGrantErrorResponse("Invalid refresh token");

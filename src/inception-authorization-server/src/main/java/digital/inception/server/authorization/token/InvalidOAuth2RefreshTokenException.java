@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package digital.inception.server.authorization.token.exception;
+package digital.inception.server.authorization.token;
 
 import digital.inception.core.exception.Problem;
-import digital.inception.core.exception.ServiceException;
 import java.io.Serial;
 
 /**
@@ -32,7 +31,7 @@ import java.io.Serial;
     type = "https://inception.digital/problems/oauth2/invalid-oauth2-refresh-token",
     title = "The OAuth2 refresh token is invalid.",
     status = 400)
-public class InvalidOAuth2RefreshTokenException extends ServiceException {
+public class InvalidOAuth2RefreshTokenException extends Exception {
 
   @Serial private static final long serialVersionUID = 1000000;
 

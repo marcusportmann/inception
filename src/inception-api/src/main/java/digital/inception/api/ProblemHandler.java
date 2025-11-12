@@ -221,11 +221,21 @@ public class ProblemHandler {
     ProblemDetails problemDetails = new ProblemDetails();
 
     problemDetails.setTimestamp(OffsetDateTime.now());
-    problemDetails.setType("about:blank");
-    problemDetails.setTitle(
-        "An error has occurred and your request could not be processed at this time.");
-    problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-    problemDetails.setDetail(cause.getMessage());
+
+    Problem problem = AnnotatedElementUtils.findMergedAnnotation(cause.getClass(), Problem.class);
+
+    if (problem != null) {
+      problemDetails.setType(problem.type());
+      problemDetails.setTitle(problem.title());
+      problemDetails.setStatus(problem.status());
+      problemDetails.setDetail(cause.getMessage());
+    } else {
+      problemDetails.setType("about:blank");
+      problemDetails.setTitle(
+          "An error has occurred and your request could not be processed at this time.");
+      problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+      problemDetails.setDetail(cause.getMessage());
+    }
 
     if (inDebugMode || verboseErrorHandling) {
       problemDetails.setStackTrace(dumpStackTrace(cause));

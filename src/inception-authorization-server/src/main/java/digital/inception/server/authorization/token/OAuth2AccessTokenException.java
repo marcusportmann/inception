@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.server.authorization.token.exception;
+package digital.inception.server.authorization.token;
 
 import java.io.Serial;
 
