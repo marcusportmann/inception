@@ -1046,7 +1046,13 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
         }
 
         for (TokenClaim tokenClaim : generateTokenRequest.getClaims()) {
-          jwtClaimsSetBuilder.claim(tokenClaim.getName(), tokenClaim.getValues());
+          if (!tokenClaim.getValues().isEmpty()) {
+            if (tokenClaim.getValues().size() == 1) {
+              jwtClaimsSetBuilder.claim(tokenClaim.getName(), tokenClaim.getValues().getFirst());
+            } else {
+              jwtClaimsSetBuilder.claim(tokenClaim.getName(), tokenClaim.getValues());
+            }
+          }
         }
 
         SignedJWT signedJWT =
