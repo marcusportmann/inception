@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, ElementRef, Inject, Input, OnInit } from '@angular/core';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -22,6 +24,7 @@ import { INCEPTION_CONFIG, InceptionConfig } from '../../inception-config';
 import { Session } from '../../session/services/session';
 import { SessionService } from '../../session/services/session.service';
 import { Replace } from '../../util/replace';
+import { SidebarTogglerDirective } from '../directives/sidebar-toggler.directive';
 
 /**
  * The AdminHeaderComponent class implements the admin header component.
@@ -29,8 +32,9 @@ import { Replace } from '../../util/replace';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'admin-header',
+  selector: 'inception-core-admin-header',
+  standalone: true,
+  imports: [SidebarTogglerDirective, MatMenuTrigger, AsyncPipe, MatMenu, MatMenuItem, NgIf],
   template: `
     <header class="admin-header">
       <button class="toggler d-lg-none" type="button" sidebarToggler>
@@ -41,10 +45,7 @@ import { Replace } from '../../util/replace';
         <div class="brand-minimized"></div>
       </a>
 
-      <button
-        class="toggler d-md-down-none"
-        type="button"
-        [sidebarToggler]="sidebarToggler">
+      <button class="toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
         <span class="toggler-icon"></span>
       </button>
 
@@ -58,24 +59,16 @@ import { Replace } from '../../util/replace';
           *ngIf="isLoggedIn() | async; else login_link"
           class="nav-item"
           [matMenuTriggerFor]="userMenu">
-          <a href="#" class="nav-link" (click)="(false)">
+          <a href="#" class="nav-link" (click)="false">
             <span class="user-icon"></span>
-            <span class="user-name d-md-down-none">{{
-              userName() | async
-            }}</span>
+            <span class="user-name d-md-down-none">{{ userName() | async }}</span>
           </a>
         </li>
 
-        <mat-menu
-          #userMenu="matMenu"
-          yPosition="below"
-          overlapTrigger="false"
-          class="user-menu">
+        <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false" class="user-menu">
           <a *ngIf="isUserProfileEnabled()" mat-menu-item (click)="profile()">
             <i class="fas fa-user-circle"></i>
-            <span i18n="@@admin_header_component_menu_item_profile"
-              >Profile</span
-            >
+            <span i18n="@@admin_header_component_menu_item_profile">Profile</span>
           </a>
           <a mat-menu-item (click)="logout()">
             <i class="fas fa-sign-out-alt"></i>
@@ -87,18 +80,15 @@ import { Replace } from '../../util/replace';
           <li class="nav-item">
             <a class="nav-link" (click)="login()">
               <span class="login-icon"></span>
-              <span
-                class="login d-md-down-none"
-                i18n="@@admin_header_component_link_login"
-                >Login</span
+              <span class="login d-md-down-none" i18n="@@admin_header_component_link_login"
+              >Login</span
               >
             </a>
           </li>
         </ng-template>
       </ul>
     </header>
-  `,
-  standalone: false
+  `
 })
 export class AdminHeaderComponent implements OnInit {
   @Input() fixed = false;
@@ -129,12 +119,6 @@ export class AdminHeaderComponent implements OnInit {
     );
   }
 
-  // eslint-disable-next-line
-  // static breakpoint(breakpoint: any): any {
-  //   console.log(breakpoint);
-  //   return breakpoint ? breakpoint : '';
-  // }
-
   isUserProfileEnabled(): boolean {
     return this.config.userProfileEnabled;
   }
@@ -162,13 +146,15 @@ export class AdminHeaderComponent implements OnInit {
 
   profile(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['/profile']).then((result: boolean) => {});
+    this.router.navigate(['/profile']).then(() => {
+      /* empty */
+    });
   }
 
   userName(): Observable<string> {
     return this.sessionService.session$.pipe(
       map((session: Session | null) => {
-        if (!!session) {
+        if (session) {
           return session.name;
         } else {
           return '';

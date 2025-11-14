@@ -40,7 +40,7 @@ export class PolicySummaries {
   policySummaries: PolicySummary[];
 
   /**
-   * The method used to sort the policy summaries e.g. by name.
+   * The method used to sort the policy summaries e.g., by name.
    */
   sortBy: PolicySortBy;
 
@@ -59,7 +59,7 @@ export class PolicySummaries {
    *
    * @param policySummaries The policy summaries.
    * @param total           The total number of policy summaries.
-   * @param sortBy          The method used to sort the policy summaries e.g. by name.
+   * @param sortBy          The method used to sort the policy summaries e.g., by name.
    * @param sortDirection   The sort direction that was applied to the policy summaries.
    * @param pageIndex       The page index.
    * @param pageSize        The page size.

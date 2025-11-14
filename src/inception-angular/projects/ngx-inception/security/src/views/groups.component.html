@@ -11,7 +11,7 @@
   </div>
   <div class="mat-mdc-table-header">
     <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration']" mat-flat-button color="primary" [disabled]="(enableNewButton$ | async) === false" (click)="newGroup()" i18n="@@security_groups_component_button_new">New</button>
-    <table-filter></table-filter>
+    <inception-core-table-filter></inception-core-table-filter>
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
 

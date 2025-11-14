@@ -18,7 +18,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ValidationError } from './validation-error';
 
 /**
- * The ProblemDetails class holds holds the information for a Problem Details Object as defined in
+ * The ProblemDetails class holds the information for a Problem Details Object as defined in
  * RFC 7807.
  *
  * @author Marcus Portmann
@@ -86,7 +86,7 @@ export class ProblemDetails {
    * a problem details object.
    *
    * @param httpErrorResponse The HTTP error response.
-   * @param errorCode         The error code.
+   * @param type              The URI reference that identifies the problem type.
    *
    * @return True if the HTTP error response is as a result of an API error represented as a problem
    *         details object.
@@ -95,17 +95,12 @@ export class ProblemDetails {
     httpErrorResponse: HttpErrorResponse,
     type?: string
   ): boolean {
-    return !!(
-      httpErrorResponse.name === 'HttpErrorResponse' &&
+    return !!(httpErrorResponse.name === 'HttpErrorResponse' &&
       httpErrorResponse.error &&
       httpErrorResponse.error.timestamp &&
       httpErrorResponse.error.type &&
       httpErrorResponse.error.title &&
       httpErrorResponse.error.status &&
-      httpErrorResponse.error.detail &&
-      (type == null ||
-        type == undefined ||
-        (httpErrorResponse.error.type && httpErrorResponse.error.type == type))
-    );
+      httpErrorResponse.error.detail && (type == null || false || (httpErrorResponse.error.type && httpErrorResponse.error.type == type)));
   }
 }

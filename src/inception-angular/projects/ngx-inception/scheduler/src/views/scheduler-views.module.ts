@@ -21,7 +21,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
 import { EditJobTitleResolver } from './edit-job-title-resolver';
 import { EditJobComponent } from './edit-job.component';
-import { JobParameterDialogComponent } from './job-parameter-dialog.component';
 import { JobTitleResolver } from './job-title-resolver';
 import { JobsTitleResolver } from './jobs-title-resolver';
 import { JobsComponent } from './jobs.component';
@@ -100,13 +99,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    // Components
-    EditJobComponent,
-    JobParameterDialogComponent,
-    JobsComponent,
-    NewJobComponent
-  ],
   imports: [
     // Angular modules
     CommonModule,

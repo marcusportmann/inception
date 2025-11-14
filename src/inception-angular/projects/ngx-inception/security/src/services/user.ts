@@ -115,7 +115,7 @@ export class User {
     this.email = email;
     this.status = status;
     this.password = password;
-    this.passwordAttempts = !!passwordAttempts ? passwordAttempts : null;
-    this.passwordExpiry = !!passwordExpiry ? passwordExpiry : null;
+    this.passwordAttempts = passwordAttempts ? passwordAttempts : null;
+    this.passwordExpiry = passwordExpiry ? passwordExpiry : null;
   }
 }

@@ -38,7 +38,7 @@ export class ServiceUnavailableError extends Error {
     message: string,
     cause?: ProblemDetails | HttpErrorResponse | HttpError
   ) {
-    //$localize`:@@core_service_unavailable_error:An error has occurred and your request could not
+    //$localize`:@@core_service_unavailable_error:An error has occurred, and your request could not
     // be processed at this time.`
     super(message, cause);
   }

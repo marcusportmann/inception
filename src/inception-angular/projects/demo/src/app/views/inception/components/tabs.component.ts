@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
 
 /**
  * The TabsComponent class implements the tabs component.
@@ -22,9 +23,9 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'tabs.component.html',
-  standalone: false
+  selector: 'app-tabs',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'tabs.component.html'
 })
-export class TabsComponent {
-  constructor() {}
-}
+export class TabsComponent {}

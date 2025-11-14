@@ -37,8 +37,6 @@ import { ReferenceService } from './reference.service';
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class ReferenceServicesModule {
-  constructor() {}
-
   static forRoot(): ModuleWithProviders<ReferenceServicesModule> {
     return {
       ngModule: ReferenceServicesModule,

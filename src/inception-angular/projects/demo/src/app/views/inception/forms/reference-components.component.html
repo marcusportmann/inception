@@ -5,7 +5,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Countries</mat-label>
-            <countries-chip-grid [formControl]="countriesControl" required></countries-chip-grid>
+            <inception-reference-countries-chip-grid [formControl]="countriesControl" required></inception-reference-countries-chip-grid>
             <mat-error *ngIf="countriesControl.errors && !countriesControl.untouched">
               <span *ngIf="countriesControl.errors?.['required']">One or more countries must be selected.</span>
             </mat-error>
@@ -16,7 +16,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Country</mat-label>
-            <country-input [formControl]="countryControl" required></country-input>
+            <inception-reference-country-input [formControl]="countryControl" required></inception-reference-country-input>
             <mat-error *ngIf="countryControl.errors && !countryControl.untouched">
               <span *ngIf="countryControl.errors?.['required']">A country is required.</span>
             </mat-error>
@@ -27,7 +27,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Language</mat-label>
-            <language-input [formControl]="languageControl" required></language-input>
+            <inception-reference-language-input [formControl]="languageControl" required></inception-reference-language-input>
             <mat-error *ngIf="languageControl.errors && !languageControl.untouched">
               <span *ngIf="languageControl.errors?.['required']">A language is required.</span>
             </mat-error>
@@ -38,7 +38,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Region</mat-label>
-            <region-input [country]="'ZA'" [formControl]="regionControl" required></region-input>
+            <inception-reference-region-input [country]="'ZA'" [formControl]="regionControl" required></inception-reference-region-input>
             <mat-error *ngIf="regionControl.errors && !regionControl.untouched">
               <span *ngIf="regionControl.errors?.['required']">A region is required.</span>
             </mat-error>
@@ -49,7 +49,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Time Zone</mat-label>
-            <time-zone-input [formControl]="timeZoneControl" required></time-zone-input>
+            <inception-reference-time-zone-input [formControl]="timeZoneControl" required></inception-reference-time-zone-input>
             <mat-error *ngIf="timeZoneControl.errors && !timeZoneControl.untouched">
               <span *ngIf="timeZoneControl.errors?.['required']">A time zone is required.</span>
             </mat-error>

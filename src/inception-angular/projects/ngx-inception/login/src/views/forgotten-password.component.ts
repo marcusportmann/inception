@@ -19,13 +19,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  DialogService,
-  Error,
-  InformationDialogComponent,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AccessDeniedError, CoreModule, DialogService, Error, InformationDialogComponent,
+  InvalidArgumentError, ServiceUnavailableError, SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { SecurityService } from 'ngx-inception/security';
 import { Observable, throwError } from 'rxjs';
@@ -37,8 +32,10 @@ import { catchError, finalize, first } from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'forgotten-password.component.html',
-  standalone: false
+  selector: 'inception-login-forgotten-password',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
+  templateUrl: 'forgotten-password.component.html'
 })
 export class ForgottenPasswordComponent {
   forgottenPasswordForm: FormGroup;
@@ -53,10 +50,7 @@ export class ForgottenPasswordComponent {
     private spinnerService: SpinnerService
   ) {
     // Initialize the form controls
-    this.usernameControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.usernameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     // Initialize the form
     this.forgottenPasswordForm = new FormGroup({
@@ -74,8 +68,7 @@ export class ForgottenPasswordComponent {
     if (this.forgottenPasswordForm.valid) {
       const username = this.usernameControl.value;
 
-      const resetPasswordUrl =
-        window.location.origin + '/#/login/reset-password';
+      const resetPasswordUrl = window.location.origin + '/#/login/reset-password';
 
       this.spinnerService.showSpinner();
 
@@ -96,7 +89,7 @@ export class ForgottenPasswordComponent {
       error instanceof InvalidArgumentError ||
       error instanceof ServiceUnavailableError
     ) {
-      // Redirect to error report page
+      // Redirect to the error report page
       // noinspection JSIgnoredPromiseFromCall
       this.router.navigateByUrl('/error/send-error-report', {
         state: { error }
@@ -110,15 +103,14 @@ export class ForgottenPasswordComponent {
   private showSuccessDialog(): void {
     const dialogRef: MatDialogRef<InformationDialogComponent, boolean> =
       this.dialogService.showInformationDialog({
-        message:
-          'The password reset process was initiated. Please check your email to proceed.'
+        message: 'The password reset process was initiated. Please check your email to proceed.'
       });
 
     dialogRef
       .afterClosed()
       .pipe(first())
       .subscribe(() => {
-        // Navigate back after dialog is closed
+        // Navigate back after the dialog is closed
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigate(['..'], { relativeTo: this.activatedRoute });
       });

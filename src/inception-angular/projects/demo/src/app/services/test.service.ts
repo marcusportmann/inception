@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import {
-  AccessDeniedError,
-  CommunicationError,
-  INCEPTION_CONFIG,
-  InceptionConfig,
-  InvalidArgumentError,
-  ResponseConverter,
-  ServiceUnavailableError
+  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
+  ResponseConverter, ServiceUnavailableError
 } from 'ngx-inception/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -60,10 +51,9 @@ export class TestService {
   @ResponseConverter
   testExceptionHandling(): Observable<boolean> {
     return this.httpClient
-      .get<boolean>(
-        this.config.apiUrlPrefix + '/test/test-exception-handling',
-        { observe: 'response' }
-      )
+      .get<boolean>(this.config.apiUrlPrefix + '/test/test-exception-handling', {
+        observe: 'response'
+      })
       .pipe(
         map((httpResponse: HttpResponse<boolean>) => {
           return httpResponse.status === 200;
@@ -71,24 +61,16 @@ export class TestService {
         catchError((httpErrorResponse: HttpErrorResponse) => {
           if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
             return throwError(() => new AccessDeniedError(httpErrorResponse));
-          } else if (
-            CommunicationError.isCommunicationError(httpErrorResponse)
-          ) {
+          } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
             return throwError(() => new CommunicationError(httpErrorResponse));
-          } else if (
-            InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
-          ) {
-            return throwError(
-              () => new InvalidArgumentError(httpErrorResponse)
-            );
+          } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+            return throwError(() => new InvalidArgumentError(httpErrorResponse));
           }
 
           return throwError(
             () =>
               new ServiceUnavailableError(
-                'Testing the exception handling at ' +
-                  new Date().toISOString() +
-                  '.',
+                'Testing the exception handling at ' + new Date().toISOString() + '.',
                 httpErrorResponse
               )
           );

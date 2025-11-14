@@ -27,9 +27,7 @@ import { UserDirectorySummary } from './user-directory-summary';
  *
  * @author Marcus Portmann
  */
-export class UserDirectorySummaryDataSource
-  implements DataSource<UserDirectorySummary>
-{
+export class UserDirectorySummaryDataSource implements DataSource<UserDirectorySummary> {
   private dataSubject$ = new BehaviorSubject<UserDirectorySummary[]>([]);
 
   private loadingSubject$ = new BehaviorSubject<boolean>(false);
@@ -50,13 +48,15 @@ export class UserDirectorySummaryDataSource
     this.dataSubject$.next([]);
   }
 
-  connect(
-    collectionViewer: CollectionViewer
-  ): Observable<UserDirectorySummary[]> {
+  connect(collectionViewer: CollectionViewer): Observable<UserDirectorySummary[]> {
+    void collectionViewer;
+
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
+    void collectionViewer;
+
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
     this.totalSubject$.complete();

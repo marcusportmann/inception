@@ -41,7 +41,7 @@ export class ErrorReportSummaries {
   pageSize: number;
 
   /**
-   * The method used to sort the error report summaries e.g. by who submitted them.
+   * The method used to sort the error report summaries e.g., by who submitted them.
    */
   sortBy: ErrorReportSortBy;
 
@@ -60,7 +60,7 @@ export class ErrorReportSummaries {
    *
    * @param errorReportSummaries The error report summaries.
    * @param total                The total number of error report summaries.
-   * @param sortBy               The method used to sort the error report summaries e.g. by who
+   * @param sortBy               The method used to sort the error report summaries e.g., by who
    *                             submitted them.
    * @param sortDirection        The sort direction that was applied to the error report summaries.
    * @param pageIndex            The page index.

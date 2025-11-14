@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  Directive,
-  Host,
-  HostListener,
-  Optional,
-  Self,
-  ViewContainerRef
-} from '@angular/core';
+import { Directive, Host, HostListener, Optional, Self, ViewContainerRef } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 
 /**
@@ -32,7 +25,7 @@ import { FormGroupDirective } from '@angular/forms';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'form[validatedForm]',
-  standalone: false
+  standalone: true
 })
 export class ValidatedFormDirective {
   /**
@@ -47,7 +40,9 @@ export class ValidatedFormDirective {
   ) {}
 
   @HostListener('reset')
-  onReset(): void {}
+  onReset(): void {
+    /* empty */
+  }
 
   @HostListener('submit')
   onSubmit(): boolean {
@@ -69,9 +64,7 @@ export class ValidatedFormDirective {
     }
 
     // Find the first invalid form control and set focus to it
-    return !this.checkForInvalidFormControlAndSetFocus(
-      this.viewContainerRef.element.nativeElement
-    );
+    return !this.checkForInvalidFormControlAndSetFocus(this.viewContainerRef.element.nativeElement);
   }
 
   private static isFormElement(nodeName: string): boolean {
@@ -100,8 +93,7 @@ export class ValidatedFormDirective {
             this.formGroupDirective.control &&
             this.formGroupDirective.control.controls
           ) {
-            const formControl =
-              this.formGroupDirective.control.controls[nativeChildElement.name];
+            const formControl = this.formGroupDirective.control.controls[nativeChildElement.name];
 
             if (formControl && formControl.invalid) {
               nativeChildElement.focus();

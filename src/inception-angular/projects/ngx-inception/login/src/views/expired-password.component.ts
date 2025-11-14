@@ -19,13 +19,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  DialogService,
-  Error,
-  InformationDialogComponent,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AccessDeniedError, CoreModule, DialogService, Error, InformationDialogComponent,
+  InvalidArgumentError, ServiceUnavailableError, SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { SecurityService } from 'ngx-inception/security';
 import { Observable, throwError } from 'rxjs';
@@ -37,8 +32,10 @@ import { catchError, finalize, first, map } from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'expired-password.component.html',
-  standalone: false
+  selector: 'inception-login-expired-password',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
+  templateUrl: 'expired-password.component.html'
 })
 export class ExpiredPasswordComponent implements OnInit {
   confirmNewPasswordControl: FormControl;
@@ -63,14 +60,8 @@ export class ExpiredPasswordComponent implements OnInit {
       Validators.required,
       Validators.maxLength(100)
     ]);
-    this.newPasswordControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
-    this.passwordControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.newPasswordControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.passwordControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.usernameControl = new FormControl({
       value: '',
       disabled: true
@@ -99,9 +90,7 @@ export class ExpiredPasswordComponent implements OnInit {
       const confirmNewPassword = this.confirmNewPasswordControl.value;
 
       if (newPassword !== confirmNewPassword) {
-        this.dialogService.showErrorDialog(
-          new Error('The passwords do not match.')
-        );
+        this.dialogService.showErrorDialog(new Error('The passwords do not match.'));
         return;
       }
 

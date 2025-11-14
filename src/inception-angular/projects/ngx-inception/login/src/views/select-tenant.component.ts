@@ -17,7 +17,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Session, SessionService } from 'ngx-inception/core';
+import {
+  AutocompleteSelectionRequiredDirective, CoreModule, Session, SessionService,
+  ValidatedFormDirective
+} from 'ngx-inception/core';
 import { Tenant } from 'ngx-inception/security';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, first, map, startWith, takeUntil } from 'rxjs/operators';
@@ -28,8 +31,10 @@ import { debounceTime, first, map, startWith, takeUntil } from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'select-tenant.component.html',
-  standalone: false
+  selector: 'inception-login-select-tenant',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective, AutocompleteSelectionRequiredDirective],
+  templateUrl: 'select-tenant.component.html'
 })
 export class SelectTenantComponent implements OnInit, OnDestroy {
   filteredTenants$: Subject<Tenant[]> = new ReplaySubject<Tenant[]>(1);
@@ -52,10 +57,10 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private sessionService: SessionService
   ) {
-    // Initialise the form controls
+    // Initialize the form controls
     this.tenantControl = new FormControl('', Validators.required);
 
-    // Initialise the form
+    // Initialize the form
     this.selectTenantForm = new FormGroup({
       tenant: this.tenantControl
     });
@@ -67,11 +72,7 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
 
   isTenantSelected(): boolean {
     const selectedTenant = this.tenantControl.value;
-    return !!(
-      selectedTenant &&
-      typeof selectedTenant === 'object' &&
-      selectedTenant.id
-    );
+    return !!(selectedTenant && typeof selectedTenant === 'object' && selectedTenant.id);
   }
 
   ngOnDestroy(): void {
@@ -90,9 +91,7 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
           this.tenantControl.valueChanges
             .pipe(startWith(''), debounceTime(300), takeUntil(this.destroy$))
             .subscribe((value) => {
-              this.filteredTenants$.next(
-                this.filterTenants(state.tenants, value)
-              );
+              this.filteredTenants$.next(this.filterTenants(state.tenants, value));
             });
         } else {
           console.error(
@@ -109,26 +108,19 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
 
   ok(): void {
     if (this.selectTenantForm.valid) {
-      this.sessionService.session$
-        .pipe(first())
-        .subscribe((session: Session | null) => {
-          if (session && typeof this.tenantControl.value === 'object') {
-            session.tenantId = this.tenantControl.value.id;
+      this.sessionService.session$.pipe(first()).subscribe((session: Session | null) => {
+        if (session && typeof this.tenantControl.value === 'object') {
+          session.tenantId = this.tenantControl.value.id;
 
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['/']);
-          }
-        });
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/']);
+        }
+      });
     }
   }
 
   private filterTenants(tenants: Tenant[], value: string | Tenant): Tenant[] {
-    const filterValue =
-      typeof value === 'string'
-        ? value.toLowerCase()
-        : value.name.toLowerCase();
-    return tenants.filter((tenant) =>
-      tenant.name.toLowerCase().startsWith(filterValue)
-    );
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase();
+    return tenants.filter((tenant) => tenant.name.toLowerCase().startsWith(filterValue));
   }
 }

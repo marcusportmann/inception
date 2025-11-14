@@ -45,6 +45,6 @@ export class CodeCategorySummary {
   constructor(id: string, name: string, lastModified?: Date) {
     this.id = id;
     this.name = name;
-    this.lastModified = !!lastModified ? lastModified : null;
+    this.lastModified = lastModified ? lastModified : null;
   }
 }

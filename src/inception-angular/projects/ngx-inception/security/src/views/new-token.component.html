@@ -80,12 +80,12 @@
               <th class="mat-mdc-nested-header-cell" i18n="@@security_new_token_component_claims_table_header_value">Value</th>
               <th class="mat-mdc-nested-header-cell mat-mdc-two-actions-cell" i18n="@@security_new_token_component_claims_table_header_actions">Actions</th>
             </tr>
-            <tr class="mat-mdc-nested-row" *ngFor="let claim of tokenClaims; index as index">
+            <tr class="mat-mdc-nested-row" *ngFor="let claim of tokenClaims">
               <td class="mat-mdc-nested-cell">
                 {{claim.name}}
               </td>
               <td class="mat-mdc-nested-cell">
-                {{claim.values.join(',')}}
+                {{(claim.value !== null && claim.value!==undefined && claim.value.length > 0) ? claim.value : claim.values.join(',')}}
               </td>
               <td class="mat-mdc-nested-cell mat-mdc-two-actions-cell">
                 <button mat-icon-button (click)="editTokenClaim(claim)">

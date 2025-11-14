@@ -14,32 +14,16 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute, Router } from '@angular/router';
 import { add, isWithinInterval } from 'date-fns';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ISO8601Util,
-  ServiceUnavailableError,
-  SortDirection,
-  SpinnerService,
-  TableFilterComponent
+  AdminContainerView, CoreModule, ISO8601Util, SortDirection, TableFilterComponent
 } from 'ngx-inception/core';
-import { merge, Observable, Subject, throwError } from 'rxjs';
-import { catchError, debounceTime, finalize, takeUntil } from 'rxjs/operators';
+import { merge, Observable, Subject } from 'rxjs';
+import { debounceTime, finalize, takeUntil } from 'rxjs/operators';
 import { ErrorReportSortBy } from '../services/error-report-sort-by';
 import { ErrorReportSummaries } from '../services/error-report-summaries';
 import { ErrorReportSummaryDataSource } from '../services/error-report-summary-data-source';
@@ -51,19 +35,18 @@ import { ErrorService } from '../services/error.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-error-error-reports',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'error-reports.component.html',
-  styleUrls: ['error-reports.component.css'],
-  standalone: false
+  styleUrls: ['error-reports.component.css']
 })
-export class ErrorReportsComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+export class ErrorReportsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: ErrorReportSummaryDataSource;
 
   displayedColumns = ['created', 'who', 'description', 'actions'];
 
-  fromDateControl: FormControl;
+  fromDateControl: FormControl<Date | null>;
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
@@ -74,46 +57,50 @@ export class ErrorReportsComponent
   @ViewChild(TableFilterComponent, { static: true })
   tableFilter!: TableFilterComponent;
 
-  toDateControl: FormControl;
+  readonly title = $localize`:@@error_error_reports_title:Error Reports`;
+
+  toDateControl: FormControl<Date | null>;
 
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private errorService: ErrorService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private errorService: ErrorService) {
     super();
 
     // Initialize form controls
-    this.fromDateControl = new FormControl(add(new Date(), { months: -1 }), [
-      Validators.required
-    ]);
-    this.toDateControl = new FormControl(new Date(), [Validators.required]);
+    this.fromDateControl = new FormControl<Date | null>(add(new Date(), { months: -1 }), {
+      validators: [Validators.required]
+    });
+
+    this.toDateControl = new FormControl<Date | null>(new Date(), {
+      validators: [Validators.required]
+    });
 
     // Initialize the data source
     this.dataSource = new ErrorReportSummaryDataSource(this.errorService);
   }
 
-  get title(): string {
-    return $localize`:@@error_error_reports_title:Error Reports`;
-  }
-
   dateRangeChanged(): void {
-    this.loadData();
+    if (this.fromDateControl.valid && this.toDateControl.valid) {
+      this.loadData();
+    }
   }
 
   dateRangeFilter(toDateCheck: Date | null): boolean {
-    const minDate = add(new Date(), { years: -1 });
-    const maxDate = new Date();
-    return toDateCheck
-      ? isWithinInterval(toDateCheck, {
-          start: minDate,
-          end: maxDate
-        })
-      : false;
+    if (!toDateCheck) {
+      return false;
+    }
+
+    const minAllowed = add(new Date(), { years: -1 });
+    const maxAllowed = new Date();
+
+    // Optional: also enforce toDate >= fromDate
+    const fromValue = this.fromDateControl.value as Date | null;
+    const effectiveMin = fromValue && fromValue > minAllowed ? fromValue : minAllowed;
+
+    return isWithinInterval(toDateCheck, {
+      start: effectiveMin,
+      end: maxAllowed
+    });
   }
 
   ngAfterViewInit(): void {
@@ -138,22 +125,6 @@ export class ErrorReportsComponent
     return typeof value === 'string' ? value : ISO8601Util.toString(value);
   }
 
-  private handleError(error: Error): Observable<never> {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
-    return throwError(() => error);
-  }
-
   private initializeDataLoaders(): void {
     // Reset paginator and load data on sort, filter, or pagination change
     this.sort.sortChange
@@ -173,7 +144,7 @@ export class ErrorReportsComponent
         next: () => {
           // Load complete
         },
-        error: (error) => this.handleError(error)
+        error: (error) => this.handleError(error, false)
       });
   }
 
@@ -184,33 +155,24 @@ export class ErrorReportsComponent
     let sortDirection = SortDirection.Descending;
 
     if (this.sort.active) {
-      sortBy =
-        this.sort.active === 'who'
-          ? ErrorReportSortBy.Who
-          : ErrorReportSortBy.Created;
+      sortBy = this.sort.active === 'who' ? ErrorReportSortBy.Who : ErrorReportSortBy.Created;
       sortDirection =
-        this.sort.direction === 'asc'
-          ? SortDirection.Ascending
-          : SortDirection.Descending;
+        this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
     }
 
     const fromDate =
       this.formatDate(this.fromDateControl.value) ||
       ISO8601Util.toString(add(new Date(), { months: -1 }));
-    const toDate =
-      this.formatDate(this.toDateControl.value) ||
-      ISO8601Util.toString(new Date());
+    const toDate = this.formatDate(this.toDateControl.value) || ISO8601Util.toString(new Date());
 
-    return this.dataSource
-      .load(
-        filter,
-        fromDate,
-        toDate,
-        sortBy,
-        sortDirection,
-        this.paginator.pageIndex,
-        this.paginator.pageSize
-      )
-      .pipe(catchError((error) => this.handleError(error)));
+    return this.dataSource.load(
+      filter,
+      fromDate,
+      toDate,
+      sortBy,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    );
   }
 }

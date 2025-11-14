@@ -111,7 +111,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Favorite country</mat-label>
-            <country-input [formControl]="favoriteCountryControl" required></country-input>
+            <inception-reference-country-input [formControl]="favoriteCountryControl" required></inception-reference-country-input>
             <mat-error *ngIf="favoriteCountryControl.errors && !favoriteCountryControl.untouched">
               <span *ngIf="favoriteCountryControl.errors?.['required']">A favorite country is required.</span>
             </mat-error>
@@ -132,7 +132,7 @@
       </div>
       <div class="row">
         <div class="col-sm">
-          <group-form-field>
+          <inception-core-group-form-field>
             <mat-label>Favorite color</mat-label>
             <mat-radio-group formControlName="favoriteColor" required>
               <mat-radio-button value="1">Red</mat-radio-button>
@@ -143,23 +143,23 @@
             <mat-error *ngIf="exampleForm.controls['favoriteColor'].errors && !exampleForm.controls['favoriteColor'].untouched">
               <span *ngIf="exampleForm.controls['favoriteColor'].errors?.['required']">A favorite colour is required.</span>
             </mat-error>
-          </group-form-field>
+          </inception-core-group-form-field>
         </div>
         <div class="col-sm">
-          <group-form-field>
+          <inception-core-group-form-field>
             <mat-label>Favorite pet</mat-label>
             <mat-checkbox formControlName="favoritePetDog">Dog</mat-checkbox>
             <mat-checkbox formControlName="favoritePetCat">Cat</mat-checkbox>
             <mat-checkbox formControlName="favoritePetFish">Fish</mat-checkbox>
             <mat-hint>Select your favorite pet(s).</mat-hint>
-          </group-form-field>
+          </inception-core-group-form-field>
         </div>
       </div>
       <div class="row">
         <div class="col">
           <mat-form-field>
             <mat-label>Notes</mat-label>
-            <textarea matInput formControlName="notes" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+            <textarea matInput formControlName="notes" cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
           </mat-form-field>
         </div>
       </div>

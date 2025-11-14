@@ -37,7 +37,7 @@ export class LoginError extends Error {
 }
 
 /**
- * The PasswordExpiredError class holds the information for a password expired error.
+ * The PasswordExpiredError class holds the information for a password-expired error.
  *
  * @author Marcus Portmann
  */
@@ -56,7 +56,7 @@ export class PasswordExpiredError extends Error {
 }
 
 /**
- * The UserLockedError class holds the information for a user locked error.
+ * The UserLockedError class holds the information for a user-locked error.
  *
  * @author Marcus Portmann
  */

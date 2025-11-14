@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable */
 export const removeClasses = (classNames: string[]): boolean => {
   const bodySelector = document.querySelector('body');
 

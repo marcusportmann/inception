@@ -17,11 +17,11 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
 import { JobParameter } from '../services/job-parameter';
 
 /**
- * The JobParameterDialogData interface defines the data that is displayed by a job parameter
- * dialog.
+ * The JobParameterDialogData interface defines the data displayed by a job parameter dialog.
  *
  * @author Marcus Portmann
  */
@@ -48,8 +48,8 @@ export interface JobParameterDialogData {
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'job-parameter-dialog',
+  selector: 'inception-scheduler-job-parameter-dialog',
+  imports: [CoreModule, ValidatedFormDirective],
   template: `
     <div class="mat-mdc-dialog-title"><span>Job Parameter</span></div>
     <div class="mat-mdc-dialog-content">
@@ -61,26 +61,19 @@ export interface JobParameterDialogData {
         <div class="row">
           <div class="col-sm">
             <mat-form-field>
-              <mat-label
-                i18n="@@scheduler_job_parameter_dialog_component_label_name">
+              <mat-label i18n="@@scheduler_job_parameter_dialog_component_label_name">
                 Name
               </mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="name"
-                required="true" />
+              <input type="text" matInput formControlName="name" required="true" />
               <mat-error *ngIf="nameControl.errors && !nameControl.untouched">
                 <span
                   *ngIf="nameControl.errors?.['required']"
-                  i18n="
-                    @@scheduler_job_parameter_dialog_component_error_name_required">
+                  i18n="@@scheduler_job_parameter_dialog_component_error_name_required">
                   A name is required.
                 </span>
                 <span
                   *ngIf="nameControl.errors?.['maxlength']"
-                  i18n="
-                    @@scheduler_job_parameter_dialog_component_error_name_maxlength">
+                  i18n="@@scheduler_job_parameter_dialog_component_error_name_maxlength">
                   Name must not exceed 100 characters.
                 </span>
               </mat-error>
@@ -90,16 +83,14 @@ export interface JobParameterDialogData {
         <div class="row">
           <div class="col-sm">
             <mat-form-field>
-              <mat-label
-                i18n="@@scheduler_job_parameter_dialog_component_label_value">
+              <mat-label i18n="@@scheduler_job_parameter_dialog_component_label_value">
                 Value
               </mat-label>
               <input type="text" matInput formControlName="value" />
               <mat-error *ngIf="valueControl.errors && !valueControl.untouched">
                 <span
                   *ngIf="valueControl.errors?.['maxlength']"
-                  i18n="
-                    @@scheduler_job_parameter_dialog_component_error_value_maxlength">
+                  i18n="@@scheduler_job_parameter_dialog_component_error_value_maxlength">
                   Value must not exceed 100 characters.
                 </span>
               </mat-error>
@@ -129,8 +120,7 @@ export interface JobParameterDialogData {
         OK
       </button>
     </div>
-  `,
-  standalone: false
+  `
 })
 export class JobParameterDialogComponent {
   jobParameterForm: FormGroup;
@@ -147,9 +137,9 @@ export class JobParameterDialogComponent {
    */
   constructor(
     private dialogRef: MatDialogRef<JobParameterDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: JobParameterDialogData
+    @Inject(MAT_DIALOG_DATA) data: JobParameterDialogData
   ) {
-    // Initialise the form controls
+    // Initialize the form controls
     this.nameControl = new FormControl(
       {
         value: data.name,
@@ -157,11 +147,9 @@ export class JobParameterDialogComponent {
       },
       [Validators.required, Validators.maxLength(100)]
     );
-    this.valueControl = new FormControl(data.value, [
-      Validators.maxLength(100)
-    ]);
+    this.valueControl = new FormControl(data.value, [Validators.maxLength(100)]);
 
-    // Initialise the form
+    // Initialize the form
     this.jobParameterForm = new FormGroup({
       name: this.nameControl,
       value: this.valueControl

@@ -16,16 +16,9 @@
 
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, CoreModule, Error, GroupFormFieldComponent,
+  ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
@@ -39,14 +32,12 @@ import { TenantStatus } from '../services/tenant-status';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-new-tenant',
+  imports: [CoreModule, ValidatedFormDirective, GroupFormFieldComponent],
   templateUrl: 'new-tenant.component.html',
-  styleUrls: ['new-tenant.component.css'],
-  standalone: false
+  styleUrls: ['new-tenant.component.css']
 })
-export class NewTenantComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class NewTenantComponent extends AdminContainerView implements AfterViewInit {
   createUserDirectoryControl: FormControl;
 
   nameControl: FormControl;
@@ -55,23 +46,16 @@ export class NewTenantComponent
 
   tenant: Tenant | null = null;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  readonly title = $localize`:@@security_new_tenant_title:New Tenant`;
+
+  constructor(private securityService: SecurityService) {
     super();
 
-    // Initialise the form controls
+    // Initialize the form controls
     this.createUserDirectoryControl = new FormControl(false);
-    this.nameControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
-    // Initialise the form
+    // Initialize the form
     this.newTenantForm = new FormGroup({
       createUserDirectory: this.createUserDirectoryControl,
       name: this.nameControl
@@ -79,15 +63,9 @@ export class NewTenantComponent
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation(
-      $localize`:@@security_new_tenant_back_navigation:Tenants`,
-      ['..'],
-      { relativeTo: this.activatedRoute }
-    );
-  }
-
-  get title(): string {
-    return $localize`:@@security_new_tenant_title:New Tenant`;
+    return new BackNavigation($localize`:@@security_new_tenant_back_navigation:Tenants`, ['..'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   cancel(): void {
@@ -100,38 +78,26 @@ export class NewTenantComponent
   }
 
   ok(): void {
-    if (this.tenant && this.newTenantForm.valid) {
-      this.tenant.name = this.nameControl.value;
-
-      this.spinnerService.showSpinner();
-
-      this.securityService
-        .createTenant(this.tenant, this.createUserDirectoryControl.value)
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner())
-        )
-        .subscribe(
-          () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-          },
-          (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if (
-              error instanceof AccessDeniedError ||
-              error instanceof InvalidArgumentError ||
-              error instanceof ServiceUnavailableError
-            ) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {
-                state: { error }
-              });
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          }
-        );
+    if (!this.tenant || !this.newTenantForm.valid) {
+      return;
     }
+
+    this.tenant.name = this.nameControl.value;
+
+    this.spinnerService.showSpinner();
+
+    this.securityService
+      .createTenant(this.tenant, this.createUserDirectoryControl.value)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe({
+        next: () => {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 }

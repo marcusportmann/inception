@@ -26,6 +26,11 @@ export class TokenClaim {
   name: string;
 
   /**
+   * The single value for the token claim.
+   */
+  value: string;
+
+  /**
    * The values for the token claim.
    */
   values: string[];
@@ -34,10 +39,12 @@ export class TokenClaim {
    * Constructs a new TokenClaim.
    *
    * @param name   The name of the token claim.
+   * @param value  The single value for the token claim.
    * @param values The values for the token claim.
    */
-  constructor(name: string, values: string[]) {
+  constructor(name: string, value: string, values: string[]) {
     this.name = name;
+    this.value = value;
     this.values = values;
   }
 }

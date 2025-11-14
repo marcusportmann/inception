@@ -65,11 +65,11 @@
       </div>
       <div *ngIf="editUserForm.contains('expirePassword') || editUserForm.contains('lockUser')" class="row">
         <div class="col-sm">
-          <group-form-field>
+          <inception-core-group-form-field>
             <mat-label i18n="@@security_edit_user_component_label_options">Options</mat-label>
             <mat-checkbox *ngIf="editUserForm.contains('expirePassword')" formControlName="expirePassword" i18n="@@security_edit_user_component_label_expire_password">Expire Password?</mat-checkbox>
             <mat-checkbox *ngIf="editUserForm.contains('lockUser')" formControlName="lockUser" i18n="@@security_edit_user_component_label_lock_user">Lock User?</mat-checkbox>
-          </group-form-field>
+          </inception-core-group-form-field>
         </div>
       </div>
     </mat-card-content>

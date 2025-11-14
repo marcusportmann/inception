@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
 
 /**
  * The DashboardComponent class implements the dashboard component.
@@ -22,9 +23,9 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Dashboard `,
-  standalone: false
+  selector: 'app-dashboard',
+  standalone: true,
+  imports: [CoreModule],
+  template: `Dashboard`
 })
-export class DashboardComponent {
-  constructor() {}
-}
+export class DashboardComponent {}

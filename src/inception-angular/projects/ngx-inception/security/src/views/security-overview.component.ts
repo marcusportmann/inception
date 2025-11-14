@@ -15,8 +15,7 @@
  */
 
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AdminContainerView } from 'ngx-inception/core';
+import { AdminContainerView, CoreModule } from 'ngx-inception/core';
 
 /**
  * The SecurityOverviewComponent class implements the security overview component.
@@ -24,21 +23,18 @@ import { AdminContainerView } from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Security Overview`,
-  standalone: false
+  selector: 'inception-security-security-overview',
+  standalone: true,
+  imports: [CoreModule],
+  template: `Security Overview`
 })
 export class SecurityOverviewComponent extends AdminContainerView {
+  readonly title = $localize`:@@security_security_overview_title:Security Overview`;
+
   /**
    * Constructs a new SecurityOverviewComponent.
    */
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) {
+  constructor() {
     super();
-  }
-
-  get title(): string {
-    return $localize`:@@security_security_overview_title:Security Overview`;
   }
 }

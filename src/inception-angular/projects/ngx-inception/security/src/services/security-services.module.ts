@@ -37,8 +37,6 @@ import { SecurityService } from './security.service';
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class SecurityServicesModule {
-  constructor() {}
-
   static forRoot(): ModuleWithProviders<SecurityServicesModule> {
     return {
       ngModule: SecurityServicesModule,

@@ -45,6 +45,6 @@ export class Role {
   constructor(code: string, name: string, description?: string) {
     this.code = code;
     this.name = name;
-    this.description = !!description ? description : null;
+    this.description = description ? description : null;
   }
 }

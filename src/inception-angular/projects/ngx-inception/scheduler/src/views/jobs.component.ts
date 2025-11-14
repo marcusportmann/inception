@@ -14,26 +14,13 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  ConfirmationDialogComponent,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, ConfirmationDialogComponent, CoreModule, Error, TableFilterComponent
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Job } from '../services/job';
@@ -46,22 +33,17 @@ import { SchedulerService } from '../services/scheduler.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-scheduler-jobs',
+  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'jobs.component.html',
-  styleUrls: ['jobs.component.css'],
-  standalone: false
+  styleUrls: ['jobs.component.css']
 })
 export class JobsComponent extends AdminContainerView implements AfterViewInit {
   JobStatus = JobStatus;
 
   dataSource: MatTableDataSource<Job> = new MatTableDataSource<Job>();
 
-  displayedColumns = [
-    'name',
-    'status',
-    'executionAttempts',
-    'nextExecution',
-    'actions'
-  ];
+  displayedColumns = ['name', 'status', 'executionAttempts', 'nextExecution', 'actions'];
 
   getJobStatusDescription = SchedulerService.getJobStatusDescription;
 
@@ -71,22 +53,14 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private schedulerService: SchedulerService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  readonly title = $localize`:@@scheduler_jobs_title:Jobs`;
+
+  constructor(private schedulerService: SchedulerService) {
     super();
 
     // Set the data source filter
     this.dataSource.filterPredicate = (data, filter): boolean =>
       data.name.toLowerCase().includes(filter);
-  }
-
-  get title(): string {
-    return $localize`:@@scheduler_jobs_title:Jobs`;
   }
 
   applyFilter(filterValue: string): void {
@@ -104,8 +78,12 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
     dialogRef
       .afterClosed()
       .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
+      .subscribe({
+        next: (confirmation: boolean | undefined) => {
+          if (confirmation !== true) {
+            return;
+          }
+
           this.spinnerService.showSpinner();
 
           this.schedulerService
@@ -114,26 +92,12 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
               first(),
               finalize(() => this.spinnerService.hideSpinner())
             )
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.loadJobs();
               },
-              (error: Error) => {
-                // noinspection SuspiciousTypeOfGuard
-                if (
-                  error instanceof AccessDeniedError ||
-                  error instanceof InvalidArgumentError ||
-                  error instanceof ServiceUnavailableError
-                ) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {
-                    state: { error }
-                  });
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              }
-            );
+              error: (error: Error) => this.handleError(error, false)
+            });
         }
       });
   }
@@ -154,26 +118,12 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (jobs: Job[]) => {
+      .subscribe({
+        next: (jobs: Job[]) => {
           this.dataSource.data = jobs;
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   newJob(): void {

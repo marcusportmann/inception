@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest
-} from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { first, flatMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { SessionService } from './session.service';
 
 /**
@@ -34,40 +29,46 @@ import { SessionService } from './session.service';
  */
 @Injectable()
 export class SessionInterceptor implements HttpInterceptor {
+  private static readonly DEFAULT_TENANT_ID = '00000000-0000-0000-0000-000000000000';
+
+  private static readonly TOKEN_ENDPOINT_SUFFIX = '/oauth/token';
+
   /**
    * Constructs a new SessionInterceptor.
    *
    * @param sessionService The session service.
    */
-  constructor(private sessionService: SessionService) {}
+  constructor(private readonly sessionService: SessionService) {}
 
-  // eslint-disable-next-line
-  intercept(
-    httpRequest: HttpRequest<any>, // eslint-disable-next-line
-    nextHttpHandler: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    if (!httpRequest.url.endsWith('/oauth/token')) {
-      return this.sessionService.session$.pipe(
-        first(),
-        flatMap((session) => {
-          if (session) {
-            httpRequest = httpRequest.clone({
-              headers: httpRequest.headers
-                .set('Authorization', `Bearer ${session.accessToken}`)
-                .set(
-                  'Tenant-ID',
-                  !!session.tenantId
-                    ? session.tenantId
-                    : '00000000-0000-0000-0000-000000000000'
-                )
-            });
-          }
-
-          return nextHttpHandler.handle(httpRequest);
-        })
-      );
-    } else {
-      return nextHttpHandler.handle(httpRequest);
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    // Skip attaching headers for the token endpoint
+    if (this.shouldBypass(req)) {
+      return next.handle(req);
     }
+
+    return this.sessionService.session$.pipe(
+      take(1),
+      switchMap((session) => {
+        // If there is no active session, just pass the request through
+        if (!session) {
+          return next.handle(req);
+        }
+
+        const tenantId = session.tenantId ?? SessionInterceptor.DEFAULT_TENANT_ID;
+
+        const authReq = req.clone({
+          setHeaders: {
+            Authorization: `Bearer ${session.accessToken}`,
+            'Tenant-ID': tenantId
+          }
+        });
+
+        return next.handle(authReq);
+      })
+    );
+  }
+
+  private shouldBypass(req: HttpRequest<unknown>): boolean {
+    return req.url.endsWith(SessionInterceptor.TOKEN_ENDPOINT_SUFFIX);
   }
 }

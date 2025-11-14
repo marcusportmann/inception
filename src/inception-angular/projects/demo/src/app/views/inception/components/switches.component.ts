@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
 
 /**
  * The SwitchesComponent class implements the switches component.
@@ -22,9 +23,9 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'switches.component.html',
-  standalone: false
+  selector: 'app-switches',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'switches.component.html'
 })
-export class SwitchesComponent {
-  constructor() {}
-}
+export class SwitchesComponent {}

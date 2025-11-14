@@ -17,10 +17,11 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
 import { TokenClaim } from '../services/token-claim';
 
 /**
- * The TokenClaimDialogData interface defines the data that is displayed by a token claim dialog.
+ * The TokenClaimDialogData interface defines the data displayed by a token claim dialog.
  *
  * @author Marcus Portmann
  */
@@ -36,6 +37,11 @@ export interface TokenClaimDialogData {
   readonlyName: boolean;
 
   /**
+   * The single value for the token claim.
+   */
+  value: string;
+
+  /**
    * The values for the token claim.
    */
   values: string[];
@@ -47,8 +53,9 @@ export interface TokenClaimDialogData {
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'token-claim-dialog',
+  selector: 'inception-security-token-claim-dialog',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
   template: `
     <div class="mat-mdc-dialog-title"><span>Token Claim</span></div>
     <div class="mat-mdc-dialog-content">
@@ -60,26 +67,19 @@ export interface TokenClaimDialogData {
         <div class="row">
           <div class="col-sm">
             <mat-form-field>
-              <mat-label
-                i18n="@@security_token_claim_dialog_component_label_name">
+              <mat-label i18n="@@security_token_claim_dialog_component_label_name">
                 Name
               </mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="name"
-                required="true" />
+              <input type="text" matInput formControlName="name" required="true" />
               <mat-error *ngIf="nameControl.errors && !nameControl.untouched">
                 <span
                   *ngIf="nameControl.errors?.['required']"
-                  i18n="
-                    @@security_token_claim_dialog_component_error_name_required">
+                  i18n="@@security_token_claim_dialog_component_error_name_required">
                   A name is required.
                 </span>
                 <span
                   *ngIf="nameControl.errors?.['maxlength']"
-                  i18n="
-                    @@security_token_claim_dialog_component_error_name_maxlength">
+                  i18n="@@security_token_claim_dialog_component_error_name_maxlength">
                   Name must not exceed 100 characters.
                 </span>
               </mat-error>
@@ -89,8 +89,24 @@ export interface TokenClaimDialogData {
         <div class="row">
           <div class="col-sm">
             <mat-form-field>
-              <mat-label
-                i18n="@@security_token_claim_dialog_component_label_values">
+              <mat-label i18n="@@security_token_claim_dialog_component_label_value">
+                Value
+              </mat-label>
+              <input type="text" matInput formControlName="value" />
+              <mat-error *ngIf="valueControl.errors && !valueControl.untouched">
+                <span
+                  *ngIf="valueControl.errors?.['maxlength']"
+                  i18n="@@security_token_claim_dialog_component_error_value_maxlength">
+                  Value must not exceed 4000 characters.
+                </span>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <mat-form-field>
+              <mat-label i18n="@@security_token_claim_dialog_component_label_values">
                 Values
               </mat-label>
               <textarea
@@ -100,12 +116,10 @@ export interface TokenClaimDialogData {
                 #autosize="cdkTextareaAutosize"
                 cdkAutosizeMinRows="5"
                 cdkAutosizeMaxRows="5"></textarea>
-              <mat-error
-                *ngIf="valuesControl.errors && !valuesControl.untouched">
+              <mat-error *ngIf="valuesControl.errors && !valuesControl.untouched">
                 <span
                   *ngIf="valuesControl.errors?.['maxlength']"
-                  i18n="
-                    @@security_token_claim_dialog_component_error_values_maxlength">
+                  i18n="@@security_token_claim_dialog_component_error_values_maxlength">
                   Value must not exceed 4000 characters.
                 </span>
               </mat-error>
@@ -135,13 +149,14 @@ export interface TokenClaimDialogData {
         OK
       </button>
     </div>
-  `,
-  standalone: false
+  `
 })
 export class TokenClaimDialogComponent {
   nameControl: FormControl;
 
   tokenClaimForm: FormGroup;
+
+  valueControl: FormControl;
 
   valuesControl: FormControl;
 
@@ -153,9 +168,9 @@ export class TokenClaimDialogComponent {
    */
   constructor(
     private dialogRef: MatDialogRef<TokenClaimDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: TokenClaimDialogData
+    @Inject(MAT_DIALOG_DATA) data: TokenClaimDialogData
   ) {
-    // Initialise the form controls
+    // Initialize the form controls
     this.nameControl = new FormControl(
       {
         value: data.name,
@@ -163,13 +178,13 @@ export class TokenClaimDialogComponent {
       },
       [Validators.required, Validators.maxLength(100)]
     );
-    this.valuesControl = new FormControl(data.values.join(','), [
-      Validators.maxLength(4000)
-    ]);
+    this.valueControl = new FormControl(data.value, [Validators.maxLength(4000)]);
+    this.valuesControl = new FormControl(data.values.join(','), [Validators.maxLength(4000)]);
 
-    // Initialise the form
+    // Initialize the form
     this.tokenClaimForm = new FormGroup({
       name: this.nameControl,
+      value: this.valueControl,
       values: this.valuesControl
     });
   }
@@ -181,6 +196,7 @@ export class TokenClaimDialogComponent {
   ok(): void {
     const tokenClaim: TokenClaim = new TokenClaim(
       this.nameControl.value,
+      this.valueControl.value,
       this.valuesControl.value.split(',')
     );
 

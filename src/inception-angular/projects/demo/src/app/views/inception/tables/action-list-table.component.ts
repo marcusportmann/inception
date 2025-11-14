@@ -18,6 +18,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { CoreModule, TableFilterComponent } from 'ngx-inception/core';
 
 export interface User {
   email: string;
@@ -239,9 +240,11 @@ const USER_DATA: User[] = [
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'app-action-list-table',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'action-list-table.component.html',
-  styleUrls: ['action-list-table.component.css'],
-  standalone: false
+  styleUrls: ['action-list-table.component.css']
 })
 export class ActionListTableComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<User>(USER_DATA);

@@ -14,36 +14,15 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SortDirection,
-  SpinnerService,
-  TableFilterComponent
+  AdminContainerView, CoreModule, SortDirection, TableFilterComponent
 } from 'ngx-inception/core';
-import { merge, Observable, Subject, tap, throwError } from 'rxjs';
+import { EMPTY, merge, Observable, Subject, tap } from 'rxjs';
 import {
-  catchError,
-  debounceTime,
-  filter,
-  finalize,
-  first,
-  switchMap,
-  takeUntil
+  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
 } from 'rxjs/operators';
 import { PolicySummaries } from '../services/policy-summaries';
 import { PolicySummaryDataSource } from '../services/policy-summary-data-source';
@@ -56,14 +35,13 @@ import { SecurityService } from '../services/security.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-policies',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'policies.component.html',
-  styleUrls: ['policies.component.css'],
-  standalone: false
+  styleUrls: ['policies.component.css']
 })
-export class PoliciesComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+export class PoliciesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: PolicySummaryDataSource;
 
   displayedColumns = ['id', 'version', 'name', 'type', 'actions'];
@@ -77,24 +55,16 @@ export class PoliciesComponent
   @ViewChild(TableFilterComponent, { static: true })
   tableFilter!: TableFilterComponent;
 
+  readonly title = $localize`:@@security_policies_title:Policies`;
+
   protected readonly PolicyType = PolicyType;
 
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private securityService: SecurityService) {
     super();
 
     this.dataSource = new PolicySummaryDataSource(this.securityService);
-  }
-
-  get title(): string {
-    return $localize`:@@security_policies_title:Policies`;
   }
 
   deletePolicy(policyId: string): void {
@@ -152,11 +122,17 @@ export class PoliciesComponent
         switchMap(() => {
           this.spinnerService.showSpinner();
           return action().pipe(
-            catchError((error) => this.handleError(error)),
+            catchError((error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
             tap(() => this.resetTable()),
             switchMap(() =>
               this.loadPolicySummaries().pipe(
-                catchError((error) => this.handleError(error))
+                catchError((error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
               )
             ),
             finalize(() => this.spinnerService.hideSpinner())
@@ -165,22 +141,6 @@ export class PoliciesComponent
         takeUntil(this.destroy$)
       )
       .subscribe();
-  }
-
-  private handleError(error: Error): Observable<never> {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
-    return throwError(() => error);
   }
 
   private initializeDataLoaders(): void {
@@ -201,7 +161,7 @@ export class PoliciesComponent
         next: () => {
           // Load complete
         },
-        error: (error) => this.handleError(error)
+        error: (error) => this.handleError(error, false)
       });
   }
 
@@ -212,19 +172,15 @@ export class PoliciesComponent
 
     if (this.sort.active) {
       sortDirection =
-        this.sort.direction === 'asc'
-          ? SortDirection.Ascending
-          : SortDirection.Descending;
+        this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
     }
 
-    return this.dataSource
-      .load(
-        filter,
-        sortDirection,
-        this.paginator.pageIndex,
-        this.paginator.pageSize
-      )
-      .pipe(catchError((error) => this.handleError(error)));
+    return this.dataSource.load(
+      filter,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    );
   }
 
   private resetTable(): void {

@@ -17,6 +17,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { CoreModule } from 'ngx-inception/core';
 
 export interface PeriodicElement {
   name: string;
@@ -154,8 +155,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'sortable-table.component.html',
-  standalone: false
+  selector: 'app-sortable-table',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'sortable-table.component.html'
 })
 export class SortableTableComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

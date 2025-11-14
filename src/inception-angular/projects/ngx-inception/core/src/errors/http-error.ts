@@ -15,7 +15,7 @@
  */
 
 /**
- * The HttpError class holds the information for a HTTP error.
+ * The HttpError class holds the information for an HTTP error.
  *
  * NOTE: This data structure is required because the standard HttpErrorResponse data structure
  *       cannot be successfully serialized when passed as a "state" parameter to the navigateByUrl

@@ -26,7 +26,7 @@ import { SidebarNavDropdownDirective } from './sidebar-nav-dropdown.directive';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[sidebarNavDropdownToggler]',
-  standalone: false
+  standalone: true
 })
 export class SidebarNavDropdownTogglerDirective {
   /**

@@ -59,7 +59,6 @@ const routes: Routes = [
 
     // Inception modules
     CoreModule
-  ],
-  declarations: [Menu21Component, Menu22Component]
+  ]
 })
 export class Menu2Module {}

@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 /**
  * The SimpleContainerComponent class implements the simple container component.
@@ -22,14 +23,9 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'simple-container',
-  template: '<router-outlet></router-outlet>',
-  standalone: false
+  selector: 'inception-core-simple-container',
+  standalone: true,
+  imports: [RouterOutlet],
+  template: '<router-outlet></router-outlet>'
 })
-export class SimpleContainerComponent {
-  /**
-   * Constructs a new SimpleContainerComponent.
-   */
-  constructor() {}
-}
+export class SimpleContainerComponent {}

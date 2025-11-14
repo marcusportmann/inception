@@ -36,7 +36,7 @@ export class Data {
   integerValue: number;
 
   /**
-   * The string string value for the data.
+   * The string value for the data.
    */
   stringValue: string;
 

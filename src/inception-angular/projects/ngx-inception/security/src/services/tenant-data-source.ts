@@ -17,7 +17,7 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { SortDirection } from 'ngx-inception/core';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { finalize, first } from 'rxjs/operators';
 import { SecurityService } from './security.service';
 import { Tenant } from './tenant';
 import { Tenants } from './tenants';
@@ -48,13 +48,15 @@ export class TenantDataSource implements DataSource<Tenant> {
     this.dataSubject$.next([]);
   }
 
-  connect(
-    collectionViewer: CollectionViewer
-  ): Observable<Tenant[] | ReadonlyArray<Tenant>> {
+  connect(collectionViewer: CollectionViewer): Observable<Tenant[] | readonly Tenant[]> {
+    void collectionViewer;
+
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
+    void collectionViewer;
+
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
     this.totalSubject$.complete();
@@ -78,22 +80,19 @@ export class TenantDataSource implements DataSource<Tenant> {
 
     this.securityService
       .getTenants(filter, sortDirection, pageIndex, pageSize)
-      .pipe(first())
-      .subscribe(
-        (tenants: Tenants) => {
-          this.loadingSubject$.next(false);
-
+      .pipe(
+        first(),
+        finalize(() => this.loadingSubject$.next(false))
+      )
+      .subscribe({
+        next: (tenants: Tenants) => {
           this.totalSubject$.next(tenants.total);
-
           this.dataSubject$.next(tenants.tenants);
         },
-        (error: Error) => {
-          this.loadingSubject$.next(false);
-
+        error: (error: Error) => {
           this.totalSubject$.next(0);
-
           this.loadingSubject$.error(error);
         }
-      );
+      });
   }
 }

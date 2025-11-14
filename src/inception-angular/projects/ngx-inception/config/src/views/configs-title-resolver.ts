@@ -26,10 +26,6 @@ import { Observable, of } from 'rxjs';
  */
 @Injectable()
 export class ConfigsTitleResolver {
-  /**
-   * Constructs a new ConfigsTitleResolver.
-   */
-  constructor() {}
 
   /**
    * Resolve the title.
@@ -37,10 +33,15 @@ export class ConfigsTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
     return of($localize`:@@config_configs_title_resolver:Config`);
   }
 }

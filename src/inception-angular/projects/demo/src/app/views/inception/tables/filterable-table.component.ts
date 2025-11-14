@@ -16,6 +16,7 @@
 
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { CoreModule, TableFilterComponent } from 'ngx-inception/core';
 
 export interface PeriodicElement {
   name: string;
@@ -153,8 +154,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'filterable-table.component.html',
-  standalone: false
+  selector: 'app-filterable-table',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent],
+  templateUrl: 'filterable-table.component.html'
 })
 export class FilterableTableComponent {
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

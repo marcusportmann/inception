@@ -33,8 +33,7 @@ export class JobTitleResolver {
    * @param schedulerService The scheduler service.
    */
   constructor(
-    @Inject(SchedulerService) private schedulerService: SchedulerService
-  ) {}
+    @Inject(SchedulerService) private schedulerService: SchedulerService) {}
 
   /**
    * Resolve the title.
@@ -42,10 +41,15 @@ export class JobTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
     let jobId = activatedRouteSnapshot.paramMap.get('jobId');
 
     if (!jobId) {

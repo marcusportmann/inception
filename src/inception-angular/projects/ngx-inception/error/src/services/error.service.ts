@@ -97,7 +97,7 @@ export class ErrorService {
    *                      summaries from.
    * @param toDate        ISO 8601 format date value for the date to retrieve the error report
    *                      summaries to.
-   * @param sortBy        The method used to sort the error report summaries e.g. by who
+   * @param sortBy        The method used to sort the error report summaries e.g., by who
    *                      submitted them.
    * @param sortDirection The sort direction to apply to the error report summaries.
    * @param pageIndex     The page index.

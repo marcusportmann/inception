@@ -17,6 +17,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { CoreModule } from 'ngx-inception/core';
 
 export interface PeriodicElement {
   name: string;
@@ -154,12 +155,15 @@ const ELEMENT_DATA: PeriodicElement[] = [
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'pagination-table.component.html',
-  standalone: false
+  selector: 'app-pagination-table',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'pagination-table.component.html'
 })
 export class PaginationTableComponent implements AfterViewInit {
-  dataSource: MatTableDataSource<PeriodicElement> =
-    new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource: MatTableDataSource<PeriodicElement> = new MatTableDataSource<PeriodicElement>(
+    ELEMENT_DATA
+  );
 
   displayedColumns = ['position', 'name', 'weight', 'symbol'];
 

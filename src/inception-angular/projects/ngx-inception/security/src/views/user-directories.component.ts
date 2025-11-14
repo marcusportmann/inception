@@ -14,36 +14,15 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SortDirection,
-  SpinnerService,
-  TableFilterComponent
+  AdminContainerView, CoreModule, Error, SortDirection, TableFilterComponent
 } from 'ngx-inception/core';
-import { merge, Observable, Subject, tap, throwError } from 'rxjs';
+import { EMPTY, merge, Observable, Subject, tap } from 'rxjs';
 import {
-  catchError,
-  debounceTime,
-  filter,
-  finalize,
-  first,
-  switchMap,
-  takeUntil
+  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
 } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
 import { UserDirectorySummaries } from '../services/user-directory-summaries';
@@ -55,9 +34,11 @@ import { UserDirectorySummaryDataSource } from '../services/user-directory-summa
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-user-directories',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'user-directories.component.html',
-  styleUrls: ['user-directories.component.css'],
-  standalone: false
+  styleUrls: ['user-directories.component.css']
 })
 export class UserDirectoriesComponent
   extends AdminContainerView
@@ -76,22 +57,14 @@ export class UserDirectoriesComponent
   @ViewChild(TableFilterComponent, { static: true })
   tableFilter!: TableFilterComponent;
 
+  readonly title = $localize`:@@security_user_directories_title:User Directories`;
+
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private securityService: SecurityService) {
     super();
 
     this.dataSource = new UserDirectorySummaryDataSource(this.securityService);
-  }
-
-  get title(): string {
-    return $localize`:@@security_user_directories_title:User Directories`;
   }
 
   deleteUserDirectory(userDirectoryId: string): void {
@@ -135,15 +108,22 @@ export class UserDirectoriesComponent
       .afterClosed()
       .pipe(
         first(),
-        filter((confirmed) => confirmed === true),
+        filter((confirmed: boolean | undefined) => confirmed === true),
         switchMap(() => {
           this.spinnerService.showSpinner();
+
           return action().pipe(
-            catchError((error) => this.handleError(error)),
+            catchError((error: Error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
             tap(() => this.resetTable()),
             switchMap(() =>
               this.loadUserDirectorySummaries().pipe(
-                catchError((error) => this.handleError(error))
+                catchError((error: Error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
               )
             ),
             finalize(() => this.spinnerService.hideSpinner())
@@ -152,22 +132,6 @@ export class UserDirectoriesComponent
         takeUntil(this.destroy$)
       )
       .subscribe();
-  }
-
-  private handleError(error: Error): Observable<never> {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
-    return throwError(() => error);
   }
 
   private initializeDataLoaders(): void {
@@ -188,7 +152,7 @@ export class UserDirectoriesComponent
         next: () => {
           // Load complete
         },
-        error: (error) => this.handleError(error)
+        error: (error) => this.handleError(error, false)
       });
   }
 
@@ -199,19 +163,15 @@ export class UserDirectoriesComponent
 
     if (this.sort.active) {
       sortDirection =
-        this.sort.direction === 'asc'
-          ? SortDirection.Ascending
-          : SortDirection.Descending;
+        this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
     }
 
-    return this.dataSource
-      .load(
-        filter,
-        sortDirection,
-        this.paginator.pageIndex,
-        this.paginator.pageSize
-      )
-      .pipe(catchError((error) => this.handleError(error)));
+    return this.dataSource.load(
+      filter,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    );
   }
 
   private resetTable(): void {

@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import {
-  AccessDeniedError,
-  CacheService,
-  CommunicationError,
-  INCEPTION_CONFIG,
-  InceptionConfig,
+  AccessDeniedError, CacheService, CommunicationError, INCEPTION_CONFIG, InceptionConfig,
   ServiceUnavailableError
 } from 'ngx-inception/core';
 import { Observable, of, throwError } from 'rxjs';
@@ -67,11 +59,7 @@ export class ReferenceService {
    * @return The countries.
    */
   getCountries(): Observable<Map<string, Country>> {
-    return this.getData(
-      'countries',
-      '/reference/countries',
-      (country: Country) => country.code
-    );
+    return this.getData('countries', '/reference/countries', (country: Country) => country.code);
   }
 
   /**
@@ -80,11 +68,7 @@ export class ReferenceService {
    * @return The languages.
    */
   getLanguages(): Observable<Map<string, Language>> {
-    return this.getData(
-      'languages',
-      '/reference/languages',
-      (language: Language) => language.code
-    );
+    return this.getData('languages', '/reference/languages', (language: Language) => language.code);
   }
 
   /**
@@ -93,11 +77,7 @@ export class ReferenceService {
    * @return The regions.
    */
   getRegions(): Observable<Map<string, Region>> {
-    return this.getData(
-      'regions',
-      '/reference/regions',
-      (region: Region) => region.code
-    );
+    return this.getData('regions', '/reference/regions', (region: Region) => region.code);
   }
 
   /**
@@ -106,11 +86,7 @@ export class ReferenceService {
    * @return The time zones.
    */
   getTimeZones(): Observable<Map<string, TimeZone>> {
-    return this.getData(
-      'timeZones',
-      '/reference/time-zones',
-      (timeZone: TimeZone) => timeZone.id
-    );
+    return this.getData('timeZones', '/reference/time-zones', (timeZone: TimeZone) => timeZone.id);
   }
 
   /**
@@ -127,7 +103,7 @@ export class ReferenceService {
     endpoint: string,
     keyGetter: (item: T) => string
   ): Observable<Map<string, T>> {
-    let cachedData: Map<string, T> = this.cacheService.get(cacheKey);
+    const cachedData = this.cacheService.get<Map<string, T>>(cacheKey);
 
     if (cachedData !== undefined) {
       return of(cachedData);
@@ -142,15 +118,15 @@ export class ReferenceService {
       })
       .pipe(
         map((items: T[]) => {
-          cachedData = new Map<string, T>();
+          const dataMap = new Map<string, T>();
 
           for (const item of items) {
-            cachedData.set(keyGetter(item), item);
+            dataMap.set(keyGetter(item), item);
           }
 
-          this.cacheService.set(cacheKey, cachedData);
+          this.cacheService.set(cacheKey, dataMap);
 
-          return cachedData;
+          return dataMap;
         }),
         catchError(this.handleApiError(`Failed to retrieve the ${cacheKey}.`))
       );
@@ -163,9 +139,7 @@ export class ReferenceService {
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(() => new CommunicationError(httpErrorResponse));
       }
-      return throwError(
-        () => new ServiceUnavailableError(defaultMessage, httpErrorResponse)
-      );
+      return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
     };
   }
 }

@@ -27,20 +27,20 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class PoliciesTitleResolver {
   /**
-   * Constructs a new PoliciesTitleResolver.
-   */
-  constructor() {}
-
-  /**
    * Resolve the title.
    *
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
     return of($localize`:@@security_policies_title_resolver:Policies`);
   }
 }

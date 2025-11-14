@@ -229,6 +229,9 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
   /** The User Repository. */
   private final UserRepository userRepository;
 
+  /* The issuer. */
+  private String issuer;
+
   /* The RSA private key used to sign JWTs. */
   private RSAPrivateKey jwtRsaPrivateKey;
 
@@ -237,10 +240,6 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
 
   /** The user directories. */
   private Map<UUID, UserDirectoryProvider> userDirectories = new ConcurrentHashMap<>();
-
-  /* The issuer. */
-  private String issuer;
-
 
   /**
    * Constructs a new {@code SecurityServiceImpl}.
@@ -1046,12 +1045,12 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
         }
 
         for (TokenClaim tokenClaim : generateTokenRequest.getClaims()) {
-          if (!tokenClaim.getValues().isEmpty()) {
-            if (tokenClaim.getValues().size() == 1) {
-              jwtClaimsSetBuilder.claim(tokenClaim.getName(), tokenClaim.getValues().getFirst());
-            } else {
-              jwtClaimsSetBuilder.claim(tokenClaim.getName(), tokenClaim.getValues());
-            }
+          if (StringUtils.hasText(tokenClaim.getValue())) {
+            jwtClaimsSetBuilder.claim(tokenClaim.getName(), tokenClaim.getValue());
+          } else if (!tokenClaim.getValues().isEmpty()) {
+            jwtClaimsSetBuilder.claim(tokenClaim.getName(), tokenClaim.getValues());
+          } else {
+            jwtClaimsSetBuilder.claim(tokenClaim.getName(), "");
           }
         }
 

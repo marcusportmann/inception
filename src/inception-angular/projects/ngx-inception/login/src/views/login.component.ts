@@ -14,28 +14,13 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Inject,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  DialogService,
-  Error,
-  INCEPTION_CONFIG,
-  InceptionConfig,
-  InvalidArgumentError,
-  PasswordExpiredError,
-  ServiceUnavailableError,
-  Session,
-  SessionService,
-  SpinnerService
+  AccessDeniedError, CoreModule, DialogService, Error, INCEPTION_CONFIG, InceptionConfig,
+  InvalidArgumentError, PasswordExpiredError, ServiceUnavailableError, Session, SessionService,
+  SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { SecurityService, Tenant, Tenants } from 'ngx-inception/security';
 import { catchError, finalize, first, map, Observable, throwError } from 'rxjs';
@@ -46,8 +31,10 @@ import { catchError, finalize, first, map, Observable, throwError } from 'rxjs';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'login.component.html',
-  standalone: false
+  selector: 'inception-login-login',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
+  templateUrl: 'login.component.html'
 })
 export class LoginComponent implements AfterViewInit, OnInit {
   loginForm: FormGroup;
@@ -67,17 +54,17 @@ export class LoginComponent implements AfterViewInit, OnInit {
     private sessionService: SessionService,
     private spinnerService: SpinnerService
   ) {
-    // Initialise the form controls
-    this.passwordControl = new FormControl(
-      this.config.prepopulatedLoginPassword || '',
-      [Validators.required, Validators.maxLength(100)]
-    );
-    this.usernameControl = new FormControl(
-      this.config.prepopulatedLoginUsername || '',
-      [Validators.required, Validators.maxLength(100)]
-    );
+    // Initialize the form controls
+    this.passwordControl = new FormControl(this.config.prepopulatedLoginPassword || '', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
+    this.usernameControl = new FormControl(this.config.prepopulatedLoginUsername || '', [
+      Validators.required,
+      Validators.maxLength(100)
+    ]);
 
-    // Initialise the form
+    // Initialize the form
     this.loginForm = new FormGroup({
       password: this.passwordControl,
       username: this.usernameControl
@@ -111,7 +98,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
         .pipe(
           first(),
           finalize(() => this.spinnerService.hideSpinner()),
-          catchError((error) => this.handleError(error, username))
+          catchError((error: Error) => this.handleError(error, username))
         )
         .subscribe((session: Session | null) => {
           if (session) {
@@ -179,18 +166,13 @@ export class LoginComponent implements AfterViewInit, OnInit {
       this.loadTenants(this.securityService.getTenants(), session);
     } else {
       this.loadTenants(
-        this.securityService.getTenantsForUserDirectory(
-          session.userDirectoryId
-        ),
+        this.securityService.getTenantsForUserDirectory(session.userDirectoryId),
         session
       );
     }
   }
 
-  private loadTenants(
-    tenants$: Observable<Tenants | Tenant[]>,
-    session: Session
-  ): void {
+  private loadTenants(tenants$: Observable<Tenants | Tenant[]>, session: Session): void {
     tenants$
       .pipe(
         first(),

@@ -27,7 +27,7 @@ export enum ErrorReportSortBy {
   Created = 'created',
 
   /**
-   * Sort by who.
+   * Sort by who submitted the error report.
    */
   Who = 'who'
 }

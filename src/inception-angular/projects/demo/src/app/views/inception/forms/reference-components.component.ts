@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
+import { CountriesChipGridComponent, CountryInputComponent, LanguageInputComponent,
+  RegionInputComponent, TimeZoneInputComponent
+} from 'ngx-inception/reference';
 
 /**
  * The ReferenceComponentsComponent class.
@@ -29,10 +28,20 @@ import { ActivatedRoute, Router } from '@angular/router';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'reference-components.component.html',
-  standalone: false
+  selector: 'app-reference-components',
+  standalone: true,
+  imports: [
+    CoreModule,
+    CountriesChipGridComponent,
+    CountryInputComponent,
+    LanguageInputComponent,
+    RegionInputComponent,
+    TimeZoneInputComponent,
+    ValidatedFormDirective
+  ],
+  templateUrl: 'reference-components.component.html'
 })
-export class ReferenceComponentsComponent implements OnInit {
+export class ReferenceComponentsComponent {
   countriesControl: FormControl = new FormControl([], Validators.required);
 
   countryControl: FormControl = new FormControl('', Validators.required);
@@ -53,18 +62,12 @@ export class ReferenceComponentsComponent implements OnInit {
     this.referenceForm = this.formBuilder.group({
       // hideRequired: false,
       // floatLabel: 'auto',
-      // eslint-disable-next-line
       countries: this.countriesControl,
       country: this.countryControl,
       language: this.languageControl,
       region: this.regionControl,
       timeZone: this.timeZoneControl
     });
-  }
-
-  ngOnInit(): void {
-    //this.countryControl.setValue('ZA');
-    //this.regionControl.setValue('ZA-GP');
   }
 
   ok(): void {

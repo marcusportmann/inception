@@ -101,8 +101,8 @@ export class ErrorReport {
     this.description = description;
     this.detail = detail;
     this.created = created;
-    this.who = !!who ? who : null;
-    this.feedback = !!feedback ? feedback : null;
-    this.data = !!data ? data : null;
+    this.who = who ? who : null;
+    this.feedback = feedback ? feedback : null;
+    this.data = data ? data : null;
   }
 }

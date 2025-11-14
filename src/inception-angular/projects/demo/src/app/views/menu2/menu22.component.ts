@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   AccessDeniedError,
+  CoreModule,
   DialogService,
   Error,
   InvalidArgumentError,
   ServiceUnavailableError,
-  SpinnerService
+  SpinnerService, TableFilterComponent
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Data } from '../../services/data';
@@ -42,8 +38,10 @@ import { DataService } from '../../services/data.service';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'menu22.component.html',
-  standalone: false
+  selector: 'app-menu22',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent],
+  templateUrl: 'menu22.component.html'
 })
 export class Menu22Component implements AfterViewInit {
   dataSource = new MatTableDataSource<Data>();
@@ -58,7 +56,6 @@ export class Menu22Component implements AfterViewInit {
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private dialogService: DialogService,
     private spinnerService: SpinnerService
@@ -78,10 +75,16 @@ export class Menu22Component implements AfterViewInit {
     this.dataService
       .getData()
       .pipe(first())
-      .subscribe((data: Data) => {
-        console.log('data = ', data);
+      .subscribe({
+        next: (data: Data) => {
+          console.log('data = ', data);
 
-        this.dataService.validateData(data).pipe(first()).subscribe();
+          // No handlers here, so the empty subscribe() is fine
+          this.dataService.validateData(data).pipe(first()).subscribe();
+        }
+        // You can optionally add error / complete here if needed:
+        // error: (err) => { ... },
+        // complete: () => { ... }
       });
   }
 
@@ -94,13 +97,13 @@ export class Menu22Component implements AfterViewInit {
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (data: Data[]) => {
+      .subscribe({
+        next: (data: Data[]) => {
           console.log('data = ', data);
 
           this.dataSource.data = data;
         },
-        (error: Error) => {
+        error: (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
           if (
             error instanceof AccessDeniedError ||
@@ -115,7 +118,7 @@ export class Menu22Component implements AfterViewInit {
             this.dialogService.showErrorDialog(error);
           }
         }
-      );
+      });
   }
 
   ngAfterViewInit(): void {

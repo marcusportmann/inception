@@ -16,21 +16,17 @@
 
 import { Component, forwardRef } from '@angular/core';
 import {
-  AbstractControl,
-  ControlValueAccessor,
-  FormControl,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-  Validators
+  ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors,
+  Validator, Validators
 } from '@angular/forms';
+import { CoreModule } from 'ngx-inception/core';
 import { UserDirectoryParameter } from '../services/user-directory-parameter';
 import { UserDirectoryUtil } from '../services/user-directory-util';
 
 @Component({
-  selector: 'inception-internal-user-directory',
+  selector: 'inception-security-internal-user-directory',
+  standalone: true,
+  imports: [CoreModule],
   templateUrl: 'internal-user-directory.component.html',
   styleUrls: ['internal-user-directory.component.css'],
   providers: [
@@ -44,12 +40,9 @@ import { UserDirectoryUtil } from '../services/user-directory-util';
       useExisting: forwardRef(() => InternalUserDirectoryComponent),
       multi: true
     }
-  ],
-  standalone: false
+  ]
 })
-export class InternalUserDirectoryComponent
-  implements ControlValueAccessor, Validator
-{
+export class InternalUserDirectoryComponent implements ControlValueAccessor, Validator {
   internalUserDirectoryForm: FormGroup;
 
   maxFilteredGroupMembersControl: FormControl;
@@ -65,7 +58,7 @@ export class InternalUserDirectoryComponent
   passwordHistoryMonthsControl: FormControl;
 
   constructor() {
-    // Initialise the form controls
+    // Initialize the form controls
     this.maxFilteredGroupMembersControl = new FormControl('', [
       Validators.required,
       Validators.pattern('^\\d+$')
@@ -91,7 +84,7 @@ export class InternalUserDirectoryComponent
       Validators.pattern('^\\d+$')
     ]);
 
-    // Initialise the form
+    // Initialize the form
     this.internalUserDirectoryForm = new FormGroup({
       maxFilteredGroupMembers: this.maxFilteredGroupMembersControl,
       maxFilteredGroups: this.maxFilteredGroupsControl,
@@ -140,7 +133,9 @@ export class InternalUserDirectoryComponent
   }
 
   // TODO: CHECK IF WE CAN REMOVE THIS -- MARCUS
-  onTouched: () => void = () => {};
+  onTouched: () => void = () => {
+    /* empty */
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
@@ -153,9 +148,11 @@ export class InternalUserDirectoryComponent
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled
-      ? this.internalUserDirectoryForm.disable()
-      : this.internalUserDirectoryForm.enable();
+    if (isDisabled) {
+      this.internalUserDirectoryForm.disable();
+    } else {
+      this.internalUserDirectoryForm.enable();
+    }
   }
 
   setParameters(parameters: UserDirectoryParameter[]) {
@@ -191,7 +188,7 @@ export class InternalUserDirectoryComponent
     );
   }
 
-  validate(c: AbstractControl): ValidationErrors | null {
+  validate(): ValidationErrors | null {
     return this.internalUserDirectoryForm.valid
       ? null
       : {

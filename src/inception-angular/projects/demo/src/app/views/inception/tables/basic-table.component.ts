@@ -16,6 +16,7 @@
 
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { CoreModule } from 'ngx-inception/core';
 
 export interface PeriodicElement {
   name: string;
@@ -153,8 +154,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'basic-table.component.html',
-  standalone: false
+  selector: 'app-basic-table',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'basic-table.component.html'
 })
 export class BasicTableComponent {
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

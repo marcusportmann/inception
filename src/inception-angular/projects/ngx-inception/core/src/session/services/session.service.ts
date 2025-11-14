@@ -14,35 +14,17 @@
  * limitations under the License.
  */
 
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import {
-  BehaviorSubject,
-  Observable,
-  of,
-  Subject,
-  throwError,
-  timer
-} from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError, timer } from 'rxjs';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import {
-  AccessDeniedError,
-  CommunicationError,
-  InvalidArgumentError,
-  ServiceUnavailableError
+  AccessDeniedError, CommunicationError, InvalidArgumentError, ServiceUnavailableError
 } from '../../errors';
 import { INCEPTION_CONFIG, InceptionConfig } from '../../inception-config';
 import { Session } from './session';
-import {
-  LoginError,
-  PasswordExpiredError,
-  UserLockedError
-} from './session.service.errors';
+import { LoginError, PasswordExpiredError, UserLockedError } from './session.service.errors';
 import { TokenResponse } from './token-response';
 
 /**
@@ -123,47 +105,28 @@ export class SessionService {
               httpErrorResponse.error.error === 'invalid_grant' &&
               httpErrorResponse.error.error_description
             ) {
-              if (
-                httpErrorResponse.error.error_description.includes(
-                  'Bad credentials'
-                )
-              ) {
+              if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
                 return throwError(() => new LoginError(httpErrorResponse));
-              } else if (
-                httpErrorResponse.error.error_description.includes(
-                  'User locked'
-                )
-              ) {
+              } else if (httpErrorResponse.error.error_description.includes('User locked')) {
                 return throwError(() => new UserLockedError(httpErrorResponse));
               } else if (
-                httpErrorResponse.error.error_description.includes(
-                  'Credentials expired'
-                )
+                httpErrorResponse.error.error_description.includes('Credentials expired')
               ) {
-                return throwError(
-                  () => new PasswordExpiredError(httpErrorResponse)
-                );
+                return throwError(() => new PasswordExpiredError(httpErrorResponse));
               }
             }
 
             return throwError(() => new LoginError(httpErrorResponse));
           } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
             return throwError(() => new AccessDeniedError(httpErrorResponse));
-          } else if (
-            CommunicationError.isCommunicationError(httpErrorResponse)
-          ) {
+          } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
             return throwError(() => new CommunicationError(httpErrorResponse));
-          } else if (
-            InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
-          ) {
-            return throwError(
-              () => new InvalidArgumentError(httpErrorResponse)
-            );
+          } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+            return throwError(() => new InvalidArgumentError(httpErrorResponse));
           }
 
           return throwError(
-            () =>
-              new ServiceUnavailableError('Failed to login', httpErrorResponse)
+            () => new ServiceUnavailableError('Failed to login', httpErrorResponse)
           );
         })
       );
@@ -185,19 +148,18 @@ export class SessionService {
     // eslint-disable-next-line
     const token: any = helper.decodeToken(accessToken);
 
-    const accessTokenExpiry: Date | null =
-      helper.getTokenExpirationDate(accessToken);
+    const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(accessToken);
 
     return new Session(
-      !!token.sub ? token.sub : '',
-      !!token.user_directory_id ? token.user_directory_id : '',
-      !!token.name ? token.name : '',
-      !!token.scope ? token.scope.split(' ') : [],
-      !!token.roles ? token.roles : [],
-      !!token.functions ? token.functions : [],
-      !!token.tenants ? token.tenants : [],
+      token.sub ? token.sub : '',
+      token.user_directory_id ? token.user_directory_id : '',
+      token.name ? token.name : '',
+      token.scope ? token.scope.split(' ') : [],
+      token.roles ? token.roles : [],
+      token.functions ? token.functions : [],
+      token.tenants ? token.tenants : [],
       accessToken,
-      !!accessTokenExpiry ? accessTokenExpiry : undefined,
+      accessTokenExpiry ? accessTokenExpiry : undefined,
       refreshToken
     );
   }
@@ -209,15 +171,12 @@ export class SessionService {
           const selectedTenantId = currentSession.tenantId;
 
           /*
-           * If the access token will expire with 60 seconds then obtain a new one using the refresh
+           * If the access token expires within 60-seconds then obtain a new one using the refresh
            * token if it exists. This will cause constant refreshes if the lifespan of the token
            * is less than 60 seconds.
            */
           if (currentSession.accessTokenExpiry && currentSession.refreshToken) {
-            if (
-              Date.now() >
-              currentSession.accessTokenExpiry.getTime() - 30000
-            ) {
+            if (Date.now() > currentSession.accessTokenExpiry.getTime() - 30000) {
               const body = new HttpParams()
                 .set('grant_type', 'refresh_token')
                 .set('refresh_token', currentSession.refreshToken);
@@ -229,20 +188,15 @@ export class SessionService {
               };
 
               return this.httpClient
-                .post<TokenResponse>(
-                  this.config.oauthTokenUrl,
-                  body.toString(),
-                  options
-                )
+                .post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
                 .pipe(
                   map((tokenResponse: TokenResponse) => {
-                    const refreshedSession: Session =
-                      SessionService.createSessionFromAccessToken(
-                        tokenResponse.access_token,
-                        !!tokenResponse.refresh_token
-                          ? tokenResponse.refresh_token
-                          : currentSession.refreshToken
-                      );
+                    const refreshedSession: Session = SessionService.createSessionFromAccessToken(
+                      tokenResponse.access_token,
+                      tokenResponse.refresh_token
+                        ? tokenResponse.refresh_token
+                        : currentSession.refreshToken
+                    );
 
                     refreshedSession.tenantId = selectedTenantId;
 
@@ -251,15 +205,9 @@ export class SessionService {
                     return refreshedSession;
                   }),
                   catchError((httpErrorResponse: HttpErrorResponse) => {
-                    console.log(
-                      'Failed to refresh the user session.',
-                      httpErrorResponse
-                    );
+                    console.log('Failed to refresh the user session.', httpErrorResponse);
 
-                    if (
-                      httpErrorResponse.status === 400 ||
-                      httpErrorResponse.status === 401
-                    ) {
+                    if (httpErrorResponse.status === 400 || httpErrorResponse.status === 401) {
                       this.session$.next(null);
 
                       // // noinspection JSIgnoredPromiseFromCall

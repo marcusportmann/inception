@@ -50,10 +50,14 @@ export class UserDataSource implements DataSource<User> {
   }
 
   connect(collectionViewer: CollectionViewer): Observable<User[]> {
+    void collectionViewer;
+
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
+    void collectionViewer;
+
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
     this.totalSubject$.complete();
@@ -64,7 +68,7 @@ export class UserDataSource implements DataSource<User> {
    *
    * @param userDirectoryId The ID for the user directory the users are associated with.
    * @param filter          The filter to apply to the users.
-   * @param sortBy          The method used to sort the users e.g. by name.
+   * @param sortBy          The method used to sort the users e.g., by name.
    * @param sortDirection   The sort direction to apply to the users.
    * @param pageIndex       The page index.
    * @param pageSize        The page size.

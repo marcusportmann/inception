@@ -18,10 +18,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import {
-  AdminContainerComponent,
-  CanActivateFunctionGuard,
-  NotFoundComponent,
-  SimpleContainerComponent
+  AdminContainerComponent, CanActivateFunctionGuard, NotFoundComponent, SimpleContainerComponent
 } from 'ngx-inception/core';
 
 import { UserProfileComponent } from 'ngx-inception/security';
@@ -51,9 +48,7 @@ export const routes: Routes = [
           authorities: ['ROLE_Administrator', 'FUNCTION_Dashboard.Dashboard']
         },
         loadChildren: () =>
-          import('./views/dashboard/dashboard.module').then(
-            (m) => m.DashboardModule
-          )
+          import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule)
       },
       {
         path: 'inception',
@@ -62,9 +57,7 @@ export const routes: Routes = [
           title: 'Inception'
         },
         loadChildren: () =>
-          import('./views/inception/inception.module').then(
-            (m) => m.InceptionModule
-          )
+          import('./views/inception/inception.module').then((m) => m.InceptionModule)
       },
       {
         path: 'menu1',
@@ -72,8 +65,7 @@ export const routes: Routes = [
         data: {
           title: 'Menu 1'
         },
-        loadChildren: () =>
-          import('./views/menu1/menu1.module').then((m) => m.Menu1Module)
+        loadChildren: () => import('./views/menu1/menu1.module').then((m) => m.Menu1Module)
       },
       {
         path: 'menu2',
@@ -81,8 +73,7 @@ export const routes: Routes = [
         data: {
           title: 'Menu 2'
         },
-        loadChildren: () =>
-          import('./views/menu2/menu2.module').then((m) => m.Menu2Module)
+        loadChildren: () => import('./views/menu2/menu2.module').then((m) => m.Menu2Module)
       },
       {
         path: 'menu3',
@@ -90,8 +81,7 @@ export const routes: Routes = [
         data: {
           title: 'Menu 3'
         },
-        loadChildren: () =>
-          import('./views/menu3/menu3.module').then((m) => m.Menu3Module)
+        loadChildren: () => import('./views/menu3/menu3.module').then((m) => m.Menu3Module)
       },
       {
         path: 'administration',
@@ -100,9 +90,7 @@ export const routes: Routes = [
           title: AdministrationTitleResolver
         },
         loadChildren: () =>
-          import('./views/administration/administration.module').then(
-            (m) => m.AdministrationModule
-          )
+          import('./views/administration/administration.module').then((m) => m.AdministrationModule)
       }
     ]
   },
@@ -113,9 +101,7 @@ export const routes: Routes = [
     pathMatch: 'prefix',
     component: SimpleContainerComponent,
     loadChildren: () =>
-      import('./views/wrappers/login-views-wrapper.module').then(
-        (m) => m.LoginViewsWrapperModule
-      )
+      import('./views/wrappers/login-views-wrapper.module').then((m) => m.LoginViewsWrapperModule)
   },
 
   // Send Error Report route
@@ -124,9 +110,7 @@ export const routes: Routes = [
     pathMatch: 'prefix',
     component: SimpleContainerComponent,
     loadChildren: () =>
-      import('./views/wrappers/error-views-wrapper.module').then(
-        (m) => m.ErrorViewsWrapperModule
-      )
+      import('./views/wrappers/error-views-wrapper.module').then((m) => m.ErrorViewsWrapperModule)
   },
 
   // Default route for invalid paths

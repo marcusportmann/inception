@@ -28,14 +28,10 @@ import { ErrorService } from './error.service';
  *
  * @author Marcus Portmann
  */
-export class ErrorReportSummaryDataSource
-  implements DataSource<ErrorReportSummary>
-{
+export class ErrorReportSummaryDataSource implements DataSource<ErrorReportSummary> {
   private dataSubject$ = new BehaviorSubject<ErrorReportSummary[]>([]);
 
   private loadingSubject$ = new BehaviorSubject<boolean>(false);
-
-  loading$ = this.loadingSubject$.asObservable();
 
   private totalSubject$ = new BehaviorSubject<number>(0);
 
@@ -46,18 +42,20 @@ export class ErrorReportSummaryDataSource
   /**
    * Clear the data source.
    */
+  // noinspection JSUnusedGlobalSymbols
   clear(): void {
     this.totalSubject$.next(0);
     this.dataSubject$.next([]);
   }
 
-  connect(
-    collectionViewer: CollectionViewer
-  ): Observable<ErrorReportSummary[]> {
+  connect(collectionViewer: CollectionViewer): Observable<ErrorReportSummary[]> {
+    void collectionViewer;
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
+    void collectionViewer;
+
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
     this.totalSubject$.complete();
@@ -71,7 +69,7 @@ export class ErrorReportSummaryDataSource
    *                      summaries from.
    * @param toDate        ISO 8601 format date value for the date to retrieve the error report
    *                      summaries to.
-   * @param sortBy        The method used to sort the error report summaries e.g. by who submitted
+   * @param sortBy        The method used to sort the error report summaries e.g., by who submitted
    *                      them.
    * @param sortDirection The sort direction to apply to the error report summaries.
    * @param pageIndex     The page index.
@@ -91,15 +89,7 @@ export class ErrorReportSummaryDataSource
     this.loadingSubject$.next(true);
 
     return this.errorService
-      .getErrorReportSummaries(
-        filter,
-        fromDate,
-        toDate,
-        sortBy,
-        sortDirection,
-        pageIndex,
-        pageSize
-      )
+      .getErrorReportSummaries(filter, fromDate, toDate, sortBy, sortDirection, pageIndex, pageSize)
       .pipe(
         tap((errorReportSummaries: ErrorReportSummaries) => {
           this.updateData(errorReportSummaries);

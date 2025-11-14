@@ -66,12 +66,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    // Components
-    ErrorReportsComponent,
-    SendErrorReportComponent,
-    ErrorReportComponent
-  ],
   imports: [
     // Angular modules
     CommonModule,

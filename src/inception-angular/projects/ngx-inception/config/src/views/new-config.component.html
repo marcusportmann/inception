@@ -28,7 +28,7 @@
         <div class="col">
           <mat-form-field>
             <mat-label i18n="@@config_new_config_component_label_description">Description</mat-label>
-            <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4"></textarea>
+            <textarea matInput formControlName="description" cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4"></textarea>
             <mat-error *ngIf="descriptionControl.errors && !descriptionControl.untouched">
               <span *ngIf="descriptionControl.errors?.['maxlength']" i18n="@@config_new_config_component_error_description_maxlength">Value must not exceed 100 characters.</span>
             </mat-error>

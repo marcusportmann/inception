@@ -15,85 +15,88 @@
  */
 
 /**
- * The Session class holds the information for an active user session associated with an
- * authenticated user. All values are stored as strings to support the serialization of the user
- * session.
+ * Represents an active user session associated with an authenticated user.
  *
  * @author Marcus Portmann
  */
 export class Session {
+  private static readonly FUNCTION_PREFIX = 'FUNCTION_';
+
+  private static readonly ROLE_PREFIX = 'ROLE_';
+
   /**
    * The base-64 encoded OAuth2 JWT access token for the user session.
    */
-  accessToken: string;
+  public readonly accessToken: string;
 
   /**
    * The date and time the OAuth2 JWT access token for the user session will expire.
    */
-  accessTokenExpiry?: Date;
+  public readonly accessTokenExpiry?: Date;
 
   /**
    * The codes for the functions assigned to the user associated with the user session.
    */
-  functionCodes: string[];
+  public readonly functionCodes: readonly string[];
 
   /**
    * The name of the user.
    */
-  name: string;
+  public readonly name: string;
 
   /**
    * The base-64 encoded OAuth2 refresh token for the user session.
    */
-  refreshToken?: string;
+  public readonly refreshToken?: string;
 
   /**
    * The codes for the roles assigned to the user associated with the user session.
    */
-  roleCodes: string[];
+  public readonly roleCodes: readonly string[];
 
   /**
    * The OAuth2 scopes for the user session.
    */
-  scopes: string[];
+  public readonly scopes: readonly string[];
 
   /**
    * The ID for the selected tenant for the user session.
    */
-  tenantId?: string;
+  public tenantId?: string;
 
   /**
    * The IDs for tenants the user is associated with.
    */
-  tenantIds: string[];
+  public readonly tenantIds: readonly string[];
 
   /**
    * The ID for the user directory the user is associated with.
    */
-  userDirectoryId: string;
+  public readonly userDirectoryId: string;
 
   /**
-   * The username for the user, the user session is associated with.
+   * The username for the user the session is associated with.
    */
-  username: string;
+  public readonly username: string;
+
+  private readonly functionCodeSet: Set<string>;
+
+  // Normalized sets for efficient, case-insensitive lookups
+  private readonly roleCodeSet: Set<string>;
 
   /**
    * Constructs a new Session.
    *
-   * @param username          The username for the user the user session is associated with.
-   * @param userDirectoryId   The ID for the user directory the
-   *                          user is associated with.
+   * @param username          The username for the user the session is associated with.
+   * @param userDirectoryId   The ID for the user directory the user is associated with.
    * @param name              The name of the user.
    * @param scopes            The OAuth2 scopes for the user session.
-   * @param roleCodes         The codes for the roles assigned to the user associated with
-   *                          the user session.
-   * @param functionCodes     The codes for the functions assigned to the user associated
-   *                          with the user session.
-   * @param tenantIds         The IDs for the tenants the user
-   *                          is associated with.
+   * @param roleCodes         The codes for the roles assigned to the user.
+   * @param functionCodes     The codes for the functions assigned to the user.
+   * @param tenantIds         The IDs for the tenants the user is associated with.
    * @param accessToken       The base-64 encoded OAuth2 JWT access token for the user session.
-   * @param accessTokenExpiry The string representation of the epoch timestamp giving the date and
-   *                          time the OAuth2 JWT access token for the user session will expire.
+   * @param accessTokenExpiry The date and time the OAuth2 JWT access token for the user session
+   *                          will expire.
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
   constructor(
@@ -111,84 +114,80 @@ export class Session {
     this.username = username;
     this.userDirectoryId = userDirectoryId;
     this.name = name;
-    this.scopes = scopes;
-    this.roleCodes = roleCodes;
-    this.functionCodes = functionCodes;
-    this.tenantIds = tenantIds;
+    this.scopes = scopes ?? [];
+    this.roleCodes = roleCodes ?? [];
+    this.functionCodes = functionCodes ?? [];
+    this.tenantIds = tenantIds ?? [];
     this.accessToken = accessToken;
     this.accessTokenExpiry = accessTokenExpiry;
     this.refreshToken = refreshToken;
+
+    this.roleCodeSet = new Set(this.roleCodes.map((c) => c.toUpperCase()));
+    this.functionCodeSet = new Set(this.functionCodes.map((c) => c.toUpperCase()));
   }
 
   /**
-   * Confirm that the user associated with the session has the specified authority.
+   * Returns true if the access token has expired (based on the local clock).
+   */
+  // noinspection JSUnusedGlobalSymbols
+  get isAccessTokenExpired(): boolean {
+    if (!this.accessTokenExpiry) {
+      return false;
+    }
+
+    return this.accessTokenExpiry.getTime() <= Date.now();
+  }
+
+  /**
+   * Returns true if the user associated with the session has the specified authority.
+   *
+   * Authorities are expected in the form:
+   *  - "ROLE_<roleCode>"
+   *  - "FUNCTION_<functionCode>"
    *
    * @param requiredAuthority The required authority.
-   *
-   * @return True if the user associated with the session has the specified authority or false
-   *         otherwise.
    */
-  hasAuthority(requiredAuthority: string): boolean {
-    if (requiredAuthority.startsWith('ROLE_')) {
-      if (requiredAuthority.length < 6) {
-        return false;
-      } else {
-        return this.hasRole(requiredAuthority.substr(5));
-      }
+  hasAuthority(requiredAuthority: string | null | undefined): boolean {
+    if (!requiredAuthority) {
+      return false;
     }
 
-    if (requiredAuthority.startsWith('FUNCTION_')) {
-      if (requiredAuthority.length < 10) {
-        return false;
-      } else {
-        return this.hasFunction(requiredAuthority.substr(9));
-      }
+    if (requiredAuthority.startsWith(Session.ROLE_PREFIX)) {
+      const code = requiredAuthority.slice(Session.ROLE_PREFIX.length);
+      return code.length > 0 && this.hasRole(code);
+    }
+
+    if (requiredAuthority.startsWith(Session.FUNCTION_PREFIX)) {
+      const code = requiredAuthority.slice(Session.FUNCTION_PREFIX.length);
+      return code.length > 0 && this.hasFunction(code);
     }
 
     return false;
   }
 
   /**
-   * Confirm that the user associated with the session has been assigned the required function.
+   * Returns true if the user associated with the session has been assigned the required function.
    *
    * @param requiredFunctionCode The code for the required function.
-   *
-   * @return True if the user associated with the session has been assigned the required function
-   *         or false otherwise.
    */
-  hasFunction(requiredFunctionCode: string): boolean {
-    for (const functionCode of this.functionCodes) {
-      if (
-        functionCode.localeCompare(requiredFunctionCode, undefined, {
-          sensitivity: 'accent'
-        }) === 0
-      ) {
-        return true;
-      }
+  hasFunction(requiredFunctionCode: string | null | undefined): boolean {
+    if (!requiredFunctionCode) {
+      return false;
     }
 
-    return false;
+    return this.functionCodeSet.has(requiredFunctionCode.toUpperCase());
   }
 
   /**
-   * Confirm that the user associated with the session has been assigned the required role.
+   * Returns true if the user associated with the session has been assigned the required role.
    *
    * @param requiredRoleCode The code for the required role.
-   *
-   * @return True if the user associated with the session has been assigned the required role or
-   *         false otherwise.
    */
-  hasRole(requiredRoleCode: string): boolean {
-    for (const roleCode of this.roleCodes) {
-      if (
-        roleCode.localeCompare(requiredRoleCode, undefined, {
-          sensitivity: 'accent'
-        }) === 0
-      ) {
-        return true;
-      }
+  hasRole(requiredRoleCode: string | null | undefined): boolean {
+    if (!requiredRoleCode) {
+      return false;
     }
 
-    return false;
+    return this.roleCodeSet.has(requiredRoleCode.toUpperCase());
   }
 }

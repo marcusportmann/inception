@@ -15,13 +15,8 @@
  */
 
 import { NgModule } from '@angular/core';
-import { NgxInceptionComponent } from './ngx-inception.component';
 
 @NgModule({
-  declarations: [NgxInceptionComponent],
-  imports: [],
-  exports: [NgxInceptionComponent]
+  imports: []
 })
-export class InceptionModule {
-  constructor() {}
-}
+export class InceptionModule {}

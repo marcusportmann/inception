@@ -16,7 +16,6 @@
 
 import { SortDirection } from 'ngx-inception/core';
 import { TokenSortBy } from './token-sort-by';
-import { TokenStatus } from './token-status';
 import { TokenSummary } from './token-summary';
 
 /**
@@ -36,7 +35,7 @@ export class TokenSummaries {
   pageSize: number;
 
   /**
-   * The method used to sort the token summaries e.g. by name.
+   * The method used to sort the token summaries e.g., by name.
    */
   sortBy: TokenSortBy;
 
@@ -60,7 +59,7 @@ export class TokenSummaries {
    *
    * @param tokenSummaries The token summaries.
    * @param total          The total number of token summaries.
-   * @param sortBy         The method used to sort the token summaries e.g. by name.
+   * @param sortBy         The method used to sort the token summaries e.g., by name.
    * @param sortDirection  The sort direction that was applied to the token summaries.
    * @param pageIndex      The page index.
    * @param pageSize       The page size.

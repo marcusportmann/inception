@@ -21,21 +21,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ReferenceServicesModule } from '../services/reference-services.module';
-import { CountriesChipGridComponent } from './countries-chip-grid.component';
-import { CountryInputComponent } from './country-input.component';
-import { LanguageInputComponent } from './language-input.component';
-import { RegionInputComponent } from './region-input.component';
-import { TimeZoneInputComponent } from './time-zone-input.component';
 
 @NgModule({
-  declarations: [
-    // Components
-    CountriesChipGridComponent,
-    CountryInputComponent,
-    LanguageInputComponent,
-    RegionInputComponent,
-    TimeZoneInputComponent
-  ],
   imports: [
     // Angular modules
     CommonModule,
@@ -48,13 +35,6 @@ import { TimeZoneInputComponent } from './time-zone-input.component';
     MatChipsModule,
     MatInputModule,
     MatIconModule
-  ],
-  exports: [
-    CountriesChipGridComponent,
-    CountryInputComponent,
-    LanguageInputComponent,
-    RegionInputComponent,
-    TimeZoneInputComponent
   ]
 })
 export class ReferenceComponentsModule {}

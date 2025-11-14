@@ -52,7 +52,7 @@ export class Error {
     this.message = message;
     this.timestamp = new Date();
 
-    if (!!cause) {
+    if (cause) {
       if (cause instanceof HttpErrorResponse) {
         if (ProblemDetails.isProblemDetails(cause)) {
           const problemDetails: ProblemDetails = new ProblemDetails(cause);

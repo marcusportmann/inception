@@ -14,48 +14,16 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SessionService,
-  SortDirection,
-  SpinnerService,
-  TableFilterComponent
+  AdminContainerView, CoreModule, HasAuthorityDirective, SessionService, SortDirection, TableFilterComponent
 } from 'ngx-inception/core';
+import { BehaviorSubject, EMPTY, forkJoin, merge, Observable, of, Subject, tap } from 'rxjs';
 import {
-  BehaviorSubject,
-  forkJoin,
-  merge,
-  Observable,
-  of,
-  Subject,
-  tap,
-  throwError
-} from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  filter,
-  finalize,
-  first,
-  map,
-  switchMap,
-  takeUntil
+  catchError, debounceTime, filter, finalize, first, map, switchMap, takeUntil
 } from 'rxjs/operators';
 import { GroupDataSource } from '../services/group-data-source';
 import { Groups } from '../services/groups';
@@ -69,14 +37,13 @@ import { UserDirectorySummary } from '../services/user-directory-summary';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-groups',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent, HasAuthorityDirective],
   templateUrl: 'groups.component.html',
-  styleUrls: ['groups.component.css'],
-  standalone: false
+  styleUrls: ['groups.component.css']
 })
-export class GroupsComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+export class GroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: GroupDataSource;
 
   displayedColumns = ['name', 'actions'];
@@ -90,10 +57,11 @@ export class GroupsComponent
   @ViewChild(TableFilterComponent, { static: true })
   tableFilter!: TableFilterComponent;
 
+  readonly title = $localize`:@@security_groups_title:Groups`;
+
   userDirectories: UserDirectorySummary[] = [];
 
-  userDirectoryCapabilities$ =
-    new BehaviorSubject<UserDirectoryCapabilities | null>(null);
+  userDirectoryCapabilities$ = new BehaviorSubject<UserDirectoryCapabilities | null>(null);
 
   userDirectoryId$ = new BehaviorSubject<string>('');
 
@@ -103,12 +71,8 @@ export class GroupsComponent
   private destroy$ = new Subject<void>();
 
   constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
     private securityService: SecurityService,
-    private sessionService: SessionService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
+    private sessionService: SessionService
   ) {
     super();
     this.dataSource = new GroupDataSource(this.securityService);
@@ -127,10 +91,6 @@ export class GroupsComponent
     return this.enableActionsMenu$;
   }
 
-  get title(): string {
-    return $localize`:@@security_groups_title:Groups`;
-  }
-
   deleteGroup(groupName: string): void {
     const message = $localize`:@@security_groups_confirm_delete_group:Are you sure you want to delete the group?`;
     this.confirmAndProcessAction(message, () =>
@@ -140,22 +100,21 @@ export class GroupsComponent
 
   editGroup(groupName: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [`${this.userDirectoryId$.value}/${encodeURIComponent(groupName)}/edit`],
-      { relativeTo: this.activatedRoute }
-    );
+    this.router.navigate([`${this.userDirectoryId$.value}/${encodeURIComponent(groupName)}/edit`], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   groupMembers(groupName: string): void {
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [
-        `${this.userDirectoryId$.value}/${encodeURIComponent(groupName)}/members`
-      ],
+      [`${this.userDirectoryId$.value}/${encodeURIComponent(groupName)}/members`],
       { relativeTo: this.activatedRoute }
     );
   }
 
   groupRoles(groupName: string): void {
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
       [`${this.userDirectoryId$.value}/${encodeURIComponent(groupName)}/roles`],
       { relativeTo: this.activatedRoute }
@@ -165,9 +124,7 @@ export class GroupsComponent
   loadGroups(): Observable<Groups> {
     const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
     const sortDirection =
-      this.sort.direction === 'asc'
-        ? SortDirection.Ascending
-        : SortDirection.Descending;
+      this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
 
     if (this.userDirectoryId$.value) {
       return this.dataSource
@@ -180,7 +137,9 @@ export class GroupsComponent
         )
         .pipe(
           catchError((error) => {
-            return this.handleError(error);
+            this.handleError(error, false);
+
+            return EMPTY;
           })
         );
     } else {
@@ -190,6 +149,7 @@ export class GroupsComponent
   }
 
   newGroup(): void {
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate([`${this.userDirectoryId$.value}/new`], {
       relativeTo: this.activatedRoute
     });
@@ -207,7 +167,7 @@ export class GroupsComponent
 
   private confirmAndProcessAction(
     confirmationMessage: string,
-    action: () => Observable<void | any>
+    action: () => Observable<void | unknown>
   ): void {
     const dialogRef = this.dialogService.showConfirmationDialog({
       message: confirmationMessage
@@ -221,11 +181,17 @@ export class GroupsComponent
         switchMap(() => {
           this.spinnerService.showSpinner();
           return action().pipe(
-            catchError((error) => this.handleError(error)),
+            catchError((error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
             tap(() => this.resetTable()),
             switchMap(() =>
               this.loadGroups().pipe(
-                catchError((error) => this.handleError(error))
+                catchError((error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
               )
             ),
             finalize(() => this.spinnerService.hideSpinner())
@@ -234,21 +200,6 @@ export class GroupsComponent
         takeUntil(this.destroy$)
       )
       .subscribe();
-  }
-
-  private handleError(error: Error): Observable<never> {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
-    return throwError(() => error);
   }
 
   private initializeDataLoaders(): void {
@@ -264,9 +215,17 @@ export class GroupsComponent
             return forkJoin({
               userDirectoryCapabilities: this.securityService
                 .getUserDirectoryCapabilities(userDirectoryId)
-                .pipe(catchError((error) => this.handleError(error))),
+                .pipe(
+                  catchError((error) => {
+                    this.handleError(error, false);
+                    return EMPTY;
+                  })
+                ),
               groups: this.loadGroups().pipe(
-                catchError((error) => this.handleError(error))
+                catchError((error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
               )
             }).pipe(
               tap(({ userDirectoryCapabilities }) =>
@@ -304,7 +263,10 @@ export class GroupsComponent
           this.spinnerService.showSpinner();
           this.loadGroups()
             .pipe(
-              catchError((error) => this.handleError(error)),
+              catchError((error) => {
+                this.handleError(error, false);
+                return EMPTY;
+              }),
               finalize(() => this.spinnerService.hideSpinner())
             )
             .subscribe();
@@ -320,12 +282,13 @@ export class GroupsComponent
         switchMap((session) => {
           if (session?.tenantId) {
             this.spinnerService.showSpinner();
-            return this.securityService
-              .getUserDirectorySummariesForTenant(session.tenantId)
-              .pipe(
-                catchError((error) => this.handleError(error)),
-                finalize(() => this.spinnerService.hideSpinner())
-              );
+            return this.securityService.getUserDirectorySummariesForTenant(session.tenantId).pipe(
+              catchError((error) => {
+                this.handleError(error, false);
+                return EMPTY;
+              }),
+              finalize(() => this.spinnerService.hideSpinner())
+            );
           } else {
             return of([]);
           }

@@ -15,10 +15,7 @@
  */
 
 import { CommonModule } from '@angular/common';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CodesService } from './codes.service';
 
@@ -37,8 +34,7 @@ import { CodesService } from './codes.service';
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class CodesServicesModule {
-  constructor() {}
-
+  // noinspection JSUnusedGlobalSymbols
   static forRoot(): ModuleWithProviders<CodesServicesModule> {
     return {
       ngModule: CodesServicesModule,

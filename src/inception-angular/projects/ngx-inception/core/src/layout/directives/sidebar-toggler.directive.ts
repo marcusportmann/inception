@@ -14,41 +14,32 @@
  * limitations under the License.
  */
 
-import { Directive, HostListener, Input, OnInit } from '@angular/core';
+import { Directive, HostListener, Input } from '@angular/core';
 import { toggleClasses } from '../../util/toggle-classes';
 import { SIDEBAR_CSS_CLASSES } from '../components/sidebar-css-classes';
 
 /**
- * The SidebarTogglerDirective class implements the sidebar toggler directive.
- *
- * @author Marcus Portmann
+ * Toggles the sidebar visibility based on an optional breakpoint.
  */
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[sidebarToggler]',
-  standalone: false
+  standalone: true
 })
-export class SidebarTogglerDirective implements OnInit {
-  bp?: string;
-
-  @Input('sidebarToggler') breakpoint?: string;
-
+export class SidebarTogglerDirective {
   /**
-   * Constructs a new SidebarTogglerDirective.
+   * Optional breakpoint to control which sidebar variant to toggle.
+   * Example: "sm", "md", "lg" → "sidebar-sm-show", etc.
    */
-  constructor() {}
+  @Input() sidebarToggler?: string;
 
-  ngOnInit(): void {
-    this.bp = this.breakpoint;
-  }
+  @HostListener('click', ['$event'])
+  onClick(event: MouseEvent): void {
+    event.preventDefault();
 
-  // eslint-disable-next-line
-  @HostListener('click', ['$event']) toggleOpen($event: any): void {
-    $event.preventDefault();
-    let cssClass;
-    !!this.bp
-      ? (cssClass = `sidebar-${this.bp}-show`)
-      : (cssClass = SIDEBAR_CSS_CLASSES[0]);
+    const breakpoint = this.sidebarToggler?.trim();
+    const cssClass = breakpoint ? `sidebar-${breakpoint}-show` : SIDEBAR_CSS_CLASSES[0];
+
     toggleClasses(cssClass, SIDEBAR_CSS_CLASSES);
   }
 }

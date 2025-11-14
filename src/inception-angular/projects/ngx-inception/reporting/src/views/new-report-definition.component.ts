@@ -16,18 +16,9 @@
 
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  Base64,
-  DialogService,
-  Error,
-  FileValidator,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, Base64, CoreModule, Error, FileValidator,
+  ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { ReportDefinition } from '../services/report-definition';
@@ -39,14 +30,12 @@ import { ReportingService } from '../services/reporting.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-reporting-new-report-definition',
+  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'new-report-definition.component.html',
-  styleUrls: ['new-report-definition.component.css'],
-  standalone: false
+  styleUrls: ['new-report-definition.component.css']
 })
-export class NewReportDefinitionComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class NewReportDefinitionComponent extends AdminContainerView implements AfterViewInit {
   idControl: FormControl;
 
   nameControl: FormControl;
@@ -57,28 +46,21 @@ export class NewReportDefinitionComponent
 
   templateControl: FormControl;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private reportingService: ReportingService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  readonly title = $localize`:@@reporting_new_report_definition_title:New Report Definition`;
+
+  constructor(private reportingService: ReportingService) {
     super();
 
-    // Initialise the form controls
+    // Initialize the form controls
     this.idControl = new FormControl('', [Validators.required]);
-    this.nameControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.templateControl = new FormControl('', [
       Validators.required,
       FileValidator.minSize(1),
       FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)
     ]);
 
-    // Initialise the form
+    // Initialize the form
     this.newReportDefinitionForm = new FormGroup({
       id: this.idControl,
       name: this.nameControl,
@@ -94,10 +76,6 @@ export class NewReportDefinitionComponent
     );
   }
 
-  get title(): string {
-    return $localize`:@@reporting_new_report_definition_title:New Report Definition`;
-  }
-
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], { relativeTo: this.activatedRoute });
@@ -108,60 +86,53 @@ export class NewReportDefinitionComponent
   }
 
   ok(): void {
-    if (this.reportDefinition && this.newReportDefinitionForm.valid) {
-      const fileReader: FileReader = new FileReader();
-
-      fileReader.onloadend = (ev: ProgressEvent) => {
-        const template = fileReader.result;
-
-        if (this.reportDefinition && template instanceof ArrayBuffer) {
-          const base64: string = Base64.encode(template as ArrayBuffer);
-
-          this.reportDefinition.id = this.idControl.value;
-          this.reportDefinition.name = this.nameControl.value;
-          this.reportDefinition.template = base64;
-
-          this.spinnerService.showSpinner();
-
-          this.reportingService
-            .createReportDefinition(this.reportDefinition)
-            .pipe(
-              first(),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe(
-              () => {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['..'], {
-                  relativeTo: this.activatedRoute
-                });
-              },
-              (error: Error) => {
-                // noinspection SuspiciousTypeOfGuard
-                if (
-                  error instanceof AccessDeniedError ||
-                  error instanceof InvalidArgumentError ||
-                  error instanceof ServiceUnavailableError
-                ) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {
-                    state: { error }
-                  });
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              }
-            );
-        } else {
-          console.log(
-            'Failed to read the template file for the report definition (' +
-              fileReader.result +
-              ')'
-          );
-        }
-      };
-
-      fileReader.readAsArrayBuffer(this.templateControl.value[0]);
+    if (!this.reportDefinition || !this.newReportDefinitionForm.valid) {
+      return;
     }
+
+    const files = this.templateControl.value as File[] | null;
+
+    if (!files || !files[0]) {
+      console.log('No template file selected for the report definition.');
+      return;
+    }
+
+    const reportDefinition = this.reportDefinition;
+    const fileReader: FileReader = new FileReader();
+
+    fileReader.onloadend = () => {
+      const result = fileReader.result;
+
+      if (!(result instanceof ArrayBuffer)) {
+        console.log('Failed to read the template file for the report definition (' + result + ')');
+        return;
+      }
+
+      const base64: string = Base64.encode(result as ArrayBuffer);
+
+      reportDefinition.id = this.idControl.value;
+      reportDefinition.name = this.nameControl.value;
+      reportDefinition.template = base64;
+
+      this.spinnerService.showSpinner();
+
+      this.reportingService
+        .createReportDefinition(reportDefinition)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe({
+          next: () => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['..'], {
+              relativeTo: this.activatedRoute
+            });
+          },
+          error: (error: Error) => this.handleError(error, false)
+        });
+    };
+
+    fileReader.readAsArrayBuffer(files[0]);
   }
 }

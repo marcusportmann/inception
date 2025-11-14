@@ -23,14 +23,13 @@ import { Replace } from '../../util/replace';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'sidebar-form',
+  selector: 'inception-core-sidebar-form',
+  standalone: true,
   template: `
     <form class="sidebar-form">
       <ng-content></ng-content>
     </form>
-  `,
-  standalone: false
+  `
 })
 export class SidebarFormComponent implements OnInit {
   /**

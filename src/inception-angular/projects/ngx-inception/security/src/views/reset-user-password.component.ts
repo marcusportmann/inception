@@ -16,16 +16,9 @@
 
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, CoreModule, Error, GroupFormFieldComponent,
+  ValidatedFormDirective
 } from 'ngx-inception/core';
 import { combineLatest } from 'rxjs';
 import { finalize, first } from 'rxjs/operators';
@@ -39,14 +32,12 @@ import { UserDirectoryCapabilities } from '../services/user-directory-capabiliti
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-reset-user-password',
+  imports: [CoreModule, ValidatedFormDirective, GroupFormFieldComponent],
   templateUrl: 'reset-user-password.component.html',
-  styleUrls: ['reset-user-password.component.css'],
-  standalone: false
+  styleUrls: ['reset-user-password.component.css']
 })
-export class ResetUserPasswordComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class ResetUserPasswordComponent extends AdminContainerView implements AfterViewInit {
   confirmPasswordControl: FormControl;
 
   expirePasswordControl: FormControl;
@@ -61,6 +52,8 @@ export class ResetUserPasswordComponent
 
   resetUserPasswordForm: FormGroup;
 
+  readonly title = $localize`:@@security_reset_user_password_title:Reset User Password`;
+
   userDirectoryCapabilities: UserDirectoryCapabilities | null = null;
 
   userDirectoryId: string;
@@ -69,18 +62,11 @@ export class ResetUserPasswordComponent
 
   usernameControl: FormControl;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private securityService: SecurityService) {
     super();
 
     // Retrieve the route parameters
-    const userDirectoryId =
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
       throw new Error('No userDirectoryId route parameter found');
@@ -96,7 +82,7 @@ export class ResetUserPasswordComponent
 
     this.username = decodeURIComponent(username);
 
-    // Initialise the form controls
+    // Initialize the form controls
     this.confirmPasswordControl = new FormControl('', [
       Validators.required,
       Validators.maxLength(100)
@@ -107,17 +93,14 @@ export class ResetUserPasswordComponent
       disabled: true
     });
     this.lockUserControl = new FormControl(false);
-    this.passwordControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.passwordControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.resetPasswordHistoryControl = new FormControl(false);
     this.usernameControl = new FormControl({
       value: '',
       disabled: true
     });
 
-    // Initialise the form
+    // Initialize the form
     this.resetUserPasswordForm = new FormGroup({
       confirmPassword: this.confirmPasswordControl,
       name: this.nameControl,
@@ -137,10 +120,6 @@ export class ResetUserPasswordComponent
     );
   }
 
-  get title(): string {
-    return $localize`:@@security_reset_user_password_title:Reset User Password`;
-  }
-
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../../..'], {
@@ -150,7 +129,7 @@ export class ResetUserPasswordComponent
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the existing user and initialise the form fields
+    // Retrieve the existing user and initialize the form fields
     this.spinnerService.showSpinner();
 
     combineLatest([
@@ -161,25 +140,19 @@ export class ResetUserPasswordComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (results: [UserDirectoryCapabilities, User]) => {
-          this.userDirectoryCapabilities = results[0];
+      .subscribe({
+        next: ([userDirectoryCapabilities, user]: [UserDirectoryCapabilities, User]) => {
+          this.userDirectoryCapabilities = userDirectoryCapabilities;
 
-          this.nameControl.setValue(results[1].name);
-          this.usernameControl.setValue(results[1].username);
+          this.nameControl.setValue(user.name);
+          this.usernameControl.setValue(user.username);
 
           if (this.userDirectoryCapabilities.supportsPasswordExpiry) {
-            this.resetUserPasswordForm.addControl(
-              'expirePassword',
-              this.expirePasswordControl
-            );
+            this.resetUserPasswordForm.addControl('expirePassword', this.expirePasswordControl);
           }
 
           if (this.userDirectoryCapabilities.supportsUserLocks) {
-            this.resetUserPasswordForm.addControl(
-              'lockUser',
-              this.lockUserControl
-            );
+            this.resetUserPasswordForm.addControl('lockUser', this.lockUserControl);
           }
 
           if (this.userDirectoryCapabilities.supportsPasswordHistory) {
@@ -189,82 +162,59 @@ export class ResetUserPasswordComponent
             );
           }
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   ok(): void {
-    if (this.resetUserPasswordForm.valid) {
-      // Check that the password and confirmation password match
-      if (this.passwordControl.value !== this.confirmPasswordControl.value) {
-        this.dialogService.showErrorDialog(
-          new Error('The passwords do not match.')
-        );
-
-        return;
-      }
-
-      const password = this.passwordControl.value;
-
-      this.spinnerService.showSpinner();
-
-      this.securityService
-        .adminChangePassword(
-          this.userDirectoryId,
-          this.username,
-          password,
-          this.resetUserPasswordForm.contains('expirePassword')
-            ? this.expirePasswordControl.value
-            : false,
-          this.resetUserPasswordForm.contains('lockUser')
-            ? this.lockUserControl.value
-            : false,
-          this.resetUserPasswordForm.contains('resetPasswordHistory')
-            ? this.resetPasswordHistoryControl.value
-            : false
-        )
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner())
-        )
-        .subscribe(
-          () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['../../..'], {
-              relativeTo: this.activatedRoute,
-              state: { userDirectoryId: this.userDirectoryId }
-            });
-          },
-          (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if (
-              error instanceof AccessDeniedError ||
-              error instanceof InvalidArgumentError ||
-              error instanceof ServiceUnavailableError
-            ) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {
-                state: { error }
-              });
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          }
-        );
+    if (!this.resetUserPasswordForm.valid) {
+      return;
     }
+
+    // Check that the password and confirmation password match
+    if (this.passwordControl.value !== this.confirmPasswordControl.value) {
+      this.dialogService.showErrorDialog(new Error('The passwords do not match.'));
+      return;
+    }
+
+    const password = this.passwordControl.value;
+
+    const expirePassword = this.resetUserPasswordForm.contains('expirePassword')
+      ? this.expirePasswordControl.value
+      : false;
+
+    const lockUser = this.resetUserPasswordForm.contains('lockUser')
+      ? this.lockUserControl.value
+      : false;
+
+    const resetPasswordHistory = this.resetUserPasswordForm.contains('resetPasswordHistory')
+      ? this.resetPasswordHistoryControl.value
+      : false;
+
+    this.spinnerService.showSpinner();
+
+    this.securityService
+      .adminChangePassword(
+        this.userDirectoryId,
+        this.username,
+        password,
+        expirePassword,
+        lockUser,
+        resetPasswordHistory
+      )
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe({
+        next: () => {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['../../..'], {
+            relativeTo: this.activatedRoute,
+            state: { userDirectoryId: this.userDirectoryId }
+          });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 }

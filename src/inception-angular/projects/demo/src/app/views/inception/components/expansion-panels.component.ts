@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
 
 /**
  * The ExpansionPanelsComponent class implements the expansion panels component.
@@ -22,8 +23,10 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'expansion-panels.component.html',
-  standalone: false
+  selector: 'app-expansion-panels',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'expansion-panels.component.html'
 })
 export class ExpansionPanelsComponent {
   panelOpenState = false;

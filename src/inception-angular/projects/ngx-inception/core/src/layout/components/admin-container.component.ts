@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import { Component, Inject, OnDestroy } from '@angular/core';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router
-} from '@angular/router';
+
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterOutlet } from '@angular/router';
+import { PerfectScrollbarModule } from 'ngx-om-perfect-scrollbar';
 
 import { Observable, Subscription } from 'rxjs';
 import { INCEPTION_CONFIG, InceptionConfig } from '../../inception-config';
@@ -31,6 +30,13 @@ import { SpinnerService } from '../services/spinner.service';
 import { TitleBarService } from '../services/title-bar.service';
 
 import { AdminContainerView } from './admin-container-view';
+import { AdminFooterComponent } from './admin-footer.component';
+import { AdminHeaderComponent } from './admin-header.component';
+import { BreadcrumbsComponent } from './breadcrumbs.component';
+import { SidebarMinimizerComponent } from './sidebar-minimizer.component';
+import { SidebarNavComponent } from './sidebar-nav.component';
+import { SidebarComponent } from './sidebar.component';
+import { TitleBarComponent } from './title-bar.component';
 
 /**
  * The AdminContainerComponent class implements the admin container component.
@@ -38,20 +44,38 @@ import { AdminContainerView } from './admin-container-view';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'admin-container',
+  selector: 'inception-core-admin-container',
+  standalone: true,
+  imports: [
+    AdminHeaderComponent,
+    RouterOutlet,
+    AdminFooterComponent,
+    SidebarComponent,
+    SidebarNavComponent,
+    PerfectScrollbarModule,
+    SidebarMinimizerComponent,
+    TitleBarComponent,
+    BreadcrumbsComponent
+  ],
   template: `
-    <admin-header [fixed]="true" [sidebarToggler]="'lg'"></admin-header>
+    <inception-core-admin-header
+      [fixed]="true"
+      [sidebarToggler]="'lg'">
+    </inception-core-admin-header>
+
     <div class="admin-body">
-      <sidebar [fixed]="true" [display]="'lg'">
-        <sidebar-nav
+      <inception-core-sidebar [fixed]="true" [display]="'lg'">
+        <inception-core-sidebar-nav
           [perfectScrollbar]
-          [disabled]="sidebarMinimized"></sidebar-nav>
-        <sidebar-minimizer></sidebar-minimizer>
-      </sidebar>
+          [disabled]="sidebarMinimized">
+        </inception-core-sidebar-nav>
+        <inception-core-sidebar-minimizer></inception-core-sidebar-minimizer>
+      </inception-core-sidebar>
+
       <main class="main">
-        <title-bar [fixed]="true"></title-bar>
-        <breadcrumbs [fixed]="true"></breadcrumbs>
+        <inception-core-title-bar [fixed]="true"></inception-core-title-bar>
+        <inception-core-breadcrumbs [fixed]="true"></inception-core-breadcrumbs>
+
         <div class="container-fluid">
           <router-outlet
             (activate)="routerOutletActive($event)"
@@ -60,98 +84,96 @@ import { AdminContainerView } from './admin-container-view';
         </div>
       </main>
     </div>
-    <admin-footer [fixed]="false">
-      <span>2025 &copy; <span class="copyright-name"></span></span>
-    </admin-footer>
-  `,
-  standalone: false
-})
-export class AdminContainerComponent implements OnDestroy {
-  element: HTMLElement = document.body;
 
+    <inception-core-admin-footer [fixed]="false">
+      <span>2025 &copy; <span class="copyright-name"></span></span>
+    </inception-core-admin-footer>
+  `
+})
+export class AdminContainerComponent implements OnInit, OnDestroy {
   sidebarMinimized = true;
 
   private adminContainerViewTitleSubscription?: Subscription;
 
-  private changes: MutationObserver;
+  private readonly mutationObserver: MutationObserver;
 
-  private subscriptions: Subscription = new Subscription();
+  private readonly subscriptions = new Subscription();
 
   /**
    * Constructs a new AdminContainerComponent.
-   *
-   * @param config             The Inception configuration.
-   * @param router             The router.
-   * @param activatedRoute     The activated route.
-   * @param breadcrumbsService The breadcrumbs service.
-   * @param sessionService     The session service.
-   * @param sidebarService     The sidebar service.
-   * @param spinnerService     The spinner service.
-   * @param titleBarService    The title bar service.
    */
   constructor(
-    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private breadcrumbsService: BreadcrumbsService,
-    private sessionService: SessionService,
-    private sidebarService: SidebarService,
-    private spinnerService: SpinnerService,
-    private titleBarService: TitleBarService
+    @Inject(INCEPTION_CONFIG) private readonly config: InceptionConfig,
+    @Inject(DOCUMENT) private readonly document: Document,
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly breadcrumbsService: BreadcrumbsService,
+    private readonly sessionService: SessionService,
+    private readonly sidebarService: SidebarService,
+    private readonly spinnerService: SpinnerService,
+    private readonly titleBarService: TitleBarService
   ) {
-    this.changes = new MutationObserver(() => {
-      this.sidebarMinimized =
-        document.body.classList.contains('sidebar-minimized');
+    this.mutationObserver = new MutationObserver(() => {
+      this.sidebarMinimized = this.document.body.classList.contains('sidebar-minimized');
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.mutationObserver.disconnect();
+    this.subscriptions.unsubscribe();
+
+    if (this.adminContainerViewTitleSubscription) {
+      this.adminContainerViewTitleSubscription.unsubscribe();
+      this.adminContainerViewTitleSubscription = undefined;
+    }
+  }
+
+  ngOnInit(): void {
+    // Initial sidebar state
+    this.sidebarMinimized = this.document.body.classList.contains('sidebar-minimized');
+
+    // Observe body class changes for sidebar minimization
+    this.mutationObserver.observe(this.document.body, {
+      attributes: true,
+      attributeFilter: ['class']
     });
 
-    this.changes.observe(this.element, {
-      attributes: true
-    });
-
+    // Handle session lifecycle
     this.subscriptions.add(
       this.sessionService.session$.subscribe((session: Session | null) => {
         if (!session) {
-          spinnerService.hideSpinner();
+          this.spinnerService.hideSpinner();
 
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate([
-            !!config.logoutRedirectUri ? config.logoutRedirectUri : '/'
+            this.config.logoutRedirectUri ?? '/'
           ]);
         }
       })
     );
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
-
   /**
    * Process the router outlet activate event.
    *
-   * @param childComponent The child component.
+   * @param component The activated child component.
    */
-  // eslint-disable-next-line
-  routerOutletActive(childComponent: any) {
+  routerOutletActive(component: unknown): void {
     let usingAdminContainerViewTitle = false;
 
     // Try and retrieve the back navigation and title from the admin container view if present
-    if (childComponent instanceof AdminContainerView) {
-      if (childComponent.sidebarMinimized != null) {
-        this.sidebarService.setSidebarMinimized(
-          childComponent.sidebarMinimized
-        );
+    if (component instanceof AdminContainerView) {
+      if (component.sidebarMinimized != null) {
+        this.sidebarService.setSidebarMinimized(component.sidebarMinimized);
       }
 
-      this.breadcrumbsService.setBreadcrumbsVisible(
-        childComponent.breadcrumbsVisible
-      );
+      this.breadcrumbsService.setBreadcrumbsVisible(component.breadcrumbsVisible);
 
-      if (childComponent.backNavigation) {
-        this.titleBarService.setBackNavigation(childComponent.backNavigation);
+      if (component.backNavigation) {
+        this.titleBarService.setBackNavigation(component.backNavigation);
       }
 
-      const title: string | Observable<string> | null = childComponent.title;
+      const title: string | Observable<string> | null = component.title;
 
       if (title) {
         usingAdminContainerViewTitle = true;
@@ -159,46 +181,28 @@ export class AdminContainerComponent implements OnDestroy {
         if (typeof title === 'string') {
           this.titleBarService.setTitle(title);
         } else {
-          this.adminContainerViewTitleSubscription = title.subscribe(
-            (newTitle: string) => {
-              this.titleBarService.setTitle(newTitle);
-            }
-          );
+          this.adminContainerViewTitleSubscription = title.subscribe((newTitle: string) => {
+            this.titleBarService.setTitle(newTitle);
+          });
         }
       }
     } else {
       this.breadcrumbsService.setBreadcrumbsVisible(true);
     }
 
-    /*
-     * If we are not using a title provided by the admin container view, attempt to retrieve the
-     * title from the activated route.
-     */
+    // Fallback: title from the deepest activated route
     if (!usingAdminContainerViewTitle) {
-      let activateRouteSnapshot: ActivatedRouteSnapshot | null =
-        this.activatedRoute.snapshot.firstChild;
-
-      if (activateRouteSnapshot) {
-        while (activateRouteSnapshot.firstChild) {
-          activateRouteSnapshot = activateRouteSnapshot.firstChild;
-        }
-
-        if (activateRouteSnapshot.data) {
-          if (!!activateRouteSnapshot.data['title']) {
-            this.titleBarService.setTitle(activateRouteSnapshot.data['title']);
-          }
-        }
-      }
+      this.updateTitleFromRoute();
     }
   }
 
   /**
    * Process the router outlet deactivate event.
    *
-   * @param childComponent The child component.
+   * @param _component The deactivated child component.
    */
-  // eslint-disable-next-line
-  routerOutletDeactive(childComponent: any) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  routerOutletDeactive(_component: unknown): void {
     // Unsubscribe from the title for the admin container view if required
     if (this.adminContainerViewTitleSubscription) {
       this.adminContainerViewTitleSubscription.unsubscribe();
@@ -209,4 +213,23 @@ export class AdminContainerComponent implements OnDestroy {
     this.titleBarService.setBackNavigation(null);
     this.titleBarService.setTitle(null);
   }
+
+  /**
+   * Update the title from the deepest activated route snapshot, if provided.
+   */
+  private updateTitleFromRoute(): void {
+    let route: ActivatedRouteSnapshot | null = this.activatedRoute.snapshot.firstChild ?? null;
+
+    while (route?.firstChild) {
+      route = route.firstChild;
+    }
+
+    const titleFromRoute = route?.data?.['title'] as string | undefined;
+
+    if (titleFromRoute) {
+      this.titleBarService.setTitle(titleFromRoute);
+    }
+  }
 }
+
+

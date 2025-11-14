@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Config } from '../services/config';
@@ -37,14 +29,13 @@ import { ConfigService } from '../services/config.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-config-new-config',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'new-config.component.html',
-  styleUrls: ['new-config.component.css'],
-  standalone: false
+  styleUrls: ['new-config.component.css']
 })
-export class NewConfigComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class NewConfigComponent extends AdminContainerView {
   config: Config;
 
   descriptionControl: FormControl;
@@ -53,23 +44,16 @@ export class NewConfigComponent
 
   newConfigForm: FormGroup;
 
+  readonly title = $localize`:@@config_new_config_title:New Config`;
+
   valueControl: FormControl;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private configService: ConfigService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private configService: ConfigService) {
     super();
 
     // Initialize the form controls
     this.descriptionControl = new FormControl('', [Validators.maxLength(100)]);
-    this.idControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.valueControl = new FormControl('', [Validators.maxLength(4000)]);
 
     // Initialize the form
@@ -84,24 +68,14 @@ export class NewConfigComponent
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation(
-      $localize`:@@config_new_config_back_navigation:Config`,
-      ['..'],
-      { relativeTo: this.activatedRoute }
-    );
-  }
-
-  get title(): string {
-    return $localize`:@@config_new_config_title:New Config`;
+    return new BackNavigation($localize`:@@config_new_config_back_navigation:Config`, ['..'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-  }
-
-  ngAfterViewInit(): void {
-    // Ensure config object is ready (already initialized in the constructor)
   }
 
   ok(): void {
@@ -118,8 +92,7 @@ export class NewConfigComponent
         .saveConfig(this.config)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner()) // Ensure spinner is hidden after the
-          // operation
+          finalize(() => this.spinnerService.hideSpinner())
         )
         .subscribe({
           next: () => {
@@ -127,24 +100,8 @@ export class NewConfigComponent
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['..'], { relativeTo: this.activatedRoute });
           },
-          error: (error: Error) => this.handleError(error)
+          error: (error: Error) => this.handleError(error, false)
         });
-    }
-  }
-
-  private handleError(error: Error): void {
-    // Centralized error handling
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
     }
   }
 }

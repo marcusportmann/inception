@@ -14,26 +14,13 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  ConfirmationDialogComponent,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, ConfirmationDialogComponent, CoreModule, Error, TableFilterComponent
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { ReportDefinitionSummary } from '../services/report-definition-summary';
@@ -45,14 +32,12 @@ import { ReportingService } from '../services/reporting.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-reporting-report-definitions',
+  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'report-definitions.component.html',
-  styleUrls: ['report-definitions.component.css'],
-  standalone: false
+  styleUrls: ['report-definitions.component.css']
 })
-export class ReportDefinitionsComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class ReportDefinitionsComponent extends AdminContainerView implements AfterViewInit {
   dataSource: MatTableDataSource<ReportDefinitionSummary> =
     new MatTableDataSource<ReportDefinitionSummary>();
 
@@ -64,22 +49,14 @@ export class ReportDefinitionsComponent
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private reportingService: ReportingService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  readonly title = $localize`:@@reporting_report_definitions_title:Report Definitions`;
+
+  constructor(private reportingService: ReportingService) {
     super();
 
     // Set the data source filter
     this.dataSource.filterPredicate = (data, filter): boolean =>
       data.name.toLowerCase().includes(filter);
-  }
-
-  get title(): string {
-    return $localize`:@@reporting_report_definitions_title:Report Definitions`;
   }
 
   applyFilter(filterValue: string): void {
@@ -97,8 +74,12 @@ export class ReportDefinitionsComponent
     dialogRef
       .afterClosed()
       .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
+      .subscribe({
+        next: (confirmation: boolean | undefined) => {
+          if (confirmation !== true) {
+            return;
+          }
+
           this.spinnerService.showSpinner();
 
           this.reportingService
@@ -107,26 +88,12 @@ export class ReportDefinitionsComponent
               first(),
               finalize(() => this.spinnerService.hideSpinner())
             )
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.loadReportDefinitions();
               },
-              (error: Error) => {
-                // noinspection SuspiciousTypeOfGuard
-                if (
-                  error instanceof AccessDeniedError ||
-                  error instanceof InvalidArgumentError ||
-                  error instanceof ServiceUnavailableError
-                ) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {
-                    state: { error }
-                  });
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              }
-            );
+              error: (error: Error) => this.handleError(error, false)
+            });
         }
       });
   }
@@ -147,26 +114,12 @@ export class ReportDefinitionsComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (reportDefinitionSummaries: ReportDefinitionSummary[]) => {
+      .subscribe({
+        next: (reportDefinitionSummaries: ReportDefinitionSummary[]) => {
           this.dataSource.data = reportDefinitionSummaries;
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   newReportDefinition(): void {

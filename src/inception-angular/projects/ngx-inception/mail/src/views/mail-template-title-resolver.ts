@@ -40,10 +40,15 @@ export class MailTemplateTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
     let mailTemplateId = activatedRouteSnapshot.paramMap.get('mailTemplateId');
 
     if (!mailTemplateId) {

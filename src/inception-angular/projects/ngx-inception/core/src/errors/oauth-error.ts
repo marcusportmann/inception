@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+// noinspection JSUnusedGlobalSymbols
 /**
  * The OAuthError interface defines the structure for an OAuth error.
  *

@@ -15,7 +15,7 @@
  */
 
 import { AfterViewInit, Component } from '@angular/core';
-import { TitleBarService } from 'ngx-inception/core';
+import { CoreModule, TitleBarService } from 'ngx-inception/core';
 
 /**
  * The Menu321Component class implements the menu 3.2.1 component.
@@ -23,12 +23,14 @@ import { TitleBarService } from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'app-menu321',
+  standalone: true,
+  imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content> Menu 3.2.1 </mat-card-content>
     </mat-card>
-  `,
-  standalone: false
+  `
 })
 export class Menu321Component implements AfterViewInit {
   /**

@@ -32,9 +32,7 @@ export class ReportDefinitionTitleResolver {
    *
    * @param reportingService The reporting service.
    */
-  constructor(
-    @Inject(ReportingService) private reportingService: ReportingService
-  ) {}
+  constructor(@Inject(ReportingService) private reportingService: ReportingService) {}
 
   /**
    * Resolve the title.
@@ -42,12 +40,16 @@ export class ReportDefinitionTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
-    let reportDefinitionId =
-      activatedRouteSnapshot.paramMap.get('reportDefinitionId');
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
+    let reportDefinitionId = activatedRouteSnapshot.paramMap.get('reportDefinitionId');
 
     if (!reportDefinitionId) {
       throw new Error('No reportDefinitionId route parameter found');

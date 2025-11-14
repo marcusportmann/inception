@@ -16,6 +16,8 @@
 
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Replace } from '../../util/replace';
+import { BrandMinimizerDirective } from '../directives/brand-minimizer.directive';
+import { SidebarMinimizerDirective } from '../directives/sidebar-minimizer.directive';
 
 /**
  * The SidebarMinimizerComponent class implements the sidebar minimizer component.
@@ -23,16 +25,12 @@ import { Replace } from '../../util/replace';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'sidebar-minimizer',
+  selector: 'inception-core-sidebar-minimizer',
+  standalone: true,
+  imports: [SidebarMinimizerDirective, BrandMinimizerDirective],
   template: `
-    <button
-      class="sidebar-minimizer"
-      type="button"
-      sidebarMinimizer
-      brandMinimizer></button>
-  `,
-  standalone: false
+    <button class="sidebar-minimizer" type="button" sidebarMinimizer brandMinimizer></button>
+  `
 })
 export class SidebarMinimizerComponent implements OnInit {
   /**

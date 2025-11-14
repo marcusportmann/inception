@@ -17,54 +17,79 @@
 import { map } from 'rxjs/operators';
 import { ISO8601Util } from './iso-8601-util';
 
-function convertStringValuesToTypes(value: any): any {
-  if (!value) return value;
+const ISO8601_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})?$/;
 
+function tryParseIso8601Date(value: string): Date | null {
+  const trimmed = value.trim();
+
+  if (!ISO8601_REGEX.test(trimmed)) {
+    return null;
+  }
+
+  const parsedDate: Date = ISO8601Util.toDate(trimmed);
+  return isNaN(parsedDate.getTime()) ? null : parsedDate;
+}
+
+export function convertStringValuesToTypes<T>(value: T): T {
+  // Leave null/undefined as-is
+  if (value == null) {
+    return value;
+  }
+
+  // String → possibly Date
   if (typeof value === 'string') {
-    const trimmedValue = value.trim();
-
-    // Check if it's a valid ISO date string (example for length 23 or 29 or similar future formats)
-    const iso8601Regex =
-      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[\+\-]\d{2}:\d{2})?$/;
-    if (iso8601Regex.test(trimmedValue)) {
-      const parsedDate: Date = ISO8601Util.toDate(trimmedValue);
-      return isNaN(parsedDate.getTime()) ? value : parsedDate;
-    }
+    const asDate = tryParseIso8601Date(value);
+    return (asDate ?? value) as unknown as T;
   }
 
+  // Arrays → recursively map, return new array (no mutation)
   if (Array.isArray(value)) {
-    return value.map(convertStringValuesToTypes);
+    return value.map((item) => convertStringValuesToTypes(item)) as unknown as T;
   }
 
+  // Plain objects → recursively convert properties, no mutation of original
   if (typeof value === 'object') {
-    for (const [key, val] of Object.entries(value)) {
-      value[key] = convertStringValuesToTypes(val);
+    const obj = value as Record<string, unknown>;
+    const result: Record<string, unknown> = {};
+
+    for (const [key, val] of Object.entries(obj)) {
+      result[key] = convertStringValuesToTypes(val);
     }
+
+    return result as unknown as T;
   }
 
+  // Other primitive types (number, boolean, etc.) stay as-is
   return value;
 }
 
+interface Pipeable {
+  pipe: (...args: unknown[]) => unknown;
+}
+
+function hasPipe(value: unknown): value is Pipeable {
+  return !!value && typeof (value as Pipeable).pipe === 'function';
+}
+
 export function ResponseConverter(
-  target: any,
+  target: unknown,
   propertyKey: string,
   descriptor: PropertyDescriptor
 ): PropertyDescriptor {
   const originalMethod = descriptor.value;
 
-  descriptor.value = function (...args: any) {
-    return originalMethod.call(this, ...args).pipe(
-      map((result: any) => {
-        //let originalResult = Object.assign({}, result);
-        //console.log('originalResult = ', originalResult);
+  if (typeof originalMethod !== 'function') {
+    throw new Error('ResponseConverter can only be applied to methods.');
+  }
 
-        let convertedResult = convertStringValuesToTypes(result);
+  descriptor.value = function (...args: unknown[]) {
+    const result = originalMethod.apply(this, args);
 
-        // console.log('convertedResult = ', convertedResult);
+    if (hasPipe(result)) {
+      return result.pipe(map((data: unknown) => convertStringValuesToTypes(data)));
+    }
 
-        return convertedResult;
-      })
-    );
+    return convertStringValuesToTypes(result);
   };
 
   return descriptor;

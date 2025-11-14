@@ -216,7 +216,7 @@ export class ExistingPasswordError extends Error {
 }
 
 /**
- * The ExistingUsersError class holds the information for an existing users error.
+ * The ExistingUsersError class holds the information for an existing-users error.
  *
  * @author Marcus Portmann
  */
@@ -523,7 +523,7 @@ export class UserDirectoryNotFoundError extends Error {
 }
 
 /**
- * The UserLockedError class holds the information for a user locked error.
+ * The UserLockedError class holds the information for a user-locked error.
  *
  * @author Marcus Portmann
  */

@@ -30,7 +30,9 @@ export class Base64 {
       Base64.LOOKUP[Base64.CHARACTERS.charCodeAt(i)] = i;
     }
 
-    this._Initialize = () => {};
+    this._Initialize = () => {
+      /* empty */
+    };
   }
 
   /**
@@ -96,8 +98,7 @@ export class Base64 {
       // eslint-disable-next-line no-bitwise
       base64 += Base64.CHARACTERS[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
       // eslint-disable-next-line no-bitwise
-      base64 +=
-        Base64.CHARACTERS[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
+      base64 += Base64.CHARACTERS[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
       // eslint-disable-next-line no-bitwise
       base64 += Base64.CHARACTERS[bytes[i + 2] & 63];
     }

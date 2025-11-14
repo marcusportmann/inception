@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
 
 /**
  * The Menu21Component class implements the menu 2.1 component.
@@ -22,13 +23,13 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'app-menu21',
+  standalone: true,
+  imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content> Menu 2.1 </mat-card-content>
     </mat-card>
-  `,
-  standalone: false
+  `
 })
-export class Menu21Component {
-  constructor() {}
-}
+export class Menu21Component {}

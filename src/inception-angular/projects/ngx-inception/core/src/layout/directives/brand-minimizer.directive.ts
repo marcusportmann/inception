@@ -24,14 +24,9 @@ import { Directive, HostListener } from '@angular/core';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[brandMinimizer]',
-  standalone: false
+  standalone: true
 })
 export class BrandMinimizerDirective {
-  /**
-   * Constructs a new AppBrandMinimizerDirective.
-   */
-  constructor() {}
-
   // eslint-disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();

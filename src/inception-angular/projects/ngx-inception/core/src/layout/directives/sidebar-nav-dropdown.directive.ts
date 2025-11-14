@@ -24,7 +24,7 @@ import { Directive, ElementRef } from '@angular/core';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[sidebarNavDropdown]',
-  standalone: false
+  standalone: true
 })
 export class SidebarNavDropdownDirective {
   /**

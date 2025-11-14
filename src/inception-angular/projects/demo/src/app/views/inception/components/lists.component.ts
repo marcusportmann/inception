@@ -14,7 +14,26 @@
  * limitations under the License.
  */
 
+import { NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
+
+interface Folder {
+  name: string;
+  updated: Date;
+}
+
+interface Note {
+  name: string;
+  updated: Date;
+}
+
+interface Planet {
+  description: string;
+  detail: string;
+  image: string;
+  name: string;
+}
 
 /**
  * The ListsComponent class implements the lists component.
@@ -22,11 +41,13 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'lists.component.html',
-  standalone: false
+  selector: 'app-lists',
+  standalone: true,
+  imports: [CoreModule, NgOptimizedImage],
+  templateUrl: 'lists.component.html'
 })
 export class ListsComponent {
-  folders = [
+  folders: Folder[] = [
     {
       name: 'Photos',
       updated: new Date('1/1/16')
@@ -41,7 +62,7 @@ export class ListsComponent {
     }
   ];
 
-  notes = [
+  notes: Note[] = [
     {
       name: 'Vacation Itinerary',
       updated: new Date('2/20/16')
@@ -52,31 +73,30 @@ export class ListsComponent {
     }
   ];
 
-  planets: any[] = [
+  planets: Planet[] = [
     {
       name: 'Jupiter',
       image: 'assets/images/planets/1.png',
       description: 'Fifth planet',
-      detail:
-        'Jupiter is the fifth planet from the Sun and the largest in the Solar System'
+      detail: 'Jupiter is the fifth planet from the Sun and the largest in the Solar System'
     },
     {
       name: 'Venus',
       image: 'assets/images/planets/2.png',
       description: 'Second planet',
-      detail:
-        'Venus is the second planet from the Sun, orbiting it every 224.7 Earth days'
+      detail: 'Venus is the second planet from the Sun, orbiting it every 224.7 Earth days'
     },
     {
       name: 'Mars',
       image: 'assets/images/planets/3.png',
       description: 'Fourth planet',
-      detail:
-        'Mars is the fourth planet from the Sun and the second-smallest planet'
+      detail: 'Mars is the fourth planet from the Sun and the second-smallest planet'
     }
   ];
 
-  typesOfShoes = ['Dogs', 'Cats', 'Birds', 'Hamsters', 'Ponies'];
+  typesOfShoes: string[] = ['Dogs', 'Cats', 'Birds', 'Hamsters', 'Ponies'];
 
-  constructor() {}
+  constructor() {
+    /* empty */
+  }
 }

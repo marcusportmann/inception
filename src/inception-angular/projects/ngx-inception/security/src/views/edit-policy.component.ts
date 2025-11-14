@@ -16,17 +16,7 @@
 
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
-} from 'ngx-inception/core';
+import { AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Policy } from '../services/policy';
 import { SecurityService } from '../services/security.service';
@@ -37,14 +27,13 @@ import { SecurityService } from '../services/security.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-edit-policy',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'edit-policy.component.html',
-  styleUrls: ['edit-policy.component.css'],
-  standalone: false
+  styleUrls: ['edit-policy.component.css']
 })
-export class EditPolicyComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class EditPolicyComponent extends AdminContainerView implements AfterViewInit {
   dataControl: FormControl;
 
   editPolicyForm: FormGroup;
@@ -57,17 +46,13 @@ export class EditPolicyComponent
 
   policyId: string;
 
+  readonly title = $localize`:@@security_edit_policy_title:Edit Policy`;
+
   typeControl: FormControl;
 
   versionControl: FormControl;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private securityService: SecurityService) {
     super();
 
     // Retrieve the route parameters
@@ -79,7 +64,7 @@ export class EditPolicyComponent
 
     this.policyId = decodeURIComponent(policyId);
 
-    // Initialise the form controls
+    // Initialize the form controls
     this.dataControl = new FormControl('', [Validators.required]);
     this.idControl = new FormControl(
       {
@@ -88,17 +73,11 @@ export class EditPolicyComponent
       },
       [Validators.required, Validators.maxLength(100)]
     );
-    this.nameControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.typeControl = new FormControl([], Validators.required);
-    this.versionControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(30)
-    ]);
+    this.versionControl = new FormControl('', [Validators.required, Validators.maxLength(30)]);
 
-    // Initialise the form
+    // Initialize the form
     this.editPolicyForm = new FormGroup({
       data: this.dataControl,
       id: this.idControl,
@@ -116,17 +95,13 @@ export class EditPolicyComponent
     );
   }
 
-  get title(): string {
-    return $localize`:@@security_edit_policy_title:Edit Policy`;
-  }
-
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the existing code category and initialise the form controls
+    // Retrieve the existing policy and initialize the form controls
     this.spinnerService.showSpinner();
 
     this.securityService
@@ -135,79 +110,46 @@ export class EditPolicyComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (policy: Policy) => {
+      .subscribe({
+        next: (policy: Policy) => {
           this.policy = policy;
+
           this.idControl.setValue(policy.id);
           this.versionControl.setValue(policy.version);
           this.nameControl.setValue(policy.name);
           this.typeControl.setValue(policy.type);
           this.dataControl.setValue(policy.data);
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService
-              .showErrorDialog(error)
-              .afterClosed()
-              .pipe(first())
-              .subscribe(() => {
-                this.router.navigate(['../..'], {
-                  relativeTo: this.activatedRoute
-                });
-              });
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, true, '../..')
+      });
   }
 
   ok(): void {
-    if (this.policy && this.editPolicyForm.valid) {
-      this.policy.version = this.versionControl.value;
-      this.policy.name = this.nameControl.value;
-      this.policy.type = this.typeControl.value;
-      this.policy.data = this.dataControl.value;
-
-      this.spinnerService.showSpinner();
-
-      this.securityService
-        .updatePolicy(this.policy)
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner())
-        )
-        .subscribe(
-          () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['../..'], {
-              relativeTo: this.activatedRoute
-            });
-          },
-          (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if (
-              error instanceof AccessDeniedError ||
-              error instanceof InvalidArgumentError ||
-              error instanceof ServiceUnavailableError
-            ) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {
-                state: { error }
-              });
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          }
-        );
+    if (!this.policy || !this.editPolicyForm.valid) {
+      return;
     }
+
+    this.policy.version = this.versionControl.value;
+    this.policy.name = this.nameControl.value;
+    this.policy.type = this.typeControl.value;
+    this.policy.data = this.dataControl.value;
+
+    this.spinnerService.showSpinner();
+
+    this.securityService
+      .updatePolicy(this.policy)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe({
+        next: () => {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['../..'], {
+            relativeTo: this.activatedRoute
+          });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 }

@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { ErrorService } from '../services/error.service';
 
 /**
  * The ErrorReportTitleResolver class provides the route data resolver that resolves the
@@ -28,22 +27,20 @@ import { ErrorService } from '../services/error.service';
 @Injectable()
 export class ErrorReportTitleResolver {
   /**
-   * Constructs a new ErrorReportTitleResolver.
-   *
-   * @param errorService The error service.
-   */
-  constructor(@Inject(ErrorService) private errorService: ErrorService) {}
-
-  /**
    * Resolve the title.
    *
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
     let errorReportId = activatedRouteSnapshot.paramMap.get('errorReportId');
 
     if (!errorReportId) {
@@ -53,6 +50,5 @@ export class ErrorReportTitleResolver {
     errorReportId = decodeURIComponent(errorReportId);
 
     return of(errorReportId);
-    //return this.codesService.getErrorReportName(codeCategoryId);
   }
 }

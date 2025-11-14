@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+import { NgIf } from '@angular/common';
 import { Component, Inject } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DialogData } from '../services/dialog-data';
 
@@ -24,8 +26,9 @@ import { DialogData } from '../services/dialog-data';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'warning-dialog',
+  selector: 'inception-core-warning-dialog',
+  standalone: true,
+  imports: [MatButton, NgIf],
   template: `
     <div class="header">
       <i class="fas fa-3x fa-exclamation-triangle"></i>
@@ -59,8 +62,7 @@ import { DialogData } from '../services/dialog-data';
   host: {
     class: 'warning-dialog',
     '(document:keydown.enter)': 'onEnter($event)'
-  },
-  standalone: false
+  }
 })
 export class WarningDialogComponent {
   /**

@@ -78,7 +78,7 @@ export class UserDirectoryCapabilities {
    *                                          capability.
    * @param supportsUserAdministration        The user directory supports the user administration
    *                                          capability.
-   * * @param supportsUserLocks               The user directory supports the user locks capability.
+   * @param supportsUserLocks                 The user directory supports the user locks capability.
    */
   constructor(
     supportsAdminChangePassword: boolean,

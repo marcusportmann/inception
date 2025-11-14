@@ -22,6 +22,8 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-core-not-found',
+  standalone: true,
   template: `
     <div class="app flex-row align-items-center">
       <div class="container">
@@ -29,9 +31,7 @@ import { Component } from '@angular/core';
           <div class="col-md-6">
             <div class="clearfix">
               <h1 class="float-left display-3 mr-4">404</h1>
-              <h4 class="pt-3" i18n="@@not_found_component_heading">
-                Oops! You're lost.
-              </h4>
+              <h4 class="pt-3" i18n="@@not_found_component_heading">Oops! You're lost.</h4>
               <p class="text-muted" i18n="@@not_found_component_message">
                 The page you are looking for was not found.
               </p>
@@ -40,12 +40,6 @@ import { Component } from '@angular/core';
         </div>
       </div>
     </div>
-  `,
-  standalone: false
+  `
 })
-export class NotFoundComponent {
-  /**
-   * Constructs a new NotFoundComponent.
-   */
-  constructor() {}
-}
+export class NotFoundComponent {}

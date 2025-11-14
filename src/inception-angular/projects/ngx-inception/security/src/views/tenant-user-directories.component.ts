@@ -19,17 +19,9 @@ import { FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  ConfirmationDialogComponent,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, AutocompleteSelectionRequiredDirective, BackNavigation,
+  ConfirmationDialogComponent, CoreModule, Error
 } from 'ngx-inception/core';
 import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, finalize, first, startWith } from 'rxjs/operators';
@@ -44,9 +36,11 @@ import { UserDirectorySummary } from '../services/user-directory-summary';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-tenant-user-directories',
+  imports: [CoreModule, AutocompleteSelectionRequiredDirective],
+  standalone: true,
   templateUrl: 'tenant-user-directories.component.html',
-  styleUrls: ['tenant-user-directories.component.css'],
-  standalone: false
+  styleUrls: ['tenant-user-directories.component.css']
 })
 export class TenantUserDirectoriesComponent
   extends AdminContainerView
@@ -54,8 +48,9 @@ export class TenantUserDirectoriesComponent
 {
   allUserDirectories: UserDirectorySummary[] = [];
 
-  availableUserDirectories$: Subject<UserDirectorySummary[]> =
-    new ReplaySubject<UserDirectorySummary[]>(1);
+  availableUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<
+    UserDirectorySummary[]
+  >(1);
 
   dataSource = new MatTableDataSource<UserDirectorySummary>([]);
 
@@ -71,15 +66,11 @@ export class TenantUserDirectoriesComponent
 
   tenantId: string;
 
+  readonly title = $localize`:@@security_tenant_user_directories_title:Tenant User Directories`;
+
   private subscriptions: Subscription = new Subscription();
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private securityService: SecurityService) {
     super();
 
     // Retrieve the route parameters
@@ -91,7 +82,7 @@ export class TenantUserDirectoriesComponent
 
     this.tenantId = decodeURIComponent(tenantId);
 
-    // Initialise the form controls
+    // Initialize the form controls
     this.newUserDirectoryControl = new FormControl('');
   }
 
@@ -105,45 +96,33 @@ export class TenantUserDirectoriesComponent
     );
   }
 
-  get title(): string {
-    return $localize`:@@security_tenant_user_directories_title:Tenant User Directories`;
-  }
-
   addUserDirectoryToTenant(): void {
-    if (this.isUserDirectorySelected()) {
-      this.spinnerService.showSpinner();
-
-      this.securityService
-        .addUserDirectoryToTenant(
-          this.tenantId,
-          this.newUserDirectoryControl.value.id
-        )
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner())
-        )
-        .subscribe(
-          () => {
-            this.loadUserDirectoriesForTenant();
-            this.newUserDirectoryControl.setValue('');
-          },
-          (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if (
-              error instanceof AccessDeniedError ||
-              error instanceof InvalidArgumentError ||
-              error instanceof ServiceUnavailableError
-            ) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {
-                state: { error }
-              });
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          }
-        );
+    if (!this.isUserDirectorySelected()) {
+      return;
     }
+
+    const selectedUserDirectory = this.newUserDirectoryControl.value;
+    const userDirectoryId = selectedUserDirectory?.id;
+
+    if (!userDirectoryId) {
+      return;
+    }
+
+    this.spinnerService.showSpinner();
+
+    this.securityService
+      .addUserDirectoryToTenant(this.tenantId, userDirectoryId)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe({
+        next: () => {
+          this.loadUserDirectoriesForTenant();
+          this.newUserDirectoryControl.setValue('');
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   applyFilter(filterValue: string): void {
@@ -178,8 +157,8 @@ export class TenantUserDirectoriesComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (userDirectorySummaries: UserDirectorySummary[]) => {
+      .subscribe({
+        next: (userDirectorySummaries: UserDirectorySummary[]) => {
           this.dataSource.data = userDirectorySummaries;
 
           const availableUserDirectories =
@@ -200,28 +179,14 @@ export class TenantUserDirectoriesComponent
 
           this.availableUserDirectories$.next(availableUserDirectories);
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
 
-    // Retrieve the existing user and initialise the form fields
+    // Retrieve the existing user directories and initialize the table
     this.spinnerService.showSpinner();
 
     this.securityService
@@ -230,36 +195,20 @@ export class TenantUserDirectoriesComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (userDirectorySummaries: UserDirectorySummaries) => {
-          this.allUserDirectories =
-            userDirectorySummaries.userDirectorySummaries;
-
+      .subscribe({
+        next: (userDirectorySummaries: UserDirectorySummaries) => {
+          this.allUserDirectories = userDirectorySummaries.userDirectorySummaries;
           this.loadUserDirectoriesForTenant();
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  removeUserDirectoryFromTenant(userDirectoryId: string) {
+  removeUserDirectoryFromTenant(userDirectoryId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog({
         message: $localize`:@@security_tenant_user_directories_confirm_remove_user_directory_from_tenant:Are you sure you want to remove the user directory from the tenant?`
@@ -268,8 +217,12 @@ export class TenantUserDirectoriesComponent
     dialogRef
       .afterClosed()
       .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
+      .subscribe({
+        next: (confirmation: boolean | undefined) => {
+          if (confirmation !== true) {
+            return;
+          }
+
           this.spinnerService.showSpinner();
 
           this.securityService
@@ -278,34 +231,19 @@ export class TenantUserDirectoriesComponent
               first(),
               finalize(() => this.spinnerService.hideSpinner())
             )
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.loadUserDirectoriesForTenant();
                 this.newUserDirectoryControl.setValue('');
               },
-              (error: Error) => {
-                // noinspection SuspiciousTypeOfGuard
-                if (
-                  error instanceof AccessDeniedError ||
-                  error instanceof InvalidArgumentError ||
-                  error instanceof ServiceUnavailableError
-                ) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {
-                    state: { error }
-                  });
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              }
-            );
+              error: (error: Error) => this.handleError(error, false)
+            });
         }
       });
   }
 
   private static calculateAvailableUserDirectories(
     allUserDirectories: UserDirectorySummary[],
-    // eslint-disable-next-line max-len
     existingTenantUserDirectories: UserDirectorySummary[]
   ): UserDirectorySummary[] {
     const availableUserDirectories: UserDirectorySummary[] = [];
@@ -341,8 +279,7 @@ export class TenantUserDirectoriesComponent
     }
 
     return userDirectories.filter(
-      (userDirecory) =>
-        userDirecory.name.toLowerCase().indexOf(filterValue) === 0
+      (userDirectory) => userDirectory.name.toLowerCase().indexOf(filterValue) === 0
     );
   }
 }

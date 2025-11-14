@@ -16,16 +16,8 @@
 
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { Subject } from 'rxjs';
 import { finalize, first, takeUntil } from 'rxjs/operators';
@@ -38,14 +30,13 @@ import { ConfigService } from '../services/config.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-config-edit-config',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'edit-config.component.html',
-  styleUrls: ['edit-config.component.css'],
-  standalone: false
+  styleUrls: ['edit-config.component.css']
 })
-export class EditConfigComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+export class EditConfigComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   config: Config | null = null;
 
   descriptionControl: FormControl<string | null>;
@@ -56,17 +47,13 @@ export class EditConfigComponent
 
   idControl: FormControl<string | null>;
 
+  readonly title = $localize`:@@config_edit_config_title:Edit Config`;
+
   valueControl: FormControl<string | null>;
 
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private configService: ConfigService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private configService: ConfigService) {
     super();
 
     // Retrieve the route parameters
@@ -96,17 +83,9 @@ export class EditConfigComponent
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation(
-      $localize`:@@config_edit_config_back_navigation:Config`,
-      ['../..'],
-      {
-        relativeTo: this.activatedRoute
-      }
-    );
-  }
-
-  get title(): string {
-    return $localize`:@@config_edit_config_title:Edit Config`;
+    return new BackNavigation($localize`:@@config_edit_config_back_navigation:Config`, ['../..'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   cancel(): void {
@@ -131,7 +110,7 @@ export class EditConfigComponent
           this.valueControl.setValue(config.value);
           this.descriptionControl.setValue(config.description);
         },
-        error: (error) => this.handleError(error, () => this.cancel())
+        error: (error: Error) => this.handleError(error, true, '../..')
       });
   }
 
@@ -160,28 +139,7 @@ export class EditConfigComponent
               relativeTo: this.activatedRoute
             });
           },
-          error: (error) => this.handleError(error)
-        });
-    }
-  }
-
-  private handleError(error: Error, onClose?: () => void): void {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService
-        .showErrorDialog(error)
-        .afterClosed()
-        .pipe(first(), takeUntil(this.destroy$))
-        .subscribe(() => {
-          if (onClose) onClose();
+          error: (error: Error) => this.handleError(error, false)
         });
     }
   }

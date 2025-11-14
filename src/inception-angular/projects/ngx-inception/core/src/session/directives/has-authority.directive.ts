@@ -14,68 +14,117 @@
  * limitations under the License.
  */
 
-import {
-  Directive,
-  Input,
-  OnInit,
-  TemplateRef,
-  ViewContainerRef
-} from '@angular/core';
-import { first } from 'rxjs/operators';
+import { Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Session } from '../services/session';
 import { SessionService } from '../services/session.service';
 
 /**
- * The HasAuthorityDirective class implements the has authority directive.
+ * Structural directive that conditionally renders its host template when the current user has at
+ * least one of the required authorities.
  *
- * @author Marcus Portmann
+ * Usage:
+ * <pre>
+ *   <div *hasAuthority="'ADMIN'">...</div>
+ *   <div *hasAuthority="['ADMIN', 'USER_MANAGE']">...</div>
+ *   <div *hasAuthority="'ADMIN,USER_MANAGE'">...</div>
+ * </pre>
  */
 @Directive({
-  // eslint-disable-next-line
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[hasAuthority]',
-  standalone: false
+  standalone: true
 })
-export class HasAuthorityDirective implements OnInit {
-  @Input('hasAuthority') requiredAuthorities: string[] = [];
+export class HasAuthorityDirective implements OnInit, OnDestroy {
+  private latestSession: Session | null = null;
 
-  /**
-   * Constructs a new HasAuthorityDirective.
-   *
-   * @param templateRef    The template reference.
-   * @param viewContainer  The view container for the element this directive is attached to.
-   * @param sessionService The session service.
-   */
-  // eslint-disable-next-line
+  private requiredAuthorities: string[] = [];
+  private sessionSub?: Subscription;
+
   constructor(
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    private sessionService: SessionService
+    private readonly templateRef: TemplateRef<unknown>,
+    private readonly viewContainer: ViewContainerRef,
+    private readonly sessionService: SessionService
   ) {}
 
+  /**
+   * Accepts:
+   *   - 'ADMIN'
+   *   - ['ADMIN', 'USER_MANAGE']
+   *   - 'ADMIN,USER_MANAGE'
+   */
+  @Input('hasAuthority')
+  set hasAuthorityInput(value: string | string[]) {
+    this.requiredAuthorities = this.normalizeAuthorities(value);
+    this.updateView();
+  }
+
+  ngOnDestroy(): void {
+    this.sessionSub?.unsubscribe();
+  }
+
   ngOnInit(): void {
-    if (this.requiredAuthorities.length > 0) {
-      this.sessionService.session$
-        .pipe(first())
-        .subscribe((session: Session | null) => {
-          if (session) {
-            let foundAuthority = false;
+    // Subscribe to session changes and update the view whenever the session changes
+    this.sessionSub = this.sessionService.session$.subscribe((session) => {
+      this.latestSession = session;
+      this.updateView();
+    });
+  }
 
-            for (const requiredAuthority of this.requiredAuthorities) {
-              if (session.hasAuthority(requiredAuthority)) {
-                foundAuthority = true;
-                break;
-              }
-            }
+  private hide(): void {
+    this.viewContainer.clear();
+  }
 
-            if (foundAuthority) {
-              this.viewContainer.createEmbeddedView(this.templateRef);
-            } else {
-              this.viewContainer.clear();
-            }
-          }
-        });
-    } else {
+  /**
+   * Normalise the input into a clean string array of authorities.
+   */
+  private normalizeAuthorities(value: string | string[] | null | undefined): string[] {
+    if (!value) {
+      return [];
+    }
+
+    if (Array.isArray(value)) {
+      return value
+        .filter((v) => !!v)
+        .map((v) => v.trim())
+        .filter((v) => v.length > 0);
+    }
+
+    // Support comma-separated strings
+    return value
+      .split(',')
+      .map((v) => v.trim())
+      .filter((v) => v.length > 0);
+  }
+
+  private show(): void {
+    // Avoid creating duplicate views
+    if (this.viewContainer.length === 0) {
       this.viewContainer.createEmbeddedView(this.templateRef);
+    }
+  }
+
+  /**
+   * Decide whether to show or hide the view based on the current
+   * session and required authorities.
+   */
+  private updateView(): void {
+    const authorities = this.requiredAuthorities;
+
+    // No authorities required → always show
+    if (!authorities.length) {
+      this.show();
+      return;
+    }
+
+    const session = this.latestSession;
+    const hasAuthority =
+      !!session && authorities.some((authority) => session.hasAuthority(authority));
+
+    if (hasAuthority) {
+      this.show();
+    } else {
+      this.hide();
     }
   }
 }

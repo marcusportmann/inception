@@ -100,12 +100,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    // Components
-    EditReportDefinitionComponent,
-    ReportDefinitionsComponent,
-    NewReportDefinitionComponent
-  ],
   imports: [
     // Angular modules
     CommonModule,

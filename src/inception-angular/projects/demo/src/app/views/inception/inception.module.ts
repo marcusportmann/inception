@@ -28,8 +28,7 @@ const routes: Routes = [
   {
     path: 'components',
     pathMatch: 'prefix',
-    loadChildren: () =>
-      import('./components/components.module').then((m) => m.ComponentsModule),
+    loadChildren: () => import('./components/components.module').then((m) => m.ComponentsModule),
     data: {
       title: 'Components'
     }
@@ -37,8 +36,7 @@ const routes: Routes = [
   {
     path: 'forms',
     pathMatch: 'prefix',
-    loadChildren: () =>
-      import('./forms/forms.module').then((m) => m.FormsModule),
+    loadChildren: () => import('./forms/forms.module').then((m) => m.FormsModule),
     data: {
       title: 'Forms'
     }
@@ -46,8 +44,7 @@ const routes: Routes = [
   {
     path: 'tables',
     pathMatch: 'prefix',
-    loadChildren: () =>
-      import('./tables/tables.module').then((m) => m.TablesModule),
+    loadChildren: () => import('./tables/tables.module').then((m) => m.TablesModule),
     data: {
       title: 'Tables'
     }

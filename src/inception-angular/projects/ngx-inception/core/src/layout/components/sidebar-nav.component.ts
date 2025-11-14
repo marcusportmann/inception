@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -26,6 +27,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NavigationItem } from '../services/navigation-item';
 import { NavigationService } from '../services/navigation.service';
+import { SidebarNavItemComponent } from './sidebar-nav-item.component';
 
 /**
  * The SidebarNavComponent class implements the sidebar nav component.
@@ -33,15 +35,15 @@ import { NavigationService } from '../services/navigation.service';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'sidebar-nav',
+  selector: 'inception-core-sidebar-nav',
+  standalone: true,
   template: ` <ul class="nav">
-    <sidebar-nav-item
+    <inception-core-sidebar-nav-item
       *ngFor="let navItem of navItems"
-      [navItem]="navItem"></sidebar-nav-item>
+      [navItem]="navItem"></inception-core-sidebar-nav-item>
   </ul>`,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false
+  imports: [NgForOf, SidebarNavItemComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarNavComponent implements OnInit, OnDestroy {
   navItems: NavigationItem[];
@@ -78,13 +80,12 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.userNavigationSubscription =
-      this.navigationService.userNavigation$.subscribe(
-        (navigation: NavigationItem[]) => {
-          this.navItems = navigation;
-          this.changeDetectorRef.detectChanges();
-        }
-      );
+    this.userNavigationSubscription = this.navigationService.userNavigation$.subscribe(
+      (navigation: NavigationItem[]) => {
+        this.navItems = navigation;
+        this.changeDetectorRef.detectChanges();
+      }
+    );
 
     this.routerEventSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

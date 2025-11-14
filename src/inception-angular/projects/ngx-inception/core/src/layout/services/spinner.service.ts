@@ -32,7 +32,7 @@ export class SpinnerService {
 
   private overlayRef?: OverlayRef;
 
-  private spinnerComponentPortal?: ComponentPortal<SpinnerComponent>;
+  private readonly spinnerComponentPortal?: ComponentPortal<SpinnerComponent>;
 
   constructor(private overlay: Overlay) {
     console.log('Initializing the Spinner Service');
@@ -57,6 +57,7 @@ export class SpinnerService {
   /**
    * Reset the spinner reference counter and hide the spinner.
    */
+  // noinspection JSUnusedGlobalSymbols
   resetSpinner(): void {
     this.counter = 0;
     if (this.overlayRef) {

@@ -37,7 +37,6 @@ const routes: Routes = [
     RouterModule.forChild(routes)
 
     // Inception modules
-  ],
-  declarations: [DashboardComponent]
+  ]
 })
 export class DashboardModule {}

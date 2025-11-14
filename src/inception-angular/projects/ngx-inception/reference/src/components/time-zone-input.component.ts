@@ -16,22 +16,15 @@
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef,
-  Component,
-  HostBinding,
-  Input,
-  OnDestroy,
-  OnInit,
-  Optional,
-  Self,
-  ViewChild
+  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { BehaviorSubject, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { debounceTime, first } from 'rxjs/operators';
+import { AutocompleteSelectionRequiredDirective, CoreModule } from 'ngx-inception/core';
+import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, first, takeUntil } from 'rxjs/operators';
 import { ReferenceService } from '../services/reference.service';
 import { TimeZone } from '../services/time-zone';
 
@@ -41,8 +34,8 @@ import { TimeZone } from '../services/time-zone';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'time-zone-input',
+  selector: 'inception-reference-time-zone-input',
+  imports: [CoreModule, AutocompleteSelectionRequiredDirective],
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
@@ -50,7 +43,7 @@ import { TimeZone } from '../services/time-zone';
         type="text"
         matInput
         autocompleteSelectionRequired
-        required="required"
+        [required]="required"
         [matAutocomplete]="timeZoneAutocomplete"
         [matAutocompleteConnectedTo]="origin"
         (input)="inputChanged($event)"
@@ -74,139 +67,120 @@ import { TimeZone } from '../services/time-zone';
       provide: MatFormFieldControl,
       useExisting: TimeZoneInputComponent
     }
-  ],
-  standalone: false
+  ]
 })
 export class TimeZoneInputComponent
-  implements
-    MatFormFieldControl<string>,
-    ControlValueAccessor,
-    OnInit,
-    OnDestroy
+  implements MatFormFieldControl<string | null>, ControlValueAccessor, OnInit, OnDestroy
 {
-  private static _nextId: number = 0;
+  private static _nextId = 0;
 
-  /**
-   * The name for the control type.
-   */
-  controlType = 'time-zone-input';
+  /** Name for the control type. */
+  readonly controlType = 'time-zone-input';
 
-  /**
-   * The filtered options for the autocomplete.
-   */
-  filteredOptions$: BehaviorSubject<TimeZone[]> = new BehaviorSubject<
-    TimeZone[]
-  >([]);
+  /** For accessibility: IDs of elements that describe this control. */
+  @HostBinding('attr.aria-describedby') describedBy = '';
 
-  /**
-   * Whether the control is focused.
-   */
+  /** The filtered options for the autocomplete. */
+  readonly filteredOptions$ = new BehaviorSubject<TimeZone[]>([]);
+
+  /** Whether the control is focused. */
   focused = false;
 
-  /**
-   * The ID for the control.
-   */
+  /** The ID for the control. */
   @HostBinding() id = `time-zone-input-${TimeZoneInputComponent._nextId++}`;
 
-  /**
-   * The input.
-   */
+  /** The input. */
   @ViewChild(MatInput, { static: true }) input!: MatInput;
 
-  /**
-   * The observable providing access to the value for the input as it changes.
-   */
-  inputValue$: Subject<string> = new ReplaySubject<string>(1);
+  /** The observable indicating that the state of the control has changed. */
+  readonly stateChanges = new Subject<void>();
 
-  /**
-   * The observable indicating that the state of the control has changed.
-   */
-  stateChanges = new Subject<void>();
+  /** Has the control received a touch event. */
+  touched = false;
 
-  /**
-   * Has the control received a touch event.
-   */
-  touched: boolean = false;
-
-  //@Input('aria-describedby') userAriaDescribedBy?: string;
-
-  /**
-   * The options for the autocomplete.
-   */
+  /** The options for the autocomplete. */
   private _options: TimeZone[] = [];
 
-  private subscriptions: Subscription = new Subscription();
+  /** Destroy notifier for subscriptions. */
+  private readonly destroy$ = new Subject<void>();
+
+  /** The observable providing access to the value for the input as it changes. */
+  private readonly inputValue$ = new ReplaySubject<string>(1);
 
   constructor(
-    private referenceService: ReferenceService,
-    @Optional() @Self() public ngControl: NgControl,
-    private changeDetectorRef: ChangeDetectorRef
+    private readonly referenceService: ReferenceService,
+    @Optional() @Self() public readonly ngControl: NgControl | null,
+    private readonly changeDetectorRef: ChangeDetectorRef
   ) {
-    if (this.ngControl != null) {
-      /*
-       * Setting the value accessor directly (instead of using the providers) to avoid running into
-       * a circular import.
-       */
+    if (this.ngControl) {
+      // Avoid circular imports from using providers
       this.ngControl.valueAccessor = this;
     }
   }
 
-  /**
-   * Whether the control is disabled.
-   * @private
-   */
+  /** Whether the control is disabled. */
   private _disabled = false;
 
   @Input()
   get disabled(): boolean {
     return this._disabled;
   }
-
   set disabled(value: boolean) {
-    this._disabled = coerceBooleanProperty(value);
+    const coerced = coerceBooleanProperty(value);
+    if (coerced === this._disabled) {
+      return;
+    }
 
-    if (this._disabled) {
-      this.input.disabled = true;
+    this._disabled = coerced;
+
+    if (this.input) {
+      this.input.disabled = this._disabled;
     }
 
     this.stateChanges.next();
   }
 
-  /**
-   * The placeholder for the input.
-   * @private
-   */
-  private _placeholder: string = '';
+  /** The placeholder for the input. */
+  private _placeholder = '';
 
   @Input()
-  get placeholder() {
+  get placeholder(): string {
     return this._placeholder;
   }
+  set placeholder(placeholder: string) {
+    if (placeholder === this._placeholder) {
+      return;
+    }
 
-  set placeholder(placeholder) {
     this._placeholder = placeholder;
+
+    // MatInput exists by the time setters are typically hit,
+    // but we still guard to be safe in tests / edge cases.
+    if (this.input) {
+      this.input.placeholder = this._placeholder;
+    }
+
     this.stateChanges.next();
   }
 
-  /**
-   * Whether the control is required.
-   * @private
-   */
-  private _required: boolean = false;
+  /** Whether the control is required. */
+  private _required = false;
 
   @Input()
   get required(): boolean {
     return this._required;
   }
+  set required(req: unknown) {
+    const coerced = coerceBooleanProperty(req);
+    if (coerced === this._required) {
+      return;
+    }
 
-  set required(req: any) {
-    this._required = coerceBooleanProperty(req);
+    this._required = coerced;
     this.stateChanges.next();
   }
 
-  /**
-   * The ID for the selected time zone.
-   */
+  /** The ID for the selected time zone. */
   private _value: string | null = null;
 
   /**
@@ -214,7 +188,7 @@ export class TimeZoneInputComponent
    *
    * @return The ID for the selected time zone.
    */
-  public get value(): string | null {
+  get value(): string | null {
     return this._value;
   }
 
@@ -224,180 +198,147 @@ export class TimeZoneInputComponent
    * @param value the ID for the selected time zone
    */
   @Input()
-  public set value(value: string | null) {
-    if (value == undefined) {
+  set value(value: string | null) {
+    if (value === undefined) {
       value = null;
     }
 
-    if (this._value !== value) {
-      this._value = null;
+    if (this._value === value) {
+      return;
+    }
 
-      // If the new value is not null
-      if (!!value) {
-        /*
-         * If the options have been loaded, check if the new value is valid by confirming that
-         * there is a corresponding option. If the new value is valid, then set the value and set
-         * the input value using the ID for the option.
-         */
-        if (this._options.length > 0) {
-          for (const option of this._options) {
-            if (option.id === value) {
-              this.input.value = option.id;
-              this._value = value;
-              break;
-            }
-          }
-        } else {
-          // Assume the new value is valid, it will be checked when the options are loaded
+    this._value = null;
+
+    if (value) {
+      // If options are already loaded, validate and set input text
+      if (this._options.length > 0) {
+        const option = this._options.find((o) => o.id === value);
+        if (option) {
+          this.input.value = option.id;
           this._value = value;
         }
+      } else {
+        // Assume the new value is valid, it will be checked when the options are loaded
+        this._value = value;
       }
-
-      this.onChange(this._value);
-      this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
+
+    this.onChange(this._value);
+    this.changeDetectorRef.markForCheck();
+    this.stateChanges.next();
+  }
+
+  // Optional ARIA invalid binding (nice for a11y, but not strictly required)
+  @HostBinding('attr.aria-invalid')
+  get ariaInvalid(): boolean {
+    return this.errorState;
   }
 
   get empty(): boolean {
-    return this._value == null || this._value.length == 0;
+    return !this._value || this._value.length === 0;
   }
 
   get errorState(): boolean {
-    return (
-      this.required &&
-      (this._value == null || this._value.length == 0) &&
-      this.touched
-    );
+    const requiredError = this.required && (!this._value || this._value.length === 0);
+    const controlInvalid = !!this.ngControl?.invalid && this.touched;
+
+    return controlInvalid || (requiredError && this.touched);
   }
 
   @HostBinding('class.floating')
-  get shouldLabelFloat() {
-    return this.focused || !this.empty || this.input.focused;
+  get shouldLabelFloat(): boolean {
+    return this.focused || !this.empty || (this.input?.focused ?? false);
   }
 
-  displayWith(timeZone: TimeZone): string {
-    if (!!timeZone) {
-      return timeZone.id;
-    } else {
-      return '';
-    }
+  displayWith(timeZone: TimeZone | null): string {
+    return timeZone ? timeZone.id : '';
   }
 
-  inputChanged(event: Event) {
-    if ((event.target as HTMLInputElement).value !== undefined) {
-      this.inputValue$.next((event.target as HTMLInputElement).value);
-    }
+  inputChanged(event: Event): void {
+    const value = (event.target as HTMLInputElement).value ?? '';
+    this.inputValue$.next(value);
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
     this.stateChanges.complete();
   }
 
   ngOnInit(): void {
+    // Keep the MatInput placeholder in sync with our property.
     this.input.placeholder = this._placeholder;
 
+    // Load time zones.
     this.referenceService
       .getTimeZones()
       .pipe(first())
       .subscribe((timeZones: Map<string, TimeZone>) => {
         this._options = Array.from(timeZones.values());
-
         this.filteredOptions$.next(this._options);
 
-        /*
-         * If a value has already been set, attempt to confirm it is valid by finding the
-         * corresponding option. If a match is found, use the option's ID as the input's value.
-         * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
-         */
-        if (!!this.value) {
-          for (const option of this._options) {
-            if (option.id === this.value) {
-              this.input.value = option.id;
-              return;
-            }
+        // If a value has already been set, confirm it is valid.
+        if (this.value) {
+          const option = this._options.find((o) => o.id === this.value);
+          if (option) {
+            this.input.value = option.id;
+          } else {
+            // The value is invalid, so clear it
+            this.value = null;
           }
-
-          // The value is invalid so clear it
-          this.value = null;
         }
       });
 
-    this.subscriptions.add(
-      this.inputValue$.pipe(debounceTime(250)).subscribe((value: string) => {
-        if (!!this._value) {
-          this._value = null;
-          this.onChange(this._value);
-          // Flag the control as touched to trigger validation
-          this.touched = true;
-          this.changeDetectorRef.detectChanges();
-          this.stateChanges.next();
-        }
-
-        value = value.toLowerCase();
-
-        let filteredOptions: TimeZone[] = [];
-
-        for (const option of this._options) {
-          if (option.id.toLowerCase().indexOf(value) !== -1) {
-            filteredOptions.push(option);
-          }
-        }
-
-        /*
-         * If there are no filtered options, as a result of there being no options at all or no
-         * options matching the filter specified by the user, then reset the input value and the
-         * filtered options. This has the effect of forcing the user to enter a valid filter.
-         */
-        if (filteredOptions.length === 0) {
-          this.input.value = '';
-          filteredOptions = this._options;
-        }
-
-        this.filteredOptions$.next(filteredOptions);
-      })
-    );
+    // React to the user typing into the input
+    this.inputValue$
+      .pipe(debounceTime(250), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((value) => this.handleUserInput(value));
   }
 
-  onChange: any = (_: any) => {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange: any = () => {
+    /* empty */
+  };
 
   onClosed(): void {
     /*
-     * If the user entered text in the input to filter the options, but they did not select an
-     * option, then the selected value will be null but the input value will be valid, i.e. not null
-     * or blank. We then need to reset the input value and the filtered options so that if the
-     * control is activated again all options are available.
+     * If the user entered text in the input to filter the options, but they did not select one of
+     * the filtered options, then the selected value will be null. However, the input value will be
+     * valid, i.e., not null or blank. We then need to reset the input value and the filtered
+     * options so that if the control is activated again, all options are available.
      */
-    if (!this._value) {
-      if (!!this.input.value) {
-        this.input.value = '';
-        this.filteredOptions$.next(this._options);
-      }
+    if (!this._value && this.input.value) {
+      this.input.value = '';
+      this.filteredOptions$.next(this._options);
     }
   }
 
-  onContainerClick(event: MouseEvent) {
-    if ((event.target as Element).tagName.toLowerCase() != 'input') {
+  onContainerClick(event: MouseEvent): void {
+    if ((event.target as Element).tagName.toLowerCase() !== 'input') {
       this.input.focus();
     }
   }
 
-  onFocusIn(event: FocusEvent) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onFocusIn(_event: Event): void {
     if (!this.focused) {
       this.focused = true;
       this.stateChanges.next();
     }
   }
 
-  onFocusOut(event: FocusEvent) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onFocusOut(_event: Event): void {
     this.touched = true;
     this.onTouched();
     this.focused = false;
     this.stateChanges.next();
   }
 
-  onTouched: any = () => {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onTouched: any = () => {
+    /* empty */
+  };
 
   optionSelected(event: MatAutocompleteSelectedEvent): void {
     this.value = event.option.value.id;
@@ -413,14 +354,15 @@ export class TimeZoneInputComponent
     this.onTouched = fn;
   }
 
-  setDescribedByIds(ids: string[]) {
-    // TODO: IMPLEMENT THIS IF NECESSARY -- MARCUS
-    // https://material.angular.io/guide/creating-a-custom-form-field-control
-    // const controlElement = this._elementRef.nativeElement
-    // .querySelector('.example-tel-input-container')!;
-    // const controlElement = this._elementRef.nativeElement
-    // .querySelector('.example-tel-input-container')!;
-    // controlElement.setEmployment('aria-describedby', ids.join(' '));
+  setDescribedByIds(ids: string[]): void {
+    this.describedBy = ids.join(' ');
+  }
+
+  /**
+   * ControlValueAccessor hook to update the disabled state from forms API.
+   */
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
   }
 
   /**
@@ -433,8 +375,43 @@ export class TimeZoneInputComponent
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(value: any): void {
-    if (typeof value === 'string') {
-      this.value = value as string;
+    if (typeof value === 'string' || value === null || value === undefined) {
+      this.value = value ?? null;
     }
+  }
+
+  private handleUserInput(value: string): void {
+    // Reset the selected value when the user types
+    if (this._value) {
+      this._value = null;
+      this.onChange(this._value);
+
+      // Flag the control as touched to trigger validation
+      this.touched = true;
+      this.changeDetectorRef.markForCheck();
+      this.stateChanges.next();
+    }
+
+    const lowerValue = value.trim().toLowerCase();
+
+    let filteredOptions = this._options;
+
+    if (lowerValue) {
+      filteredOptions = this._options.filter((option) =>
+        option.id.toLowerCase().includes(lowerValue)
+      );
+    }
+
+    /*
+     * If there are no filtered options, as a result of there being no options at all or no
+     * options matching the filter specified by the user, then reset the input value and the
+     * filtered options. This has the effect of forcing the user to enter a valid filter.
+     */
+    if (filteredOptions.length === 0) {
+      this.input.value = '';
+      filteredOptions = this._options;
+    }
+
+    this.filteredOptions$.next(filteredOptions);
   }
 }

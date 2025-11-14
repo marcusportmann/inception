@@ -15,13 +15,7 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Input,
-  NgZone,
-  ViewChild,
+  AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, NgZone, ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -34,59 +28,63 @@ import {
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'div[groupFormFieldNotchedOutline]',
-  templateUrl: './group-form-field-notched-outline.component.html', // eslint-disable-next-line
+  standalone: true,
+  templateUrl: './group-form-field-notched-outline.component.html',
   // @angular-eslint/no-host-metadata-property
   host: {
-    class: 'mdc-notched-outline', // Besides updating the notch state through the MDC component,
-    // we toggle this class through
-    // a host binding in order to ensure that the notched-outline renders correctly on the server.
+    class: 'mdc-notched-outline',
+    // Besides updating the notch state through the MDC component, we toggle this class
+    // through a host binding in order to ensure that the notched-outline renders
+    // correctly on the server.
     '[class.mdc-notched-outline--notched]': 'groupFormFieldNotchedOutlineOpen'
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  standalone: false
+  encapsulation: ViewEncapsulation.None
 })
 export class GroupFormFieldNotchedOutlineComponent implements AfterViewInit {
-  // @ts-ignore
-  @ViewChild('notch') _notch: ElementRef;
-
   /** Whether the notch should be opened. */
-  @Input() groupFormFieldNotchedOutlineOpen: boolean = false;
+  @Input() groupFormFieldNotchedOutlineOpen = false;
+
+  /** Reference to the notch element. Assigned by Angular after view init. */
+  @ViewChild('notch') private _notch!: ElementRef<HTMLDivElement>;
 
   constructor(
-    private _elementRef: ElementRef<HTMLElement>,
-    private _ngZone: NgZone
+    private readonly _elementRef: ElementRef<HTMLElement>,
+    private readonly _ngZone: NgZone
   ) {}
 
-  _setNotchWidth(labelWidth: number) {
+  /** Updates the visual width of the notch based on the label width. */
+  _setNotchWidth(labelWidth: number): void {
     if (!this.groupFormFieldNotchedOutlineOpen || !labelWidth) {
       this._notch.nativeElement.style.width = '';
-    } else {
-      const NOTCH_ELEMENT_PADDING = 8;
-      const NOTCH_ELEMENT_BORDER = 1;
-      this._notch.nativeElement.style.width = `calc(${labelWidth}px * var(--mat-mdc-form-field-floating-label-scale, 0.75) + ${NOTCH_ELEMENT_PADDING + NOTCH_ELEMENT_BORDER}px)`;
+      return;
     }
+
+    const NOTCH_ELEMENT_PADDING = 8;
+    const NOTCH_ELEMENT_BORDER = 1;
+
+    this._notch.nativeElement.style.width =
+      `calc(${labelWidth}px * var(--mat-mdc-form-field-floating-label-scale, 0.75) + ` +
+      `${NOTCH_ELEMENT_PADDING + NOTCH_ELEMENT_BORDER}px)`;
   }
 
   ngAfterViewInit(): void {
-    const label = this._elementRef.nativeElement.querySelector<HTMLElement>(
-      '.mdc-floating-label'
-    );
+    const hostElement = this._elementRef.nativeElement;
+    const label = hostElement.querySelector<HTMLElement>('.mdc-floating-label');
+
     if (label) {
-      this._elementRef.nativeElement.classList.add(
-        'mdc-notched-outline--upgraded'
-      );
+      hostElement.classList.add('mdc-notched-outline--upgraded');
 
       if (typeof requestAnimationFrame === 'function') {
         label.style.transitionDuration = '0s';
         this._ngZone.runOutsideAngular(() => {
-          requestAnimationFrame(() => (label.style.transitionDuration = ''));
+          requestAnimationFrame(() => {
+            label.style.transitionDuration = '';
+          });
         });
       }
     } else {
-      this._elementRef.nativeElement.classList.add(
-        'mdc-notched-outline--no-label'
-      );
+      hostElement.classList.add('mdc-notched-outline--no-label');
     }
   }
 }

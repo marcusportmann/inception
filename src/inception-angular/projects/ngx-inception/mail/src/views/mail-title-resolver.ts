@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
@@ -23,22 +24,23 @@ import { Observable, of } from 'rxjs';
  *
  * @author Marcus Portmann
  */
+@Injectable()
 export class MailTitleResolver {
-  /**
-   * Constructs a new MailTitleResolver.
-   */
-  constructor() {}
-
   /**
    * Resolve the title.
    *
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
     return of($localize`:@@mail_mail_title_resolver:Mail`);
   }
 }

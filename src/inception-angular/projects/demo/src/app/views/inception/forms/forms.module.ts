@@ -58,7 +58,6 @@ const routes: Routes = [
     CoreModule,
     ReferenceComponentsModule
   ],
-  declarations: [ExampleComponent, ReferenceComponentsComponent],
   providers: []
 })
 export class FormsModule {}

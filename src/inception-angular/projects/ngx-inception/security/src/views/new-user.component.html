@@ -91,11 +91,11 @@
       </div>
       <div *ngIf="newUserForm.contains('expiredPassword') || newUserForm.contains('userLocked')" class="row">
         <div class="col-sm">
-          <group-form-field>
+          <inception-core-group-form-field>
             <mat-label i18n="@@security_new_user_component_label_options">Options</mat-label>
             <mat-checkbox *ngIf="newUserForm.contains('expiredPassword')" formControlName="expiredPassword" i18n="@@security_new_user_component_label_expired_password">Expired Password?</mat-checkbox>
             <mat-checkbox *ngIf="newUserForm.contains('userLocked')" formControlName="userLocked" i18n="@@security_new_user_component_label_user_locked">User Locked?</mat-checkbox>
-          </group-form-field>
+          </inception-core-group-form-field>
         </div>
       </div>
     </mat-card-content>

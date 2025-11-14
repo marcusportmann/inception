@@ -99,12 +99,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    // Components
-    EditMailTemplateComponent,
-    MailTemplatesComponent,
-    NewMailTemplateComponent
-  ],
   imports: [
     // Angular modules
     CommonModule,

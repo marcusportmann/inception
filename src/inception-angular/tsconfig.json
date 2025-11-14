@@ -25,10 +25,37 @@
     ],
     "paths": {
       "ngx-inception": [
-        "dist/ngx-inception"
+        "projects/ngx-inception/src/public-api.ts"
       ],
-      "ngx-inception/*": [
-        "dist/ngx-inception/*"
+      "ngx-inception/codes": [
+        "projects/ngx-inception/codes/public-api.ts"
+      ],
+      "ngx-inception/config": [
+        "projects/ngx-inception/config/public-api.ts"
+      ],
+      "ngx-inception/core": [
+        "projects/ngx-inception/core/public-api.ts"
+      ],
+      "ngx-inception/error": [
+        "projects/ngx-inception/error/public-api.ts"
+      ],
+      "ngx-inception/login": [
+        "projects/ngx-inception/login/public-api.ts"
+      ],
+      "ngx-inception/mail": [
+        "projects/ngx-inception/mail/public-api.ts"
+      ],
+      "ngx-inception/reference": [
+        "projects/ngx-inception/reference/public-api.ts"
+      ],
+      "ngx-inception/reporting": [
+        "projects/ngx-inception/reporting/public-api.ts"
+      ],
+      "ngx-inception/scheduler": [
+        "projects/ngx-inception/scheduler/public-api.ts"
+      ],
+      "ngx-inception/security": [
+        "projects/ngx-inception/security/public-api.ts"
       ]
     },
     /* Inception Options */

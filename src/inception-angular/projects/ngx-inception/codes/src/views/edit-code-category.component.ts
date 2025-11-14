@@ -16,16 +16,8 @@
 
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { CodeCategory } from '../services/code-category';
@@ -37,14 +29,13 @@ import { CodesService } from '../services/codes.service';
  * @author Marcus
  */
 @Component({
+  selector: 'inception-codes-edit-code-category',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'edit-code-category.component.html',
-  styleUrls: ['edit-code-category.component.css'],
-  standalone: false
+  styleUrls: ['edit-code-category.component.css']
 })
-export class EditCodeCategoryComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class EditCodeCategoryComponent extends AdminContainerView implements AfterViewInit {
   codeCategory: CodeCategory | null = null;
 
   codeCategoryId: string;
@@ -57,18 +48,13 @@ export class EditCodeCategoryComponent
 
   nameControl: FormControl;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private codesService: CodesService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  readonly title = $localize`:@@codes_edit_code_category_title:Edit Code Category`;
+
+  constructor(private codesService: CodesService) {
     super();
 
     // Retrieve the route parameter
-    const codeCategoryId =
-      this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+    const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
     if (!codeCategoryId) {
       throw new Error('No codeCategoryId route parameter found');
     }
@@ -83,10 +69,7 @@ export class EditCodeCategoryComponent
       },
       [Validators.required, Validators.maxLength(100)]
     );
-    this.nameControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     // Initialize the form group
     this.editCodeCategoryForm = new FormGroup({
@@ -104,10 +87,6 @@ export class EditCodeCategoryComponent
         relativeTo: this.activatedRoute
       }
     );
-  }
-
-  get title(): string {
-    return $localize`:@@codes_edit_code_category_title:Edit Code Category`;
   }
 
   cancel(): void {
@@ -131,7 +110,7 @@ export class EditCodeCategoryComponent
           this.nameControl.setValue(codeCategory.name);
           this.dataControl.setValue(codeCategory.data);
         },
-        error: (error: Error) => this.handleError(error, true)
+        error: (error: Error) => this.handleError(error, true, '../..')
       });
   }
 
@@ -154,32 +133,6 @@ export class EditCodeCategoryComponent
               relativeTo: this.activatedRoute
             }),
           error: (error: Error) => this.handleError(error, false)
-        });
-    }
-  }
-
-  private handleError(error: Error, navigateOnClose: boolean): void {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService
-        .showErrorDialog(error)
-        .afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          if (navigateOnClose) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['../..'], {
-              relativeTo: this.activatedRoute
-            });
-          }
         });
     }
   }

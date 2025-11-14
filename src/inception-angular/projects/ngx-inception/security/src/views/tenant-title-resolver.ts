@@ -33,8 +33,7 @@ export class TenantTitleResolver {
    * @param securityService The security service.
    */
   constructor(
-    @Inject(SecurityService) private securityService: SecurityService
-  ) {}
+    @Inject(SecurityService) private securityService: SecurityService) {}
 
   /**
    * Resolve the title.
@@ -42,10 +41,15 @@ export class TenantTitleResolver {
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
     let tenantId = activatedRouteSnapshot.paramMap.get('tenantId');
 
     if (!tenantId) {

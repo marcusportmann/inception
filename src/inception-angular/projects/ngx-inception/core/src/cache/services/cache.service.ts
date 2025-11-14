@@ -15,7 +15,6 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Session } from '../../session/services/session';
 import { SessionService } from '../../session/services/session.service';
 
 /**
@@ -27,7 +26,7 @@ import { SessionService } from '../../session/services/session.service';
   providedIn: 'root'
 })
 export class CacheService {
-  private cache: Map<string, any> = new Map<string, any>();
+  private readonly cache = new Map<string, unknown>();
 
   /**
    * Constructs a new CacheService.
@@ -37,7 +36,8 @@ export class CacheService {
   constructor(private sessionService: SessionService) {
     console.log('Initializing the Cache Service');
 
-    this.sessionService.session$.subscribe((session: Session | null) => {
+    // Clear the cache whenever the session changes
+    this.sessionService.session$.subscribe(() => {
       this.clear();
     });
   }
@@ -46,12 +46,19 @@ export class CacheService {
    * Clear the cache managed by the Cache Service.
    */
   clear(): void {
-    console.log(
-      'Clearing ' +
-        this.cache.size +
-        ' items from the cache managed by the Cache Service'
-    );
+    console.log(`Clearing ${this.cache.size} items from the cache managed by the Cache Service`);
     this.cache.clear();
+  }
+
+  /**
+   * Remove the cached value with the specified key.
+   *
+   * @param key The key identifying the cached value.
+   *
+   * @return True if an element in the cache existed and has been removed, or false if the element does not exist.
+   */
+  delete(key: string): boolean {
+    return this.cache.delete(key);
   }
 
   /**
@@ -61,8 +68,25 @@ export class CacheService {
    *
    * @return The cached value or undefined if the cached value could not be found.
    */
-  get(key: string): any | undefined {
-    return this.cache.get(key);
+  get<T>(key: string): T | undefined {
+    return this.cache.get(key) as T | undefined;
+  }
+
+  /**
+   * Retrieve the cached value if present; otherwise create it using the factory,
+   * store it, and return it.
+   *
+   * @param key     The key identifying the cached value.
+   * @param factory The factory function used to create the value if it does not exist.
+   */
+  getOrSet<T>(key: string, factory: () => T): T {
+    if (this.cache.has(key)) {
+      return this.cache.get(key) as T;
+    }
+
+    const value = factory();
+    this.cache.set(key, value);
+    return value;
   }
 
   /**
@@ -70,9 +94,9 @@ export class CacheService {
    *
    * @param key The key identifying the cached value.
    *
-   * @return True if the cached value with the specified key exists of false otherwise.
+   * @return True if the cached value with the specified key exists or false otherwise.
    */
-  has(key: string) {
+  has(key: string): boolean {
     return this.cache.has(key);
   }
 
@@ -82,7 +106,7 @@ export class CacheService {
    * @param key   The key identifying the cached value.
    * @param value The value to cache.
    */
-  set(key: string, value: any) {
+  set<T>(key: string, value: T): void {
     this.cache.set(key, value);
   }
 }

@@ -92,14 +92,6 @@ const routes: Routes = [
     // Inception modules
     CoreModule
   ],
-  declarations: [
-    ActionListTableComponent,
-    ActionMenuTableComponent,
-    BasicTableComponent,
-    FilterableTableComponent,
-    PaginationTableComponent,
-    SortableTableComponent
-  ],
   providers: []
 })
 export class TablesModule {}

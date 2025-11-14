@@ -27,20 +27,20 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class EditTenantTitleResolver {
   /**
-   * Constructs a new EditTenantTitleResolver.
-   */
-  constructor() {}
-
-  /**
    * Resolve the title.
    *
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
     return of($localize`:@@security_edit_tenant_title_resolver:Edit Tenant`);
   }
 }

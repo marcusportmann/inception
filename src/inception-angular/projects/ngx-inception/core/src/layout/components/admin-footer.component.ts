@@ -23,14 +23,13 @@ import { Replace } from '../../util/replace';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'admin-footer',
+  selector: 'inception-core-admin-footer',
+  standalone: true,
   template: `
     <footer class="admin-footer">
       <ng-content></ng-content>
     </footer>
-  `,
-  standalone: false
+  `
 })
 export class AdminFooterComponent implements OnInit {
   @Input() fixed = false;

@@ -14,26 +14,13 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  ConfirmationDialogComponent,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, ConfirmationDialogComponent, CoreModule, Error, TableFilterComponent
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { MailTemplateContentType } from '../services/mail-template-content-type';
@@ -46,14 +33,14 @@ import { MailService } from '../services/mail.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-mail-mail-templates',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'mail-templates.component.html',
-  styleUrls: ['mail-templates.component.css'],
-  standalone: false
+  styleUrls: ['mail-templates.component.css']
 })
-export class MailTemplatesComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class MailTemplatesComponent extends AdminContainerView implements AfterViewInit {
+  // noinspection JSUnusedGlobalSymbols
   MailTemplateContentType = MailTemplateContentType;
 
   dataSource: MatTableDataSource<MailTemplateSummary> =
@@ -61,8 +48,7 @@ export class MailTemplatesComponent
 
   displayedColumns = ['name', 'contentType', 'actions'];
 
-  getMailTemplateContentTypeDescription =
-    MailService.getMailTemplateContentTypeDescription;
+  getMailTemplateContentTypeDescription = MailService.getMailTemplateContentTypeDescription;
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
@@ -70,22 +56,14 @@ export class MailTemplatesComponent
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private mailService: MailService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  readonly title = $localize`:@@mail_mail_templates_title:Mail Templates`;
+
+  constructor(private mailService: MailService) {
     super();
 
     // Set the data source filter
     this.dataSource.filterPredicate = (data, filter): boolean =>
       data.name.toLowerCase().includes(filter);
-  }
-
-  get title(): string {
-    return $localize`:@@mail_mail_templates_title:Mail Templates`;
   }
 
   applyFilter(filterValue: string): void {
@@ -103,8 +81,12 @@ export class MailTemplatesComponent
     dialogRef
       .afterClosed()
       .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
+      .subscribe({
+        next: (confirmation: boolean | undefined) => {
+          if (confirmation !== true) {
+            return;
+          }
+
           this.spinnerService.showSpinner();
 
           this.mailService
@@ -113,26 +95,12 @@ export class MailTemplatesComponent
               first(),
               finalize(() => this.spinnerService.hideSpinner())
             )
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.loadMailTemplates();
               },
-              (error: Error) => {
-                // noinspection SuspiciousTypeOfGuard
-                if (
-                  error instanceof AccessDeniedError ||
-                  error instanceof InvalidArgumentError ||
-                  error instanceof ServiceUnavailableError
-                ) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {
-                    state: { error }
-                  });
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              }
-            );
+              error: (error: Error) => this.handleError(error, false)
+            });
         }
       });
   }
@@ -153,26 +121,12 @@ export class MailTemplatesComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (mailTemplateSummaries: MailTemplateSummary[]) => {
+      .subscribe({
+        next: (mailTemplateSummaries: MailTemplateSummary[]) => {
           this.dataSource.data = mailTemplateSummaries;
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   newMailTemplate(): void {

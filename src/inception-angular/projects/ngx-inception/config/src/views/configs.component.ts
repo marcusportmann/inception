@@ -14,40 +14,19 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
 
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  ConfirmationDialogComponent,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, ConfirmationDialogComponent, CoreModule, TableFilterComponent
 } from 'ngx-inception/core';
 
-import { merge, Observable, Subject, throwError } from 'rxjs';
+import { EMPTY, merge, Observable, Subject } from 'rxjs';
 import {
-  catchError,
-  debounceTime,
-  filter,
-  finalize,
-  first,
-  switchMap,
-  takeUntil,
-  tap
+  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil, tap
 } from 'rxjs/operators';
 import { Config } from '../services/config';
 import { ConfigService } from '../services/config.service';
@@ -58,14 +37,13 @@ import { ConfigService } from '../services/config.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-config-configs',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'configs.component.html',
-  styleUrls: ['configs.component.css'],
-  standalone: false
+  styleUrls: ['configs.component.css']
 })
-export class ConfigsComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+export class ConfigsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource = new MatTableDataSource<Config>();
 
   displayedColumns = ['id', 'value', 'actions'];
@@ -76,23 +54,15 @@ export class ConfigsComponent
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
+  readonly title = $localize`:@@config_configs_title:Configs`;
+
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private configService: ConfigService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private configService: ConfigService) {
     super();
 
     this.dataSource.filterPredicate = (data: Config, filter: string): boolean =>
       data.id.toLowerCase().includes(filter);
-  }
-
-  get title(): string {
-    return $localize`:@@config_configs_title:Configs`;
   }
 
   applyFilter(filterValue: string): void {
@@ -149,7 +119,10 @@ export class ConfigsComponent
         switchMap(() => {
           this.spinnerService.showSpinner();
           return action().pipe(
-            catchError((error) => this.handleError(error)),
+            catchError((error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
             tap(() => this.loadData()),
             finalize(() => this.spinnerService.hideSpinner())
           );
@@ -157,22 +130,6 @@ export class ConfigsComponent
         takeUntil(this.destroy$)
       )
       .subscribe();
-  }
-
-  private handleError(error: Error): Observable<never> {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
-    return throwError(() => error);
   }
 
   private initializeDataLoaders(): void {
@@ -185,21 +142,16 @@ export class ConfigsComponent
       .subscribe(() => this.loadData());
   }
 
-  private loadConfigs(): Observable<Config[]> {
-    return this.configService
-      .getConfigs()
-      .pipe(catchError((error) => this.handleError(error)));
-  }
-
   private loadData(): void {
     this.spinnerService.showSpinner();
-    this.loadConfigs()
+    this.configService
+      .getConfigs()
       .pipe(finalize(() => this.spinnerService.hideSpinner()))
       .subscribe({
         next: (configs) => {
           this.dataSource.data = configs;
         },
-        error: (error) => this.handleError(error)
+        error: (error) => this.handleError(error, false)
       });
   }
 }

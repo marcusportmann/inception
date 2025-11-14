@@ -40,12 +40,12 @@ import java.util.List;
  */
 @Schema(description = "A token claim")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"name", "values"})
+@JsonPropertyOrder({"name", "value", "values"})
 @XmlRootElement(name = "TokenClaim", namespace = "https://inception.digital/security")
 @XmlType(
     name = "TokenClaim",
     namespace = "https://inception.digital/security",
-    propOrder = {"name", "values"})
+    propOrder = {"name", "value", "values"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TokenClaim implements Serializable {
 
@@ -59,14 +59,17 @@ public class TokenClaim implements Serializable {
   @Size(min = 1, max = 100)
   private String name;
 
+  /** The single value for the token claim. */
+  @Schema(description = "The single value for the token claim")
+  @JsonProperty
+  @XmlElement(name = "Value")
+  private String value;
+
   /** The values for the token claim. */
-  @Schema(
-      description = "The values for the token claim",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElementWrapper(name = "Values", required = true)
-  @XmlElement(name = "Value", required = true)
-  @NotNull
+  @Schema(description = "The values for the token claim")
+  @JsonProperty
+  @XmlElementWrapper(name = "Values")
+  @XmlElement(name = "Value")
   private List<String> values;
 
   /** Constructs a new {@code TokenClaim}. */
@@ -95,12 +98,32 @@ public class TokenClaim implements Serializable {
   }
 
   /**
+   * Constructs a new {@code TokenClaim}.
+   *
+   * @param name the name of the token claim
+   * @param value the single value for the token claim
+   */
+  public TokenClaim(String name, String value) {
+    this.name = name;
+    this.value = value;
+  }
+
+  /**
    * Returns the name of the token claim.
    *
    * @return the name of the token claim
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Returns the single value for the token claim.
+   *
+   * @return the single value for the token claim
+   */
+  public String getValue() {
+    return value;
   }
 
   /**
@@ -119,6 +142,15 @@ public class TokenClaim implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the single value for the token claim.
+   *
+   * @param value the single value for the token claim
+   */
+  public void setValue(String value) {
+    this.value = value;
   }
 
   /**

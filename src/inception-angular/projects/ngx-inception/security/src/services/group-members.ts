@@ -29,7 +29,7 @@ export class GroupMembers {
   groupMembers: GroupMember[];
 
   /**
-   * The name of the group the group members are associated with.
+   * The name of the group that the group members are associated with.
    */
   groupName: string;
 
@@ -56,7 +56,7 @@ export class GroupMembers {
   /**
    * Constructs a new GroupMembers.
    *
-   * @param groupName       The name of the group the group members are associated with.
+   * @param groupName       The name of the group that the group members are associated with.
    * @param groupMembers    The group members.
    * @param total           The total number of groups.
    * @param sortDirection   The sort direction that was applied to the group members.

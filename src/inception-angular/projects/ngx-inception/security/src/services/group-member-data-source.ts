@@ -49,10 +49,14 @@ export class GroupMemberDataSource implements DataSource<GroupMember> {
   }
 
   connect(collectionViewer: CollectionViewer): Observable<GroupMember[]> {
+    void collectionViewer;
+
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
+    void collectionViewer;
+
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
     this.totalSubject$.complete();

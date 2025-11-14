@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  Input,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SidebarService } from '../services/sidebar.service';
 import { SIDEBAR_CSS_CLASSES } from './sidebar-css-classes';
@@ -32,11 +25,10 @@ import { SIDEBAR_CSS_CLASSES } from './sidebar-css-classes';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'sidebar',
+  selector: 'inception-core-sidebar',
+  standalone: true,
   template: ` <ng-content></ng-content>`,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   // TODO: Confirm if we can default these properties to false -- MARCUS
@@ -50,6 +42,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   @Input() offCanvas?: boolean;
 
+  readonly sidebar = true;
+
   private sidebarMinimizedSubscription?: Subscription;
 
   /**
@@ -58,10 +52,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
    * @param sidebarService The sidebar service.
    */
   constructor(private sidebarService: SidebarService) {}
-
-  @HostBinding('class.sidebar') get sidebar() {
-    return true;
-  }
 
   ngOnDestroy(): void {
     if (this.sidebarMinimizedSubscription) {
@@ -72,43 +62,45 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const bodySelector = document.querySelector('body');
 
-    this.sidebarMinimizedSubscription =
-      this.sidebarService.sidebarMinimized$.subscribe(
-        (sidebarMinimized: boolean) => {
-          if (sidebarMinimized) {
-            if (bodySelector) {
-              bodySelector.classList.add('sidebar-minimized');
-            }
-          } else {
-            if (bodySelector) {
-              bodySelector.classList.remove('sidebar-minimized');
-            }
+    this.sidebarMinimizedSubscription = this.sidebarService.sidebarMinimized$.subscribe(
+      (sidebarMinimized: boolean) => {
+        if (sidebarMinimized) {
+          if (bodySelector) {
+            bodySelector.classList.add('sidebar-minimized');
+          }
+        } else {
+          if (bodySelector) {
+            bodySelector.classList.remove('sidebar-minimized');
           }
         }
-      );
+      }
+    );
 
     if (bodySelector) {
-      if (!!this.display) {
+      if (this.display) {
         let cssClass;
-        this.display
-          ? (cssClass = `sidebar-${this.display}-show`)
-          : (cssClass = SIDEBAR_CSS_CLASSES[0]);
+
+        if (this.display) {
+          cssClass = `sidebar-${this.display}-show`;
+        } else {
+          cssClass = SIDEBAR_CSS_CLASSES[0];
+        }
         bodySelector.classList.add(cssClass);
       }
 
-      if (!!this.compact) {
+      if (this.compact) {
         bodySelector.classList.add('sidebar-compact');
       }
 
-      if (!!this.fixed) {
+      if (this.fixed) {
         bodySelector.classList.add('sidebar-fixed');
       }
 
-      if (!!this.minimized) {
+      if (this.minimized) {
         bodySelector.classList.add('sidebar-minimized');
       }
 
-      if (!!this.offCanvas) {
+      if (this.offCanvas) {
         bodySelector.classList.add('sidebar-off-canvas');
       }
     }

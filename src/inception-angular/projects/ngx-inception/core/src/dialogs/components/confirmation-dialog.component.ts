@@ -15,10 +15,11 @@
  */
 
 import { Component, Inject } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 /**
- * The ConfirmationDialogData interface defines the data that is displayed by a confirmation dialog.
+ * The ConfirmationDialogData interface defines the data displayed by a confirmation dialog.
  *
  * @author Marcus Portmann
  */
@@ -35,8 +36,9 @@ export interface ConfirmationDialogData {
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'confirmation-dialog',
+  selector: 'inception-core-confirmation-dialog',
+  standalone: true,
+  imports: [MatButton],
   template: `
     <div class="header">
       <i class="far fa-3x fa-question-circle"></i>
@@ -67,8 +69,7 @@ export interface ConfirmationDialogData {
   `,
   host: {
     class: 'confirmation-dialog'
-  },
-  standalone: false
+  }
 })
 export class ConfirmationDialogComponent {
   /**

@@ -50,10 +50,14 @@ export class PolicySummaryDataSource implements DataSource<PolicySummary> {
   }
 
   connect(collectionViewer: CollectionViewer): Observable<PolicySummary[]> {
+    void collectionViewer;
+
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
+    void collectionViewer;
+
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
     this.totalSubject$.complete();

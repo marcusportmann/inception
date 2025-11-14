@@ -25,12 +25,9 @@ import { ActivatedRouteSnapshot } from '@angular/router';
  */
 @Injectable()
 export class DisabledFunctionGuard {
-  /**
-   * Constructs a new DisabledFunctionGuard.
-   */
-  constructor() {}
-
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): boolean {
+    void activatedRouteSnapshot;
+
     return false;
   }
 }

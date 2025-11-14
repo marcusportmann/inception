@@ -196,6 +196,7 @@ export class MailService {
    *
    * @return The mail templates.
    */
+  // noinspection JSUnusedGlobalSymbols
   getMailTemplates(): Observable<MailTemplate[]> {
     return this.httpClient
       .get<

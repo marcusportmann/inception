@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
 
 /**
  * The TooltipsComponent class implements the tooltips component.
@@ -22,7 +23,9 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'tooltips.component.html',
-  standalone: false
+  selector: 'app-tooltips',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'tooltips.component.html'
 })
 export class TooltipsComponent {}

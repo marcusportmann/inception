@@ -14,30 +14,18 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Directive,
-  Host,
-  Input,
-  OnDestroy,
-  Self
-} from '@angular/core';
+import { AfterViewInit, Directive, Host, Input, OnDestroy, Self } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import {
-  MatAutocomplete,
-  MatAutocompleteTrigger
-} from '@angular/material/autocomplete';
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { Subscription } from 'rxjs';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[autocompleteSelectionRequired]',
-  standalone: false
+  standalone: true
 })
-export class AutocompleteSelectionRequiredDirective
-  implements AfterViewInit, OnDestroy
-{
+export class AutocompleteSelectionRequiredDirective implements AfterViewInit, OnDestroy {
   @Input()
   matAutocomplete: MatAutocomplete | undefined;
 
@@ -53,7 +41,8 @@ export class AutocompleteSelectionRequiredDirective
   ngAfterViewInit() {
     this.subscriptions.add(
       this.autoCompleteTrigger.panelClosingActions.subscribe(
-        (next: MatOptionSelectionChange | null) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (_next: MatOptionSelectionChange | null) => {
           if (this.matAutocomplete) {
             const selected = this.matAutocomplete.options
               .map((option) => option.value)

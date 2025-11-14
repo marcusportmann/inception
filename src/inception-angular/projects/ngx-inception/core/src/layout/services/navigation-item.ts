@@ -53,7 +53,7 @@ export class NavigationItem {
   icon: string;
 
   /**
-   * The name of navigation item.
+   * The name of the navigation item.
    */
   name: string;
 
@@ -102,8 +102,8 @@ export class NavigationItem {
     this.icon = icon;
     this.name = name;
     this.url = url;
-    this.authorities = !!authorities ? authorities : [];
-    this.children = !!children ? children : [];
+    this.authorities = authorities ? authorities : [];
+    this.children = children ? children : [];
     this.cssClass = cssClass;
     this.variant = variant;
     this.badge = badge;

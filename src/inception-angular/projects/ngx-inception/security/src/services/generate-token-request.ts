@@ -75,7 +75,7 @@ export class GenerateTokenRequest {
     this.name = name;
     this.description = description;
     this.claims = claims;
-    this.expiryDate = !!expiryDate ? expiryDate : null;
-    this.validFromDate = !!validFromDate ? validFromDate : null;
+    this.expiryDate = expiryDate ? expiryDate : null;
+    this.validFromDate = validFromDate ? validFromDate : null;
   }
 }

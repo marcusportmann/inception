@@ -27,20 +27,20 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class GroupsTitleResolver {
   /**
-   * Constructs a new GroupsTitleResolver.
-   */
-  constructor() {}
-
-  /**
    * Resolve the title.
    *
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
     return of($localize`:@@security_groups_title_resolver:Groups`);
   }
 }

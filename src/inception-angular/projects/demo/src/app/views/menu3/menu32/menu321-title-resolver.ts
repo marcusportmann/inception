@@ -26,20 +26,20 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class Menu321TitleResolver {
   /**
-   * Constructs a new Menu321TitleResolver.
-   */
-  constructor() {}
-
-  /**
    * Resolve the title.
    *
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
     return of('Custom Menu 3.2.1 Title');
   }
 }

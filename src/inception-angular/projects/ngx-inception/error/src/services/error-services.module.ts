@@ -15,10 +15,7 @@
  */
 
 import { CommonModule } from '@angular/common';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { ErrorService } from './error.service';
 
@@ -37,8 +34,6 @@ import { ErrorService } from './error.service';
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class ErrorServicesModule {
-  constructor() {}
-
   static forRoot(): ModuleWithProviders<ErrorServicesModule> {
     return {
       ngModule: ErrorServicesModule,

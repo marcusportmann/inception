@@ -14,48 +14,17 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SessionService,
-  SortDirection,
-  SpinnerService,
+  AdminContainerView, CoreModule, Error, HasAuthorityDirective, Session, SessionService, SortDirection,
   TableFilterComponent
 } from 'ngx-inception/core';
+import { BehaviorSubject, EMPTY, forkJoin, merge, Observable, of, Subject, tap } from 'rxjs';
 import {
-  BehaviorSubject,
-  forkJoin,
-  merge,
-  Observable,
-  of,
-  Subject,
-  tap,
-  throwError
-} from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  filter,
-  finalize,
-  first,
-  map,
-  switchMap,
-  takeUntil
+  catchError, debounceTime, filter, finalize, first, map, switchMap, takeUntil
 } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
 import { UserDataSource } from '../services/user-data-source';
@@ -70,14 +39,13 @@ import { Users } from '../services/users';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-users',
+  imports: [CoreModule, TableFilterComponent, HasAuthorityDirective],
+  standalone: true,
   templateUrl: 'users.component.html',
-  styleUrls: ['users.component.css'],
-  standalone: false
+  styleUrls: ['users.component.css']
 })
-export class UsersComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+export class UsersComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: UserDataSource;
 
   displayedColumns = ['name', 'username', 'actions'];
@@ -91,10 +59,11 @@ export class UsersComponent
   @ViewChild(TableFilterComponent, { static: true })
   tableFilter!: TableFilterComponent;
 
+  readonly title = $localize`:@@security_users_title:Users`;
+
   userDirectories: UserDirectorySummary[] = [];
 
-  userDirectoryCapabilities$ =
-    new BehaviorSubject<UserDirectoryCapabilities | null>(null);
+  userDirectoryCapabilities$ = new BehaviorSubject<UserDirectoryCapabilities | null>(null);
 
   userDirectoryId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
@@ -104,12 +73,8 @@ export class UsersComponent
   private destroy$ = new Subject<void>();
 
   constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
     private securityService: SecurityService,
-    private sessionService: SessionService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
+    private sessionService: SessionService
   ) {
     super();
     this.dataSource = new UserDataSource(this.securityService);
@@ -143,10 +108,6 @@ export class UsersComponent
     );
   }
 
-  get title(): string {
-    return $localize`:@@security_users_title:Users`;
-  }
-
   deleteUser(username: string): void {
     const message = $localize`:@@security_users_confirm_delete_user:Are you sure you want to delete the user?`;
     this.confirmAndProcessAction(message, () =>
@@ -157,12 +118,7 @@ export class UsersComponent
   editUser(username: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [
-        this.userDirectoryId$.value +
-          '/' +
-          encodeURIComponent(username) +
-          '/edit'
-      ],
+      [this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/edit'],
       { relativeTo: this.activatedRoute }
     );
   }
@@ -172,7 +128,7 @@ export class UsersComponent
     let sortBy: UserSortBy = UserSortBy.Username;
     let sortDirection = SortDirection.Ascending;
 
-    if (!!this.sort.active) {
+    if (this.sort.active) {
       if (this.sort.active === 'name') {
         sortBy = UserSortBy.Name;
       } else if (this.sort.active === 'preferredName') {
@@ -196,7 +152,9 @@ export class UsersComponent
         )
         .pipe(
           catchError((error) => {
-            return this.handleError(error);
+            this.handleError(error, false);
+
+            return EMPTY;
           })
         );
     } else {
@@ -225,12 +183,7 @@ export class UsersComponent
   resetUserPassword(username: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [
-        this.userDirectoryId$.value +
-          '/' +
-          encodeURIComponent(username) +
-          '/reset-user-password'
-      ],
+      [this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/reset-user-password'],
       { relativeTo: this.activatedRoute }
     );
   }
@@ -238,19 +191,14 @@ export class UsersComponent
   userGroups(username: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [
-        this.userDirectoryId$.value +
-          '/' +
-          encodeURIComponent(username) +
-          '/groups'
-      ],
+      [this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/groups'],
       { relativeTo: this.activatedRoute }
     );
   }
 
   private confirmAndProcessAction(
     confirmationMessage: string,
-    action: () => Observable<void | any>
+    action: () => Observable<void | unknown>
   ): void {
     const dialogRef = this.dialogService.showConfirmationDialog({
       message: confirmationMessage
@@ -260,15 +208,22 @@ export class UsersComponent
       .afterClosed()
       .pipe(
         first(),
-        filter((confirmed) => confirmed === true),
+        filter((confirmed: boolean | undefined) => confirmed === true),
         switchMap(() => {
           this.spinnerService.showSpinner();
+
           return action().pipe(
-            catchError((error) => this.handleError(error)),
+            catchError((error: Error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
             tap(() => this.resetTable()),
             switchMap(() =>
               this.loadUsers().pipe(
-                catchError((error) => this.handleError(error))
+                catchError((error: Error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
               )
             ),
             finalize(() => this.spinnerService.hideSpinner())
@@ -279,80 +234,91 @@ export class UsersComponent
       .subscribe();
   }
 
-  private handleError(error: Error): Observable<never> {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
-    return throwError(() => error);
-  }
-
   private initializeDataLoaders(): void {
     // Handle user directory selection changes
     this.userDirectoryId$
       .pipe(
         takeUntil(this.destroy$),
-        switchMap((userDirectoryId) => {
-          if (userDirectoryId) {
-            this.resetTable();
-            this.spinnerService.showSpinner();
-
-            return forkJoin({
-              userDirectoryCapabilities: this.securityService
-                .getUserDirectoryCapabilities(userDirectoryId)
-                .pipe(catchError((error) => this.handleError(error))),
-              groups: this.loadUsers().pipe(
-                catchError((error) => this.handleError(error))
-              )
-            }).pipe(
-              tap(({ userDirectoryCapabilities }) =>
-                this.userDirectoryCapabilities$.next(userDirectoryCapabilities)
-              ),
-              finalize(() => this.spinnerService.hideSpinner())
-            );
-          } else {
-            return of();
+        switchMap((userDirectoryId: string | null | undefined) => {
+          if (!userDirectoryId) {
+            return EMPTY;
           }
+
+          this.resetTable();
+          this.spinnerService.showSpinner();
+
+          return forkJoin({
+            userDirectoryCapabilities: this.securityService
+              .getUserDirectoryCapabilities(userDirectoryId)
+              .pipe(
+                catchError((error: Error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
+              ),
+            groups: this.loadUsers().pipe(
+              catchError((error: Error) => {
+                this.handleError(error, false);
+                return EMPTY;
+              })
+            )
+          }).pipe(
+            tap(({ userDirectoryCapabilities }) =>
+              this.userDirectoryCapabilities$.next(userDirectoryCapabilities)
+            ),
+            finalize(() => this.spinnerService.hideSpinner())
+          );
         })
       )
-      .subscribe();
+      .subscribe({
+        error: (error: Error) => this.handleError(error, false)
+      });
 
     // Handle selection changes in the user directory select
-    this.userDirectorySelect.selectionChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((change: MatSelectChange) => {
+    this.userDirectorySelect.selectionChange.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (change: MatSelectChange) => {
         this.userDirectoryId$.next(change.value);
-      });
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
 
     // Reset paginator on sort or filter changes
     merge(this.sort.sortChange, this.tableFilter.changed)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => (this.paginator.pageIndex = 0));
+      .subscribe({
+        next: () => {
+          if (this.paginator) {
+            this.paginator.pageIndex = 0;
+          }
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
 
     // Load users on sort, filter, or pagination changes
     merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
       .pipe(
         debounceTime(200), // Avoid redundant API calls
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        if (this.userDirectoryId$.value) {
+        takeUntil(this.destroy$),
+        switchMap(() => {
+          const userDirectoryId = this.userDirectoryId$.value;
+
+          if (!userDirectoryId) {
+            return EMPTY;
+          }
+
           this.spinnerService.showSpinner();
-          this.loadUsers()
-            .pipe(
-              catchError((error) => this.handleError(error)),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe();
-        }
+
+          return this.loadUsers().pipe(
+            catchError((error: Error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
+            finalize(() => this.spinnerService.hideSpinner())
+          );
+        })
+      )
+      .subscribe({
+        error: (error: Error) => this.handleError(error, false)
       });
   }
 
@@ -361,46 +327,55 @@ export class UsersComponent
     this.sessionService.session$
       .pipe(
         first(),
-        switchMap((session) => {
+        switchMap((session: Session | null) => {
           if (session?.tenantId) {
             this.spinnerService.showSpinner();
-            return this.securityService
-              .getUserDirectorySummariesForTenant(session.tenantId)
-              .pipe(
-                catchError((error) => this.handleError(error)),
-                finalize(() => this.spinnerService.hideSpinner())
-              );
-          } else {
-            return of([]);
+
+            return this.securityService.getUserDirectorySummariesForTenant(session.tenantId).pipe(
+              catchError((error: Error) => {
+                this.handleError(error, false);
+                return EMPTY;
+              }),
+              finalize(() => this.spinnerService.hideSpinner())
+            );
           }
+
+          return of([] as UserDirectorySummary[]);
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe((userDirectories: UserDirectorySummary[]) => {
-        this.userDirectories = userDirectories;
+      .subscribe({
+        next: (userDirectories: UserDirectorySummary[]) => {
+          this.userDirectories = userDirectories;
 
-        if (this.userDirectories.length === 1) {
-          this.userDirectoryId$.next(this.userDirectories[0].id);
-        } else {
+          if (this.userDirectories.length === 1) {
+            this.userDirectoryId$.next(this.userDirectories[0].id);
+            return;
+          }
+
           this.activatedRoute.paramMap
             .pipe(
               first(),
               map(() => window.history.state),
               takeUntil(this.destroy$)
             )
-            .subscribe((state) => {
-              const userDirectoryId = state.userDirectoryId;
-              if (userDirectoryId) {
-                const matchingDirectory = this.userDirectories.find(
-                  (ud) => ud.id === userDirectoryId
-                );
-                if (matchingDirectory) {
-                  this.userDirectorySelect.value = matchingDirectory.id;
-                  this.userDirectoryId$.next(matchingDirectory.id);
+            .subscribe({
+              next: (state) => {
+                const userDirectoryId = state.userDirectoryId;
+                if (userDirectoryId) {
+                  const matchingDirectory = this.userDirectories.find(
+                    (ud) => ud.id === userDirectoryId
+                  );
+                  if (matchingDirectory) {
+                    this.userDirectorySelect.value = matchingDirectory.id;
+                    this.userDirectoryId$.next(matchingDirectory.id);
+                  }
                 }
-              }
+              },
+              error: (error: Error) => this.handleError(error, false)
             });
-        }
+        },
+        error: (error: Error) => this.handleError(error, false)
       });
   }
 

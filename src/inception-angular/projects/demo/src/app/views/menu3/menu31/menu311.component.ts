@@ -15,7 +15,7 @@
  */
 
 import { Component } from '@angular/core';
-import { AdminContainerView } from 'ngx-inception/core';
+import { AdminContainerView, CoreModule } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 
 /**
@@ -24,12 +24,14 @@ import { Observable } from 'rxjs';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'app-menu311',
+  standalone: true,
+  imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content> Menu 3.1.1 </mat-card-content>
     </mat-card>
-  `,
-  standalone: false
+  `
 })
 export class Menu311Component extends AdminContainerView {
   constructor() {

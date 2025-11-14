@@ -14,37 +14,15 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SortDirection,
-  SpinnerService,
-  TableFilterComponent
+  AdminContainerView, BackNavigation, CoreModule, Error, SortDirection, TableFilterComponent
 } from 'ngx-inception/core';
-import { merge, Observable, Subject, tap, throwError } from 'rxjs';
+import { EMPTY, merge, Observable, Subject, tap } from 'rxjs';
 import {
-  catchError,
-  debounceTime,
-  filter,
-  finalize,
-  first,
-  switchMap,
-  takeUntil
+  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
 } from 'rxjs/operators';
 import { GroupMember } from '../services/group-member';
 import { GroupMemberDataSource } from '../services/group-member-data-source';
@@ -58,14 +36,13 @@ import { SecurityService } from '../services/security.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-group-members',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'group-members.component.html',
-  styleUrls: ['group-members.component.css'],
-  standalone: false
+  styleUrls: ['group-members.component.css']
 })
-export class GroupMembersComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+export class GroupMembersComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: GroupMemberDataSource;
 
   displayedColumns = ['memberName', 'memberType', 'actions'];
@@ -81,22 +58,17 @@ export class GroupMembersComponent
   @ViewChild(TableFilterComponent, { static: true })
   tableFilter!: TableFilterComponent;
 
+  readonly title = $localize`:@@security_group_members_title:Group Members`;
+
   userDirectoryId: string;
 
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private securityService: SecurityService) {
     super();
 
     // Retrieve the route parameters
-    const userDirectoryId =
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
       throw new Error('No userDirectoryId route parameter found');
@@ -124,10 +96,6 @@ export class GroupMembersComponent
         state: { userDirectoryId: this.userDirectoryId }
       }
     );
-  }
-
-  get title(): string {
-    return $localize`:@@security_group_members_title:Group Members`;
   }
 
   addMemberToGroup(): void {
@@ -165,9 +133,9 @@ export class GroupMembersComponent
       .pipe(
         first(),
         filter((confirmed) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
-          return this.securityService
+        tap(() => this.spinnerService.showSpinner()),
+        switchMap(() =>
+          this.securityService
             .removeMemberFromGroup(
               this.userDirectoryId,
               this.groupName,
@@ -175,36 +143,26 @@ export class GroupMembersComponent
               groupMember.memberName
             )
             .pipe(
-              catchError((error) => this.handleError(error)),
               tap(() => this.resetTable()),
-              // After delete completes
+              // After delete completes, reload members
               switchMap(() =>
                 this.loadGroupMembers().pipe(
-                  catchError((error) => this.handleError(error))
+                  catchError((error: Error) => {
+                    this.handleError(error, false);
+                    return EMPTY;
+                  })
                 )
               ),
+              catchError((error: Error) => {
+                this.handleError(error, false);
+                return EMPTY;
+              }),
               finalize(() => this.spinnerService.hideSpinner())
-            );
-        }),
+            )
+        ),
         takeUntil(this.destroy$)
       )
       .subscribe();
-  }
-
-  private handleError(error: Error): Observable<never> {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
-    return throwError(() => error);
   }
 
   private initializeDataLoaders(): void {
@@ -225,7 +183,7 @@ export class GroupMembersComponent
         next: () => {
           // Load complete
         },
-        error: (error) => this.handleError(error)
+        error: (error) => this.handleError(error, false)
       });
   }
 
@@ -236,21 +194,17 @@ export class GroupMembersComponent
 
     if (this.sort.active) {
       sortDirection =
-        this.sort.direction === 'asc'
-          ? SortDirection.Ascending
-          : SortDirection.Descending;
+        this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
     }
 
-    return this.dataSource
-      .load(
-        this.userDirectoryId,
-        this.groupName,
-        filter,
-        sortDirection,
-        this.paginator.pageIndex,
-        this.paginator.pageSize
-      )
-      .pipe(catchError((error) => this.handleError(error)));
+    return this.dataSource.load(
+      this.userDirectoryId,
+      this.groupName,
+      filter,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    );
   }
 
   private resetTable(): void {

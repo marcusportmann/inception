@@ -24,14 +24,9 @@ import { Directive, HostListener } from '@angular/core';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[mobileSidebarToggler]',
-  standalone: false
+  standalone: true
 })
 export class MobileSidebarTogglerDirective {
-  /**
-   * Constructs a new AppMobileSidebarTogglerDirective.
-   */
-  constructor() {}
-
   // eslint-disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();

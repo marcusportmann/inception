@@ -16,20 +16,14 @@
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef,
-  Component,
-  HostBinding,
-  Input,
-  OnDestroy,
-  OnInit,
-  Optional,
-  Self,
-  ViewChild
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit,
+  Optional, Self, ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { AutocompleteSelectionRequiredDirective, CoreModule } from 'ngx-inception/core';
 import { BehaviorSubject, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, first } from 'rxjs/operators';
 import { Language } from '../services/language';
@@ -41,8 +35,9 @@ import { ReferenceService } from '../services/reference.service';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'language-input',
+  selector: 'inception-reference-language-input',
+  imports: [CoreModule, AutocompleteSelectionRequiredDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
@@ -50,7 +45,8 @@ import { ReferenceService } from '../services/reference.service';
         type="text"
         matInput
         autocompleteSelectionRequired
-        required="required"
+        [required]="required"
+        [placeholder]="placeholder"
         [matAutocomplete]="languageAutocomplete"
         [matAutocompleteConnectedTo]="origin"
         (input)="inputChanged($event)"
@@ -74,29 +70,22 @@ import { ReferenceService } from '../services/reference.service';
       provide: MatFormFieldControl,
       useExisting: LanguageInputComponent
     }
-  ],
-  standalone: false
+  ]
 })
 export class LanguageInputComponent
-  implements
-    MatFormFieldControl<string>,
-    ControlValueAccessor,
-    OnInit,
-    OnDestroy
+  implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy
 {
-  private static _nextId: number = 0;
+  private static _nextId = 0;
 
   /**
    * The name for the control type.
    */
-  controlType = 'language-input';
+  readonly controlType = 'language-input';
 
   /**
    * The filtered options for the autocomplete.
    */
-  filteredOptions$: BehaviorSubject<Language[]> = new BehaviorSubject<
-    Language[]
-  >([]);
+  readonly filteredOptions$ = new BehaviorSubject<Language[]>([]);
 
   /**
    * Whether the control is focused.
@@ -114,46 +103,40 @@ export class LanguageInputComponent
   @ViewChild(MatInput, { static: true }) input!: MatInput;
 
   /**
-   * The observable providing access to the value for the language input as it changes.
-   */
-  inputValue$: Subject<string> = new ReplaySubject<string>(1);
-
-  /**
    * The observable indicating that the state of the control has changed.
    */
-  stateChanges = new Subject<void>();
+  readonly stateChanges = new Subject<void>();
 
   /**
    * Has the control received a touch event.
    */
-  touched: boolean = false;
-
-  //@Input('aria-describedby') userAriaDescribedBy?: string;
+  touched = false;
 
   /**
    * The options for the language.
    */
   private _options: Language[] = [];
 
-  private subscriptions: Subscription = new Subscription();
+  /**
+   * The observable providing access to the value for the language input as it changes.
+   */
+  private readonly inputValue$ = new ReplaySubject<string>(1);
+
+  private readonly subscriptions = new Subscription();
 
   constructor(
-    private referenceService: ReferenceService,
-    @Optional() @Self() public ngControl: NgControl,
-    private changeDetectorRef: ChangeDetectorRef
+    private readonly referenceService: ReferenceService,
+    @Optional() @Self() public readonly ngControl: NgControl | null,
+    private readonly cdr: ChangeDetectorRef
   ) {
-    if (this.ngControl != null) {
-      /*
-       * Setting the value accessor directly (instead of using the providers) to avoid running into
-       * a circular import.
-       */
+    if (this.ngControl) {
+      // Avoid circular DI by setting the accessor directly.
       this.ngControl.valueAccessor = this;
     }
   }
 
   /**
    * Whether the control is disabled.
-   * @private
    */
   private _disabled = false;
 
@@ -165,43 +148,44 @@ export class LanguageInputComponent
   set disabled(value: boolean) {
     this._disabled = coerceBooleanProperty(value);
 
-    if (this._disabled) {
-      this.input.disabled = true;
+    if (this.input) {
+      this.input.disabled = this._disabled;
     }
 
     this.stateChanges.next();
+    this.cdr.markForCheck();
   }
 
   /**
    * The placeholder for the language input.
-   * @private
    */
-  private _placeholder: string = '';
+  private _placeholder = '';
 
   @Input()
-  get placeholder() {
+  get placeholder(): string {
     return this._placeholder;
   }
 
-  set placeholder(placeholder) {
-    this._placeholder = placeholder;
+  set placeholder(placeholder: string) {
+    this._placeholder = placeholder ?? '';
     this.stateChanges.next();
+    this.cdr.markForCheck();
   }
 
   /**
    * Whether the control is required.
-   * @private
    */
-  private _required: boolean = false;
+  private _required = false;
 
   @Input()
   get required(): boolean {
     return this._required;
   }
 
-  set required(req: any) {
+  set required(req: boolean | string) {
     this._required = coerceBooleanProperty(req);
     this.stateChanges.next();
+    this.cdr.markForCheck();
   }
 
   /**
@@ -211,94 +195,84 @@ export class LanguageInputComponent
 
   /**
    * Returns the ISO 639-1 alpha-2 code for the selected language.
-   *
-   * @return The ISO 639-1 alpha-2 code for the selected language.
    */
-  public get value(): string | null {
+  get value(): string | null {
     return this._value;
   }
 
   /**
    * Set the ISO 639-1 alpha-2 code for the selected language.
-   *
-   * @param value the ISO 639-1 alpha-2 code for the selected language
    */
   @Input()
-  public set value(value: string | null) {
-    if (value == undefined) {
-      value = null;
+  set value(value: string | null) {
+    const newValue = value ?? null;
+
+    if (this._value === newValue) {
+      return;
     }
 
-    if (this._value !== value) {
-      this._value = null;
+    this._value = null;
 
-      // If the new value is not null
-      if (!!value) {
-        /*
-         * If the options have been loaded, check if the new value is valid by confirming that
-         * there is a corresponding option. If the new value is valid, then set the value and set
-         * the input value using the name for the option.
-         */
-        if (this._options.length > 0) {
-          for (const option of this._options) {
-            if (option.code === value) {
-              this.input.value = option.name;
-              this._value = value;
-              break;
-            }
+    if (newValue) {
+      if (this._options.length > 0) {
+        const match = this._options.find((o) => o.code === newValue);
+
+        if (match) {
+          if (this.input) {
+            this.input.value = match.name;
           }
-        } else {
-          // Assume the new value is valid, it will be checked when the options are loaded
-          this._value = value;
+          this._value = newValue;
         }
+      } else {
+        // Assume valid; verify when options are loaded.
+        this._value = newValue;
       }
-
-      this.onChange(this._value);
-      this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
+
+    this.onChange(this._value);
+    this.stateChanges.next();
+    this.cdr.markForCheck();
   }
 
   get empty(): boolean {
-    return this._value == null || this._value.length == 0;
+    return this._value == null || this._value.length === 0;
   }
 
   get errorState(): boolean {
-    return (
-      this.required &&
-      (this._value == null || this._value.length == 0) &&
-      this.touched
-    );
+    const controlInvalid = !!this.ngControl && !!this.ngControl.invalid && !!this.ngControl.touched;
+
+    const requiredInvalid =
+      this.required && (this._value == null || this._value.length === 0) && this.touched;
+
+    return controlInvalid || requiredInvalid;
   }
 
   @HostBinding('class.floating')
-  get shouldLabelFloat() {
-    return this.focused || !this.empty || this.input.focused;
+  get shouldLabelFloat(): boolean {
+    return this.focused || !this.empty || !!this.input?.focused;
   }
 
-  displayWith(language: Language): string {
-    if (!!language) {
-      return language.name;
-    } else {
-      return '';
-    }
+  displayWith(language: Language | null): string {
+    return language?.name ?? '';
   }
 
-  inputChanged(event: Event) {
-    if ((event.target as HTMLInputElement).value !== undefined) {
-      this.inputValue$.next((event.target as HTMLInputElement).value);
-    }
+  inputChanged(event: Event): void {
+    const target = event.target as HTMLInputElement | null;
+    const value = target?.value ?? '';
+
+    this.inputValue$.next(value);
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
     this.stateChanges.complete();
+    this.filteredOptions$.complete();
+    this.inputValue$.complete();
   }
 
   ngOnInit(): void {
-    this.input.placeholder = this._placeholder;
-
-    this.referenceService
+    // Load languages
+    const languagesSub = this.referenceService
       .getLanguages()
       .pipe(first())
       .subscribe((languages: Map<string, Language>) => {
@@ -306,120 +280,114 @@ export class LanguageInputComponent
 
         this.filteredOptions$.next(this._options);
 
-        /*
-         * If a value has already been set, attempt to confirm it is valid by finding the
-         * corresponding option. If a match is found, use the option's name as the input's value.
-         * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
-         */
-        if (!!this.value) {
-          for (const option of this._options) {
-            if (option.code === this.value) {
-              this.input.value = option.name;
-              return;
-            }
-          }
+        // If a value has already been set, confirm it's valid and update the input display.
+        if (this.value) {
+          const match = this._options.find((o) => o.code === this.value);
 
-          // The value is invalid so clear it
-          this.value = null;
+          if (match) {
+            if (this.input) {
+              this.input.value = match.name;
+            }
+          } else {
+            // Invalid value; clear it
+            this.value = null;
+          }
         }
+
+        this.cdr.markForCheck();
       });
 
-    this.subscriptions.add(
-      this.inputValue$.pipe(debounceTime(250)).subscribe((value: string) => {
-        if (!!this._value) {
-          this._value = null;
-          this.onChange(this._value);
-          // Flag the control as touched to trigger validation
-          this.touched = true;
-          this.changeDetectorRef.detectChanges();
-          this.stateChanges.next();
-        }
+    this.subscriptions.add(languagesSub);
 
-        value = value.toLowerCase();
+    // Filter handling
+    const filterSub = this.inputValue$.pipe(debounceTime(250)).subscribe((value: string) => {
+      // If a new value is being typed, clear the selected code.
+      if (this._value) {
+        this._value = null;
+        this.onChange(this._value);
+        this.touched = true;
+        this.stateChanges.next();
+      }
 
-        let filteredOptions: Language[] = [];
+      const filterValue = value.toLowerCase().trim();
+      let filteredOptions = this._options;
 
-        for (const option of this._options) {
-          if (option.name.toLowerCase().indexOf(value) !== -1) {
-            filteredOptions.push(option);
-          }
-        }
+      if (filterValue.length > 0) {
+        filteredOptions = this._options.filter((option) =>
+          option.name.toLowerCase().includes(filterValue)
+        );
+      }
 
-        /*
-         * If there are no filtered options, as a result of there being no options at all or no
-         * options matching the filter specified by the user, then reset the input value and the
-         * filtered options. This has the effect of forcing the user to enter a valid filter.
-         */
-        if (filteredOptions.length === 0) {
+      /*
+       * If there are no filtered options, reset the input value and fall back to all options.
+       * This forces the user to enter a valid filter.
+       */
+      if (filteredOptions.length === 0) {
+        if (this.input) {
           this.input.value = '';
-          filteredOptions = this._options;
         }
+        filteredOptions = this._options;
+      }
 
-        this.filteredOptions$.next(filteredOptions);
-      })
-    );
+      this.filteredOptions$.next(filteredOptions);
+      this.cdr.markForCheck();
+    });
+
+    this.subscriptions.add(filterSub);
   }
-
-  onChange: any = (_: any) => {};
 
   onClosed(): void {
     /*
-     * If the user entered text in the input to filter the options, but they did not select an
-     * option, then the selected value will be null but the input value will be valid, i.e. not null
-     * or blank. We then need to reset the input value and the filtered options so that if the
-     * control is activated again all options are available.
+     * If the user entered the text but did not select an option, then reset the input value and
+     * the filtered options.
      */
-    if (!this._value) {
-      if (!!this.input.value) {
-        this.input.value = '';
-        this.filteredOptions$.next(this._options);
-      }
+    if (!this._value && this.input && this.input.value) {
+      this.input.value = '';
+      this.filteredOptions$.next(this._options);
+      this.cdr.markForCheck();
     }
   }
 
-  onContainerClick(event: MouseEvent) {
-    if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this.input.focus();
+  onContainerClick(event: MouseEvent): void {
+    if ((event.target as Element).tagName.toLowerCase() !== 'input') {
+      this.input?.focus();
     }
   }
 
-  onFocusIn(event: FocusEvent) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onFocusIn(_: FocusEvent): void {
     if (!this.focused) {
       this.focused = true;
       this.stateChanges.next();
+      this.cdr.markForCheck();
     }
   }
 
-  onFocusOut(event: FocusEvent) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onFocusOut(_: FocusEvent): void {
     this.touched = true;
     this.onTouched();
     this.focused = false;
     this.stateChanges.next();
+    this.cdr.markForCheck();
   }
-
-  onTouched: any = () => {};
 
   optionSelected(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
+    const language: Language | null = event.option.value ?? null;
+    this.value = language ? language.code : null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: string | null) => void): void {
     this.onChange = fn;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
-  setDescribedByIds(ids: string[]) {
-    // TODO: IMPLEMENT THIS IF NECESSARY -- MARCUS
-    // https://material.angular.io/guide/creating-a-custom-form-field-control
-    // const controlElement = this._elementRef.nativeElement
-    // .querySelector('.example-tel-input-container')!;
-    // const controlElement = this._elementRef.nativeElement
-    // .querySelector('.example-tel-input-container')!;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setDescribedByIds(_ids: string[]): void {
+    // Implement if necessary for accessibility:
     // controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
@@ -428,13 +396,20 @@ export class LanguageInputComponent
    *
    * This method is called by the forms API to write to the view when programmatic changes from
    * model to view are requested.
-   *
-   * @param value The new value for the control.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  writeValue(value: any): void {
+  writeValue(value: unknown): void {
     if (typeof value === 'string') {
-      this.value = value as string;
+      this.value = value;
+    } else if (value == null) {
+      this.value = null;
     }
   }
+
+  private onChange: (value: string | null) => void = () => {
+    /* empty */
+  };
+
+  private onTouched: () => void = () => {
+    /* empty */
+  };
 }

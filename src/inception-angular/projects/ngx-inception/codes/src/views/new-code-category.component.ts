@@ -16,16 +16,8 @@
 
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { CodeCategory } from '../services/code-category';
@@ -37,14 +29,13 @@ import { CodesService } from '../services/codes.service';
  * @author Marcus
  */
 @Component({
+  selector: 'inception-codes-new-code-category',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'new-code-category.component.html',
-  styleUrls: ['new-code-category.component.css'],
-  standalone: false
+  styleUrls: ['new-code-category.component.css']
 })
-export class NewCodeCategoryComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class NewCodeCategoryComponent extends AdminContainerView implements AfterViewInit {
   codeCategory: CodeCategory | null = null;
 
   dataControl: FormControl;
@@ -55,25 +46,15 @@ export class NewCodeCategoryComponent
 
   newCodeCategoryForm: FormGroup;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private codesService: CodesService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  readonly title = $localize`:@@codes_new_code_category_title:New Code Category`;
+
+  constructor(private codesService: CodesService) {
     super();
 
     // Initialize form controls
     this.dataControl = new FormControl('');
-    this.idControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
-    this.nameControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     // Initialize form group
     this.newCodeCategoryForm = new FormGroup({
@@ -89,10 +70,6 @@ export class NewCodeCategoryComponent
       ['..'],
       { relativeTo: this.activatedRoute }
     );
-  }
-
-  get title(): string {
-    return $localize`:@@codes_new_code_category_title:New Code Category`;
   }
 
   cancel(): void {
@@ -122,25 +99,9 @@ export class NewCodeCategoryComponent
           finalize(() => this.spinnerService.hideSpinner())
         )
         .subscribe({
-          next: () =>
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute }),
-          error: (error: Error) => this.handleError(error)
+          next: () => this.router.navigate(['..'], { relativeTo: this.activatedRoute }),
+          error: (error: Error) => this.handleError(error, false)
         });
-    }
-  }
-
-  private handleError(error: Error): void {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
     }
   }
 }

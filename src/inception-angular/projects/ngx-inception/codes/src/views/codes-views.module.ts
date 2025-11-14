@@ -74,10 +74,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: EditCodeCategoryComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Codes.CodeAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
         },
         resolve: {
           title: EditCodeCategoryTitleResolver
@@ -96,10 +93,7 @@ const routes: Routes = [
             canActivate: [CanActivateFunctionGuard],
             component: CodesComponent,
             data: {
-              authorities: [
-                'ROLE_Administrator',
-                'FUNCTION_Codes.CodeAdministration'
-              ]
+              authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
             }
           },
           {
@@ -108,10 +102,7 @@ const routes: Routes = [
             canActivate: [CanActivateFunctionGuard],
             component: NewCodeComponent,
             data: {
-              authorities: [
-                'ROLE_Administrator',
-                'FUNCTION_Codes.CodeAdministration'
-              ]
+              authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
             },
             resolve: {
               title: NewCodeTitleResolver
@@ -135,10 +126,7 @@ const routes: Routes = [
                 canActivate: [CanActivateFunctionGuard],
                 component: EditCodeComponent,
                 data: {
-                  authorities: [
-                    'ROLE_Administrator',
-                    'FUNCTION_Codes.CodeAdministration'
-                  ]
+                  authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
                 },
                 resolve: {
                   title: EditCodeTitleResolver
@@ -153,15 +141,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    // Components
-    CodeCategoriesComponent,
-    CodesComponent,
-    EditCodeCategoryComponent,
-    EditCodeComponent,
-    NewCodeCategoryComponent,
-    NewCodeComponent
-  ],
   imports: [
     // Angular modules
     CommonModule,

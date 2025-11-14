@@ -16,16 +16,8 @@
 
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
@@ -37,14 +29,13 @@ import { Tenant } from '../services/tenant';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-edit-tenant',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'edit-tenant.component.html',
-  styleUrls: ['edit-tenant.component.css'],
-  standalone: false
+  styleUrls: ['edit-tenant.component.css']
 })
-export class EditTenantComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class EditTenantComponent extends AdminContainerView implements AfterViewInit {
   editTenantForm: FormGroup;
 
   nameControl: FormControl;
@@ -53,13 +44,9 @@ export class EditTenantComponent
 
   tenantId: string;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  readonly title = $localize`:@@security_edit_tenant_title:Edit Tenant`;
+
+  constructor(private securityService: SecurityService) {
     super();
 
     // Retrieve the route parameters
@@ -71,13 +58,10 @@ export class EditTenantComponent
 
     this.tenantId = decodeURIComponent(tenantId);
 
-    // Initialise the form controls
-    this.nameControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    // Initialize the form controls
+    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
-    // Initialise the form
+    // Initialize the form
     this.editTenantForm = new FormGroup({
       name: this.nameControl
     });
@@ -91,17 +75,13 @@ export class EditTenantComponent
     );
   }
 
-  get title(): string {
-    return $localize`:@@security_edit_tenant_title:Edit Tenant`;
-  }
-
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the existing user and initialise the form fields
+    // Retrieve the existing tenant and initialize the form fields
     this.spinnerService.showSpinner();
 
     this.securityService
@@ -110,73 +90,38 @@ export class EditTenantComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (tenant: Tenant) => {
+      .subscribe({
+        next: (tenant: Tenant) => {
           this.tenant = tenant;
-
           this.nameControl.setValue(tenant.name);
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService
-              .showErrorDialog(error)
-              .afterClosed()
-              .pipe(first())
-              .subscribe(() => {
-                this.router.navigate(['../..'], {
-                  relativeTo: this.activatedRoute
-                });
-              });
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, true, '../..')
+      });
   }
 
   ok(): void {
-    if (this.tenant && this.editTenantForm.valid) {
-      this.tenant.name = this.nameControl.value;
-
-      this.spinnerService.showSpinner();
-
-      this.securityService
-        .updateTenant(this.tenant)
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner())
-        )
-        .subscribe(
-          () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['../..'], {
-              relativeTo: this.activatedRoute
-            });
-          },
-          (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if (
-              error instanceof AccessDeniedError ||
-              error instanceof InvalidArgumentError ||
-              error instanceof ServiceUnavailableError
-            ) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {
-                state: { error }
-              });
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          }
-        );
+    if (!this.tenant || !this.editTenantForm.valid) {
+      return;
     }
+
+    this.tenant.name = this.nameControl.value;
+
+    this.spinnerService.showSpinner();
+
+    this.securityService
+      .updateTenant(this.tenant)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe({
+        next: () => {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['../..'], {
+            relativeTo: this.activatedRoute
+          });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 }

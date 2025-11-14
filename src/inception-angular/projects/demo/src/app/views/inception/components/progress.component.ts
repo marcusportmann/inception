@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
 
 /**
  * The ProgressComponent class implements the progress component.
@@ -22,8 +23,10 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'progress.component.html',
-  standalone: false
+  selector: 'app-progress',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'progress.component.html'
 })
 export class ProgressComponent {
   bufferValue?: string;

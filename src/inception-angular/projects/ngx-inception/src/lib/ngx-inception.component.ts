@@ -18,10 +18,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'inception-ngx-inception',
+  standalone: true,
   template: ``,
-  styles: [],
-  standalone: false
+  styles: []
 })
-export class NgxInceptionComponent {
-  constructor() {}
-}
+export class NgxInceptionComponent {}

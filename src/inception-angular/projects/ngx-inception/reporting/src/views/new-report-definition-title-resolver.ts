@@ -27,22 +27,20 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class NewReportDefinitionTitleResolver {
   /**
-   * Constructs a new NewReportDefinitionTitleResolver.
-   */
-  constructor() {}
-
-  /**
    * Resolve the title.
    *
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
-    return of(
-      $localize`:@@reporting_new_report_definition_title_resolver:New Report Definition`
-    );
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
+    return of($localize`:@@reporting_new_report_definition_title_resolver:New Report Definition`);
   }
 }

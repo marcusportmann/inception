@@ -24,14 +24,9 @@ import { Directive, HostListener } from '@angular/core';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[sidebarMinimizer]',
-  standalone: false
+  standalone: true
 })
 export class SidebarMinimizerDirective {
-  /**
-   * Constructs a new SidebarMinimizerDirective.
-   */
-  constructor() {}
-
   // eslint-disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();

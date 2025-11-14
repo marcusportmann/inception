@@ -15,17 +15,7 @@
  */
 
 import { AfterViewInit, Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
-} from 'ngx-inception/core';
+import { AdminContainerView, BackNavigation, CoreModule, Error } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
 import { Token } from '../services/token';
@@ -37,25 +27,20 @@ import { TokenType } from '../services/token-type';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-view-token',
+  standalone: true,
+  imports: [CoreModule],
   templateUrl: 'view-token.component.html',
-  styleUrls: ['view-token.component.css'],
-  standalone: false
+  styleUrls: ['view-token.component.css']
 })
-export class ViewTokenComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class ViewTokenComponent extends AdminContainerView implements AfterViewInit {
+  readonly title = $localize`:@@security_view_token_title:View Token`;
+
   token: Token | null = null;
 
   tokenId: string;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private securityService: SecurityService) {
     super();
 
     // Retrieve the route parameters
@@ -69,15 +54,9 @@ export class ViewTokenComponent
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation(
-      $localize`:@@security_view_token_back_navigation:Tokens`,
-      ['../..'],
-      { relativeTo: this.activatedRoute }
-    );
-  }
-
-  get title(): string {
-    return $localize`:@@security_view_token_title:View Token`;
+    return new BackNavigation($localize`:@@security_view_token_back_navigation:Tokens`, ['../..'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   back(): void {
@@ -94,7 +73,7 @@ export class ViewTokenComponent
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the existing code category and initialise the form controls
+    // Retrieve the existing token and initialize the form controls
     this.spinnerService.showSpinner();
 
     this.securityService
@@ -103,33 +82,11 @@ export class ViewTokenComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (token: Token) => {
+      .subscribe({
+        next: (token: Token) => {
           this.token = token;
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService
-              .showErrorDialog(error)
-              .afterClosed()
-              .pipe(first())
-              .subscribe(() => {
-                this.router.navigate(['../..'], {
-                  relativeTo: this.activatedRoute
-                });
-              });
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, true, '../..')
+      });
   }
 }

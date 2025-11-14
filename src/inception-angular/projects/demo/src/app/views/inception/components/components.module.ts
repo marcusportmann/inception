@@ -136,19 +136,6 @@ const routes: Routes = [
 
     // Inception modules
     CoreModule
-  ],
-  declarations: [
-    ButtonsComponent,
-    CardsComponent,
-    DialogsComponent,
-    ErrorReportComponent,
-    ExpansionPanelsComponent,
-    GridListComponent,
-    ListsComponent,
-    ProgressComponent,
-    SwitchesComponent,
-    TabsComponent,
-    TooltipsComponent
   ]
 })
 export class ComponentsModule {}

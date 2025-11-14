@@ -80,7 +80,7 @@ export class ErrorReportSummary {
     this.applicationVersion = applicationVersion;
     this.description = description;
     this.created = created;
-    this.who = !!who ? who : null;
-    this.deviceId = !!deviceId ? deviceId : null;
+    this.who = who ? who : null;
+    this.deviceId = deviceId ? deviceId : null;
   }
 }

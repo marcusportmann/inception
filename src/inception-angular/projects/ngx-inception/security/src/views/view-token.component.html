@@ -75,7 +75,7 @@
         <div class="col-sm">
           <mat-form-field class="static">
             <mat-label i18n="@@security_view_token_component_label_data">Data</mat-label>
-            <textarea matInput [value]="token?.data" [disabled]="true" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="5" cdkAutosizeMaxRows="5"></textarea>
+            <textarea matInput [value]="token?.data" [disabled]="true" cdkTextareaAutosize cdkAutosizeMinRows="5" cdkAutosizeMaxRows="5"></textarea>
           </mat-form-field>
         </div>
       </div>
@@ -89,12 +89,12 @@
               <th class="mat-mdc-nested-header-cell" i18n="@@security_view_token_component_claims_table_header_name">Name</th>
               <th class="mat-mdc-nested-header-cell" i18n="@@security_view_token_component_claims_table_header_value">Value</th>
             </tr>
-            <tr class="mat-mdc-nested-row" *ngFor="let claim of token?.claims; index as index">
+            <tr class="mat-mdc-nested-row" *ngFor="let claim of token?.claims">
               <td class="mat-mdc-nested-cell">
                 {{claim.name}}
               </td>
               <td class="mat-mdc-nested-cell">
-                {{claim.values.join(',')}}
+                {{(claim.value !== null && claim.value!==undefined && claim.value.length > 0) ? claim.value : claim.values.join(',')}}
               </td>
             </tr>
           </table>

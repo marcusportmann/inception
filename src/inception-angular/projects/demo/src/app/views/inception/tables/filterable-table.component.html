@@ -1,7 +1,7 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="mat-mdc-table-header">
     <div></div>
-    <table-filter (changed)="applyFilter($event)"></table-filter>
+    <inception-core-table-filter (changed)="applyFilter($event)"></inception-core-table-filter>
   </div>
   <mat-table #table [dataSource]="dataSource" style="min-height: 462px;">
     <!-- Position Column -->

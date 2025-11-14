@@ -14,27 +14,12 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  ConfirmationDialogComponent,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SortDirection,
-  SpinnerService,
+  AdminContainerView, ConfirmationDialogComponent, CoreModule, Error, SortDirection,
   TableFilterComponent
 } from 'ngx-inception/core';
 import { merge, Subscription } from 'rxjs';
@@ -48,14 +33,13 @@ import { TenantDataSource } from '../services/tenant-data-source';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-tenants',
+  standalone: true,
+  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'tenants.component.html',
-  styleUrls: ['tenants.component.css'],
-  standalone: false
+  styleUrls: ['tenants.component.css']
 })
-export class TenantsComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+export class TenantsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   dataSource: TenantDataSource;
 
   displayedColumns = ['name', 'actions'];
@@ -69,22 +53,14 @@ export class TenantsComponent
   @ViewChild(TableFilterComponent, { static: true })
   tableFilter!: TableFilterComponent;
 
+  readonly title = $localize`:@@security_tenants_title:Tenants`;
+
   private subscriptions: Subscription = new Subscription();
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private securityService: SecurityService) {
     super();
 
     this.dataSource = new TenantDataSource(this.securityService);
-  }
-
-  get title(): string {
-    return $localize`:@@security_tenants_title:Tenants`;
   }
 
   deleteTenant(tenantId: string): void {
@@ -96,8 +72,12 @@ export class TenantsComponent
     dialogRef
       .afterClosed()
       .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
+      .subscribe({
+        next: (confirmation: boolean | undefined) => {
+          if (confirmation !== true) {
+            return;
+          }
+
           this.spinnerService.showSpinner();
 
           this.securityService
@@ -106,26 +86,12 @@ export class TenantsComponent
               first(),
               finalize(() => this.spinnerService.hideSpinner())
             )
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.loadTenants();
               },
-              (error: Error) => {
-                // noinspection SuspiciousTypeOfGuard
-                if (
-                  error instanceof AccessDeniedError ||
-                  error instanceof InvalidArgumentError ||
-                  error instanceof ServiceUnavailableError
-                ) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {
-                    state: { error }
-                  });
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              }
-            );
+              error: (error: Error) => this.handleError(error, false)
+            });
         }
       });
   }
@@ -140,23 +106,16 @@ export class TenantsComponent
   loadTenants(): void {
     let filter = '';
 
-    if (!!this.tableFilter.filter) {
+    if (this.tableFilter.filter) {
       filter = this.tableFilter.filter;
       filter = filter.trim();
       filter = filter.toLowerCase();
     }
 
     const sortDirection =
-      this.sort.direction === 'asc'
-        ? SortDirection.Ascending
-        : SortDirection.Descending;
+      this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
 
-    this.dataSource.load(
-      filter,
-      sortDirection,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+    this.dataSource.load(filter, sortDirection, this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   newTenant(): void {
@@ -166,30 +125,16 @@ export class TenantsComponent
 
   ngAfterViewInit(): void {
     this.subscriptions.add(
-      this.dataSource.loading$.subscribe(
-        (next: boolean) => {
+      this.dataSource.loading$.subscribe({
+        next: (next: boolean) => {
           if (next) {
             this.spinnerService.showSpinner();
           } else {
             this.spinnerService.hideSpinner();
           }
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        }
-      )
+        error: (error: Error) => this.handleError(error, false)
+      })
     );
 
     this.subscriptions.add(
@@ -209,12 +154,11 @@ export class TenantsComponent
     );
 
     this.subscriptions.add(
-      merge(
-        this.sort.sortChange,
-        this.tableFilter.changed,
-        this.paginator.page
-      ).subscribe(() => {
-        this.loadTenants();
+      merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page).subscribe({
+        next: () => {
+          this.loadTenants();
+        },
+        error: (error: Error) => this.handleError(error, false)
       })
     );
 

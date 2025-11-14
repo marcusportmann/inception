@@ -51,7 +51,7 @@ export class CodeCategory {
   constructor(id: string, name: string, data?: string, lastModified?: Date) {
     this.id = id;
     this.name = name;
-    this.data = !!data ? data : null;
-    this.lastModified = !!lastModified ? lastModified : null;
+    this.data = data ? data : null;
+    this.lastModified = lastModified ? lastModified : null;
   }
 }

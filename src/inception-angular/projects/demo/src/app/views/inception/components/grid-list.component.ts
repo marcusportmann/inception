@@ -15,6 +15,15 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
+
+/** Shape of a grid tile */
+interface Tile {
+  text: string;
+  cols: number;
+  rows: number;
+  color: string;
+}
 
 /**
  * The GridListComponent class implements the grid list component.
@@ -22,11 +31,13 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'grid-list.component.html',
-  standalone: false
+  selector: 'app-grid-list',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'grid-list.component.html'
 })
 export class GridListComponent {
-  tiles: any[] = [
+  tiles: Tile[] = [
     {
       text: 'One',
       cols: 3,

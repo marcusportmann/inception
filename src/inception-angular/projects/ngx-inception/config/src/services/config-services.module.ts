@@ -15,10 +15,7 @@
  */
 
 import { CommonModule } from '@angular/common';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { ConfigService } from './config.service';
 
@@ -37,8 +34,6 @@ import { ConfigService } from './config.service';
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class ConfigServicesModule {
-  constructor() {}
-
   static forRoot(): ModuleWithProviders<ConfigServicesModule> {
     return {
       ngModule: ConfigServicesModule,

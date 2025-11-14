@@ -14,24 +14,10 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { combineLatest, Subscription } from 'rxjs';
 import { finalize, first, pairwise, startWith } from 'rxjs/operators';
@@ -47,9 +33,11 @@ import { LdapUserDirectoryComponent } from './ldap-user-directory.component';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-edit-user-directory',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'edit-user-directory.component.html',
-  styleUrls: ['edit-user-directory.component.css'],
-  standalone: false
+  styleUrls: ['edit-user-directory.component.css']
 })
 export class EditUserDirectoryComponent
   extends AdminContainerView
@@ -65,6 +53,8 @@ export class EditUserDirectoryComponent
 
   nameControl: FormControl;
 
+  readonly title = $localize`:@@security_edit_user_directory_title:Edit User Directory`;
+
   userDirectory: UserDirectory | null = null;
 
   userDirectoryId: string;
@@ -77,17 +67,12 @@ export class EditUserDirectoryComponent
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
+    private securityService: SecurityService
   ) {
     super();
 
     // Retrieve the route parameters
-    const userDirectoryId =
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
       throw new Error('No userDirectoryId route parameter found');
@@ -95,14 +80,11 @@ export class EditUserDirectoryComponent
 
     this.userDirectoryId = decodeURIComponent(userDirectoryId);
 
-    // Initialise the form controls
-    this.nameControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    // Initialize the form controls
+    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userDirectoryTypeControl = new FormControl('', [Validators.required]);
 
-    // Initialise the form
+    // Initialize the form
     this.editUserDirectoryForm = new FormGroup({
       name: this.nameControl,
       userDirectoryType: this.userDirectoryTypeControl
@@ -111,17 +93,9 @@ export class EditUserDirectoryComponent
     this.subscriptions.add(
       this.userDirectoryTypeControl.valueChanges
         .pipe(startWith(null), pairwise())
-        .subscribe(
-          ([previousUserDirectoryType, currentUserDirectoryType]: [
-            string,
-            string
-          ]) => {
-            this.userDirectoryTypeSelected(
-              previousUserDirectoryType,
-              currentUserDirectoryType
-            );
-          }
-        )
+        .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
+          this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
+        })
     );
   }
 
@@ -131,10 +105,6 @@ export class EditUserDirectoryComponent
       ['../..'],
       { relativeTo: this.activatedRoute }
     );
-  }
-
-  get title(): string {
-    return $localize`:@@security_edit_user_directory_title:Edit User Directory`;
   }
 
   cancel(): void {
@@ -154,37 +124,16 @@ export class EditUserDirectoryComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (results: [UserDirectoryType[], UserDirectory]) => {
-          this.userDirectoryTypes = results[0];
-          this.userDirectory = results[1];
-          this.nameControl.setValue(results[1].name);
-          this.userDirectoryTypeControl.setValue(results[1].type);
+      .subscribe({
+        next: ([userDirectoryTypes, userDirectory]: [UserDirectoryType[], UserDirectory]) => {
+          this.userDirectoryTypes = userDirectoryTypes;
+          this.userDirectory = userDirectory;
+
+          this.nameControl.setValue(userDirectory.name);
+          this.userDirectoryTypeControl.setValue(userDirectory.type);
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService
-              .showErrorDialog(error)
-              .afterClosed()
-              .pipe(first())
-              .subscribe(() => {
-                this.router.navigate(['../..'], {
-                  relativeTo: this.activatedRoute
-                });
-              });
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, true, '../..')
+      });
   }
 
   ngOnDestroy(): void {
@@ -192,50 +141,36 @@ export class EditUserDirectoryComponent
   }
 
   ok(): void {
-    if (this.userDirectory && this.editUserDirectoryForm.valid) {
-      this.userDirectory.name = this.nameControl.value;
-      this.userDirectory.type = this.userDirectoryTypeControl.value;
-
-      if (this.internalUserDirectoryComponent) {
-        this.userDirectory.parameters =
-          this.internalUserDirectoryComponent.getParameters();
-      } else if (this.ldapUserDirectoryComponent) {
-        this.userDirectory.parameters =
-          this.ldapUserDirectoryComponent.getParameters();
-      }
-
-      this.spinnerService.showSpinner();
-
-      this.securityService
-        .updateUserDirectory(this.userDirectory)
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner())
-        )
-        .subscribe(
-          () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['../..'], {
-              relativeTo: this.activatedRoute
-            });
-          },
-          (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if (
-              error instanceof AccessDeniedError ||
-              error instanceof InvalidArgumentError ||
-              error instanceof ServiceUnavailableError
-            ) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {
-                state: { error }
-              });
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          }
-        );
+    if (!this.userDirectory || !this.editUserDirectoryForm.valid) {
+      return;
     }
+
+    this.userDirectory.name = this.nameControl.value;
+    this.userDirectory.type = this.userDirectoryTypeControl.value;
+
+    if (this.internalUserDirectoryComponent) {
+      this.userDirectory.parameters = this.internalUserDirectoryComponent.getParameters();
+    } else if (this.ldapUserDirectoryComponent) {
+      this.userDirectory.parameters = this.ldapUserDirectoryComponent.getParameters();
+    }
+
+    this.spinnerService.showSpinner();
+
+    this.securityService
+      .updateUserDirectory(this.userDirectory)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe({
+        next: () => {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['../..'], {
+            relativeTo: this.activatedRoute
+          });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   userDirectoryTypeSelected(
@@ -253,15 +188,9 @@ export class EditUserDirectoryComponent
 
     // Add the appropriate control for the user directory type that was selected
     if (currentUserDirectoryType === 'InternalUserDirectory') {
-      this.editUserDirectoryForm.addControl(
-        'internalUserDirectory',
-        new FormControl('')
-      );
+      this.editUserDirectoryForm.addControl('internalUserDirectory', new FormControl(''));
     } else if (currentUserDirectoryType === 'LDAPUserDirectory') {
-      this.editUserDirectoryForm.addControl(
-        'ldapUserDirectory',
-        new FormControl('')
-      );
+      this.editUserDirectoryForm.addControl('ldapUserDirectory', new FormControl(''));
     }
 
     this.changeDetectorRef.detectChanges();
@@ -269,13 +198,9 @@ export class EditUserDirectoryComponent
     // Populate the nested InternalUserDirectoryComponent or LdapUserDirectoryComponent
     if (this.userDirectory) {
       if (this.internalUserDirectoryComponent) {
-        this.internalUserDirectoryComponent.setParameters(
-          this.userDirectory.parameters
-        );
+        this.internalUserDirectoryComponent.setParameters(this.userDirectory.parameters);
       } else if (this.ldapUserDirectoryComponent) {
-        this.ldapUserDirectoryComponent.setParameters(
-          this.userDirectory.parameters
-        );
+        this.ldapUserDirectoryComponent.setParameters(this.userDirectory.parameters);
       }
     }
   }

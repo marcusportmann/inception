@@ -35,12 +35,12 @@ export abstract class InceptionAppModule {
     if (navigationService) {
       navigationService.initNavigation(this.initNavigation());
     } else {
-      console.error('Failed to initialise the Inception Navigation Service');
+      console.error('Failed to initialize the Inception Navigation Service');
     }
   }
 
   /**
-   * Initialise the navigation for the application.
+   * Initialize the navigation for the application.
    *
    * @return The navigation for the application.
    */

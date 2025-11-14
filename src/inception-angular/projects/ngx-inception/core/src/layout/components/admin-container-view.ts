@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
+import { inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
+import { DialogService } from '../../dialogs/services/dialog.service';
+import {
+  AccessDeniedError, Error, InvalidArgumentError, ServiceUnavailableError
+} from '../../errors';
+import { SpinnerService } from '../services/spinner.service';
 import { BackNavigation } from './back-navigation';
 
 /**
@@ -24,9 +32,18 @@ import { BackNavigation } from './back-navigation';
  * @author Marcus Portmann
  */
 export abstract class AdminContainerView {
+  protected readonly activatedRoute = inject(ActivatedRoute);
+
+  protected readonly dialogService = inject(DialogService);
+
+  protected readonly router = inject(Router);
+
+  protected readonly spinnerService = inject(SpinnerService);
+
   /**
-   * Tne back navigation for the admin container view.
+   * The back navigation for the admin container view.
    */
+  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
   get backNavigation(): BackNavigation | null {
     return null;
   }
@@ -37,6 +54,7 @@ export abstract class AdminContainerView {
    * @return True if the breadcrumbs should be shown for the admin container view or false
    *   otherwise.
    */
+  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
   get breadcrumbsVisible(): boolean {
     return true;
   }
@@ -47,6 +65,7 @@ export abstract class AdminContainerView {
    * @return True if the sidebar should be minimized for the admin container view or false
    *   otherwise.
    */
+  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
   get sidebarMinimized(): boolean | null {
     return null;
   }
@@ -55,4 +74,51 @@ export abstract class AdminContainerView {
    * The title for the admin container view.
    */
   abstract get title(): string | Observable<string>;
+
+  /**
+   * Handles errors raised by admin container views consistently.
+   *
+   * If the error is an {@link AccessDeniedError}, {@link InvalidArgumentError} or
+   * {@link ServiceUnavailableError}, the user is navigated to the
+   * `/error/send-error-report` route and the error is passed via navigation state.
+   *
+   *  For all other errors an error dialog is displayed using the {@link DialogService}.
+   *  Once the dialog is closed:
+   *  - if `navigateOnClose` is `true`, the user is navigated to the route specified
+   *    by `navigationUrl`, relative to the current {@link ActivatedRoute};
+   *  - if `navigateOnClose` is `false`, no additional navigation occurs.
+   *
+   * This helper should be called by derived admin container views when handling service or UI
+   * errors to ensure a consistent user experience.
+   *
+   * @param error           The error that occurred.
+   * @param navigateOnClose Whether navigation should be performed after the error dialog is closed.
+   * @param navigationUrl   The URL segment or route to navigate to when
+   *                        {@code navigateOnClose} is {@code true}.
+   */
+  handleError(error: Error, navigateOnClose: boolean, navigationUrl?: string): void {
+    if (
+      error instanceof AccessDeniedError ||
+      error instanceof InvalidArgumentError ||
+      error instanceof ServiceUnavailableError
+    ) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigateByUrl('/error/send-error-report', {
+        state: { error }
+      });
+    } else {
+      this.dialogService
+        .showErrorDialog(error)
+        .afterClosed()
+        .pipe(first())
+        .subscribe(() => {
+          if (navigateOnClose && navigationUrl) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate([navigationUrl], {
+              relativeTo: this.activatedRoute
+            });
+          }
+        });
+    }
+  }
 }

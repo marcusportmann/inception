@@ -16,29 +16,18 @@
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef,
-  Component,
-  HostBinding,
-  Input,
-  OnDestroy,
-  OnInit,
-  Optional,
-  Self,
-  ViewChild
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit,
+  Optional, Self, ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { AutocompleteSelectionRequiredDirective, CoreModule } from 'ngx-inception/core';
+import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 import {
-  BehaviorSubject,
-  combineLatest,
-  ReplaySubject,
-  Subject,
-  Subscription,
-  throttleTime
-} from 'rxjs';
-import { debounceTime, first, map } from 'rxjs/operators';
+  debounceTime, distinctUntilChanged, first, map, switchMap, takeUntil
+} from 'rxjs/operators';
 import { ReferenceService } from '../services/reference.service';
 import { Region } from '../services/region';
 
@@ -48,8 +37,8 @@ import { Region } from '../services/region';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'region-input',
+  selector: 'inception-reference-region-input',
+  imports: [CoreModule, AutocompleteSelectionRequiredDirective],
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
@@ -57,7 +46,7 @@ import { Region } from '../services/region';
         type="text"
         matInput
         autocompleteSelectionRequired
-        required="required"
+        [required]="required"
         [matAutocomplete]="regionAutocomplete"
         [matAutocompleteConnectedTo]="origin"
         (input)="inputChanged($event)"
@@ -82,93 +71,61 @@ import { Region } from '../services/region';
       useExisting: RegionInputComponent
     }
   ],
-  standalone: false
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegionInputComponent
-  implements
-    MatFormFieldControl<string>,
-    ControlValueAccessor,
-    OnInit,
-    OnDestroy
+  implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy
 {
-  private static _nextId: number = 0;
+  private static _nextId = 0;
 
-  /**
-   * The name for the control type.
-   */
+  /** The name for the control type. */
   controlType = 'region-input';
 
-  /**
-   * The filtered options for the autocomplete.
-   */
-  filteredOptions$: BehaviorSubject<Region[]> = new BehaviorSubject<Region[]>(
-    []
-  );
+  /** ARIA described-by ids set by the form-field. */
+  @HostBinding('attr.aria-describedby') describedBy = '';
 
-  /**
-   * Whether the control is focused.
-   */
+  /** The filtered options for the autocomplete. */
+  readonly filteredOptions$ = new BehaviorSubject<Region[]>([]);
+
+  /** Whether the control is focused. */
   focused = false;
 
-  /**
-   * The ID for the control.
-   */
+  /** The ID for the control. */
   @HostBinding() id = `region-input-${RegionInputComponent._nextId++}`;
 
-  /**
-   * The input.
-   */
+  /** The input. */
   @ViewChild(MatInput, { static: true }) input!: MatInput;
 
-  /**
-   * The observable providing access to the value for the region input as it changes.
-   */
-  inputValue$: Subject<string> = new ReplaySubject<string>(1);
+  /** The observable providing access to the value for the region input as it changes. */
+  readonly inputValue$ = new ReplaySubject<string>(1);
 
-  /**
-   * The observable indicating that the state of the control has changed.
-   */
-  stateChanges = new Subject<void>();
+  /** The observable indicating that the state of the control has changed. */
+  readonly stateChanges = new Subject<void>();
 
-  /**
-   * Has the control received a touch event.
-   */
-  touched: boolean = false;
+  /** Has the control received a touch event. */
+  touched = false;
 
-  //@Input('aria-describedby') userAriaDescribedBy?: string;
-
-  /**
-   * The options for the autocomplete.
-   */
+  /** The options for the autocomplete. */
   private _options: Region[] = [];
 
-  /**
-   * The ISO 639-1 alpha-2 code for the country to retrieve the regions for.
-   */
-  private country$: BehaviorSubject<string | null> = new BehaviorSubject<
-    string | null
-  >(null);
+  /** The ISO 3166-1 alpha-2 code for the country to retrieve the regions for. */
+  private readonly country$ = new BehaviorSubject<string | null>(null);
 
-  private subscriptions: Subscription = new Subscription();
+  /** Emits when the component is destroyed. */
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
-    private referenceService: ReferenceService,
-    @Optional() @Self() public ngControl: NgControl,
-    private changeDetectorRef: ChangeDetectorRef
+    private readonly referenceService: ReferenceService,
+    @Optional() @Self() public readonly ngControl: NgControl | null,
+    private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     if (this.ngControl != null) {
-      /*
-       * Setting the value accessor directly (instead of using the providers) to avoid running into
-       * a circular import.
-       */
+      // Setting the value accessor directly to avoid circular imports.
       this.ngControl.valueAccessor = this;
     }
   }
 
-  /**
-   * Whether the control is disabled.
-   * @private
-   */
+  /** Whether the control is disabled. */
   private _disabled = false;
 
   @Input()
@@ -177,277 +134,255 @@ export class RegionInputComponent
   }
 
   set disabled(value: boolean) {
-    this._disabled = coerceBooleanProperty(value);
+    const newDisabled = coerceBooleanProperty(value);
 
-    if (this._disabled) {
-      this.input.disabled = true;
+    if (newDisabled === this._disabled) {
+      return;
+    }
+
+    this._disabled = newDisabled;
+
+    if (this.input) {
+      this.input.disabled = this._disabled;
     }
 
     this.stateChanges.next();
+    this.changeDetectorRef.markForCheck();
   }
 
-  /**
-   * The placeholder for the region input.
-   * @private
-   */
-  private _placeholder: string = '';
+  /** The placeholder for the region input. */
+  private _placeholder = '';
 
   @Input()
-  get placeholder() {
+  get placeholder(): string {
     return this._placeholder;
   }
 
-  set placeholder(placeholder) {
-    this._placeholder = placeholder;
+  set placeholder(placeholder: string) {
+    this._placeholder = placeholder ?? '';
+
+    // keep the native input in sync if it's already available
+    if (this.input) {
+      this.input.placeholder = this._placeholder;
+    }
+
     this.stateChanges.next();
+    this.changeDetectorRef.markForCheck();
   }
 
-  /**
-   * Whether the control is required.
-   * @private
-   */
-  private _required: boolean = false;
+  /** Whether the control is required. */
+  private _required = false;
 
   @Input()
   get required(): boolean {
     return this._required;
   }
 
-  set required(req: any) {
+  set required(req: boolean | string) {
     this._required = coerceBooleanProperty(req);
     this.stateChanges.next();
+    this.changeDetectorRef.markForCheck();
   }
 
-  /**
-   * The code for the selected region.
-   */
+  /** The code for the selected region. */
   private _value: string | null = null;
 
-  /**
-   * Returns the code for the selected region.
-   *
-   * @return The code for the selected region.
-   */
-  public get value(): string | null {
+  /** Returns the code for the selected region. */
+  get value(): string | null {
     return this._value;
   }
 
-  /**
-   * Set the code for the selected region.
-   *
-   * @param value the code for the selected region
-   */
+  /** Set the code for the selected region. */
   @Input()
-  public set value(value: string | null) {
-    if (value == undefined) {
-      value = null;
+  set value(value: string | null) {
+    const normalized = value ?? null;
+
+    if (this._value === normalized) {
+      return;
     }
 
-    if (this._value !== value) {
-      this._value = null;
+    this._value = null;
 
-      // If the new value is not null
-      if (!!value) {
-        /*
-         * If the options have been loaded, check if the new value is valid by confirming that
-         * there is a corresponding option. If the new value is valid, then set the value and set
-         * the input value using the name for the option.
-         */
-        if (this._options.length > 0) {
-          for (const option of this._options) {
-            if (option.code === value) {
-              this.input.value = option.name;
-              this._value = value;
-              break;
-            }
-          }
-        } else {
-          // Assume the new value is valid, it will be checked when the options are loaded
-          this._value = value;
+    if (normalized) {
+      if (this._options.length > 0) {
+        const match = this._options.find((option) => option.code === normalized);
+        if (match) {
+          this._value = normalized;
+          this.input.value = match.name;
         }
+      } else {
+        // Assume the new value is valid; it will be checked when the options are loaded.
+        this._value = normalized;
       }
-
-      this.onChange(this._value);
-      this.changeDetectorRef.detectChanges();
-      this.stateChanges.next();
     }
+
+    this.onChange(this._value);
+    this.stateChanges.next();
+    this.changeDetectorRef.markForCheck();
   }
 
-  /**
-   * The ISO 639-1 alpha-2 code for the country to retrieve the regions for.
-   */
-  @Input() get country(): string | null {
+  /** The ISO 3166-1 alpha-2 code for the country to retrieve the regions for. */
+  @Input()
+  get country(): string | null {
     return this.country$.value;
   }
 
   set country(country: string | null) {
-    if (country == undefined) {
-      country = null;
-    }
-
-    if (country !== this.country$.value) {
-      this.country$.next(country);
+    const normalized = country ?? null;
+    if (normalized !== this.country$.value) {
+      this.country$.next(normalized);
     }
   }
 
   get empty(): boolean {
-    return this._value == null || this._value.length == 0;
+    return !this._value || this._value.length === 0;
   }
 
   get errorState(): boolean {
+    if (this.ngControl && this.ngControl.invalid && this.touched) {
+      return true;
+    }
     return this.required && this.empty && this.touched;
   }
 
   @HostBinding('class.floating')
-  get shouldLabelFloat() {
-    return this.focused || !this.empty || this.input.focused;
+  get shouldLabelFloat(): boolean {
+    return this.focused || !this.empty || (this.input && this.input.focused);
   }
 
-  displayWith(region: Region): string {
-    if (!!region) {
-      return region.name;
-    } else {
-      return '';
-    }
+  displayWith(region?: Region | null): string {
+    return region?.name ?? '';
   }
 
-  inputChanged(event: Event) {
-    if ((event.target as HTMLInputElement).value !== undefined) {
-      this.inputValue$.next((event.target as HTMLInputElement).value);
+  inputChanged(event: Event): void {
+    const target = event.target as HTMLInputElement | null;
+    if (target && target.value !== undefined) {
+      this.inputValue$.next(target.value);
     }
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
+
+    this.filteredOptions$.complete();
     this.stateChanges.complete();
+    this.inputValue$.complete();
   }
 
   ngOnInit(): void {
-    this.input.placeholder = this._placeholder;
+    if (this.input) {
+      this.input.placeholder = this._placeholder;
+      this.input.disabled = this._disabled;
+    }
 
-    this.subscriptions.add(
-      combineLatest([this.country$])
-        .pipe(
-          throttleTime(250),
-          map((values) => ({
-            country: this.country$.value
-          }))
-        )
-        .subscribe((parameters) => {
-          this.referenceService
-            .getRegions()
-            .pipe(first())
-            .subscribe((regions: Map<string, Region>) => {
-              this._options = [];
-
+    // Load & filter regions when the country changes.
+    this.country$
+      .pipe(
+        distinctUntilChanged(),
+        switchMap((country) =>
+          this.referenceService.getRegions().pipe(
+            first(),
+            map((regions: Map<string, Region>) => {
+              const options: Region[] = [];
               for (const region of regions.values()) {
-                if (
-                  !parameters.country ||
-                  region.country === parameters.country
-                ) {
-                  this._options.push(region);
+                if (!country || region.country === country) {
+                  options.push(region);
                 }
               }
+              return options;
+            })
+          )
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((options: Region[]) => {
+        this._options = options;
+        this.filteredOptions$.next(options);
+        this.syncValueWithOptions();
+        this.stateChanges.next();
+        this.changeDetectorRef.markForCheck();
+      });
 
-              this.filteredOptions$.next(this._options);
-
-              /*
-               * If a value has already been set, attempt to confirm it is valid by finding the
-               * corresponding option. If a match is found, use the option's name as the input's value.
-               * If we cannot find a corresponding option, i.e. the value is invalid, reset the value.
-               */
-              if (!!this.value) {
-                for (const option of this._options) {
-                  if (option.code === this.value) {
-                    this.input.value = option.name;
-                    return;
-                  }
-                }
-
-                // The value is invalid so clear it
-                this.value = null;
-              }
-            });
-        })
-    );
-
-    this.subscriptions.add(
-      this.inputValue$.pipe(debounceTime(250)).subscribe((value: string) => {
-        if (!!this._value) {
+    // Filter options as the user types.
+    this.inputValue$
+      .pipe(debounceTime(250), takeUntil(this.destroy$))
+      .subscribe((value: string) => {
+        if (this._value) {
           this._value = null;
           this.onChange(this._value);
-          // Flag the control as touched to trigger validation
           this.touched = true;
-          this.changeDetectorRef.detectChanges();
-          this.stateChanges.next();
         }
 
-        value = value.toLowerCase();
+        const filter = value.toLowerCase().trim();
+        let filteredOptions = this._options.filter((option) =>
+          option.name.toLowerCase().includes(filter)
+        );
 
-        let filteredOptions: Region[] = [];
-
-        for (const option of this._options) {
-          if (option.name.toLowerCase().indexOf(value) !== -1) {
-            filteredOptions.push(option);
-          }
-        }
-
-        /*
-         * If there are no filtered options, as a result of there being no options at all or no
-         * options matching the filter specified by the user, then reset the input value and the
-         * filtered options. This has the effect of forcing the user to enter a valid filter.
-         */
+        // No filtered options -> clear input and show all, forcing the user to refine.
         if (filteredOptions.length === 0) {
           this.input.value = '';
           filteredOptions = this._options;
         }
 
         this.filteredOptions$.next(filteredOptions);
-      })
-    );
+        this.stateChanges.next();
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
-  onChange: any = (_: any) => {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange: (value: any) => void = () => {
+    /* empty */
+  };
 
   onClosed(): void {
     /*
-     * If the user entered text in the input to filter the options, but they did not select an
-     * option, then the selected value will be null but the input value will be valid, i.e. not null
-     * or blank. We then need to reset the input value and the filtered options so that if the
-     * control is activated again all options are available.
+     * If the user entered text in the input to filter the options, but they did not select one of
+     * the filtered options, then the selected value will be null. However, the input value will be
+     * valid, i.e., not null or blank. We then need to reset the input value and the filtered
+     * options so that if the control is activated again, all options are available.
      */
-    if (!this._value) {
-      if (!!this.input.value) {
-        this.input.value = '';
-        this.filteredOptions$.next(this._options);
-      }
+    if (!this._value && this.input.value) {
+      this.input.value = '';
+      this.filteredOptions$.next(this._options);
+      this.stateChanges.next();
+      this.changeDetectorRef.markForCheck();
     }
   }
 
-  onContainerClick(event: MouseEvent) {
-    if ((event.target as Element).tagName.toLowerCase() != 'input') {
+  onContainerClick(event: MouseEvent): void {
+    const target = event.target as Element | null;
+    if (target && target.tagName.toLowerCase() !== 'input') {
       this.input.focus();
     }
   }
 
-  onFocusIn(event: FocusEvent) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onFocusIn(_event: FocusEvent): void {
     if (!this.focused) {
       this.focused = true;
       this.stateChanges.next();
+      this.changeDetectorRef.markForCheck();
     }
   }
 
-  onFocusOut(event: FocusEvent) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onFocusOut(_event: FocusEvent): void {
     this.touched = true;
     this.onTouched();
     this.focused = false;
     this.stateChanges.next();
+    this.changeDetectorRef.markForCheck();
   }
 
-  onTouched: any = () => {};
+  onTouched: () => void = () => {
+    /* empty */
+  };
 
   optionSelected(event: MatAutocompleteSelectedEvent): void {
-    this.value = event.option.value.code;
+    const region: Region | null = event.option.value;
+    this.value = region ? region.code : null;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -460,28 +395,33 @@ export class RegionInputComponent
     this.onTouched = fn;
   }
 
-  setDescribedByIds(ids: string[]) {
-    // TODO: IMPLEMENT THIS IF NECESSARY -- MARCUS
-    // https://material.angular.io/guide/creating-a-custom-form-field-control
-    // const controlElement = this._elementRef.nativeElement
-    // .querySelector('.example-tel-input-container')!;
-    // const controlElement = this._elementRef.nativeElement
-    // .querySelector('.example-tel-input-container')!;
-    // controlElement.setAttribute('aria-describedby', ids.join(' '));
+  setDescribedByIds(ids: string[]): void {
+    this.describedBy = ids.join(' ');
   }
 
-  /**
-   * Writes a new value to the control.
-   *
-   * This method is called by the forms API to write to the view when programmatic changes from
-   * model to view are requested.
-   *
-   * @param value The new value for the control.
-   */
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(value: any): void {
-    if (typeof value === 'string') {
-      this.value = value as string;
+    if (typeof value === 'string' || value === null || value === undefined) {
+      this.value = value ?? null;
+    }
+  }
+
+  private syncValueWithOptions(): void {
+    if (!this._value) {
+      return;
+    }
+
+    const match = this._options.find((option) => option.code === this._value);
+
+    if (match) {
+      this.input.value = match.name;
+    } else {
+      // invalid value -> reset
+      this.value = null;
     }
   }
 }

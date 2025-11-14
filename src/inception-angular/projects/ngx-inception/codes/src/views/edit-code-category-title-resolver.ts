@@ -27,22 +27,20 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class EditCodeCategoryTitleResolver {
   /**
-   * Constructs a new EditCodeCategoryTitleResolver.
-   */
-  constructor() {}
-
-  /**
    * Resolve the title.
    *
    * @param activatedRouteSnapshot The activated route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
+  // noinspection JSUnusedGlobalSymbols
   resolve(
     activatedRouteSnapshot: ActivatedRouteSnapshot,
     routerStateSnapshot: RouterStateSnapshot
   ): Observable<string> {
-    return of(
-      $localize`:@@codes_edit_code_category_title_resolver:Edit Code Category`
-    );
+    // Mark parameters as used so TS doesn't complain
+    void activatedRouteSnapshot;
+    void routerStateSnapshot;
+
+    return of($localize`:@@codes_edit_code_category_title_resolver:Edit Code Category`);
   }
 }

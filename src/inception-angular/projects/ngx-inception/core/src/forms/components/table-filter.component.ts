@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
+  Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
+import { MatIconButton } from '@angular/material/button';
+import { MatInput } from '@angular/material/input';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
-  // eslint-disable-next-line
-  selector: 'table-filter',
+  selector: 'inception-core-table-filter',
+  standalone: true,
+  imports: [MatIconButton, MatInput, NgIf, AsyncPipe],
   template: `
     <div class="table-filter-container">
       <div class="table-filter-icon">
@@ -89,9 +87,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
         border: none !important;
       }
     `
-  ],
-  standalone: false
-}) // eslint-disable-next-line
+  ]
+})
 export class TableFilterComponent implements OnInit, OnDestroy {
   @Output() changed: EventEmitter<string> = new EventEmitter<string>();
 
@@ -109,10 +106,7 @@ export class TableFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.tableFilterInputSubscription = fromEvent(
-      this.tableFilterInput.nativeElement,
-      'keyup'
-    )
+    this.tableFilterInputSubscription = fromEvent(this.tableFilterInput.nativeElement, 'keyup')
       .pipe(debounceTime(250), distinctUntilChanged())
       .subscribe(() => {
         this.filter = this.tableFilterInput.nativeElement.value;

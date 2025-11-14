@@ -15,8 +15,7 @@
  */
 
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DialogService } from 'ngx-inception/core';
+import { CoreModule } from 'ngx-inception/core';
 import { first } from 'rxjs/operators';
 import { Data } from '../../services/data';
 import { DataService } from '../../services/data.service';
@@ -27,20 +26,17 @@ import { DataService } from '../../services/data.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'app-menu1',
+  standalone: true,
+  imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content> </mat-card-content>
     </mat-card>
-  `,
-  standalone: false
+  `
 })
 export class Menu1Component {
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private dataService: DataService,
-    private dialogService: DialogService
-  ) {}
+  constructor(private dataService: DataService) {}
 
   clickMe(): void {
     this.dataService

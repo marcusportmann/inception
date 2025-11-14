@@ -35,7 +35,7 @@ export class Users {
   pageSize: number;
 
   /**
-   * The method used to sort the users e.g. by name.
+   * The method used to sort the users e.g., by name.
    */
   sortBy: UserSortBy;
 
@@ -59,7 +59,7 @@ export class Users {
    *
    * @param users           The users.
    * @param total           The total number of users.
-   * @param sortBy          The method used to sort the users e.g. by name.
+   * @param sortBy          The method used to sort the users e.g., by name.
    * @param sortDirection   The sort direction that was applied to the users.
    * @param pageIndex       The page index.
    * @param pageSize        The page size.

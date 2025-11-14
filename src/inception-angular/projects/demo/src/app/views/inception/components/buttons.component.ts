@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
 
 /**
  * The ButtonsComponent class implements the buttons component.
@@ -22,9 +23,9 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'buttons.component.html',
-  standalone: false
+  selector: 'app-buttons',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'buttons.component.html'
 })
-export class ButtonsComponent {
-  constructor() {}
-}
+export class ButtonsComponent {}

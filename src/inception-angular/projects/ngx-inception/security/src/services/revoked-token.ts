@@ -81,8 +81,8 @@ export class RevokedToken {
     this.type = type;
     this.name = name;
     this.issued = issued;
-    this.expires = !!expires ? expires : null;
-    this.validFrom = !!validFrom ? validFrom : null;
-    this.revoked = !!revoked ? revoked : null;
+    this.expires = expires ? expires : null;
+    this.validFrom = validFrom ? validFrom : null;
+    this.revoked = revoked ? revoked : null;
   }
 }

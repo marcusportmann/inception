@@ -16,21 +16,19 @@
 
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import {
-  ConfirmationDialogComponent,
-  DialogService,
-  Error
-} from 'ngx-inception/core';
+import { ConfirmationDialogComponent, CoreModule, DialogService, Error } from 'ngx-inception/core';
 import { first } from 'rxjs/operators';
 
 /**
- * The DialogsComponent class implements the lists component.
+ * The DialogsComponent class implements the dialogs component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'dialogs.component.html',
-  standalone: false
+  selector: 'app-dialogs',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'dialogs.component.html'
 })
 export class DialogsComponent {
   /**
@@ -46,10 +44,14 @@ export class DialogsComponent {
         message: 'Perform the action?'
       });
 
+    // noinspection JSUnusedLocalSymbols
     dialogRef
       .afterClosed()
       .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {});
+      .subscribe((confirmation: boolean | undefined) => {
+        void confirmation;
+        /* empty */
+      });
   }
 
   error(): void {

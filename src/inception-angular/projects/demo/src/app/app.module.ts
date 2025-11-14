@@ -19,12 +19,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
-  CoreModule,
-  InceptionAppModule,
-  InceptionConfig,
-  NavigationBadge,
-  NavigationItem,
-  NavigationTitle
+  CoreModule, InceptionAppModule, InceptionConfig, NavigationBadge, NavigationItem, NavigationTitle
 } from 'ngx-inception/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -54,7 +49,6 @@ const ngxInceptionConfig: InceptionConfig = {
 };
 
 @NgModule({
-  bootstrap: [AppComponent],
   declarations: [AppComponent],
   exports: [CoreModule],
   imports: [
@@ -62,7 +56,8 @@ const ngxInceptionConfig: InceptionConfig = {
     BrowserAnimationsModule,
     BrowserModule,
     CoreModule.forRoot(ngxInceptionConfig)
-  ]
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule extends InceptionAppModule {
   constructor() {
@@ -70,7 +65,7 @@ export class AppModule extends InceptionAppModule {
   }
 
   /**
-   * Initialise the navigation for the application.
+   * Initialize the navigation for the application.
    *
    * @return The navigation for the application.
    */
@@ -103,21 +98,9 @@ export class AppModule extends InceptionAppModule {
             '/inception/components',
             [],
             [
-              new NavigationItem(
-                'fa fa-puzzle-piece',
-                'Buttons',
-                '/inception/components/buttons'
-              ),
-              new NavigationItem(
-                'fa fa-puzzle-piece',
-                'Cards',
-                '/inception/components/cards'
-              ),
-              new NavigationItem(
-                'fa fa-puzzle-piece',
-                'Dialogs',
-                '/inception/components/dialogs'
-              ),
+              new NavigationItem('fa fa-puzzle-piece', 'Buttons', '/inception/components/buttons'),
+              new NavigationItem('fa fa-puzzle-piece', 'Cards', '/inception/components/cards'),
+              new NavigationItem('fa fa-puzzle-piece', 'Dialogs', '/inception/components/dialogs'),
               new NavigationItem(
                 'fa fa-puzzle-piece',
                 'Error Report',
@@ -134,11 +117,7 @@ export class AppModule extends InceptionAppModule {
                 '/inception/components/grid-list',
                 []
               ),
-              new NavigationItem(
-                'fa fa-puzzle-piece',
-                'Lists',
-                '/inception/components/lists'
-              ),
+              new NavigationItem('fa fa-puzzle-piece', 'Lists', '/inception/components/lists'),
               new NavigationItem(
                 'fa fa-puzzle-piece',
                 'Progress',
@@ -151,16 +130,8 @@ export class AppModule extends InceptionAppModule {
                 '/inception/components/switches',
                 []
               ),
-              new NavigationItem(
-                'fa fa-puzzle-piece',
-                'Tabs',
-                '/inception/components/tabs'
-              ),
-              new NavigationItem(
-                'fa fa-puzzle-piece',
-                'Tooltips',
-                '/inception/components/tooltips'
-              )
+              new NavigationItem('fa fa-puzzle-piece', 'Tabs', '/inception/components/tabs'),
+              new NavigationItem('fa fa-puzzle-piece', 'Tooltips', '/inception/components/tooltips')
             ]
           ),
 
@@ -170,11 +141,7 @@ export class AppModule extends InceptionAppModule {
             '/inception/forms',
             [],
             [
-              new NavigationItem(
-                'fa fa-file-alt',
-                'Example',
-                '/inception/forms/example'
-              ),
+              new NavigationItem('fa fa-file-alt', 'Example', '/inception/forms/example'),
               new NavigationItem(
                 'fa fa-file-alt',
                 'Reference Components',
@@ -199,11 +166,7 @@ export class AppModule extends InceptionAppModule {
                 'Action Menu Table',
                 '/inception/tables/action-menu-table'
               ),
-              new NavigationItem(
-                'fa fa-table',
-                'Basic Table',
-                '/inception/tables/basic-table'
-              ),
+              new NavigationItem('fa fa-table', 'Basic Table', '/inception/tables/basic-table'),
               new NavigationItem(
                 'fa fa-table',
                 'Filterable Table',
@@ -264,37 +227,25 @@ export class AppModule extends InceptionAppModule {
               'FUNCTION_Security.UserGroups'
             ],
             [
-              new NavigationItem(
-                'fas fa-user',
-                'Users',
-                '/administration/security/users',
-                [
-                  'ROLE_Administrator',
-                  'FUNCTION_Security.ResetUserPassword',
-                  'FUNCTION_Security.UserAdministration',
-                  'FUNCTION_Security.UserGroups'
-                ]
-              ),
-              new NavigationItem(
-                'fas fa-users',
-                'Groups',
-                '/administration/security/groups',
-                ['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration']
-              ),
-              new NavigationItem(
-                'far fa-building',
-                'Tenants',
-                '/administration/security/tenants',
-                ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
-              ),
+              new NavigationItem('fas fa-user', 'Users', '/administration/security/users', [
+                'ROLE_Administrator',
+                'FUNCTION_Security.ResetUserPassword',
+                'FUNCTION_Security.UserAdministration',
+                'FUNCTION_Security.UserGroups'
+              ]),
+              new NavigationItem('fas fa-users', 'Groups', '/administration/security/groups', [
+                'ROLE_Administrator',
+                'FUNCTION_Security.GroupAdministration'
+              ]),
+              new NavigationItem('far fa-building', 'Tenants', '/administration/security/tenants', [
+                'ROLE_Administrator',
+                'FUNCTION_Security.TenantAdministration'
+              ]),
               new NavigationItem(
                 'far fa-address-book',
                 'User Directories',
                 '/administration/security/user-directories',
-                [
-                  'ROLE_Administrator',
-                  'FUNCTION_Security.UserDirectoryAdministration'
-                ]
+                ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
               ),
               new NavigationItem(
                 'far fa-building-lock',
@@ -302,12 +253,10 @@ export class AppModule extends InceptionAppModule {
                 '/administration/security/policies',
                 ['ROLE_Administrator', 'FUNCTION_Security.PolicyAdministration']
               ),
-              new NavigationItem(
-                'fa-solid fa-key',
-                'Tokens',
-                '/administration/security/tokens',
-                ['ROLE_Administrator', 'FUNCTION_Security.TokenAdministration']
-              )
+              new NavigationItem('fa-solid fa-key', 'Tokens', '/administration/security/tokens', [
+                'ROLE_Administrator',
+                'FUNCTION_Security.TokenAdministration'
+              ])
             ]
           ),
           new NavigationItem(
@@ -326,18 +275,14 @@ export class AppModule extends InceptionAppModule {
               'FUNCTION_Scheduler.JobAdministration'
             ],
             [
-              new NavigationItem(
-                'fa fa-list',
-                'Codes',
-                '/administration/system/code-categories',
-                ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
-              ),
-              new NavigationItem(
-                'fa fa-list',
-                'Config',
-                '/administration/system/config',
-                ['ROLE_Administrator', 'FUNCTION_Config.ConfigAdministration']
-              ),
+              new NavigationItem('fa fa-list', 'Codes', '/administration/system/code-categories', [
+                'ROLE_Administrator',
+                'FUNCTION_Codes.CodeAdministration'
+              ]),
+              new NavigationItem('fa fa-list', 'Config', '/administration/system/config', [
+                'ROLE_Administrator',
+                'FUNCTION_Config.ConfigAdministration'
+              ]),
               new NavigationItem(
                 'fas fa-circle-exclamation',
                 'Error Reports',
@@ -432,9 +377,7 @@ export class AppModule extends InceptionAppModule {
         [],
         [
           new NavigationItem('far fa-file', 'Menu 2.1', '/menu2/menu21', []),
-          new NavigationItem('far fa-file', 'Menu 2.2', '/menu2/menu22', [
-            'ROLE_Administrator'
-          ])
+          new NavigationItem('far fa-file', 'Menu 2.2', '/menu2/menu22', ['ROLE_Administrator'])
         ]
       )
     );
@@ -452,18 +395,8 @@ export class AppModule extends InceptionAppModule {
             '/menu3/menu31',
             [],
             [
-              new NavigationItem(
-                'far fa-file',
-                'Menu 3.1.1',
-                '/menu3/menu31/menu311',
-                []
-              ),
-              new NavigationItem(
-                'far fa-file',
-                'Menu 3.1.2',
-                '/menu3/menu31/menu312',
-                []
-              )
+              new NavigationItem('far fa-file', 'Menu 3.1.1', '/menu3/menu31/menu311', []),
+              new NavigationItem('far fa-file', 'Menu 3.1.2', '/menu3/menu31/menu312', [])
             ]
           ),
           new NavigationItem(
@@ -472,18 +405,8 @@ export class AppModule extends InceptionAppModule {
             '/menu3/menu32',
             [],
             [
-              new NavigationItem(
-                'far fa-file',
-                'Menu 3.2.1',
-                '/menu3/menu32/menu321',
-                []
-              ),
-              new NavigationItem(
-                'far fa-file',
-                'Menu 3.2.2',
-                '/menu3/menu32/menu322',
-                []
-              )
+              new NavigationItem('far fa-file', 'Menu 3.2.1', '/menu3/menu32/menu321', []),
+              new NavigationItem('far fa-file', 'Menu 3.2.2', '/menu3/menu32/menu322', [])
             ]
           )
         ]

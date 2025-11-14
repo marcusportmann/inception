@@ -1,12 +1,25 @@
 <form [formGroup]="userProfileForm" autocomplete="off" class="d-flex flex-column flex-fill" validatedForm>
   <mat-card class="flex flex-column flex-auto">
     <mat-card-content class="d-flex flex-column flex-fill">
-      <div class="row">
-        <div class="col-sm">
+      <div style="display:flex; align-items:flex-end; gap:16px;">
+        <div style="flex:1 1 auto;">
           <mat-form-field class="static">
             <mat-label i18n="@@security_user_profile_component_label_username">Username</mat-label>
             <input type="text" matInput formControlName="username">
           </mat-form-field>
+        </div>
+
+        <div style="margin-left:auto; display:flex; justify-content:flex-end;">
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="copyAccessToken()"
+            [disabled]="(canCopyToken$ | async) !== true"
+            i18n="@@security_user_profile_component_button_copy_access_token"
+          >
+            Copy Access Token
+          </button>
         </div>
       </div>
       <div class="row">
@@ -63,6 +76,9 @@
           </mat-form-field>
         </div>
       </div>
+
+
+
     </mat-card-content>
     <mat-card-actions align="end">
       <button type="button" mat-flat-button color="link" (click)="cancel()" i18n="@@security_user_profile_component_button_cancel">Cancel</button>

@@ -14,27 +14,14 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  ConfirmationDialogComponent,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, ConfirmationDialogComponent, CoreModule, Error,
+  TableFilterComponent
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Code } from '../services/code';
@@ -46,14 +33,13 @@ import { CodesService } from '../services/codes.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-codes-codes',
+  standalone: true,
   templateUrl: 'codes.component.html',
-  styleUrls: ['codes.component.css'],
-  standalone: false
+  imports: [CoreModule, TableFilterComponent],
+  styleUrls: ['codes.component.css']
 })
-export class CodesComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class CodesComponent extends AdminContainerView implements AfterViewInit {
   codeCategoryId: string;
 
   dataSource: MatTableDataSource<Code> = new MatTableDataSource<Code>();
@@ -66,18 +52,13 @@ export class CodesComponent
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private codesService: CodesService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  readonly title = $localize`:@@codes_codes_title:Codes`;
+
+  constructor(private codesService: CodesService) {
     super();
 
     // Retrieve the route parameters
-    const codeCategoryId =
-      this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+    const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
     if (!codeCategoryId) {
       throw new Error('No codeCategoryId route parameter found');
     }
@@ -85,8 +66,7 @@ export class CodesComponent
 
     // Set the data source filter
     this.dataSource.filterPredicate = (data, filter): boolean =>
-      data.id.toLowerCase().includes(filter) ||
-      data.name.toLowerCase().includes(filter);
+      data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
   }
 
   override get backNavigation(): BackNavigation {
@@ -95,10 +75,6 @@ export class CodesComponent
       ['../..'],
       { relativeTo: this.activatedRoute }
     );
-  }
-
-  get title(): string {
-    return $localize`:@@codes_codes_title:Codes`;
   }
 
   applyFilter(filterValue: string): void {
@@ -122,7 +98,7 @@ export class CodesComponent
             .pipe(finalize(() => this.spinnerService.hideSpinner()))
             .subscribe({
               next: () => this.loadCodes(),
-              error: (error) => this.handleError(error)
+              error: (error) => this.handleError(error, false)
             });
         }
       });
@@ -142,7 +118,7 @@ export class CodesComponent
       .pipe(finalize(() => this.spinnerService.hideSpinner()))
       .subscribe({
         next: (codes: Code[]) => (this.dataSource.data = codes),
-        error: (error) => this.handleError(error)
+        error: (error) => this.handleError(error, false)
       });
   }
 
@@ -155,20 +131,5 @@ export class CodesComponent
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.loadCodes();
-  }
-
-  private handleError(error: Error): void {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
   }
 }

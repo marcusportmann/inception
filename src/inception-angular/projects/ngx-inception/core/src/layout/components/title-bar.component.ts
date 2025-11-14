@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -27,8 +28,9 @@ import { BackNavigation } from './back-navigation';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'title-bar',
+  selector: 'inception-core-title-bar',
+  standalone: true,
+  imports: [NgIf, AsyncPipe],
   template: `
     <div *ngIf="title | async as title; else noTitle" class="title-bar">
       <div
@@ -45,8 +47,7 @@ import { BackNavigation } from './back-navigation';
         <div class="title">No Title</div>
       </div>
     </ng-template>
-  `,
-  standalone: false
+  `
 })
 export class TitleBarComponent implements OnInit {
   @Input() fixed = false;
@@ -84,16 +85,16 @@ export class TitleBarComponent implements OnInit {
   navigateBack(backNavigation: BackNavigation): void {
     if (backNavigation) {
       // noinspection JSIgnoredPromiseFromCall
-      this.router
-        .navigate(backNavigation.commands, backNavigation.extras)
-        .then((navigationResult) => {});
+      this.router.navigate(backNavigation.commands, backNavigation.extras).then(() => {
+        /* empty */
+      });
     }
   }
 
   ngOnInit(): void {
     Replace(this.elementRef);
 
-    if (!!this.fixed) {
+    if (this.fixed) {
       const bodySelector = document.querySelector('body');
 
       if (bodySelector) {

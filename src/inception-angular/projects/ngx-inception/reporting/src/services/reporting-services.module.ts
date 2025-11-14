@@ -15,10 +15,7 @@
  */
 
 import { CommonModule } from '@angular/common';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { ReportingService } from './reporting.service';
 
@@ -37,8 +34,6 @@ import { ReportingService } from './reporting.service';
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class ReportingServicesModule {
-  constructor() {}
-
   static forRoot(): ModuleWithProviders<ReportingServicesModule> {
     return {
       ngModule: ReportingServicesModule,

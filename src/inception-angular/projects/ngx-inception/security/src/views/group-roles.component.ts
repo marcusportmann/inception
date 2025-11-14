@@ -18,17 +18,8 @@ import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  ConfirmationDialogComponent,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, ConfirmationDialogComponent, CoreModule, Error
 } from 'ngx-inception/core';
 import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { finalize, first } from 'rxjs/operators';
@@ -42,14 +33,13 @@ import { SecurityService } from '../services/security.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-group-roles',
+  standalone: true,
+  imports: [CoreModule],
   templateUrl: 'group-roles.component.html',
-  styleUrls: ['group-roles.component.css'],
-  standalone: false
+  styleUrls: ['group-roles.component.css']
 })
-export class GroupRolesComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+export class GroupRolesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
   allRoles: Role[] = [];
 
   availableRoles$: Subject<Role[]> = new ReplaySubject<Role[]>(1);
@@ -64,22 +54,17 @@ export class GroupRolesComponent
 
   selectedRole: Role | null = null;
 
+  readonly title = $localize`:@@security_group_roles_title:Group Roles`;
+
   userDirectoryId: string;
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private securityService: SecurityService) {
     super();
 
     // Retrieve the route parameters
-    const userDirectoryId =
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
       throw new Error('No userDirectoryId route parameter found');
@@ -107,46 +92,26 @@ export class GroupRolesComponent
     );
   }
 
-  get title(): string {
-    return $localize`:@@security_group_roles_title:Group Roles`;
-  }
-
   addRoleToGroup(): void {
-    if (this.selectedRole) {
-      this.spinnerService.showSpinner();
-
-      this.securityService
-        .addRoleToGroup(
-          this.userDirectoryId,
-          this.groupName,
-          this.selectedRole.code
-        )
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner())
-        )
-        .subscribe(
-          () => {
-            this.loadRolesForGroup();
-            this.selectedRole = null;
-          },
-          (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if (
-              error instanceof AccessDeniedError ||
-              error instanceof InvalidArgumentError ||
-              error instanceof ServiceUnavailableError
-            ) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {
-                state: { error }
-              });
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          }
-        );
+    if (!this.selectedRole) {
+      return;
     }
+
+    this.spinnerService.showSpinner();
+
+    this.securityService
+      .addRoleToGroup(this.userDirectoryId, this.groupName, this.selectedRole.code)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe({
+        next: () => {
+          this.loadRolesForGroup();
+          this.selectedRole = null;
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   loadRolesForGroup(): void {
@@ -158,39 +123,22 @@ export class GroupRolesComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (groupRoles: GroupRole[]) => {
+      .subscribe({
+        next: (groupRoles: GroupRole[]) => {
           this.dataSource.data = groupRoles;
 
           this.availableRoles$.next(
-            GroupRolesComponent.calculateAvailableRoles(
-              this.allRoles,
-              this.dataSource.data
-            )
+            GroupRolesComponent.calculateAvailableRoles(this.allRoles, this.dataSource.data)
           );
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
 
-    // Retrieve the existing user and initialise the form fields
+    // Retrieve the roles and initialize the table
     this.spinnerService.showSpinner();
 
     this.securityService
@@ -199,35 +147,20 @@ export class GroupRolesComponent
         first(),
         finalize(() => this.spinnerService.hideSpinner())
       )
-      .subscribe(
-        (roles: Role[]) => {
+      .subscribe({
+        next: (roles: Role[]) => {
           this.allRoles = roles;
-
           this.loadRolesForGroup();
         },
-        (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        }
-      );
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  removeRoleFromGroup(roleCode: string) {
+  removeRoleFromGroup(roleCode: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog({
         message: $localize`:@@security_group_roles_confirm_remove_role_from_group:Are you sure you want to remove the role from the group?`
@@ -236,8 +169,12 @@ export class GroupRolesComponent
     dialogRef
       .afterClosed()
       .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
+      .subscribe({
+        next: (confirmation: boolean | undefined) => {
+          if (confirmation !== true) {
+            return;
+          }
+
           this.spinnerService.showSpinner();
 
           this.securityService
@@ -246,27 +183,13 @@ export class GroupRolesComponent
               first(),
               finalize(() => this.spinnerService.hideSpinner())
             )
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.loadRolesForGroup();
                 this.selectedRole = null;
               },
-              (error: Error) => {
-                // noinspection SuspiciousTypeOfGuard
-                if (
-                  error instanceof AccessDeniedError ||
-                  error instanceof InvalidArgumentError ||
-                  error instanceof ServiceUnavailableError
-                ) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {
-                    state: { error }
-                  });
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              }
-            );
+              error: (error: Error) => this.handleError(error, false)
+            });
         }
       });
   }

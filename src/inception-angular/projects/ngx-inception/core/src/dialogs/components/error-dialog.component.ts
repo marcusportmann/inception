@@ -15,11 +15,12 @@
  */
 
 import { Component, Inject } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Error } from '../../errors/error';
 
 /**
- * The ErrorDialogData interface defines the data that is displayed by an error dialog.
+ * The ErrorDialogData interface defines the data displayed by an error dialog.
  *
  * @author Marcus Portmann
  */
@@ -36,8 +37,9 @@ export interface ErrorDialogData {
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'error-dialog',
+  selector: 'inception-core-error-dialog',
+  standalone: true,
+  imports: [MatButton],
   template: `
     <div class="header">
       <i class="far fa-3x fa-times-circle"></i>
@@ -61,8 +63,7 @@ export interface ErrorDialogData {
   host: {
     class: 'error-dialog',
     '(document:keydown.enter)': 'onEnter($event)'
-  },
-  standalone: false
+  }
 })
 export class ErrorDialogComponent {
   /**

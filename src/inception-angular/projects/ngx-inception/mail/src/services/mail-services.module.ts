@@ -37,8 +37,7 @@ import { MailService } from './mail.service';
   providers: [provideHttpClient(withInterceptorsFromDi())]
 })
 export class MailServicesModule {
-  constructor() {}
-
+  // noinspection JSUnusedGlobalSymbols
   static forRoot(): ModuleWithProviders<MailServicesModule> {
     return {
       ngModule: MailServicesModule,

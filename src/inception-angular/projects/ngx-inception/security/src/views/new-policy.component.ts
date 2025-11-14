@@ -16,17 +16,7 @@
 
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
-} from 'ngx-inception/core';
+import { AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Policy } from '../services/policy';
 import { PolicyType } from '../services/policy-type';
@@ -38,14 +28,13 @@ import { SecurityService } from '../services/security.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-security-new-policy',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'new-policy.component.html',
-  styleUrls: ['new-policy.component.css'],
-  standalone: false
+  styleUrls: ['new-policy.component.css']
 })
-export class NewPolicyComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class NewPolicyComponent extends AdminContainerView implements AfterViewInit {
   dataControl: FormControl;
 
   idControl: FormControl;
@@ -56,36 +45,23 @@ export class NewPolicyComponent
 
   policy: Policy | null = null;
 
+  readonly title = $localize`:@@security_new_policy_title:New Policy`;
+
   typeControl: FormControl;
 
   versionControl: FormControl;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private securityService: SecurityService) {
     super();
 
-    // Initialise the form controls
+    // Initialize the form controls
     this.dataControl = new FormControl('', [Validators.required]);
-    this.idControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
-    this.nameControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.typeControl = new FormControl('', [Validators.required]);
-    this.versionControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(30)
-    ]);
+    this.versionControl = new FormControl('', [Validators.required, Validators.maxLength(30)]);
 
-    // Initialise the form
+    // Initialize the form
     this.newPolicyForm = new FormGroup({
       data: this.dataControl,
       id: this.idControl,
@@ -96,15 +72,9 @@ export class NewPolicyComponent
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation(
-      $localize`:@@security_new_policy_back_navigation:Policies`,
-      ['..'],
-      { relativeTo: this.activatedRoute }
-    );
-  }
-
-  get title(): string {
-    return $localize`:@@security_new_policy_title:New Policy`;
+    return new BackNavigation($localize`:@@security_new_policy_back_navigation:Policies`, ['..'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   cancel(): void {
@@ -117,42 +87,30 @@ export class NewPolicyComponent
   }
 
   ok(): void {
-    if (this.policy && this.newPolicyForm.valid) {
-      this.policy.id = this.idControl.value;
-      this.policy.version = this.versionControl.value;
-      this.policy.name = this.nameControl.value;
-      this.policy.data = this.dataControl.value;
-      this.policy.type = this.typeControl.value;
-
-      this.spinnerService.showSpinner();
-
-      this.securityService
-        .createPolicy(this.policy)
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner())
-        )
-        .subscribe(
-          () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-          },
-          (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if (
-              error instanceof AccessDeniedError ||
-              error instanceof InvalidArgumentError ||
-              error instanceof ServiceUnavailableError
-            ) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {
-                state: { error }
-              });
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          }
-        );
+    if (!this.policy || !this.newPolicyForm.valid) {
+      return;
     }
+
+    this.policy.id = this.idControl.value;
+    this.policy.version = this.versionControl.value;
+    this.policy.name = this.nameControl.value;
+    this.policy.data = this.dataControl.value;
+    this.policy.type = this.typeControl.value;
+
+    this.spinnerService.showSpinner();
+
+    this.securityService
+      .createPolicy(this.policy)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe({
+        next: () => {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 }

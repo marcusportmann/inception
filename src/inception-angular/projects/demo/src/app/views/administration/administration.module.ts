@@ -44,9 +44,7 @@ const routes: Routes = [
       title: SecurityTitleResolver
     },
     loadChildren: () =>
-      import('../wrappers/security-views-wrapper.module').then(
-        (m) => m.SecurityViewsWrapperModule
-      )
+      import('../wrappers/security-views-wrapper.module').then((m) => m.SecurityViewsWrapperModule)
   },
   {
     path: 'system',
@@ -62,9 +60,7 @@ const routes: Routes = [
           title: CodeCategoriesTitleResolver
         },
         loadChildren: () =>
-          import('../wrappers/codes-views-wrapper.module').then(
-            (m) => m.CodesViewsWrapperModule
-          )
+          import('../wrappers/codes-views-wrapper.module').then((m) => m.CodesViewsWrapperModule)
       },
       {
         path: 'config',
@@ -73,9 +69,7 @@ const routes: Routes = [
           title: ConfigsTitleResolver
         },
         loadChildren: () =>
-          import('../wrappers/config-views-wrapper.module').then(
-            (m) => m.ConfigViewsWrapperModule
-          )
+          import('../wrappers/config-views-wrapper.module').then((m) => m.ConfigViewsWrapperModule)
       },
       {
         path: 'error-reports',
@@ -84,9 +78,7 @@ const routes: Routes = [
           title: ErrorReportsTitleResolver
         },
         loadChildren: () =>
-          import('../wrappers/error-views-wrapper.module').then(
-            (m) => m.ErrorViewsWrapperModule
-          )
+          import('../wrappers/error-views-wrapper.module').then((m) => m.ErrorViewsWrapperModule)
       },
       {
         path: 'mail',
@@ -95,9 +87,7 @@ const routes: Routes = [
           title: MailTitleResolver
         },
         loadChildren: () =>
-          import('../wrappers/mail-views-wrapper.module').then(
-            (m) => m.MailViewsWrapperModule
-          )
+          import('../wrappers/mail-views-wrapper.module').then((m) => m.MailViewsWrapperModule)
       },
       {
         path: 'scheduler',
@@ -131,7 +121,6 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AdministrationComponent],
   providers: [
     // Resolvers
     CodeCategoriesTitleResolver,

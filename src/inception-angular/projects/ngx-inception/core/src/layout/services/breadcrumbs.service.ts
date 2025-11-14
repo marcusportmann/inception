@@ -67,7 +67,7 @@ export class BreadcrumbsService {
                   routeSnapshot.url.map((segment) => segment.path).join('/');
 
                 if (routeSnapshot.data['title']) {
-                  if (!!routeSnapshot.params) {
+                  if (routeSnapshot.params) {
                     breadcrumbs.push(
                       new Breadcrumb(
                         render(

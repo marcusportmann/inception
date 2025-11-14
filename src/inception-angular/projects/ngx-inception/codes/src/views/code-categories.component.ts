@@ -14,36 +14,14 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AdminContainerView, CoreModule, TableFilterComponent } from 'ngx-inception/core';
+import { EMPTY, merge, Observable, Subject } from 'rxjs';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
-} from 'ngx-inception/core';
-import { merge, Observable, Subject, throwError } from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  filter,
-  finalize,
-  first,
-  switchMap,
-  takeUntil,
-  tap
+  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil, tap
 } from 'rxjs/operators';
 import { CodeCategorySummary } from '../services/code-category-summary';
 import { CodesService } from '../services/codes.service';
@@ -54,9 +32,11 @@ import { CodesService } from '../services/codes.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-codes-code-categories',
+  standalone: true,
   templateUrl: 'code-categories.component.html',
-  styleUrls: ['code-categories.component.css'],
-  standalone: false
+  imports: [CoreModule, TableFilterComponent],
+  styleUrls: ['code-categories.component.css']
 })
 export class CodeCategoriesComponent
   extends AdminContainerView
@@ -73,25 +53,16 @@ export class CodeCategoriesComponent
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
+  readonly title = $localize`:@@codes_code_categories_title:Code Categories`;
+
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private codesService: CodesService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private codesService: CodesService) {
     super();
 
     // Set the data source filter
     this.dataSource.filterPredicate = (data, filter): boolean =>
-      data.id.toLowerCase().includes(filter) ||
-      data.name.toLowerCase().includes(filter);
-  }
-
-  get title(): string {
-    return $localize`:@@codes_code_categories_title:Code Categories`;
+      data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
   }
 
   applyFilter(filterValue: string): void {
@@ -154,7 +125,10 @@ export class CodeCategoriesComponent
         switchMap(() => {
           this.spinnerService.showSpinner();
           return action().pipe(
-            catchError((error) => this.handleError(error)),
+            catchError((error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
             tap(() => this.loadData()),
             finalize(() => this.spinnerService.hideSpinner())
           );
@@ -162,22 +136,6 @@ export class CodeCategoriesComponent
         takeUntil(this.destroy$)
       )
       .subscribe();
-  }
-
-  private handleError(error: Error): Observable<never> {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService.showErrorDialog(error);
-    }
-    return throwError(() => error);
   }
 
   private initializeDataLoaders(): void {
@@ -190,21 +148,16 @@ export class CodeCategoriesComponent
       .subscribe(() => this.loadData());
   }
 
-  private loadCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
-    return this.codesService
-      .getCodeCategorySummaries()
-      .pipe(catchError((error) => this.handleError(error)));
-  }
-
   private loadData(): void {
     this.spinnerService.showSpinner();
-    this.loadCodeCategorySummaries()
+    this.codesService
+      .getCodeCategorySummaries()
       .pipe(finalize(() => this.spinnerService.hideSpinner()))
       .subscribe({
         next: (codeCategorySummaries) => {
           this.dataSource.data = codeCategorySummaries;
         },
-        error: (error) => this.handleError(error)
+        error: (error) => this.handleError(error, false)
       });
   }
 }

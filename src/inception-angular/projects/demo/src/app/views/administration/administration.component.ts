@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
 
 /**
  * The AdministrationComponent class implements the administration component.
@@ -22,9 +23,9 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Administration `,
-  standalone: false
+  selector: 'app-administration',
+  standalone: true,
+  imports: [CoreModule],
+  template: `Administration`
 })
-export class AdministrationComponent {
-  constructor() {}
-}
+export class AdministrationComponent {}

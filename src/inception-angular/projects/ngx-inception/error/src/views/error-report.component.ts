@@ -16,17 +16,7 @@
 
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
-} from 'ngx-inception/core';
+import { AdminContainerView, BackNavigation, CoreModule, Error } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { ErrorReport } from '../services/error-report';
 import { ErrorService } from '../services/error.service';
@@ -37,14 +27,13 @@ import { ErrorService } from '../services/error.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-error-error-report',
+  standalone: true,
+  imports: [CoreModule],
   templateUrl: 'error-report.component.html',
-  styleUrls: ['error-report.component.css'],
-  standalone: false
+  styleUrls: ['error-report.component.css']
 })
-export class ErrorReportComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class ErrorReportComponent extends AdminContainerView implements AfterViewInit {
   applicationIdControl: FormControl;
 
   applicationVersionControl: FormControl;
@@ -67,20 +56,15 @@ export class ErrorReportComponent
 
   idControl: FormControl;
 
+  readonly title = $localize`:@@error_error_report_title:View Error Report`;
+
   whoControl: FormControl;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private errorService: ErrorService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor(private errorService: ErrorService) {
     super();
 
     // Retrieve the route parameters
-    const errorReportId =
-      this.activatedRoute.snapshot.paramMap.get('errorReportId');
+    const errorReportId = this.activatedRoute.snapshot.paramMap.get('errorReportId');
     if (!errorReportId) {
       throw new Error('No errorReportId route parameter found');
     }
@@ -146,10 +130,6 @@ export class ErrorReportComponent
     );
   }
 
-  get title(): string {
-    return $localize`:@@error_error_report_title:View Error Report`;
-  }
-
   ngAfterViewInit(): void {
     // Retrieve the error report and populate form controls
     this.spinnerService.showSpinner();
@@ -162,35 +142,13 @@ export class ErrorReportComponent
       )
       .subscribe({
         next: (errorReport: ErrorReport) => this.populateForm(errorReport),
-        error: (error: Error) => this.handleError(error)
+        error: (error: Error) => this.handleError(error, true, '../..')
       });
   }
 
   ok(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-  }
-
-  private handleError(error: Error): void {
-    if (
-      error instanceof AccessDeniedError ||
-      error instanceof InvalidArgumentError ||
-      error instanceof ServiceUnavailableError
-    ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
-      });
-    } else {
-      this.dialogService
-        .showErrorDialog(error)
-        .afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
-        });
-    }
   }
 
   private populateForm(errorReport: ErrorReport): void {

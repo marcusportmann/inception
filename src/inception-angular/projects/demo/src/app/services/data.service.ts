@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import {
-  AccessDeniedError,
-  CommunicationError,
-  INCEPTION_CONFIG,
-  InceptionConfig,
-  InvalidArgumentError,
-  ResponseConverter,
-  ServiceUnavailableError
+  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
+  ResponseConverter, ServiceUnavailableError
 } from 'ngx-inception/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -63,9 +54,7 @@ export class DataService {
   @ResponseConverter
   getAllData(): Observable<Data[]> {
     return this.httpClient
-      .get<
-        Data[]
-      >(this.config.apiUrlPrefix + '/data/all-data', { reportProgress: true })
+      .get<Data[]>(this.config.apiUrlPrefix + '/data/all-data', { reportProgress: true })
       .pipe(
         map((allData: Data[]) => {
           return allData;
@@ -73,24 +62,14 @@ export class DataService {
         catchError((httpErrorResponse: HttpErrorResponse) => {
           if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
             return throwError(() => new AccessDeniedError(httpErrorResponse));
-          } else if (
-            CommunicationError.isCommunicationError(httpErrorResponse)
-          ) {
+          } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
             return throwError(() => new CommunicationError(httpErrorResponse));
-          } else if (
-            InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
-          ) {
-            return throwError(
-              () => new InvalidArgumentError(httpErrorResponse)
-            );
+          } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+            return throwError(() => new InvalidArgumentError(httpErrorResponse));
           }
 
           return throwError(
-            () =>
-              new ServiceUnavailableError(
-                'Failed to retrieve all the data.',
-                httpErrorResponse
-              )
+            () => new ServiceUnavailableError('Failed to retrieve all the data.', httpErrorResponse)
           );
         })
       );
@@ -114,24 +93,14 @@ export class DataService {
         catchError((httpErrorResponse: HttpErrorResponse) => {
           if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
             return throwError(() => new AccessDeniedError(httpErrorResponse));
-          } else if (
-            CommunicationError.isCommunicationError(httpErrorResponse)
-          ) {
+          } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
             return throwError(() => new CommunicationError(httpErrorResponse));
-          } else if (
-            InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
-          ) {
-            return throwError(
-              () => new InvalidArgumentError(httpErrorResponse)
-            );
+          } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+            return throwError(() => new InvalidArgumentError(httpErrorResponse));
           }
 
           return throwError(
-            () =>
-              new ServiceUnavailableError(
-                'Failed to retrieve the data.',
-                httpErrorResponse
-              )
+            () => new ServiceUnavailableError('Failed to retrieve the data.', httpErrorResponse)
           );
         })
       );
@@ -140,7 +109,7 @@ export class DataService {
   /**
    * Validate the data.
    *
-   * @param code The data to validate
+   * @param data The data to validate
    */
   validateData(data: Data): Observable<boolean> {
     return this.httpClient
@@ -154,24 +123,14 @@ export class DataService {
         catchError((httpErrorResponse: HttpErrorResponse) => {
           if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
             return throwError(() => new AccessDeniedError(httpErrorResponse));
-          } else if (
-            CommunicationError.isCommunicationError(httpErrorResponse)
-          ) {
+          } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
             return throwError(() => new CommunicationError(httpErrorResponse));
-          } else if (
-            InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
-          ) {
-            return throwError(
-              () => new InvalidArgumentError(httpErrorResponse)
-            );
+          } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+            return throwError(() => new InvalidArgumentError(httpErrorResponse));
           }
 
           return throwError(
-            () =>
-              new ServiceUnavailableError(
-                'Failed to validate the data.',
-                httpErrorResponse
-              )
+            () => new ServiceUnavailableError('Failed to validate the data.', httpErrorResponse)
           );
         })
       );

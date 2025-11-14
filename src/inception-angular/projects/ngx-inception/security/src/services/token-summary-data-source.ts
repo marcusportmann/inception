@@ -51,10 +51,14 @@ export class TokenSummaryDataSource implements DataSource<TokenSummary> {
   }
 
   connect(collectionViewer: CollectionViewer): Observable<TokenSummary[]> {
+    void collectionViewer;
+
     return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
+    void collectionViewer;
+
     this.dataSubject$.complete();
     this.loadingSubject$.complete();
     this.totalSubject$.complete();

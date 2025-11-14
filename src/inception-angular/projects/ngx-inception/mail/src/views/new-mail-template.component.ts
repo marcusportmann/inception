@@ -16,18 +16,9 @@
 
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  AdminContainerView,
-  BackNavigation,
-  Base64,
-  DialogService,
-  Error,
-  FileValidator,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AdminContainerView, BackNavigation, Base64, CoreModule, Error, FileValidator,
+  ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { MailTemplate } from '../services/mail-template';
@@ -40,14 +31,14 @@ import { MailService } from '../services/mail.service';
  * @author Marcus Portmann
  */
 @Component({
+  selector: 'inception-mail-new-mail-template',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'new-mail-template.component.html',
-  styleUrls: ['new-mail-template.component.css'],
-  standalone: false
+  styleUrls: ['new-mail-template.component.css']
 })
-export class NewMailTemplateComponent
-  extends AdminContainerView
-  implements AfterViewInit
-{
+export class NewMailTemplateComponent extends AdminContainerView implements AfterViewInit {
+  // noinspection JSUnusedGlobalSymbols
   MailTemplateContentType = MailTemplateContentType;
 
   contentTypeControl: FormControl;
@@ -57,8 +48,7 @@ export class NewMailTemplateComponent
     MailTemplateContentType.HTML
   ];
 
-  getMailTemplateContentTypeDescription =
-    MailService.getMailTemplateContentTypeDescription;
+  getMailTemplateContentTypeDescription = MailService.getMailTemplateContentTypeDescription;
 
   idControl: FormControl;
 
@@ -70,29 +60,22 @@ export class NewMailTemplateComponent
 
   templateControl: FormControl;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private mailService: MailService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  readonly title = $localize`:@@mail_new_mail_template_title:New Mail Template`;
+
+  constructor(private mailService: MailService) {
     super();
 
-    // Initialise the form controls
+    // Initialize the form controls
     this.contentTypeControl = new FormControl('', [Validators.required]);
     this.idControl = new FormControl('', [Validators.required]);
-    this.nameControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.templateControl = new FormControl('', [
       Validators.required,
       FileValidator.minSize(1),
       FileValidator.maxSize(MailService.MAX_TEMPLATE_SIZE)
     ]);
 
-    // Initialise the form
+    // Initialize the form
     this.newMailTemplateForm = new FormGroup({
       contentType: this.contentTypeControl,
       id: this.idControl,
@@ -109,80 +92,64 @@ export class NewMailTemplateComponent
     );
   }
 
-  get title(): string {
-    return $localize`:@@mail_new_mail_template_title:New Mail Template`;
-  }
-
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
-    this.mailTemplate = new MailTemplate(
-      '',
-      '',
-      MailTemplateContentType.Text,
-      ''
-    );
+    this.mailTemplate = new MailTemplate('', '', MailTemplateContentType.Text, '');
   }
 
   ok(): void {
-    if (this.mailTemplate && this.newMailTemplateForm.valid) {
-      const fileReader: FileReader = new FileReader();
-
-      fileReader.onloadend = (ev: ProgressEvent) => {
-        const template = fileReader.result;
-
-        if (this.mailTemplate && template instanceof ArrayBuffer) {
-          const base64: string = Base64.encode(template as ArrayBuffer);
-
-          this.mailTemplate.id = this.idControl.value;
-          this.mailTemplate.name = this.nameControl.value;
-          this.mailTemplate.contentType = this.contentTypeControl.value;
-          this.mailTemplate.template = base64;
-
-          this.spinnerService.showSpinner();
-
-          this.mailService
-            .createMailTemplate(this.mailTemplate)
-            .pipe(
-              first(),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe(
-              () => {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['..'], {
-                  relativeTo: this.activatedRoute
-                });
-              },
-              (error: Error) => {
-                // noinspection SuspiciousTypeOfGuard
-                if (
-                  error instanceof AccessDeniedError ||
-                  error instanceof InvalidArgumentError ||
-                  error instanceof ServiceUnavailableError
-                ) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {
-                    state: { error }
-                  });
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              }
-            );
-        } else {
-          console.log(
-            'Failed to read the template file for the report definition (' +
-              fileReader.result +
-              ')'
-          );
-        }
-      };
-
-      fileReader.readAsArrayBuffer(this.templateControl.value[0]);
+    if (!this.mailTemplate || !this.newMailTemplateForm.valid) {
+      return;
     }
+
+    const files = this.templateControl.value as File[] | null;
+
+    if (!files || !files[0]) {
+      console.log('No template file selected for the mail template.');
+      return;
+    }
+
+    const mailTemplate = this.mailTemplate;
+    const fileReader: FileReader = new FileReader();
+
+    fileReader.onloadend = () => {
+      const result = fileReader.result;
+
+      if (!(result instanceof ArrayBuffer)) {
+        console.log('Failed to read the template file for the mail template (' + result + ')');
+        return;
+      }
+
+      const base64: string = Base64.encode(result as ArrayBuffer);
+
+      mailTemplate.id = this.idControl.value;
+      mailTemplate.name = this.nameControl.value;
+      mailTemplate.contentType = this.contentTypeControl.value;
+      mailTemplate.template = base64;
+
+      this.spinnerService.showSpinner();
+
+      this.mailService
+        .createMailTemplate(mailTemplate)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe({
+          next: () => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['..'], {
+              relativeTo: this.activatedRoute
+            });
+          },
+          error: (error: Error) => this.handleError(error, false)
+        });
+    };
+
+    fileReader.readAsArrayBuffer(files[0]);
   }
 }

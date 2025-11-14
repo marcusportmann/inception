@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule, Routes } from '@angular/router';
 import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
 import { EditGroupTitleResolver } from './edit-group-title-resolver';
@@ -36,8 +38,6 @@ import { GroupRolesComponent } from './group-roles.component';
 import { GroupTitleResolver } from './group-title-resolver';
 import { GroupsTitleResolver } from './groups-title-resolver';
 import { GroupsComponent } from './groups.component';
-import { InternalUserDirectoryComponent } from './internal-user-directory.component';
-import { LdapUserDirectoryComponent } from './ldap-user-directory.component';
 import { NewGroupTitleResolver } from './new-group-title-resolver';
 import { NewGroupComponent } from './new-group.component';
 import { NewPolicyTitleResolver } from './new-policy-title-resolver';
@@ -62,7 +62,6 @@ import { TenantUserDirectoriesTitleResolver } from './tenant-user-directories-ti
 import { TenantUserDirectoriesComponent } from './tenant-user-directories.component';
 import { TenantsTitleResolver } from './tenants-title-resolver';
 import { TenantsComponent } from './tenants.component';
-import { TokenClaimDialogComponent } from './token-claim-dialog.component';
 import { TokenTitleResolver } from './token-title-resolver';
 import { TokensTitleResolver } from './tokens-title-resolver';
 import { TokensComponent } from './tokens.component';
@@ -71,7 +70,6 @@ import { UserDirectoriesComponent } from './user-directories.component';
 import { UserDirectoryTitleResolver } from './user-directory-title-resolver';
 import { UserGroupsTitleResolver } from './user-groups-title-resolver';
 import { UserGroupsComponent } from './user-groups.component';
-import { UserProfileComponent } from './user-profile.component';
 import { UserTitleResolver } from './user-title-resolver';
 import { UsersTitleResolver } from './users-title-resolver';
 import { UsersComponent } from './users.component';
@@ -208,10 +206,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: PoliciesComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Security.PolicyAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.PolicyAdministration']
         }
       },
       {
@@ -220,10 +215,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: NewPolicyComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Security.PolicyAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.PolicyAdministration']
         },
         resolve: {
           title: NewPolicyTitleResolver
@@ -247,10 +239,7 @@ const routes: Routes = [
             canActivate: [CanActivateFunctionGuard],
             component: EditPolicyComponent,
             data: {
-              authorities: [
-                'ROLE_Administrator',
-                'FUNCTION_Security.PolicyAdministration'
-              ]
+              authorities: ['ROLE_Administrator', 'FUNCTION_Security.PolicyAdministration']
             },
             resolve: {
               title: EditPolicyTitleResolver
@@ -273,10 +262,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: TenantsComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Security.TenantAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
         }
       },
       {
@@ -285,10 +271,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: NewTenantComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Security.TenantAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
         },
         resolve: {
           title: NewTenantTitleResolver
@@ -312,10 +295,7 @@ const routes: Routes = [
             canActivate: [CanActivateFunctionGuard],
             component: EditTenantComponent,
             data: {
-              authorities: [
-                'ROLE_Administrator',
-                'FUNCTION_Security.TenantAdministration'
-              ]
+              authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
             },
             resolve: {
               title: EditTenantTitleResolver
@@ -327,10 +307,7 @@ const routes: Routes = [
             canActivate: [CanActivateFunctionGuard],
             component: TenantUserDirectoriesComponent,
             data: {
-              authorities: [
-                'ROLE_Administrator',
-                'FUNCTION_Security.TenantAdministration'
-              ]
+              authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
             },
             resolve: {
               title: TenantUserDirectoriesTitleResolver
@@ -353,10 +330,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: TokensComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Security.TokenAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.TokenAdministration']
         }
       },
       {
@@ -365,10 +339,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: NewTokenComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Security.TokenAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.TokenAdministration']
         },
         resolve: {
           title: NewTokenTitleResolver
@@ -380,10 +351,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: NewTokenComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Security.TokenAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.TokenAdministration']
         },
         resolve: {
           title: NewTokenTitleResolver
@@ -407,10 +375,7 @@ const routes: Routes = [
             canActivate: [CanActivateFunctionGuard],
             component: ViewTokenComponent,
             data: {
-              authorities: [
-                'ROLE_Administrator',
-                'FUNCTION_Security.TokenAdministration'
-              ]
+              authorities: ['ROLE_Administrator', 'FUNCTION_Security.TokenAdministration']
             },
             resolve: {
               title: ViewTokenTitleResolver
@@ -433,10 +398,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: UserDirectoriesComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Security.UserDirectoryAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
         }
       },
       {
@@ -445,10 +407,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: NewUserDirectoryComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Security.UserDirectoryAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
         },
         resolve: {
           title: NewUserDirectoryTitleResolver
@@ -471,10 +430,7 @@ const routes: Routes = [
             canActivate: [CanActivateFunctionGuard],
             component: EditUserDirectoryComponent,
             data: {
-              authorities: [
-                'ROLE_Administrator',
-                'FUNCTION_Security.UserDirectoryAdministration'
-              ]
+              authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
             },
             resolve: {
               title: EditUserDirectoryTitleResolver
@@ -590,41 +546,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    // Components
-    EditGroupComponent,
-    EditPolicyComponent,
-    EditTenantComponent,
-    EditUserDirectoryComponent,
-    EditUserComponent,
-    GroupMembersComponent,
-    GroupRolesComponent,
-    GroupsComponent,
-    InternalUserDirectoryComponent,
-    LdapUserDirectoryComponent,
-    NewGroupComponent,
-    NewPolicyComponent,
-    NewTenantComponent,
-    NewTokenComponent,
-    NewUserComponent,
-    NewUserDirectoryComponent,
-    PoliciesComponent,
-    TenantsComponent,
-    TenantUserDirectoriesComponent,
-    TokenClaimDialogComponent,
-    ResetUserPasswordComponent,
-    SecurityOverviewComponent,
-    TokensComponent,
-    UserDirectoriesComponent,
-    UserGroupsComponent,
-    UserProfileComponent,
-    UsersComponent,
-    ViewTokenComponent
-  ],
   imports: [
     // Angular modules
+    ClipboardModule,
     CommonModule,
     FormsModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
 

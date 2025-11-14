@@ -19,11 +19,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  DialogService,
-  Error,
-  InformationDialogComponent,
-  ProblemDetails,
-  SpinnerService
+  CoreModule, DialogService, Error, InformationDialogComponent, ProblemDetails, SpinnerService,
+  ValidatedFormDirective
 } from 'ngx-inception/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, first, map } from 'rxjs/operators';
@@ -35,8 +32,10 @@ import { ErrorService } from '../services/error.service';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'send-error-report.component.html',
-  standalone: false
+  selector: 'inception-error-send-error-report',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
+  templateUrl: 'send-error-report.component.html'
 })
 export class SendErrorReportComponent implements OnInit {
   emailControl: FormControl;
@@ -93,11 +92,7 @@ export class SendErrorReportComponent implements OnInit {
       this.spinnerService.showSpinner();
 
       this.errorService
-        .sendErrorReport(
-          this.error,
-          this.emailControl.value,
-          this.feedbackControl.value
-        )
+        .sendErrorReport(this.error, this.emailControl.value, this.feedbackControl.value)
         .pipe(
           first(),
           finalize(() => this.spinnerService.hideSpinner()),

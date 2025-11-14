@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { CoreModule } from 'ngx-inception/core';
 
 /**
  * The CardsComponent class implements the cards component.
@@ -22,9 +23,9 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'cards.component.html',
-  standalone: false
+  selector: 'app-cards',
+  standalone: true,
+  imports: [CoreModule],
+  templateUrl: 'cards.component.html'
 })
-export class CardsComponent {
-  constructor() {}
-}
+export class CardsComponent {}

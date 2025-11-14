@@ -38,7 +38,7 @@ export class PasswordChange {
   newPassword: string;
 
   /**
-   * The password for the user that is used to authorise the operation when performing a user
+   * The password for the user that is used to authorize the operation when performing a user
    * password change.
    */
   password: string | null = null;
@@ -63,7 +63,7 @@ export class PasswordChange {
    *
    * @param reason               The reason for changing the password.
    * @param newPassword          The new password.
-   * @param password             The password for the user that is used to authorise the operation
+   * @param password             The password for the user that is used to authorize the operation
    *                             when performing a user password change.
    * @param securityCode         The security code when performing a forgotten password change.
    * @param expirePassword       Expire the user's password when performing an administrative
@@ -83,11 +83,11 @@ export class PasswordChange {
   ) {
     this.reason = reason;
     this.newPassword = newPassword;
-    this.password = !!password ? password : null;
-    this.securityCode = !!securityCode ? securityCode : null;
-    this.expirePassword = !!expirePassword ? expirePassword : null;
-    this.lockUser = !!lockUser ? lockUser : null;
-    this.resetPasswordHistory = !!resetPasswordHistory
+    this.password = password ? password : null;
+    this.securityCode = securityCode ? securityCode : null;
+    this.expirePassword = expirePassword ? expirePassword : null;
+    this.lockUser = lockUser ? lockUser : null;
+    this.resetPasswordHistory = resetPasswordHistory
       ? resetPasswordHistory
       : null;
   }

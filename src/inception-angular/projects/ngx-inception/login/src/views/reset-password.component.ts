@@ -19,13 +19,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  DialogService,
-  Error,
-  InformationDialogComponent,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService
+  AccessDeniedError, CoreModule, DialogService, Error, InformationDialogComponent,
+  InvalidArgumentError, ServiceUnavailableError, SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { SecurityService } from 'ngx-inception/security';
 import { catchError, finalize, first, Observable, throwError } from 'rxjs';
@@ -36,8 +31,10 @@ import { catchError, finalize, first, Observable, throwError } from 'rxjs';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'reset-password.component.html',
-  standalone: false
+  selector: 'inception-login-reset-password',
+  standalone: true,
+  imports: [CoreModule, ValidatedFormDirective],
+  templateUrl: 'reset-password.component.html'
 })
 export class ResetPasswordComponent implements OnInit {
   confirmNewPasswordControl: FormControl;
@@ -66,21 +63,18 @@ export class ResetPasswordComponent implements OnInit {
     private securityService: SecurityService,
     private spinnerService: SpinnerService
   ) {
-    // Initialise the form controls
+    // Initialize the form controls
     this.confirmNewPasswordControl = new FormControl('', [
       Validators.required,
       Validators.maxLength(100)
     ]);
-    this.newPasswordControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.newPasswordControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.usernameControl = new FormControl({
       value: '',
       disabled: true
     });
 
-    // Initialise the form
+    // Initialize the form
     this.resetPasswordForm = new FormGroup({
       confirmNewPassword: this.confirmNewPasswordControl,
       newPassword: this.newPasswordControl,
@@ -94,12 +88,10 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams
-      .pipe(first())
-      .subscribe((params: Params) => {
-        this.usernameControl.setValue(params['username']);
-        this.securityCode = params['securityCode'];
-      });
+    this.activatedRoute.queryParams.pipe(first()).subscribe((params: Params) => {
+      this.usernameControl.setValue(params['username']);
+      this.securityCode = params['securityCode'];
+    });
   }
 
   resetPassword(): void {
@@ -110,9 +102,7 @@ export class ResetPasswordComponent implements OnInit {
     const confirmNewPassword = this.confirmNewPasswordControl.value;
 
     if (newPassword !== confirmNewPassword) {
-      this.dialogService.showErrorDialog(
-        new Error('The passwords do not match.')
-      );
+      this.dialogService.showErrorDialog(new Error('The passwords do not match.'));
       return;
     }
 

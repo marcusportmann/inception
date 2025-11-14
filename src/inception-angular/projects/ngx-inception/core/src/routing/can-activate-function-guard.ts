@@ -40,6 +40,7 @@ export class CanActivateFunctionGuard {
     private sessionService: SessionService
   ) {}
 
+  // noinspection JSUnusedGlobalSymbols
   canActivate(
     activatedRouteSnapshot: ActivatedRouteSnapshot
   ): Observable<boolean> {

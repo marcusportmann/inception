@@ -16,21 +16,17 @@
 
 import { Component, forwardRef } from '@angular/core';
 import {
-  AbstractControl,
-  ControlValueAccessor,
-  FormControl,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-  Validators
+  ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors,
+  Validator, Validators
 } from '@angular/forms';
+import { CoreModule } from 'ngx-inception/core';
 import { UserDirectoryParameter } from '../services/user-directory-parameter';
 import { UserDirectoryUtil } from '../services/user-directory-util';
 
 @Component({
-  selector: 'inception-ldap-user-directory',
+  selector: 'inception-security-ldap-user-directory',
+  standalone: true,
+  imports: [CoreModule],
   templateUrl: 'ldap-user-directory.component.html',
   styleUrls: ['ldap-user-directory.component.css'],
   providers: [
@@ -44,12 +40,9 @@ import { UserDirectoryUtil } from '../services/user-directory-util';
       useExisting: forwardRef(() => LdapUserDirectoryComponent),
       multi: true
     }
-  ],
-  standalone: false
+  ]
 })
-export class LdapUserDirectoryComponent
-  implements ControlValueAccessor, Validator
-{
+export class LdapUserDirectoryComponent implements ControlValueAccessor, Validator {
   baseDNControl: FormControl;
 
   bindDNControl: FormControl;
@@ -109,23 +102,14 @@ export class LdapUserDirectoryComponent
   userUsernameAttributeControl: FormControl;
 
   constructor() {
-    // Initialise the form controls
-    this.baseDNControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(200)
-    ]);
-    this.bindDNControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(200)
-    ]);
+    // Initialize the form controls
+    this.baseDNControl = new FormControl('', [Validators.required, Validators.maxLength(200)]);
+    this.bindDNControl = new FormControl('', [Validators.required, Validators.maxLength(200)]);
     this.bindPasswordControl = new FormControl('', [
       Validators.required,
       Validators.maxLength(100)
     ]);
-    this.groupBaseDNControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(200)
-    ]);
+    this.groupBaseDNControl = new FormControl('', [Validators.required, Validators.maxLength(200)]);
     this.groupDescriptionAttributeControl = new FormControl('', [
       Validators.required,
       Validators.maxLength(100)
@@ -138,17 +122,12 @@ export class LdapUserDirectoryComponent
       Validators.required,
       Validators.maxLength(100)
     ]);
-    this.groupNamePrefixFilterControl = new FormControl('', [
-      Validators.maxLength(100)
-    ]);
+    this.groupNamePrefixFilterControl = new FormControl('', [Validators.maxLength(100)]);
     this.groupObjectClassControl = new FormControl('', [
       Validators.required,
       Validators.maxLength(100)
     ]);
-    this.hostControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.hostControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.maxFilteredGroupMembersControl = new FormControl('', [
       Validators.required,
       Validators.pattern('^\\d+$')
@@ -161,10 +140,7 @@ export class LdapUserDirectoryComponent
       Validators.required,
       Validators.pattern('^\\d+$')
     ]);
-    this.portControl = new FormControl('', [
-      Validators.required,
-      Validators.pattern('^\\d+$')
-    ]);
+    this.portControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
     this.supportsAdminChangePasswordControl = new FormControl('', [
       Validators.required,
       Validators.pattern('^(true|false)$')
@@ -185,10 +161,7 @@ export class LdapUserDirectoryComponent
       Validators.required,
       Validators.pattern('^(true|false)$')
     ]);
-    this.userBaseDNControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(200)
-    ]);
+    this.userBaseDNControl = new FormControl('', [Validators.required, Validators.maxLength(200)]);
     this.userObjectClassControl = new FormControl('', [
       Validators.required,
       Validators.maxLength(100)
@@ -222,7 +195,7 @@ export class LdapUserDirectoryComponent
       Validators.pattern('^(true|false)$')
     ]);
 
-    // Initialise the form
+    // Initialize the form
     this.ldapUserDirectoryForm = new FormGroup({
       baseDN: this.baseDNControl,
       bindDN: this.bindDNControl,
@@ -241,8 +214,7 @@ export class LdapUserDirectoryComponent
       supportsAdminChangePassword: this.supportsAdminChangePasswordControl,
       supportsChangePassword: this.supportsChangePasswordControl,
       supportsGroupAdministration: this.supportsGroupAdministrationControl,
-      supportsGroupMemberAdministration:
-        this.supportsGroupMemberAdministrationControl,
+      supportsGroupMemberAdministration: this.supportsGroupMemberAdministrationControl,
       supportsUserAdministration: this.supportsUserAdministrationControl,
       userBaseDN: this.userBaseDNControl,
       userObjectClass: this.userObjectClassControl,
@@ -259,26 +231,10 @@ export class LdapUserDirectoryComponent
   getParameters(): UserDirectoryParameter[] {
     const parameters: UserDirectoryParameter[] = [];
 
-    UserDirectoryUtil.setParameter(
-      parameters,
-      'BaseDN',
-      this.baseDNControl.value
-    );
-    UserDirectoryUtil.setParameter(
-      parameters,
-      'BindDN',
-      this.bindDNControl.value
-    );
-    UserDirectoryUtil.setParameter(
-      parameters,
-      'BindPassword',
-      this.bindPasswordControl.value
-    );
-    UserDirectoryUtil.setParameter(
-      parameters,
-      'GroupBaseDN',
-      this.groupBaseDNControl.value
-    );
+    UserDirectoryUtil.setParameter(parameters, 'BaseDN', this.baseDNControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'BindDN', this.bindDNControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'BindPassword', this.bindPasswordControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'GroupBaseDN', this.groupBaseDNControl.value);
     UserDirectoryUtil.setParameter(
       parameters,
       'GroupDescriptionAttribute',
@@ -346,11 +302,7 @@ export class LdapUserDirectoryComponent
       'SupportsUserAdministration',
       this.supportsUserAdministrationControl.value
     );
-    UserDirectoryUtil.setParameter(
-      parameters,
-      'UserBaseDN',
-      this.userBaseDNControl.value
-    );
+    UserDirectoryUtil.setParameter(parameters, 'UserBaseDN', this.userBaseDNControl.value);
     UserDirectoryUtil.setParameter(
       parameters,
       'UserObjectClass',
@@ -386,16 +338,14 @@ export class LdapUserDirectoryComponent
       'UserUsernameAttribute',
       this.userUsernameAttributeControl.value
     );
-    UserDirectoryUtil.setParameter(
-      parameters,
-      'UseSSL',
-      this.useSSLControl.value
-    );
+    UserDirectoryUtil.setParameter(parameters, 'UseSSL', this.useSSLControl.value);
 
     return parameters;
   }
 
-  onTouched: () => void = () => {};
+  onTouched: () => void = () => {
+    /* empty */
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
@@ -408,9 +358,11 @@ export class LdapUserDirectoryComponent
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled
-      ? this.ldapUserDirectoryForm.disable()
-      : this.ldapUserDirectoryForm.enable();
+    if (isDisabled) {
+      this.ldapUserDirectoryForm.disable();
+    } else {
+      this.ldapUserDirectoryForm.enable();
+    }
   }
 
   setParameters(parameters: UserDirectoryParameter[]) {
@@ -436,10 +388,7 @@ export class LdapUserDirectoryComponent
     );
     this.groupDescriptionAttributeControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'GroupDescriptionAttribute')
-        ? UserDirectoryUtil.getParameter(
-            parameters,
-            'GroupDescriptionAttribute'
-          )
+        ? UserDirectoryUtil.getParameter(parameters, 'GroupDescriptionAttribute')
         : 'description'
     );
     this.groupMemberAttributeControl.setValue(
@@ -489,10 +438,7 @@ export class LdapUserDirectoryComponent
     );
     this.supportsAdminChangePasswordControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'SupportsAdminChangePassword')
-        ? UserDirectoryUtil.getParameter(
-            parameters,
-            'SupportsAdminChangePassword'
-          )
+        ? UserDirectoryUtil.getParameter(parameters, 'SupportsAdminChangePassword')
         : ''
     );
     this.supportsChangePasswordControl.setValue(
@@ -502,29 +448,17 @@ export class LdapUserDirectoryComponent
     );
     this.supportsGroupAdministrationControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'SupportsGroupAdministration')
-        ? UserDirectoryUtil.getParameter(
-            parameters,
-            'SupportsGroupAdministration'
-          )
+        ? UserDirectoryUtil.getParameter(parameters, 'SupportsGroupAdministration')
         : ''
     );
     this.supportsGroupMemberAdministrationControl.setValue(
-      UserDirectoryUtil.hasParameter(
-        parameters,
-        'SupportsGroupMemberAdministration'
-      )
-        ? UserDirectoryUtil.getParameter(
-            parameters,
-            'SupportsGroupMemberAdministration'
-          )
+      UserDirectoryUtil.hasParameter(parameters, 'SupportsGroupMemberAdministration')
+        ? UserDirectoryUtil.getParameter(parameters, 'SupportsGroupMemberAdministration')
         : ''
     );
     this.supportsUserAdministrationControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'SupportsUserAdministration')
-        ? UserDirectoryUtil.getParameter(
-            parameters,
-            'SupportsUserAdministration'
-          )
+        ? UserDirectoryUtil.getParameter(parameters, 'SupportsUserAdministration')
         : ''
     );
     this.userBaseDNControl.setValue(
@@ -549,18 +483,12 @@ export class LdapUserDirectoryComponent
     );
     this.userPreferredNameAttributeControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserPreferredNameAttribute')
-        ? UserDirectoryUtil.getParameter(
-            parameters,
-            'UserPreferredNameAttribute'
-          )
+        ? UserDirectoryUtil.getParameter(parameters, 'UserPreferredNameAttribute')
         : 'nickName'
     );
     this.userMobileNumberAttributeControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserMobileNumberAttribute')
-        ? UserDirectoryUtil.getParameter(
-            parameters,
-            'UserMobileNumberAttribute'
-          )
+        ? UserDirectoryUtil.getParameter(parameters, 'UserMobileNumberAttribute')
         : 'mobile'
     );
     this.userPhoneNumberAttributeControl.setValue(
@@ -580,7 +508,7 @@ export class LdapUserDirectoryComponent
     );
   }
 
-  validate(c: AbstractControl): ValidationErrors | null {
+  validate(): ValidationErrors | null {
     return this.ldapUserDirectoryForm.valid
       ? null
       : {

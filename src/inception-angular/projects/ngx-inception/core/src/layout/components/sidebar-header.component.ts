@@ -23,14 +23,13 @@ import { Replace } from '../../util/replace';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'sidebar-header',
+  selector: 'inception-core-sidebar-header',
+  standalone: true,
   template: `
     <div class="sidebar-header">
       <ng-content></ng-content>
     </div>
-  `,
-  standalone: false
+  `
 })
 export class SidebarHeaderComponent implements OnInit {
   /**

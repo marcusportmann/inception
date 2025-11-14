@@ -74,14 +74,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    // Components
-    ExpiredPasswordComponent,
-    ForgottenPasswordComponent,
-    LoginComponent,
-    ResetPasswordComponent,
-    SelectTenantComponent
-  ],
   imports: [
     // Angular modules
     CommonModule,

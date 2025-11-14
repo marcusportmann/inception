@@ -28,8 +28,7 @@ const routes: Routes = [
   {
     path: 'menu31',
     pathMatch: 'prefix',
-    loadChildren: () =>
-      import('./menu31/menu31.module').then((m) => m.Menu31Module),
+    loadChildren: () => import('./menu31/menu31.module').then((m) => m.Menu31Module),
     data: {
       title: 'Menu 3.1'
     }
@@ -37,8 +36,7 @@ const routes: Routes = [
   {
     path: 'menu32',
     pathMatch: 'prefix',
-    loadChildren: () =>
-      import('./menu32/menu32.module').then((m) => m.Menu32Module),
+    loadChildren: () => import('./menu32/menu32.module').then((m) => m.Menu32Module),
     data: {
       title: 'Menu 3.2'
     }

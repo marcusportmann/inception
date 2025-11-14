@@ -34,10 +34,7 @@ const routes: Routes = [
     canActivate: [CanActivateFunctionGuard],
     component: ConfigsComponent,
     data: {
-      authorities: [
-        'ROLE_Administrator',
-        'FUNCTION_Config.ConfigAdministration'
-      ]
+      authorities: ['ROLE_Administrator', 'FUNCTION_Config.ConfigAdministration']
     }
   },
   {
@@ -46,10 +43,7 @@ const routes: Routes = [
     canActivate: [CanActivateFunctionGuard],
     component: NewConfigComponent,
     data: {
-      authorities: [
-        'ROLE_Administrator',
-        'FUNCTION_Config.ConfigAdministration'
-      ]
+      authorities: ['ROLE_Administrator', 'FUNCTION_Config.ConfigAdministration']
     },
     resolve: {
       title: NewConfigTitleResolver
@@ -72,10 +66,7 @@ const routes: Routes = [
         canActivate: [CanActivateFunctionGuard],
         component: EditConfigComponent,
         data: {
-          authorities: [
-            'ROLE_Administrator',
-            'FUNCTION_Config.ConfigAdministration'
-          ]
+          authorities: ['ROLE_Administrator', 'FUNCTION_Config.ConfigAdministration']
         },
         resolve: {
           title: EditConfigTitleResolver
@@ -86,12 +77,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    // Components
-    ConfigsComponent,
-    EditConfigComponent,
-    NewConfigComponent
-  ],
   imports: [
     // Angular modules
     CommonModule,
