@@ -59,7 +59,6 @@ export class ForgottenPasswordComponent {
   }
 
   cancel(): void {
-    // Navigate back
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], { relativeTo: this.activatedRoute });
   }

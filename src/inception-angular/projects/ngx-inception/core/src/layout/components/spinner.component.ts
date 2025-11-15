@@ -22,7 +22,8 @@ import { Component, ElementRef } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-spinner',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'spinner',
   standalone: true,
   template: ` <div class="spinner spinner-oval"></div>`,
   styles: [

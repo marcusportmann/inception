@@ -28,7 +28,8 @@ import { BackNavigation } from './back-navigation';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-title-bar',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'title-bar',
   standalone: true,
   imports: [NgIf, AsyncPipe],
   template: `

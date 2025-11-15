@@ -23,7 +23,8 @@ import { Replace } from '../../util/replace';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-sidebar-footer',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'sidebar-footer',
   standalone: true,
   template: ` <div class="sidebar-footer">
     <ng-content></ng-content>

@@ -35,12 +35,13 @@ import { SidebarNavItemComponent } from './sidebar-nav-item.component';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-sidebar-nav',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'sidebar-nav',
   standalone: true,
   template: ` <ul class="nav">
-    <inception-core-sidebar-nav-item
+    <sidebar-nav-item
       *ngFor="let navItem of navItems"
-      [navItem]="navItem"></inception-core-sidebar-nav-item>
+      [navItem]="navItem"></sidebar-nav-item>
   </ul>`,
   imports: [NgForOf, SidebarNavItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush

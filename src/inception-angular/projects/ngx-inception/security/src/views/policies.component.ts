@@ -30,7 +30,7 @@ import { PolicyType } from '../services/policy-type';
 import { SecurityService } from '../services/security.service';
 
 /**
- * The PolicesComponent class implements the policies component.
+ * The PolicesComponent class implements the Policies component.
  *
  * @author Marcus Portmann
  */

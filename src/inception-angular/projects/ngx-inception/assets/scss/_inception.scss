@@ -29,15 +29,15 @@ $border-radius: 0.25rem !default;
 $spacer: 1rem !default;
 
 // Breadcrumbs
-$breadcrumb-height: 35px;
-$breadcrumb-font-size: 0.8rem !default;
-$breadcrumb-line-height: 1rem !default;
-$breadcrumb-padding-y: 8px !default;
-$breadcrumb-padding-x: 8px !default;
-$breadcrumb-item-padding: 0.4rem !default;
-$breadcrumb-margin-bottom: 0 !default;
-$breadcrumb-divider: string.quote("/") !default;
-$breadcrumb-border-radius: $border-radius !default;
+$breadcrumbs-height: 35px;
+$breadcrumbs-font-size: 0.8rem !default;
+$breadcrumbs-line-height: 1rem !default;
+$breadcrumbs-padding-y: 8px !default;
+$breadcrumbs-padding-x: 8px !default;
+$breadcrumbs-item-padding: 0.4rem !default;
+$breadcrumbs-margin-bottom: 0 !default;
+$breadcrumbs-divider: string.quote("/") !default;
+$breadcrumbs-border-radius: $border-radius !default;
 
 // Layout
 $layout-transition-speed: 0.25s !default;
@@ -364,12 +364,12 @@ $theme-colors: (
   text-muted-color: #6c757d,
   table-caption-color: #6c757d,
 
-  breadcrumb-bg-color: #ffffff,
-  breadcrumb-divider-color: #536c79,
+  breadcrumbs-bg-color: #ffffff,
+  breadcrumbs-divider-color: #536c79,
   // Same as gray-600
-  breadcrumb-active-color: #536c79,
+  breadcrumbs-active-color: #536c79,
   // Same as gray-600
-  breadcrumb-border-color: #a4b7c1,
+  breadcrumbs-border-color: #a4b7c1,
 
   // Same as gray-300
   card-icon-color: #29363d,
@@ -410,11 +410,11 @@ $theme-colors: (
   sidebar-nav-link-hover-icon-color: #ffffff,
   sidebar-nav-link-hover-bg-color: #2196f3,
 
-  // Same as blue
+
   sidebar-nav-link-active-color: #ffffff,
   sidebar-nav-link-active-bg-color: color.adjust(#343a40, $lightness: 5%),
   sidebar-nav-link-active-icon-color: #2196f3,
-  // Same as blue
+
   sidebar-nav-link-bg-color: transparent,
   sidebar-nav-link-icon-color: #6c757d,
   sidebar-nav-dropdown-color: #ffffff,
@@ -524,11 +524,11 @@ $sidebar-minimizer-hover-indicator: str-replace(
 ) !default;
 
 // Breadcrumb
-$breadcrumb-borders: (
+$breadcrumbs-borders: (
   bottom: (
     size: 1px,
     style: solid,
-    color: map.get($theme-colors, breadcrumb-border-color)
+    color: map.get($theme-colors, breadcrumbs-border-color)
   )
 ) !default;
 
@@ -1000,18 +1000,18 @@ template {
 //   ____|_.__/|_|  \___|\__,_|\__,_|\___|_|   \__,_|_| |_| |_|_.__(_)___/\___|___/___/
 //  |_____|
 
-.breadcrumb {
+.breadcrumbs {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
-  background-color: map.get($theme-colors, breadcrumb-bg-color);
-  padding: $breadcrumb-padding-y $breadcrumb-padding-x;
-  margin-bottom: $breadcrumb-margin-bottom;
-  font-size: $breadcrumb-font-size;
-  line-height: $breadcrumb-line-height;
+  background-color: map.get($theme-colors, breadcrumbs-bg-color);
+  padding: $breadcrumbs-padding-y $breadcrumbs-padding-x;
+  margin-bottom: $breadcrumbs-margin-bottom;
+  font-size: $breadcrumbs-font-size;
+  line-height: $breadcrumbs-line-height;
 }
 
-.breadcrumb-item {
+.breadcrumbs-item {
   max-width: 300px;
   white-space: nowrap;
   overflow: hidden;
@@ -1019,13 +1019,13 @@ template {
 
   /* Separator (e.g. "/") between items */
   & + & {
-    padding-left: $breadcrumb-item-padding;
+    padding-left: $breadcrumbs-item-padding;
 
     &::before {
       float: left; // suppress inline spacing/underline
-      padding-right: $breadcrumb-item-padding;
-      color: map.get($theme-colors, breadcrumb-divider-color);
-      content: escape-svg($breadcrumb-divider);
+      padding-right: $breadcrumbs-item-padding;
+      color: map.get($theme-colors, breadcrumbs-divider-color);
+      content: escape-svg($breadcrumbs-divider);
     }
 
     /* IE9–11 hack: remove underline on separator when hovering */
@@ -1035,7 +1035,7 @@ template {
   }
 
   &.active {
-    color: map.get($theme-colors, breadcrumb-active-color);
+    color: map.get($theme-colors, breadcrumbs-active-color);
   }
 }
 
@@ -1433,7 +1433,7 @@ admin-root {
       }
     }
 
-    .breadcrumb {
+    .breadcrumbs {
       border-bottom: 1px solid map.get($theme-colors, gray-300);
     }
 
@@ -1683,7 +1683,7 @@ admin-root {
             }
           }
         }
-        .breadcrumb {
+        .breadcrumbs {
           left: $sidebar-width;
         }
         .title-bar {
@@ -1695,16 +1695,16 @@ admin-root {
           }
         }
         &.breadcrumbs-fixed {
-          .breadcrumb {
+          .breadcrumbs {
             left: $sidebar-width;
           }
           &.sidebar-compact {
-            .breadcrumb {
+            .breadcrumbs {
               left: $sidebar-compact-width;
             }
           }
           &.sidebar-minimized {
-            .breadcrumb {
+            .breadcrumbs {
               left: $sidebar-minimized-width;
             }
           }
@@ -1798,7 +1798,7 @@ admin-root {
 }
 
 // noinspection SassScssResolvedByNameOnly
-.breadcrumb {
+.breadcrumbs {
   transition:
     left $layout-transition-speed,
     right $layout-transition-speed,
@@ -1859,7 +1859,7 @@ admin-root {
     left: 0;
   }
 
-  .breadcrumb {
+  .breadcrumbs {
     display: none !important;
   }
 
@@ -2348,8 +2348,8 @@ $inception-theme: mat.m2-define-light-theme(
         }
 
         .mat-mdc-form-field-infix {
-          padding-top: 26px;
-          padding-bottom: 8px;
+          padding-top: 28px;
+          padding-bottom: 6px;
 
           .mat-mdc-floating-label {
             &:not(.mdc-floating-label--float-above) {

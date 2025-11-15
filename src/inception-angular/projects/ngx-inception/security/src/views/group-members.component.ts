@@ -20,7 +20,7 @@ import { MatSort } from '@angular/material/sort';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, SortDirection, TableFilterComponent
 } from 'ngx-inception/core';
-import { EMPTY, merge, Observable, Subject, tap } from 'rxjs';
+import { EMPTY, merge, Observable, Subject } from 'rxjs';
 import {
   catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
 } from 'rxjs/operators';
@@ -31,7 +31,7 @@ import { GroupMembers } from '../services/group-members';
 import { SecurityService } from '../services/security.service';
 
 /**
- * The GroupMembersComponent class implements the group members component.
+ * The GroupMembersComponent class implements the Group Members component.
  *
  * @author Marcus Portmann
  */
@@ -43,13 +43,13 @@ import { SecurityService } from '../services/security.service';
   styleUrls: ['group-members.component.css']
 })
 export class GroupMembersComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-  dataSource: GroupMemberDataSource;
+  readonly dataSource: GroupMemberDataSource;
 
-  displayedColumns = ['memberName', 'memberType', 'actions'];
+  readonly displayedColumns: readonly string[] = ['memberName', 'memberType', 'actions'];
 
-  groupName: string;
+  readonly groupName: string;
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
+  @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
@@ -60,28 +60,24 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
 
   readonly title = $localize`:@@security_group_members_title:Group Members`;
 
-  userDirectoryId: string;
+  readonly userDirectoryId: string;
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   constructor(private securityService: SecurityService) {
     super();
 
     // Retrieve the route parameters
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
-
     if (!userDirectoryId) {
       throw new Error('No userDirectoryId route parameter found');
     }
-
     this.userDirectoryId = decodeURIComponent(userDirectoryId);
 
     const groupName = this.activatedRoute.snapshot.paramMap.get('groupName');
-
     if (!groupName) {
       throw new Error('No groupName route parameter found');
     }
-
     this.groupName = decodeURIComponent(groupName);
 
     this.dataSource = new GroupMemberDataSource(this.securityService);
@@ -100,7 +96,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
 
   addMemberToGroup(): void {
     // // noinspection JSIgnoredPromiseFromCall
-    // this.router.navigate(['new'], {relativeTo: this.activatedRoute});
+    // this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   groupMemberTypeName(groupMemberType: GroupMemberType): string {
@@ -124,8 +120,24 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
   }
 
   removeMemberFromGroup(groupMember: GroupMember): void {
+    this.confirmAndProcessAction(
+      $localize`:@@security_group_members_confirm_remove_member_from_group:Are you sure you want to remove the group member from the group?`,
+      () =>
+        this.securityService.removeMemberFromGroup(
+          this.userDirectoryId,
+          this.groupName,
+          groupMember.memberType,
+          groupMember.memberName
+        )
+    );
+  }
+
+  private confirmAndProcessAction(
+    confirmationMessage: string,
+    action: () => Observable<unknown>
+  ): void {
     const dialogRef = this.dialogService.showConfirmationDialog({
-      message: $localize`:@@security_group_members_confirm_remove_member_from_group:Are you sure you want to remove the group member from the group?`
+      message: confirmationMessage
     });
 
     dialogRef
@@ -133,42 +145,30 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
       .pipe(
         first(),
         filter((confirmed) => confirmed === true),
-        tap(() => this.spinnerService.showSpinner()),
-        switchMap(() =>
-          this.securityService
-            .removeMemberFromGroup(
-              this.userDirectoryId,
-              this.groupName,
-              groupMember.memberType,
-              groupMember.memberName
-            )
-            .pipe(
-              tap(() => this.resetTable()),
-              // After delete completes, reload members
-              switchMap(() =>
-                this.loadGroupMembers().pipe(
-                  catchError((error: Error) => {
-                    this.handleError(error, false);
-                    return EMPTY;
-                  })
-                )
-              ),
-              catchError((error: Error) => {
-                this.handleError(error, false);
-                return EMPTY;
-              }),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-        ),
+        switchMap(() => {
+          this.spinnerService.showSpinner();
+
+          return action().pipe(
+            switchMap(() => {
+              this.resetTable();
+              return this.loadGroupMembers();
+            }),
+            catchError((error: Error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
+            finalize(() => this.spinnerService.hideSpinner())
+          );
+        }),
         takeUntil(this.destroy$)
       )
       .subscribe();
   }
 
   private initializeDataLoaders(): void {
-    this.sort.sortChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => (this.paginator.pageIndex = 0));
+    this.sort.sortChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.paginator.pageIndex = 0;
+    });
 
     merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
       .pipe(debounceTime(200), takeUntil(this.destroy$))
@@ -177,18 +177,19 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
 
   private loadData(): void {
     this.spinnerService.showSpinner();
+
     this.loadGroupMembers()
       .pipe(finalize(() => this.spinnerService.hideSpinner()))
       .subscribe({
         next: () => {
-          // Load complete
+          /* empty */
         },
         error: (error) => this.handleError(error, false)
       });
   }
 
   private loadGroupMembers(): Observable<GroupMembers> {
-    const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
+    const filterValue = this.tableFilter.filter?.trim().toLowerCase() || '';
 
     let sortDirection = SortDirection.Descending;
 
@@ -200,7 +201,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
     return this.dataSource.load(
       this.userDirectoryId,
       this.groupName,
-      filter,
+      filterValue,
       sortDirection,
       this.paginator.pageIndex,
       this.paginator.pageSize
@@ -211,6 +212,6 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
     this.tableFilter.reset(false);
     this.paginator.pageIndex = 0;
     this.sort.active = '';
-    this.sort.direction = 'asc' as SortDirection;
+    this.sort.direction = 'asc';
   }
 }

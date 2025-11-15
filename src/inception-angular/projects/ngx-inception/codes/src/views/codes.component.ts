@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, HostBinding } from '@angular/core';
 import {
-  AdminContainerView, BackNavigation, ConfirmationDialogComponent, CoreModule, Error,
-  TableFilterComponent
+  BackNavigation, CoreModule, Error, FilteredPaginatedListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
 import { Code } from '../services/code';
 import { CodesService } from '../services/codes.service';
 
 /**
- * The CodesComponent class implements the codes component.
+ * The CodesComponent class implements the Codes component.
  *
  * @author Marcus Portmann
  */
@@ -39,18 +35,14 @@ import { CodesService } from '../services/codes.service';
   imports: [CoreModule, TableFilterComponent],
   styleUrls: ['codes.component.css']
 })
-export class CodesComponent extends AdminContainerView implements AfterViewInit {
-  codeCategoryId: string;
+export class CodesComponent extends FilteredPaginatedListView<Code> {
+  readonly codeCategoryId: string;
 
-  dataSource: MatTableDataSource<Code> = new MatTableDataSource<Code>();
+  readonly displayedColumns: readonly string[] = ['id', 'name', 'actions'];
 
-  displayedColumns = ['id', 'name', 'actions'];
+  @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  readonly listKey: string;
 
   readonly title = $localize`:@@codes_codes_title:Codes`;
 
@@ -64,9 +56,7 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
     }
     this.codeCategoryId = decodeURIComponent(codeCategoryId);
 
-    // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean =>
-      data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
+    this.listKey = `codes.${this.codeCategoryId}`;
   }
 
   override get backNavigation(): BackNavigation {
@@ -77,31 +67,11 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
     );
   }
 
-  applyFilter(filterValue: string): void {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
   deleteCode(codeId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
-      this.dialogService.showConfirmationDialog({
-        message: $localize`:@@codes_codes_confirm_delete_code:Are you sure you want to delete the code?`
-      });
-
-    dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe((confirmed: boolean | undefined) => {
-        if (confirmed) {
-          this.spinnerService.showSpinner();
-          this.codesService
-            .deleteCode(this.codeCategoryId, codeId)
-            .pipe(finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe({
-              next: () => this.loadCodes(),
-              error: (error) => this.handleError(error, false)
-            });
-        }
-      });
+    this.confirmAndProcessAction(
+      $localize`:@@codes_codes_confirm_delete_code:Are you sure you want to delete the code?`,
+      () => this.codesService.deleteCode(this.codeCategoryId, codeId)
+    );
   }
 
   editCode(codeId: string): void {
@@ -111,25 +81,73 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
     });
   }
 
-  loadCodes(): void {
-    this.spinnerService.showSpinner();
-    this.codesService
-      .getCodesForCodeCategory(this.codeCategoryId)
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe({
-        next: (codes: Code[]) => (this.dataSource.data = codes),
-        error: (error) => this.handleError(error, false)
-      });
-  }
-
   newCode(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.loadCodes();
+  protected override createFilterPredicate(): (data: Code, filter: string) => boolean {
+    return (data: Code, filter: string): boolean => {
+      const normalizedFilter = (filter ?? '').toLowerCase();
+      const id = (data.id ?? '').toLowerCase();
+      const name = (data.name ?? '').toLowerCase();
+      return id.includes(normalizedFilter) || name.includes(normalizedFilter);
+    };
+  }
+
+  protected override loadData(): void {
+    this.spinnerService.showSpinner();
+    this.codesService
+      .getCodesForCodeCategory(this.codeCategoryId)
+      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe({
+        next: (codes: Code[]) => {
+          this.dataSource.data = codes;
+
+          this.restorePageAfterDataLoaded();
+        },
+        error: (error) => this.handleError(error, false)
+      });
+  }
+
+  private confirmAndProcessAction(
+    confirmationMessage: string,
+    action: () => Observable<void | boolean>
+  ): void {
+    const dialogRef = this.dialogService.showConfirmationDialog({
+      message: confirmationMessage
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        filter((confirmed) => confirmed === true),
+        switchMap(() => {
+          this.spinnerService.showSpinner();
+
+          return action().pipe(
+            catchError((error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
+            switchMap(() =>
+              this.codesService.getCodesForCodeCategory(this.codeCategoryId).pipe(
+                catchError((error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
+              )
+            ),
+            finalize(() => this.spinnerService.hideSpinner())
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (codes) => {
+          this.dataSource.data = codes;
+        }
+      });
   }
 }

@@ -32,7 +32,8 @@ import { SidebarTogglerDirective } from '../directives/sidebar-toggler.directive
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-admin-header',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'admin-header',
   standalone: true,
   imports: [SidebarTogglerDirective, MatMenuTrigger, AsyncPipe, MatMenu, MatMenuItem, NgIf],
   template: `

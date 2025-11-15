@@ -14,92 +14,57 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, HostBinding } from '@angular/core';
 import {
-  AdminContainerView, ConfirmationDialogComponent, CoreModule, Error, TableFilterComponent
+  CoreModule, Error, FilteredPaginatedListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
 import { Job } from '../services/job';
 import { JobStatus } from '../services/job-status';
 import { SchedulerService } from '../services/scheduler.service';
 
 /**
- * The JobsComponent class implements the jobs component.
+ * The JobsComponent class implements the Jobs component.
  *
  * @author Marcus Portmann
  */
 @Component({
   selector: 'inception-scheduler-jobs',
+  standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'jobs.component.html',
   styleUrls: ['jobs.component.css']
 })
-export class JobsComponent extends AdminContainerView implements AfterViewInit {
-  JobStatus = JobStatus;
+export class JobsComponent extends FilteredPaginatedListView<Job> {
+  // noinspection JSUnusedGlobalSymbols
+  readonly JobStatus = JobStatus;
 
-  dataSource: MatTableDataSource<Job> = new MatTableDataSource<Job>();
+  readonly displayedColumns: readonly string[] = [
+    'name',
+    'status',
+    'executionAttempts',
+    'nextExecution',
+    'actions'
+  ];
 
-  displayedColumns = ['name', 'status', 'executionAttempts', 'nextExecution', 'actions'];
+  readonly getJobStatusDescription = SchedulerService.getJobStatusDescription;
 
-  getJobStatusDescription = SchedulerService.getJobStatusDescription;
+  @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  readonly listKey = 'scheduler.jobs';
 
   readonly title = $localize`:@@scheduler_jobs_title:Jobs`;
 
   constructor(private schedulerService: SchedulerService) {
     super();
-
-    // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean =>
-      data.name.toLowerCase().includes(filter);
-  }
-
-  applyFilter(filterValue: string): void {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
   }
 
   deleteJob(jobId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
-      this.dialogService.showConfirmationDialog({
-        message: $localize`:@@scheduler_jobs_confirm_delete_job:Are you sure you want to delete the job?`
-      });
-
-    dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe({
-        next: (confirmation: boolean | undefined) => {
-          if (confirmation !== true) {
-            return;
-          }
-
-          this.spinnerService.showSpinner();
-
-          this.schedulerService
-            .deleteJob(jobId)
-            .pipe(
-              first(),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe({
-              next: () => {
-                this.loadJobs();
-              },
-              error: (error: Error) => this.handleError(error, false)
-            });
-        }
-      });
+    this.confirmAndProcessAction(
+      $localize`:@@scheduler_jobs_confirm_delete_job:Are you sure you want to delete the job?`,
+      () => this.schedulerService.deleteJob(jobId)
+    );
   }
 
   editJob(jobId: string): void {
@@ -109,32 +74,73 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
     });
   }
 
-  loadJobs(): void {
-    this.spinnerService.showSpinner();
-
-    this.schedulerService
-      .getJobs()
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (jobs: Job[]) => {
-          this.dataSource.data = jobs;
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
-  }
-
   newJob(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  protected override createFilterPredicate(): (data: Job, filter: string) => boolean {
+    return (data: Job, filter: string): boolean => {
+      const normalized = (filter ?? '').toLowerCase();
+      const name = (data.name ?? '').toLowerCase();
+      return name.includes(normalized);
+    };
+  }
 
-    this.loadJobs();
+  protected override loadData(): void {
+    this.spinnerService.showSpinner();
+
+    this.schedulerService
+      .getJobs()
+      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe({
+        next: (jobs: Job[]) => {
+          this.dataSource.data = jobs;
+
+          this.restorePageAfterDataLoaded();
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
+  }
+
+  private confirmAndProcessAction(
+    confirmationMessage: string,
+    action: () => Observable<void | boolean>
+  ): void {
+    const dialogRef = this.dialogService.showConfirmationDialog({
+      message: confirmationMessage
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        filter((confirmed) => confirmed === true),
+        switchMap(() => {
+          this.spinnerService.showSpinner();
+
+          return action().pipe(
+            catchError((error: Error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
+            switchMap(() =>
+              this.schedulerService.getJobs().pipe(
+                catchError((error: Error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
+              )
+            ),
+            finalize(() => this.spinnerService.hideSpinner())
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (jobs) => {
+          this.dataSource.data = jobs;
+        }
+      });
   }
 }

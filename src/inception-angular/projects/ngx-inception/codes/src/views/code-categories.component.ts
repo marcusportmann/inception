@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { AdminContainerView, CoreModule, TableFilterComponent } from 'ngx-inception/core';
-import { EMPTY, merge, Observable, Subject } from 'rxjs';
-import {
-  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil, tap
-} from 'rxjs/operators';
+import { Component, HostBinding } from '@angular/core';
+import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
+
 import { CodeCategorySummary } from '../services/code-category-summary';
 import { CodesService } from '../services/codes.service';
 
 /**
- * The CodeCategoriesComponent class implements the code categories component.
+ * The CodeCategoriesComponent class implements the Code Categories component.
  *
  * @author Marcus Portmann
  */
@@ -38,39 +34,22 @@ import { CodesService } from '../services/codes.service';
   imports: [CoreModule, TableFilterComponent],
   styleUrls: ['code-categories.component.css']
 })
-export class CodeCategoriesComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
-  dataSource: MatTableDataSource<CodeCategorySummary> =
-    new MatTableDataSource<CodeCategorySummary>();
+export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCategorySummary> {
+  readonly displayedColumns: readonly string[] = ['id', 'name', 'actions'];
 
-  displayedColumns = ['id', 'name', 'actions'];
+  @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  readonly listKey = 'codes.code-categories';
 
   readonly title = $localize`:@@codes_code_categories_title:Code Categories`;
 
-  private destroy$ = new Subject<void>();
-
   constructor(private codesService: CodesService) {
     super();
-
-    // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean =>
-      data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
-  }
-
-  applyFilter(filterValue: string): void {
-    filterValue = filterValue.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
   }
 
   codesAdministration(codeCategoryId: string): void {
+    this.listStateService.clear('codes.' + codeCategoryId);
+
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate([encodeURIComponent(codeCategoryId) + '/codes'], {
       relativeTo: this.activatedRoute
@@ -96,17 +75,33 @@ export class CodeCategoriesComponent
     this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  protected override createFilterPredicate(): (
+    data: CodeCategorySummary,
+    filter: string
+  ) => boolean {
+    return (data: CodeCategorySummary, filter: string): boolean => {
+      const normalizedFilter = (filter ?? '').toLowerCase();
+      const id = (data.id ?? '').toLowerCase();
+      const name = (data.name ?? '').toLowerCase();
 
-    this.initializeDataLoaders();
-    this.loadData();
+      return id.includes(normalizedFilter) || name.includes(normalizedFilter);
+    };
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  protected override loadData(): void {
+    this.spinnerService.showSpinner();
+
+    this.codesService
+      .getCodeCategorySummaries()
+      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe({
+        next: (codeCategorySummaries) => {
+          this.dataSource.data = codeCategorySummaries;
+
+          this.restorePageAfterDataLoaded();
+        },
+        error: (error) => this.handleError(error, false)
+      });
   }
 
   private confirmAndProcessAction(
@@ -124,40 +119,29 @@ export class CodeCategoriesComponent
         filter((confirmed) => confirmed === true),
         switchMap(() => {
           this.spinnerService.showSpinner();
+
           return action().pipe(
             catchError((error) => {
               this.handleError(error, false);
               return EMPTY;
             }),
-            tap(() => this.loadData()),
+            switchMap(() =>
+              this.codesService.getCodeCategorySummaries().pipe(
+                catchError((error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
+              )
+            ),
             finalize(() => this.spinnerService.hideSpinner())
           );
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe();
-  }
-
-  private initializeDataLoaders(): void {
-    this.sort.sortChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => (this.paginator.pageIndex = 0));
-
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(debounceTime(200), takeUntil(this.destroy$))
-      .subscribe(() => this.loadData());
-  }
-
-  private loadData(): void {
-    this.spinnerService.showSpinner();
-    this.codesService
-      .getCodeCategorySummaries()
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
       .subscribe({
         next: (codeCategorySummaries) => {
           this.dataSource.data = codeCategorySummaries;
-        },
-        error: (error) => this.handleError(error, false)
+        }
       });
   }
 }

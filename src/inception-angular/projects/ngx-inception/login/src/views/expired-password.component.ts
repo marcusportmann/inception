@@ -77,7 +77,6 @@ export class ExpiredPasswordComponent implements OnInit {
   }
 
   cancel(): void {
-    // Navigate back
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], { relativeTo: this.activatedRoute });
   }

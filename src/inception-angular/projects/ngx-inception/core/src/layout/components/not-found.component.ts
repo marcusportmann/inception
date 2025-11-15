@@ -22,7 +22,8 @@ import { Component } from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-not-found',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'not-found',
   standalone: true,
   template: `
     <div class="app flex-row align-items-center">

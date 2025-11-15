@@ -14,88 +14,46 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, HostBinding } from '@angular/core';
 import {
-  AdminContainerView, ConfirmationDialogComponent, CoreModule, Error, TableFilterComponent
+  CoreModule, Error, FilteredPaginatedListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
+
 import { ReportDefinitionSummary } from '../services/report-definition-summary';
 import { ReportingService } from '../services/reporting.service';
 
 /**
  * The ReportDefinitionsComponent class implements the Report Definitions component.
  *
- * @author Marcus Portmann
+ * @author Marcus
  */
 @Component({
   selector: 'inception-reporting-report-definitions',
+  standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'report-definitions.component.html',
   styleUrls: ['report-definitions.component.css']
 })
-export class ReportDefinitionsComponent extends AdminContainerView implements AfterViewInit {
-  dataSource: MatTableDataSource<ReportDefinitionSummary> =
-    new MatTableDataSource<ReportDefinitionSummary>();
+export class ReportDefinitionsComponent extends FilteredPaginatedListView<ReportDefinitionSummary> {
+  readonly displayedColumns: readonly string[] = ['name', 'actions'];
 
-  displayedColumns = ['name', 'actions'];
+  @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  readonly listKey = 'reporting.report-definitions';
 
   readonly title = $localize`:@@reporting_report_definitions_title:Report Definitions`;
 
   constructor(private reportingService: ReportingService) {
     super();
-
-    // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean =>
-      data.name.toLowerCase().includes(filter);
-  }
-
-  applyFilter(filterValue: string): void {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
   }
 
   deleteReportDefinition(reportDefinitionId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
-      this.dialogService.showConfirmationDialog({
-        message: $localize`:@@reporting_report_definitions_confirm_delete_report_definition:Are you sure you want to delete the report definition?`
-      });
-
-    dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe({
-        next: (confirmation: boolean | undefined) => {
-          if (confirmation !== true) {
-            return;
-          }
-
-          this.spinnerService.showSpinner();
-
-          this.reportingService
-            .deleteReportDefinition(reportDefinitionId)
-            .pipe(
-              first(),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe({
-              next: () => {
-                this.loadReportDefinitions();
-              },
-              error: (error: Error) => this.handleError(error, false)
-            });
-        }
-      });
+    this.confirmAndProcessAction(
+      $localize`:@@reporting_report_definitions_confirm_delete_report_definition:Are you sure you want to delete the report definition?`,
+      () => this.reportingService.deleteReportDefinition(reportDefinitionId)
+    );
   }
 
   editReportDefinition(reportDefinitionId: string): void {
@@ -105,32 +63,79 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
     });
   }
 
-  loadReportDefinitions(): void {
-    this.spinnerService.showSpinner();
-
-    this.reportingService
-      .getReportDefinitionSummaries()
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (reportDefinitionSummaries: ReportDefinitionSummary[]) => {
-          this.dataSource.data = reportDefinitionSummaries;
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
-  }
-
   newReportDefinition(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  protected override createFilterPredicate(): (
+    data: ReportDefinitionSummary,
+    filter: string
+  ) => boolean {
+    return (data: ReportDefinitionSummary, filter: string): boolean => {
+      const normalizedFilter = (filter ?? '').toLowerCase();
+      const name = (data.name ?? '').toLowerCase();
 
-    this.loadReportDefinitions();
+      return name.includes(normalizedFilter);
+    };
+  }
+
+  protected override loadData(): void {
+    this.spinnerService.showSpinner();
+
+    this.reportingService
+      .getReportDefinitionSummaries()
+      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe({
+        next: (reportDefinitionSummaries: ReportDefinitionSummary[]) => {
+          this.dataSource.data = reportDefinitionSummaries;
+
+          this.restorePageAfterDataLoaded();
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
+  }
+
+  private confirmAndProcessAction(
+    confirmationMessage: string,
+    action: () => Observable<void | boolean>
+  ): void {
+    const dialogRef = this.dialogService.showConfirmationDialog({
+      message: confirmationMessage
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        filter((confirmed) => confirmed === true),
+        switchMap(() => {
+          this.spinnerService.showSpinner();
+
+          return action().pipe(
+            catchError((error: Error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
+            switchMap(() =>
+              this.reportingService.getReportDefinitionSummaries().pipe(
+                catchError((error: Error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
+              )
+            ),
+            finalize(() => this.spinnerService.hideSpinner())
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (reportDefinitionSummaries: ReportDefinitionSummary[]) => {
+          this.dataSource.data = reportDefinitionSummaries;
+
+          this.restorePageAfterDataLoaded();
+        }
+      });
   }
 }

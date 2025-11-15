@@ -23,7 +23,8 @@ import { RouterOutlet } from '@angular/router';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-simple-container',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'simple-container',
   standalone: true,
   imports: [RouterOutlet],
   template: '<router-outlet></router-outlet>'

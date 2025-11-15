@@ -33,7 +33,7 @@ import { TokenSummaryDataSource } from '../services/token-summary-data-source';
 import { TokenType } from '../services/token-type';
 
 /**
- * The TokensComponent class implements the tokens component.
+ * The TokensComponent class implements the Tokens component.
  *
  * @author Marcus Portmann
  */

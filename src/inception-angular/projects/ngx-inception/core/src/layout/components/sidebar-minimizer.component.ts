@@ -25,7 +25,8 @@ import { SidebarMinimizerDirective } from '../directives/sidebar-minimizer.direc
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-sidebar-minimizer',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'sidebar-minimizer',
   standalone: true,
   imports: [SidebarMinimizerDirective, BrandMinimizerDirective],
   template: `

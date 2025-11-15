@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, HostBinding } from '@angular/core';
 import {
-  AdminContainerView, ConfirmationDialogComponent, CoreModule, Error, TableFilterComponent
+  CoreModule, Error, FilteredPaginatedListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
+
 import { MailTemplateContentType } from '../services/mail-template-content-type';
 import { MailTemplateSummary } from '../services/mail-template-summary';
 import { MailService } from '../services/mail.service';
 
 /**
- * The MailTemplatesComponent class implements the mail templates component.
+ * The MailTemplatesComponent class implements the Mail Templates component.
  *
- * @author Marcus Portmann
+ * @author Marcus
  */
 @Component({
   selector: 'inception-mail-mail-templates',
@@ -39,70 +37,30 @@ import { MailService } from '../services/mail.service';
   templateUrl: 'mail-templates.component.html',
   styleUrls: ['mail-templates.component.css']
 })
-export class MailTemplatesComponent extends AdminContainerView implements AfterViewInit {
+export class MailTemplatesComponent extends FilteredPaginatedListView<MailTemplateSummary> {
   // noinspection JSUnusedGlobalSymbols
-  MailTemplateContentType = MailTemplateContentType;
+  readonly MailTemplateContentType = MailTemplateContentType;
 
-  dataSource: MatTableDataSource<MailTemplateSummary> =
-    new MatTableDataSource<MailTemplateSummary>();
+  readonly displayedColumns: readonly string[] = ['name', 'contentType', 'actions'];
 
-  displayedColumns = ['name', 'contentType', 'actions'];
+  readonly getMailTemplateContentTypeDescription =
+    MailService.getMailTemplateContentTypeDescription;
 
-  getMailTemplateContentTypeDescription = MailService.getMailTemplateContentTypeDescription;
+  @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  readonly listKey = 'mail.mail-templates';
 
   readonly title = $localize`:@@mail_mail_templates_title:Mail Templates`;
 
   constructor(private mailService: MailService) {
     super();
-
-    // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean =>
-      data.name.toLowerCase().includes(filter);
-  }
-
-  applyFilter(filterValue: string): void {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
   }
 
   deleteMailTemplate(mailTemplateId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
-      this.dialogService.showConfirmationDialog({
-        message: $localize`:@@mail_mail_templates_confirm_delete_mail_template:Are you sure you want to delete the mail template?`
-      });
-
-    dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe({
-        next: (confirmation: boolean | undefined) => {
-          if (confirmation !== true) {
-            return;
-          }
-
-          this.spinnerService.showSpinner();
-
-          this.mailService
-            .deleteMailTemplate(mailTemplateId)
-            .pipe(
-              first(),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe({
-              next: () => {
-                this.loadMailTemplates();
-              },
-              error: (error: Error) => this.handleError(error, false)
-            });
-        }
-      });
+    this.confirmAndProcessAction(
+      $localize`:@@mail_mail_templates_confirm_delete_mail_template:Are you sure you want to delete the mail template?`,
+      () => this.mailService.deleteMailTemplate(mailTemplateId)
+    );
   }
 
   editMailTemplate(mailTemplateId: string): void {
@@ -112,32 +70,79 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
     });
   }
 
-  loadMailTemplates(): void {
-    this.spinnerService.showSpinner();
-
-    this.mailService
-      .getMailTemplateSummaries()
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (mailTemplateSummaries: MailTemplateSummary[]) => {
-          this.dataSource.data = mailTemplateSummaries;
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
-  }
-
   newMailTemplate(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  protected override createFilterPredicate(): (
+    data: MailTemplateSummary,
+    filter: string
+  ) => boolean {
+    return (data: MailTemplateSummary, filter: string): boolean => {
+      const normalizedFilter = (filter ?? '').toLowerCase();
+      const name = (data.name ?? '').toLowerCase();
 
-    this.loadMailTemplates();
+      return name.includes(normalizedFilter);
+    };
+  }
+
+  protected override loadData(): void {
+    this.spinnerService.showSpinner();
+
+    this.mailService
+      .getMailTemplateSummaries()
+      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe({
+        next: (mailTemplateSummaries: MailTemplateSummary[]) => {
+          this.dataSource.data = mailTemplateSummaries;
+
+          this.restorePageAfterDataLoaded();
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
+  }
+
+  private confirmAndProcessAction(
+    confirmationMessage: string,
+    action: () => Observable<void | boolean>
+  ): void {
+    const dialogRef = this.dialogService.showConfirmationDialog({
+      message: confirmationMessage
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        filter((confirmed) => confirmed === true),
+        switchMap(() => {
+          this.spinnerService.showSpinner();
+
+          return action().pipe(
+            catchError((error: Error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
+            switchMap(() =>
+              this.mailService.getMailTemplateSummaries().pipe(
+                catchError((error: Error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
+              )
+            ),
+            finalize(() => this.spinnerService.hideSpinner())
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (mailTemplateSummaries: MailTemplateSummary[]) => {
+          this.dataSource.data = mailTemplateSummaries;
+
+          this.restorePageAfterDataLoaded();
+        }
+      });
   }
 }

@@ -44,7 +44,8 @@ import { TitleBarComponent } from './title-bar.component';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-admin-container',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'admin-container',
   standalone: true,
   imports: [
     AdminHeaderComponent,
@@ -58,23 +59,23 @@ import { TitleBarComponent } from './title-bar.component';
     BreadcrumbsComponent
   ],
   template: `
-    <inception-core-admin-header
+    <admin-header
       [fixed]="true"
       [sidebarToggler]="'lg'">
-    </inception-core-admin-header>
+    </admin-header>
 
     <div class="admin-body">
-      <inception-core-sidebar [fixed]="true" [display]="'lg'">
-        <inception-core-sidebar-nav
+      <sidebar class="sidebar" [fixed]="true" [display]="'lg'">
+        <sidebar-nav
           [perfectScrollbar]
           [disabled]="sidebarMinimized">
-        </inception-core-sidebar-nav>
-        <inception-core-sidebar-minimizer></inception-core-sidebar-minimizer>
-      </inception-core-sidebar>
+        </sidebar-nav>
+        <sidebar-minimizer></sidebar-minimizer>
+      </sidebar>
 
       <main class="main">
-        <inception-core-title-bar [fixed]="true"></inception-core-title-bar>
-        <inception-core-breadcrumbs [fixed]="true"></inception-core-breadcrumbs>
+        <title-bar [fixed]="true"></title-bar>
+        <breadcrumbs [fixed]="true"></breadcrumbs>
 
         <div class="container-fluid">
           <router-outlet
@@ -85,9 +86,9 @@ import { TitleBarComponent } from './title-bar.component';
       </main>
     </div>
 
-    <inception-core-admin-footer [fixed]="false">
+    <admin-footer [fixed]="false">
       <span>2025 &copy; <span class="copyright-name"></span></span>
-    </inception-core-admin-footer>
+    </admin-footer>
   `
 })
 export class AdminContainerComponent implements OnInit, OnDestroy {

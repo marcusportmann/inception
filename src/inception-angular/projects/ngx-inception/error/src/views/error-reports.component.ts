@@ -85,7 +85,7 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
     }
   }
 
-  dateRangeFilter(toDateCheck: Date | null): boolean {
+  dateRangeFilter = (toDateCheck: Date | null): boolean => {
     if (!toDateCheck) {
       return false;
     }
@@ -93,15 +93,14 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
     const minAllowed = add(new Date(), { years: -1 });
     const maxAllowed = new Date();
 
-    // Optional: also enforce toDate >= fromDate
-    const fromValue = this.fromDateControl.value as Date | null;
+    const fromValue = this.fromDateControl?.value as Date | null;
     const effectiveMin = fromValue && fromValue > minAllowed ? fromValue : minAllowed;
 
     return isWithinInterval(toDateCheck, {
       start: effectiveMin,
       end: maxAllowed
     });
-  }
+  };
 
   ngAfterViewInit(): void {
     this.initializeDataLoaders();

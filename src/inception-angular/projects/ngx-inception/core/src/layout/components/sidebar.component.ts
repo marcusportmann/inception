@@ -25,7 +25,8 @@ import { SIDEBAR_CSS_CLASSES } from './sidebar-css-classes';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-sidebar',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'sidebar',
   standalone: true,
   template: ` <ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -66,10 +67,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
       (sidebarMinimized: boolean) => {
         if (sidebarMinimized) {
           if (bodySelector) {
+            bodySelector.classList.add('admin-brand-minimized');
             bodySelector.classList.add('sidebar-minimized');
           }
         } else {
           if (bodySelector) {
+            bodySelector.classList.remove('admin-brand-minimized');
             bodySelector.classList.remove('sidebar-minimized');
           }
         }

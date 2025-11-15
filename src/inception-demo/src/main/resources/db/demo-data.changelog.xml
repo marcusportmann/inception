@@ -826,6 +826,78 @@
       <column name="name" value="Test Code Name 1.3"/>
       <column name="value" value="Test Code Value 1.3"/>
     </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode014"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.4"/>
+      <column name="value" value="Test Code Value 1.4"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode015"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.5"/>
+      <column name="value" value="Test Code Value 1.5"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode016"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.6"/>
+      <column name="value" value="Test Code Value 1.6"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode017"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.7"/>
+      <column name="value" value="Test Code Value 1.7"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode018"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.8"/>
+      <column name="value" value="Test Code Value 1.8"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode019"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.9"/>
+      <column name="value" value="Test Code Value 1.9"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01A"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1A"/>
+      <column name="value" value="Test Code Value 1.1A"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01B"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1B"/>
+      <column name="value" value="Test Code Value 1.1B"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01C"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1C"/>
+      <column name="value" value="Test Code Value 1.1C"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01D"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1D"/>
+      <column name="value" value="Test Code Value 1.1D"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01E"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1E"/>
+      <column name="value" value="Test Code Value 1.1E"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01F"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1F"/>
+      <column name="value" value="Test Code Value 1.1F"/>
+    </insert>
 
     <insert tableName="codes_code_categories">
       <column name="id" value="TestCodeCategory02"/>
@@ -1853,6 +1925,78 @@
       <column name="code_category_id" value="TestCodeCategory01"/>
       <column name="name" value="Test Code Name 1.3"/>
       <column name="value" value="Test Code Value 1.3"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode014"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.4"/>
+      <column name="value" value="Test Code Value 1.4"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode015"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.5"/>
+      <column name="value" value="Test Code Value 1.5"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode016"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.6"/>
+      <column name="value" value="Test Code Value 1.6"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode017"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.7"/>
+      <column name="value" value="Test Code Value 1.7"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode018"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.8"/>
+      <column name="value" value="Test Code Value 1.8"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode019"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.9"/>
+      <column name="value" value="Test Code Value 1.9"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01A"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1A"/>
+      <column name="value" value="Test Code Value 1.1A"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01B"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1B"/>
+      <column name="value" value="Test Code Value 1.1B"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01C"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1C"/>
+      <column name="value" value="Test Code Value 1.1C"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01D"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1D"/>
+      <column name="value" value="Test Code Value 1.1D"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01E"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1E"/>
+      <column name="value" value="Test Code Value 1.1E"/>
+    </insert>
+    <insert tableName="codes_codes">
+      <column name="id" value="TestCode01F"/>
+      <column name="code_category_id" value="TestCodeCategory01"/>
+      <column name="name" value="Test Code Name 1.1F"/>
+      <column name="value" value="Test Code Value 1.1F"/>
     </insert>
 
     <insert tableName="codes_code_categories">

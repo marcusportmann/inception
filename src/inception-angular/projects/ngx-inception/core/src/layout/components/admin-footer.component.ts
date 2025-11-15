@@ -23,7 +23,8 @@ import { Replace } from '../../util/replace';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-admin-footer',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'admin-footer',
   standalone: true,
   template: `
     <footer class="admin-footer">

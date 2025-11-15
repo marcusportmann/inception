@@ -36,13 +36,14 @@ import { BreadcrumbsService } from '../services/breadcrumbs.service';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-core-breadcrumbs',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'breadcrumbs',
   standalone: true,
   template: `
     <ng-container *ngIf="this.visible">
-      <ol class="breadcrumb">
+      <ol class="breadcrumbs">
         <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last="last">
-          <li class="breadcrumb-item" *ngIf="breadcrumb.label" [ngClass]="{ active: last }">
+          <li class="breadcrumbs-item" *ngIf="breadcrumb.label" [ngClass]="{ active: last }">
             <a *ngIf="!last && !!breadcrumb.url" [routerLink]="breadcrumb.url">{{
               breadcrumb.label
             }}</a>

@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, HostBinding } from '@angular/core';
+import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
 
-import {
-  AdminContainerView, ConfirmationDialogComponent, CoreModule, TableFilterComponent
-} from 'ngx-inception/core';
-
-import { EMPTY, merge, Observable, Subject } from 'rxjs';
-import {
-  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil, tap
-} from 'rxjs/operators';
 import { Config } from '../services/config';
 import { ConfigService } from '../services/config.service';
 
 /**
- * The ConfigsComponent class implements the configs component.
+ * The ConfigsComponent class implements the Configs component.
  *
- * @author Marcus Portmann
+ * @author Marcus
  */
 @Component({
   selector: 'inception-config-configs',
@@ -43,31 +34,17 @@ import { ConfigService } from '../services/config.service';
   templateUrl: 'configs.component.html',
   styleUrls: ['configs.component.css']
 })
-export class ConfigsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-  dataSource = new MatTableDataSource<Config>();
+export class ConfigsComponent extends FilteredPaginatedListView<Config> {
+  readonly displayedColumns: readonly string[] = ['id', 'value', 'actions'];
 
-  displayedColumns = ['id', 'value', 'actions'];
+  @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  readonly listKey = 'config.configs';
 
   readonly title = $localize`:@@config_configs_title:Configs`;
 
-  private destroy$ = new Subject<void>();
-
   constructor(private configService: ConfigService) {
     super();
-
-    this.dataSource.filterPredicate = (data: Config, filter: string): boolean =>
-      data.id.toLowerCase().includes(filter);
-  }
-
-  applyFilter(filterValue: string): void {
-    filterValue = filterValue.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
   }
 
   deleteConfig(id: string): void {
@@ -89,27 +66,37 @@ export class ConfigsComponent extends AdminContainerView implements AfterViewIni
     this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
-    this.initializeDataLoaders();
-    this.loadData();
+  protected override createFilterPredicate(): (data: Config, filter: string) => boolean {
+    return (data: Config, filter: string): boolean => {
+      const normalizedFilter = (filter ?? '').toLowerCase();
+      const id = (data.id ?? '').toLowerCase();
+      return id.includes(normalizedFilter);
+    };
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  protected override loadData(): void {
+    this.spinnerService.showSpinner();
+
+    this.configService
+      .getConfigs()
+      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe({
+        next: (configs: Config[]) => {
+          this.dataSource.data = configs;
+
+          this.restorePageAfterDataLoaded();
+        },
+        error: (error) => this.handleError(error, false)
+      });
   }
 
   private confirmAndProcessAction(
     confirmationMessage: string,
     action: () => Observable<void | boolean>
   ): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
-      this.dialogService.showConfirmationDialog({
-        message: confirmationMessage
-      });
+    const dialogRef = this.dialogService.showConfirmationDialog({
+      message: confirmationMessage
+    });
 
     dialogRef
       .afterClosed()
@@ -118,40 +105,31 @@ export class ConfigsComponent extends AdminContainerView implements AfterViewIni
         filter((confirmed) => confirmed === true),
         switchMap(() => {
           this.spinnerService.showSpinner();
+
           return action().pipe(
             catchError((error) => {
               this.handleError(error, false);
               return EMPTY;
             }),
-            tap(() => this.loadData()),
+            switchMap(() =>
+              this.configService.getConfigs().pipe(
+                catchError((error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
+              )
+            ),
             finalize(() => this.spinnerService.hideSpinner())
           );
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe();
-  }
-
-  private initializeDataLoaders(): void {
-    this.sort.sortChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => (this.paginator.pageIndex = 0));
-
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(debounceTime(200), takeUntil(this.destroy$))
-      .subscribe(() => this.loadData());
-  }
-
-  private loadData(): void {
-    this.spinnerService.showSpinner();
-    this.configService
-      .getConfigs()
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
       .subscribe({
-        next: (configs) => {
+        next: (configs: Config[]) => {
           this.dataSource.data = configs;
-        },
-        error: (error) => this.handleError(error, false)
+
+          this.restorePageAfterDataLoaded();
+        }
       });
   }
 }
