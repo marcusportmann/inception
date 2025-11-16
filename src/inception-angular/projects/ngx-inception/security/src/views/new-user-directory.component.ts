@@ -16,7 +16,10 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective } from 'ngx-inception/core';
+import {
+  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
+} from 'ngx-inception/core';
+import { UserDirectoryParameter } from 'ngx-inception/security';
 import { Subscription } from 'rxjs';
 import { debounceTime, finalize, first, pairwise, startWith } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
@@ -34,7 +37,12 @@ import { LdapUserDirectoryComponent } from './ldap-user-directory.component';
 @Component({
   selector: 'inception-security-new-user-directory',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
+  imports: [
+    CoreModule,
+    ValidatedFormDirective,
+    InternalUserDirectoryComponent,
+    LdapUserDirectoryComponent
+  ],
   templateUrl: 'new-user-directory.component.html',
   styleUrls: ['new-user-directory.component.css']
 })
@@ -168,9 +176,15 @@ export class NewUserDirectoryComponent
 
     // Add the appropriate control for the user directory type that was selected
     if (currentUserDirectoryType === 'InternalUserDirectory') {
-      this.newUserDirectoryForm.addControl('internalUserDirectory', new FormControl(''));
+      this.newUserDirectoryForm.addControl(
+        'internalUserDirectory',
+        new FormControl<UserDirectoryParameter[] | null>(null, { nonNullable: false })
+      );
     } else if (currentUserDirectoryType === 'LDAPUserDirectory') {
-      this.newUserDirectoryForm.addControl('ldapUserDirectory', new FormControl(''));
+      this.newUserDirectoryForm.addControl(
+        'ldapUserDirectory',
+        new FormControl<UserDirectoryParameter[] | null>(null, { nonNullable: false })
+      );
     }
 
     this.changeDetectorRef.detectChanges();

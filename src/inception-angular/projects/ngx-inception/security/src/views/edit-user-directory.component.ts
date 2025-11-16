@@ -19,6 +19,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
 } from 'ngx-inception/core';
+import { UserDirectoryParameter } from 'ngx-inception/security';
 import { combineLatest, Subscription } from 'rxjs';
 import { finalize, first, pairwise, startWith } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
@@ -35,7 +36,12 @@ import { LdapUserDirectoryComponent } from './ldap-user-directory.component';
 @Component({
   selector: 'inception-security-edit-user-directory',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
+  imports: [
+    CoreModule,
+    ValidatedFormDirective,
+    InternalUserDirectoryComponent,
+    LdapUserDirectoryComponent
+  ],
   templateUrl: 'edit-user-directory.component.html',
   styleUrls: ['edit-user-directory.component.css']
 })
@@ -177,31 +183,57 @@ export class EditUserDirectoryComponent
     previousUserDirectoryType: string,
     currentUserDirectoryType: string
   ): void {
-    // Clear the user directory parameters if required
-    if (!!previousUserDirectoryType && this.userDirectory) {
+    // If the user actually changes the type in the UI (after initial load),
+    // you may want to clear the parameters.
+    if (
+      previousUserDirectoryType &&
+      currentUserDirectoryType &&
+      previousUserDirectoryType !== currentUserDirectoryType &&
+      this.userDirectory
+    ) {
       this.userDirectory.parameters = [];
     }
 
-    // Remove the controls for the user directory types
+    // Remove any existing nested controls
     this.editUserDirectoryForm.removeControl('internalUserDirectory');
     this.editUserDirectoryForm.removeControl('ldapUserDirectory');
 
-    // Add the appropriate control for the user directory type that was selected
+    if (!currentUserDirectoryType) {
+      this.changeDetectorRef.detectChanges();
+      return;
+    }
+
+    // Determine initial parameters for this type (edit scenario)
+    let initialParams: UserDirectoryParameter[] | null = null;
+
+    if (
+      this.userDirectory &&
+      this.userDirectory.type === currentUserDirectoryType &&
+      this.userDirectory.parameters
+    ) {
+      initialParams = this.userDirectory.parameters;
+    }
+
+    // Add the appropriate control for the selected type
     if (currentUserDirectoryType === 'InternalUserDirectory') {
-      this.editUserDirectoryForm.addControl('internalUserDirectory', new FormControl(''));
+      this.editUserDirectoryForm.addControl(
+        'internalUserDirectory',
+        new FormControl<UserDirectoryParameter[] | null>(initialParams, {
+          nonNullable: false
+        })
+      );
     } else if (currentUserDirectoryType === 'LDAPUserDirectory') {
-      this.editUserDirectoryForm.addControl('ldapUserDirectory', new FormControl(''));
+      this.editUserDirectoryForm.addControl(
+        'ldapUserDirectory',
+        new FormControl<UserDirectoryParameter[] | null>(initialParams, {
+          nonNullable: false
+        })
+      );
     }
 
+    // This causes Angular to instantiate the nested component (via *ngIf)
+    // and wire up the value accessor; it will then call writeValue(initialParams)
+    // on the CVA, which in turn calls setParameters(...) internally.
     this.changeDetectorRef.detectChanges();
-
-    // Populate the nested InternalUserDirectoryComponent or LdapUserDirectoryComponent
-    if (this.userDirectory) {
-      if (this.internalUserDirectoryComponent) {
-        this.internalUserDirectoryComponent.setParameters(this.userDirectory.parameters);
-      } else if (this.ldapUserDirectoryComponent) {
-        this.ldapUserDirectoryComponent.setParameters(this.userDirectory.parameters);
-      }
-    }
   }
 }

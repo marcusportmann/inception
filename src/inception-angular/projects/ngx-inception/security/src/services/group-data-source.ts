@@ -94,7 +94,7 @@ export class GroupDataSource implements DataSource<Group> {
   }
 
   /**
-   * Handle errors during the group load operation.
+   * Handle errors during the load operation.
    *
    * @param error The error encountered.
    *

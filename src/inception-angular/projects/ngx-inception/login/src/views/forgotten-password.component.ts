@@ -38,9 +38,11 @@ import { catchError, finalize, first } from 'rxjs/operators';
   templateUrl: 'forgotten-password.component.html'
 })
 export class ForgottenPasswordComponent {
-  forgottenPasswordForm: FormGroup;
+  readonly forgottenPasswordForm: FormGroup<{
+    username: FormControl<string>;
+  }>;
 
-  usernameControl: FormControl;
+  readonly usernameControl: FormControl<string>;
 
   constructor(
     private router: Router,
@@ -50,7 +52,10 @@ export class ForgottenPasswordComponent {
     private spinnerService: SpinnerService
   ) {
     // Initialize the form controls
-    this.usernameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.usernameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
 
     // Initialize the form
     this.forgottenPasswordForm = new FormGroup({
@@ -64,22 +69,34 @@ export class ForgottenPasswordComponent {
   }
 
   resetPassword(): void {
-    if (this.forgottenPasswordForm.valid) {
-      const username = this.usernameControl.value;
-
-      const resetPasswordUrl = window.location.origin + '/#/login/reset-password';
-
-      this.spinnerService.showSpinner();
-
-      this.securityService
-        .initiatePasswordReset(username, resetPasswordUrl)
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner()),
-          catchError((error) => this.handleError(error))
-        )
-        .subscribe(() => this.showSuccessDialog());
+    if (this.forgottenPasswordForm.invalid) {
+      this.forgottenPasswordForm.markAllAsTouched();
+      return;
     }
+
+    const { username } = this.forgottenPasswordForm.getRawValue();
+
+    const resetPasswordUrl = this.buildResetPasswordUrl();
+
+    this.spinnerService.showSpinner();
+
+    this.securityService
+      .initiatePasswordReset(username, resetPasswordUrl)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner()),
+        catchError((error: Error) => this.handleError(error))
+      )
+      .subscribe(() => this.showSuccessDialog());
+  }
+
+  /**
+   * Build the reset password URL that will be embedded in the email.
+   * Kept as a separate helper for clarity and easier future changes.
+   */
+  private buildResetPasswordUrl(): string {
+    // Preserve existing hash-based routing behavior
+    return `${window.location.origin}/#/login/reset-password`;
   }
 
   private handleError(error: Error): Observable<never> {
@@ -94,8 +111,10 @@ export class ForgottenPasswordComponent {
         state: { error }
       });
     } else {
+      // Show the error dialog and keep the user on this screen
       this.dialogService.showErrorDialog(error);
     }
+
     return throwError(() => error);
   }
 

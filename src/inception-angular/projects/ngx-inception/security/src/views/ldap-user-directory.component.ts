@@ -16,8 +16,15 @@
 
 import { Component, forwardRef } from '@angular/core';
 import {
-  ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors,
-  Validator, Validators
+  AbstractControl,
+  ControlValueAccessor,
+  FormControl,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+  Validators
 } from '@angular/forms';
 import { CoreModule } from 'ngx-inception/core';
 import { UserDirectoryParameter } from '../services/user-directory-parameter';
@@ -42,64 +49,42 @@ import { UserDirectoryUtil } from '../services/user-directory-util';
     }
   ]
 })
-export class LdapUserDirectoryComponent implements ControlValueAccessor, Validator {
+export class LdapUserDirectoryComponent
+  implements ControlValueAccessor, Validator
+{
   baseDNControl: FormControl;
-
   bindDNControl: FormControl;
-
   bindPasswordControl: FormControl;
-
   groupBaseDNControl: FormControl;
-
   groupDescriptionAttributeControl: FormControl;
-
   groupMemberAttributeControl: FormControl;
-
   groupNameAttributeControl: FormControl;
-
   groupNamePrefixFilterControl: FormControl;
-
   groupObjectClassControl: FormControl;
-
   hostControl: FormControl;
-
   ldapUserDirectoryForm: FormGroup;
-
   maxFilteredGroupMembersControl: FormControl;
-
   maxFilteredGroupsControl: FormControl;
-
   maxFilteredUsersControl: FormControl;
-
   portControl: FormControl;
-
   supportsAdminChangePasswordControl: FormControl;
-
   supportsChangePasswordControl: FormControl;
-
   supportsGroupAdministrationControl: FormControl;
-
   supportsGroupMemberAdministrationControl: FormControl;
-
   supportsUserAdministrationControl: FormControl;
-
   useSSLControl: FormControl;
-
   userBaseDNControl: FormControl;
-
   userEmailAttributeControl: FormControl;
-
   userMobileNumberAttributeControl: FormControl;
-
   userNameAttributeControl: FormControl;
-
   userObjectClassControl: FormControl;
-
   userPhoneNumberAttributeControl: FormControl;
-
   userPreferredNameAttributeControl: FormControl;
-
   userUsernameAttributeControl: FormControl;
+
+  // ---- ControlValueAccessor callbacks ----
+  private onChange: (value: UserDirectoryParameter[] | null) => void = () => { /* empty */ };
+  private onTouched: () => void = () => { /* empty */ };
 
   constructor() {
     // Initialize the form controls
@@ -226,8 +211,14 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       userUsernameAttribute: this.userUsernameAttributeControl,
       useSSL: this.useSSLControl
     });
+
+    // Propagate the parameter list whenever the internal form changes
+    this.ldapUserDirectoryForm.valueChanges.subscribe(() => {
+      this.onChange(this.getParameters());
+    });
   }
 
+  // Expose parameters as the "value" of this custom control
   getParameters(): UserDirectoryParameter[] {
     const parameters: UserDirectoryParameter[] = [];
 
@@ -343,29 +334,8 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
     return parameters;
   }
 
-  onTouched: () => void = () => {
-    /* empty */
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerOnChange(fn: any): void {
-    this.ldapUserDirectoryForm.valueChanges.subscribe(fn);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.ldapUserDirectoryForm.disable();
-    } else {
-      this.ldapUserDirectoryForm.enable();
-    }
-  }
-
-  setParameters(parameters: UserDirectoryParameter[]) {
+  // Helper to populate the form from a parameter list
+  setParameters(parameters: UserDirectoryParameter[]): void {
     this.baseDNControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'BaseDN')
         ? UserDirectoryUtil.getParameter(parameters, 'BaseDN')
@@ -506,23 +476,60 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
         ? UserDirectoryUtil.getParameter(parameters, 'UseSSL')
         : 'false'
     );
+
+    this.ldapUserDirectoryForm.markAsPristine();
+    this.ldapUserDirectoryForm.markAsUntouched();
+
+    // keep external value in sync as well
+    this.onChange(this.getParameters());
   }
 
-  validate(): ValidationErrors | null {
-    return this.ldapUserDirectoryForm.valid
-      ? null
-      : {
-          invalidForm: {
-            valid: false,
-            message: 'ldapUserDirectoryForm fields are invalid'
-          }
-        };
-  }
+  // ---- ControlValueAccessor implementation ----
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(val: any): void {
-    if (val) {
-      this.ldapUserDirectoryForm.setValue(val, { emitEvent: false });
+    if (val && Array.isArray(val)) {
+      this.setParameters(val);
     }
+    // If null/undefined/empty, we just keep defaults
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.ldapUserDirectoryForm.disable();
+    } else {
+      this.ldapUserDirectoryForm.enable();
+    }
+  }
+
+  // Call from the template (e.g. `(blur)="markAsTouched()"`) if you want touched state
+  markAsTouched(): void {
+    if (this.onTouched) {
+      this.onTouched();
+    }
+  }
+
+  // ---- Validator implementation ----
+
+  validate(_control: AbstractControl): ValidationErrors | null {
+    void _control;
+    return this.ldapUserDirectoryForm.valid
+      ? null
+      : {
+        invalidForm: {
+          valid: false,
+          message: 'ldapUserDirectoryForm fields are invalid'
+        }
+      };
   }
 }

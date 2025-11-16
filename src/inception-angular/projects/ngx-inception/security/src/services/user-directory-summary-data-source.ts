@@ -92,7 +92,7 @@ export class UserDirectorySummaryDataSource implements DataSource<UserDirectoryS
   }
 
   /**
-   * Handle errors during the user directory summaries load operation.
+   * Handle errors during the load operation.
    *
    * @param error The error encountered.
    *

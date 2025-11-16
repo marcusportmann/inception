@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import {
+  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import {
-  AdminContainerView, ConfirmationDialogComponent, CoreModule, Error, SortDirection,
-  TableFilterComponent
-} from 'ngx-inception/core';
-import { merge, Subscription } from 'rxjs';
-import { finalize, first } from 'rxjs/operators';
+import { CoreModule, Error, SortDirection, TableFilterComponent } from 'ngx-inception/core';
+import { Observable } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
+import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { SecurityService } from '../services/security.service';
 import { TenantDataSource } from '../services/tenant-data-source';
 
-/**
- * The TenantsComponent class implements the Tenants component.
- *
- * @author Marcus Portmann
- */
 @Component({
   selector: 'inception-security-tenants',
   standalone: true,
@@ -39,140 +33,105 @@ import { TenantDataSource } from '../services/tenant-data-source';
   templateUrl: 'tenants.component.html',
   styleUrls: ['tenants.component.css']
 })
-export class TenantsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-  dataSource: TenantDataSource;
+export class TenantsComponent extends StatefulListView implements AfterViewInit {
+  readonly dataSource: TenantDataSource;
 
   displayedColumns = ['name', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  readonly listKey = 'security.tenants';
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
+
+  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
 
   @ViewChild(TableFilterComponent, { static: true })
-  tableFilter!: TableFilterComponent;
+  override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_tenants_title:Tenants`;
 
-  private subscriptions: Subscription = new Subscription();
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
+  /** Whether this navigation requested a state reset (from the sidebar). */
+  private readonly resetStateRequested: boolean;
 
   constructor(private securityService: SecurityService) {
     super();
+
+    const nav = this.router.getCurrentNavigation();
+    this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     this.dataSource = new TenantDataSource(this.securityService);
   }
 
   deleteTenant(tenantId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
-      this.dialogService.showConfirmationDialog({
-        message: $localize`:@@security_tenants_confirm_delete_tenant:Are you sure you want to delete the tenant?`
-      });
-
-    dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe({
-        next: (confirmation: boolean | undefined) => {
-          if (confirmation !== true) {
-            return;
-          }
-
-          this.spinnerService.showSpinner();
-
-          this.securityService
-            .deleteTenant(tenantId)
-            .pipe(
-              first(),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe({
-              next: () => {
-                this.loadTenants();
-              },
-              error: (error: Error) => this.handleError(error, false)
-            });
-        }
-      });
+    this.confirmAndProcessAction(
+      $localize`:@@security_tenants_confirm_delete_tenant:Are you sure you want to delete the tenant?`,
+      () => this.securityService.deleteTenant(tenantId),
+      () => this.loadTenants()
+    );
   }
 
   editTenant(tenantId: string): void {
+    this.saveState();
+
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate([encodeURIComponent(tenantId) + '/edit'], {
       relativeTo: this.activatedRoute
     });
   }
 
-  loadTenants(): void {
-    let filter = '';
-
-    if (this.tableFilter.filter) {
-      filter = this.tableFilter.filter;
-      filter = filter.trim();
-      filter = filter.toLowerCase();
-    }
-
-    const sortDirection =
-      this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
-
-    this.dataSource.load(filter, sortDirection, this.paginator.pageIndex, this.paginator.pageSize);
-  }
-
   newTenant(): void {
+    this.saveState();
+
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
-    this.subscriptions.add(
-      this.dataSource.loading$.subscribe({
-        next: (next: boolean) => {
-          if (next) {
-            this.spinnerService.showSpinner();
-          } else {
-            this.spinnerService.hideSpinner();
-          }
-        },
-        error: (error: Error) => this.handleError(error, false)
-      })
-    );
+    this.initializeStatefulList(this.resetStateRequested, () => this.loadData());
 
-    this.subscriptions.add(
-      this.sort.sortChange.subscribe(() => {
-        if (this.paginator) {
-          this.paginator.pageIndex = 0;
-        }
-      })
-    );
-
-    this.subscriptions.add(
-      this.tableFilter.changed.subscribe(() => {
-        if (this.paginator) {
-          this.paginator.pageIndex = 0;
-        }
-      })
-    );
-
-    this.subscriptions.add(
-      merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page).subscribe({
-        next: () => {
-          this.loadTenants();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      })
-    );
-
-    this.loadTenants();
+    // Stabilize view after paginator/sort mutations
+    this.changeDetectorRef.detectChanges();
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
+  tenantUserDirectories(tenantId: string): void {
+    this.saveState();
 
-  tenantUserDirectories(tenantId: string) {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate([encodeURIComponent(tenantId) + '/user-directories'], {
       relativeTo: this.activatedRoute
     });
+  }
+
+  private loadData(): void {
+    this.spinnerService.showSpinner();
+
+    this.loadTenants()
+      .pipe(
+        finalize(() => this.spinnerService.hideSpinner()),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: () => {
+          // Load complete
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
+  }
+
+  private loadTenants(): Observable<unknown> {
+    const filterValue = this.tableFilter.filter?.trim().toLowerCase() || '';
+
+    const sortDirection =
+      this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
+
+    return this.dataSource.load(
+      filterValue,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    );
   }
 }

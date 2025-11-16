@@ -23,7 +23,7 @@ import {
   SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { SecurityService, Tenant, Tenants } from 'ngx-inception/security';
-import { catchError, finalize, first, map, Observable, throwError } from 'rxjs';
+import { catchError, finalize, first, map, Observable, of, switchMap, throwError } from 'rxjs';
 
 /**
  * The LoginComponent class implements the login component.
@@ -37,11 +37,11 @@ import { catchError, finalize, first, map, Observable, throwError } from 'rxjs';
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements AfterViewInit, OnInit {
-  loginForm: FormGroup;
+  readonly loginForm: FormGroup;
 
-  passwordControl: FormControl;
+  readonly passwordControl: FormControl<string>;
 
-  usernameControl: FormControl;
+  readonly usernameControl: FormControl<string>;
 
   @ViewChild('usernameInput') usernameInput!: ElementRef<HTMLInputElement>;
 
@@ -54,17 +54,16 @@ export class LoginComponent implements AfterViewInit, OnInit {
     private sessionService: SessionService,
     private spinnerService: SpinnerService
   ) {
-    // Initialize the form controls
-    this.passwordControl = new FormControl(this.config.prepopulatedLoginPassword || '', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
-    this.usernameControl = new FormControl(this.config.prepopulatedLoginUsername || '', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
+    this.passwordControl = new FormControl<string>(this.config.prepopulatedLoginPassword || '', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
 
-    // Initialize the form
+    this.usernameControl = new FormControl<string>(this.config.prepopulatedLoginUsername || '', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
     this.loginForm = new FormGroup({
       password: this.passwordControl,
       username: this.usernameControl
@@ -87,28 +86,47 @@ export class LoginComponent implements AfterViewInit, OnInit {
   }
 
   login(): void {
-    if (this.loginForm.valid) {
-      const username = this.usernameControl.value;
-      const password = this.passwordControl.value;
-
-      this.spinnerService.showSpinner();
-
-      this.sessionService
-        .login(username, password)
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner()),
-          catchError((error: Error) => this.handleError(error, username))
-        )
-        .subscribe((session: Session | null) => {
-          if (session) {
-            this.handleSession(session);
-          } else {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['/']);
-          }
-        });
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      this.usernameInput?.nativeElement.focus();
+      return;
     }
+
+    const { username, password } = this.loginForm.getRawValue() as {
+      username: string;
+      password: string;
+    };
+
+    this.spinnerService.showSpinner();
+
+    this.sessionService
+      .login(username, password)
+      .pipe(
+        first(),
+        // Once logged in, resolve the tenant list for this session
+        switchMap((session: Session | null) => {
+          if (!session) {
+            return of<{ session: Session | null; tenants: Tenant[] }>({
+              session: null,
+              tenants: []
+            });
+          }
+
+          return this.getTenantsForSession(session).pipe(map((tenants) => ({ session, tenants })));
+        }),
+        finalize(() => this.spinnerService.hideSpinner()),
+        catchError((error: Error) => this.handleError(error, username))
+      )
+      .subscribe(({ session, tenants }) => {
+        if (!session) {
+          // No session, just go home
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/']);
+          return;
+        }
+
+        this.handleTenantSelection(session, tenants);
+      });
   }
 
   ngAfterViewInit(): void {
@@ -125,10 +143,23 @@ export class LoginComponent implements AfterViewInit, OnInit {
         map(() => window.history.state)
       )
       .subscribe((state) => {
-        if (state.username) {
+        if (state && state.username) {
           this.usernameControl.setValue(state.username);
         }
       });
+  }
+
+  /**
+   * Resolve the list of tenants for the given session.
+   */
+  private getTenantsForSession(session: Session): Observable<Tenant[]> {
+    if (session.hasRole('Administrator')) {
+      // Administrators see all tenants
+      return this.securityService.getTenants().pipe(map((tenants: Tenants) => tenants.tenants));
+    }
+
+    // Non-admins see only tenants for their user directory
+    return this.securityService.getTenantsForUserDirectory(session.userDirectoryId);
   }
 
   private handleError(error: Error, username?: string): Observable<never> {
@@ -158,40 +189,33 @@ export class LoginComponent implements AfterViewInit, OnInit {
           });
         });
     }
+
     return throwError(() => error);
   }
 
-  private handleSession(session: Session): void {
-    if (session.hasRole('Administrator')) {
-      this.loadTenants(this.securityService.getTenants(), session);
-    } else {
-      this.loadTenants(
-        this.securityService.getTenantsForUserDirectory(session.userDirectoryId),
-        session
-      );
+  /**
+   * Decide what to do with the resolved tenants: set tenant on the session and route appropriately.
+   */
+  private handleTenantSelection(session: Session, tenants: Tenant[]): void {
+    if (!tenants || tenants.length === 0) {
+      // No tenants – just navigate to root; backend / guards can handle it.
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigate(['/']);
+      return;
     }
-  }
 
-  private loadTenants(tenants$: Observable<Tenants | Tenant[]>, session: Session): void {
-    tenants$
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner()),
-        catchError((error) => this.handleError(error))
-      )
-      .subscribe((tenants) => {
-        const tenantArray = Array.isArray(tenants) ? tenants : tenants.tenants;
-        if (tenantArray.length === 1) {
-          session.tenantId = tenantArray[0].id;
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
-        } else {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['select-tenant'], {
-            relativeTo: this.activatedRoute,
-            state: { tenants: tenantArray }
-          });
-        }
-      });
+    if (tenants.length === 1) {
+      session.tenantId = tenants[0].id;
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigate(['/']);
+      return;
+    }
+
+    // Multiple tenants – let the user choose
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['select-tenant'], {
+      relativeTo: this.activatedRoute,
+      state: { tenants }
+    });
   }
 }

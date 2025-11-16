@@ -104,7 +104,7 @@ export class UserDataSource implements DataSource<User> {
   }
 
   /**
-   * Handle errors during the user load operation.
+   * Handle errors during the load operation.
    *
    * @param error The error encountered.
    *

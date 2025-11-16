@@ -103,7 +103,7 @@ export class GroupMemberDataSource implements DataSource<GroupMember> {
   }
 
   /**
-   * Handle errors during the group members load operation.
+   * Handle errors during the load operation.
    *
    * @param error The error encountered.
    *

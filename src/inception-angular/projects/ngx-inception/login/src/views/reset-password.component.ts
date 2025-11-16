@@ -15,7 +15,9 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl, FormControl, FormGroup, ValidationErrors, Validators
+} from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
@@ -37,25 +39,20 @@ import { catchError, finalize, first, Observable, throwError } from 'rxjs';
   templateUrl: 'reset-password.component.html'
 })
 export class ResetPasswordComponent implements OnInit {
-  confirmNewPasswordControl: FormControl;
+  readonly confirmNewPasswordControl: FormControl<string>;
 
-  newPasswordControl: FormControl;
+  readonly newPasswordControl: FormControl<string>;
 
-  resetPasswordForm: FormGroup;
+  readonly resetPasswordForm: FormGroup<{
+    username: FormControl<string>;
+    newPassword: FormControl<string>;
+    confirmNewPassword: FormControl<string>;
+  }>;
 
-  securityCode: string | null = null;
+  readonly usernameControl: FormControl<string>;
 
-  usernameControl: FormControl;
+  private securityCode: string | null = null;
 
-  /**
-   * Constructs a new ResetPasswordComponent.
-   *
-   * @param router          The router.
-   * @param activatedRoute  The activated route.
-   * @param dialogService   The dialog service.
-   * @param securityService The security service.
-   * @param spinnerService  The spinner service.
-   */
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -63,23 +60,29 @@ export class ResetPasswordComponent implements OnInit {
     private securityService: SecurityService,
     private spinnerService: SpinnerService
   ) {
-    // Initialize the form controls
-    this.confirmNewPasswordControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
-    this.newPasswordControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.usernameControl = new FormControl({
-      value: '',
-      disabled: true
+    this.newPasswordControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
     });
 
-    // Initialize the form
-    this.resetPasswordForm = new FormGroup({
-      confirmNewPassword: this.confirmNewPasswordControl,
-      newPassword: this.newPasswordControl,
-      username: this.usernameControl
+    this.confirmNewPasswordControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
     });
+
+    this.usernameControl = new FormControl<string>(
+      { value: '', disabled: true },
+      { nonNullable: true }
+    );
+
+    this.resetPasswordForm = new FormGroup(
+      {
+        username: this.usernameControl,
+        newPassword: this.newPasswordControl,
+        confirmNewPassword: this.confirmNewPasswordControl
+      },
+      { validators: ResetPasswordComponent.passwordsMatchValidator }
+    );
   }
 
   cancel(): void {
@@ -89,33 +92,63 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.pipe(first()).subscribe((params: Params) => {
-      this.usernameControl.setValue(params['username']);
-      this.securityCode = params['securityCode'];
+      const username = params['username'];
+      const securityCode = params['securityCode'];
+
+      if (!username || !securityCode) {
+        this.dialogService
+        .showErrorDialog(
+          new Error(
+            'The password reset link is invalid or has expired. Please request a new reset link.'
+          )
+        )
+        .afterClosed()
+        .pipe(first())
+        .subscribe(() => {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+        });
+        return;
+      }
+
+      this.usernameControl.setValue(username);
+      this.securityCode = securityCode;
     });
   }
 
   resetPassword(): void {
-    if (!this.securityCode || !this.resetPasswordForm.valid) return;
-
-    const username = this.usernameControl.value;
-    const newPassword = this.newPasswordControl.value;
-    const confirmNewPassword = this.confirmNewPasswordControl.value;
-
-    if (newPassword !== confirmNewPassword) {
-      this.dialogService.showErrorDialog(new Error('The passwords do not match.'));
+    if (this.resetPasswordForm.invalid || !this.securityCode) {
+      this.resetPasswordForm.markAllAsTouched();
       return;
     }
+
+    const { username, newPassword } = this.resetPasswordForm.getRawValue();
 
     this.spinnerService.showSpinner();
 
     this.securityService
-      .resetPassword(username, newPassword, this.securityCode)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner()),
-        catchError((error) => this.handleError(error))
-      )
-      .subscribe(() => this.showSuccessDialog(username));
+    .resetPassword(username, newPassword, this.securityCode)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner()),
+      catchError((error: Error) => this.handleError(error))
+    )
+    .subscribe(() => this.showSuccessDialog(username));
+  }
+
+  private static passwordsMatchValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const newPassword = control.get('newPassword')?.value;
+    const confirmNewPassword = control.get('confirmNewPassword')?.value;
+
+    if (!newPassword || !confirmNewPassword) {
+      return null;
+    }
+
+    return newPassword === confirmNewPassword
+      ? null
+      : { passwordsMismatch: true };
   }
 
   private handleError(error: Error): Observable<never> {
@@ -131,6 +164,7 @@ export class ResetPasswordComponent implements OnInit {
     } else {
       this.dialogService.showErrorDialog(error);
     }
+
     return throwError(() => error);
   }
 
@@ -141,14 +175,14 @@ export class ResetPasswordComponent implements OnInit {
       });
 
     dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['..'], {
-          relativeTo: this.activatedRoute,
-          state: { username }
-        });
+    .afterClosed()
+    .pipe(first())
+    .subscribe(() => {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigate(['..'], {
+        relativeTo: this.activatedRoute,
+        state: { username }
       });
+    });
   }
 }

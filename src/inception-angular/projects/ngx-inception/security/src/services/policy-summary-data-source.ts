@@ -99,7 +99,7 @@ export class PolicySummaryDataSource implements DataSource<PolicySummary> {
   }
 
   /**
-   * Handle errors during the policy summaries load operation.
+   * Handle errors during the load operation.
    *
    * @param error The error encountered.
    *

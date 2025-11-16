@@ -22,7 +22,7 @@ import {
   ValidatedFormDirective
 } from 'ngx-inception/core';
 import { Tenant } from 'ngx-inception/security';
-import { ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { debounceTime, first, map, startWith, takeUntil } from 'rxjs/operators';
 
 /**
@@ -37,13 +37,18 @@ import { debounceTime, first, map, startWith, takeUntil } from 'rxjs/operators';
   templateUrl: 'select-tenant.component.html'
 })
 export class SelectTenantComponent implements OnInit, OnDestroy {
-  filteredTenants$: Subject<Tenant[]> = new ReplaySubject<Tenant[]>(1);
+  // Exposed as observable for template binding
+  readonly filteredTenants$ = new BehaviorSubject<Tenant[]>([]);
 
-  selectTenantForm: FormGroup;
+  readonly selectTenantForm: FormGroup<{
+    tenant: FormControl<Tenant | string>;
+  }>;
 
-  tenantControl: FormControl;
+  readonly tenantControl: FormControl<Tenant | string>;
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
+
+  private tenants: Tenant[] = [];
 
   /**
    * Constructs a new SelectTenantComponent.
@@ -58,7 +63,10 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
     private sessionService: SessionService
   ) {
     // Initialize the form controls
-    this.tenantControl = new FormControl('', Validators.required);
+    this.tenantControl = new FormControl<Tenant | string>('', {
+      nonNullable: true,
+      validators: [Validators.required]
+    });
 
     // Initialize the form
     this.selectTenantForm = new FormGroup({
@@ -66,18 +74,23 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
     });
   }
 
-  displayTenant(tenant: Tenant): string {
-    return tenant?.name || '';
+  displayTenant(tenant: Tenant | string | null): string {
+    if (!tenant || typeof tenant === 'string') {
+      return typeof tenant === 'string' ? tenant : '';
+    }
+
+    return tenant.name ?? '';
   }
 
   isTenantSelected(): boolean {
-    const selectedTenant = this.tenantControl.value;
-    return !!(selectedTenant && typeof selectedTenant === 'object' && selectedTenant.id);
+    const value = this.tenantControl.value;
+    return SelectTenantComponent.isTenant(value);
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.filteredTenants$.complete();
   }
 
   ngOnInit(): void {
@@ -87,13 +100,9 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
         map(() => window.history.state)
       )
       .subscribe((state) => {
-        if (state.tenants) {
-          this.tenantControl.valueChanges
-            .pipe(startWith(''), debounceTime(300), takeUntil(this.destroy$))
-            .subscribe((value) => {
-              this.filteredTenants$.next(this.filterTenants(state.tenants, value));
-            });
-        } else {
+        const tenants: Tenant[] | undefined = state?.tenants;
+
+        if (!tenants || !Array.isArray(tenants) || tenants.length === 0) {
           console.error(
             'No tenants found, invalidating session and redirecting to the application root'
           );
@@ -102,25 +111,71 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
 
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/']);
+          return;
         }
+
+        this.tenants = tenants;
+        this.filteredTenants$.next(this.tenants);
+
+        this.setupTenantFiltering();
       });
   }
 
   ok(): void {
-    if (this.selectTenantForm.valid) {
-      this.sessionService.session$.pipe(first()).subscribe((session: Session | null) => {
-        if (session && typeof this.tenantControl.value === 'object') {
-          session.tenantId = this.tenantControl.value.id;
-
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
-        }
-      });
+    if (this.selectTenantForm.invalid) {
+      this.selectTenantForm.markAllAsTouched();
+      return;
     }
+
+    const selected = this.tenantControl.value;
+
+    if (!SelectTenantComponent.isTenant(selected)) {
+      this.selectTenantForm.markAllAsTouched();
+      return;
+    }
+
+    this.sessionService.session$.pipe(first()).subscribe((session: Session | null) => {
+      if (session) {
+        session.tenantId = selected.id;
+
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['/']);
+      } else {
+        console.error(
+          'No active session found when selecting tenant, redirecting to the application root'
+        );
+
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['/']);
+      }
+    });
   }
 
-  private filterTenants(tenants: Tenant[], value: string | Tenant): Tenant[] {
-    const filterValue = typeof value === 'string' ? value.toLowerCase() : value.name.toLowerCase();
-    return tenants.filter((tenant) => tenant.name.toLowerCase().startsWith(filterValue));
+  private static isTenant(value: unknown): value is Tenant {
+    return !!value && typeof value === 'object' && 'id' in value && 'name' in value;
+  }
+
+  private filterTenants(tenants: Tenant[], value: Tenant | string): Tenant[] {
+    if (!value) {
+      return tenants;
+    }
+
+    const filterValue =
+      typeof value === 'string' ? value.toLowerCase() : (value.name?.toLowerCase() ?? '');
+
+    if (!filterValue) {
+      return tenants;
+    }
+
+    return tenants.filter((tenant) => (tenant.name ?? '').toLowerCase().startsWith(filterValue));
+  }
+
+  private setupTenantFiltering(): void {
+    this.tenantControl.valueChanges
+      .pipe(startWith('' as Tenant | string), debounceTime(200), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        const filtered = this.filterTenants(this.tenants, value);
+        this.filteredTenants$.next(filtered);
+      });
   }
 }

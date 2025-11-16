@@ -16,8 +16,8 @@
 
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { SortDirection } from 'ngx-inception/core';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { finalize, first } from 'rxjs/operators';
+import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 import { SecurityService } from './security.service';
 import { Tenant } from './tenant';
 import { Tenants } from './tenants';
@@ -28,14 +28,12 @@ import { Tenants } from './tenants';
  * @author Marcus Portmann
  */
 export class TenantDataSource implements DataSource<Tenant> {
-  private dataSubject$: Subject<Tenant[]> = new ReplaySubject<Tenant[]>(1);
+  private dataSubject$ = new BehaviorSubject<Tenant[]>([]);
 
-  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>(1);
-
+  private loadingSubject$ = new BehaviorSubject<boolean>(false);
   loading$ = this.loadingSubject$.asObservable();
 
-  private totalSubject$: Subject<number> = new ReplaySubject<number>(1);
-
+  private totalSubject$ = new BehaviorSubject<number>(0);
   total$ = this.totalSubject$.asObservable();
 
   constructor(private securityService: SecurityService) {}
@@ -48,9 +46,8 @@ export class TenantDataSource implements DataSource<Tenant> {
     this.dataSubject$.next([]);
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<Tenant[] | readonly Tenant[]> {
+  connect(collectionViewer: CollectionViewer): Observable<Tenant[]> {
     void collectionViewer;
-
     return this.dataSubject$.asObservable();
   }
 
@@ -69,30 +66,49 @@ export class TenantDataSource implements DataSource<Tenant> {
    * @param sortDirection The sort direction to apply to the tenants.
    * @param pageIndex     The page index.
    * @param pageSize      The page size.
+   *
+   * @return The tenants observable.
    */
   load(
     filter?: string,
     sortDirection?: SortDirection,
     pageIndex?: number,
     pageSize?: number
-  ): void {
+  ): Observable<Tenants> {
     this.loadingSubject$.next(true);
 
-    this.securityService
-      .getTenants(filter, sortDirection, pageIndex, pageSize)
-      .pipe(
-        first(),
-        finalize(() => this.loadingSubject$.next(false))
-      )
-      .subscribe({
-        next: (tenants: Tenants) => {
-          this.totalSubject$.next(tenants.total);
-          this.dataSubject$.next(tenants.tenants);
-        },
-        error: (error: Error) => {
-          this.totalSubject$.next(0);
-          this.loadingSubject$.error(error);
-        }
-      });
+    return this.securityService
+    .getTenants(filter, sortDirection, pageIndex, pageSize)
+    .pipe(
+      tap((tenants: Tenants) => {
+        this.updateData(tenants);
+      }),
+      catchError((error: Error) => this.handleError(error)),
+      finalize(() => this.loadingSubject$.next(false))
+    );
+  }
+
+  /**
+   * Handle errors during the load operation.
+   *
+   * @param error The error encountered.
+   *
+   * @return An observable that emits the error.
+   */
+  private handleError(error: Error): Observable<never> {
+    console.error('Failed to load the tenants:', error);
+    this.totalSubject$.next(0);
+    this.dataSubject$.next([]);
+    return throwError(() => error);
+  }
+
+  /**
+   * Update the data source with the fetched tenants.
+   *
+   * @param tenants The tenants to update.
+   */
+  private updateData(tenants: Tenants): void {
+    this.totalSubject$.next(tenants.total);
+    this.dataSubject$.next(tenants.tenants);
   }
 }

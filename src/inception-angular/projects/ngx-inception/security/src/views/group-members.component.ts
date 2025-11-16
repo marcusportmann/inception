@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
-  AdminContainerView, BackNavigation, CoreModule, Error, SortDirection, TableFilterComponent
+  BackNavigation, CoreModule, Error, SortDirection, TableFilterComponent
 } from 'ngx-inception/core';
-import { EMPTY, merge, Observable, Subject } from 'rxjs';
-import {
-  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
-} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
+import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { GroupMember } from '../services/group-member';
 import { GroupMemberDataSource } from '../services/group-member-data-source';
 import { GroupMemberType } from '../services/group-member-type';
@@ -42,7 +43,7 @@ import { SecurityService } from '../services/security.service';
   templateUrl: 'group-members.component.html',
   styleUrls: ['group-members.component.css']
 })
-export class GroupMembersComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+export class GroupMembersComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: GroupMemberDataSource;
 
   readonly displayedColumns: readonly string[] = ['memberName', 'memberType', 'actions'];
@@ -51,21 +52,30 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  readonly listKey = 'security.group-members';
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
+
+  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
 
   @ViewChild(TableFilterComponent, { static: true })
-  tableFilter!: TableFilterComponent;
+  override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_group_members_title:Group Members`;
 
   readonly userDirectoryId: string;
 
-  private readonly destroy$ = new Subject<void>();
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
+  /** Whether this navigation requested a state reset (from the sidebar). */
+  private readonly resetStateRequested: boolean;
 
   constructor(private securityService: SecurityService) {
     super();
+
+    // Read the reset flag from the current navigation
+    const nav = this.router.getCurrentNavigation();
+    this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     // Retrieve the route parameters
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
@@ -95,7 +105,9 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
   }
 
   addMemberToGroup(): void {
+    // When implemented, remember to call this.saveState() before navigation.
     // // noinspection JSIgnoredPromiseFromCall
+    // this.saveState();
     // this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
@@ -110,13 +122,10 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
   }
 
   ngAfterViewInit(): void {
-    this.initializeDataLoaders();
-    this.loadData();
-  }
+    this.initializeStatefulList(this.resetStateRequested, () => this.loadData());
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    // Stabilize view after paginator/sort mutations
+    this.changeDetectorRef.detectChanges();
   }
 
   removeMemberFromGroup(groupMember: GroupMember): void {
@@ -128,63 +137,24 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
           this.groupName,
           groupMember.memberType,
           groupMember.memberName
-        )
+        ),
+      () => this.loadGroupMembers()
     );
-  }
-
-  private confirmAndProcessAction(
-    confirmationMessage: string,
-    action: () => Observable<unknown>
-  ): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: confirmationMessage
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((confirmed) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
-
-          return action().pipe(
-            switchMap(() => {
-              this.resetTable();
-              return this.loadGroupMembers();
-            }),
-            catchError((error: Error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-  }
-
-  private initializeDataLoaders(): void {
-    this.sort.sortChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.paginator.pageIndex = 0;
-    });
-
-    merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(debounceTime(200), takeUntil(this.destroy$))
-      .subscribe(() => this.loadData());
   }
 
   private loadData(): void {
     this.spinnerService.showSpinner();
 
     this.loadGroupMembers()
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .pipe(
+        finalize(() => this.spinnerService.hideSpinner()),
+        takeUntil(this.destroy$)
+      )
       .subscribe({
         next: () => {
-          /* empty */
+          // Load complete
         },
-        error: (error) => this.handleError(error, false)
+        error: (error: Error) => this.handleError(error, false)
       });
   }
 
@@ -206,12 +176,5 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
       this.paginator.pageIndex,
       this.paginator.pageSize
     );
-  }
-
-  private resetTable(): void {
-    this.tableFilter.reset(false);
-    this.paginator.pageIndex = 0;
-    this.sort.active = '';
-    this.sort.direction = 'asc';
   }
 }

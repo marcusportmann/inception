@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import {
-  AdminContainerView, CoreModule, Error, SortDirection, TableFilterComponent
-} from 'ngx-inception/core';
-import { EMPTY, merge, Observable, Subject, tap } from 'rxjs';
-import {
-  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
-} from 'rxjs/operators';
+import { CoreModule, Error, SortDirection, TableFilterComponent } from 'ngx-inception/core';
+import { Observable } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
+import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { SecurityService } from '../services/security.service';
 import { UserDirectorySummaries } from '../services/user-directory-summaries';
 import { UserDirectorySummaryDataSource } from '../services/user-directory-summary-data-source';
@@ -40,29 +39,34 @@ import { UserDirectorySummaryDataSource } from '../services/user-directory-summa
   templateUrl: 'user-directories.component.html',
   styleUrls: ['user-directories.component.css']
 })
-export class UserDirectoriesComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
-  dataSource: UserDirectorySummaryDataSource;
+export class UserDirectoriesComponent extends StatefulListView implements AfterViewInit {
+  readonly dataSource: UserDirectorySummaryDataSource;
 
   displayedColumns = ['name', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  readonly listKey = 'security.user-directories';
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
+
+  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
 
   @ViewChild(TableFilterComponent, { static: true })
-  tableFilter!: TableFilterComponent;
+  override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_user_directories_title:User Directories`;
 
-  private destroy$ = new Subject<void>();
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
+  /** Whether this navigation requested a state reset (from the sidebar). */
+  private readonly resetStateRequested: boolean;
 
   constructor(private securityService: SecurityService) {
     super();
+
+    const nav = this.router.getCurrentNavigation();
+    this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     this.dataSource = new UserDirectorySummaryDataSource(this.securityService);
   }
@@ -70,11 +74,14 @@ export class UserDirectoriesComponent
   deleteUserDirectory(userDirectoryId: string): void {
     this.confirmAndProcessAction(
       $localize`:@@security_user_directories_confirm_delete_user_directory:Are you sure you want to delete the user directory?`,
-      () => this.securityService.deleteUserDirectory(userDirectoryId)
+      () => this.securityService.deleteUserDirectory(userDirectoryId),
+      () => this.loadUserDirectorySummaries()
     );
   }
 
   editUserDirectory(userDirectoryId: string): void {
+    this.saveState();
+
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate([encodeURIComponent(userDirectoryId)], {
       relativeTo: this.activatedRoute
@@ -82,77 +89,32 @@ export class UserDirectoriesComponent
   }
 
   newUserDirectory(): void {
+    this.saveState();
+
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
-    this.initializeDataLoaders();
-    this.loadData();
-  }
+    this.initializeStatefulList(this.resetStateRequested, () => this.loadData());
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private confirmAndProcessAction(
-    confirmationMessage: string,
-    action: () => Observable<void | boolean>
-  ): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: confirmationMessage
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((confirmed: boolean | undefined) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
-
-          return action().pipe(
-            catchError((error: Error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            tap(() => this.resetTable()),
-            switchMap(() =>
-              this.loadUserDirectorySummaries().pipe(
-                catchError((error: Error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            ),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-  }
-
-  private initializeDataLoaders(): void {
-    this.sort.sortChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => (this.paginator.pageIndex = 0));
-
-    merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(debounceTime(200), takeUntil(this.destroy$))
-      .subscribe(() => this.loadData());
+    // Stabilize view after paginator/sort mutations
+    this.changeDetectorRef.detectChanges();
   }
 
   private loadData(): void {
     this.spinnerService.showSpinner();
+
     this.loadUserDirectorySummaries()
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .pipe(
+        finalize(() => this.spinnerService.hideSpinner()),
+        takeUntil(this.destroy$)
+      )
       .subscribe({
         next: () => {
           // Load complete
         },
-        error: (error) => this.handleError(error, false)
+        error: (error: Error) => this.handleError(error, false)
       });
   }
 
@@ -172,12 +134,5 @@ export class UserDirectoriesComponent
       this.paginator.pageIndex,
       this.paginator.pageSize
     );
-  }
-
-  private resetTable(): void {
-    this.tableFilter.reset(false);
-    this.paginator.pageIndex = 0;
-    this.sort.active = '';
-    this.sort.direction = 'asc' as SortDirection;
   }
 }

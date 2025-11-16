@@ -16,8 +16,15 @@
 
 import { Component, forwardRef } from '@angular/core';
 import {
-  ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors,
-  Validator, Validators
+  AbstractControl,
+  ControlValueAccessor,
+  FormControl,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+  Validators
 } from '@angular/forms';
 import { CoreModule } from 'ngx-inception/core';
 import { UserDirectoryParameter } from '../services/user-directory-parameter';
@@ -42,20 +49,22 @@ import { UserDirectoryUtil } from '../services/user-directory-util';
     }
   ]
 })
-export class InternalUserDirectoryComponent implements ControlValueAccessor, Validator {
+export class InternalUserDirectoryComponent
+  implements ControlValueAccessor, Validator
+{
   internalUserDirectoryForm: FormGroup;
 
   maxFilteredGroupMembersControl: FormControl;
-
   maxFilteredGroupsControl: FormControl;
-
   maxFilteredUsersControl: FormControl;
-
   maxPasswordAttemptsControl: FormControl;
-
   passwordExpiryMonthsControl: FormControl;
-
   passwordHistoryMonthsControl: FormControl;
+
+  // ---- ControlValueAccessor callbacks ----
+  // The external value is the parameter list
+  private onChange: (value: UserDirectoryParameter[] | null) => void = () => { /* empty */ };
+  private onTouched: () => void = () => { /* empty */ };
 
   constructor() {
     // Initialize the form controls
@@ -93,8 +102,14 @@ export class InternalUserDirectoryComponent implements ControlValueAccessor, Val
       passwordExpiryMonths: this.passwordExpiryMonthsControl,
       passwordHistoryMonths: this.passwordHistoryMonthsControl
     });
+
+    // Whenever the internal form changes, propagate the parameter list
+    this.internalUserDirectoryForm.valueChanges.subscribe(() => {
+      this.onChange(this.getParameters());
+    });
   }
 
+  // Expose parameters as the "value" of the control
   getParameters(): UserDirectoryParameter[] {
     const parameters: UserDirectoryParameter[] = [];
 
@@ -132,30 +147,8 @@ export class InternalUserDirectoryComponent implements ControlValueAccessor, Val
     return parameters;
   }
 
-  // TODO: CHECK IF WE CAN REMOVE THIS -- MARCUS
-  onTouched: () => void = () => {
-    /* empty */
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerOnChange(fn: any): void {
-    this.internalUserDirectoryForm.valueChanges.subscribe(fn);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.internalUserDirectoryForm.disable();
-    } else {
-      this.internalUserDirectoryForm.enable();
-    }
-  }
-
-  setParameters(parameters: UserDirectoryParameter[]) {
+  // Helper to populate from an existing parameter list
+  setParameters(parameters: UserDirectoryParameter[]): void {
     this.maxPasswordAttemptsControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'MaxPasswordAttempts')
         ? UserDirectoryUtil.getParameter(parameters, 'MaxPasswordAttempts')
@@ -186,23 +179,64 @@ export class InternalUserDirectoryComponent implements ControlValueAccessor, Val
         ? UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroupMembers')
         : '100'
     );
+
+    // Reset the touch/pristine state when writing from outside
+    this.internalUserDirectoryForm.markAsPristine();
+    this.internalUserDirectoryForm.markAsUntouched();
+
+    // keep outer control value in sync as well
+    this.onChange(this.getParameters());
   }
 
-  validate(): ValidationErrors | null {
-    return this.internalUserDirectoryForm.valid
-      ? null
-      : {
-          invalidForm: {
-            valid: false,
-            message: 'internalUserDirectoryForm fields are invalid'
-          }
-        };
+  // ---- ControlValueAccessor implementation ----
+
+  // Angular calls this to push a value INTO the component
+  // Expected value: UserDirectoryParameter[] | null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  writeValue(val: any): void {
+    if (val && Array.isArray(val)) {
+      this.setParameters(val);
+    }
+    // If null/undefined/empty, we keep current defaults
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  writeValue(val: any): void {
-    if (val) {
-      this.internalUserDirectoryForm.setValue(val, { emitEvent: false });
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.internalUserDirectoryForm.disable();
+    } else {
+      this.internalUserDirectoryForm.enable();
     }
+  }
+
+  // Call this from the template on blur if you want proper "touched" behavior
+  markAsTouched(): void {
+    if (this.onTouched) {
+      this.onTouched();
+    }
+  }
+
+  // ---- Validator implementation ----
+
+  validate(_control: AbstractControl): ValidationErrors | null {
+    void _control;
+
+    return this.internalUserDirectoryForm.valid
+      ? null
+      : {
+        invalidForm: {
+          valid: false,
+          message: 'internalUserDirectoryForm fields are invalid'
+        }
+      };
   }
 }

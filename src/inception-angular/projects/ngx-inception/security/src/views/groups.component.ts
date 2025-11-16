@@ -165,6 +165,8 @@ export class GroupsComponent
 
     this.saveState();
 
+    this.listStateService.clear('security.group-members');
+
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
       [`${userDirectoryId}/${encodeURIComponent(groupName)}/members`],

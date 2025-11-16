@@ -100,7 +100,7 @@ export class ErrorReportSummaryDataSource implements DataSource<ErrorReportSumma
   }
 
   /**
-   * Handle errors during the error report summaries load operation.
+   * Handle errors during the load operation.
    *
    * @param error The error encountered.
    *

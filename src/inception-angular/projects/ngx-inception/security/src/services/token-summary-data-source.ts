@@ -103,7 +103,7 @@ export class TokenSummaryDataSource implements DataSource<TokenSummary> {
   }
 
   /**
-   * Handle errors during the token summaries load operation.
+   * Handle errors during the load operation.
    *
    * @param error The error encountered.
    *

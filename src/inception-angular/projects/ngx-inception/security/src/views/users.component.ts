@@ -301,7 +301,7 @@ export class UsersComponent
   private loadUsers(userDirectoryId: string): Observable<Users> {
     const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
 
-    let sortBy: UserSortBy = UserSortBy.Username;
+    let sortBy: UserSortBy = UserSortBy.Name;
     let sortDirection = SortDirection.Ascending;
 
     if (this.sort.active) {
