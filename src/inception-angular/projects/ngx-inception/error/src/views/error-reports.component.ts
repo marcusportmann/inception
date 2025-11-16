@@ -51,6 +51,8 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
+  readonly listKey = 'error.error-reports';
+
   @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 
   @ViewChild(MatSort, { static: true }) override sort!: MatSort;
@@ -61,9 +63,6 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
   readonly title = $localize`:@@error_error_reports_title:Error Reports`;
 
   toDateControl: FormControl<Date | null>;
-
-  /** Unique key for persisting list state. */
-  protected readonly listKey = 'error.error-reports';
 
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 

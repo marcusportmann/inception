@@ -36,7 +36,7 @@ export abstract class StatefulListView<TExtras = unknown>
   protected readonly destroy$ = new Subject<void>();
 
   /** Unique key for persisting list state (must be provided by subclass). */
-  protected abstract readonly listKey: string;
+  abstract readonly listKey: string;
 
   protected readonly listStateService = inject(ListStateService);
 

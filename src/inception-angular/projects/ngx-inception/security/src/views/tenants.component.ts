@@ -28,7 +28,7 @@ import { SecurityService } from '../services/security.service';
 import { TenantDataSource } from '../services/tenant-data-source';
 
 /**
- * The TenantsComponent class implements the tenants component.
+ * The TenantsComponent class implements the Tenants component.
  *
  * @author Marcus Portmann
  */

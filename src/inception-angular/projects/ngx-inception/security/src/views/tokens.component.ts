@@ -54,6 +54,8 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
+  readonly listKey = 'security.tokens';
+
   @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 
   @ViewChild(MatSort, { static: true }) override sort!: MatSort;
@@ -69,9 +71,6 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
   protected readonly TokenStatus = TokenStatus;
 
   protected readonly TokenType = TokenType;
-
-  /** Unique key for persisting list state. */
-  protected readonly listKey = 'security-tokens';
 
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 

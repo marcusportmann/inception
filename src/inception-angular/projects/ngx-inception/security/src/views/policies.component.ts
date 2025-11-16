@@ -47,6 +47,8 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
+  readonly listKey = 'security.policies';
+
   @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 
   @ViewChild(MatSort, { static: true }) override sort!: MatSort;
@@ -57,9 +59,6 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
   readonly title = $localize`:@@security_policies_title:Policies`;
 
   protected readonly PolicyType = PolicyType;
-
-  /** Unique key for persisting list state. */
-  protected readonly listKey = 'security.policies';
 
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 

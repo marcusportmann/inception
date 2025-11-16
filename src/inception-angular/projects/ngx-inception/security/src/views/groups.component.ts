@@ -14,25 +14,49 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  ViewChild,
+  inject
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import {
-  AdminContainerView, CoreModule, HasAuthorityDirective, SessionService, SortDirection, TableFilterComponent
+  CoreModule,
+  Error,
+  HasAuthorityDirective,
+  Session,
+  SessionService,
+  SortDirection,
+  TableFilterComponent
 } from 'ngx-inception/core';
-import { BehaviorSubject, EMPTY, forkJoin, merge, Observable, of, Subject, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, forkJoin, of } from 'rxjs';
 import {
-  catchError, debounceTime, filter, finalize, first, map, switchMap, takeUntil
+  catchError,
+  finalize,
+  first,
+  map,
+  switchMap,
+  takeUntil,
+  tap
 } from 'rxjs/operators';
+import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { GroupDataSource } from '../services/group-data-source';
 import { Groups } from '../services/groups';
 import { SecurityService } from '../services/security.service';
 import { UserDirectoryCapabilities } from '../services/user-directory-capabilities';
 import { UserDirectorySummary } from '../services/user-directory-summary';
 
+interface GroupsListExtras {
+  userDirectoryId: string | null;
+}
+
 /**
- * The GroupsComponent class implements the groups component.
+ * The GroupsComponent class implements the Groups component.
  *
  * @author Marcus Portmann
  */
@@ -43,19 +67,22 @@ import { UserDirectorySummary } from '../services/user-directory-summary';
   templateUrl: 'groups.component.html',
   styleUrls: ['groups.component.css']
 })
-export class GroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-  dataSource: GroupDataSource;
+export class GroupsComponent
+  extends StatefulListView<GroupsListExtras>
+  implements AfterViewInit
+{
+  readonly dataSource: GroupDataSource;
 
   displayedColumns = ['name', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
 
   @ViewChild(TableFilterComponent, { static: true })
-  tableFilter!: TableFilterComponent;
+  override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_groups_title:Groups`;
 
@@ -63,26 +90,35 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
   userDirectoryCapabilities$ = new BehaviorSubject<UserDirectoryCapabilities | null>(null);
 
-  userDirectoryId$ = new BehaviorSubject<string>('');
+  userDirectoryId$ = new BehaviorSubject<string | null>(null);
 
   @ViewChild('userDirectorySelect', { static: true })
   userDirectorySelect!: MatSelect;
 
-  private destroy$ = new Subject<void>();
+  readonly listKey = 'security.groups';
+
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
+  /** Whether this navigation requested a state reset (from the sidebar). */
+  private readonly resetStateRequested: boolean;
 
   constructor(
     private securityService: SecurityService,
     private sessionService: SessionService
   ) {
     super();
+
+    const nav = this.router.getCurrentNavigation();
+    this.resetStateRequested = !!nav?.extras.state?.['resetState'];
+
     this.dataSource = new GroupDataSource(this.securityService);
   }
 
   get enableActionsMenu$(): Observable<boolean> {
     return this.userDirectoryCapabilities$.pipe(
       map(
-        (userDirectoryCapabilities) =>
-          userDirectoryCapabilities?.supportsGroupAdministration ?? false
+        (caps) =>
+          caps?.supportsGroupAdministration ?? false
       )
     );
   }
@@ -92,241 +128,235 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
   }
 
   deleteGroup(groupName: string): void {
+    const userDirectoryId = this.userDirectoryId$.value;
+    if (!userDirectoryId) {
+      return;
+    }
+
     const message = $localize`:@@security_groups_confirm_delete_group:Are you sure you want to delete the group?`;
-    this.confirmAndProcessAction(message, () =>
-      this.securityService.deleteGroup(this.userDirectoryId$.value, groupName)
+
+    this.confirmAndProcessAction(
+      message,
+      () => this.securityService.deleteGroup(userDirectoryId, groupName),
+      () => this.loadGroups(userDirectoryId)
     );
   }
 
   editGroup(groupName: string): void {
+    const userDirectoryId = this.userDirectoryId$.value;
+    if (!userDirectoryId) {
+      return;
+    }
+
+    this.saveState();
+
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([`${this.userDirectoryId$.value}/${encodeURIComponent(groupName)}/edit`], {
-      relativeTo: this.activatedRoute
-    });
+    this.router.navigate(
+      [`${userDirectoryId}/${encodeURIComponent(groupName)}/edit`],
+      { relativeTo: this.activatedRoute }
+    );
   }
 
   groupMembers(groupName: string): void {
+    const userDirectoryId = this.userDirectoryId$.value;
+    if (!userDirectoryId) {
+      return;
+    }
+
+    this.saveState();
+
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [`${this.userDirectoryId$.value}/${encodeURIComponent(groupName)}/members`],
+      [`${userDirectoryId}/${encodeURIComponent(groupName)}/members`],
       { relativeTo: this.activatedRoute }
     );
   }
 
   groupRoles(groupName: string): void {
+    const userDirectoryId = this.userDirectoryId$.value;
+    if (!userDirectoryId) {
+      return;
+    }
+
+    this.saveState();
+
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [`${this.userDirectoryId$.value}/${encodeURIComponent(groupName)}/roles`],
+      [`${userDirectoryId}/${encodeURIComponent(groupName)}/roles`],
       { relativeTo: this.activatedRoute }
     );
   }
 
-  loadGroups(): Observable<Groups> {
-    const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
-    const sortDirection =
-      this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
-
-    if (this.userDirectoryId$.value) {
-      return this.dataSource
-        .load(
-          this.userDirectoryId$.value,
-          filter,
-          sortDirection,
-          this.paginator.pageIndex,
-          this.paginator.pageSize
-        )
-        .pipe(
-          catchError((error) => {
-            this.handleError(error, false);
-
-            return EMPTY;
-          })
-        );
-    } else {
-      this.dataSource.clear();
-      return of();
-    }
-  }
-
   newGroup(): void {
+    const userDirectoryId = this.userDirectoryId$.value;
+    if (!userDirectoryId) {
+      return;
+    }
+
+    this.saveState();
+
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([`${this.userDirectoryId$.value}/new`], {
+    this.router.navigate([`${userDirectoryId}/new`], {
       relativeTo: this.activatedRoute
     });
   }
 
   ngAfterViewInit(): void {
-    this.initializeDataLoaders();
-    this.loadData();
+    const directorySelection$ = this.userDirectorySelect.selectionChange.pipe(
+      tap((change: MatSelectChange) => {
+        this.userDirectoryId$.next(change.value);
+      })
+    );
+
+    this.initializeStatefulList(
+      this.resetStateRequested,
+      () => this.loadGroupsData(),
+      [
+        {
+          observable: directorySelection$,
+          resetPage: true
+        }
+      ]
+    );
+
+    this.loadUserDirectories();
+
+    this.changeDetectorRef.detectChanges();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  protected override getExtrasState(): GroupsListExtras | undefined {
+    return {
+      userDirectoryId: this.userDirectoryId$.value
+    };
   }
 
-  private confirmAndProcessAction(
-    confirmationMessage: string,
-    action: () => Observable<void | unknown>
-  ): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: confirmationMessage
-    });
+  protected override resetExtrasState(): void {
+    this.userDirectoryId$.next(null);
+    this.userDirectoryCapabilities$.next(null);
+    this.userDirectories = [];
+    this.dataSource.clear();
 
-    dialogRef
-      .afterClosed()
+    if (this.userDirectorySelect) {
+      this.userDirectorySelect.value = null;
+    }
+  }
+
+  protected override restoreExtrasState(extras: GroupsListExtras | undefined): void {
+    if (extras?.userDirectoryId) {
+      this.userDirectoryId$.next(extras.userDirectoryId);
+
+      if (this.userDirectorySelect) {
+        this.userDirectorySelect.value = extras.userDirectoryId;
+      }
+    }
+  }
+
+  private loadGroupsData(): void {
+    const userDirectoryId = this.userDirectoryId$.value;
+
+    if (!userDirectoryId) {
+      this.dataSource.clear();
+      this.userDirectoryCapabilities$.next(null);
+      return;
+    }
+
+    this.spinnerService.showSpinner();
+
+    forkJoin({
+      userDirectoryCapabilities: this.securityService
+      .getUserDirectoryCapabilities(userDirectoryId)
       .pipe(
-        first(),
-        filter((confirmed) => confirmed === true),
-        switchMap(() => {
+        catchError((error: Error) => {
+          this.handleError(error, false);
+          return of(null);
+        })
+      ),
+      groups: this.loadGroups(userDirectoryId).pipe(
+        catchError((error: Error) => {
+          this.handleError(error, false);
+          return EMPTY;
+        })
+      )
+    })
+    .pipe(
+      finalize(() => this.spinnerService.hideSpinner()),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: ({ userDirectoryCapabilities }) => {
+        if (userDirectoryCapabilities) {
+          this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
+        }
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
+  }
+
+  private loadGroups(userDirectoryId: string): Observable<Groups> {
+    const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
+    const sortDirection =
+      this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
+
+    return this.dataSource.load(
+      userDirectoryId,
+      filter,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    );
+  }
+
+  private loadUserDirectories(): void {
+    this.sessionService.session$
+    .pipe(
+      first(),
+      switchMap((session: Session | null) => {
+        if (session?.tenantId) {
           this.spinnerService.showSpinner();
-          return action().pipe(
-            catchError((error) => {
+
+          return this.securityService
+          .getUserDirectorySummariesForTenant(session.tenantId)
+          .pipe(
+            catchError((error: Error) => {
               this.handleError(error, false);
               return EMPTY;
             }),
-            tap(() => this.resetTable()),
-            switchMap(() =>
-              this.loadGroups().pipe(
-                catchError((error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            ),
             finalize(() => this.spinnerService.hideSpinner())
           );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-  }
-
-  private initializeDataLoaders(): void {
-    // Handle user directory selection changes
-    this.userDirectoryId$
-      .pipe(
-        takeUntil(this.destroy$),
-        switchMap((userDirectoryId) => {
-          if (userDirectoryId) {
-            this.resetTable();
-            this.spinnerService.showSpinner();
-
-            return forkJoin({
-              userDirectoryCapabilities: this.securityService
-                .getUserDirectoryCapabilities(userDirectoryId)
-                .pipe(
-                  catchError((error) => {
-                    this.handleError(error, false);
-                    return EMPTY;
-                  })
-                ),
-              groups: this.loadGroups().pipe(
-                catchError((error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            }).pipe(
-              tap(({ userDirectoryCapabilities }) =>
-                this.userDirectoryCapabilities$.next(userDirectoryCapabilities)
-              ),
-              finalize(() => this.spinnerService.hideSpinner())
-            );
-          } else {
-            return of();
-          }
-        })
-      )
-      .subscribe();
-
-    // Handle selection changes in the user directory select
-    this.userDirectorySelect.selectionChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((change: MatSelectChange) => {
-        this.userDirectoryId$.next(change.value);
-      });
-
-    // Reset paginator on sort or filter changes
-    merge(this.sort.sortChange, this.tableFilter.changed)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => (this.paginator.pageIndex = 0));
-
-    // Load groups on sort, filter, or pagination changes
-    merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(
-        debounceTime(200), // Avoid redundant API calls
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        if (this.userDirectoryId$.value) {
-          this.spinnerService.showSpinner();
-          this.loadGroups()
-            .pipe(
-              catchError((error) => {
-                this.handleError(error, false);
-                return EMPTY;
-              }),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe();
+        } else {
+          return of([] as UserDirectorySummary[]);
         }
-      });
-  }
-
-  private loadData(): void {
-    // Load user directories for the tenant
-    this.sessionService.session$
-      .pipe(
-        first(),
-        switchMap((session) => {
-          if (session?.tenantId) {
-            this.spinnerService.showSpinner();
-            return this.securityService.getUserDirectorySummariesForTenant(session.tenantId).pipe(
-              catchError((error) => {
-                this.handleError(error, false);
-                return EMPTY;
-              }),
-              finalize(() => this.spinnerService.hideSpinner())
-            );
-          } else {
-            return of([]);
-          }
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((userDirectories: UserDirectorySummary[]) => {
+      }),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: (userDirectories: UserDirectorySummary[]) => {
         this.userDirectories = userDirectories;
 
-        if (this.userDirectories.length === 1) {
-          this.userDirectoryId$.next(this.userDirectories[0].id);
-        } else {
-          this.activatedRoute.paramMap
-            .pipe(
-              first(),
-              map(() => window.history.state),
-              takeUntil(this.destroy$)
-            )
-            .subscribe((state) => {
-              const userDirectoryId = state.userDirectoryId;
-              if (userDirectoryId) {
-                const matchingDirectory = this.userDirectories.find(
-                  (ud) => ud.id === userDirectoryId
-                );
-                if (matchingDirectory) {
-                  this.userDirectorySelect.value = matchingDirectory.id;
-                  this.userDirectoryId$.next(matchingDirectory.id);
-                }
-              }
-            });
-        }
-      });
-  }
+        let selectedId = this.userDirectoryId$.value;
 
-  private resetTable(): void {
-    this.tableFilter.reset(false);
-    this.paginator.pageIndex = 0;
-    this.sort.active = '';
-    this.sort.direction = 'asc' as SortDirection;
+        // If no selection from the restored state, infer one
+        if (!selectedId) {
+          if (userDirectories.length === 1) {
+            selectedId = userDirectories[0].id;
+          } else {
+            const state = window.history.state as { userDirectoryId?: string };
+            const fromNav = state?.userDirectoryId;
+
+            if (fromNav && userDirectories.some((ud) => ud.id === fromNav)) {
+              selectedId = fromNav;
+            }
+          }
+        }
+
+        if (selectedId && userDirectories.some((ud) => ud.id === selectedId)) {
+          this.userDirectoryId$.next(selectedId);
+          if (this.userDirectorySelect) {
+            this.userDirectorySelect.value = selectedId;
+          }
+        }
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }
