@@ -18,8 +18,7 @@ import { Component, HostBinding } from '@angular/core';
 import {
   BackNavigation, CoreModule, Error, FilteredPaginatedListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { EMPTY, Observable } from 'rxjs';
-import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { Code } from '../services/code';
 import { CodesService } from '../services/codes.service';
 
@@ -95,59 +94,7 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
     };
   }
 
-  protected override loadData(): void {
-    this.spinnerService.showSpinner();
-    this.codesService
-      .getCodesForCodeCategory(this.codeCategoryId)
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe({
-        next: (codes: Code[]) => {
-          this.dataSource.data = codes;
-
-          this.restorePageAfterDataLoaded();
-        },
-        error: (error) => this.handleError(error, false)
-      });
-  }
-
-  private confirmAndProcessAction(
-    confirmationMessage: string,
-    action: () => Observable<void | boolean>
-  ): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: confirmationMessage
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((confirmed) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
-
-          return action().pipe(
-            catchError((error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            switchMap(() =>
-              this.codesService.getCodesForCodeCategory(this.codeCategoryId).pipe(
-                catchError((error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            ),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (codes) => {
-          this.dataSource.data = codes;
-        }
-      });
+  protected override fetchData(): Observable<Code[]> {
+    return this.codesService.getCodesForCodeCategory(this.codeCategoryId);
   }
 }

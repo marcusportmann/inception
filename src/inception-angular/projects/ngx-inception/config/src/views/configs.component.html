@@ -1,7 +1,7 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="mat-mdc-table-header">
     <button mat-flat-button color="primary" (click)="newConfig()" i18n="@@config_configs_component_button_new">New</button>
-    <inception-core-table-filter (changed)="applyFilter($event)"></inception-core-table-filter>
+    <inception-core-table-filter [value]="filterValue" (changed)="applyFilter($event)"></inception-core-table-filter>
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
 

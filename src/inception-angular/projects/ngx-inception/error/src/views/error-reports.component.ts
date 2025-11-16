@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+} from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { add, isWithinInterval } from 'date-fns';
-import {
-  AdminContainerView, CoreModule, ISO8601Util, SortDirection, TableFilterComponent
-} from 'ngx-inception/core';
-import { merge, Observable, Subject } from 'rxjs';
-import { debounceTime, finalize, takeUntil } from 'rxjs/operators';
+import { CoreModule, ISO8601Util, SortDirection, TableFilterComponent } from 'ngx-inception/core';
+import { Observable } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
+import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { ErrorReportSortBy } from '../services/error-report-sort-by';
 import { ErrorReportSummaries } from '../services/error-report-summaries';
 import { ErrorReportSummaryDataSource } from '../services/error-report-summary-data-source';
@@ -41,8 +42,8 @@ import { ErrorService } from '../services/error.service';
   templateUrl: 'error-reports.component.html',
   styleUrls: ['error-reports.component.css']
 })
-export class ErrorReportsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-  dataSource: ErrorReportSummaryDataSource;
+export class ErrorReportsComponent extends StatefulListView implements AfterViewInit {
+  readonly dataSource: ErrorReportSummaryDataSource;
 
   displayedColumns = ['created', 'who', 'description', 'actions'];
 
@@ -50,21 +51,31 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
 
   @ViewChild(TableFilterComponent, { static: true })
-  tableFilter!: TableFilterComponent;
+  override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@error_error_reports_title:Error Reports`;
 
   toDateControl: FormControl<Date | null>;
 
-  private destroy$ = new Subject<void>();
+  /** Unique key for persisting list state. */
+  protected readonly listKey = 'error.error-reports';
+
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
+  /** Whether this navigation requested a state reset (from the sidebar). */
+  private readonly resetStateRequested: boolean;
 
   constructor(private errorService: ErrorService) {
     super();
+
+    // Read the reset flag from the current navigation
+    const nav = this.router.getCurrentNavigation();
+    this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     // Initialize form controls
     this.fromDateControl = new FormControl<Date | null>(add(new Date(), { months: -1 }), {
@@ -81,6 +92,7 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
 
   dateRangeChanged(): void {
     if (this.fromDateControl.valid && this.toDateControl.valid) {
+      this.onStateChangingEvent(true);
       this.loadData();
     }
   }
@@ -103,13 +115,10 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
   };
 
   ngAfterViewInit(): void {
-    this.initializeDataLoaders();
-    this.loadData();
-  }
+    this.initializeStatefulList(this.resetStateRequested, () => this.loadData());
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    // Stabilize view after mutating sort/paginator
+    this.changeDetectorRef.detectChanges();
   }
 
   viewErrorReport(errorReportId: string): void {
@@ -120,25 +129,19 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
   }
 
   private formatDate(value: Date | string | null): string | null {
-    if (!value) return null;
+    if (!value) {
+      return null;
+    }
     return typeof value === 'string' ? value : ISO8601Util.toString(value);
-  }
-
-  private initializeDataLoaders(): void {
-    // Reset paginator and load data on sort, filter, or pagination change
-    this.sort.sortChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => (this.paginator.pageIndex = 0));
-
-    merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(debounceTime(200), takeUntil(this.destroy$))
-      .subscribe(() => this.loadData());
   }
 
   private loadData(): void {
     this.spinnerService.showSpinner();
     this.loadErrorReportSummaries()
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .pipe(
+        finalize(() => this.spinnerService.hideSpinner()),
+        takeUntil(this.destroy$)
+      )
       .subscribe({
         next: () => {
           // Load complete
@@ -153,7 +156,7 @@ export class ErrorReportsComponent extends AdminContainerView implements AfterVi
     let sortBy = ErrorReportSortBy.Created;
     let sortDirection = SortDirection.Descending;
 
-    if (this.sort.active) {
+    if (this.sort.active && this.sort.direction) {
       sortBy = this.sort.active === 'who' ? ErrorReportSortBy.Who : ErrorReportSortBy.Created;
       sortDirection =
         this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;

@@ -15,11 +15,8 @@
  */
 
 import { Component, HostBinding } from '@angular/core';
-import {
-  CoreModule, Error, FilteredPaginatedListView, TableFilterComponent
-} from 'ngx-inception/core';
-import { EMPTY, Observable } from 'rxjs';
-import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
+import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
+import { Observable } from 'rxjs';
 
 import { MailTemplateContentType } from '../services/mail-template-content-type';
 import { MailTemplateSummary } from '../services/mail-template-summary';
@@ -87,62 +84,7 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
     };
   }
 
-  protected override loadData(): void {
-    this.spinnerService.showSpinner();
-
-    this.mailService
-      .getMailTemplateSummaries()
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe({
-        next: (mailTemplateSummaries: MailTemplateSummary[]) => {
-          this.dataSource.data = mailTemplateSummaries;
-
-          this.restorePageAfterDataLoaded();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
-  }
-
-  private confirmAndProcessAction(
-    confirmationMessage: string,
-    action: () => Observable<void | boolean>
-  ): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: confirmationMessage
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((confirmed) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
-
-          return action().pipe(
-            catchError((error: Error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            switchMap(() =>
-              this.mailService.getMailTemplateSummaries().pipe(
-                catchError((error: Error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            ),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (mailTemplateSummaries: MailTemplateSummary[]) => {
-          this.dataSource.data = mailTemplateSummaries;
-
-          this.restorePageAfterDataLoaded();
-        }
-      });
+  protected override fetchData(): Observable<MailTemplateSummary[]> {
+    return this.mailService.getMailTemplateSummaries();
   }
 }

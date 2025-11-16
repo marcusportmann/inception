@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import {
-  AdminContainerView, CoreModule, Error, SortDirection, TableFilterComponent
-} from 'ngx-inception/core';
-import { EMPTY, merge, Observable, Subject, tap } from 'rxjs';
-import {
-  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
-} from 'rxjs/operators';
+import { CoreModule, SortDirection, TableFilterComponent } from 'ngx-inception/core';
+import { Observable } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
+import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { SecurityService } from '../services/security.service';
 import { TokenStatus } from '../services/token-status';
 import { TokenSummaries } from '../services/token-summaries';
 import { TokenSummary } from '../services/token-summary';
 import { TokenSummaryDataSource } from '../services/token-summary-data-source';
 import { TokenType } from '../services/token-type';
+
+interface TokenListExtras {
+  tokenStatus: TokenStatus;
+}
 
 /**
  * The TokensComponent class implements the Tokens component.
@@ -44,19 +47,19 @@ import { TokenType } from '../services/token-type';
   templateUrl: 'tokens.component.html',
   styleUrls: ['tokens.component.css']
 })
-export class TokensComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-  dataSource: TokenSummaryDataSource;
+export class TokensComponent extends StatefulListView<TokenListExtras> implements AfterViewInit {
+  readonly dataSource: TokenSummaryDataSource;
 
   displayedColumns = ['name', 'type', 'status', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
 
   @ViewChild(TableFilterComponent, { static: true })
-  tableFilter!: TableFilterComponent;
+  override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_tokens_title:Tokens`;
 
@@ -67,10 +70,20 @@ export class TokensComponent extends AdminContainerView implements AfterViewInit
 
   protected readonly TokenType = TokenType;
 
-  private destroy$ = new Subject<void>();
+  /** Unique key for persisting list state. */
+  protected readonly listKey = 'security-tokens';
+
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
+  /** Whether this navigation requested a state reset (from the sidebar). */
+  private readonly resetStateRequested: boolean;
 
   constructor(private securityService: SecurityService) {
     super();
+
+    // Read the reset flag from the current navigation (if any)
+    const nav = this.router.getCurrentNavigation();
+    this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     this.dataSource = new TokenSummaryDataSource(this.securityService);
   }
@@ -78,7 +91,8 @@ export class TokensComponent extends AdminContainerView implements AfterViewInit
   deleteToken(tokenId: string): void {
     this.confirmAndProcessAction(
       $localize`:@@security_tokens_confirm_delete_token:Are you sure you want to delete the token?`,
-      () => this.securityService.deleteToken(tokenId)
+      () => this.securityService.deleteToken(tokenId),
+      () => this.loadTokenSummaries()
     );
   }
 
@@ -98,7 +112,7 @@ export class TokensComponent extends AdminContainerView implements AfterViewInit
   }
 
   getTokenTypeName(tokenType: TokenType): string {
-    if (tokenType == TokenType.JWT) {
+    if (tokenType === TokenType.JWT) {
       return $localize`:@@security_token_type_jwt:JWT`;
     } else {
       return $localize`:@@security_token_type_unknown:Unknown`;
@@ -111,25 +125,29 @@ export class TokensComponent extends AdminContainerView implements AfterViewInit
   }
 
   ngAfterViewInit(): void {
-    this.initializeDataLoaders();
-    this.loadData();
-  }
+    // Initialize list state + data loaders (includes tokenStatus as extra trigger)
+    this.initializeStatefulList(this.resetStateRequested, () => this.loadData(), [
+      {
+        observable: this.tokenStatusSelect.selectionChange,
+        resetPage: true
+      }
+    ]);
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    // Stabilize view after mutating sort/paginator
+    this.changeDetectorRef.detectChanges();
   }
 
   reinstateToken(tokenId: string): void {
     this.confirmAndProcessAction(
       $localize`:@@security_tokens_confirm_reinstate_token:Are you sure you want to reinstate the token?`,
-      () => this.securityService.reinstateToken(tokenId)
+      () => this.securityService.reinstateToken(tokenId),
+      () => this.loadTokenSummaries()
     );
   }
 
   reissueToken(tokenId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['reissue/' + encodeURIComponent(tokenId)], {
+    this.router.navigate(['reissue', encodeURIComponent(tokenId)], {
       relativeTo: this.activatedRoute
     });
   }
@@ -137,76 +155,44 @@ export class TokensComponent extends AdminContainerView implements AfterViewInit
   revokeToken(tokenId: string): void {
     this.confirmAndProcessAction(
       $localize`:@@security_tokens_confirm_revoke_token:Are you sure you want to revoke the token?`,
-      () => this.securityService.revokeToken(tokenId)
+      () => this.securityService.revokeToken(tokenId),
+      () => this.loadTokenSummaries()
     );
   }
 
   viewToken(tokenId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(tokenId) + '/view'], {
+    this.router.navigate([encodeURIComponent(tokenId), 'view'], {
       relativeTo: this.activatedRoute
     });
   }
 
-  private confirmAndProcessAction(
-    confirmationMessage: string,
-    action: () => Observable<void | boolean>
-  ): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: confirmationMessage
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((confirmed: boolean | undefined) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
-
-          return action().pipe(
-            catchError((error: Error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            tap(() => this.resetTable()),
-            switchMap(() =>
-              this.loadTokenSummaries().pipe(
-                catchError((error: Error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            ),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        error: (error: Error) => this.handleError(error, false)
-      });
+  protected override getExtrasState(): TokenListExtras {
+    return {
+      tokenStatus: (this.tokenStatusSelect?.value as TokenStatus) ?? TokenStatus.Active
+    };
   }
 
-  private initializeDataLoaders(): void {
-    this.sort.sortChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => (this.paginator.pageIndex = 0));
+  protected override resetExtrasState(): void {
+    this.tokenStatusSelect.value = TokenStatus.Active;
+  }
 
-    merge(
-      this.sort.sortChange,
-      this.tokenStatusSelect.selectionChange,
-      this.tableFilter.changed,
-      this.paginator.page
-    )
-      .pipe(debounceTime(200), takeUntil(this.destroy$))
-      .subscribe(() => this.loadData());
+  protected override restoreExtrasState(extras: TokenListExtras | undefined): void {
+    if (!extras) {
+      this.tokenStatusSelect.value = TokenStatus.Active;
+      return;
+    }
+
+    this.tokenStatusSelect.value = extras.tokenStatus ?? TokenStatus.Active;
   }
 
   private loadData(): void {
     this.spinnerService.showSpinner();
     this.loadTokenSummaries()
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .pipe(
+        finalize(() => this.spinnerService.hideSpinner()),
+        takeUntil(this.destroy$)
+      )
       .subscribe({
         next: () => {
           // Load complete
@@ -216,28 +202,23 @@ export class TokensComponent extends AdminContainerView implements AfterViewInit
   }
 
   private loadTokenSummaries(): Observable<TokenSummaries> {
-    const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
+    const filterValue = this.tableFilter.filter?.trim().toLowerCase() || '';
 
     let sortDirection = SortDirection.Descending;
 
-    if (this.sort.active) {
+    if (this.sort.active && this.sort.direction) {
       sortDirection =
         this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
     }
 
+    const tokenStatus = (this.tokenStatusSelect?.value as TokenStatus) ?? TokenStatus.Active;
+
     return this.dataSource.load(
-      this.tokenStatusSelect.value as TokenStatus,
-      filter,
+      tokenStatus,
+      filterValue,
       sortDirection,
       this.paginator.pageIndex,
       this.paginator.pageSize
     );
-  }
-
-  private resetTable(): void {
-    this.tableFilter.reset(false);
-    this.paginator.pageIndex = 0;
-    this.sort.active = '';
-    this.sort.direction = 'asc' as SortDirection;
   }
 }

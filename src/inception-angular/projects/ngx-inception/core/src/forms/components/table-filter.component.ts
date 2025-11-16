@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { AsyncPipe, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import {
-  Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild
+  Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
@@ -26,7 +26,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Component({
   selector: 'inception-core-table-filter',
   standalone: true,
-  imports: [MatIconButton, MatInput, NgIf, AsyncPipe],
+  imports: [MatIconButton, MatInput, NgIf],
   template: `
     <div class="table-filter-container">
       <div class="table-filter-icon">
@@ -38,11 +38,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
         #tableFilterInput
         placeholder="Search..."
         autocomplete="off" />
-      <button
-        class="table-filter-reset"
-        mat-icon-button
-        *ngIf="changed | async"
-        (click)="reset(true)">
+      <button class="table-filter-reset" mat-icon-button *ngIf="filter" (click)="reset(true)">
         <i class="fa fa-times"></i>
       </button>
     </div>
@@ -90,36 +86,56 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   ]
 })
 export class TableFilterComponent implements OnInit, OnDestroy {
+  /** Emitted when the user changes the filter (or clicks reset with emitEvent=true). */
   @Output() changed: EventEmitter<string> = new EventEmitter<string>();
 
   filter = '';
 
   @ViewChild('tableFilterInput', { static: true })
-  tableFilterInput!: ElementRef;
+  tableFilterInput!: ElementRef<HTMLInputElement>;
 
   private tableFilterInputSubscription?: Subscription;
 
+  @Input()
+  get value(): string {
+    return this.filter;
+  }
+
+  set value(val: string) {
+    this.filter = val ?? '';
+    this.syncInput();
+  }
+
   ngOnDestroy(): void {
-    if (this.tableFilterInputSubscription) {
-      this.tableFilterInputSubscription.unsubscribe();
-    }
+    this.tableFilterInputSubscription?.unsubscribe();
   }
 
   ngOnInit(): void {
-    this.tableFilterInputSubscription = fromEvent(this.tableFilterInput.nativeElement, 'keyup')
+    this.tableFilterInputSubscription = fromEvent<KeyboardEvent>(
+      this.tableFilterInput.nativeElement,
+      'keyup'
+    )
       .pipe(debounceTime(250), distinctUntilChanged())
       .subscribe(() => {
         this.filter = this.tableFilterInput.nativeElement.value;
         this.changed.emit(this.filter);
       });
+
+    this.syncInput();
   }
 
   reset(emitEvent: boolean): void {
     this.filter = '';
-    this.tableFilterInput.nativeElement.value = this.filter;
+    this.syncInput();
 
     if (emitEvent) {
       this.changed.emit(this.filter);
+    }
+  }
+
+  private syncInput(): void {
+    if (this.tableFilterInput?.nativeElement) {
+      this.tableFilterInput.nativeElement.value = this.filter;
     }
   }
 }

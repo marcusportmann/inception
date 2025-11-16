@@ -16,8 +16,7 @@
 
 import { Component, HostBinding } from '@angular/core';
 import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
-import { EMPTY, Observable } from 'rxjs';
-import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { Config } from '../services/config';
 import { ConfigService } from '../services/config.service';
@@ -74,62 +73,7 @@ export class ConfigsComponent extends FilteredPaginatedListView<Config> {
     };
   }
 
-  protected override loadData(): void {
-    this.spinnerService.showSpinner();
-
-    this.configService
-      .getConfigs()
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe({
-        next: (configs: Config[]) => {
-          this.dataSource.data = configs;
-
-          this.restorePageAfterDataLoaded();
-        },
-        error: (error) => this.handleError(error, false)
-      });
-  }
-
-  private confirmAndProcessAction(
-    confirmationMessage: string,
-    action: () => Observable<void | boolean>
-  ): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: confirmationMessage
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((confirmed) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
-
-          return action().pipe(
-            catchError((error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            switchMap(() =>
-              this.configService.getConfigs().pipe(
-                catchError((error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            ),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (configs: Config[]) => {
-          this.dataSource.data = configs;
-
-          this.restorePageAfterDataLoaded();
-        }
-      });
+  protected override fetchData(): Observable<Config[]> {
+    return this.configService.getConfigs();
   }
 }

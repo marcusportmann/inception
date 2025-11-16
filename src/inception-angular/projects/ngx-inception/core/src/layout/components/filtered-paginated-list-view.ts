@@ -20,9 +20,9 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { AdminContainerView } from 'ngx-inception/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { AdminContainerView, Error } from 'ngx-inception/core';
+import { EMPTY, Observable, Subject } from 'rxjs';
+import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
 import { ListStateService } from '../services/list-state.service';
 
 @Directive()
@@ -31,6 +31,9 @@ export abstract class FilteredPaginatedListView<T>
   implements AfterViewInit, OnDestroy
 {
   readonly dataSource = new MatTableDataSource<T>();
+
+  /** Current filter text (drives both the datasource and the UI filter component). */
+  filterValue = '';
 
   /** Unique key for this list (per route / context). */
   abstract readonly listKey: string;
@@ -44,11 +47,11 @@ export abstract class FilteredPaginatedListView<T>
 
   protected readonly listStateService = inject(ListStateService);
 
-  /** Guard to ignore the sortChange triggered while restoring state. */
-  private restoringState = false;
-
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
+
+  /** Guard to ignore the sortChange triggered while restoring state. */
+  private restoringState = false;
 
   protected constructor() {
     super();
@@ -62,6 +65,8 @@ export abstract class FilteredPaginatedListView<T>
   }
 
   applyFilter(filterValue: string): void {
+    this.filterValue = filterValue ?? '';
+
     this.dataSource.filter = (filterValue ?? '').trim().toLowerCase();
 
     if (this.dataSource.paginator) {
@@ -93,6 +98,61 @@ export abstract class FilteredPaginatedListView<T>
   }
 
   /**
+   * Displays a confirmation dialog, executes an action when confirmed, and reloads the list data.
+   *
+   * This method shows a confirmation dialog with the provided message. If the user confirms,
+   * it runs {@link actionFn}, then calls {@link fetchData} to retrieve the updated items.
+   * On success, the resulting items are assigned to {@link dataSource}.data and the current
+   * page index is restored via {@link restorePageAfterDataLoaded}. Errors are reported using
+   * {@link handleError}, and the global spinner is shown and hidden automatically.
+   *
+   * @param confirmationMessage - Localized message displayed in the confirmation dialog.
+   * @param actionFn - Function that performs the side effect (e.g., delete or update) and returns an observable.
+   */
+  protected confirmAndProcessAction(
+    confirmationMessage: string,
+    actionFn: () => Observable<unknown>
+  ): void {
+    const dialogRef = this.dialogService.showConfirmationDialog({
+      message: confirmationMessage
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        filter((confirmed: boolean | undefined) => confirmed === true),
+        switchMap(() => {
+          this.spinnerService.showSpinner();
+
+          return actionFn().pipe(
+            catchError((error: Error) => {
+              this.handleError(error, false);
+              return EMPTY;
+            }),
+            switchMap(() =>
+              this.fetchData().pipe(
+                catchError((error: Error) => {
+                  this.handleError(error, false);
+                  return EMPTY;
+                })
+              )
+            ),
+            finalize(() => this.spinnerService.hideSpinner())
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (items: T[]) => {
+          this.dataSource.data = items;
+          this.restorePageAfterDataLoaded();
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
+  }
+
+  /**
    * Subclasses can override this to customize filtering logic.
    */
   protected createFilterPredicate(): (data: T, filter: string) => boolean {
@@ -104,13 +164,30 @@ export abstract class FilteredPaginatedListView<T>
   }
 
   /**
-   * Subclasses must implement this to fetch data and assign `this.dataSource.data`.
+   * Subclasses must implement this to fetch the raw list items.
    */
-  protected abstract loadData(): void;
+  protected abstract fetchData(): Observable<T[]>;
 
   /**
-   * Call this **after** setting `this.dataSource.data` in your component's `loadData()` subscription.
+   * Loads data using {@link fetchData}, handles spinner, errors, and page restoration.
    */
+  protected loadData(): void {
+    this.spinnerService.showSpinner();
+
+    this.fetchData()
+      .pipe(
+        finalize(() => this.spinnerService.hideSpinner()),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (items: T[]) => {
+          this.dataSource.data = items;
+          this.restorePageAfterDataLoaded();
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
+  }
+
   protected restorePageAfterDataLoaded(): void {
     const state = this.listStateService.get(this.listKey);
     if (!state || !this.paginator) {
@@ -139,7 +216,7 @@ export abstract class FilteredPaginatedListView<T>
       pageSize: this.paginator.pageSize ?? 10,
       sortActive: this.sort.active ?? '',
       sortDirection: this.sort.direction,
-      filter: this.dataSource.filter ?? ''
+      filter: this.filterValue ?? ''
     });
   }
 
@@ -167,6 +244,8 @@ export abstract class FilteredPaginatedListView<T>
     if (this.resetStateRequested) {
       this.listStateService.clear(this.listKey);
 
+      this.filterValue = '';
+
       // Make sure the local UI is in a clean state as well
       this.dataSource.filter = '';
       if (this.paginator) {
@@ -187,7 +266,9 @@ export abstract class FilteredPaginatedListView<T>
 
     this.restoringState = true;
 
-    this.dataSource.filter = state.filter;
+    this.filterValue = state.filter ?? '';
+    this.dataSource.filter = state.filter ? state.filter : '';
+
     this.paginator.pageSize = state.pageSize;
     this.sort.active = state.sortActive;
     this.sort.direction = state.sortDirection;

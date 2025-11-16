@@ -15,14 +15,21 @@
  */
 
 import { Injectable } from '@angular/core';
-import { SortDirection } from '@angular/material/sort';
 
-export interface ListState {
+/**
+ * The persisted state for a pageable, sortable list.
+ *
+ * This model captures the UI state that should survive navigation, such as the current page,
+ * page size, sort field/direction, and an optional text filter. The generic `TExtras` allows each
+ * list to store additional, feature-specific state (e.g., selected token status, active tab, etc.).
+ */
+export interface ListState<TExtras = unknown> {
+  extras?: TExtras;
+  filter?: string;
   pageIndex: number;
   pageSize: number;
   sortActive: string;
-  sortDirection: SortDirection;
-  filter: string;
+  sortDirection: 'asc' | 'desc' | '';
 }
 
 /**
@@ -37,6 +44,10 @@ export interface ListState {
 export class ListStateService {
   private readonly states = new Map<string, ListState>();
 
+  clear(key: string): void {
+    this.states.delete(key);
+  }
+
   get(key: string): ListState | undefined {
     return this.states.get(key);
   }
@@ -44,10 +55,4 @@ export class ListStateService {
   set(key: string, state: ListState): void {
     this.states.set(key, state);
   }
-
-  clear(key: string): void {
-    this.states.delete(key);
-  }
 }
-
-

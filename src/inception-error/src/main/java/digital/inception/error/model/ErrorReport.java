@@ -188,6 +188,7 @@ public class ErrorReport implements Serializable {
    * @param description the description of the error
    * @param detail the error detail
    * @param created the date and time the error report was created
+   * @param who the username for the user associated with the error report
    */
   public ErrorReport(
       UUID id,
@@ -195,13 +196,15 @@ public class ErrorReport implements Serializable {
       String applicationVersion,
       String description,
       String detail,
-      OffsetDateTime created) {
+      OffsetDateTime created,
+      String who) {
     this.id = id;
     this.applicationId = applicationId;
     this.applicationVersion = applicationVersion;
     this.description = description;
     this.detail = detail;
     this.created = created;
+    this.who = who;
   }
 
   /**

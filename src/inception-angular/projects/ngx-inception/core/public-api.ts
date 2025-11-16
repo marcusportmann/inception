@@ -70,7 +70,7 @@ export * from './src/layout/components/admin-footer.component';
 export * from './src/layout/components/admin-header.component';
 export * from './src/layout/components/back-navigation';
 export * from './src/layout/components/breadcrumbs.component';
-export * from './src/layout/components/filtered-paginated-list-view.component';
+export * from './src/layout/components/filtered-paginated-list-view';
 export * from './src/layout/components/not-found.component';
 export * from './src/layout/components/sidebar.component';
 export * from './src/layout/components/sidebar-footer.component';

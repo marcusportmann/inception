@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import {
-  AdminContainerView, CoreModule, SortDirection, TableFilterComponent
-} from 'ngx-inception/core';
-import { EMPTY, merge, Observable, Subject, tap } from 'rxjs';
-import {
-  catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
-} from 'rxjs/operators';
+import { CoreModule, SortDirection, TableFilterComponent } from 'ngx-inception/core';
+import { Observable } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
+import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { PolicySummaries } from '../services/policy-summaries';
 import { PolicySummaryDataSource } from '../services/policy-summary-data-source';
 import { PolicyType } from '../services/policy-type';
 import { SecurityService } from '../services/security.service';
 
 /**
- * The PolicesComponent class implements the Policies component.
+ * The PoliciesComponent class implements the Policies component.
  *
  * @author Marcus Portmann
  */
@@ -41,36 +40,48 @@ import { SecurityService } from '../services/security.service';
   templateUrl: 'policies.component.html',
   styleUrls: ['policies.component.css']
 })
-export class PoliciesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-  dataSource: PolicySummaryDataSource;
+export class PoliciesComponent extends StatefulListView implements AfterViewInit {
+  readonly dataSource: PolicySummaryDataSource;
 
   displayedColumns = ['id', 'version', 'name', 'type', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
 
   @ViewChild(TableFilterComponent, { static: true })
-  tableFilter!: TableFilterComponent;
+  override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_policies_title:Policies`;
 
   protected readonly PolicyType = PolicyType;
 
-  private destroy$ = new Subject<void>();
+  /** Unique key for persisting list state. */
+  protected readonly listKey = 'security.policies';
+
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
+  /** Whether this navigation requested a state reset (from the sidebar). */
+  private readonly resetStateRequested: boolean;
 
   constructor(private securityService: SecurityService) {
     super();
 
+    // Read the reset flag from the current navigation
+    const nav = this.router.getCurrentNavigation();
+    this.resetStateRequested = !!nav?.extras.state?.['resetState'];
+
+    // Initialize the data source
     this.dataSource = new PolicySummaryDataSource(this.securityService);
   }
 
   deletePolicy(policyId: string): void {
     this.confirmAndProcessAction(
       $localize`:@@security_policies_confirm_delete_policy:Are you sure you want to delete the policy?`,
-      () => this.securityService.deletePolicy(policyId)
+      () => this.securityService.deletePolicy(policyId),
+      () => this.loadPolicySummaries()
     );
   }
 
@@ -82,9 +93,9 @@ export class PoliciesComponent extends AdminContainerView implements AfterViewIn
   }
 
   getPolicyTypeName(policyType: PolicyType): string {
-    if (policyType == PolicyType.XACMLPolicy) {
+    if (policyType === PolicyType.XACMLPolicy) {
       return 'XACML Policy';
-    } else if (policyType == PolicyType.XACMLPolicySet) {
+    } else if (policyType === PolicyType.XACMLPolicySet) {
       return 'XACML Policy Set';
     } else {
       return 'Unknown';
@@ -97,66 +108,19 @@ export class PoliciesComponent extends AdminContainerView implements AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    this.initializeDataLoaders();
-    this.loadData();
-  }
+    this.initializeStatefulList(this.resetStateRequested, () => this.loadData());
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private confirmAndProcessAction(
-    confirmationMessage: string,
-    action: () => Observable<void | boolean>
-  ): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: confirmationMessage
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((confirmed) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
-          return action().pipe(
-            catchError((error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            tap(() => this.resetTable()),
-            switchMap(() =>
-              this.loadPolicySummaries().pipe(
-                catchError((error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            ),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-  }
-
-  private initializeDataLoaders(): void {
-    this.sort.sortChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => (this.paginator.pageIndex = 0));
-
-    merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(debounceTime(200), takeUntil(this.destroy$))
-      .subscribe(() => this.loadData());
+    // Stabilize view after mutating sort/paginator
+    this.changeDetectorRef.detectChanges();
   }
 
   private loadData(): void {
     this.spinnerService.showSpinner();
     this.loadPolicySummaries()
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
+      .pipe(
+        finalize(() => this.spinnerService.hideSpinner()),
+        takeUntil(this.destroy$)
+      )
       .subscribe({
         next: () => {
           // Load complete
@@ -166,27 +130,20 @@ export class PoliciesComponent extends AdminContainerView implements AfterViewIn
   }
 
   private loadPolicySummaries(): Observable<PolicySummaries> {
-    const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
+    const filterValue = this.tableFilter.filter?.trim().toLowerCase() || '';
 
     let sortDirection = SortDirection.Descending;
 
-    if (this.sort.active) {
+    if (this.sort.active && this.sort.direction) {
       sortDirection =
         this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
     }
 
     return this.dataSource.load(
-      filter,
+      filterValue,
       sortDirection,
       this.paginator.pageIndex,
       this.paginator.pageSize
     );
-  }
-
-  private resetTable(): void {
-    this.tableFilter.reset(false);
-    this.paginator.pageIndex = 0;
-    this.sort.active = '';
-    this.sort.direction = 'asc' as SortDirection;
   }
 }

@@ -18,6 +18,8 @@ package demo;
 
 import digital.inception.application.Application;
 import digital.inception.core.util.ResourceUtil;
+import digital.inception.error.model.ErrorReport;
+import digital.inception.error.service.ErrorService;
 import digital.inception.executor.model.TaskEventType;
 import digital.inception.executor.model.TaskPriority;
 import digital.inception.executor.model.TaskType;
@@ -33,8 +35,10 @@ import digital.inception.security.model.TokenType;
 import digital.inception.security.service.SecurityService;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
@@ -56,6 +60,9 @@ public class DemoApplication extends Application {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(DemoApplication.class);
 
+  /** The Error Service. */
+  private final ErrorService errorService;
+
   /** The Executor Service. */
   private final ExecutorService executorService;
 
@@ -69,17 +76,20 @@ public class DemoApplication extends Application {
    * Constructs a new {@code DemoApplication}.
    *
    * @param applicationContext the Spring application context
+   * @param errorService the Error Service
    * @param executorService the Executor Service
    * @param reportingService the Reporting Service
    * @param securityService the Security Service
    */
   public DemoApplication(
       ApplicationContext applicationContext,
+      ErrorService errorService,
       ExecutorService executorService,
       ReportingService reportingService,
       SecurityService securityService) {
     super(applicationContext);
 
+    this.errorService = errorService;
     this.executorService = executorService;
     this.reportingService = reportingService;
     this.securityService = securityService;
@@ -100,30 +110,76 @@ public class DemoApplication extends Application {
   @PostConstruct
   public void init() {
     try {
-      byte[] demoReportDefinitionData = ResourceUtil.getClasspathResource("demo/DemoReport.jasper");
+      createDemoReports();
 
-      ReportDefinition demoReportDefinition =
-          new ReportDefinition(
-              "Inception.Demo.DemoReport", "Demo Report", demoReportDefinitionData);
+      createDemoErrorReports();
 
-      if (!reportingService.reportDefinitionExists(demoReportDefinition.getId())) {
-        reportingService.createReportDefinition(demoReportDefinition);
-        log.info("Saved the \"Demo Report\" report definition");
-      }
-
-      String demoPolicyData =
-          ResourceUtil.getStringClasspathResource("pdp/policies/DemoPolicy.xml");
-
-      Policy demoPolicy =
-          new Policy("DemoPolicy", "1.0", "Demo Policy", PolicyType.XACML_POLICY, demoPolicyData);
-
-      securityService.createPolicy(demoPolicy);
+      createDemoPolicies();
 
       createDemoTokens();
 
       createDemoTaskTypes();
     } catch (Throwable e) {
       throw new BeanInitializationException("Failed to initialize the Demo application", e);
+    }
+  }
+
+  private void createDemoErrorReports() {
+    try {
+      for (int i = 1; i <= 15; i++) {
+        ErrorReport demoErrorReport =
+            new ErrorReport(
+                UUID.randomUUID(),
+                "demo",
+                "1.0.0",
+                "The description for error report " + i,
+                "The detail for error report " + i,
+                OffsetDateTime.now(),
+                "demo" + i);
+
+        errorService.createErrorReport(demoErrorReport);
+      }
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to create the demo error reports", e);
+    }
+  }
+
+  private void createDemoPolicies() {
+    try {
+      for (int i = 1; i <= 15; i++) {
+        String policyId = String.format("DemoPolicy_%02d", i);
+
+        String demoPolicyData =
+            ResourceUtil.getStringClasspathResource("pdp/policies/DemoPolicy.xml");
+
+        demoPolicyData =
+            demoPolicyData.replace("PolicyId=\"DemoPolicy\"", "PolicyId=\"" + policyId + "\"");
+
+        Policy demoPolicy =
+            new Policy(policyId, "1.0", "Demo Policy " + i, PolicyType.XACML_POLICY, demoPolicyData);
+
+        securityService.createPolicy(demoPolicy);
+      }
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to create the demo policies", e);
+    }
+  }
+
+  private void createDemoReports() {
+    try {
+      byte[] demoReportDefinitionData = ResourceUtil.getClasspathResource("demo/DemoReport.jasper");
+
+      for (int i = 1; i <= 15; i++) {
+        ReportDefinition demoReportDefinition =
+            new ReportDefinition(
+                "Inception.Demo.DemoReport" + i, "Demo Report " + i, demoReportDefinitionData);
+
+        if (!reportingService.reportDefinitionExists(demoReportDefinition.getId())) {
+          reportingService.createReportDefinition(demoReportDefinition);
+        }
+      }
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to create the demo reports", e);
     }
   }
 
@@ -206,7 +262,7 @@ public class DemoApplication extends Application {
 
       securityService.generateToken(generatePendingTokenRequest);
 
-      for (int i = 0; i < 10; i++) {
+      for (int i = 1; i <= 10; i++) {
         GenerateTokenRequest generateServiceTokenRequest =
             new GenerateTokenRequest(
                 TokenType.JWT,

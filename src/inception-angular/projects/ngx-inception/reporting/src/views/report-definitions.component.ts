@@ -15,11 +15,8 @@
  */
 
 import { Component, HostBinding } from '@angular/core';
-import {
-  CoreModule, Error, FilteredPaginatedListView, TableFilterComponent
-} from 'ngx-inception/core';
-import { EMPTY, Observable } from 'rxjs';
-import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
+import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
+import { Observable } from 'rxjs';
 
 import { ReportDefinitionSummary } from '../services/report-definition-summary';
 import { ReportingService } from '../services/reporting.service';
@@ -80,62 +77,7 @@ export class ReportDefinitionsComponent extends FilteredPaginatedListView<Report
     };
   }
 
-  protected override loadData(): void {
-    this.spinnerService.showSpinner();
-
-    this.reportingService
-      .getReportDefinitionSummaries()
-      .pipe(finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe({
-        next: (reportDefinitionSummaries: ReportDefinitionSummary[]) => {
-          this.dataSource.data = reportDefinitionSummaries;
-
-          this.restorePageAfterDataLoaded();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
-  }
-
-  private confirmAndProcessAction(
-    confirmationMessage: string,
-    action: () => Observable<void | boolean>
-  ): void {
-    const dialogRef = this.dialogService.showConfirmationDialog({
-      message: confirmationMessage
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((confirmed) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
-
-          return action().pipe(
-            catchError((error: Error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            switchMap(() =>
-              this.reportingService.getReportDefinitionSummaries().pipe(
-                catchError((error: Error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            ),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (reportDefinitionSummaries: ReportDefinitionSummary[]) => {
-          this.dataSource.data = reportDefinitionSummaries;
-
-          this.restorePageAfterDataLoaded();
-        }
-      });
+  protected override fetchData(): Observable<ReportDefinitionSummary[]> {
+    return this.reportingService.getReportDefinitionSummaries();
   }
 }
