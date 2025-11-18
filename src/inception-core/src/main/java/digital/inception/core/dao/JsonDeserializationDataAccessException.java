@@ -27,6 +27,15 @@ import org.springframework.dao.DataRetrievalFailureException;
 public class JsonDeserializationDataAccessException extends DataRetrievalFailureException {
 
   /**
+   * Constructs a new {@code JsonDeserializationDataAccessException} with the specified message.
+   *
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   */
+  public JsonDeserializationDataAccessException(String message) {
+    super(message);
+  }
+
+  /**
    * Constructs a new {@code JsonDeserializationDataAccessException} with the specified message and
    * cause.
    *

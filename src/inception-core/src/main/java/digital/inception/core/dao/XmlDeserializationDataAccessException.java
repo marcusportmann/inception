@@ -21,10 +21,19 @@ import org.springframework.dao.DataRetrievalFailureException;
 /**
  * The {@code XmlDeserializationDataAccessException} exception is thrown to indicate a failure to
  * deserialize XML during data access.
- * 
+ *
  * @author Marcus Portmann
  */
 public class XmlDeserializationDataAccessException extends DataRetrievalFailureException {
+
+  /**
+   * Constructs a new {@code XmlDeserializationDataAccessException} with the specified message.
+   *
+   * @param message The message saved for later retrieval by the {@code getMessage()} method.
+   */
+  public XmlDeserializationDataAccessException(String message) {
+    super(message);
+  }
 
   /**
    * Constructs a new {@code XmlDeserializationDataAccessException} with the specified message and
