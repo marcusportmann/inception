@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -58,6 +59,7 @@ import java.util.UUID;
   "recipients",
   "subject",
   "mimeType",
+  "priority",
   "occurred",
   "assigned",
   "assignedTo",
@@ -81,6 +83,7 @@ import java.util.UUID;
       "recipients",
       "subject",
       "mimeType",
+      "priority",
       "occurred",
       "assigned",
       "assignedTo",
@@ -168,6 +171,16 @@ public class InteractionSummary implements Serializable {
   @JsonProperty
   @XmlElement(name = "PartyId")
   private UUID partyId;
+
+  /** The priority for the interaction. */
+  @Schema(
+      description = "The priority for the interaction",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Priority", required = true)
+  @NotNull
+  @Column(name = "priority", nullable = false)
+  private InteractionPriority priority;
 
   /**
    * The identifiers representing the recipients for the interaction, e.g. email addresses, mobile
@@ -258,6 +271,7 @@ public class InteractionSummary implements Serializable {
    *     addresses, mobile numbers, etc
    * @param subject the subject for the interaction
    * @param mimeType the mime type for the content for the interaction
+   * @param priority the priority for the interaction
    * @param occurred the date and time the interaction occurred (received if inbound, sent if
    *     outbound)
    * @param assigned the date and time the interaction was assigned
@@ -278,6 +292,7 @@ public class InteractionSummary implements Serializable {
       List<String> recipients,
       String subject,
       InteractionMimeType mimeType,
+      InteractionPriority priority,
       OffsetDateTime occurred,
       OffsetDateTime assigned,
       String assignedTo,
@@ -295,6 +310,7 @@ public class InteractionSummary implements Serializable {
     this.recipients = recipients;
     this.subject = subject;
     this.mimeType = mimeType;
+    this.priority = priority;
     this.occurred = occurred;
     this.assigned = assigned;
     this.assignedTo = assignedTo;
@@ -319,6 +335,7 @@ public class InteractionSummary implements Serializable {
    *     addresses, mobile numbers, etc
    * @param subject the subject for the interaction
    * @param mimeType the mime type for the content for the interaction
+   * @param priority the priority for the interaction
    * @param occurred the date and time the interaction occurred (received if inbound, sent if
    *     outbound)
    * @param assigned the date and time the interaction was assigned
@@ -337,6 +354,7 @@ public class InteractionSummary implements Serializable {
       List<String> recipients,
       String subject,
       InteractionMimeType mimeType,
+      InteractionPriority priority,
       OffsetDateTime occurred,
       OffsetDateTime assigned,
       String assignedTo) {
@@ -352,6 +370,7 @@ public class InteractionSummary implements Serializable {
     this.recipients = recipients;
     this.subject = subject;
     this.mimeType = mimeType;
+    this.priority = priority;
     this.occurred = occurred;
     this.assigned = assigned;
     this.assignedTo = assignedTo;
@@ -476,6 +495,15 @@ public class InteractionSummary implements Serializable {
   }
 
   /**
+   * Returns the priority for the interaction.
+   *
+   * @return the priority for the interaction
+   */
+  public InteractionPriority getPriority() {
+    return priority;
+  }
+
+  /**
    * Returns the identifiers representing the recipients for the interaction, e.g. email addresses,
    * mobile numbers, etc.
    *
@@ -550,14 +578,5 @@ public class InteractionSummary implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
-  }
-
-  /**
-   * Set the direction for the interaction, i.e., inbound or outbound.
-   *
-   * @param direction the direction for the interaction, i.e., inbound or outbound
-   */
-  public void setDirection(InteractionDirection direction) {
-    this.direction = direction;
   }
 }

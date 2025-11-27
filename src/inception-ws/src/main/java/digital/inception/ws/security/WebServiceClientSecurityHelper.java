@@ -26,10 +26,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.security.KeyStore;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.net.ssl.SSLSocketFactory;
 import javax.xml.namespace.QName;
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.transport.http.HTTPConduit;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 
 /**
  * The {@code WebServiceClientSecurityHelper} class is a utility class that provides support for
@@ -37,7 +42,7 @@ import javax.xml.namespace.QName;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "GrazieInspection"})
 public final class WebServiceClientSecurityHelper {
 
   /**
@@ -49,6 +54,12 @@ public final class WebServiceClientSecurityHelper {
   /** The name of the JAX-WS property that allows the SSL socket factory to be configured. */
   public static final String JAX_WS_PROPERTIES_SSL_SOCKET_FACTORY =
       "com.sun.xml.ws.transport.https.client.SSLSocketFactory";
+
+  /** The default connect timeout. */
+  private static final long DEFAULT_CONNECT_TIMEOUT = 15000;
+
+  /** The default receive timeout. */
+  private static final long DEFAULT_RECEIVE_TIMEOUT = 30000;
 
   /* The web service client cache. */
   private static final ConcurrentMap<String, WebServiceClient> webServiceClientCache =
@@ -80,7 +91,7 @@ public final class WebServiceClientSecurityHelper {
    */
   private static NoTrustSSLSocketFactory noTrustSSLSocketFactory;
 
-  /** Private constructor to prevent instantiation. */
+  /** Private default constructor to prevent instantiation. */
   private WebServiceClientSecurityHelper() {}
 
   /**
@@ -106,6 +117,44 @@ public final class WebServiceClientSecurityHelper {
       String username,
       String password)
       throws WebServiceClientSecurityException {
+    return getDigestAuthenticationServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        username,
+        password,
+        null,
+        null);
+  }
+
+  /**
+   * Returns the secure web service proxy for the web service that has been secured with digest
+   * authentication.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param username the username
+   * @param password the password
+   * @param connectTimeout the connect timeout in milliseconds
+   * @param receiveTimeout the receive timeout in milliseconds
+   * @param <T> the Java interface for the web service
+   * @return the secure web service proxy for the web service that has been secured with digest
+   *     authentication
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getDigestAuthenticationServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      String username,
+      String password,
+      Long connectTimeout,
+      Long receiveTimeout)
+      throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
       WebServiceClient webServiceClient =
@@ -130,6 +179,9 @@ public final class WebServiceClientSecurityHelper {
           .put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndpoint);
 
       CXFDigestSecurityProxyConfigurator.configureProxy(proxy, username, password);
+
+      // Set timeout and disable chunking
+      setTimeoutsAndDisableChunking(proxy, connectTimeout, receiveTimeout);
 
       return proxy;
     } catch (Throwable e) {
@@ -163,6 +215,44 @@ public final class WebServiceClientSecurityHelper {
       String username,
       String password)
       throws WebServiceClientSecurityException {
+    return getHTTPAuthenticationServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        username,
+        password,
+        null,
+        null);
+  }
+
+  /**
+   * Returns the secure web service proxy for the web service that has been secured with basic HTTP
+   * authentication.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param username the username
+   * @param password the password
+   * @param connectTimeout the connect timeout in milliseconds
+   * @param receiveTimeout the receive timeout in milliseconds
+   * @param <T> the Java interface for the web service
+   * @return the secure web service proxy for the web service that has been secured with basic HTTP
+   *     authentication
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getHTTPAuthenticationServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      String username,
+      String password,
+      Long connectTimeout,
+      Long receiveTimeout)
+      throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
       WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName());
@@ -186,6 +276,9 @@ public final class WebServiceClientSecurityHelper {
       bindingProvider.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, password);
 
       CXFBasicSecurityProxyConfigurator.configureProxy(proxy, username, password);
+
+      // Set timeout and disable chunking
+      setTimeoutsAndDisableChunking(proxy, connectTimeout, receiveTimeout);
 
       return proxy;
     } catch (Throwable e) {
@@ -226,6 +319,53 @@ public final class WebServiceClientSecurityHelper {
       String keyStorePassword,
       KeyStore trustStore,
       boolean disableServerTrustChecking)
+      throws WebServiceClientSecurityException {
+    return getMutualSSLServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        keyStore,
+        keyStorePassword,
+        trustStore,
+        disableServerTrustChecking,
+        null,
+        null);
+  }
+
+  /**
+   * Returns the secure web service proxy for the web service that has been secured with transport
+   * level security using SSL client authentication.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param keyStore the key store containing the private key and certificate (public key) that will
+   *     be used to perform the mutual SSL authentication when invoking the web service
+   * @param keyStorePassword the password for the key store that will be used to perform the mutual
+   *     SSL authentication when invoking the web service
+   * @param trustStore the key store containing the certificates that will be used to verify the
+   *     remote server when performing mutual SSL authentication
+   * @param disableServerTrustChecking disable trust checking of the remote server certificate
+   * @param connectTimeout the connect timeout in milliseconds
+   * @param receiveTimeout the receive timeout in milliseconds
+   * @param <T> the Java interface for the web service
+   * @return the secure web service proxy for the web service that has been secured with transport
+   *     level security using mutual SSL authentication
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getMutualSSLServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      KeyStore keyStore,
+      String keyStorePassword,
+      KeyStore trustStore,
+      boolean disableServerTrustChecking,
+      Long connectTimeout,
+      Long receiveTimeout)
       throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
@@ -269,6 +409,9 @@ public final class WebServiceClientSecurityHelper {
       CXFMutualSSLSecurityProxyConfigurator.configureProxy(
           proxy, keyStore, keyStorePassword, trustStore, disableServerTrustChecking);
 
+      // Set timeout and disable chunking
+      setTimeoutsAndDisableChunking(proxy, connectTimeout, receiveTimeout);
+
       return proxy;
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
@@ -297,6 +440,33 @@ public final class WebServiceClientSecurityHelper {
       Class<T> serviceInterface,
       String wsdlResourcePath,
       String serviceEndpoint)
+      throws WebServiceClientSecurityException {
+    return getNoTrustServiceProxy(
+        serviceClass, serviceInterface, wsdlResourcePath, serviceEndpoint, null, null);
+  }
+
+  /**
+   * Returns the web service proxy for the web service that supports SSL without validating the
+   * server certificate.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param connectTimeout the connect timeout in milliseconds
+   * @param receiveTimeout the receive timeout in milliseconds
+   * @param <T> the Java interface for the web service
+   * @return the web service proxy for the web service that supports SSL without validating the
+   *     server certificate
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getNoTrustServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      Long connectTimeout,
+      Long receiveTimeout)
       throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
@@ -334,6 +504,9 @@ public final class WebServiceClientSecurityHelper {
 
       CXFNoTrustSecurityProxyConfigurator.configureProxy(proxy);
 
+      // Set timeout and disable chunking
+      setTimeoutsAndDisableChunking(proxy, connectTimeout, receiveTimeout);
+
       return proxy;
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
@@ -342,6 +515,37 @@ public final class WebServiceClientSecurityHelper {
               + ") that has server certificate verification disabled",
           e);
     }
+  }
+
+  /**
+   * Returns the web service proxy for the unsecured web service.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param connectTimeout the connect timeout in milliseconds
+   * @param receiveTimeout the receive timeout in milliseconds
+   * @param <T> the Java interface for the web service
+   * @return the web service proxy for the unsecured web service
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      Long connectTimeout,
+      Long receiveTimeout)
+      throws WebServiceClientSecurityException {
+    return getServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        null,
+        connectTimeout,
+        receiveTimeout);
   }
 
   /**
@@ -362,6 +566,40 @@ public final class WebServiceClientSecurityHelper {
       String serviceEndpoint)
       throws WebServiceClientSecurityException {
     return getServiceProxy(serviceClass, serviceInterface, wsdlResourcePath, serviceEndpoint, null);
+  }
+
+  /**
+   * Returns the web service proxy for the unsecured web service.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param handlerResolver the web service handler resolver
+   * @param connectTimeout the connect timeout in milliseconds
+   * @param receiveTimeout the receive timeout in milliseconds
+   * @param <T> the Java interface for the web service
+   * @return the web service proxy for the unsecured web service
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      HandlerResolver handlerResolver,
+      Long connectTimeout,
+      Long receiveTimeout)
+      throws WebServiceClientSecurityException {
+    return getServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        handlerResolver,
+        false,
+        connectTimeout,
+        receiveTimeout);
   }
 
   /**
@@ -408,6 +646,42 @@ public final class WebServiceClientSecurityHelper {
       HandlerResolver handlerResolver,
       boolean useClientCache)
       throws WebServiceClientSecurityException {
+    return getServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        handlerResolver,
+        useClientCache,
+        null,
+        null);
+  }
+
+  /**
+   * Returns the web service proxy for the unsecured web service.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param handlerResolver the web service handler resolver
+   * @param useClientCache should the web service client cached be used
+   * @param connectTimeout the connect timeout in milliseconds
+   * @param receiveTimeout the receive timeout in milliseconds
+   * @param <T> the Java interface for the web service
+   * @return the web service proxy for the unsecured web service
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      HandlerResolver handlerResolver,
+      boolean useClientCache,
+      Long connectTimeout,
+      Long receiveTimeout)
+      throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache if required
       WebServiceClient webServiceClient = null;
@@ -437,6 +711,9 @@ public final class WebServiceClientSecurityHelper {
           .getRequestContext()
           .put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndpoint);
 
+      // Set timeout and disable chunking
+      setTimeoutsAndDisableChunking(proxy, connectTimeout, receiveTimeout);
+
       return proxy;
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
@@ -445,6 +722,45 @@ public final class WebServiceClientSecurityHelper {
               + ") ",
           e);
     }
+  }
+
+  /**
+   * Returns the secure web service proxy for the web service that has been secured with message
+   * level security using the Web Services Security Username Token profile.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param username the username
+   * @param password the password
+   * @param connectTimeout the connect timeout in milliseconds
+   * @param receiveTimeout the receive timeout in milliseconds
+   * @param <T> the Java interface for the web service
+   * @return the secure web service proxy for the web service that has been secured with message
+   *     level security using the Web Services Security Username Token profile
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getWSSecurityUsernameTokenServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      String username,
+      String password,
+      Long connectTimeout,
+      Long receiveTimeout)
+      throws WebServiceClientSecurityException {
+    return getWSSecurityUsernameTokenServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        username,
+        password,
+        false,
+        connectTimeout,
+        receiveTimeout);
   }
 
   /**
@@ -505,6 +821,47 @@ public final class WebServiceClientSecurityHelper {
       String password,
       boolean usePlainTextPassword)
       throws WebServiceClientSecurityException {
+    return getWSSecurityUsernameTokenServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        username,
+        password,
+        usePlainTextPassword,
+        null,
+        null);
+  }
+
+  /**
+   * Returns the secure web service proxy for the web service that has been secured with message
+   * level security using the Web Services Security Username Token profile.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param username the username
+   * @param password the password
+   * @param usePlainTextPassword should a plain text password be used
+   * @param connectTimeout the connect timeout in milliseconds
+   * @param receiveTimeout the receive timeout in milliseconds
+   * @param <T> the Java interface for the web service
+   * @return the secure web service proxy for the web service that has been secured with message
+   *     level security using the Web Services Security Username Token profile
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getWSSecurityUsernameTokenServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      String username,
+      String password,
+      boolean usePlainTextPassword,
+      Long connectTimeout,
+      Long receiveTimeout)
+      throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
       WebServiceClient webServiceClient =
@@ -534,6 +891,9 @@ public final class WebServiceClientSecurityHelper {
 
       CXFWSSUsernameTokenProfileProxyConfigurator.configureProxy(
           proxy, username, password, usePlainTextPassword);
+
+      // Set timeout and disable chunking
+      setTimeoutsAndDisableChunking(proxy, connectTimeout, receiveTimeout);
 
       return proxy;
     } catch (Throwable e) {
@@ -592,6 +952,48 @@ public final class WebServiceClientSecurityHelper {
    * @param keyStore the key store containing the private key and certificate (public key)
    * @param keyStorePassword the password for the key store
    * @param keyStoreAlias the alias of the key-pair in the key store
+   * @param connectTimeout the connect timeout
+   * @param receiveTimeout the receive timeout
+   * @param <T> the Java interface for the web service
+   * @return the secure web service proxy for the web service that has been secured with message
+   *     level security using the Web Services Security X.509 Certificate Token profile
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getWSSecurityX509CertificateServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      KeyStore keyStore,
+      String keyStorePassword,
+      String keyStoreAlias,
+      Long connectTimeout,
+      Long receiveTimeout)
+      throws WebServiceClientSecurityException {
+    return getWSSecurityX509CertificateServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        keyStore,
+        keyStorePassword,
+        keyStoreAlias,
+        keyStore,
+        connectTimeout,
+        receiveTimeout);
+  }
+
+  /**
+   * Returns the secure web service proxy for the web service that has been secured with message
+   * level security using the Web Services Security X.509 Certificate Token profile.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param keyStore the key store containing the private key and certificate (public key)
+   * @param keyStorePassword the password for the key store
+   * @param keyStoreAlias the alias of the key-pair in the key store
    * @param trustStore the key store containing the certificates that will be used to verify the
    *     remote web service
    * @param <T> the Java interface for the web service
@@ -608,6 +1010,51 @@ public final class WebServiceClientSecurityHelper {
       String keyStorePassword,
       String keyStoreAlias,
       KeyStore trustStore)
+      throws WebServiceClientSecurityException {
+    return getWSSecurityX509CertificateServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        keyStore,
+        keyStorePassword,
+        keyStoreAlias,
+        trustStore,
+        null,
+        null);
+  }
+
+  /**
+   * Returns the secure web service proxy for the web service that has been secured with message
+   * level security using the Web Services Security X.509 Certificate Token profile.
+   *
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param keyStore the key store containing the private key and certificate (public key)
+   * @param keyStorePassword the password for the key store
+   * @param keyStoreAlias the alias of the key-pair in the key store
+   * @param trustStore the key store containing the certificates that will be used to verify the
+   *     remote web service
+   * @param connectTimeout the connect timeout in milliseconds
+   * @param receiveTimeout the receive timeout in milliseconds
+   * @param <T> the Java interface for the web service
+   * @return the secure web service proxy for the web service that has been secured with message
+   *     level security using the Web Services Security X.509 Certificate Token profile
+   * @throws WebServiceClientSecurityException if the web service proxy could not be retrieved
+   */
+  public static <T> T getWSSecurityX509CertificateServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      KeyStore keyStore,
+      String keyStorePassword,
+      String keyStoreAlias,
+      KeyStore trustStore,
+      Long connectTimeout,
+      Long receiveTimeout)
       throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
@@ -635,6 +1082,9 @@ public final class WebServiceClientSecurityHelper {
       CXFWSSX509CertificateTokenProfileProxyConfigurator.configureProxy(
           proxy, keyStore, keyStorePassword, keyStoreAlias, trustStore);
 
+      // Set timeout and disable chunking
+      setTimeoutsAndDisableChunking(proxy, connectTimeout, receiveTimeout);
+
       return proxy;
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
@@ -642,6 +1092,49 @@ public final class WebServiceClientSecurityHelper {
               + serviceClass.getName()
               + ") that has been secured using the Web Services Security X.509 Certificate Token profile",
           e);
+    }
+  }
+
+  private static <T> void setTimeoutsAndDisableChunking(
+      T proxy, Long connectTimeout, Long receiveTimeout) {
+    Client client = ClientProxy.getClient(proxy);
+    HTTPConduit httpConduit = (HTTPConduit) client.getConduit();
+
+    HTTPClientPolicy httpClientPolicy = httpConduit.getClient();
+    if (httpClientPolicy == null) {
+      httpClientPolicy = new HTTPClientPolicy();
+    }
+
+    httpClientPolicy.setConnectionTimeout(
+        Objects.requireNonNullElse(connectTimeout, DEFAULT_CONNECT_TIMEOUT));
+
+    httpClientPolicy.setReceiveTimeout(
+        Objects.requireNonNullElse(receiveTimeout, DEFAULT_RECEIVE_TIMEOUT));
+
+    httpClientPolicy.setAllowChunking(false);
+
+    httpConduit.setClient(httpClientPolicy);
+
+    BindingProvider bindingProvider = ((BindingProvider) proxy);
+
+    if (connectTimeout != null && connectTimeout > 0) {
+      bindingProvider
+          .getRequestContext()
+          .put("javax.xml.ws.client.connectionTimeout", connectTimeout.toString());
+    } else {
+      bindingProvider
+          .getRequestContext()
+          .put("javax.xml.ws.client.connectionTimeout", String.valueOf(DEFAULT_CONNECT_TIMEOUT));
+    }
+
+    if (receiveTimeout != null && receiveTimeout > 0) {
+      bindingProvider
+          .getRequestContext()
+          .put("javax.xml.ws.client.receiveTimeout", receiveTimeout.toString());
+    } else {
+      bindingProvider
+          .getRequestContext()
+          .put("javax.xml.ws.client.receiveTimeout", String.valueOf(DEFAULT_RECEIVE_TIMEOUT));
     }
   }
 
@@ -760,7 +1253,6 @@ public final class WebServiceClientSecurityHelper {
   /**
    * The {@code WebServiceClient} class holds the information for a web service client.
    *
-   * @author Marcus Portmann
    * @param portQName The QName for the port.
    * @param service The web service client.
    */
@@ -773,5 +1265,25 @@ public final class WebServiceClientSecurityHelper {
      * @param service the web service client
      */
     public WebServiceClient {}
+
+    /**
+     * Returns the QName for the port.
+     *
+     * @return the QName for the port
+     */
+    @Override
+    public QName portQName() {
+      return portQName;
+    }
+
+    /**
+     * Returns the web service client.
+     *
+     * @return the web service client
+     */
+    @Override
+    public Service service() {
+      return service;
+    }
   }
 }

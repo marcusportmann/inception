@@ -48,6 +48,7 @@ import digital.inception.operations.model.InteractionMimeType;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
+import digital.inception.operations.model.InteractionPriority;
 import digital.inception.operations.model.InteractionProcessingResult;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
@@ -1496,6 +1497,9 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       } else {
         interaction.setOccurred(OffsetDateTime.now());
       }
+
+      // TODO: Add support for prioritizing interactions based on email domain -- MARCUS
+      interaction.setPriority(InteractionPriority.NORMAL);
 
       MimeData messageContent = MessageUtil.getMessageContent(message);
 

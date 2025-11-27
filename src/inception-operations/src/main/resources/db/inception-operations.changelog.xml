@@ -1197,6 +1197,10 @@
         remarks="The mime type for the content for the interaction">
         <constraints nullable="false"/>
       </column>
+      <column name="priority" type="integer"
+        remarks="The numeric priority value for the interaction">
+        <constraints nullable="false"/>
+      </column>
       <column name="content" type="clob" remarks="The content for the interaction">
         <constraints nullable="false"/>
       </column>
@@ -1244,6 +1248,10 @@
     <createIndex indexName="operations_interactions_party_id_ix"
       tableName="operations_interactions">
       <column name="party_id"/>
+    </createIndex>
+    <createIndex indexName="operations_interactions_priority_ix"
+      tableName="operations_interactions">
+      <column name="priority"/>
     </createIndex>
     <createIndex indexName="operations_interactions_source_id_ix"
       tableName="operations_interactions">
@@ -1469,6 +1477,8 @@
         indexName="operations_interactions_source_id_source_reference_ix"/>
       <dropIndex tableName="operations_interactions"
         indexName="operations_interactions_source_id_ix"/>
+      <dropIndex tableName="operations_interactions"
+        indexName="operations_interactions_priority_ix"/>
       <dropIndex tableName="operations_interactions"
         indexName="operations_interactions_party_id_ix"/>
       <dropIndex tableName="operations_interactions"

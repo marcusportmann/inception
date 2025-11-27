@@ -47,6 +47,7 @@ import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
 import digital.inception.operations.model.InteractionPermissionType;
+import digital.inception.operations.model.InteractionPriority;
 import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
 import digital.inception.operations.model.InteractionSourceAttribute;
@@ -278,6 +279,7 @@ public class InteractionServiceTests {
             "Test subject " + randomId(),
             "This is the test content.",
             InteractionMimeType.TEXT_PLAIN,
+            InteractionPriority.NORMAL,
             InteractionStatus.AVAILABLE);
 
     interactionService.createInteraction(TenantUtil.DEFAULT_TENANT_ID, interaction);
@@ -890,6 +892,10 @@ public class InteractionServiceTests {
         interaction1.getPartyId(),
         interaction2.getPartyId(),
         "The party ID values for the interactions do not match");
+    assertEquals(
+        interaction1.getPriority(),
+        interaction2.getPriority(),
+        "The priority values for the interactions do not match");
     assertEquals(
         interaction1.getProcessed(),
         interaction2.getProcessed(),

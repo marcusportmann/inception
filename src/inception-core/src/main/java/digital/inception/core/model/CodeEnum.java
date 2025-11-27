@@ -53,4 +53,11 @@ public interface CodeEnum {
    * @return the snake case code for the enumeration value
    */
   String code();
+
+  /**
+   * Returns the description for the enumeration value.
+   *
+   * @return the description for the enumeration value
+   */
+  String description();
 }

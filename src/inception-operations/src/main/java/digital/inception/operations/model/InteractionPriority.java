@@ -34,27 +34,50 @@ public enum InteractionPriority implements CodeEnum {
 
   /** Critical. */
   @XmlEnumValue("Critical")
-  CRITICAL("critical", "Critical"),
+  CRITICAL("critical", 1, "Critical"),
 
   /** High. */
   @XmlEnumValue("High")
-  HIGH("high", "High"),
+  HIGH("high", 5, "High"),
 
   /** Normal. */
   @XmlEnumValue("Normal")
-  NORMAL("normal", "Normal"),
+  NORMAL("normal", 10, "Normal"),
 
   /** Low. */
   @XmlEnumValue("Low")
-  LOW("low", "Low");
+  LOW("low", 20, "Low");
 
   private final String code;
 
   private final String description;
 
-  InteractionPriority(String code, String description) {
+  private final int priority;
+
+  InteractionPriority(String code, int priority, String description) {
     this.code = code;
+    this.priority = priority;
     this.description = description;
+  }
+
+  /**
+   * Returns the interaction priority given by the specified numerical priority value.
+   *
+   * @param priority the numerical priority value
+   * @return the interaction priority given by the specified numerical priority value
+   */
+  public static InteractionPriority fromPriority(int priority) {
+    return switch (priority) {
+      case 20 -> InteractionPriority.LOW;
+      case 10 -> InteractionPriority.NORMAL;
+      case 5 -> InteractionPriority.HIGH;
+      case 1 -> InteractionPriority.CRITICAL;
+      default ->
+          throw new RuntimeException(
+              "Failed to determine the interaction priority with the invalid numerical priority value ("
+                  + priority
+                  + ")");
+    };
   }
 
   /**
@@ -73,5 +96,14 @@ public enum InteractionPriority implements CodeEnum {
    */
   public String description() {
     return description;
+  }
+
+  /**
+   * Returns the numerical priority value for the interaction priority.
+   *
+   * @return the numerical priority value for the interaction priority
+   */
+  public int priority() {
+    return priority;
   }
 }

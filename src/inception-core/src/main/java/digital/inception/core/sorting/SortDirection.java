@@ -68,6 +68,24 @@ public enum SortDirection implements CodeEnum {
   }
 
   /**
+   * Is the sort direction ascending?
+   *
+   * @return {@code true} if the sort direction is ascending or {@code false} otherwise
+   */
+  public boolean isAscending() {
+    return this == ASCENDING;
+  }
+
+  /**
+   * Is the sort direction descending?
+   *
+   * @return {@code true} if the sort direction is descending or {@code false} otherwise
+   */
+  public boolean isDescending() {
+    return this == DESCENDING;
+  }
+
+  /**
    * Returns the string representation of the enumeration value.
    *
    * @return the string representation of the enumeration value

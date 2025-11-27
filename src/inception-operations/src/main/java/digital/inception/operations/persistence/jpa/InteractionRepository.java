@@ -157,7 +157,7 @@ public interface InteractionRepository
   @Query(
       "select new digital.inception.operations.model.InteractionSummary("
           + "  i.id, i.tenantId, i.status, i.sourceId, i.conversationId, i.partyId, i.type, i.direction, "
-          + "  i.sender, i.recipients, i.subject, i.mimeType, i.occurred, i.assigned, i.assignedTo, "
+          + "  i.sender, i.recipients, i.subject, i.mimeType, i.priority, i.occurred, i.assigned, i.assignedTo, "
           + "  (select count(a) from InteractionAttachment a where a.interactionId = i.id), "
           + "  (select count(n) from InteractionNote n where n.interactionId = i.id)"
           + ") "
@@ -191,7 +191,7 @@ public interface InteractionRepository
   @Query(
       "select new digital.inception.operations.model.InteractionSummary("
           + "  i.id, i.tenantId, i.status, i.sourceId, i.conversationId, i.partyId, i.type, i.direction, "
-          + "  i.sender, i.recipients, i.subject, i.mimeType, i.occurred, i.assigned, i.assignedTo"
+          + "  i.sender, i.recipients, i.subject, i.mimeType, i.priority, i.occurred, i.assigned, i.assignedTo"
           + ") "
           + "from Interaction i "
           + "where i.tenantId = :tenantId "

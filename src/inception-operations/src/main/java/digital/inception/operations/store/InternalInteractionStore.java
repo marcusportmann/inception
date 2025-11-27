@@ -63,6 +63,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -677,27 +678,21 @@ public class InternalInteractionStore implements InteractionStore {
       int maxResults)
       throws ServiceUnavailableException {
     try {
-      PageRequest pageRequest;
+      Sort sort;
 
       if (sortBy == InteractionSortBy.OCCURRED) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "occurred");
+        sort =
+            Sort.by(
+                Order.asc("priority"),
+                sortDirection.isAscending() ? Order.asc("occurred") : Order.desc("occurred"));
       } else {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                Math.min(pageSize, maxResults),
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "occurred");
+        sort =
+            Sort.by(
+                Order.asc("priority"),
+                sortDirection.isAscending() ? Order.asc("occurred") : Order.desc("occurred"));
       }
+
+      PageRequest pageRequest = PageRequest.of(pageIndex, Math.min(pageSize, maxResults), sort);
 
       String filterLike = (filter == null) ? null : "%" + filter.toLowerCase() + "%";
 
@@ -941,6 +936,7 @@ public class InternalInteractionStore implements InteractionStore {
                   root.get("recipients"),
                   root.get("subject"),
                   root.get("mimeType"),
+                  root.get("priority"),
                   root.get("occurred"),
                   root.get("assigned"),
                   root.get("assignedTo")))

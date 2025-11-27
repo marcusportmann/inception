@@ -614,6 +614,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-processor</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-operations</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -793,6 +798,7 @@
     <module>inception-mail-ws</module>
     <module>inception-mongo</module>
     <module>inception-opentelemetry</module>
+    <module>inception-processor</module>
     <module>inception-operations</module>
     <module>inception-operations-api</module>
     <module>inception-operations-ws</module>

@@ -71,6 +71,7 @@ import org.springframework.util.StringUtils;
   "recipients",
   "subject",
   "mimeType",
+  "priority",
   "content",
   "occurred",
   "assigned",
@@ -100,6 +101,7 @@ import org.springframework.util.StringUtils;
       "recipients",
       "subject",
       "mimeType",
+      "priority",
       "content",
       "occurred",
       "assigned",
@@ -227,6 +229,16 @@ public class Interaction implements Serializable {
   @XmlElement(name = "PartyId")
   @Column(name = "party_id")
   private UUID partyId;
+
+  /** The priority for the interaction. */
+  @Schema(
+      description = "The priority for the interaction",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Priority", required = true)
+  @NotNull
+  @Column(name = "priority", nullable = false)
+  private InteractionPriority priority;
 
   /** The date and time the interaction was processed. */
   @Schema(description = "The date and time the interaction was processed")
@@ -357,6 +369,7 @@ public class Interaction implements Serializable {
    * @param subject the subject for the interaction
    * @param content the content for the interaction
    * @param mimeType the mime type for the content for the interaction
+   * @param priority the priority for the interaction
    * @param status the status of the interaction
    */
   public Interaction(
@@ -370,6 +383,7 @@ public class Interaction implements Serializable {
       String subject,
       String content,
       InteractionMimeType mimeType,
+      InteractionPriority priority,
       InteractionStatus status) {
     this.id = id;
     this.tenantId = tenantId;
@@ -382,6 +396,7 @@ public class Interaction implements Serializable {
     this.content = content;
     this.mimeType = mimeType;
     this.status = status;
+    this.priority = priority;
     this.occurred = OffsetDateTime.now();
   }
 
@@ -401,6 +416,7 @@ public class Interaction implements Serializable {
    * @param subject the subject for the interaction
    * @param content the content for the interaction
    * @param mimeType the mime type for the content for the interaction
+   * @param priority the priority for the interaction
    * @param status the status of the interaction
    */
   public Interaction(
@@ -415,6 +431,7 @@ public class Interaction implements Serializable {
       String subject,
       String content,
       InteractionMimeType mimeType,
+      InteractionPriority priority,
       InteractionStatus status) {
     this.id = id;
     this.tenantId = tenantId;
@@ -427,6 +444,7 @@ public class Interaction implements Serializable {
     this.subject = subject;
     this.content = content;
     this.mimeType = mimeType;
+    this.priority = priority;
     this.status = status;
     this.occurred = OffsetDateTime.now();
   }
@@ -563,6 +581,15 @@ public class Interaction implements Serializable {
    */
   public UUID getPartyId() {
     return partyId;
+  }
+
+  /**
+   * Returns the priority for the interaction.
+   *
+   * @return the priority for the interaction
+   */
+  public InteractionPriority getPriority() {
+    return priority;
   }
 
   /**
@@ -847,6 +874,15 @@ public class Interaction implements Serializable {
    */
   public void setPartyId(UUID partyId) {
     this.partyId = partyId;
+  }
+
+  /**
+   * Set the priority for the interaction.
+   *
+   * @param priority the priority for the interaction
+   */
+  public void setPriority(InteractionPriority priority) {
+    this.priority = priority;
   }
 
   /**
