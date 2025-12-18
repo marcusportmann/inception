@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-export * from './src/services/error.service.errors';
-export * from './src/services/error.service';
-export * from './src/services/error-report';
-export * from './src/services/error-report-summary';
-export * from './src/views/error-report-title-resolver';
-export * from './src/views/error-reports-title-resolver';
-export * from './src/views/error-title-resolver';
-export * from './src/views/error-views.module';
+export * from './services/scheduler-services.module';
+export * from './services/job';
+export * from './services/job-parameter';
+export * from './services/job-status';
+export * from './services/scheduler.service.errors';
+export * from './services/scheduler.service';
+export * from './views/scheduler-title-resolver';
+export * from './views/scheduler-views.module';

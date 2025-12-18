@@ -20,11 +20,11 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
-  BackNavigation, CoreModule, Error, SortDirection, TableFilterComponent
+  BackNavigation, CoreModule, Error, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
+
 import { GroupMember } from '../services/group-member';
 import { GroupMemberDataSource } from '../services/group-member-data-source';
 import { GroupMemberType } from '../services/group-member-type';

@@ -21,10 +21,15 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { add, isWithinInterval } from 'date-fns';
-import { CoreModule, ISO8601Util, SortDirection, TableFilterComponent } from 'ngx-inception/core';
+import {
+  CoreModule,
+  ISO8601Util,
+  SortDirection,
+  TableFilterComponent,
+  StatefulListView
+} from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { ErrorReportSortBy } from '../services/error-report-sort-by';
 import { ErrorReportSummaries } from '../services/error-report-summaries';
 import { ErrorReportSummaryDataSource } from '../services/error-report-summary-data-source';

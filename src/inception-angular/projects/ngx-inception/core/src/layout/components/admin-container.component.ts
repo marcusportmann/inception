@@ -18,7 +18,6 @@
 
 import { Component, Inject, OnDestroy, OnInit, DOCUMENT } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterOutlet } from '@angular/router';
-import { PerfectScrollbarModule } from 'ngx-om-perfect-scrollbar';
 
 import { Observable, Subscription } from 'rxjs';
 import { INCEPTION_CONFIG, InceptionConfig } from '../../inception-config';
@@ -37,6 +36,7 @@ import { SidebarMinimizerComponent } from './sidebar-minimizer.component';
 import { SidebarNavComponent } from './sidebar-nav.component';
 import { SidebarComponent } from './sidebar.component';
 import { TitleBarComponent } from './title-bar.component';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 /**
  * The AdminContainerComponent class implements the admin container component.
@@ -53,23 +53,19 @@ import { TitleBarComponent } from './title-bar.component';
     AdminFooterComponent,
     SidebarComponent,
     SidebarNavComponent,
-    PerfectScrollbarModule,
+    NgScrollbarModule,
     SidebarMinimizerComponent,
     TitleBarComponent,
     BreadcrumbsComponent
   ],
   template: `
-    <admin-header
-      [fixed]="true"
-      [sidebarToggler]="'lg'">
-    </admin-header>
+    <admin-header [fixed]="true" [sidebarToggler]="'lg'"> </admin-header>
 
     <div class="admin-body">
       <sidebar class="sidebar" [fixed]="true" [display]="'lg'">
-        <sidebar-nav
-          [perfectScrollbar]
-          [disabled]="sidebarMinimized">
-        </sidebar-nav>
+        <ng-scrollbar>
+          <sidebar-nav></sidebar-nav>
+        </ng-scrollbar>
         <sidebar-minimizer></sidebar-minimizer>
       </sidebar>
 
@@ -146,9 +142,7 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
           this.spinnerService.hideSpinner();
 
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate([
-            this.config.logoutRedirectUri ?? '/'
-          ]);
+          this.router.navigate([this.config.logoutRedirectUri ?? '/']);
         }
       })
     );

@@ -19,10 +19,14 @@ import {
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { CoreModule, Error, SortDirection, TableFilterComponent } from 'ngx-inception/core';
+import {
+  CoreModule,
+  Error,
+  SortDirection,
+  StatefulListView, TableFilterComponent
+} from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { SecurityService } from '../services/security.service';
 import { TenantDataSource } from '../services/tenant-data-source';
 

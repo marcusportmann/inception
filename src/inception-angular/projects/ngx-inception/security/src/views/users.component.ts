@@ -21,12 +21,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import {
-  CoreModule, Error, HasAuthorityDirective, Session, SessionService, SortDirection,
+  CoreModule, Error, HasAuthorityDirective, Session, SessionService, SortDirection, StatefulListView,
   TableFilterComponent
 } from 'ngx-inception/core';
 import { BehaviorSubject, EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { catchError, finalize, first, map, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { SecurityService } from '../services/security.service';
 import { UserDataSource } from '../services/user-data-source';
 import { UserDirectoryCapabilities } from '../services/user-directory-capabilities';

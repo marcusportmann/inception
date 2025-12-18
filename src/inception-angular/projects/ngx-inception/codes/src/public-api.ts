@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-export * from './src/services/reporting-services.module';
-export * from './src/services/report-definition';
-export * from './src/services/report-definition-summary';
-export * from './src/services/reporting.service.errors';
-export * from './src/services/reporting.service';
-export * from './src/views/reporting-title-resolver';
-export * from './src/views/reporting-views.module';
+export * from './services/codes-services.module';
+export * from './services/code';
+export * from './services/code-category';
+export * from './services/code-category-summary';
+export * from './services/codes.service';
+export * from './services/codes.service.errors';
+
+export * from './views/code-categories-title-resolver';
+export * from './views/codes-views.module';

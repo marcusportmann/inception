@@ -32,6 +32,7 @@ import {
   Session,
   SessionService,
   SortDirection,
+  StatefulListView,
   TableFilterComponent
 } from 'ngx-inception/core';
 import { BehaviorSubject, EMPTY, Observable, forkJoin, of } from 'rxjs';
@@ -44,7 +45,6 @@ import {
   takeUntil,
   tap
 } from 'rxjs/operators';
-import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { GroupDataSource } from '../services/group-data-source';
 import { Groups } from '../services/groups';
 import { SecurityService } from '../services/security.service';

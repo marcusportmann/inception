@@ -14,4 +14,11 @@
  * limitations under the License.
  */
 
-export * from './src/views/login-views.module';
+export * from './services/mail-services.module';
+export * from './services/mail.service.errors';
+export * from './services/mail.service';
+export * from './services/mail-template';
+export * from './services/mail-template-content-type';
+export * from './services/mail-template-summary';
+export * from './views/mail-title-resolver';
+export * from './views/mail-views.module';

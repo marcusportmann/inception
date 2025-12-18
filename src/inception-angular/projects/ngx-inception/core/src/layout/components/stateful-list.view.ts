@@ -17,12 +17,15 @@
 import { Directive, inject, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { AdminContainerView, Error, TableFilterComponent } from 'ngx-inception/core';
+
 import { EMPTY, merge, Observable, Subject } from 'rxjs';
 import {
   catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
 } from 'rxjs/operators';
+import { Error } from '../../errors/error';
+import { TableFilterComponent } from '../../forms/components/table-filter.component';
 import { ListState, ListStateService } from '../services/list-state.service';
+import { AdminContainerView } from './admin-container-view';
 
 /**
  * Base view for list screens with persisted state (page, sort, filter, extras).
@@ -32,11 +35,11 @@ export abstract class StatefulListView<TExtras = unknown>
   extends AdminContainerView
   implements OnDestroy
 {
-  /** Shared destroy notifier for subscriptions. */
-  protected readonly destroy$ = new Subject<void>();
-
   /** Unique key for persisting list state (must be provided by subclass). */
   abstract readonly listKey: string;
+
+  /** Shared destroy notifier for subscriptions. */
+  protected readonly destroy$ = new Subject<void>();
 
   protected readonly listStateService = inject(ListStateService);
 

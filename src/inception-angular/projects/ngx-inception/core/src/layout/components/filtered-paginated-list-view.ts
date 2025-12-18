@@ -20,10 +20,11 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { AdminContainerView, Error } from 'ngx-inception/core';
 import { EMPTY, Observable, Subject } from 'rxjs';
 import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
+import { Error } from '../../errors/error';
 import { ListStateService } from '../services/list-state.service';
+import { AdminContainerView } from './admin-container-view';
 
 @Directive()
 export abstract class FilteredPaginatedListView<T>

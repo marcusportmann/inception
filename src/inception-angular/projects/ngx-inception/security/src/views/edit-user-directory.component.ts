@@ -19,11 +19,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { UserDirectoryParameter } from 'ngx-inception/security';
 import { combineLatest, Subscription } from 'rxjs';
 import { finalize, first, pairwise, startWith } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
 import { UserDirectory } from '../services/user-directory';
+import { UserDirectoryParameter } from '../services/user-directory-parameter';
 import { UserDirectoryType } from '../services/user-directory-type';
 import { InternalUserDirectoryComponent } from './internal-user-directory.component';
 import { LdapUserDirectoryComponent } from './ldap-user-directory.component';

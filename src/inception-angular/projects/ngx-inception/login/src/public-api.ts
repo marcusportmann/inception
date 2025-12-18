@@ -14,12 +14,4 @@
  * limitations under the License.
  */
 
-export * from './src/services/codes-services.module';
-export * from './src/services/code';
-export * from './src/services/code-category';
-export * from './src/services/code-category-summary';
-export * from './src/services/codes.service';
-export * from './src/services/codes.service.errors';
-
-export * from './src/views/code-categories-title-resolver';
-export * from './src/views/codes-views.module';
+export * from './views/login-views.module';

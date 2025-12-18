@@ -19,7 +19,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { UserDirectoryParameter } from 'ngx-inception/security';
+import { UserDirectoryParameter } from '../services/user-directory-parameter';
 import { Subscription } from 'rxjs';
 import { debounceTime, finalize, first, pairwise, startWith } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';

@@ -46,9 +46,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
-import {
-  PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule
-} from 'ngx-om-perfect-scrollbar';
 import { CacheService } from './cache/services/cache.service';
 import { DialogService } from './dialogs/services/dialog.service';
 import { INCEPTION_CONFIG, InceptionConfig } from './inception-config';
@@ -61,11 +58,6 @@ import { CanActivateFunctionGuard } from './routing/can-activate-function-guard'
 import { DisabledFunctionGuard } from './routing/disabled-function-guard';
 import { SessionInterceptor } from './session/services/session.interceptor';
 import { SessionService } from './session/services/session.service';
-//import '@angular/localize/init';
-
-const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
-};
 
 export const INCEPTION_DATE_FORMATS = {
   parse: {
@@ -147,26 +139,6 @@ export class InceptionDateAdapter extends NativeDateAdapter {
     MatTooltipModule,
     // Third-Party Modules
     // ChartsModule,
-    PerfectScrollbarModule
-
-    // Inception Core Dialogs Components
-    //ConfirmationDialogComponent,
-    //ErrorDialogComponent,
-    //InformationDialogComponent,
-    //WarningDialogComponent,
-
-    // Inception Core Forms Directives
-    //AutocompleteSelectionRequiredDirective,
-    //AutofocusDirective,
-    //ValidatedFormDirective,
-
-    // Inception Forms Components
-    //FileUploadComponent,
-    //GroupFormFieldComponent,
-    //TableFilterComponent,
-
-    // Inception Core Session Directives
-    //HasAuthorityDirective
   ],
   imports: [
     // Angular Modules
@@ -204,23 +176,6 @@ export class InceptionDateAdapter extends NativeDateAdapter {
     MatTooltipModule,
     // Third-Party Modules
     // ChartsModule,
-    PerfectScrollbarModule
-
-    // Inception Core Dialogs Components
-    //ConfirmationDialogComponent,
-    //ErrorDialogComponent,
-    //InformationDialogComponent,
-    //WarningDialogComponent,
-    // Inception Core Forms Directives
-    //AutocompleteSelectionRequiredDirective,
-    //AutofocusDirective,
-    //ValidatedFormDirective,
-    // Inception Forms Components
-    //FileUploadComponent,
-    //GroupFormFieldComponent,
-    //TableFilterComponent,
-    // Inception Core Session Directives
-    //HasAuthorityDirective
   ],
   providers: [
     {
@@ -264,10 +219,6 @@ export class CoreModule {
           provide: HTTP_INTERCEPTORS,
           useClass: SessionInterceptor,
           multi: true
-        },
-        {
-          provide: PERFECT_SCROLLBAR_CONFIG,
-          useValue: INCEPTION_PERFECT_SCROLLBAR_CONFIG
         },
 
         // Cache Services

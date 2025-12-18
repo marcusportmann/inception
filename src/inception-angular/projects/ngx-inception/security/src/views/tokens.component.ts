@@ -20,10 +20,9 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import { CoreModule, SortDirection, TableFilterComponent } from 'ngx-inception/core';
+import { CoreModule, SortDirection, StatefulListView, TableFilterComponent } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { StatefulListView } from '../../../core/src/layout/components/stateful-list.view';
 import { SecurityService } from '../services/security.service';
 import { TokenStatus } from '../services/token-status';
 import { TokenSummaries } from '../services/token-summaries';

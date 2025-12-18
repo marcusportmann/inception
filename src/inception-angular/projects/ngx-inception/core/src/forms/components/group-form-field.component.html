@@ -44,12 +44,10 @@
   [class.mdc-text-field--outlined]="_hasOutline()">
   <div class="mat-mdc-form-field-flex">
     @if (_hasOutline()) {
-      @if (_hasOutline()) {
-        <div groupFormFieldNotchedOutline
-          [groupFormFieldNotchedOutlineOpen]="_hasFloatingLabel()">
-          <ng-template [ngTemplateOutlet]="labelTemplate"></ng-template>
-        </div>
-      }
+      <div groupFormFieldNotchedOutline
+           [groupFormFieldNotchedOutlineOpen]="_hasFloatingLabel()">
+        <ng-template [ngTemplateOutlet]="labelTemplate"></ng-template>
+      </div>
     }
 
     <div class="mat-mdc-form-field-infix">
@@ -72,12 +70,12 @@
 <div class="mat-mdc-form-field-subscript-wrapper mat-mdc-form-field-bottom-align">
   @switch (_getDisplayedMessages()) {
     @case ('error') {
-      <div class="mat-mdc-form-field-error-wrapper" [@transitionMessages]="_subscriptAnimationState" style="opacity: 1; transform: translateY(0%);">
+      <div class="mat-mdc-form-field-error-wrapper">
         <ng-content select="mat-error"></ng-content>
       </div>
     }
     @case ('hint') {
-      <div class="mat-mdc-form-field-hint-wrapper" [@transitionMessages]="_subscriptAnimationState" style="opacity: 1; transform: translateY(0%);">
+      <div class="mat-mdc-form-field-hint-wrapper">
         @if (hintLabel) {
           <div [id]="_hintLabelId" class="mat-mdc-form-field-hint mat-mdc-form-field-bottom-align">{{hintLabel}}</div>
         }

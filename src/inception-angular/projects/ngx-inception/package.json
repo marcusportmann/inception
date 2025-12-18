@@ -22,8 +22,8 @@
     "@fortawesome/fontawesome-free": ">= 6.6 < 8",
     "es6-template-string": ">= 1 < 2",
     "date-fns": ">= 3.6 < 5",
-    "ngx-om-perfect-scrollbar": ">= 16 < 17",
-    "uuid": ">= 9 < 10"
+    "uuid": ">= 9 < 10",
+    "ngx-scrollbar": ">= 19 < 22.0.0"
   },
   "dependencies": {
     "tslib": ">= 2.6 < 3"

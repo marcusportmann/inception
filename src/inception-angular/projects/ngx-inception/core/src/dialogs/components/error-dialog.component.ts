@@ -85,8 +85,10 @@ export class ErrorDialogComponent {
     this.dialogRef.close();
   }
 
-  onEnter(event: KeyboardEvent) {
-    event.preventDefault(); // Optional: prevent unintended form submissions
+  onEnter(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
+    // Optional: prevent unintended form submissions
+    keyboardEvent.preventDefault();
     this.ok();
   }
 }

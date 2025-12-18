@@ -40,11 +40,7 @@ import { DialogData } from '../services/dialog-data';
     </div>
     <div class="button">
       @if (data.buttonText) {
-        <button
-          mat-flat-button
-          color="warn"
-          (click)="ok()"
-          tabindex="-1">
+        <button mat-flat-button color="warn" (click)="ok()" tabindex="-1">
           {{ data.buttonText }}
         </button>
       } @else {
@@ -58,7 +54,7 @@ import { DialogData } from '../services/dialog-data';
         </button>
       }
     </div>
-    `,
+  `,
   host: {
     class: 'warning-dialog',
     '(document:keydown.enter)': 'onEnter($event)'
@@ -80,8 +76,10 @@ export class WarningDialogComponent {
     this.dialogRef.close();
   }
 
-  onEnter(event: KeyboardEvent) {
-    event.preventDefault(); // Optional: prevent unintended form submissions
+  onEnter(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
+    // Optional: prevent unintended form submissions
+    keyboardEvent.preventDefault();
     this.ok();
   }
 }
