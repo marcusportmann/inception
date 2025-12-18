@@ -11,7 +11,7 @@ get {
 }
 
 vars:post-response {
-  workflowDocumentId: res.body.workflowDocuments[0].id
+  workflowDocumentId: res.body.workflowDocumentSummaries[0].id
 }
 
 assert {
@@ -20,4 +20,5 @@ assert {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

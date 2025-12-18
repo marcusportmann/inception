@@ -210,8 +210,12 @@ logging:
 management:
   endpoint:
     health:
+      mongo:
+        enabled: false
       probes:
         enabled: true
+    metrics:
+      enabled: true
   endpoints:
     web:
       exposure:
