@@ -5,7 +5,7 @@
         .mat-mdc-radio-group {
           .mat-mdc-radio-button {
             .mdc-radio {
-              --mdc-radio-state-layer-size: 20px;
+              --mat-radio-state-layer-size: 20px;
               padding: 0px 4px 0px 0px;
             }
 
@@ -31,7 +31,7 @@
             }
 
             .mdc-checkbox__native-control {
-              --mdc-checkbox-state-layer-size: 20px;
+              --mat-checkbox-state-layer-size: 20px;
             }
           }
 
