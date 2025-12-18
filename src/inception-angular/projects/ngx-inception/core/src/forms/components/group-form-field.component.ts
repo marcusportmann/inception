@@ -18,7 +18,7 @@ import { Directionality } from '@angular/cdk/bidi';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CdkObserveContent } from '@angular/cdk/observers';
 import { Platform } from '@angular/cdk/platform';
-import { NgIf, NgSwitch, NgSwitchCase, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   AfterContentChecked, AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
   Component, ContentChild, ContentChildren, ElementRef, Inject, InjectionToken, Input, NgZone,
@@ -54,12 +54,9 @@ export const GROUP_FORM_FIELD_COMPONENT =
   standalone: true,
   imports: [
     CdkObserveContent,
-    NgIf,
-    NgSwitch,
     GroupFormFieldNotchedOutlineComponent,
-    NgTemplateOutlet,
-    NgSwitchCase
-  ],
+    NgTemplateOutlet
+],
   exportAs: 'groupFormField',
   templateUrl: 'group-form-field.component.html',
   styleUrls: ['group-form-field.component.scss'],
