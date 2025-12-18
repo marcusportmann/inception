@@ -29,10 +29,7 @@ export class LoginError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@session_login_error:Incorrect username or password.`,
-      cause
-    );
+    super($localize`:@@session_login_error:Incorrect username or password.`, cause);
   }
 }
 
@@ -48,10 +45,7 @@ export class PasswordExpiredError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@session_password_expired_error:The password has expired.`,
-      cause
-    );
+    super($localize`:@@session_password_expired_error:The password has expired.`, cause);
   }
 }
 

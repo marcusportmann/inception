@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Error } from '../../errors/error';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog.component';
@@ -24,7 +24,7 @@ import { WarningDialogComponent } from '../components/warning-dialog.component';
 import { DialogData } from './dialog-data';
 
 /**
- * The service that provides the capability to show different standard dialogs.
+ * The service that provides the ability to show different standard dialogs.
  *
  * @author Marcus Portmann
  */
@@ -36,8 +36,6 @@ export class DialogService {
 
   /**
    * Constructs a new DialogService.
-   *
-   * @param matDialog The material dialog.
    */
   constructor() {
     console.log('Initializing the Dialog Service');
@@ -48,9 +46,7 @@ export class DialogService {
    *
    * @param data The data.
    */
-  showConfirmationDialog(
-    data: DialogData
-  ): MatDialogRef<ConfirmationDialogComponent> {
+  showConfirmationDialog(data: DialogData): MatDialogRef<ConfirmationDialogComponent> {
     return this.matDialog.open(ConfirmationDialogComponent, {
       panelClass: 'confirmation-dialog',
       restoreFocus: false,
@@ -82,9 +78,7 @@ export class DialogService {
    *
    * @param data The data.
    */
-  showInformationDialog(
-    data: DialogData
-  ): MatDialogRef<InformationDialogComponent> {
+  showInformationDialog(data: DialogData): MatDialogRef<InformationDialogComponent> {
     return this.matDialog.open(InformationDialogComponent, {
       panelClass: 'information-dialog',
       restoreFocus: false,

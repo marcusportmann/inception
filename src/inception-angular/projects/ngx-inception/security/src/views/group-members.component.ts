@@ -44,8 +44,6 @@ import { SecurityService } from '../services/security.service';
   styleUrls: ['group-members.component.css']
 })
 export class GroupMembersComponent extends StatefulListView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   readonly dataSource: GroupMemberDataSource;
 
   readonly displayedColumns: readonly string[] = ['memberName', 'memberType', 'actions'];
@@ -72,11 +70,14 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
+  private securityService = inject(SecurityService);
+
   constructor() {
     super();
 
     // Read the reset flag from the current navigation
-    const nav = this.router.getCurrentNavigation();
+    const nav = this.router.currentNavigation();
+
     this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     // Retrieve the route parameters

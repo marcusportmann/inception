@@ -16,10 +16,10 @@
             <input type="text" matInput formControlName="description">
             @if (descriptionControl.errors && !descriptionControl.untouched) {
               <mat-error>
-                @if (descriptionControl.errors?.['required']) {
+                @if (descriptionControl.errors['required']) {
                   <span i18n="@@security_edit_group_component_error_description_required">A description is required.</span>
                 }
-                @if (descriptionControl.errors?.['maxlength']) {
+                @if (descriptionControl.errors['maxlength']) {
                   <span i18n="@@security_edit_group_component_error_description_maxlength">Description must not exceed 100 characters.</span>
                 }
               </mat-error>

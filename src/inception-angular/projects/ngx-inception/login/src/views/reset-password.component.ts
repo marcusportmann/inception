@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   AbstractControl, FormControl, FormGroup, ValidationErrors, Validators
 } from '@angular/forms';
@@ -39,12 +39,6 @@ import { catchError, finalize, first, Observable, throwError } from 'rxjs';
   templateUrl: 'reset-password.component.html'
 })
 export class ResetPasswordComponent implements OnInit {
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private dialogService = inject(DialogService);
-  private securityService = inject(SecurityService);
-  private spinnerService = inject(SpinnerService);
-
   readonly confirmNewPasswordControl: FormControl<string>;
 
   readonly newPasswordControl: FormControl<string>;
@@ -57,7 +51,17 @@ export class ResetPasswordComponent implements OnInit {
 
   readonly usernameControl: FormControl<string>;
 
+  private activatedRoute = inject(ActivatedRoute);
+
+  private dialogService = inject(DialogService);
+
+  private router = inject(Router);
+
   private securityCode: string | null = null;
+
+  private securityService = inject(SecurityService);
+
+  private spinnerService = inject(SpinnerService);
 
   constructor() {
     this.newPasswordControl = new FormControl<string>('', {
@@ -97,17 +101,17 @@ export class ResetPasswordComponent implements OnInit {
 
       if (!username || !securityCode) {
         this.dialogService
-        .showErrorDialog(
-          new Error(
-            'The password reset link is invalid or has expired. Please request a new reset link.'
+          .showErrorDialog(
+            new Error(
+              'The password reset link is invalid or has expired. Please request a new reset link.'
+            )
           )
-        )
-        .afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-        });
+          .afterClosed()
+          .pipe(first())
+          .subscribe(() => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+          });
         return;
       }
 
@@ -127,18 +131,16 @@ export class ResetPasswordComponent implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-    .resetPassword(username, newPassword, this.securityCode)
-    .pipe(
-      first(),
-      finalize(() => this.spinnerService.hideSpinner()),
-      catchError((error: Error) => this.handleError(error))
-    )
-    .subscribe(() => this.showSuccessDialog(username));
+      .resetPassword(username, newPassword, this.securityCode)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner()),
+        catchError((error: Error) => this.handleError(error))
+      )
+      .subscribe(() => this.showSuccessDialog(username));
   }
 
-  private static passwordsMatchValidator(
-    control: AbstractControl
-  ): ValidationErrors | null {
+  private static passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
     const newPassword = control.get('newPassword')?.value;
     const confirmNewPassword = control.get('confirmNewPassword')?.value;
 
@@ -146,9 +148,7 @@ export class ResetPasswordComponent implements OnInit {
       return null;
     }
 
-    return newPassword === confirmNewPassword
-      ? null
-      : { passwordsMismatch: true };
+    return newPassword === confirmNewPassword ? null : { passwordsMismatch: true };
   }
 
   private handleError(error: Error): Observable<never> {
@@ -175,14 +175,14 @@ export class ResetPasswordComponent implements OnInit {
       });
 
     dialogRef
-    .afterClosed()
-    .pipe(first())
-    .subscribe(() => {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(['..'], {
-        relativeTo: this.activatedRoute,
-        state: { username }
+      .afterClosed()
+      .pipe(first())
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['..'], {
+          relativeTo: this.activatedRoute,
+          state: { username }
+        });
       });
-    });
   }
 }

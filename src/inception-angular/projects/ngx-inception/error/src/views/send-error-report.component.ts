@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -38,12 +38,6 @@ import { ErrorService } from '../services/error.service';
   templateUrl: 'send-error-report.component.html'
 })
 export class SendErrorReportComponent implements OnInit {
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private dialogService = inject(DialogService);
-  private errorService = inject(ErrorService);
-  private spinnerService = inject(SpinnerService);
-
   emailControl: FormControl;
 
   error: Error | null = null;
@@ -54,13 +48,23 @@ export class SendErrorReportComponent implements OnInit {
 
   sendErrorReportForm: FormGroup;
 
+  private activatedRoute = inject(ActivatedRoute);
+
+  private dialogService = inject(DialogService);
+
+  private errorService = inject(ErrorService);
+
+  private router = inject(Router);
+
+  private spinnerService = inject(SpinnerService);
+
   constructor() {
     // Initialize form controls
     this.emailControl = new FormControl('', Validators.email);
     this.feedbackControl = new FormControl('');
     this.messageControl = new FormControl('');
 
-    // Initialize form group
+    // Initialize the form group
     this.sendErrorReportForm = new FormGroup({
       message: this.messageControl,
       email: this.emailControl,

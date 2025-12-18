@@ -15,36 +15,17 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  HostBinding,
-  ViewChild,
-  inject
+  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import {
-  CoreModule,
-  Error,
-  HasAuthorityDirective,
-  Session,
-  SessionService,
-  SortDirection,
-  StatefulListView,
-  TableFilterComponent
+  CoreModule, Error, HasAuthorityDirective, Session, SessionService, SortDirection,
+  StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { BehaviorSubject, EMPTY, Observable, forkJoin, of } from 'rxjs';
-import {
-  catchError,
-  finalize,
-  first,
-  map,
-  switchMap,
-  takeUntil,
-  tap
-} from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, forkJoin, Observable, of } from 'rxjs';
+import { catchError, finalize, first, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { GroupDataSource } from '../services/group-data-source';
 import { Groups } from '../services/groups';
 import { SecurityService } from '../services/security.service';
@@ -67,18 +48,14 @@ interface GroupsListExtras {
   templateUrl: 'groups.component.html',
   styleUrls: ['groups.component.css']
 })
-export class GroupsComponent
-  extends StatefulListView<GroupsListExtras>
-  implements AfterViewInit
-{
-  private securityService = inject(SecurityService);
-  private sessionService = inject(SessionService);
-
+export class GroupsComponent extends StatefulListView<GroupsListExtras> implements AfterViewInit {
   readonly dataSource: GroupDataSource;
 
   displayedColumns = ['name', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
+
+  readonly listKey = 'security.groups';
 
   @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 
@@ -98,17 +75,20 @@ export class GroupsComponent
   @ViewChild('userDirectorySelect', { static: true })
   userDirectorySelect!: MatSelect;
 
-  readonly listKey = 'security.groups';
-
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
+  private securityService = inject(SecurityService);
+
+  private sessionService = inject(SessionService);
+
   constructor() {
     super();
 
-    const nav = this.router.getCurrentNavigation();
+    const nav = this.router.currentNavigation();
+
     this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     this.dataSource = new GroupDataSource(this.securityService);
@@ -116,10 +96,7 @@ export class GroupsComponent
 
   get enableActionsMenu$(): Observable<boolean> {
     return this.userDirectoryCapabilities$.pipe(
-      map(
-        (caps) =>
-          caps?.supportsGroupAdministration ?? false
-      )
+      map((caps) => caps?.supportsGroupAdministration ?? false)
     );
   }
 
@@ -151,10 +128,9 @@ export class GroupsComponent
     this.saveState();
 
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [`${userDirectoryId}/${encodeURIComponent(groupName)}/edit`],
-      { relativeTo: this.activatedRoute }
-    );
+    this.router.navigate([`${userDirectoryId}/${encodeURIComponent(groupName)}/edit`], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   groupMembers(groupName: string): void {
@@ -168,10 +144,9 @@ export class GroupsComponent
     this.listStateService.clear('security.group-members');
 
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [`${userDirectoryId}/${encodeURIComponent(groupName)}/members`],
-      { relativeTo: this.activatedRoute }
-    );
+    this.router.navigate([`${userDirectoryId}/${encodeURIComponent(groupName)}/members`], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   groupRoles(groupName: string): void {
@@ -183,10 +158,9 @@ export class GroupsComponent
     this.saveState();
 
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [`${userDirectoryId}/${encodeURIComponent(groupName)}/roles`],
-      { relativeTo: this.activatedRoute }
-    );
+    this.router.navigate([`${userDirectoryId}/${encodeURIComponent(groupName)}/roles`], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   newGroup(): void {
@@ -210,16 +184,12 @@ export class GroupsComponent
       })
     );
 
-    this.initializeStatefulList(
-      this.resetStateRequested,
-      () => this.loadGroupsData(),
-      [
-        {
-          observable: directorySelection$,
-          resetPage: true
-        }
-      ]
-    );
+    this.initializeStatefulList(this.resetStateRequested, () => this.loadGroupsData(), [
+      {
+        observable: directorySelection$,
+        resetPage: true
+      }
+    ]);
 
     this.loadUserDirectories();
 
@@ -253,47 +223,6 @@ export class GroupsComponent
     }
   }
 
-  private loadGroupsData(): void {
-    const userDirectoryId = this.userDirectoryId$.value;
-
-    if (!userDirectoryId) {
-      this.dataSource.clear();
-      this.userDirectoryCapabilities$.next(null);
-      return;
-    }
-
-    this.spinnerService.showSpinner();
-
-    forkJoin({
-      userDirectoryCapabilities: this.securityService
-      .getUserDirectoryCapabilities(userDirectoryId)
-      .pipe(
-        catchError((error: Error) => {
-          this.handleError(error, false);
-          return of(null);
-        })
-      ),
-      groups: this.loadGroups(userDirectoryId).pipe(
-        catchError((error: Error) => {
-          this.handleError(error, false);
-          return EMPTY;
-        })
-      )
-    })
-    .pipe(
-      finalize(() => this.spinnerService.hideSpinner()),
-      takeUntil(this.destroy$)
-    )
-    .subscribe({
-      next: ({ userDirectoryCapabilities }) => {
-        if (userDirectoryCapabilities) {
-          this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
-        }
-      },
-      error: (error: Error) => this.handleError(error, false)
-    });
-  }
-
   private loadGroups(userDirectoryId: string): Observable<Groups> {
     const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
     const sortDirection =
@@ -308,57 +237,96 @@ export class GroupsComponent
     );
   }
 
+  private loadGroupsData(): void {
+    const userDirectoryId = this.userDirectoryId$.value;
+
+    if (!userDirectoryId) {
+      this.dataSource.clear();
+      this.userDirectoryCapabilities$.next(null);
+      return;
+    }
+
+    this.spinnerService.showSpinner();
+
+    forkJoin({
+      userDirectoryCapabilities: this.securityService
+        .getUserDirectoryCapabilities(userDirectoryId)
+        .pipe(
+          catchError((error: Error) => {
+            this.handleError(error, false);
+            return of(null);
+          })
+        ),
+      groups: this.loadGroups(userDirectoryId).pipe(
+        catchError((error: Error) => {
+          this.handleError(error, false);
+          return EMPTY;
+        })
+      )
+    })
+      .pipe(
+        finalize(() => this.spinnerService.hideSpinner()),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: ({ userDirectoryCapabilities }) => {
+          if (userDirectoryCapabilities) {
+            this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
+          }
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
+  }
+
   private loadUserDirectories(): void {
     this.sessionService.session$
-    .pipe(
-      first(),
-      switchMap((session: Session | null) => {
-        if (session?.tenantId) {
-          this.spinnerService.showSpinner();
+      .pipe(
+        first(),
+        switchMap((session: Session | null) => {
+          if (session?.tenantId) {
+            this.spinnerService.showSpinner();
 
-          return this.securityService
-          .getUserDirectorySummariesForTenant(session.tenantId)
-          .pipe(
-            catchError((error: Error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        } else {
-          return of([] as UserDirectorySummary[]);
-        }
-      }),
-      takeUntil(this.destroy$)
-    )
-    .subscribe({
-      next: (userDirectories: UserDirectorySummary[]) => {
-        this.userDirectories = userDirectories;
-
-        let selectedId = this.userDirectoryId$.value;
-
-        // If no selection from the restored state, infer one
-        if (!selectedId) {
-          if (userDirectories.length === 1) {
-            selectedId = userDirectories[0].id;
+            return this.securityService.getUserDirectorySummariesForTenant(session.tenantId).pipe(
+              catchError((error: Error) => {
+                this.handleError(error, false);
+                return EMPTY;
+              }),
+              finalize(() => this.spinnerService.hideSpinner())
+            );
           } else {
-            const state = window.history.state as { userDirectoryId?: string };
-            const fromNav = state?.userDirectoryId;
+            return of([] as UserDirectorySummary[]);
+          }
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (userDirectories: UserDirectorySummary[]) => {
+          this.userDirectories = userDirectories;
 
-            if (fromNav && userDirectories.some((ud) => ud.id === fromNav)) {
-              selectedId = fromNav;
+          let selectedId = this.userDirectoryId$.value;
+
+          // If no selection from the restored state, infer one
+          if (!selectedId) {
+            if (userDirectories.length === 1) {
+              selectedId = userDirectories[0].id;
+            } else {
+              const state = window.history.state as { userDirectoryId?: string };
+              const fromNav = state?.userDirectoryId;
+
+              if (fromNav && userDirectories.some((ud) => ud.id === fromNav)) {
+                selectedId = fromNav;
+              }
             }
           }
-        }
 
-        if (selectedId && userDirectories.some((ud) => ud.id === selectedId)) {
-          this.userDirectoryId$.next(selectedId);
-          if (this.userDirectorySelect) {
-            this.userDirectorySelect.value = selectedId;
+          if (selectedId && userDirectories.some((ud) => ud.id === selectedId)) {
+            this.userDirectoryId$.next(selectedId);
+            if (this.userDirectorySelect) {
+              this.userDirectorySelect.value = selectedId;
+            }
           }
-        }
-      },
-      error: (error: Error) => this.handleError(error, false)
-    });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 }

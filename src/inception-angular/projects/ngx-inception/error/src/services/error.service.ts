@@ -14,24 +14,11 @@
  * limitations under the License.
  */
 
+import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams,
-  HttpResponse
-} from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import {
-  AccessDeniedError,
-  CommunicationError,
-  Error,
-  INCEPTION_CONFIG,
-  InceptionConfig,
-  InvalidArgumentError,
-  ProblemDetails,
-  ResponseConverter,
-  ServiceUnavailableError,
-  SortDirection
+  AccessDeniedError, CommunicationError, Error, INCEPTION_CONFIG, InceptionConfig,
+  InvalidArgumentError, ProblemDetails, ResponseConverter, ServiceUnavailableError, SortDirection
 } from 'ngx-inception/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -56,9 +43,6 @@ export class ErrorService {
 
   /**
    * Constructs a new ErrorService.
-   *
-   * @param config     The Inception configuration.
-   * @param httpClient The HTTP client.
    */
   constructor() {
     console.log('Initializing the Error Service');
@@ -71,9 +55,7 @@ export class ErrorService {
    *
    * @return The error report.
    */
-  @ResponseConverter getErrorReport(
-    errorReportId: string
-  ): Observable<ErrorReport> {
+  @ResponseConverter getErrorReport(errorReportId: string): Observable<ErrorReport> {
     return this.httpClient
       .get<ErrorReport>(
         `${this.config.apiUrlPrefix}/error/error-reports/${encodeURIComponent(errorReportId)}`,
@@ -81,10 +63,7 @@ export class ErrorService {
       )
       .pipe(
         catchError((error) =>
-          ErrorService.handleApiError(
-            error,
-            'Failed to retrieve the error report.'
-          )
+          ErrorService.handleApiError(error, 'Failed to retrieve the error report.')
         )
       );
   }
@@ -145,19 +124,13 @@ export class ErrorService {
     }
 
     return this.httpClient
-      .get<ErrorReportSummaries>(
-        `${this.config.apiUrlPrefix}/error/error-report-summaries`,
-        {
-          params,
-          reportProgress: true
-        }
-      )
+      .get<ErrorReportSummaries>(`${this.config.apiUrlPrefix}/error/error-report-summaries`, {
+        params,
+        reportProgress: true
+      })
       .pipe(
         catchError((error) =>
-          ErrorService.handleApiError(
-            error,
-            'Failed to retrieve the error report summaries.'
-          )
+          ErrorService.handleApiError(error, 'Failed to retrieve the error report summaries.')
         )
       );
   }
@@ -169,11 +142,7 @@ export class ErrorService {
    * @param email    The email address of the user submitting the error report.
    * @param feedback The feedback from the user submitting the error report.
    */
-  sendErrorReport(
-    error: Error,
-    email?: string,
-    feedback?: string
-  ): Observable<boolean> {
+  sendErrorReport(error: Error, email?: string, feedback?: string): Observable<boolean> {
     const errorReport: ErrorReport = new ErrorReport(
       uuid(),
       this.config.applicationId,
@@ -186,11 +155,9 @@ export class ErrorService {
     );
 
     return this.httpClient
-      .post<boolean>(
-        `${this.config.apiUrlPrefix}/error/error-reports`,
-        errorReport,
-        { observe: 'response' }
-      )
+      .post<boolean>(`${this.config.apiUrlPrefix}/error/error-reports`, errorReport, {
+        observe: 'response'
+      })
       .pipe(
         map(ErrorService.isResponse204),
         catchError((error) =>
@@ -203,12 +170,7 @@ export class ErrorService {
     httpErrorResponse: HttpErrorResponse,
     defaultMessage: string
   ): Observable<never> {
-    if (
-      ProblemDetails.isProblemDetails(
-        httpErrorResponse,
-        ErrorReportNotFoundError.TYPE
-      )
-    ) {
+    if (ProblemDetails.isProblemDetails(httpErrorResponse, ErrorReportNotFoundError.TYPE)) {
       return throwError(() => new ErrorReportNotFoundError(httpErrorResponse));
     } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
       return throwError(() => new AccessDeniedError(httpErrorResponse));
@@ -218,9 +180,7 @@ export class ErrorService {
       return throwError(() => new InvalidArgumentError(httpErrorResponse));
     }
 
-    return throwError(
-      () => new ServiceUnavailableError(defaultMessage, httpErrorResponse)
-    );
+    return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
   }
 
   // Centralized method to check if HTTP response status is 204 (No Content)

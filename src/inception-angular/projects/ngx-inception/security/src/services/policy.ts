@@ -56,13 +56,7 @@ export class Policy {
    * @param type    The policy type.
    * @param data    The policy data.
    */
-  constructor(
-    id: string,
-    version: string,
-    name: string,
-    type: PolicyType,
-    data: string
-  ) {
+  constructor(id: string, version: string, name: string, type: PolicyType, data: string) {
     this.id = id;
     this.version = version;
     this.name = name;

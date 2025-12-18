@@ -20,10 +20,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
-  CoreModule,
-  Error,
-  SortDirection,
-  StatefulListView, TableFilterComponent
+  CoreModule, Error, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -38,8 +35,6 @@ import { TenantDataSource } from '../services/tenant-data-source';
   styleUrls: ['tenants.component.css']
 })
 export class TenantsComponent extends StatefulListView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   readonly dataSource: TenantDataSource;
 
   displayedColumns = ['name', 'actions'];
@@ -62,10 +57,13 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
+  private securityService = inject(SecurityService);
+
   constructor() {
     super();
 
-    const nav = this.router.getCurrentNavigation();
+    const nav = this.router.currentNavigation();
+
     this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     this.dataSource = new TenantDataSource(this.securityService);

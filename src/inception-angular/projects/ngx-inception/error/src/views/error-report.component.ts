@@ -34,8 +34,6 @@ import { ErrorService } from '../services/error.service';
   styleUrls: ['error-report.component.css']
 })
 export class ErrorReportComponent extends AdminContainerView implements AfterViewInit {
-  private errorService = inject(ErrorService);
-
   applicationIdControl: FormControl;
 
   applicationVersionControl: FormControl;
@@ -61,6 +59,8 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
   readonly title = $localize`:@@error_error_report_title:View Error Report`;
 
   whoControl: FormControl;
+
+  private errorService = inject(ErrorService);
 
   constructor() {
     super();
@@ -110,7 +110,7 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
       disabled: true
     });
 
-    // Initialize form group
+    // Initialize the form group
     this.errorReportForm = new FormGroup({
       applicationId: this.applicationIdControl,
       applicationVersion: this.applicationVersionControl,

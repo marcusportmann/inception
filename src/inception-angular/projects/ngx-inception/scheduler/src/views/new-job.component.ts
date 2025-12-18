@@ -17,7 +17,9 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective } from 'ngx-inception/core';
+import {
+  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
+} from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Job } from '../services/job';
 import { JobParameter } from '../services/job-parameter';
@@ -39,9 +41,6 @@ import {
   styleUrls: ['new-job.component.css']
 })
 export class NewJobComponent extends AdminContainerView implements AfterViewInit {
-  private schedulerService = inject(SchedulerService);
-  private matDialog = inject(MatDialog);
-
   JobStatus = JobStatus;
 
   enabledControl: FormControl;
@@ -75,6 +74,10 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
   statusControl: FormControl;
 
   readonly title = $localize`:@@scheduler_new_job_title:New Job`;
+
+  private matDialog = inject(MatDialog);
+
+  private schedulerService = inject(SchedulerService);
 
   constructor() {
     super();

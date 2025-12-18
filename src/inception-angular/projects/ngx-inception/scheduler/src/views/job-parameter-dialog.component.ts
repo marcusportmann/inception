@@ -67,17 +67,15 @@ export interface JobParameterDialogData {
               <input type="text" matInput formControlName="name" required="true" />
               @if (nameControl.errors && !nameControl.untouched) {
                 <mat-error>
-                  @if (nameControl.errors?.['required']) {
-                    <span
-                      i18n="@@scheduler_job_parameter_dialog_component_error_name_required">
-                  A name is required.
-                </span>
+                  @if (nameControl.errors['required']) {
+                    <span i18n="@@scheduler_job_parameter_dialog_component_error_name_required">
+                      A name is required.
+                    </span>
                   }
-                  @if (nameControl.errors?.['maxlength']) {
-                    <span
-                      i18n="@@scheduler_job_parameter_dialog_component_error_name_maxlength">
-                  Name must not exceed 100 characters.
-                </span>
+                  @if (nameControl.errors['maxlength']) {
+                    <span i18n="@@scheduler_job_parameter_dialog_component_error_name_maxlength">
+                      Name must not exceed 100 characters.
+                    </span>
                   }
                 </mat-error>
               }
@@ -93,11 +91,10 @@ export interface JobParameterDialogData {
               <input type="text" matInput formControlName="value" />
               @if (valueControl.errors && !valueControl.untouched) {
                 <mat-error>
-                  @if (valueControl.errors?.['maxlength']) {
-                    <span
-                      i18n="@@scheduler_job_parameter_dialog_component_error_value_maxlength">
-                  Value must not exceed 100 characters.
-                </span>
+                  @if (valueControl.errors['maxlength']) {
+                    <span i18n="@@scheduler_job_parameter_dialog_component_error_value_maxlength">
+                      Value must not exceed 100 characters.
+                    </span>
                   }
                 </mat-error>
               }
@@ -127,22 +124,19 @@ export interface JobParameterDialogData {
         OK
       </button>
     </div>
-    `
+  `
 })
 export class JobParameterDialogComponent {
-  private dialogRef = inject<MatDialogRef<JobParameterDialogComponent>>(MatDialogRef);
-
   jobParameterForm: FormGroup;
 
   nameControl: FormControl;
 
   valueControl: FormControl;
 
+  private dialogRef = inject<MatDialogRef<JobParameterDialogComponent>>(MatDialogRef);
+
   /**
    * Constructs a new JobParameterDialogComponent.
-   *
-   * @param dialogRef The dialog reference.
-   * @param data      The dialog data.
    */
   constructor() {
     const data = inject<JobParameterDialogData>(MAT_DIALOG_DATA);

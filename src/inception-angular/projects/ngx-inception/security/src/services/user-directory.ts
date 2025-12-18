@@ -50,12 +50,7 @@ export class UserDirectory {
    * @param type       The code for the user directory type.
    * @param parameters The parameters for the user directory.
    */
-  constructor(
-    id: string,
-    name: string,
-    type: string,
-    parameters?: UserDirectoryParameter[]
-  ) {
+  constructor(id: string, name: string, type: string, parameters?: UserDirectoryParameter[]) {
     this.id = id;
     this.name = name;
     this.type = type;

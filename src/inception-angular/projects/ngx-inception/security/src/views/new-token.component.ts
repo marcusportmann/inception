@@ -41,9 +41,6 @@ import { TokenClaimDialogComponent, TokenClaimDialogData } from './token-claim-d
   styleUrls: ['new-token.component.css']
 })
 export class NewTokenComponent extends AdminContainerView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-  private matDialog = inject(MatDialog);
-
   descriptionControl: FormControl;
 
   existingTokenId: string | null = null;
@@ -61,6 +58,10 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
   typeControl: FormControl;
 
   validFromDateControl: FormControl;
+
+  private matDialog = inject(MatDialog);
+
+  private securityService = inject(SecurityService);
 
   constructor() {
     super();

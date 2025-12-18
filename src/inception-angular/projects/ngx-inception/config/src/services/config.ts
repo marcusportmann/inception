@@ -15,7 +15,7 @@
  */
 
 /**
- * The Config class stores the ID, value and description for the config.
+ * The Config class stores the ID, value, and description for the config.
  *
  * @author Marcus Portmann
  */

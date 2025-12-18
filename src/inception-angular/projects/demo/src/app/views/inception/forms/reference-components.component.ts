@@ -18,8 +18,9 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
-import { CountriesChipGridComponent, CountryInputComponent, LanguageInputComponent,
-  RegionInputComponent, TimeZoneInputComponent
+import {
+  CountriesChipGridComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent,
+  TimeZoneInputComponent
 } from 'ngx-inception/reference';
 
 /**
@@ -42,10 +43,6 @@ import { CountriesChipGridComponent, CountryInputComponent, LanguageInputCompone
   templateUrl: 'reference-components.component.html'
 })
 export class ReferenceComponentsComponent {
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private formBuilder = inject(FormBuilder);
-
   countriesControl: FormControl = new FormControl([], Validators.required);
 
   countryControl: FormControl = new FormControl('', Validators.required);
@@ -57,6 +54,12 @@ export class ReferenceComponentsComponent {
   regionControl: FormControl = new FormControl('', Validators.required);
 
   timeZoneControl: FormControl = new FormControl('', Validators.required);
+
+  private activatedRoute = inject(ActivatedRoute);
+
+  private formBuilder = inject(FormBuilder);
+
+  private router = inject(Router);
 
   constructor() {
     this.referenceForm = this.formBuilder.group({

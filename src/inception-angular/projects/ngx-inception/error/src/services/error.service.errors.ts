@@ -23,8 +23,7 @@ import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 export class ErrorReportNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/error/error-report-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/error/error-report-not-found';
 
   /**
    * Constructs a new ErrorReportNotFoundError.

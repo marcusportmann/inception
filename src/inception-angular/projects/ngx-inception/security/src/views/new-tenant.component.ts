@@ -38,8 +38,6 @@ import { TenantStatus } from '../services/tenant-status';
   styleUrls: ['new-tenant.component.css']
 })
 export class NewTenantComponent extends AdminContainerView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   createUserDirectoryControl: FormControl;
 
   nameControl: FormControl;
@@ -49,6 +47,8 @@ export class NewTenantComponent extends AdminContainerView implements AfterViewI
   tenant: Tenant | null = null;
 
   readonly title = $localize`:@@security_new_tenant_title:New Tenant`;
+
+  private securityService = inject(SecurityService);
 
   constructor() {
     super();

@@ -37,8 +37,6 @@ import { UserDirectoryCapabilities } from '../services/user-directory-capabiliti
   styleUrls: ['new-group.component.css']
 })
 export class NewGroupComponent extends AdminContainerView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   descriptionControl: FormControl;
 
   group: Group | null = null;
@@ -52,6 +50,8 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   userDirectoryCapabilities: UserDirectoryCapabilities | null = null;
 
   userDirectoryId: string;
+
+  private securityService = inject(SecurityService);
 
   constructor() {
     super();

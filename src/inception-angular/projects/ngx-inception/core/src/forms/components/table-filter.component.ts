@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import {
   Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
@@ -44,7 +43,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
         </button>
       }
     </div>
-    `,
+  `,
   styles: [
     `
       .table-filter-container {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, OnDestroy, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -39,8 +39,6 @@ import { SecurityService } from '../services/security.service';
   styleUrls: ['user-groups.component.css']
 })
 export class UserGroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-  private securityService = inject(SecurityService);
-
   allGroupNames: string[] = [];
 
   availableGroupNames$: Subject<string[]> = new ReplaySubject<string[]>(1);
@@ -58,6 +56,8 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
   userDirectoryId: string;
 
   username: string;
+
+  private securityService = inject(SecurityService);
 
   private subscriptions: Subscription = new Subscription();
 

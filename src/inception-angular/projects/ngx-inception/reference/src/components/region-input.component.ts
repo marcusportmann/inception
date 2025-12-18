@@ -15,7 +15,10 @@
  */
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy,
+  OnInit, ViewChild
+} from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldControl } from '@angular/material/form-field';
@@ -55,14 +58,13 @@ import { Region } from '../services/region';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         @for (filteredOption of filteredOptions$ | async; track filteredOption) {
-          <mat-option
-            [value]="filteredOption">
+          <mat-option [value]="filteredOption">
             {{ filteredOption.name }}
           </mat-option>
         }
       </mat-autocomplete>
     </div>
-    `,
+  `,
   providers: [
     {
       provide: MatFormFieldControl,
@@ -74,10 +76,6 @@ import { Region } from '../services/region';
 export class RegionInputComponent
   implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy
 {
-  private readonly referenceService = inject(ReferenceService);
-  readonly ngControl = inject(NgControl, { optional: true, self: true });
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
   private static _nextId = 0;
 
   /** The name for the control type. */
@@ -101,20 +99,26 @@ export class RegionInputComponent
   /** The observable providing access to the value for the region input as it changes. */
   readonly inputValue$ = new ReplaySubject<string>(1);
 
+  readonly ngControl = inject(NgControl, { optional: true, self: true });
+
   /** The observable indicating that the state of the control has changed. */
   readonly stateChanges = new Subject<void>();
 
-  /** Has the control received a touch event. */
+  /** Has the control received a touch event? */
   touched = false;
 
   /** The options for the autocomplete. */
   private _options: Region[] = [];
+
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   /** The ISO 3166-1 alpha-2 code for the country to retrieve the regions for. */
   private readonly country$ = new BehaviorSubject<string | null>(null);
 
   /** Emits when the component is destroyed. */
   private readonly destroy$ = new Subject<void>();
+
+  private readonly referenceService = inject(ReferenceService);
 
   constructor() {
     if (this.ngControl != null) {

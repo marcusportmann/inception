@@ -64,10 +64,7 @@ export class UserDirectoryUtil {
    * @return True if a parameter with the specified name exists for the specified user directory or
    *         false otherwise.
    */
-  static hasParameter(
-    object: UserDirectory | UserDirectoryParameter[],
-    name: string
-  ): boolean {
+  static hasParameter(object: UserDirectory | UserDirectoryParameter[], name: string): boolean {
     if (object instanceof UserDirectory) {
       for (const userDirectoryParameter of object.parameters) {
         if (userDirectoryParameter.name === name) {

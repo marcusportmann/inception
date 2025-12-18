@@ -38,8 +38,6 @@ import { MailService } from '../services/mail.service';
   styleUrls: ['new-mail-template.component.css']
 })
 export class NewMailTemplateComponent extends AdminContainerView implements AfterViewInit {
-  private mailService = inject(MailService);
-
   // noinspection JSUnusedGlobalSymbols
   MailTemplateContentType = MailTemplateContentType;
 
@@ -63,6 +61,8 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
   templateControl: FormControl;
 
   readonly title = $localize`:@@mail_new_mail_template_title:New Mail Template`;
+
+  private mailService = inject(MailService);
 
   constructor() {
     super();

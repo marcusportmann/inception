@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { Session } from '../../session/services/session';
 import { SessionService } from '../../session/services/session.service';
@@ -29,18 +29,14 @@ import { NavigationItem } from './navigation-item';
   providedIn: 'root'
 })
 export class NavigationService {
-  private sessionService = inject(SessionService);
-
-  userNavigation$: Subject<NavigationItem[]> = new ReplaySubject<
-    NavigationItem[]
-  >(1);
+  userNavigation$: Subject<NavigationItem[]> = new ReplaySubject<NavigationItem[]>(1);
 
   private navigation: NavigationItem[] = [];
 
+  private sessionService = inject(SessionService);
+
   /**
    * Constructs a new NavigationService.
-   *
-   * @param sessionService The session service.
    */
   constructor() {
     console.log('Initializing the Navigation Service');
@@ -63,10 +59,7 @@ export class NavigationService {
     this.userNavigation$.next(this.filterNavigationItems(navigation, null));
   }
 
-  private static hasAccessToNavigationItem(
-    authorities: string[],
-    session: Session
-  ): boolean {
+  private static hasAccessToNavigationItem(authorities: string[], session: Session): boolean {
     for (const authority of authorities) {
       if (session.hasAuthority(authority)) {
         return true;
@@ -87,16 +80,15 @@ export class NavigationService {
     const filteredNavigationItems: NavigationItem[] = [];
 
     for (const navigationItem of navigationItems) {
-      const authorities =
-        navigationItem.authorities == null ? [] : navigationItem.authorities;
+      const authorities = navigationItem.authorities == null ? [] : navigationItem.authorities;
 
       if (authorities.length > 0) {
         if (session) {
-          if (
-            NavigationService.hasAccessToNavigationItem(authorities, session)
-          ) {
-            const filteredChildNavigationItems: NavigationItem[] =
-              this.filterNavigationItems(navigationItem.children, session);
+          if (NavigationService.hasAccessToNavigationItem(authorities, session)) {
+            const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(
+              navigationItem.children,
+              session
+            );
 
             filteredNavigationItems.push(
               new NavigationItem(
@@ -115,8 +107,10 @@ export class NavigationService {
           }
         }
       } else {
-        const filteredChildNavigationItems: NavigationItem[] =
-          this.filterNavigationItems(navigationItem.children, session);
+        const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(
+          navigationItem.children,
+          session
+        );
 
         filteredNavigationItems.push(
           new NavigationItem(

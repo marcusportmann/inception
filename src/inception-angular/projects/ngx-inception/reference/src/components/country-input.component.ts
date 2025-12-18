@@ -113,7 +113,7 @@ export class CountryInputComponent
   readonly stateChanges = new Subject<void>();
 
   /**
-   * Has the control received a touch event.
+   * Has the control received a touch event?
    */
   touched = false;
 
@@ -326,7 +326,7 @@ export class CountryInputComponent
   onClosed(): void {
     /*
      * If the user entered text in the input to filter the options, but they did not select an
-     * option, then the selected value will be null but the input value will be valid.
+     * option, then the selected value will be null, but the input value will be valid.
      * Reset the input and filtered options.
      */
     if (!this._value && this.input.value) {

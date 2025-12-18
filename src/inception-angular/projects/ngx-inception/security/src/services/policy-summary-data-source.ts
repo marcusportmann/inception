@@ -82,13 +82,7 @@ export class PolicySummaryDataSource implements DataSource<PolicySummary> {
     this.loadingSubject$.next(true);
 
     return this.securityService
-      .getPolicySummaries(
-        filter,
-        PolicySortBy.Name,
-        sortDirection,
-        pageIndex,
-        pageSize
-      )
+      .getPolicySummaries(filter, PolicySortBy.Name, sortDirection, pageIndex, pageSize)
       .pipe(
         tap((policySummaries: PolicySummaries) => {
           this.updateData(policySummaries);

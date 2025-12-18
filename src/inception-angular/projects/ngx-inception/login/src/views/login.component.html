@@ -16,10 +16,10 @@
                 <input type="text" matInput formControlName="username" #usernameInput>
                 @if (usernameControl.errors && !usernameControl.untouched) {
                   <mat-error>
-                    @if (usernameControl.errors?.['required']) {
+                    @if (usernameControl.errors['required']) {
                       <span i18n="@@login_login_component_error_username_required">A username is required.</span>
                     }
-                    @if (usernameControl.errors?.['maxlength']) {
+                    @if (usernameControl.errors['maxlength']) {
                       <span i18n="@@login_login_component_error_username_maxlength">Username must not exceed 100 characters.</span>
                     }
                   </mat-error>
@@ -34,10 +34,10 @@
                 <input type="password" matInput formControlName="password">
                 @if (passwordControl.errors && !passwordControl.untouched) {
                   <mat-error>
-                    @if (passwordControl.errors?.['required']) {
+                    @if (passwordControl.errors['required']) {
                       <span i18n="@@login_login_component_error_password_required">A password is required.</span>
                     }
-                    @if (passwordControl.errors?.['maxlength']) {
+                    @if (passwordControl.errors['maxlength']) {
                       <span i18n="@@login_login_component_error_password_maxlength">Password must not exceed 100 characters.</span>
                     }
                   </mat-error>

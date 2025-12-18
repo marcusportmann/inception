@@ -16,9 +16,23 @@
 
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ChangeDetectionStrategy, Component, DoCheck, ElementRef, HostBinding, Input, OnDestroy, ViewChild, inject } from '@angular/core';
 import {
-  AbstractControl, ControlValueAccessor, FormGroupDirective, NgControl, NgForm
+  ChangeDetectionStrategy,
+  Component,
+  DoCheck,
+  ElementRef,
+  HostBinding,
+  inject,
+  Input,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormGroupDirective,
+  NgControl,
+  NgForm
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatFormFieldControl } from '@angular/material/form-field';
@@ -87,12 +101,6 @@ import { Subject } from 'rxjs';
 export class FileUploadComponent
   implements MatFormFieldControl<File[]>, ControlValueAccessor, OnDestroy, DoCheck
 {
-  private fm = inject(FocusMonitor);
-  private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  ngControl = inject(NgControl, { optional: true, self: true });
-  private readonly _parentForm = inject(NgForm, { optional: true });
-  private readonly _parentFormGroup = inject(FormGroupDirective, { optional: true });
-
   /** Static counter for unique id */
   private static nextId = 0;
 
@@ -111,7 +119,7 @@ export class FileUploadComponent
   /** Error state matcher (fallback to default) */
   @Input() errorStateMatcher: ErrorStateMatcher;
 
-  /** Control float behaviour of mat-label */
+  /** Control float behavior of mat-label */
   @Input() floatLabel: 'auto' | 'always' | 'never' = 'auto';
 
   /** MatFormFieldControl-focused */
@@ -123,15 +131,25 @@ export class FileUploadComponent
   @ViewChild('input', { static: true })
   inputRef!: ElementRef<HTMLInputElement>;
 
+  ngControl = inject(NgControl, { optional: true, self: true });
+
   /** Placeholder shown when no files are selected */
   @Input() placeholder = '';
 
   /** MatFormFieldControl required */
   readonly stateChanges = new Subject<void>();
 
+  private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
   private _explicitRequired = false;
 
   private _files: File[] | null = null;
+
+  private readonly _parentForm = inject(NgForm, { optional: true });
+
+  private readonly _parentFormGroup = inject(FormGroupDirective, { optional: true });
+
+  private fm = inject(FocusMonitor);
 
   constructor() {
     const defaultErrorStateMatcher = inject(ErrorStateMatcher);
@@ -274,7 +292,7 @@ export class FileUploadComponent
   }
 
   ngDoCheck(): void {
-    const control = this.ngControl?.control;
+    const control: AbstractControl | null = this.ngControl?.control ?? null;
     const newState = this.errorStateMatcher.isErrorState(
       control,
       this._parentForm || this._parentFormGroup

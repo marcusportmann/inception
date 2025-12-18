@@ -8,10 +8,10 @@
             <input type="text" matInput formControlName="id">
             @if (idControl.errors && !idControl.untouched) {
               <mat-error>
-                @if (idControl.errors?.['required']) {
+                @if (idControl.errors['required']) {
                   <span i18n="@@security_new_policy_component_error_id_required">An ID is required.</span>
                 }
-                @if (idControl.errors?.['maxlength']) {
+                @if (idControl.errors['maxlength']) {
                   <span i18n="@@security_new_policy_component_error_id_maxlength">ID must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -26,10 +26,10 @@
             <input type="text" matInput formControlName="version">
             @if (versionControl.errors && !versionControl.untouched) {
               <mat-error>
-                @if (versionControl.errors?.['required']) {
+                @if (versionControl.errors['required']) {
                   <span i18n="@@security_new_policy_component_error_version_required">A version is required.</span>
                 }
-                @if (versionControl.errors?.['maxlength']) {
+                @if (versionControl.errors['maxlength']) {
                   <span i18n="@@security_new_policy_component_error_version_maxlength">Version must not exceed 30 characters.</span>
                 }
               </mat-error>
@@ -44,10 +44,10 @@
             <input type="text" matInput formControlName="name">
             @if (nameControl.errors && !nameControl.untouched) {
               <mat-error>
-                @if (nameControl.errors?.['required']) {
+                @if (nameControl.errors['required']) {
                   <span i18n="@@security_new_policy_component_error_name_required">A name is required.</span>
                 }
-                @if (nameControl.errors?.['maxlength']) {
+                @if (nameControl.errors['maxlength']) {
                   <span i18n="@@security_new_policy_component_error_name_maxlength">Name must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -65,7 +65,7 @@
             </mat-select>
             @if (typeControl.errors && !typeControl.untouched) {
               <mat-error>
-                @if (typeControl.errors?.['required']) {
+                @if (typeControl.errors['required']) {
                   <span>A type is required.</span>
                 }
               </mat-error>
@@ -80,7 +80,7 @@
             <textarea matInput formControlName="data" cdkTextareaAutosize cdkAutosizeMinRows="10" cdkAutosizeMaxRows="10"></textarea>
             @if (dataControl.errors && !dataControl.untouched) {
               <mat-error>
-                @if (dataControl.errors?.['required']) {
+                @if (dataControl.errors['required']) {
                   <span>Policy data is required.</span>
                 }
               </mat-error>

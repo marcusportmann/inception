@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, OnDestroy, OnInit
+} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NavigationItem } from '../services/navigation-item';
@@ -32,22 +33,23 @@ import { SidebarNavItemComponent } from './sidebar-nav-item.component';
   selector: 'sidebar-nav',
   standalone: true,
   template: ` <ul class="nav">
-      @for (navItem of navItems; track navItem) {
-        <sidebar-nav-item
-        [navItem]="navItem"></sidebar-nav-item>
-      }
-    </ul>`,
+    @for (navItem of navItems; track navItem) {
+      <sidebar-nav-item [navItem]="navItem"></sidebar-nav-item>
+    }
+  </ul>`,
   imports: [SidebarNavItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarNavComponent implements OnInit, OnDestroy {
-  private navigationService = inject(NavigationService);
-  private router = inject(Router);
-  private changeDetectorRef = inject(ChangeDetectorRef);
-
   navItems: NavigationItem[];
 
   @HostBinding('attr.role') role = 'nav';
+
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
+  private navigationService = inject(NavigationService);
+
+  private router = inject(Router);
 
   private routerEventSubscription?: Subscription;
 
@@ -55,10 +57,6 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
 
   /**
    * Constructs a new SidebarNavComponent.
-   *
-   * @param navigationService The navigation service.
-   * @param router            The router.
-   * @param changeDetectorRef The ChangeDetectorRef instance.
    */
   constructor() {
     this.navItems = new Array<NavigationItem>();

@@ -41,8 +41,6 @@ export class ResetUserPasswordTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    return of(
-      $localize`:@@security_reset_user_password_title_resolver:Reset User Password`
-    );
+    return of($localize`:@@security_reset_user_password_title_resolver:Reset User Password`);
   }
 }

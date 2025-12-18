@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -61,9 +60,9 @@ import { DialogData } from '../services/dialog-data';
   }
 })
 export class WarningDialogComponent {
-  private dialogRef = inject<MatDialogRef<WarningDialogComponent>>(MatDialogRef);
   data = inject<DialogData>(MAT_DIALOG_DATA);
 
+  private dialogRef = inject<MatDialogRef<WarningDialogComponent>>(MatDialogRef);
 
   ok(): void {
     this.dialogRef.close();

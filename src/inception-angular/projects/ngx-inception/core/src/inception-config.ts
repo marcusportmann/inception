@@ -28,15 +28,15 @@ export interface InceptionConfig {
    */
   apiUrlPrefix?: string;
   /**
-   * The ID used to identify the application e.g. demo.
+   * The ID used to identify the application e.g., demo.
    */
   applicationId: string;
   /**
-   * The semantic version number for the application e.g. 1.0.0.
+   * The semantic version number for the application e.g., 1.0.0.
    */
   applicationVersion: string;
   /**
-   * Is the forgotten password functionality enabled.
+   * Is the forgotten password functionality enabled?
    */
   forgottenPasswordEnabled: boolean;
 
@@ -46,7 +46,7 @@ export interface InceptionConfig {
   logoutRedirectUri: string;
 
   /**
-   * The OAuth Token URL e.g. http://localhost:8080/oauth/token.
+   * The OAuth Token URL e.g., http://localhost:8080/oauth/token.
    */
   oauthTokenUrl: string;
 
@@ -63,7 +63,7 @@ export interface InceptionConfig {
   prepopulatedLoginUsername?: string;
 
   /**
-   * Is the user profile functionality enabled.
+   * Is the user profile functionality enabled?
    */
   userProfileEnabled: boolean;
 }
@@ -71,6 +71,4 @@ export interface InceptionConfig {
 /**
  * The injection token for the InceptionConfig.
  */
-export const INCEPTION_CONFIG = new InjectionToken<InceptionConfig>(
-  'INCEPTION_CONFIG'
-);
+export const INCEPTION_CONFIG = new InjectionToken<InceptionConfig>('INCEPTION_CONFIG');

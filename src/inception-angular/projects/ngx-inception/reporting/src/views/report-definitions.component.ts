@@ -34,8 +34,6 @@ import { ReportingService } from '../services/reporting.service';
   styleUrls: ['report-definitions.component.css']
 })
 export class ReportDefinitionsComponent extends FilteredPaginatedListView<ReportDefinitionSummary> {
-  private reportingService = inject(ReportingService);
-
   readonly displayedColumns: readonly string[] = ['name', 'actions'];
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
@@ -43,6 +41,8 @@ export class ReportDefinitionsComponent extends FilteredPaginatedListView<Report
   readonly listKey = 'reporting.report-definitions';
 
   readonly title = $localize`:@@reporting_report_definitions_title:Report Definitions`;
+
+  private reportingService = inject(ReportingService);
 
   deleteReportDefinition(reportDefinitionId: string): void {
     this.confirmAndProcessAction(

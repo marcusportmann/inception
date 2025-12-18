@@ -8,10 +8,10 @@
             <input type="text" matInput formControlName="id" autofocus>
             @if (idControl.errors && !idControl.untouched) {
               <mat-error>
-                @if (idControl.errors?.['required']) {
+                @if (idControl.errors['required']) {
                   <span i18n="@@codes_new_code_component_error_id_required">An ID is required.</span>
                 }
-                @if (idControl.errors?.['maxlength']) {
+                @if (idControl.errors['maxlength']) {
                   <span i18n="@@codes_new_code_component_error_id_maxlength">ID must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -26,10 +26,10 @@
             <input type="text" matInput formControlName="name">
             @if (nameControl.errors && !nameControl.untouched) {
               <mat-error>
-                @if (nameControl.errors?.['required']) {
+                @if (nameControl.errors['required']) {
                   <span i18n="@@codes_new_code_component_error_name_required">A name is required.</span>
                 }
-                @if (nameControl.errors?.['maxlength']) {
+                @if (nameControl.errors['maxlength']) {
                   <span i18n="@@codes_new_code_component_error_name_maxlength">Name must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -44,7 +44,7 @@
             <textarea matInput formControlName="value" cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4"></textarea>
             @if (valueControl.errors && !valueControl.untouched) {
               <mat-error>
-                @if (valueControl.errors?.['required']) {
+                @if (valueControl.errors['required']) {
                   <span i18n="@@codes_new_code_component_error_value_required">A value is required.</span>
                 }
               </mat-error>

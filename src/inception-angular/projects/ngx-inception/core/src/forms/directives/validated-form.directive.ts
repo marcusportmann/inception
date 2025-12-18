@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Directive, HostListener, ViewContainerRef, inject } from '@angular/core';
+import { Directive, HostListener, inject, ViewContainerRef } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 
 /**
@@ -28,9 +28,13 @@ import { FormGroupDirective } from '@angular/forms';
   standalone: true
 })
 export class ValidatedFormDirective {
-  private viewContainerRef = inject(ViewContainerRef);
-  private formGroupDirective = inject(FormGroupDirective, { host: true, self: true, optional: true });
+  private formGroupDirective = inject(FormGroupDirective, {
+    host: true,
+    self: true,
+    optional: true
+  });
 
+  private viewContainerRef = inject(ViewContainerRef);
 
   @HostListener('reset')
   onReset(): void {

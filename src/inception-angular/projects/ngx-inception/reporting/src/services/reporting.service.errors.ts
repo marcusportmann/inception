@@ -24,8 +24,7 @@ import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 export class DuplicateReportDefinitionError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/reporting/duplicate-report-definition';
+  static readonly TYPE = 'https://inception.digital/problems/reporting/duplicate-report-definition';
 
   /**
    * Constructs a new DuplicateReportDefinitionError.
@@ -47,8 +46,7 @@ export class DuplicateReportDefinitionError extends Error {
  * @author Marcus Portmann
  */
 export class ReportDefinitionNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/reporting/report-definition-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/reporting/report-definition-not-found';
 
   /**
    * Constructs a new ReportDefinitionNotFoundError.

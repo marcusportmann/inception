@@ -21,8 +21,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import {
-  CoreModule, Error, HasAuthorityDirective, Session, SessionService, SortDirection, StatefulListView,
-  TableFilterComponent
+  CoreModule, Error, HasAuthorityDirective, Session, SessionService, SortDirection,
+  StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
 import { BehaviorSubject, EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { catchError, finalize, first, map, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -49,13 +49,7 @@ interface UsersListExtras {
   templateUrl: 'users.component.html',
   styleUrls: ['users.component.css']
 })
-export class UsersComponent
-  extends StatefulListView<UsersListExtras>
-  implements AfterViewInit
-{
-  private securityService = inject(SecurityService);
-  private sessionService = inject(SessionService);
-
+export class UsersComponent extends StatefulListView<UsersListExtras> implements AfterViewInit {
   readonly dataSource: UserDataSource;
 
   displayedColumns = ['name', 'username', 'actions'];
@@ -87,10 +81,15 @@ export class UsersComponent
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
+  private securityService = inject(SecurityService);
+
+  private sessionService = inject(SessionService);
+
   constructor() {
     super();
 
-    const nav = this.router.getCurrentNavigation();
+    const nav = this.router.currentNavigation();
+
     this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     this.dataSource = new UserDataSource(this.securityService);
@@ -142,12 +141,9 @@ export class UsersComponent
     this.saveState();
 
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [userDirectoryId + '/' + encodeURIComponent(username) + '/edit'],
-      {
-        relativeTo: this.activatedRoute
-      }
-    );
+    this.router.navigate([userDirectoryId + '/' + encodeURIComponent(username) + '/edit'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   newUser(): void {
@@ -174,16 +170,12 @@ export class UsersComponent
     // Initialize generic stateful list behavior. We use the *selectionChange* stream, not the
     // BehaviorSubject itself, so we don't get a synthetic emission during restore that resets the
     // page.
-    this.initializeStatefulList(
-      this.resetStateRequested,
-      () => this.loadUsersData(),
-      [
-        {
-          observable: directorySelection$,
-          resetPage: true
-        }
-      ]
-    );
+    this.initializeStatefulList(this.resetStateRequested, () => this.loadUsersData(), [
+      {
+        observable: directorySelection$,
+        resetPage: true
+      }
+    ]);
 
     // Load available directories and align the selection with the restored state / nav state.
     this.loadUserDirectories();
@@ -216,10 +208,9 @@ export class UsersComponent
     this.saveState();
 
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [userDirectoryId + '/' + encodeURIComponent(username) + '/groups'],
-      { relativeTo: this.activatedRoute }
-    );
+    this.router.navigate([userDirectoryId + '/' + encodeURIComponent(username) + '/groups'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   protected override getExtrasState(): UsersListExtras | undefined {
@@ -251,50 +242,50 @@ export class UsersComponent
 
   private loadUserDirectories(): void {
     this.sessionService.session$
-    .pipe(
-      first(),
-      switchMap((session: Session | null) => {
-        if (session?.tenantId) {
-          this.spinnerService.showSpinner();
+      .pipe(
+        first(),
+        switchMap((session: Session | null) => {
+          if (session?.tenantId) {
+            this.spinnerService.showSpinner();
 
-          return this.securityService
-          .getUserDirectorySummariesForTenant(session.tenantId)
-          .pipe(finalize(() => this.spinnerService.hideSpinner()));
-        }
+            return this.securityService
+              .getUserDirectorySummariesForTenant(session.tenantId)
+              .pipe(finalize(() => this.spinnerService.hideSpinner()));
+          }
 
-        return of([] as UserDirectorySummary[]);
-      }),
-      takeUntil(this.destroy$)
-    )
-    .subscribe({
-      next: (userDirectories: UserDirectorySummary[]) => {
-        this.userDirectories = userDirectories;
+          return of([] as UserDirectorySummary[]);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (userDirectories: UserDirectorySummary[]) => {
+          this.userDirectories = userDirectories;
 
-        let selectedId = this.userDirectoryId$.value;
+          let selectedId = this.userDirectoryId$.value;
 
-        // If no selection from the restored state, infer one
-        if (!selectedId) {
-          if (userDirectories.length === 1) {
-            selectedId = userDirectories[0].id;
-          } else {
-            const state = window.history.state as { userDirectoryId?: string };
-            const fromNav = state?.userDirectoryId;
+          // If no selection from the restored state, infer one
+          if (!selectedId) {
+            if (userDirectories.length === 1) {
+              selectedId = userDirectories[0].id;
+            } else {
+              const state = window.history.state as { userDirectoryId?: string };
+              const fromNav = state?.userDirectoryId;
 
-            if (fromNav && userDirectories.some((ud) => ud.id === fromNav)) {
-              selectedId = fromNav;
+              if (fromNav && userDirectories.some((ud) => ud.id === fromNav)) {
+                selectedId = fromNav;
+              }
             }
           }
-        }
 
-        if (selectedId && userDirectories.some((ud) => ud.id === selectedId)) {
-          this.userDirectoryId$.next(selectedId);
-          if (this.userDirectorySelect) {
-            this.userDirectorySelect.value = selectedId;
+          if (selectedId && userDirectories.some((ud) => ud.id === selectedId)) {
+            this.userDirectoryId$.next(selectedId);
+            if (this.userDirectorySelect) {
+              this.userDirectorySelect.value = selectedId;
+            }
           }
-        }
-      },
-      error: (error: Error) => this.handleError(error, false)
-    });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 
   private loadUsers(userDirectoryId: string): Observable<Users> {
@@ -338,13 +329,13 @@ export class UsersComponent
 
     forkJoin({
       userDirectoryCapabilities: this.securityService
-      .getUserDirectoryCapabilities(userDirectoryId)
-      .pipe(
-        catchError((error: Error) => {
-          this.handleError(error, false);
-          return of(null);
-        })
-      ),
+        .getUserDirectoryCapabilities(userDirectoryId)
+        .pipe(
+          catchError((error: Error) => {
+            this.handleError(error, false);
+            return of(null);
+          })
+        ),
       users: this.loadUsers(userDirectoryId).pipe(
         catchError((error: Error) => {
           this.handleError(error, false);
@@ -352,17 +343,17 @@ export class UsersComponent
         })
       )
     })
-    .pipe(
-      finalize(() => this.spinnerService.hideSpinner()),
-      takeUntil(this.destroy$)
-    )
-    .subscribe({
-      next: ({ userDirectoryCapabilities }) => {
-        if (userDirectoryCapabilities) {
-          this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
-        }
-      },
-      error: (error: Error) => this.handleError(error, false)
-    });
+      .pipe(
+        finalize(() => this.spinnerService.hideSpinner()),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: ({ userDirectoryCapabilities }) => {
+          if (userDirectoryCapabilities) {
+            this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
+          }
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 }

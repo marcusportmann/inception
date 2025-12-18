@@ -19,7 +19,11 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CdkObserveContent } from '@angular/cdk/observers';
 import { Platform } from '@angular/cdk/platform';
 import { NgTemplateOutlet } from '@angular/common';
-import { AfterContentChecked, AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, ElementRef, InjectionToken, Input, NgZone, OnDestroy, QueryList, ViewChild, ViewEncapsulation, inject } from '@angular/core';
+import {
+  AfterContentChecked, AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
+  ContentChild, ContentChildren, ElementRef, inject, InjectionToken, Input, NgZone, OnDestroy,
+  QueryList, ViewChild, ViewEncapsulation
+} from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import {
   FloatLabelType, getMatFormFieldDuplicatedHintError, MAT_ERROR, MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -79,13 +83,6 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
   }
 })
 export class GroupFormFieldComponent implements AfterContentInit, AfterContentChecked, OnDestroy {
-  _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly _changeDetectorRef = inject(ChangeDetectorRef);
-  private readonly _dir = inject(Directionality, { optional: true });
-  private readonly _defaults = inject<MatFormFieldDefaultOptions | null>(MAT_FORM_FIELD_DEFAULT_OPTIONS, { optional: true });
-  private readonly _platform = inject(Platform);
-  private readonly _ngZone = inject(NgZone);
-
   static ngAcceptInputType_hideRequiredMarker: BooleanInput;
 
   @ContentChildren(MatCheckbox, { descendants: true })
@@ -93,6 +90,8 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
 
   @ViewChild('connectionContainer', { static: true })
   _connectionContainerRef!: ElementRef<HTMLElement>;
+
+  _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
   @ContentChildren(MAT_ERROR, { descendants: true })
   _errorChildren!: QueryList<MatError>;
@@ -123,10 +122,21 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
 
   @Input() color: 'primary' | 'accent' | 'warn' = 'primary';
 
+  private readonly _changeDetectorRef = inject(ChangeDetectorRef);
+
+  private readonly _defaults = inject<MatFormFieldDefaultOptions | null>(
+    MAT_FORM_FIELD_DEFAULT_OPTIONS,
+    { optional: true }
+  );
+
   /** Emits when the component is being destroyed. */
   private readonly _destroyed = new Subject<void>();
 
+  private readonly _dir = inject(Directionality, { optional: true });
+
   @ViewChild('label') private _label!: ElementRef<HTMLElement>;
+
+  private readonly _ngZone = inject(NgZone);
 
   /**
    * Whether the outline gap needs to be calculated immediately on the next change detection run.
@@ -135,6 +145,8 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
 
   /** Whether the outline gap needs to be calculated next time the zone has stabilized. */
   private _outlineGapCalculationNeededOnStable = false;
+
+  private readonly _platform = inject(Platform);
 
   constructor() {
     this.floatLabel = this._getDefaultFloatLabelState();

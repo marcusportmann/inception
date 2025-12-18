@@ -15,7 +15,10 @@
  */
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy,
+  OnInit, ViewChild
+} from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldControl } from '@angular/material/form-field';
@@ -55,14 +58,13 @@ import { ReferenceService } from '../services/reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         @for (filteredOption of filteredOptions$ | async; track filteredOption) {
-          <mat-option
-            [value]="filteredOption">
+          <mat-option [value]="filteredOption">
             {{ filteredOption.shortName }}
           </mat-option>
         }
       </mat-autocomplete>
     </div>
-    `,
+  `,
   providers: [
     {
       provide: MatFormFieldControl,
@@ -73,10 +75,6 @@ import { ReferenceService } from '../services/reference.service';
 export class LanguageInputComponent
   implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy
 {
-  private readonly referenceService = inject(ReferenceService);
-  readonly ngControl = inject(NgControl, { optional: true, self: true });
-  private readonly cdr = inject(ChangeDetectorRef);
-
   private static _nextId = 0;
 
   /**
@@ -104,13 +102,15 @@ export class LanguageInputComponent
    */
   @ViewChild(MatInput, { static: true }) input!: MatInput;
 
+  readonly ngControl = inject(NgControl, { optional: true, self: true });
+
   /**
    * The observable indicating that the state of the control has changed.
    */
   readonly stateChanges = new Subject<void>();
 
   /**
-   * Has the control received a touch event.
+   * Has the control received a touch event?
    */
   touched = false;
 
@@ -119,10 +119,14 @@ export class LanguageInputComponent
    */
   private _options: Language[] = [];
 
+  private readonly cdr = inject(ChangeDetectorRef);
+
   /**
    * The observable providing access to the value for the language input as it changes.
    */
   private readonly inputValue$ = new ReplaySubject<string>(1);
+
+  private readonly referenceService = inject(ReferenceService);
 
   private readonly subscriptions = new Subscription();
 

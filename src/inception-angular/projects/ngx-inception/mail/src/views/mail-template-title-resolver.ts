@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MailService } from '../services/mail.service';
@@ -28,7 +28,6 @@ import { MailService } from '../services/mail.service';
 @Injectable()
 export class MailTemplateTitleResolver {
   private mailService = inject<MailService>(MailService);
-
 
   /**
    * Resolve the title.

@@ -15,7 +15,7 @@
  */
 
 import { AsyncPipe } from '@angular/common';
-import { Component, ElementRef, Input, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit } from '@angular/core';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -45,11 +45,11 @@ import { SidebarTogglerDirective } from '../directives/sidebar-toggler.directive
         <div class="brand-full"></div>
         <div class="brand-minimized"></div>
       </a>
-    
+
       <button class="toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
         <span class="toggler-icon"></span>
       </button>
-    
+
       <ul class="nav ml-auto">
         <!--
         <li class="nav-item d-md-down-none">
@@ -75,7 +75,7 @@ import { SidebarTogglerDirective } from '../directives/sidebar-toggler.directive
               </a>
             </li>
           }
-    
+
           <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false" class="user-menu">
             @if (isUserProfileEnabled()) {
               <a mat-menu-item (click)="profile()">
@@ -88,21 +88,24 @@ import { SidebarTogglerDirective } from '../directives/sidebar-toggler.directive
               <span i18n="@@admin_header_component_menu_item_logout">Logout</span>
             </a>
           </mat-menu>
-    
+
         </ul>
       </header>
     `
 })
 export class AdminHeaderComponent implements OnInit {
-  private elementRef = inject(ElementRef);
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
-  private router = inject(Router);
-  private sessionService = inject(SessionService);
-
   @Input() fixed = false;
 
   // eslint-disable-next-line
   @Input() sidebarToggler!: any;
+
+  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+
+  private elementRef = inject(ElementRef);
+
+  private router = inject(Router);
+
+  private sessionService = inject(SessionService);
 
   isLoggedIn(): Observable<boolean> {
     return this.sessionService.session$.pipe(

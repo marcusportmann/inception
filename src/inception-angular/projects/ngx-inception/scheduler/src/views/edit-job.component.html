@@ -8,7 +8,7 @@
             <input type="text" matInput formControlName="id">
             @if (idControl.errors && !idControl.untouched) {
               <mat-error>
-                @if (idControl.errors?.['required']) {
+                @if (idControl.errors['required']) {
                   <span i18n="@@scheduler_edit_job_component_error_id_required">An ID is required.</span>
                 }
               </mat-error>
@@ -23,10 +23,10 @@
             <input type="text" matInput formControlName="name">
             @if (nameControl.errors && !nameControl.untouched) {
               <mat-error>
-                @if (nameControl.errors?.['required']) {
+                @if (nameControl.errors['required']) {
                   <span i18n="@@scheduler_edit_job_component_error_name_required">A name is required.</span>
                 }
-                @if (nameControl.errors?.['maxlength']) {
+                @if (nameControl.errors['maxlength']) {
                   <span i18n="@@scheduler_edit_job_component_error_name_maxlength">Name must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -41,10 +41,10 @@
             <input type="text" matInput formControlName="jobClass">
             @if (jobClassControl.errors && !jobClassControl.untouched) {
               <mat-error>
-                @if (jobClassControl.errors?.['required']) {
+                @if (jobClassControl.errors['required']) {
                   <span i18n="@@scheduler_edit_job_component_error_job_class_required">A job class is required.</span>
                 }
-                @if (jobClassControl.errors?.['maxlength']) {
+                @if (jobClassControl.errors['maxlength']) {
                   <span i18n="@@scheduler_edit_job_component_error_job_class_maxlength">Job class must not exceed 1000 characters.</span>
                 }
               </mat-error>
@@ -59,13 +59,13 @@
             <input type="text" matInput formControlName="schedulingPattern">
             @if (schedulingPatternControl.errors && !schedulingPatternControl.untouched) {
               <mat-error>
-                @if (schedulingPatternControl.errors?.['required']) {
+                @if (schedulingPatternControl.errors['required']) {
                   <span i18n="@@scheduler_edit_job_component_error_scheduling_pattern_required">A scheduling pattern is required.</span>
                 }
-                @if (schedulingPatternControl.errors?.['maxlength']) {
+                @if (schedulingPatternControl.errors['maxlength']) {
                   <span i18n="@@scheduler_edit_job_component_error_scheduling_pattern_maxlength">Scheduling pattern must not exceed 100 characters.</span>
                 }
-                @if (schedulingPatternControl.errors?.['pattern']) {
+                @if (schedulingPatternControl.errors['pattern']) {
                   <span i18n="@@scheduler_edit_job_component_error_scheduling_pattern_pattern">A valid cron statement is required.</span>
                 }
               </mat-error>
@@ -83,7 +83,7 @@
             </mat-select>
             @if (enabledControl.errors && !enabledControl.untouched) {
               <mat-error>
-                @if (enabledControl.errors?.['required']) {
+                @if (enabledControl.errors['required']) {
                   <span i18n="@@scheduler_edit_job_component_error_enabled_required">Select whether the job is enabled.</span>
                 }
               </mat-error>
@@ -104,7 +104,7 @@
             </mat-select>
             @if (statusControl.errors && !statusControl.untouched) {
               <mat-error>
-                @if (statusControl.errors?.['required']) {
+                @if (statusControl.errors['required']) {
                   <span i18n="@@scheduler_edit_job_component_error_status_required">A status is required.</span>
                 }
               </mat-error>

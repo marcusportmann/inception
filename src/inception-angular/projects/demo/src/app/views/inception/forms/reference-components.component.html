@@ -8,7 +8,7 @@
             <inception-reference-countries-chip-grid [formControl]="countriesControl" required></inception-reference-countries-chip-grid>
             @if (countriesControl.errors && !countriesControl.untouched) {
               <mat-error>
-                @if (countriesControl.errors?.['required']) {
+                @if (countriesControl.errors['required']) {
                   <span>One or more countries must be selected.</span>
                 }
               </mat-error>
@@ -23,7 +23,7 @@
             <inception-reference-country-input [formControl]="countryControl" required></inception-reference-country-input>
             @if (countryControl.errors && !countryControl.untouched) {
               <mat-error>
-                @if (countryControl.errors?.['required']) {
+                @if (countryControl.errors['required']) {
                   <span>A country is required.</span>
                 }
               </mat-error>
@@ -38,7 +38,7 @@
             <inception-reference-language-input [formControl]="languageControl" required></inception-reference-language-input>
             @if (languageControl.errors && !languageControl.untouched) {
               <mat-error>
-                @if (languageControl.errors?.['required']) {
+                @if (languageControl.errors['required']) {
                   <span>A language is required.</span>
                 }
               </mat-error>
@@ -53,7 +53,7 @@
             <inception-reference-region-input [country]="'ZA'" [formControl]="regionControl" required></inception-reference-region-input>
             @if (regionControl.errors && !regionControl.untouched) {
               <mat-error>
-                @if (regionControl.errors?.['required']) {
+                @if (regionControl.errors['required']) {
                   <span>A region is required.</span>
                 }
               </mat-error>
@@ -68,7 +68,7 @@
             <inception-reference-time-zone-input [formControl]="timeZoneControl" required></inception-reference-time-zone-input>
             @if (timeZoneControl.errors && !timeZoneControl.untouched) {
               <mat-error>
-                @if (timeZoneControl.errors?.['required']) {
+                @if (timeZoneControl.errors['required']) {
                   <span>A time zone is required.</span>
                 }
               </mat-error>

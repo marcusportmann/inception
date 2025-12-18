@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -37,10 +37,6 @@ import { debounceTime, first, map, startWith, takeUntil } from 'rxjs/operators';
   templateUrl: 'select-tenant.component.html'
 })
 export class SelectTenantComponent implements OnInit, OnDestroy {
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private sessionService = inject(SessionService);
-
   // Exposed as observable for template binding
   readonly filteredTenants$ = new BehaviorSubject<Tenant[]>([]);
 
@@ -50,16 +46,18 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
 
   readonly tenantControl: FormControl<Tenant | string>;
 
+  private activatedRoute = inject(ActivatedRoute);
+
   private readonly destroy$ = new Subject<void>();
+
+  private router = inject(Router);
+
+  private sessionService = inject(SessionService);
 
   private tenants: Tenant[] = [];
 
   /**
    * Constructs a new SelectTenantComponent.
-   *
-   * @param router          The router.
-   * @param activatedRoute  The activated route.
-   * @param sessionService  The session service.
    */
   constructor() {
     // Initialize the form controls

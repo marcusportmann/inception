@@ -41,8 +41,6 @@ export class NewUserDirectoryTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    return of(
-      $localize`:@@security_new_user_directory_title_resolver:New User Directory`
-    );
+    return of($localize`:@@security_new_user_directory_title_resolver:New User Directory`);
   }
 }

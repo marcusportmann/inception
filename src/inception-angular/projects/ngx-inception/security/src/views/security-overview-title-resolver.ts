@@ -41,8 +41,6 @@ export class SecurityOverviewTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    return of(
-      $localize`:@@security_security_overview_title_resolver:Security Overview`
-    );
+    return of($localize`:@@security_security_overview_title_resolver:Security Overview`);
   }
 }

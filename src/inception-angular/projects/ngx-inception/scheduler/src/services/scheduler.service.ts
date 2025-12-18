@@ -14,30 +14,17 @@
  * limitations under the License.
  */
 
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse
-} from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import {
-  AccessDeniedError,
-  CommunicationError,
-  INCEPTION_CONFIG,
-  InceptionConfig,
-  InvalidArgumentError,
-  ProblemDetails,
-  ResponseConverter,
-  ServiceUnavailableError
+  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
+  ProblemDetails, ResponseConverter, ServiceUnavailableError
 } from 'ngx-inception/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Job } from './job';
 import { JobStatus } from './job-status';
-import {
-  DuplicateJobError,
-  JobNotFoundError
-} from './scheduler.service.errors';
+import { DuplicateJobError, JobNotFoundError } from './scheduler.service.errors';
 
 /**
  * The Scheduler Service implementation.
@@ -53,9 +40,6 @@ export class SchedulerService {
 
   /**
    * Constructs a new SchedulerService.
-   *
-   * @param config     The Inception configuration.
-   * @param httpClient The HTTP client.
    */
   constructor() {
     console.log('Initializing the Scheduler Service');
@@ -114,10 +98,9 @@ export class SchedulerService {
    */
   deleteJob(jobId: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(
-        `${this.config.apiUrlPrefix}/scheduler/jobs/${encodeURIComponent(jobId)}`,
-        { observe: 'response' }
-      )
+      .delete<boolean>(`${this.config.apiUrlPrefix}/scheduler/jobs/${encodeURIComponent(jobId)}`, {
+        observe: 'response'
+      })
       .pipe(
         map(SchedulerService.isResponse204),
         catchError(SchedulerService.handleApiError('Failed to delete the job.'))
@@ -133,15 +116,10 @@ export class SchedulerService {
    */
   @ResponseConverter getJob(jobId: string): Observable<Job> {
     return this.httpClient
-      .get<Job>(
-        `${this.config.apiUrlPrefix}/scheduler/jobs/${encodeURIComponent(jobId)}`,
-        { reportProgress: true }
-      )
-      .pipe(
-        catchError(
-          SchedulerService.handleApiError('Failed to retrieve the job.')
-        )
-      );
+      .get<Job>(`${this.config.apiUrlPrefix}/scheduler/jobs/${encodeURIComponent(jobId)}`, {
+        reportProgress: true
+      })
+      .pipe(catchError(SchedulerService.handleApiError('Failed to retrieve the job.')));
   }
 
   /**
@@ -153,15 +131,10 @@ export class SchedulerService {
    */
   getJobName(jobId: string): Observable<string> {
     return this.httpClient
-      .get<string>(
-        `${this.config.apiUrlPrefix}/scheduler/jobs/${encodeURIComponent(jobId)}/name`,
-        { reportProgress: true }
-      )
-      .pipe(
-        catchError(
-          SchedulerService.handleApiError('Failed to retrieve the job name.')
-        )
-      );
+      .get<string>(`${this.config.apiUrlPrefix}/scheduler/jobs/${encodeURIComponent(jobId)}/name`, {
+        reportProgress: true
+      })
+      .pipe(catchError(SchedulerService.handleApiError('Failed to retrieve the job name.')));
   }
 
   /**
@@ -171,14 +144,8 @@ export class SchedulerService {
    */
   @ResponseConverter getJobs(): Observable<Job[]> {
     return this.httpClient
-      .get<
-        Job[]
-      >(`${this.config.apiUrlPrefix}/scheduler/jobs`, { reportProgress: true })
-      .pipe(
-        catchError(
-          SchedulerService.handleApiError('Failed to retrieve the jobs.')
-        )
-      );
+      .get<Job[]>(`${this.config.apiUrlPrefix}/scheduler/jobs`, { reportProgress: true })
+      .pipe(catchError(SchedulerService.handleApiError('Failed to retrieve the jobs.')));
   }
 
   /**
@@ -203,33 +170,19 @@ export class SchedulerService {
 
   private static handleApiError(defaultMessage: string) {
     return (httpErrorResponse: HttpErrorResponse) => {
-      if (
-        ProblemDetails.isProblemDetails(
-          httpErrorResponse,
-          DuplicateJobError.TYPE
-        )
-      ) {
+      if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateJobError.TYPE)) {
         return throwError(() => new DuplicateJobError(httpErrorResponse));
-      } else if (
-        ProblemDetails.isProblemDetails(
-          httpErrorResponse,
-          JobNotFoundError.TYPE
-        )
-      ) {
+      } else if (ProblemDetails.isProblemDetails(httpErrorResponse, JobNotFoundError.TYPE)) {
         return throwError(() => new JobNotFoundError(httpErrorResponse));
       } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
         return throwError(() => new AccessDeniedError(httpErrorResponse));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(() => new CommunicationError(httpErrorResponse));
-      } else if (
-        InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)
-      ) {
+      } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
         return throwError(() => new InvalidArgumentError(httpErrorResponse));
       }
 
-      return throwError(
-        () => new ServiceUnavailableError(defaultMessage, httpErrorResponse)
-      );
+      return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
     };
   }
 

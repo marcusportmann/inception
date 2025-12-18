@@ -51,7 +51,6 @@ import { Component, ElementRef, inject } from '@angular/core';
 export class SpinnerComponent {
   private elementRef = inject(ElementRef);
 
-
   // noinspection JSUnusedGlobalSymbols
   show(): void {
     this.elementRef.nativeElement.focus();

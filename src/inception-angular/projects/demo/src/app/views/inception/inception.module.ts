@@ -52,7 +52,7 @@ const routes: Routes = [
 ];
 
 /**
- * The InceptionModule class implements the module that contains the sub-modules that illustrate the
+ * The InceptionModule class implements the module that contains the sub modules that illustrate the
  * use of the Inception framework.
  *
  * @author Marcus Portmann

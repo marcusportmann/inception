@@ -6,10 +6,10 @@
         <input type="text" matInput formControlName="maxPasswordAttempts">
         @if (maxPasswordAttemptsControl.errors && !maxPasswordAttemptsControl.untouched) {
           <mat-error>
-            @if (maxPasswordAttemptsControl.errors?.['required']) {
+            @if (maxPasswordAttemptsControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_max_password_attempts_required">The maximum number of password attempts is required.</span>
             }
-            @if (maxPasswordAttemptsControl.errors?.['pattern']) {
+            @if (maxPasswordAttemptsControl.errors['pattern']) {
               <span i18n="@@security_internal_user_directory_component_error_max_password_attempts_pattern">A valid number is required.</span>
             }
           </mat-error>
@@ -24,10 +24,10 @@
         <input type="text" matInput formControlName="passwordExpiryMonths">
         @if (passwordExpiryMonthsControl.errors && !passwordExpiryMonthsControl.untouched) {
           <mat-error>
-            @if (passwordExpiryMonthsControl.errors?.['required']) {
+            @if (passwordExpiryMonthsControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_password_expiry_months_required">The number of months before a password expires is required.</span>
             }
-            @if (passwordExpiryMonthsControl.errors?.['pattern']) {
+            @if (passwordExpiryMonthsControl.errors['pattern']) {
               <span i18n="@@security_internal_user_directory_component_error_password_expiry_months_pattern">A valid number is required.</span>
             }
           </mat-error>
@@ -42,10 +42,10 @@
         <input type="text" matInput formControlName="passwordHistoryMonths">
         @if (passwordHistoryMonthsControl.errors && !passwordHistoryMonthsControl.untouched) {
           <mat-error>
-            @if (passwordHistoryMonthsControl.errors?.['required']) {
+            @if (passwordHistoryMonthsControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_password_history_months_required">The number of months before a password can be reused is required.</span>
             }
-            @if (passwordHistoryMonthsControl.errors?.['pattern']) {
+            @if (passwordHistoryMonthsControl.errors['pattern']) {
               <span i18n="@@security_internal_user_directory_component_error_password_history_months_pattern">A valid number is required.</span>
             }
           </mat-error>
@@ -60,10 +60,10 @@
         <input type="text" matInput formControlName="maxFilteredUsers">
         @if (maxFilteredUsersControl.errors && !maxFilteredUsersControl.untouched) {
           <mat-error>
-            @if (maxFilteredUsersControl.errors?.['required']) {
+            @if (maxFilteredUsersControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_max_filtered_users_required">The maximum number of filtered users is required.</span>
             }
-            @if (maxFilteredUsersControl.errors?.['pattern']) {
+            @if (maxFilteredUsersControl.errors['pattern']) {
               <span i18n="@@security_internal_user_directory_component_error_max_filtered_users_pattern">A valid number is required.</span>
             }
           </mat-error>
@@ -78,10 +78,10 @@
         <input type="text" matInput formControlName="maxFilteredGroups">
         @if (maxFilteredGroupsControl.errors && !maxFilteredGroupsControl.untouched) {
           <mat-error>
-            @if (maxFilteredGroupsControl.errors?.['required']) {
+            @if (maxFilteredGroupsControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_max_filtered_groups_required">The maximum number of filtered groups is required.</span>
             }
-            @if (maxFilteredGroupsControl.errors?.['pattern']) {
+            @if (maxFilteredGroupsControl.errors['pattern']) {
               <span i18n="@@security_internal_user_directory_component_error_max_filtered_groups_pattern">A valid number is required.</span>
             }
           </mat-error>
@@ -96,10 +96,10 @@
         <input type="text" matInput formControlName="maxFilteredGroupMembers">
         @if (maxFilteredGroupMembersControl.errors && !maxFilteredGroupMembersControl.untouched) {
           <mat-error>
-            @if (maxFilteredGroupMembersControl.errors?.['required']) {
+            @if (maxFilteredGroupMembersControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_max_filtered_group_members_required">The maximum number of filtered group members is required.</span>
             }
-            @if (maxFilteredGroupMembersControl.errors?.['pattern']) {
+            @if (maxFilteredGroupMembersControl.errors['pattern']) {
               <span i18n="@@security_internal_user_directory_component_error_max_filtered_group_members_pattern">A valid number is required.</span>
             }
           </mat-error>

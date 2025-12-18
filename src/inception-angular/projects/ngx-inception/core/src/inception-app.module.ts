@@ -29,8 +29,7 @@ export abstract class InceptionAppModule {
    * Constructs a new InceptionAppModule.
    */
   protected constructor() {
-    const navigationService: NavigationService =
-      InceptionInjector.get(NavigationService);
+    const navigationService: NavigationService = InceptionInjector.get(NavigationService);
 
     if (navigationService) {
       navigationService.initNavigation(this.initNavigation());

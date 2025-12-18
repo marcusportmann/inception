@@ -16,7 +16,9 @@
 
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective } from 'ngx-inception/core';
+import {
+  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
+} from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Policy } from '../services/policy';
 import { PolicyType } from '../services/policy-type';
@@ -35,8 +37,6 @@ import { SecurityService } from '../services/security.service';
   styleUrls: ['new-policy.component.css']
 })
 export class NewPolicyComponent extends AdminContainerView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   dataControl: FormControl;
 
   idControl: FormControl;
@@ -52,6 +52,8 @@ export class NewPolicyComponent extends AdminContainerView implements AfterViewI
   typeControl: FormControl;
 
   versionControl: FormControl;
+
+  private securityService = inject(SecurityService);
 
   constructor() {
     super();

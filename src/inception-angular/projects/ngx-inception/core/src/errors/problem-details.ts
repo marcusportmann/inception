@@ -91,16 +91,18 @@ export class ProblemDetails {
    * @return True if the HTTP error response is as a result of an API error represented as a problem
    *         details object.
    */
-  static isProblemDetails(
-    httpErrorResponse: HttpErrorResponse,
-    type?: string
-  ): boolean {
-    return !!(httpErrorResponse.name === 'HttpErrorResponse' &&
+  static isProblemDetails(httpErrorResponse: HttpErrorResponse, type?: string): boolean {
+    return !!(
+      httpErrorResponse.name === 'HttpErrorResponse' &&
       httpErrorResponse.error &&
       httpErrorResponse.error.timestamp &&
       httpErrorResponse.error.type &&
       httpErrorResponse.error.title &&
       httpErrorResponse.error.status &&
-      httpErrorResponse.error.detail && (type == null || false || (httpErrorResponse.error.type && httpErrorResponse.error.type == type)));
+      httpErrorResponse.error.detail &&
+      (type == null ||
+        false ||
+        (httpErrorResponse.error.type && httpErrorResponse.error.type == type))
+    );
   }
 }

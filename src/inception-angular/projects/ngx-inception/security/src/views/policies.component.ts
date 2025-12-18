@@ -20,9 +20,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
-  CoreModule,
-  SortDirection,
-  StatefulListView, TableFilterComponent
+  CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -44,8 +42,6 @@ import { SecurityService } from '../services/security.service';
   styleUrls: ['policies.component.css']
 })
 export class PoliciesComponent extends StatefulListView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   readonly dataSource: PolicySummaryDataSource;
 
   displayedColumns = ['id', 'version', 'name', 'type', 'actions'];
@@ -70,11 +66,14 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
+  private securityService = inject(SecurityService);
+
   constructor() {
     super();
 
     // Read the reset flag from the current navigation
-    const nav = this.router.getCurrentNavigation();
+    const nav = this.router.currentNavigation();
+
     this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     // Initialize the data source

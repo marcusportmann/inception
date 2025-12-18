@@ -35,8 +35,6 @@ import { CodesService } from '../services/codes.service';
   styleUrls: ['codes.component.css']
 })
 export class CodesComponent extends FilteredPaginatedListView<Code> {
-  private codesService = inject(CodesService);
-
   readonly codeCategoryId: string;
 
   readonly displayedColumns: readonly string[] = ['id', 'name', 'actions'];
@@ -46,6 +44,8 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
   readonly listKey: string;
 
   readonly title = $localize`:@@codes_codes_title:Codes`;
+
+  private codesService = inject(CodesService);
 
   constructor() {
     super();

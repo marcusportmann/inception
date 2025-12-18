@@ -54,13 +54,7 @@ export class TimeZone {
    * @param name        The name of the time zone.
    * @param description The description for the time zone.
    */
-  constructor(
-    id: string,
-    localeId: string,
-    sortOrder: number,
-    name: string,
-    description: string
-  ) {
+  constructor(id: string, localeId: string, sortOrder: number, name: string, description: string) {
     this.id = id;
     this.localeId = localeId;
     this.sortOrder = sortOrder;

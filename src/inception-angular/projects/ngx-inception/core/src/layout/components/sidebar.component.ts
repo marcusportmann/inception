@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy, Component, inject, Input, OnDestroy, OnInit
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SidebarService } from '../services/sidebar.service';
 import { SIDEBAR_CSS_CLASSES } from './sidebar-css-classes';
@@ -32,8 +34,6 @@ import { SIDEBAR_CSS_CLASSES } from './sidebar-css-classes';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-  private sidebarService = inject(SidebarService);
-
   // TODO: Confirm if we can default these properties to false -- MARCUS
   @Input() compact?: boolean;
 
@@ -48,6 +48,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly sidebar = true;
 
   private sidebarMinimizedSubscription?: Subscription;
+
+  private sidebarService = inject(SidebarService);
 
   ngOnDestroy(): void {
     if (this.sidebarMinimizedSubscription) {

@@ -8,10 +8,10 @@
             <input type="text" matInput formControlName="name">
             @if (nameControl.errors && !nameControl.untouched) {
               <mat-error>
-                @if (nameControl.errors?.['required']) {
+                @if (nameControl.errors['required']) {
                   <span i18n="@@security_new_token_component_error_name_required">A name is required.</span>
                 }
-                @if (nameControl.errors?.['maxlength']) {
+                @if (nameControl.errors['maxlength']) {
                   <span i18n="@@security_new_token_component_error_name_maxlength">Name must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -28,7 +28,7 @@
             </mat-select>
             @if (typeControl.errors && !typeControl.untouched) {
               <mat-error>
-                @if (typeControl.errors?.['required']) {
+                @if (typeControl.errors['required']) {
                   <span>A type is required.</span>
                 }
               </mat-error>
@@ -43,10 +43,10 @@
             <input type="text" matInput formControlName="description">
             @if (descriptionControl.errors && !descriptionControl.untouched) {
               <mat-error>
-                @if (descriptionControl.errors?.['required']) {
+                @if (descriptionControl.errors['required']) {
                   <span i18n="@@security_new_token_component_error_description_required">A description is required.</span>
                 }
-                @if (descriptionControl.errors?.['maxlength']) {
+                @if (descriptionControl.errors['maxlength']) {
                   <span i18n="@@security_new_token_component_error_description_maxlength">Description must not exceed 200 characters.</span>
                 }
               </mat-error>

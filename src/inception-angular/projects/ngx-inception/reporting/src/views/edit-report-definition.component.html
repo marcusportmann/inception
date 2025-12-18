@@ -16,10 +16,10 @@
             <input type="text" matInput formControlName="name">
             @if (nameControl.errors && !nameControl.untouched) {
               <mat-error>
-                @if (nameControl.errors?.['required']) {
+                @if (nameControl.errors['required']) {
                   <span i18n="@@reporting_edit_report_definition_component_error_name_required">A name is required.</span>
                 }
-                @if (nameControl.errors?.['maxlength']) {
+                @if (nameControl.errors['maxlength']) {
                   <span i18n="@@reporting_edit_report_definition_component_error_name_maxlength">Name must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -34,13 +34,13 @@
             <inception-core-file-upload formControlName="template" i18n-placeholder="@@reporting_edit_report_definition_component_placeholder_no_file_selected" placeholder="No file selected"></inception-core-file-upload>
             @if (templateControl.errors && !templateControl.untouched) {
               <mat-error>
-                @if (templateControl.errors?.['required']) {
+                @if (templateControl.errors['required']) {
                   <span i18n="@@reporting_edit_report_definition_component_error_template_required">A template is required.</span>
                 }
-                @if (templateControl.errors?.['minsize']) {
+                @if (templateControl.errors['minsize']) {
                   <span i18n="@@reporting_edit_report_definition_component_error_template_min_size">The template is empty.</span>
                 }
-                @if (templateControl.errors?.['maxsize']) {
+                @if (templateControl.errors['maxsize']) {
                   <span i18n="@@reporting_edit_report_definition_component_error_template_max_size">The template exceeds the maximum allowed size.</span>
                 }
               </mat-error>

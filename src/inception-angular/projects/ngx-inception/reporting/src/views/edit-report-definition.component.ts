@@ -17,7 +17,13 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  AdminContainerView, BackNavigation, Base64, CoreModule, Error, FileUploadComponent, FileValidator,
+  AdminContainerView,
+  BackNavigation,
+  Base64,
+  CoreModule,
+  Error,
+  FileUploadComponent,
+  FileValidator,
   ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
@@ -36,8 +42,6 @@ import { ReportingService } from '../services/reporting.service';
   styleUrls: ['edit-report-definition.component.css']
 })
 export class EditReportDefinitionComponent extends AdminContainerView implements AfterViewInit {
-  private reportingService = inject(ReportingService);
-
   editReportDefinitionForm: FormGroup;
 
   idControl: FormControl;
@@ -51,6 +55,8 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
   templateControl: FormControl;
 
   readonly title = $localize`:@@reporting_edit_report_definition_title:Edit Report Definition`;
+
+  private reportingService = inject(ReportingService);
 
   constructor() {
     super();

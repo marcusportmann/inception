@@ -38,17 +38,21 @@ import { catchError, finalize, first } from 'rxjs/operators';
   templateUrl: 'forgotten-password.component.html'
 })
 export class ForgottenPasswordComponent {
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private dialogService = inject(DialogService);
-  private securityService = inject(SecurityService);
-  private spinnerService = inject(SpinnerService);
-
   readonly forgottenPasswordForm: FormGroup<{
     username: FormControl<string>;
   }>;
 
   readonly usernameControl: FormControl<string>;
+
+  private activatedRoute = inject(ActivatedRoute);
+
+  private dialogService = inject(DialogService);
+
+  private router = inject(Router);
+
+  private securityService = inject(SecurityService);
+
+  private spinnerService = inject(SpinnerService);
 
   constructor() {
     // Initialize the form controls

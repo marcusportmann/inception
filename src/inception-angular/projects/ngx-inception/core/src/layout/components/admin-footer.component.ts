@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit } from '@angular/core';
 import { Replace } from '../../util/replace';
 
 /**
@@ -33,9 +33,9 @@ import { Replace } from '../../util/replace';
   `
 })
 export class AdminFooterComponent implements OnInit {
-  private elementRef = inject(ElementRef);
-
   @Input() fixed = false;
+
+  private elementRef = inject(ElementRef);
 
   ngOnInit(): void {
     Replace(this.elementRef);

@@ -17,7 +17,7 @@
 import { ObserversModule } from '@angular/cdk/observers';
 import { CommonModule, formatDate, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { Injectable, Injector, ModuleWithProviders, NgModule, inject } from '@angular/core';
+import { inject, Injectable, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -136,7 +136,7 @@ export class InceptionDateAdapter extends NativeDateAdapter {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule,
+    MatTooltipModule
     // Third-Party Modules
     // ChartsModule,
   ],
@@ -173,7 +173,7 @@ export class InceptionDateAdapter extends NativeDateAdapter {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule,
+    MatTooltipModule
     // Third-Party Modules
     // ChartsModule,
   ],

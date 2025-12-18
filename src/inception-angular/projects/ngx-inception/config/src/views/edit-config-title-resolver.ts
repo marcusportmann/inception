@@ -44,4 +44,3 @@ export class EditConfigTitleResolver {
     return of('Edit Config');
   }
 }
-

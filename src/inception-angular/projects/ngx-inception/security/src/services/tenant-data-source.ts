@@ -77,9 +77,7 @@ export class TenantDataSource implements DataSource<Tenant> {
   ): Observable<Tenants> {
     this.loadingSubject$.next(true);
 
-    return this.securityService
-    .getTenants(filter, sortDirection, pageIndex, pageSize)
-    .pipe(
+    return this.securityService.getTenants(filter, sortDirection, pageIndex, pageSize).pipe(
       tap((tenants: Tenants) => {
         this.updateData(tenants);
       }),

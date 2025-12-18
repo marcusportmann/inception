@@ -41,8 +41,6 @@ export class EditMailTemplateTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    return of(
-      $localize`:@@mail_edit_mail_template_title_resolver:Edit Mail Template`
-    );
+    return of($localize`:@@mail_edit_mail_template_title_resolver:Edit Mail Template`);
   }
 }

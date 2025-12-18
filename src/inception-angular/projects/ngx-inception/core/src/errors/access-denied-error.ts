@@ -67,9 +67,6 @@ export class AccessDeniedError extends Error {
    *         which indicates that access to the requested resource has been denied.
    */
   static isAccessDeniedError(httpErrorResponse: HttpErrorResponse): boolean {
-    return (
-      httpErrorResponse.name === 'HttpErrorResponse' &&
-      httpErrorResponse.status === 403
-    );
+    return httpErrorResponse.name === 'HttpErrorResponse' && httpErrorResponse.status === 403;
   }
 }

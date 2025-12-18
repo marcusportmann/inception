@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, inject, OnInit } from '@angular/core';
 import { Replace } from '../../util/replace';
 import { BrandMinimizerDirective } from '../directives/brand-minimizer.directive';
 import { SidebarMinimizerDirective } from '../directives/sidebar-minimizer.directive';
@@ -35,7 +35,6 @@ import { SidebarMinimizerDirective } from '../directives/sidebar-minimizer.direc
 })
 export class SidebarMinimizerComponent implements OnInit {
   private elementRef = inject(ElementRef);
-
 
   ngOnInit(): void {
     Replace(this.elementRef);

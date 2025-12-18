@@ -36,8 +36,6 @@ import { ConfigService } from '../services/config.service';
   styleUrls: ['new-config.component.css']
 })
 export class NewConfigComponent extends AdminContainerView {
-  private configService = inject(ConfigService);
-
   config: Config;
 
   descriptionControl: FormControl;
@@ -49,6 +47,8 @@ export class NewConfigComponent extends AdminContainerView {
   readonly title = $localize`:@@config_new_config_title:New Config`;
 
   valueControl: FormControl;
+
+  private configService = inject(ConfigService);
 
   constructor() {
     super();

@@ -71,11 +71,7 @@ export class ValidationError {
    * @param message    The error message for the validation error.
    * @param attributes The attributes associated with the validation error.
    */
-  constructor(
-    property: string,
-    message: string,
-    attributes?: ValidationErrorAttribute[]
-  ) {
+  constructor(property: string, message: string, attributes?: ValidationErrorAttribute[]) {
     this.property = property;
     this.message = message;
 

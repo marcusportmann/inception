@@ -87,8 +87,6 @@ export class PasswordChange {
     this.securityCode = securityCode ? securityCode : null;
     this.expirePassword = expirePassword ? expirePassword : null;
     this.lockUser = lockUser ? lockUser : null;
-    this.resetPasswordHistory = resetPasswordHistory
-      ? resetPasswordHistory
-      : null;
+    this.resetPasswordHistory = resetPasswordHistory ? resetPasswordHistory : null;
   }
 }

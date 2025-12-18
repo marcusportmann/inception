@@ -23,8 +23,7 @@ import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 export class DuplicateMailTemplateError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/mail/duplicate-mail-template';
+  static readonly TYPE = 'https://inception.digital/problems/mail/duplicate-mail-template';
 
   /**
    * Constructs a new DuplicateMailTemplateError.
@@ -45,8 +44,7 @@ export class DuplicateMailTemplateError extends Error {
  * @author Marcus Portmann
  */
 export class MailTemplateNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/mail/mail-template-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/mail/mail-template-not-found';
 
   /**
    * Constructs a new MailTemplateNotFoundError.

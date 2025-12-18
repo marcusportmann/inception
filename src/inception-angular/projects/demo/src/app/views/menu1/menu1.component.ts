@@ -38,7 +38,6 @@ import { DataService } from '../../services/data.service';
 export class Menu1Component {
   private dataService = inject(DataService);
 
-
   clickMe(): void {
     this.dataService
       .getData()

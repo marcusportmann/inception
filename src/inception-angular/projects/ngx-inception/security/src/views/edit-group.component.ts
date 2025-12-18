@@ -38,8 +38,6 @@ import { UserDirectoryCapabilities } from '../services/user-directory-capabiliti
   styleUrls: ['edit-group.component.css']
 })
 export class EditGroupComponent extends AdminContainerView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   descriptionControl: FormControl;
 
   editGroupForm: FormGroup;
@@ -55,6 +53,8 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   userDirectoryCapabilities?: UserDirectoryCapabilities;
 
   userDirectoryId: string;
+
+  private securityService = inject(SecurityService);
 
   constructor() {
     super();

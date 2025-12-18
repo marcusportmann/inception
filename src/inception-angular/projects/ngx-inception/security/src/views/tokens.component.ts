@@ -20,7 +20,9 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import { CoreModule, SortDirection, StatefulListView, TableFilterComponent } from 'ngx-inception/core';
+import {
+  CoreModule, SortDirection, StatefulListView, TableFilterComponent
+} from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
@@ -47,8 +49,6 @@ interface TokenListExtras {
   styleUrls: ['tokens.component.css']
 })
 export class TokensComponent extends StatefulListView<TokenListExtras> implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   readonly dataSource: TokenSummaryDataSource;
 
   displayedColumns = ['name', 'type', 'status', 'actions'];
@@ -78,11 +78,14 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
+  private securityService = inject(SecurityService);
+
   constructor() {
     super();
 
     // Read the reset flag from the current navigation (if any)
-    const nav = this.router.getCurrentNavigation();
+    const nav = this.router.currentNavigation();
+
     this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     this.dataSource = new TokenSummaryDataSource(this.securityService);

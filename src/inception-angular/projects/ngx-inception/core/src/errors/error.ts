@@ -45,10 +45,7 @@ export class Error {
    * @param message The error message.
    * @param cause   The cause of the error.
    */
-  constructor(
-    message: string,
-    cause?: ProblemDetails | HttpErrorResponse | HttpError | null
-  ) {
+  constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError | null) {
     this.message = message;
     this.timestamp = new Date();
 
@@ -62,9 +59,7 @@ export class Error {
           if (cause.error) {
             this.cause = new HttpError(
               cause.error.error ? cause.error.error : '',
-              cause.error.error_description
-                ? cause.error.error_description
-                : '',
+              cause.error.error_description ? cause.error.error_description : '',
               cause.message,
               cause.status,
               cause.statusText,

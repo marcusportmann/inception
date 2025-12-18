@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { SessionService } from '../../session/services/session.service';
 
 /**
@@ -26,14 +26,12 @@ import { SessionService } from '../../session/services/session.service';
   providedIn: 'root'
 })
 export class CacheService {
-  private sessionService = inject(SessionService);
-
   private readonly cache = new Map<string, unknown>();
+
+  private sessionService = inject(SessionService);
 
   /**
    * Constructs a new CacheService.
-   *
-   * @param sessionService The session service.
    */
   constructor() {
     console.log('Initializing the Cache Service');

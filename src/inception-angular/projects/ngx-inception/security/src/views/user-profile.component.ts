@@ -19,7 +19,9 @@ import { Location } from '@angular/common';
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AdminContainerView, CoreModule, Error, Session, SessionService, ValidatedFormDirective } from 'ngx-inception/core';
+import {
+  AdminContainerView, CoreModule, Error, Session, SessionService, ValidatedFormDirective
+} from 'ngx-inception/core';
 import { EMPTY, Observable } from 'rxjs';
 import { finalize, first, map, switchMap } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
@@ -38,17 +40,6 @@ import { User } from '../services/user';
   styleUrls: ['user-profile.component.css']
 })
 export class UserProfileComponent extends AdminContainerView implements AfterViewInit {
-  private location = inject(Location);
-  private securityService = inject(SecurityService);
-  private sessionService = inject(SessionService);
-  private clipboard = inject(Clipboard);
-  private snackBar = inject(MatSnackBar);
-
-  // ↓ Only a boolean for UI enabling, no token exposure
-  readonly canCopyToken$: Observable<boolean> = this.sessionService.session$.pipe(
-    map((s: Session | null) => !!s?.accessToken)
-  );
-
   emailControl: FormControl;
 
   mobileNumberControl: FormControl;
@@ -66,6 +57,21 @@ export class UserProfileComponent extends AdminContainerView implements AfterVie
   userProfileForm: FormGroup;
 
   usernameControl: FormControl;
+
+  private clipboard = inject(Clipboard);
+
+  private location = inject(Location);
+
+  private securityService = inject(SecurityService);
+
+  private sessionService = inject(SessionService);
+
+  // ↓ Only a boolean for UI enabling, no token exposure
+  readonly canCopyToken$: Observable<boolean> = this.sessionService.session$.pipe(
+    map((s: Session | null) => !!s?.accessToken)
+  );
+
+  private snackBar = inject(MatSnackBar);
 
   constructor() {
     super();

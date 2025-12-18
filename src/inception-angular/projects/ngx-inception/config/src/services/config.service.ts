@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse
-} from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import {
-  AccessDeniedError,
-  CommunicationError,
-  INCEPTION_CONFIG,
-  InceptionConfig,
-  InvalidArgumentError,
-  ProblemDetails,
-  ServiceUnavailableError
+  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
+  ProblemDetails, ServiceUnavailableError
 } from 'ngx-inception/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -48,9 +39,6 @@ export class ConfigService {
 
   /**
    * Constructs a new ConfigService.
-   *
-   * @param config     The Inception config.
-   * @param httpClient The HTTP client.
    */
   constructor() {
     console.log('Initializing the Config Service');
@@ -65,15 +53,12 @@ export class ConfigService {
    */
   deleteConfig(id: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(
-        `${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}`,
-        { observe: 'response' }
-      )
+      .delete<boolean>(`${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}`, {
+        observe: 'response'
+      })
       .pipe(
         map(ConfigService.isResponse204),
-        catchError((error) =>
-          ConfigService.handleApiError(error, 'Failed to delete the config.')
-        )
+        catchError((error) => ConfigService.handleApiError(error, 'Failed to delete the config.'))
       );
   }
 
@@ -86,14 +71,11 @@ export class ConfigService {
    */
   getConfig(id: string): Observable<Config> {
     return this.httpClient
-      .get<Config>(
-        `${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}`,
-        { reportProgress: true }
-      )
+      .get<Config>(`${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}`, {
+        reportProgress: true
+      })
       .pipe(
-        catchError((error) =>
-          ConfigService.handleApiError(error, 'Failed to retrieve the config.')
-        )
+        catchError((error) => ConfigService.handleApiError(error, 'Failed to retrieve the config.'))
       );
   }
 
@@ -106,16 +88,12 @@ export class ConfigService {
    */
   getConfigValue(id: string): Observable<string> {
     return this.httpClient
-      .get<string>(
-        `${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}/value`,
-        { reportProgress: true }
-      )
+      .get<string>(`${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}/value`, {
+        reportProgress: true
+      })
       .pipe(
         catchError((error) =>
-          ConfigService.handleApiError(
-            error,
-            'Failed to retrieve the config value.'
-          )
+          ConfigService.handleApiError(error, 'Failed to retrieve the config value.')
         )
       );
   }
@@ -127,9 +105,7 @@ export class ConfigService {
    */
   getConfigs(): Observable<Config[]> {
     return this.httpClient
-      .get<
-        Config[]
-      >(`${this.config.apiUrlPrefix}/config/configs`, { reportProgress: true })
+      .get<Config[]>(`${this.config.apiUrlPrefix}/config/configs`, { reportProgress: true })
       .pipe(
         catchError((error) =>
           ConfigService.handleApiError(error, 'Failed to retrieve the configs.')
@@ -151,9 +127,7 @@ export class ConfigService {
       })
       .pipe(
         map(ConfigService.isResponse204),
-        catchError((error) =>
-          ConfigService.handleApiError(error, 'Failed to save the config.')
-        )
+        catchError((error) => ConfigService.handleApiError(error, 'Failed to save the config.'))
       );
   }
 
@@ -161,12 +135,7 @@ export class ConfigService {
     httpErrorResponse: HttpErrorResponse,
     defaultMessage: string
   ): Observable<never> {
-    if (
-      ProblemDetails.isProblemDetails(
-        httpErrorResponse,
-        ConfigNotFoundError.TYPE
-      )
-    ) {
+    if (ProblemDetails.isProblemDetails(httpErrorResponse, ConfigNotFoundError.TYPE)) {
       return throwError(() => new ConfigNotFoundError(httpErrorResponse));
     } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
       return throwError(() => new AccessDeniedError(httpErrorResponse));
@@ -175,9 +144,7 @@ export class ConfigService {
     } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
       return throwError(() => new InvalidArgumentError(httpErrorResponse));
     }
-    return throwError(
-      () => new ServiceUnavailableError(defaultMessage, httpErrorResponse)
-    );
+    return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
   }
 
   private static isResponse204(httpResponse: HttpResponse<boolean>): boolean {

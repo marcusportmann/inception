@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy, ViewChild
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { UserDirectoryParameter } from '../services/user-directory-parameter';
 import { Subscription } from 'rxjs';
 import { debounceTime, finalize, first, pairwise, startWith } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
 import { SecurityService } from '../services/security.service';
 import { UserDirectory } from '../services/user-directory';
+import { UserDirectoryParameter } from '../services/user-directory-parameter';
 import { UserDirectoryType } from '../services/user-directory-type';
 import { InternalUserDirectoryComponent } from './internal-user-directory.component';
 import { LdapUserDirectoryComponent } from './ldap-user-directory.component';
@@ -50,9 +52,6 @@ export class NewUserDirectoryComponent
   extends AdminContainerView
   implements AfterViewInit, OnDestroy
 {
-  private changeDetectorRef = inject(ChangeDetectorRef);
-  private securityService = inject(SecurityService);
-
   @ViewChild(InternalUserDirectoryComponent)
   internalUserDirectoryComponent?: InternalUserDirectoryComponent;
 
@@ -70,6 +69,10 @@ export class NewUserDirectoryComponent
   userDirectoryTypeControl: FormControl;
 
   userDirectoryTypes: UserDirectoryType[] = [];
+
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
+  private securityService = inject(SecurityService);
 
   private subscriptions: Subscription = new Subscription();
 

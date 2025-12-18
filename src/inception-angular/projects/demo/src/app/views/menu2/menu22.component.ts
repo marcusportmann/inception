@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, HostBinding, inject, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import {
-  AccessDeniedError,
-  CoreModule,
-  DialogService,
-  Error,
-  InvalidArgumentError,
-  ServiceUnavailableError,
-  SpinnerService, TableFilterComponent
+  AccessDeniedError, CoreModule, DialogService, Error, InvalidArgumentError,
+  ServiceUnavailableError, SpinnerService, TableFilterComponent
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Data } from '../../services/data';
@@ -44,11 +39,6 @@ import { DataService } from '../../services/data.service';
   templateUrl: 'menu22.component.html'
 })
 export class Menu22Component implements AfterViewInit {
-  private router = inject(Router);
-  private dataService = inject(DataService);
-  private dialogService = inject(DialogService);
-  private spinnerService = inject(SpinnerService);
-
   dataSource = new MatTableDataSource<Data>();
 
   displayedColumns = ['id', 'stringValue', 'dateValue', 'integerValue'];
@@ -58,6 +48,14 @@ export class Menu22Component implements AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
+
+  private dataService = inject(DataService);
+
+  private dialogService = inject(DialogService);
+
+  private router = inject(Router);
+
+  private spinnerService = inject(SpinnerService);
 
   constructor() {
     // Set the data source filter

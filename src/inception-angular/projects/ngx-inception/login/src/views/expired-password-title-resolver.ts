@@ -41,8 +41,6 @@ export class ExpiredPasswordTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    return of(
-      $localize`:@@login_expired_password_title_resolver:Expired Password`
-    );
+    return of($localize`:@@login_expired_password_title_resolver:Expired Password`);
   }
 }

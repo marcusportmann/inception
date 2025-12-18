@@ -19,10 +19,10 @@ import { CoreModule } from 'ngx-inception/core';
 
 /** Shape of a grid tile */
 interface Tile {
-  text: string;
+  color: string;
   cols: number;
   rows: number;
-  color: string;
+  text: string;
 }
 
 /**

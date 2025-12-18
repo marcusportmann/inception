@@ -25,8 +25,7 @@ import { ProblemDetails } from './problem-details';
  * @author Marcus Portmann
  */
 export class ServiceUnavailableError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/service-unavailable';
+  static readonly TYPE = 'https://inception.digital/problems/service-unavailable';
 
   /**
    * Constructs a new ServiceUnavailableError.
@@ -34,12 +33,7 @@ export class ServiceUnavailableError extends Error {
    * @param message The error message.
    * @param cause   The cause of the error.
    */
-  constructor(
-    message: string,
-    cause?: ProblemDetails | HttpErrorResponse | HttpError
-  ) {
-    //$localize`:@@core_service_unavailable_error:An error has occurred, and your request could not
-    // be processed at this time.`
+  constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 
@@ -52,12 +46,7 @@ export class ServiceUnavailableError extends Error {
    * @return True if the HTTP error response is as a result of a service unavailable error or false
    *         otherwise.
    */
-  static isServiceUnavailableError(
-    httpErrorResponse: HttpErrorResponse
-  ): boolean {
-    return ProblemDetails.isProblemDetails(
-      httpErrorResponse,
-      ServiceUnavailableError.TYPE
-    );
+  static isServiceUnavailableError(httpErrorResponse: HttpErrorResponse): boolean {
+    return ProblemDetails.isProblemDetails(httpErrorResponse, ServiceUnavailableError.TYPE);
   }
 }

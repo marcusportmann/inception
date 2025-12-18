@@ -8,10 +8,10 @@
             <input type="text" matInput formControlName="id">
             @if (idControl.errors && !idControl.untouched) {
               <mat-error>
-                @if (idControl.errors?.['required']) {
+                @if (idControl.errors['required']) {
                   <span i18n="@@config_new_config_component_error_id_required">An ID is required.</span>
                 }
-                @if (idControl.errors?.['maxlength']) {
+                @if (idControl.errors['maxlength']) {
                   <span i18n="@@config_new_config_component_error_id_maxlength">ID must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -26,7 +26,7 @@
             <input type="text" matInput formControlName="value">
             @if (valueControl.errors && !valueControl.untouched) {
               <mat-error>
-                @if (valueControl.errors?.['maxlength']) {
+                @if (valueControl.errors['maxlength']) {
                   <span i18n="@@config_new_config_component_error_value_maxlength">Value must not exceed 4000 characters.</span>
                 }
               </mat-error>
@@ -41,7 +41,7 @@
             <textarea matInput formControlName="description" cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4"></textarea>
             @if (descriptionControl.errors && !descriptionControl.untouched) {
               <mat-error>
-                @if (descriptionControl.errors?.['maxlength']) {
+                @if (descriptionControl.errors['maxlength']) {
                   <span i18n="@@config_new_config_component_error_description_maxlength">Value must not exceed 100 characters.</span>
                 }
               </mat-error>

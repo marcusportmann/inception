@@ -31,7 +31,6 @@ import { SidebarNavDropdownDirective } from './sidebar-nav-dropdown.directive';
 export class SidebarNavDropdownTogglerDirective {
   private dropdown = inject(SidebarNavDropdownDirective);
 
-
   // eslint-disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();

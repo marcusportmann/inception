@@ -50,12 +50,7 @@ export class MailTemplate {
    * @param contentType The content type for the mail template.
    * @param template    The base-64 encoded Apache FreeMarker template for the mail template.
    */
-  constructor(
-    id: string,
-    name: string,
-    contentType: MailTemplateContentType,
-    template: string
-  ) {
+  constructor(id: string, name: string, contentType: MailTemplateContentType, template: string) {
     this.id = id;
     this.name = name;
     this.contentType = contentType;

@@ -35,8 +35,6 @@ import { MailService } from '../services/mail.service';
   styleUrls: ['mail-templates.component.css']
 })
 export class MailTemplatesComponent extends FilteredPaginatedListView<MailTemplateSummary> {
-  private mailService = inject(MailService);
-
   // noinspection JSUnusedGlobalSymbols
   readonly MailTemplateContentType = MailTemplateContentType;
 
@@ -50,6 +48,8 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
   readonly listKey = 'mail.mail-templates';
 
   readonly title = $localize`:@@mail_mail_templates_title:Mail Templates`;
+
+  private mailService = inject(MailService);
 
   deleteMailTemplate(mailTemplateId: string): void {
     this.confirmAndProcessAction(

@@ -39,8 +39,6 @@ import { UserStatus } from '../services/user-status';
   styleUrls: ['new-user.component.css']
 })
 export class NewUserComponent extends AdminContainerView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   confirmPasswordControl: FormControl;
 
   emailControl: FormControl;
@@ -70,6 +68,8 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
   userLockedControl: FormControl;
 
   usernameControl: FormControl;
+
+  private securityService = inject(SecurityService);
 
   constructor() {
     super();

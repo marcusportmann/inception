@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-
-
-import { Component, OnDestroy, OnInit, DOCUMENT, inject } from '@angular/core';
+import { Component, DOCUMENT, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterOutlet } from '@angular/router';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 import { Observable, Subscription } from 'rxjs';
 import { INCEPTION_CONFIG, InceptionConfig } from '../../inception-config';
@@ -36,7 +35,6 @@ import { SidebarMinimizerComponent } from './sidebar-minimizer.component';
 import { SidebarNavComponent } from './sidebar-nav.component';
 import { SidebarComponent } from './sidebar.component';
 import { TitleBarComponent } from './title-bar.component';
-import { NgScrollbarModule } from 'ngx-scrollbar';
 
 /**
  * The AdminContainerComponent class implements the admin container component.
@@ -59,7 +57,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     BreadcrumbsComponent
   ],
   template: `
-    <admin-header [fixed]="true" [sidebarToggler]="'lg'"> </admin-header>
+    <admin-header [fixed]="true" [sidebarToggler]="'lg'"></admin-header>
 
     <div class="admin-body">
       <sidebar class="sidebar" [fixed]="true" [display]="'lg'">
@@ -75,8 +73,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 
         <div class="container-fluid">
           <router-outlet
-            (activate)="routerOutletActive($event)"
-            (deactivate)="routerOutletDeactive($event)">
+            (activate)="routerOutletActivate($event)"
+            (deactivate)="routerOutletDeactivate($event)">
           </router-outlet>
         </div>
       </main>
@@ -88,23 +86,31 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
   `
 })
 export class AdminContainerComponent implements OnInit, OnDestroy {
-  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
-  private readonly document = inject<Document>(DOCUMENT);
-  private readonly router = inject(Router);
-  private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly breadcrumbsService = inject(BreadcrumbsService);
-  private readonly sessionService = inject(SessionService);
-  private readonly sidebarService = inject(SidebarService);
-  private readonly spinnerService = inject(SpinnerService);
-  private readonly titleBarService = inject(TitleBarService);
-
   sidebarMinimized = true;
+
+  private readonly activatedRoute = inject(ActivatedRoute);
 
   private adminContainerViewTitleSubscription?: Subscription;
 
+  private readonly breadcrumbsService = inject(BreadcrumbsService);
+
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
+
+  private readonly document = inject<Document>(DOCUMENT);
+
   private readonly mutationObserver: MutationObserver;
 
+  private readonly router = inject(Router);
+
+  private readonly sessionService = inject(SessionService);
+
+  private readonly sidebarService = inject(SidebarService);
+
+  private readonly spinnerService = inject(SpinnerService);
+
   private readonly subscriptions = new Subscription();
+
+  private readonly titleBarService = inject(TitleBarService);
 
   /**
    * Constructs a new AdminContainerComponent.
@@ -153,7 +159,7 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
    *
    * @param component The activated child component.
    */
-  routerOutletActive(component: unknown): void {
+  routerOutletActivate(component: unknown): void {
     let usingAdminContainerViewTitle = false;
 
     // Try and retrieve the back navigation and title from the admin container view if present
@@ -197,7 +203,7 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
    * @param _component The deactivated child component.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  routerOutletDeactive(_component: unknown): void {
+  routerOutletDeactivate(_component: unknown): void {
     // Unsubscribe from the title for the admin container view if required
     if (this.adminContainerViewTitleSubscription) {
       this.adminContainerViewTitleSubscription.unsubscribe();
@@ -226,5 +232,3 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
     }
   }
 }
-
-

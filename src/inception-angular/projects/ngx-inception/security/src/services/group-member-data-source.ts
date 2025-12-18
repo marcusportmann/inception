@@ -85,14 +85,7 @@ export class GroupMemberDataSource implements DataSource<GroupMember> {
     this.loadingSubject$.next(true);
 
     return this.securityService
-      .getMembersForGroup(
-        userDirectoryId,
-        groupName,
-        filter,
-        sortDirection,
-        pageIndex,
-        pageSize
-      )
+      .getMembersForGroup(userDirectoryId, groupName, filter, sortDirection, pageIndex, pageSize)
       .pipe(
         tap((groupMembers: GroupMembers) => {
           this.updateData(groupMembers);

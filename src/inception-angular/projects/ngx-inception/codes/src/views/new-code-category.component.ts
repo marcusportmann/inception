@@ -36,8 +36,6 @@ import { CodesService } from '../services/codes.service';
   styleUrls: ['new-code-category.component.css']
 })
 export class NewCodeCategoryComponent extends AdminContainerView implements AfterViewInit {
-  private codesService = inject(CodesService);
-
   codeCategory: CodeCategory | null = null;
 
   dataControl: FormControl;
@@ -50,6 +48,8 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
 
   readonly title = $localize`:@@codes_new_code_category_title:New Code Category`;
 
+  private codesService = inject(CodesService);
+
   constructor() {
     super();
 
@@ -58,7 +58,7 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
     this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
-    // Initialize form group
+    // Initialize the form group
     this.newCodeCategoryForm = new FormGroup({
       data: this.dataControl,
       id: this.idControl,

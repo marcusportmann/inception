@@ -16,7 +16,7 @@
 
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { SpinnerComponent } from '../components/spinner.component';
 
 /**
@@ -28,9 +28,9 @@ import { SpinnerComponent } from '../components/spinner.component';
   providedIn: 'root'
 })
 export class SpinnerService {
-  private overlay = inject(Overlay);
-
   private counter = 0; // Reference count
+
+  private overlay = inject(Overlay);
 
   private overlayRef?: OverlayRef;
 

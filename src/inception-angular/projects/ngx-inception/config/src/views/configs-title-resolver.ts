@@ -26,7 +26,6 @@ import { Observable, of } from 'rxjs';
  */
 @Injectable()
 export class ConfigsTitleResolver {
-
   /**
    * Resolve the title.
    *

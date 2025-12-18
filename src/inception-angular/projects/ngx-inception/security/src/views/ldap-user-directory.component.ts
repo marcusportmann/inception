@@ -16,15 +16,8 @@
 
 import { Component, forwardRef } from '@angular/core';
 import {
-  AbstractControl,
-  ControlValueAccessor,
-  FormControl,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-  Validators
+  AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
+  ValidationErrors, Validator, Validators
 } from '@angular/forms';
 import { CoreModule } from 'ngx-inception/core';
 import { UserDirectoryParameter } from '../services/user-directory-parameter';
@@ -49,9 +42,7 @@ import { UserDirectoryUtil } from '../services/user-directory-util';
     }
   ]
 })
-export class LdapUserDirectoryComponent
-  implements ControlValueAccessor, Validator
-{
+export class LdapUserDirectoryComponent implements ControlValueAccessor, Validator {
   baseDNControl: FormControl;
   bindDNControl: FormControl;
   bindPasswordControl: FormControl;
@@ -81,10 +72,6 @@ export class LdapUserDirectoryComponent
   userPhoneNumberAttributeControl: FormControl;
   userPreferredNameAttributeControl: FormControl;
   userUsernameAttributeControl: FormControl;
-
-  // ---- ControlValueAccessor callbacks ----
-  private onChange: (value: UserDirectoryParameter[] | null) => void = () => { /* empty */ };
-  private onTouched: () => void = () => { /* empty */ };
 
   constructor() {
     // Initialize the form controls
@@ -334,6 +321,33 @@ export class LdapUserDirectoryComponent
     return parameters;
   }
 
+  // Call from the template (e.g. `(blur)="markAsTouched()"`) if you want touched state
+  markAsTouched(): void {
+    if (this.onTouched) {
+      this.onTouched();
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  // ---- ControlValueAccessor implementation ----
+
+  setDisabledState?(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.ldapUserDirectoryForm.disable();
+    } else {
+      this.ldapUserDirectoryForm.enable();
+    }
+  }
+
   // Helper to populate the form from a parameter list
   setParameters(parameters: UserDirectoryParameter[]): void {
     this.baseDNControl.setValue(
@@ -484,7 +498,17 @@ export class LdapUserDirectoryComponent
     this.onChange(this.getParameters());
   }
 
-  // ---- ControlValueAccessor implementation ----
+  validate(_control: AbstractControl): ValidationErrors | null {
+    void _control;
+    return this.ldapUserDirectoryForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'ldapUserDirectoryForm fields are invalid'
+          }
+        };
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(val: any): void {
@@ -494,42 +518,14 @@ export class LdapUserDirectoryComponent
     // If null/undefined/empty, we just keep defaults
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.ldapUserDirectoryForm.disable();
-    } else {
-      this.ldapUserDirectoryForm.enable();
-    }
-  }
-
-  // Call from the template (e.g. `(blur)="markAsTouched()"`) if you want touched state
-  markAsTouched(): void {
-    if (this.onTouched) {
-      this.onTouched();
-    }
-  }
+  // ---- ControlValueAccessor callbacks ----
+  private onChange: (value: UserDirectoryParameter[] | null) => void = () => {
+    /* empty */
+  };
 
   // ---- Validator implementation ----
 
-  validate(_control: AbstractControl): ValidationErrors | null {
-    void _control;
-    return this.ldapUserDirectoryForm.valid
-      ? null
-      : {
-        invalidForm: {
-          valid: false,
-          message: 'ldapUserDirectoryForm fields are invalid'
-        }
-      };
-  }
+  private onTouched: () => void = () => {
+    /* empty */
+  };
 }

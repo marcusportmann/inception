@@ -43,7 +43,7 @@
             <mat-hint>The name.</mat-hint>
             @if (exampleForm.controls['name'].errors && !exampleForm.controls['name'].untouched) {
               <mat-error>
-                @if (exampleForm.controls['name'].errors?.['required']) {
+                @if (exampleForm.controls['name'].errors['required']) {
                   <span>A name is required.</span>
                 }
               </mat-error>
@@ -56,7 +56,7 @@
             <input type="text" matInput formControlName="preferredName" required>
             @if (exampleForm.controls['preferredName'].errors && !exampleForm.controls['preferredName'].untouched) {
               <mat-error>
-                @if (exampleForm.controls['preferredName'].errors?.['required']) {
+                @if (exampleForm.controls['preferredName'].errors['required']) {
                   <span>A preferred name is required.</span>
                 }
               </mat-error>
@@ -73,7 +73,7 @@
             <mat-datepicker #datePicker></mat-datepicker>
             @if (exampleForm.controls['dateOfBirth'].errors && !exampleForm.controls['dateOfBirth'].untouched) {
               <mat-error>
-                @if (exampleForm.controls['dateOfBirth'].errors?.['required']) {
+                @if (exampleForm.controls['dateOfBirth'].errors['required']) {
                   <span>A date of birth is required.</span>
                 }
               </mat-error>
@@ -92,7 +92,7 @@
             </mat-select>
             @if (exampleForm.controls['title'].errors && !exampleForm.controls['title'].untouched) {
               <mat-error>
-                @if (exampleForm.controls['title'].errors?.['required']) {
+                @if (exampleForm.controls['title'].errors['required']) {
                   <span>A title is required.</span>
                 }
               </mat-error>
@@ -107,7 +107,7 @@
             <input type="password" matInput formControlName="password" required>
             @if (exampleForm.controls['password'].errors && !exampleForm.controls['password'].untouched) {
               <mat-error>
-                @if (exampleForm.controls['password'].errors?.['required']) {
+                @if (exampleForm.controls['password'].errors['required']) {
                   <span>A password is required.</span>
                 }
               </mat-error>
@@ -120,7 +120,7 @@
             <input type="password" matInput formControlName="confirmPassword" required>
             @if (exampleForm.controls['confirmPassword'].errors && !exampleForm.controls['confirmPassword'].untouched) {
               <mat-error>
-                @if (exampleForm.controls['confirmPassword'].errors?.['required']) {
+                @if (exampleForm.controls['confirmPassword'].errors['required']) {
                   <span>Password confirmation is required.</span>
                 }
               </mat-error>
@@ -140,7 +140,7 @@
             <inception-reference-country-input [formControl]="favoriteCountryControl" required></inception-reference-country-input>
             @if (favoriteCountryControl.errors && !favoriteCountryControl.untouched) {
               <mat-error>
-                @if (favoriteCountryControl.errors?.['required']) {
+                @if (favoriteCountryControl.errors['required']) {
                   <span>A favorite country is required.</span>
                 }
               </mat-error>
@@ -156,7 +156,7 @@
             <mat-hint>Your gross income.</mat-hint>
             @if (exampleForm.controls['grossIncome'].errors && !exampleForm.controls['grossIncome'].untouched) {
               <mat-error>
-                @if (exampleForm.controls['grossIncome'].errors?.['required']) {
+                @if (exampleForm.controls['grossIncome'].errors['required']) {
                   <span>The gross income is required.</span>
                 }
               </mat-error>
@@ -176,7 +176,7 @@
             <mat-hint>Select a favorite color.</mat-hint>
             @if (exampleForm.controls['favoriteColor'].errors && !exampleForm.controls['favoriteColor'].untouched) {
               <mat-error>
-                @if (exampleForm.controls['favoriteColor'].errors?.['required']) {
+                @if (exampleForm.controls['favoriteColor'].errors['required']) {
                   <span>A favorite colour is required.</span>
                 }
               </mat-error>

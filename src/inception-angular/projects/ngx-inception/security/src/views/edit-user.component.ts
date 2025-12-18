@@ -17,7 +17,8 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  AdminContainerView, BackNavigation, CoreModule, Error, GroupFormFieldComponent, ValidatedFormDirective
+  AdminContainerView, BackNavigation, CoreModule, Error, GroupFormFieldComponent,
+  ValidatedFormDirective
 } from 'ngx-inception/core';
 import { combineLatest } from 'rxjs';
 import { finalize, first } from 'rxjs/operators';
@@ -37,8 +38,6 @@ import { UserDirectoryCapabilities } from '../services/user-directory-capabiliti
   styleUrls: ['edit-user.component.css']
 })
 export class EditUserComponent extends AdminContainerView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   editUserForm: FormGroup;
 
   emailControl: FormControl;
@@ -62,6 +61,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   username: string;
 
   usernameControl: FormControl;
+
+  private securityService = inject(SecurityService);
 
   constructor() {
     super();

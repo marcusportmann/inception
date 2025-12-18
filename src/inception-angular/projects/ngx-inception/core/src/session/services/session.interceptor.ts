@@ -15,7 +15,7 @@
  */
 
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { SessionService } from './session.service';
@@ -29,11 +29,11 @@ import { SessionService } from './session.service';
  */
 @Injectable()
 export class SessionInterceptor implements HttpInterceptor {
-  private readonly sessionService = inject(SessionService);
-
   private static readonly DEFAULT_TENANT_ID = '00000000-0000-0000-0000-000000000000';
 
   private static readonly TOKEN_ENDPOINT_SUFFIX = '/oauth/token';
+
+  private readonly sessionService = inject(SessionService);
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // Skip attaching headers for the token endpoint

@@ -6,10 +6,10 @@
         <input type="text" matInput formControlName="host">
         @if (hostControl.errors && !hostControl.untouched) {
           <mat-error>
-            @if (hostControl.errors?.['required']) {
+            @if (hostControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_host_required">The host is required.</span>
             }
-            @if (hostControl.errors?.['maxlength']) {
+            @if (hostControl.errors['maxlength']) {
               <span i18n="@@security_edit_user_directory_component_error_name_maxlength">Host must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -24,10 +24,10 @@
         <input type="text" matInput formControlName="port">
         @if (portControl.errors && !portControl.untouched) {
           <mat-error>
-            @if (portControl.errors?.['required']) {
+            @if (portControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_port_required">The port is required.</span>
             }
-            @if (portControl.errors?.['pattern']) {
+            @if (portControl.errors['pattern']) {
               <span i18n="@@security_ldap_user_directory_component_error_port_pattern">A valid number is required.</span>
             }
           </mat-error>
@@ -42,10 +42,10 @@
         <input type="text" matInput formControlName="useSSL">
         @if (useSSLControl.errors && !useSSLControl.untouched) {
           <mat-error>
-            @if (useSSLControl.errors?.['required']) {
+            @if (useSSLControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_use_ssl_required">Select whether to use SSL.</span>
             }
-            @if (useSSLControl.errors?.['pattern']) {
+            @if (useSSLControl.errors['pattern']) {
               <span i18n="@@security_ldap_user_directory_component_error_use_ssl_pattern">Must be true or false.</span>
             }
           </mat-error>
@@ -60,10 +60,10 @@
         <input type="text" matInput formControlName="bindDN">
         @if (bindDNControl.errors && !bindDNControl.untouched) {
           <mat-error>
-            @if (bindDNControl.errors?.['required']) {
+            @if (bindDNControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_bind_dn_required">The bind DN is required.</span>
             }
-            @if (bindDNControl.errors?.['maxlength']) {
+            @if (bindDNControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_bind_dn_maxlength">Bind DN must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -78,10 +78,10 @@
         <input type="text" matInput formControlName="bindPassword">
         @if (bindPasswordControl.errors && !bindPasswordControl.untouched) {
           <mat-error>
-            @if (bindPasswordControl.errors?.['required']) {
+            @if (bindPasswordControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_bind_password_required">The bind password is required.</span>
             }
-            @if (bindPasswordControl.errors?.['maxlength']) {
+            @if (bindPasswordControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_bind_password_maxlength">Bind password must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -96,10 +96,10 @@
         <input type="text" matInput formControlName="baseDN">
         @if (baseDNControl.errors && !baseDNControl.untouched) {
           <mat-error>
-            @if (baseDNControl.errors?.['required']) {
+            @if (baseDNControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_base_dn_required">The base DN is required.</span>
             }
-            @if (baseDNControl.errors?.['maxlength']) {
+            @if (baseDNControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_base_dn_maxlength">Base DN must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -114,10 +114,10 @@
         <input type="text" matInput formControlName="userBaseDN">
         @if (userBaseDNControl.errors && !userBaseDNControl.untouched) {
           <mat-error>
-            @if (userBaseDNControl.errors?.['required']) {
+            @if (userBaseDNControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_base_dn_required">The user base DN is required.</span>
             }
-            @if (userBaseDNControl.errors?.['maxlength']) {
+            @if (userBaseDNControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_base_dn_maxlength">User base DN must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -132,10 +132,10 @@
         <input type="text" matInput formControlName="groupBaseDN">
         @if (groupBaseDNControl.errors && !groupBaseDNControl.untouched) {
           <mat-error>
-            @if (groupBaseDNControl.errors?.['required']) {
+            @if (groupBaseDNControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_base_dn_required">The group base DN is required.</span>
             }
-            @if (groupBaseDNControl.errors?.['maxlength']) {
+            @if (groupBaseDNControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_base_dn_maxlength">Group base DN must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -150,10 +150,10 @@
         <input type="text" matInput formControlName="userObjectClass">
         @if (userObjectClassControl.errors && !userObjectClassControl.untouched) {
           <mat-error>
-            @if (userObjectClassControl.errors?.['required']) {
+            @if (userObjectClassControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_object_class_required">The user object class is required.</span>
             }
-            @if (userObjectClassControl.errors?.['maxlength']) {
+            @if (userObjectClassControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_object_class_maxlength">User object class must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -168,10 +168,10 @@
         <input type="text" matInput formControlName="userUsernameAttribute">
         @if (userUsernameAttributeControl.errors && !userUsernameAttributeControl.untouched) {
           <mat-error>
-            @if (userUsernameAttributeControl.errors?.['required']) {
+            @if (userUsernameAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_username_attribute_required">The user username attribute is required.</span>
             }
-            @if (userUsernameAttributeControl.errors?.['maxlength']) {
+            @if (userUsernameAttributeControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_username_attribute_maxlength">User username attribute must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -186,10 +186,10 @@
         <input type="text" matInput formControlName="userNameAttribute">
         @if (userNameAttributeControl.errors && !userNameAttributeControl.untouched) {
           <mat-error>
-            @if (userNameAttributeControl.errors?.['required']) {
+            @if (userNameAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_name_attribute_required">The user name attribute is required.</span>
             }
-            @if (userNameAttributeControl.errors?.['maxlength']) {
+            @if (userNameAttributeControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_name_attribute_maxlength">User name attribute must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -204,10 +204,10 @@
         <input type="text" matInput formControlName="userPreferredNameAttribute">
         @if (userPreferredNameAttributeControl.errors && !userPreferredNameAttributeControl.untouched) {
           <mat-error>
-            @if (userPreferredNameAttributeControl.errors?.['required']) {
+            @if (userPreferredNameAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_preferred_name_attribute_required">The user preferred name attribute is required.</span>
             }
-            @if (userPreferredNameAttributeControl.errors?.['maxlength']) {
+            @if (userPreferredNameAttributeControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_preferred_name_attribute_maxlength">User preferred name attribute must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -222,10 +222,10 @@
         <input type="text" matInput formControlName="userPhoneNumberAttribute">
         @if (userPhoneNumberAttributeControl.errors && !userPhoneNumberAttributeControl.untouched) {
           <mat-error>
-            @if (userPhoneNumberAttributeControl.errors?.['required']) {
+            @if (userPhoneNumberAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_phone_number_attribute_required">The user phone number attribute is required.</span>
             }
-            @if (userPhoneNumberAttributeControl.errors?.['maxlength']) {
+            @if (userPhoneNumberAttributeControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_phone_number_attribute_maxlength">User phone number attribute must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -240,10 +240,10 @@
         <input type="text" matInput formControlName="userMobileNumberAttribute">
         @if (userMobileNumberAttributeControl.errors && !userMobileNumberAttributeControl.untouched) {
           <mat-error>
-            @if (userMobileNumberAttributeControl.errors?.['required']) {
+            @if (userMobileNumberAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_mobile_number_attribute_required">The user mobile number attribute is required.</span>
             }
-            @if (userMobileNumberAttributeControl.errors?.['maxlength']) {
+            @if (userMobileNumberAttributeControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_mobile_number_attribute_maxlength">User mobile number attribute must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -258,10 +258,10 @@
         <input type="text" matInput formControlName="userEmailAttribute">
         @if (userEmailAttributeControl.errors && !userEmailAttributeControl.untouched) {
           <mat-error>
-            @if (userEmailAttributeControl.errors?.['required']) {
+            @if (userEmailAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_email_attribute_required">The user email attribute is required.</span>
             }
-            @if (userEmailAttributeControl.errors?.['maxlength']) {
+            @if (userEmailAttributeControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_email_attribute_maxlength">User email attribute must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -276,10 +276,10 @@
         <input type="text" matInput formControlName="groupObjectClass">
         @if (groupObjectClassControl.errors && !groupObjectClassControl.untouched) {
           <mat-error>
-            @if (groupObjectClassControl.errors?.['required']) {
+            @if (groupObjectClassControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_object_class_required">The group object class is required.</span>
             }
-            @if (groupObjectClassControl.errors?.['maxlength']) {
+            @if (groupObjectClassControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_object_class_maxlength">Group object class must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -294,10 +294,10 @@
         <input type="text" matInput formControlName="groupNameAttribute">
         @if (groupNameAttributeControl.errors && !groupNameAttributeControl.untouched) {
           <mat-error>
-            @if (groupNameAttributeControl.errors?.['required']) {
+            @if (groupNameAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_name_attribute_required">The group name attribute is required.</span>
             }
-            @if (groupNameAttributeControl.errors?.['maxlength']) {
+            @if (groupNameAttributeControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_name_attribute_maxlength">Group name attribute must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -312,7 +312,7 @@
         <input type="text" matInput formControlName="groupNamePrefixFilter">
         @if (groupNamePrefixFilterControl.errors && !groupNamePrefixFilterControl.untouched) {
           <mat-error>
-            @if (groupNamePrefixFilterControl.errors?.['maxlength']) {
+            @if (groupNamePrefixFilterControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_name_prefix_filter_maxlength">Group name prefix filter must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -327,10 +327,10 @@
         <input type="text" matInput formControlName="groupMemberAttribute">
         @if (groupMemberAttributeControl.errors && !groupMemberAttributeControl.untouched) {
           <mat-error>
-            @if (groupMemberAttributeControl.errors?.['required']) {
+            @if (groupMemberAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_member_attribute_required">The group member attribute is required.</span>
             }
-            @if (groupMemberAttributeControl.errors?.['maxlength']) {
+            @if (groupMemberAttributeControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_member_attribute_maxlength">Group member attribute must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -345,10 +345,10 @@
         <input type="text" matInput formControlName="groupDescriptionAttribute">
         @if (groupDescriptionAttributeControl.errors && !groupDescriptionAttributeControl.untouched) {
           <mat-error>
-            @if (groupDescriptionAttributeControl.errors?.['required']) {
+            @if (groupDescriptionAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_description_attribute_required">The group description attribute is required.</span>
             }
-            @if (groupDescriptionAttributeControl.errors?.['maxlength']) {
+            @if (groupDescriptionAttributeControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_description_attribute_maxlength">Group description attribute must not exceed 100 characters.</span>
             }
           </mat-error>
@@ -363,10 +363,10 @@
         <input type="text" matInput formControlName="maxFilteredUsers">
         @if (maxFilteredUsersControl.errors && !maxFilteredUsersControl.untouched) {
           <mat-error>
-            @if (maxFilteredUsersControl.errors?.['required']) {
+            @if (maxFilteredUsersControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_max_filtered_users_required">The max filtered users is required.</span>
             }
-            @if (maxFilteredUsersControl.errors?.['pattern']) {
+            @if (maxFilteredUsersControl.errors['pattern']) {
               <span i18n="@@security_ldap_user_directory_component_error_max_filtered_users_pattern">A valid number is required.</span>
             }
           </mat-error>
@@ -381,10 +381,10 @@
         <input type="text" matInput formControlName="maxFilteredGroups">
         @if (maxFilteredGroupsControl.errors && !maxFilteredGroupsControl.untouched) {
           <mat-error>
-            @if (maxFilteredGroupsControl.errors?.['required']) {
+            @if (maxFilteredGroupsControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_max_filtered_groups_required">The max filtered groups is required.</span>
             }
-            @if (maxFilteredGroupsControl.errors?.['pattern']) {
+            @if (maxFilteredGroupsControl.errors['pattern']) {
               <span i18n="@@security_ldap_user_directory_component_error_max_filtered_groups_pattern">A valid number is required.</span>
             }
           </mat-error>
@@ -399,10 +399,10 @@
         <input type="text" matInput formControlName="maxFilteredGroupMembers">
         @if (maxFilteredGroupMembersControl.errors && !maxFilteredGroupMembersControl.untouched) {
           <mat-error>
-            @if (maxFilteredGroupMembersControl.errors?.['required']) {
+            @if (maxFilteredGroupMembersControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_max_filtered_group_members_required">The max filtered group members is required.</span>
             }
-            @if (maxFilteredGroupMembersControl.errors?.['pattern']) {
+            @if (maxFilteredGroupMembersControl.errors['pattern']) {
               <span i18n="@@security_ldap_user_directory_component_error_max_filtered_group_members_pattern">A valid number is required.</span>
             }
           </mat-error>
@@ -417,10 +417,10 @@
         <input type="text" matInput formControlName="supportsAdminChangePassword">
         @if (supportsAdminChangePasswordControl.errors && !supportsAdminChangePasswordControl.untouched) {
           <mat-error>
-            @if (supportsAdminChangePasswordControl.errors?.['required']) {
+            @if (supportsAdminChangePasswordControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_admin_change_password_required">A true or false value is required.</span>
             }
-            @if (supportsAdminChangePasswordControl.errors?.['pattern']) {
+            @if (supportsAdminChangePasswordControl.errors['pattern']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_admin_change_password_pattern">A true or false value is required.</span>
             }
           </mat-error>
@@ -435,10 +435,10 @@
         <input type="text" matInput formControlName="supportsChangePassword">
         @if (supportsChangePasswordControl.errors && !supportsChangePasswordControl.untouched) {
           <mat-error>
-            @if (supportsChangePasswordControl.errors?.['required']) {
+            @if (supportsChangePasswordControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_change_password_required">A true or false value is required.</span>
             }
-            @if (supportsChangePasswordControl.errors?.['pattern']) {
+            @if (supportsChangePasswordControl.errors['pattern']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_change_password_pattern">A true or false value is required.</span>
             }
           </mat-error>
@@ -453,10 +453,10 @@
         <input type="text" matInput formControlName="supportsGroupAdministration">
         @if (supportsGroupAdministrationControl.errors && !supportsGroupAdministrationControl.untouched) {
           <mat-error>
-            @if (supportsGroupAdministrationControl.errors?.['required']) {
+            @if (supportsGroupAdministrationControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_group_administration_required">The supports group administration is required.</span>
             }
-            @if (supportsGroupAdministrationControl.errors?.['pattern']) {
+            @if (supportsGroupAdministrationControl.errors['pattern']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_group_administration_pattern">A true or false value is required.</span>
             }
           </mat-error>
@@ -472,10 +472,10 @@
         <input type="text" matInput formControlName="supportsGroupMemberAdministration">
         @if (supportsGroupMemberAdministrationControl.errors && !supportsGroupMemberAdministrationControl.untouched) {
           <mat-error>
-            @if (supportsGroupMemberAdministrationControl.errors?.['required']) {
+            @if (supportsGroupMemberAdministrationControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_support_group_member_administration_required">A true or false value is required.</span>
             }
-            @if (supportsGroupMemberAdministrationControl.errors?.['pattern']) {
+            @if (supportsGroupMemberAdministrationControl.errors['pattern']) {
               <span i18n="@@security_ldap_user_directory_component_error_support_group_member_administration_pattern">A true or false value is required.</span>
             }
           </mat-error>
@@ -490,10 +490,10 @@
         <input type="text" matInput formControlName="supportsUserAdministration">
         @if (supportsUserAdministrationControl.errors && !supportsUserAdministrationControl.untouched) {
           <mat-error>
-            @if (supportsUserAdministrationControl.errors?.['required']) {
+            @if (supportsUserAdministrationControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_user_administration_required">A true or false value is required.</span>
             }
-            @if (supportsUserAdministrationControl.errors?.['pattern']) {
+            @if (supportsUserAdministrationControl.errors['pattern']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_user_administration_pattern">A true or false value is required.</span>
             }
           </mat-error>

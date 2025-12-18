@@ -25,7 +25,7 @@
                   <input type="text" matInput formControlName="email">
                   @if (emailControl.errors && !emailControl.untouched) {
                     <mat-error>
-                      @if (emailControl.errors?.['email']) {
+                      @if (emailControl.errors['email']) {
                         <span i18n="@@error_send_error_component_error_email_invalid">A valid email address is required.</span>
                       }
                     </mat-error>

@@ -15,7 +15,10 @@
  */
 
 import { AsyncPipe, NgClass } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Input, OnDestroy,
+  OnInit
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Replace } from '../../util/replace';
@@ -38,9 +41,7 @@ import { BreadcrumbsService } from '../services/breadcrumbs.service';
           @if (breadcrumb.label) {
             <li class="breadcrumbs-item" [ngClass]="{ active: last }">
               @if (!last && !!breadcrumb.url) {
-                <a [routerLink]="breadcrumb.url">{{
-                  breadcrumb.label
-                }}</a>
+                <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
               }
               @if (last || !breadcrumb.url) {
                 <span>{{ breadcrumb.label }}</span>
@@ -50,29 +51,27 @@ import { BreadcrumbsService } from '../services/breadcrumbs.service';
         }
       </ol>
     }
-    `,
+  `,
   imports: [AsyncPipe, NgClass, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
-  private elementRef = inject(ElementRef);
-  private breadcrumbsService = inject(BreadcrumbsService);
-  private changeDetectorRef = inject(ChangeDetectorRef);
-
   breadcrumbs: Observable<Breadcrumb[]>;
 
   @Input() fixed = false;
 
   visible = false;
 
+  private breadcrumbsService = inject(BreadcrumbsService);
+
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
+  private elementRef = inject(ElementRef);
+
   private subscriptions: Subscription = new Subscription();
 
   /**
    * Constructs a new BreadcrumbsComponent.
-   *
-   * @param elementRef         The element reference.
-   * @param breadcrumbsService The breadcrumbs service.
-   * @param changeDetectorRef  The ChangeDetectorRef instance.
    */
   constructor() {
     this.breadcrumbs = this.breadcrumbsService.breadcrumbs$;

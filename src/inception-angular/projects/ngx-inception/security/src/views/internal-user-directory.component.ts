@@ -16,15 +16,8 @@
 
 import { Component, forwardRef } from '@angular/core';
 import {
-  AbstractControl,
-  ControlValueAccessor,
-  FormControl,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-  Validators
+  AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
+  ValidationErrors, Validator, Validators
 } from '@angular/forms';
 import { CoreModule } from 'ngx-inception/core';
 import { UserDirectoryParameter } from '../services/user-directory-parameter';
@@ -49,9 +42,7 @@ import { UserDirectoryUtil } from '../services/user-directory-util';
     }
   ]
 })
-export class InternalUserDirectoryComponent
-  implements ControlValueAccessor, Validator
-{
+export class InternalUserDirectoryComponent implements ControlValueAccessor, Validator {
   internalUserDirectoryForm: FormGroup;
 
   maxFilteredGroupMembersControl: FormControl;
@@ -62,9 +53,6 @@ export class InternalUserDirectoryComponent
   passwordHistoryMonthsControl: FormControl;
 
   // ---- ControlValueAccessor callbacks ----
-  // The external value is the parameter list
-  private onChange: (value: UserDirectoryParameter[] | null) => void = () => { /* empty */ };
-  private onTouched: () => void = () => { /* empty */ };
 
   constructor() {
     // Initialize the form controls
@@ -147,6 +135,36 @@ export class InternalUserDirectoryComponent
     return parameters;
   }
 
+  // Call this from the template on blur if you want proper "touched" behavior
+  markAsTouched(): void {
+    if (this.onTouched) {
+      this.onTouched();
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  // ---- ControlValueAccessor implementation ----
+
+  // Angular calls this to push a value INTO the component
+  // Expected value: UserDirectoryParameter[] | null
+
+  setDisabledState?(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.internalUserDirectoryForm.disable();
+    } else {
+      this.internalUserDirectoryForm.enable();
+    }
+  }
+
   // Helper to populate from an existing parameter list
   setParameters(parameters: UserDirectoryParameter[]): void {
     this.maxPasswordAttemptsControl.setValue(
@@ -188,10 +206,19 @@ export class InternalUserDirectoryComponent
     this.onChange(this.getParameters());
   }
 
-  // ---- ControlValueAccessor implementation ----
+  validate(_control: AbstractControl): ValidationErrors | null {
+    void _control;
 
-  // Angular calls this to push a value INTO the component
-  // Expected value: UserDirectoryParameter[] | null
+    return this.internalUserDirectoryForm.valid
+      ? null
+      : {
+          invalidForm: {
+            valid: false,
+            message: 'internalUserDirectoryForm fields are invalid'
+          }
+        };
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(val: any): void {
     if (val && Array.isArray(val)) {
@@ -200,43 +227,14 @@ export class InternalUserDirectoryComponent
     // If null/undefined/empty, we keep current defaults
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.internalUserDirectoryForm.disable();
-    } else {
-      this.internalUserDirectoryForm.enable();
-    }
-  }
-
-  // Call this from the template on blur if you want proper "touched" behavior
-  markAsTouched(): void {
-    if (this.onTouched) {
-      this.onTouched();
-    }
-  }
+  // The external value is the parameter list
+  private onChange: (value: UserDirectoryParameter[] | null) => void = () => {
+    /* empty */
+  };
 
   // ---- Validator implementation ----
 
-  validate(_control: AbstractControl): ValidationErrors | null {
-    void _control;
-
-    return this.internalUserDirectoryForm.valid
-      ? null
-      : {
-        invalidForm: {
-          valid: false,
-          message: 'internalUserDirectoryForm fields are invalid'
-        }
-      };
-  }
+  private onTouched: () => void = () => {
+    /* empty */
+  };
 }

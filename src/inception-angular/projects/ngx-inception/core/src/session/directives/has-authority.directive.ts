@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import { Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef, inject } from '@angular/core';
+import {
+  Directive, inject, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Session } from '../services/session';
 import { SessionService } from '../services/session.service';
@@ -36,14 +38,17 @@ import { SessionService } from '../services/session.service';
   standalone: true
 })
 export class HasAuthorityDirective implements OnInit, OnDestroy {
-  private readonly templateRef = inject<TemplateRef<unknown>>(TemplateRef);
-  private readonly viewContainer = inject(ViewContainerRef);
-  private readonly sessionService = inject(SessionService);
-
   private latestSession: Session | null = null;
 
   private requiredAuthorities: string[] = [];
+
+  private readonly sessionService = inject(SessionService);
+
   private sessionSub?: Subscription;
+
+  private readonly templateRef = inject<TemplateRef<unknown>>(TemplateRef);
+
+  private readonly viewContainer = inject(ViewContainerRef);
 
   /**
    * Accepts:

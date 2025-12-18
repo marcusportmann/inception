@@ -54,14 +54,15 @@ export abstract class FilteredPaginatedListView<T>
   /** Guard to ignore the sortChange triggered while restoring state. */
   private restoringState = false;
 
-  protected constructor() {
+  constructor() {
     super();
 
     // Subclasses can override this for their own filter logic
     this.dataSource.filterPredicate = this.createFilterPredicate();
 
     // Read the reset flag from the current navigation (if any)
-    const nav = this.router.getCurrentNavigation();
+    const nav = this.router.currentNavigation();
+
     this.resetStateRequested = !!nav?.extras.state?.['resetState'];
   }
 

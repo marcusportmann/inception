@@ -36,8 +36,6 @@ import { CodesService } from '../services/codes.service';
   styleUrls: ['edit-code.component.css']
 })
 export class EditCodeComponent extends AdminContainerView implements AfterViewInit {
-  private codesService = inject(CodesService);
-
   code: Code | null = null;
 
   codeCategoryId: string;
@@ -53,6 +51,8 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   readonly title = $localize`:@@codes_edit_code_title:Edit Code`;
 
   valueControl: FormControl;
+
+  private codesService = inject(CodesService);
 
   constructor() {
     super();

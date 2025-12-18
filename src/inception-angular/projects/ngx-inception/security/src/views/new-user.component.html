@@ -8,10 +8,10 @@
             <input type="text" matInput formControlName="username">
             @if (usernameControl.errors && !usernameControl.untouched) {
               <mat-error>
-                @if (usernameControl.errors?.['required']) {
+                @if (usernameControl.errors['required']) {
                   <span i18n="@@security_new_user_component_error_username_required">A username is required.</span>
                 }
-                @if (usernameControl.errors?.['maxlength']) {
+                @if (usernameControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_username_maxlength">Username must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -26,10 +26,10 @@
             <input type="text" matInput formControlName="name">
             @if (nameControl.errors && !nameControl.untouched) {
               <mat-error>
-                @if (nameControl.errors?.['required']) {
+                @if (nameControl.errors['required']) {
                   <span i18n="@@security_new_user_component_error_name_required">A name is required.</span>
                 }
-                @if (nameControl.errors?.['maxlength']) {
+                @if (nameControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_name_maxlength">Name must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -42,7 +42,7 @@
             <input type="text" matInput formControlName="preferredName">
             @if (preferredNameControl.errors && !preferredNameControl.untouched) {
               <mat-error>
-                @if (preferredNameControl.errors?.['maxlength']) {
+                @if (preferredNameControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_preferred_name_maxlength">Preferred name must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -57,10 +57,10 @@
             <input type="text" matInput formControlName="email">
             @if (emailControl.errors && !emailControl.untouched) {
               <mat-error>
-                @if (emailControl.errors?.['maxlength']) {
+                @if (emailControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_email_maxlength">Email must not exceed 100 characters.</span>
                 }
-                @if (emailControl.errors?.['pattern']) {
+                @if (emailControl.errors['pattern']) {
                   <span i18n="@@security_new_user_component_error_email_pattern">A valid email is required.</span>
                 }
               </mat-error>
@@ -75,7 +75,7 @@
             <input type="text" matInput formControlName="phoneNumber">
             @if (phoneNumberControl.errors && !phoneNumberControl.untouched) {
               <mat-error>
-                @if (phoneNumberControl.errors?.['maxlength']) {
+                @if (phoneNumberControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_phone_number_maxlength">Phone number must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -88,10 +88,10 @@
             <input type="text" matInput formControlName="mobileNumber">
             @if (mobileNumberControl.errors && !mobileNumberControl.untouched) {
               <mat-error>
-                @if (mobileNumberControl.errors?.['maxlength']) {
+                @if (mobileNumberControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_mobile_number_maxlength">Mobile number must not exceed 100 characters.</span>
                 }
-                @if (mobileNumberControl.errors?.['pattern']) {
+                @if (mobileNumberControl.errors['pattern']) {
                   <span i18n="@@security_new_user_component_error_mobile_number_pattern">A valid international format mobile number is required.</span>
                 }
               </mat-error>
@@ -106,10 +106,10 @@
             <input type="password" matInput formControlName="password">
             @if (passwordControl.errors && !passwordControl.untouched) {
               <mat-error>
-                @if (passwordControl.errors?.['required']) {
+                @if (passwordControl.errors['required']) {
                   <span i18n="@@security_new_user_component_error_password_required">A password is required.</span>
                 }
-                @if (passwordControl.errors?.['maxlength']) {
+                @if (passwordControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_password_maxlength">Password must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -122,10 +122,10 @@
             <input type="password" matInput formControlName="confirmPassword">
             @if (confirmPasswordControl.errors && !confirmPasswordControl.untouched) {
               <mat-error>
-                @if (confirmPasswordControl.errors?.['required']) {
+                @if (confirmPasswordControl.errors['required']) {
                   <span i18n="@@security_new_user_component_error_confirm_password_required">A password is required.</span>
                 }
-                @if (confirmPasswordControl.errors?.['maxlength']) {
+                @if (confirmPasswordControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_confirm_password_maxlength">Password must not exceed 100 characters.</span>
                 }
               </mat-error>

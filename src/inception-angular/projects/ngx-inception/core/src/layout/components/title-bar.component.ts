@@ -15,7 +15,7 @@
  */
 
 import { AsyncPipe } from '@angular/common';
-import { Component, ElementRef, Input, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Replace } from '../../util/replace';
@@ -36,9 +36,7 @@ import { BackNavigation } from './back-navigation';
     @if (title | async; as title) {
       <div class="title-bar">
         @if (backNavigation | async; as backNavigation) {
-          <div
-            class="back"
-            (click)="navigateBack(backNavigation)">
+          <div class="back" (click)="navigateBack(backNavigation)">
             <span class="fa fa-chevron-left"></span> {{ backNavigation.title }}
           </div>
         }
@@ -49,15 +47,16 @@ import { BackNavigation } from './back-navigation';
         <div class="title">No Title</div>
       </div>
     }
-    
-    `
+  `
 })
 export class TitleBarComponent implements OnInit {
-  private elementRef = inject(ElementRef);
-  private router = inject(Router);
-  private titleBarService = inject(TitleBarService);
-
   @Input() fixed = false;
+
+  private elementRef = inject(ElementRef);
+
+  private router = inject(Router);
+
+  private titleBarService = inject(TitleBarService);
 
   /**
    * The back navigation.

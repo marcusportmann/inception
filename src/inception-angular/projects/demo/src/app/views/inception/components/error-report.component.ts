@@ -34,10 +34,11 @@ import { TestService } from '../../../services/test.service';
   templateUrl: 'error-report.component.html'
 })
 export class ErrorReportComponent {
-  private router = inject(Router);
   private dialogService = inject(DialogService);
-  private testService = inject(TestService);
 
+  private router = inject(Router);
+
+  private testService = inject(TestService);
 
   testErrorReport(): void {
     this.testService

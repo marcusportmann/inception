@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse
-} from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import {
   AccessDeniedError,
   CommunicationError,
@@ -34,10 +30,7 @@ import { catchError, map } from 'rxjs/operators';
 import { MailTemplate } from './mail-template';
 import { MailTemplateContentType } from './mail-template-content-type';
 import { MailTemplateSummary } from './mail-template-summary';
-import {
-  DuplicateMailTemplateError,
-  MailTemplateNotFoundError
-} from './mail.service.errors';
+import { DuplicateMailTemplateError, MailTemplateNotFoundError } from './mail.service.errors';
 
 /**
  * The Mail Service implementation.
@@ -48,16 +41,14 @@ import {
   providedIn: 'root'
 })
 export class MailService {
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
-  private httpClient = inject(HttpClient);
-
   static readonly MAX_TEMPLATE_SIZE: number = 10485760;
+
+  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+
+  private httpClient = inject(HttpClient);
 
   /**
    * Constructs a new MailService.
-   *
-   * @param config     The Inception configuration.
-   * @param httpClient The HTTP client.
    */
   constructor() {
     console.log('Initializing the Mail Service');
@@ -85,18 +76,13 @@ export class MailService {
    */
   createMailTemplate(mailTemplate: MailTemplate): Observable<boolean> {
     return this.httpClient
-      .post<boolean>(
-        `${this.config.apiUrlPrefix}/mail/mail-templates`,
-        mailTemplate,
-        { observe: 'response' }
-      )
+      .post<boolean>(`${this.config.apiUrlPrefix}/mail/mail-templates`, mailTemplate, {
+        observe: 'response'
+      })
       .pipe(
         map(MailService.isResponse204),
         catchError((error) =>
-          MailService.handleApiError(
-            error,
-            'Failed to create the mail template.'
-          )
+          MailService.handleApiError(error, 'Failed to create the mail template.')
         )
       );
   }
@@ -117,10 +103,7 @@ export class MailService {
       .pipe(
         map(MailService.isResponse204),
         catchError((error) =>
-          MailService.handleApiError(
-            error,
-            'Failed to delete the mail template.'
-          )
+          MailService.handleApiError(error, 'Failed to delete the mail template.')
         )
       );
   }
@@ -140,10 +123,7 @@ export class MailService {
       )
       .pipe(
         catchError((error) =>
-          MailService.handleApiError(
-            error,
-            'Failed to retrieve the mail template.'
-          )
+          MailService.handleApiError(error, 'Failed to retrieve the mail template.')
         )
       );
   }
@@ -163,10 +143,7 @@ export class MailService {
       )
       .pipe(
         catchError((error) =>
-          MailService.handleApiError(
-            error,
-            'Failed to retrieve the mail template name.'
-          )
+          MailService.handleApiError(error, 'Failed to retrieve the mail template name.')
         )
       );
   }
@@ -204,10 +181,7 @@ export class MailService {
       >(`${this.config.apiUrlPrefix}/mail/mail-templates`, { reportProgress: true })
       .pipe(
         catchError((error) =>
-          MailService.handleApiError(
-            error,
-            'Failed to retrieve the mail templates.'
-          )
+          MailService.handleApiError(error, 'Failed to retrieve the mail templates.')
         )
       );
   }
@@ -229,10 +203,7 @@ export class MailService {
       .pipe(
         map(MailService.isResponse204),
         catchError((error) =>
-          MailService.handleApiError(
-            error,
-            'Failed to update the mail template.'
-          )
+          MailService.handleApiError(error, 'Failed to update the mail template.')
         )
       );
   }
@@ -241,21 +212,9 @@ export class MailService {
     httpErrorResponse: HttpErrorResponse,
     defaultMessage: string
   ): Observable<never> {
-    if (
-      ProblemDetails.isProblemDetails(
-        httpErrorResponse,
-        DuplicateMailTemplateError.TYPE
-      )
-    ) {
-      return throwError(
-        () => new DuplicateMailTemplateError(httpErrorResponse)
-      );
-    } else if (
-      ProblemDetails.isProblemDetails(
-        httpErrorResponse,
-        MailTemplateNotFoundError.TYPE
-      )
-    ) {
+    if (ProblemDetails.isProblemDetails(httpErrorResponse, DuplicateMailTemplateError.TYPE)) {
+      return throwError(() => new DuplicateMailTemplateError(httpErrorResponse));
+    } else if (ProblemDetails.isProblemDetails(httpErrorResponse, MailTemplateNotFoundError.TYPE)) {
       return throwError(() => new MailTemplateNotFoundError(httpErrorResponse));
     } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
       return throwError(() => new AccessDeniedError(httpErrorResponse));
@@ -265,9 +224,7 @@ export class MailService {
       return throwError(() => new InvalidArgumentError(httpErrorResponse));
     }
 
-    return throwError(
-      () => new ServiceUnavailableError(defaultMessage, httpErrorResponse)
-    );
+    return throwError(() => new ServiceUnavailableError(defaultMessage, httpErrorResponse));
   }
 
   private static isResponse204(httpResponse: HttpResponse<boolean>): boolean {

@@ -38,8 +38,6 @@ import { CodesService } from '../services/codes.service';
   styleUrls: ['new-code.component.css']
 })
 export class NewCodeComponent extends AdminContainerView implements AfterViewInit {
-  private codesService = inject(CodesService);
-
   code: Code | null = null;
 
   codeCategoryId: string;
@@ -53,6 +51,8 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
   readonly title = $localize`:@@codes_new_code_title:New Code`;
 
   valueControl: FormControl;
+
+  private codesService = inject(CodesService);
 
   constructor() {
     super();

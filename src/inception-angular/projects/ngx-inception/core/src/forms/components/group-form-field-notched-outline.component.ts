@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, NgZone, ViewChild, ViewEncapsulation, inject } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, Input, NgZone, ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 
 /**
  * Internal component that creates an instance of the MDC notched-outline component.
@@ -31,19 +34,19 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, N
   host: {
     class: 'mdc-notched-outline',
     // Besides updating the notch state through the MDC component, we toggle this class
-    // through a host binding in order to ensure that the notched-outline renders
-    // correctly on the server.
+    // through a host binding to ensure that the notched-outline renders correctly on the server.
     '[class.mdc-notched-outline--notched]': 'groupFormFieldNotchedOutlineOpen'
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class GroupFormFieldNotchedOutlineComponent implements AfterViewInit {
-  private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly _ngZone = inject(NgZone);
-
   /** Whether the notch should be opened. */
   @Input() groupFormFieldNotchedOutlineOpen = false;
+
+  private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  private readonly _ngZone = inject(NgZone);
 
   /** Reference to the notch element. Assigned by Angular after view init. */
   @ViewChild('notch') private _notch!: ElementRef<HTMLDivElement>;

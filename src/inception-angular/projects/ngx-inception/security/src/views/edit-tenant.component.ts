@@ -36,8 +36,6 @@ import { Tenant } from '../services/tenant';
   styleUrls: ['edit-tenant.component.css']
 })
 export class EditTenantComponent extends AdminContainerView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   editTenantForm: FormGroup;
 
   nameControl: FormControl;
@@ -47,6 +45,8 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
   tenantId: string;
 
   readonly title = $localize`:@@security_edit_tenant_title:Edit Tenant`;
+
+  private securityService = inject(SecurityService);
 
   constructor() {
     super();

@@ -41,8 +41,6 @@ export class ForgottenPasswordTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    return of(
-      $localize`:@@login_forgotten_password_title_resolver:Forgotten Password`
-    );
+    return of($localize`:@@login_forgotten_password_title_resolver:Forgotten Password`);
   }
 }

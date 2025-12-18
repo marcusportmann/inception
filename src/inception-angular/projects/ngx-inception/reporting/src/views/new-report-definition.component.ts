@@ -36,8 +36,6 @@ import { ReportingService } from '../services/reporting.service';
   styleUrls: ['new-report-definition.component.css']
 })
 export class NewReportDefinitionComponent extends AdminContainerView implements AfterViewInit {
-  private reportingService = inject(ReportingService);
-
   idControl: FormControl;
 
   nameControl: FormControl;
@@ -49,6 +47,8 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
   templateControl: FormControl;
 
   readonly title = $localize`:@@reporting_new_report_definition_title:New Report Definition`;
+
+  private reportingService = inject(ReportingService);
 
   constructor() {
     super();

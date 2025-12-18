@@ -35,7 +35,6 @@ import { CoreModule, TitleBarService } from 'ngx-inception/core';
 export class Menu321Component implements AfterViewInit {
   private titleBarService = inject(TitleBarService);
 
-
   ngAfterViewInit(): void {
     this.titleBarService.setTitle('Custom Menu 3.2.1 Title');
   }

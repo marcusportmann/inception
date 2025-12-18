@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ReportingService } from '../services/reporting.service';
@@ -28,7 +28,6 @@ import { ReportingService } from '../services/reporting.service';
 @Injectable()
 export class ReportDefinitionTitleResolver {
   private reportingService = inject<ReportingService>(ReportingService);
-
 
   /**
    * Resolve the title.

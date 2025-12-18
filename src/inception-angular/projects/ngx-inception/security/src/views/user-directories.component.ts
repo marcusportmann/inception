@@ -19,7 +19,9 @@ import {
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { CoreModule, Error, SortDirection, StatefulListView, TableFilterComponent } from 'ngx-inception/core';
+import {
+  CoreModule, Error, SortDirection, StatefulListView, TableFilterComponent
+} from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
@@ -39,8 +41,6 @@ import { UserDirectorySummaryDataSource } from '../services/user-directory-summa
   styleUrls: ['user-directories.component.css']
 })
 export class UserDirectoriesComponent extends StatefulListView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   readonly dataSource: UserDirectorySummaryDataSource;
 
   displayedColumns = ['name', 'actions'];
@@ -63,10 +63,13 @@ export class UserDirectoriesComponent extends StatefulListView implements AfterV
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
+  private securityService = inject(SecurityService);
+
   constructor() {
     super();
 
-    const nav = this.router.getCurrentNavigation();
+    const nav = this.router.currentNavigation();
+
     this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
     this.dataSource = new UserDirectorySummaryDataSource(this.securityService);

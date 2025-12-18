@@ -30,8 +30,7 @@ export class TitleBarService {
   /**
    * The back navigation.
    */
-  backNavigation$: Subject<BackNavigation | null> =
-    new ReplaySubject<BackNavigation | null>(1);
+  backNavigation$: Subject<BackNavigation | null> = new ReplaySubject<BackNavigation | null>(1);
 
   /**
    * The title.

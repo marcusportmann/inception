@@ -23,8 +23,7 @@ import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 export class AuthenticationFailedError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/authentication-failed';
+  static readonly TYPE = 'https://inception.digital/problems/security/authentication-failed';
 
   /**
    * Constructs a new AuthenticationFailedError.
@@ -32,10 +31,7 @@ export class AuthenticationFailedError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@security_authentication_failed_error:Authentication failed.`,
-      cause
-    );
+    super($localize`:@@security_authentication_failed_error:Authentication failed.`, cause);
   }
 }
 
@@ -45,8 +41,7 @@ export class AuthenticationFailedError extends Error {
  * @author Marcus Portmann
  */
 export class DuplicateGroupError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/duplicate-group';
+  static readonly TYPE = 'https://inception.digital/problems/security/duplicate-group';
 
   /**
    * Constructs a new DuplicateGroupError.
@@ -67,8 +62,7 @@ export class DuplicateGroupError extends Error {
  * @author Marcus Portmann
  */
 export class DuplicatePolicyError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/duplicate-policy';
+  static readonly TYPE = 'https://inception.digital/problems/security/duplicate-policy';
 
   /**
    * Constructs a new DuplicatePolicyError.
@@ -89,8 +83,7 @@ export class DuplicatePolicyError extends Error {
  * @author Marcus Portmann
  */
 export class DuplicateTenantError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/duplicate-tenant';
+  static readonly TYPE = 'https://inception.digital/problems/security/duplicate-tenant';
 
   /**
    * Constructs a new DuplicateTenantError.
@@ -111,8 +104,7 @@ export class DuplicateTenantError extends Error {
  * @author Marcus Portmann
  */
 export class DuplicateUserDirectoryError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/duplicate-user-directory';
+  static readonly TYPE = 'https://inception.digital/problems/security/duplicate-user-directory';
 
   /**
    * Constructs a new DuplicateUserDirectoryError.
@@ -133,8 +125,7 @@ export class DuplicateUserDirectoryError extends Error {
  * @author Marcus Portmann
  */
 export class DuplicateUserError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/duplicate-user';
+  static readonly TYPE = 'https://inception.digital/problems/security/duplicate-user';
 
   /**
    * Constructs a new DuplicateUserError.
@@ -155,8 +146,7 @@ export class DuplicateUserError extends Error {
  * @author Marcus Portmann
  */
 export class ExistingGroupMembersError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/existing-group-members';
+  static readonly TYPE = 'https://inception.digital/problems/security/existing-group-members';
 
   /**
    * Constructs a new ExistingGroupMembersError.
@@ -177,8 +167,7 @@ export class ExistingGroupMembersError extends Error {
  * @author Marcus Portmann
  */
 export class ExistingGroupsError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/existing-groups';
+  static readonly TYPE = 'https://inception.digital/problems/security/existing-groups';
 
   /**
    * Constructs a new ExistingGroupsError.
@@ -199,8 +188,7 @@ export class ExistingGroupsError extends Error {
  * @author Marcus Portmann
  */
 export class ExistingPasswordError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/existing-password';
+  static readonly TYPE = 'https://inception.digital/problems/security/existing-password';
 
   /**
    * Constructs a new ExistingPasswordError.
@@ -221,8 +209,7 @@ export class ExistingPasswordError extends Error {
  * @author Marcus Portmann
  */
 export class ExistingUsersError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/existing-users';
+  static readonly TYPE = 'https://inception.digital/problems/security/existing-users';
 
   /**
    * Constructs a new ExistingUsersError.
@@ -243,8 +230,7 @@ export class ExistingUsersError extends Error {
  * @author Marcus Portmann
  */
 export class GroupMemberNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/group-member-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/security/group-member-not-found';
 
   /**
    * Constructs a new GroupMemberNotFoundError.
@@ -265,8 +251,7 @@ export class GroupMemberNotFoundError extends Error {
  * @author Marcus Portmann
  */
 export class GroupNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/group-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/security/group-not-found';
 
   /**
    * Constructs a new GroupNotFoundError.
@@ -274,10 +259,7 @@ export class GroupNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@security_group_not_found_error:The group could not be found.`,
-      cause
-    );
+    super($localize`:@@security_group_not_found_error:The group could not be found.`, cause);
   }
 }
 
@@ -287,8 +269,7 @@ export class GroupNotFoundError extends Error {
  * @author Marcus Portmann
  */
 export class GroupRoleNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/group-role-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/security/group-role-not-found';
 
   /**
    * Constructs a new GroupRoleNotFoundError.
@@ -309,8 +290,7 @@ export class GroupRoleNotFoundError extends Error {
  * @author Marcus Portmann
  */
 export class InvalidPolicyDataError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/invalid-policy-data';
+  static readonly TYPE = 'https://inception.digital/problems/security/invalid-policy-data';
 
   /**
    * Constructs a new InvalidPolicyDataError.
@@ -318,10 +298,7 @@ export class InvalidPolicyDataError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@security_invalid_policy_data_error:The policy data is invalid.`,
-      cause
-    );
+    super($localize`:@@security_invalid_policy_data_error:The policy data is invalid.`, cause);
   }
 }
 
@@ -331,8 +308,7 @@ export class InvalidPolicyDataError extends Error {
  * @author Marcus Portmann
  */
 export class InvalidSecurityCodeError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/invalid-security-code';
+  static readonly TYPE = 'https://inception.digital/problems/security/invalid-security-code';
 
   /**
    * Constructs a new InvalidSecurityCodeError.
@@ -340,10 +316,7 @@ export class InvalidSecurityCodeError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@security_invalid_security_code_error:The security code is invalid.`,
-      cause
-    );
+    super($localize`:@@security_invalid_security_code_error:The security code is invalid.`, cause);
   }
 }
 
@@ -353,8 +326,7 @@ export class InvalidSecurityCodeError extends Error {
  * @author Marcus Portmann
  */
 export class PolicyDataMismatchError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/policy-data-mismatch';
+  static readonly TYPE = 'https://inception.digital/problems/security/policy-data-mismatch';
 
   /**
    * Constructs a new PolicyDataMismatchError.
@@ -375,8 +347,7 @@ export class PolicyDataMismatchError extends Error {
  * @author Marcus Portmann
  */
 export class PolicyNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/policy-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/security/policy-not-found';
 
   /**
    * Constructs a new PolicyNotFoundError.
@@ -384,10 +355,7 @@ export class PolicyNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@security_policy_not_found_error:The policy could not be found.`,
-      cause
-    );
+    super($localize`:@@security_policy_not_found_error:The policy could not be found.`, cause);
   }
 }
 
@@ -397,8 +365,7 @@ export class PolicyNotFoundError extends Error {
  * @author Marcus Portmann
  */
 export class RoleNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/role-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/security/role-not-found';
 
   /**
    * Constructs a new RoleNotFoundError.
@@ -406,10 +373,7 @@ export class RoleNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@security_role_not_found_error:The role could not be found.`,
-      cause
-    );
+    super($localize`:@@security_role_not_found_error:The role could not be found.`, cause);
   }
 }
 
@@ -425,10 +389,7 @@ export class SessionError extends Error {
    * @param message The error message.
    * @param cause   The cause of the error.
    */
-  constructor(
-    message: string,
-    cause?: ProblemDetails | HttpErrorResponse | HttpError
-  ) {
+  constructor(message: string, cause?: ProblemDetails | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }
@@ -439,8 +400,7 @@ export class SessionError extends Error {
  * @author Marcus Portmann
  */
 export class TenantNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/tenant-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/security/tenant-not-found';
 
   /**
    * Constructs a new TenantNotFoundError.
@@ -448,10 +408,7 @@ export class TenantNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@security_tenant_not_found_error:The tenant could not be found.`,
-      cause
-    );
+    super($localize`:@@security_tenant_not_found_error:The tenant could not be found.`, cause);
   }
 }
 
@@ -484,8 +441,7 @@ export class TenantUserDirectoryNotFoundError extends Error {
  * @author Marcus Portmann
  */
 export class TokenNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/token-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/security/token-not-found';
 
   /**
    * Constructs a new TokenNotFoundError.
@@ -493,10 +449,7 @@ export class TokenNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@security_token_not_found_error:The token could not be found.`,
-      cause
-    );
+    super($localize`:@@security_token_not_found_error:The token could not be found.`, cause);
   }
 }
 
@@ -506,8 +459,7 @@ export class TokenNotFoundError extends Error {
  * @author Marcus Portmann
  */
 export class UserDirectoryNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/user-directory-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/security/user-directory-not-found';
 
   /**
    * Constructs a new UserDirectoryNotFoundError.
@@ -528,8 +480,7 @@ export class UserDirectoryNotFoundError extends Error {
  * @author Marcus Portmann
  */
 export class UserLockedError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/user-locked';
+  static readonly TYPE = 'https://inception.digital/problems/security/user-locked';
 
   /**
    * Constructs a new UserLockedError.
@@ -550,8 +501,7 @@ export class UserLockedError extends Error {
  * @author Marcus Portmann
  */
 export class UserNotFoundError extends Error {
-  static readonly TYPE =
-    'https://inception.digital/problems/security/user-not-found';
+  static readonly TYPE = 'https://inception.digital/problems/security/user-not-found';
 
   /**
    * Constructs a new UserNotFoundError.
@@ -559,9 +509,6 @@ export class UserNotFoundError extends Error {
    * @param cause The cause of the error.
    */
   constructor(cause?: ProblemDetails | HttpErrorResponse | HttpError) {
-    super(
-      $localize`:@@security_user_not_found_error:The user could not be found.`,
-      cause
-    );
+    super($localize`:@@security_user_not_found_error:The user could not be found.`, cause);
   }
 }

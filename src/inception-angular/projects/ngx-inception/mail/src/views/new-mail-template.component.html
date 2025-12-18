@@ -8,7 +8,7 @@
             <input type="text" matInput formControlName="id">
             @if (idControl.errors && !idControl.untouched) {
               <mat-error>
-                @if (idControl.errors?.['required']) {
+                @if (idControl.errors['required']) {
                   <span i18n="@@mail_new_mail_template_component_error_id_required">An ID is required.</span>
                 }
               </mat-error>
@@ -23,10 +23,10 @@
             <input type="text" matInput formControlName="name">
             @if (nameControl.errors && !nameControl.untouched) {
               <mat-error>
-                @if (nameControl.errors?.['required']) {
+                @if (nameControl.errors['required']) {
                   <span i18n="@@mail_new_mail_template_component_error_name_required">A name is required.</span>
                 }
-                @if (nameControl.errors?.['maxlength']) {
+                @if (nameControl.errors['maxlength']) {
                   <span i18n="@@mail_new_mail_template_component_error_name_maxlength">Name must not exceed 100 characters.</span>
                 }
               </mat-error>
@@ -47,7 +47,7 @@
             </mat-select>
             @if (contentTypeControl.errors && !contentTypeControl.untouched) {
               <mat-error>
-                @if (contentTypeControl.errors?.['required']) {
+                @if (contentTypeControl.errors['required']) {
                   <span i18n="@@mail_new_mail_template_component_error_content_type_required">A content type is required.</span>
                 }
               </mat-error>
@@ -62,13 +62,13 @@
             <file-upload formControlName="template" i18n-placeholder="@@mail_new_mail_template_component_placeholder_no_file_selected" placeholder="No file selected"></file-upload>
             @if (templateControl.errors && !templateControl.untouched) {
               <mat-error>
-                @if (templateControl.errors?.['required']) {
+                @if (templateControl.errors['required']) {
                   <span i18n="@@mail_new_mail_template_component_error_template_required">A template is required.</span>
                 }
-                @if (templateControl.errors?.['minsize']) {
+                @if (templateControl.errors['minsize']) {
                   <span i18n="@@mail_new_mail_template_component_error_template_min_size">The template is empty.</span>
                 }
-                @if (templateControl.errors?.['maxsize']) {
+                @if (templateControl.errors['maxsize']) {
                   <span i18n="@@mail_new_mail_template_component_error_template_max_size">The template exceeds the maximum allowed size.</span>
                 }
               </mat-error>

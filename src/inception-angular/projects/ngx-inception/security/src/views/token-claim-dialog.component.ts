@@ -73,17 +73,15 @@ export interface TokenClaimDialogData {
               <input type="text" matInput formControlName="name" required="true" />
               @if (nameControl.errors && !nameControl.untouched) {
                 <mat-error>
-                  @if (nameControl.errors?.['required']) {
-                    <span
-                      i18n="@@security_token_claim_dialog_component_error_name_required">
-                  A name is required.
-                </span>
+                  @if (nameControl.errors['required']) {
+                    <span i18n="@@security_token_claim_dialog_component_error_name_required">
+                      A name is required.
+                    </span>
                   }
-                  @if (nameControl.errors?.['maxlength']) {
-                    <span
-                      i18n="@@security_token_claim_dialog_component_error_name_maxlength">
-                  Name must not exceed 100 characters.
-                </span>
+                  @if (nameControl.errors['maxlength']) {
+                    <span i18n="@@security_token_claim_dialog_component_error_name_maxlength">
+                      Name must not exceed 100 characters.
+                    </span>
                   }
                 </mat-error>
               }
@@ -99,11 +97,10 @@ export interface TokenClaimDialogData {
               <input type="text" matInput formControlName="value" />
               @if (valueControl.errors && !valueControl.untouched) {
                 <mat-error>
-                  @if (valueControl.errors?.['maxlength']) {
-                    <span
-                      i18n="@@security_token_claim_dialog_component_error_value_maxlength">
-                  Value must not exceed 4000 characters.
-                </span>
+                  @if (valueControl.errors['maxlength']) {
+                    <span i18n="@@security_token_claim_dialog_component_error_value_maxlength">
+                      Value must not exceed 4000 characters.
+                    </span>
                   }
                 </mat-error>
               }
@@ -122,14 +119,13 @@ export interface TokenClaimDialogData {
                 cdkTextareaAutosize
                 #autosize="cdkTextareaAutosize"
                 cdkAutosizeMinRows="5"
-              cdkAutosizeMaxRows="5"></textarea>
+                cdkAutosizeMaxRows="5"></textarea>
               @if (valuesControl.errors && !valuesControl.untouched) {
                 <mat-error>
-                  @if (valuesControl.errors?.['maxlength']) {
-                    <span
-                      i18n="@@security_token_claim_dialog_component_error_values_maxlength">
-                  Value must not exceed 4000 characters.
-                </span>
+                  @if (valuesControl.errors['maxlength']) {
+                    <span i18n="@@security_token_claim_dialog_component_error_values_maxlength">
+                      Value must not exceed 4000 characters.
+                    </span>
                   }
                 </mat-error>
               }
@@ -159,11 +155,9 @@ export interface TokenClaimDialogData {
         OK
       </button>
     </div>
-    `
+  `
 })
 export class TokenClaimDialogComponent {
-  private dialogRef = inject<MatDialogRef<TokenClaimDialogComponent>>(MatDialogRef);
-
   nameControl: FormControl;
 
   tokenClaimForm: FormGroup;
@@ -171,6 +165,8 @@ export class TokenClaimDialogComponent {
   valueControl: FormControl;
 
   valuesControl: FormControl;
+
+  private dialogRef = inject<MatDialogRef<TokenClaimDialogComponent>>(MatDialogRef);
 
   /**
    * Constructs a new TokenClaimDialogComponent.

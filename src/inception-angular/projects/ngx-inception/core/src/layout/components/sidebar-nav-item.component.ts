@@ -15,7 +15,7 @@
  */
 
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import {
   SidebarNavDropdownTogglerDirective
@@ -45,7 +45,7 @@ import { NavigationItem } from '../services/navigation-item';
         </li>
       }
       <!-- Dropdown -->
-      @if (!item.divider && !item.title && item.children?.length) {
+      @if (!item.divider && !item.title && item.children.length > 0) {
         <li
           [ngClass]="['nav-item', 'nav-dropdown', item.cssClass || '']"
           [class.open]="isActive()"
@@ -57,8 +57,7 @@ import { NavigationItem } from '../services/navigation-item';
             </a>
             <ul class="nav-dropdown-items">
               @for (child of item.children; track child) {
-                <sidebar-nav-item [navItem]="child">
-                </sidebar-nav-item>
+                <sidebar-nav-item [navItem]="child"> </sidebar-nav-item>
               }
             </ul>
           </div>
@@ -101,7 +100,7 @@ import { NavigationItem } from '../services/navigation-item';
         }
       </ng-template>
     }
-    `,
+  `,
   styles: ['.nav-dropdown-toggle { cursor: pointer; }'],
   imports: [
     SidebarNavDropdownDirective,
@@ -110,13 +109,19 @@ import { NavigationItem } from '../services/navigation-item';
     RouterLink,
     RouterLinkActive,
     NgTemplateOutlet
-],
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarNavItemComponent {
+  @Input() navItem?: NavigationItem;
+
   private router = inject(Router);
 
-  @Input() navItem?: NavigationItem;
+  get isExternalLink(): boolean {
+    const url = this.navItem?.url ?? '';
+    // Handles http and https, case-insensitive
+    return /^https?:\/\//i.test(url);
+  }
 
   hideMobile(): void {
     document.body.classList.remove('sidebar-show');
@@ -125,11 +130,5 @@ export class SidebarNavItemComponent {
   isActive(): boolean {
     const url = this.navItem?.url;
     return !!url && this.router.isActive(url, false);
-  }
-
-  get isExternalLink(): boolean {
-    const url = this.navItem?.url ?? '';
-    // Handles http and https, case-insensitive
-    return /^https?:\/\//i.test(url);
   }
 }

@@ -41,8 +41,6 @@ export class EditUserDirectoryTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    return of(
-      $localize`:@@security_edit_user_directory_title_resolver:Edit User Directory`
-    );
+    return of($localize`:@@security_edit_user_directory_title_resolver:Edit User Directory`);
   }
 }

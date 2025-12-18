@@ -34,8 +34,6 @@ import { SchedulerService } from '../services/scheduler.service';
   styleUrls: ['jobs.component.css']
 })
 export class JobsComponent extends FilteredPaginatedListView<Job> {
-  private schedulerService = inject(SchedulerService);
-
   // noinspection JSUnusedGlobalSymbols
   readonly JobStatus = JobStatus;
 
@@ -54,6 +52,8 @@ export class JobsComponent extends FilteredPaginatedListView<Job> {
   readonly listKey = 'scheduler.jobs';
 
   readonly title = $localize`:@@scheduler_jobs_title:Jobs`;
+
+  private schedulerService = inject(SchedulerService);
 
   deleteJob(jobId: string): void {
     this.confirmAndProcessAction(

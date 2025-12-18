@@ -38,8 +38,6 @@ import { UserDirectoryCapabilities } from '../services/user-directory-capabiliti
   styleUrls: ['reset-user-password.component.css']
 })
 export class ResetUserPasswordComponent extends AdminContainerView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   confirmPasswordControl: FormControl;
 
   expirePasswordControl: FormControl;
@@ -63,6 +61,8 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
   username: string;
 
   usernameControl: FormControl;
+
+  private securityService = inject(SecurityService);
 
   constructor() {
     super();

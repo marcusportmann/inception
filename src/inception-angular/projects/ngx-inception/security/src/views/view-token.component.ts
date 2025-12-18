@@ -34,13 +34,13 @@ import { TokenType } from '../services/token-type';
   styleUrls: ['view-token.component.css']
 })
 export class ViewTokenComponent extends AdminContainerView implements AfterViewInit {
-  private securityService = inject(SecurityService);
-
   readonly title = $localize`:@@security_view_token_title:View Token`;
 
   token: Token | null = null;
 
   tokenId: string;
+
+  private securityService = inject(SecurityService);
 
   constructor() {
     super();

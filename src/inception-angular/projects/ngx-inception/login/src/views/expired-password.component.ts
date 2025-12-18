@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -38,12 +38,6 @@ import { catchError, finalize, first, map } from 'rxjs/operators';
   templateUrl: 'expired-password.component.html'
 })
 export class ExpiredPasswordComponent implements OnInit {
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private dialogService = inject(DialogService);
-  private securityService = inject(SecurityService);
-  private spinnerService = inject(SpinnerService);
-
   confirmNewPasswordControl: FormControl;
 
   expiredPasswordForm: FormGroup;
@@ -53,6 +47,16 @@ export class ExpiredPasswordComponent implements OnInit {
   passwordControl: FormControl;
 
   usernameControl: FormControl;
+
+  private activatedRoute = inject(ActivatedRoute);
+
+  private dialogService = inject(DialogService);
+
+  private router = inject(Router);
+
+  private securityService = inject(SecurityService);
+
+  private spinnerService = inject(SpinnerService);
 
   constructor() {
     // Initialize form controls

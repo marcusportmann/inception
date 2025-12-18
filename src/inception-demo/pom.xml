@@ -176,8 +176,9 @@
       <artifactId>mssql-jdbc</artifactId>
     </dependency>
     <dependency>
-      <groupId>de.flapdoodle.embed</groupId>
-      <artifactId>de.flapdoodle.embed.mongo</artifactId>
+      <groupId>de.bwaldvogel</groupId>
+      <artifactId>mongo-java-server</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>io.r2dbc</groupId>

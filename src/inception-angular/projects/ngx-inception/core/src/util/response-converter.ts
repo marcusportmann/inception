@@ -42,12 +42,12 @@ export function convertStringValuesToTypes<T>(value: T): T {
     return (asDate ?? value) as unknown as T;
   }
 
-  // Arrays → recursively map, return new array (no mutation)
+  // Arrays → recursively map, return the new array (no mutation)
   if (Array.isArray(value)) {
     return value.map((item) => convertStringValuesToTypes(item)) as unknown as T;
   }
 
-  // Plain objects → recursively convert properties, no mutation of original
+  // Plain objects → recursively convert properties, no mutation of the original
   if (typeof value === 'object') {
     const obj = value as Record<string, unknown>;
     const result: Record<string, unknown> = {};
@@ -72,8 +72,8 @@ function hasPipe(value: unknown): value is Pipeable {
 }
 
 export function ResponseConverter(
-  target: unknown,
-  propertyKey: string,
+  _target: unknown,
+  _propertyKey: string,
   descriptor: PropertyDescriptor
 ): PropertyDescriptor {
   const originalMethod = descriptor.value;

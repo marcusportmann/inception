@@ -86,14 +86,7 @@ export class UserDataSource implements DataSource<User> {
     this.loadingSubject$.next(true);
 
     return this.securityService
-      .getUsers(
-        userDirectoryId,
-        filter,
-        sortBy,
-        sortDirection,
-        pageIndex,
-        pageSize
-      )
+      .getUsers(userDirectoryId, filter, sortBy, sortDirection, pageIndex, pageSize)
       .pipe(
         tap((users: Users) => {
           this.updateData(users);

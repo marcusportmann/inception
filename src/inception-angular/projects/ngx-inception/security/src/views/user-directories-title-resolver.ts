@@ -41,8 +41,6 @@ export class UserDirectoriesTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    return of(
-      $localize`:@@security_user_directories_title_resolver:User Directories`
-    );
+    return of($localize`:@@security_user_directories_title_resolver:User Directories`);
   }
 }

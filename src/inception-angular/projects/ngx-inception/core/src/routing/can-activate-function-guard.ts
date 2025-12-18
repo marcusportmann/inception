@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
@@ -32,11 +32,8 @@ export class CanActivateFunctionGuard {
   private router = inject(Router);
   private sessionService = inject(SessionService);
 
-
   // noinspection JSUnusedGlobalSymbols
-  canActivate(
-    activatedRouteSnapshot: ActivatedRouteSnapshot
-  ): Observable<boolean> {
+  canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
     return this.sessionService.session$.pipe(
       first(),
       map((session: Session | null) => {
@@ -44,9 +41,7 @@ export class CanActivateFunctionGuard {
           if (activatedRouteSnapshot.data) {
             if (activatedRouteSnapshot.data['authorities']) {
               if (session) {
-                for (const authority of activatedRouteSnapshot.data[
-                  'authorities'
-                ]) {
+                for (const authority of activatedRouteSnapshot.data['authorities']) {
                   if (session.hasAuthority(authority)) {
                     return true;
                   }

@@ -37,9 +37,7 @@
   }
 </ng-template>
 
-
-
-<div class="mat-mdc-text-field-wrapper mdc-text-field "
+<div #connectionContainer class="mat-mdc-text-field-wrapper mdc-text-field "
   [class.mdc-text-field--filled]="!_hasOutline()"
   [class.mdc-text-field--outlined]="_hasOutline()">
   <div class="mat-mdc-form-field-flex">
@@ -66,7 +64,6 @@
 
 </div>
 
-
 <div class="mat-mdc-form-field-subscript-wrapper mat-mdc-form-field-bottom-align">
   @switch (_getDisplayedMessages()) {
     @case ('error') {
@@ -79,9 +76,9 @@
         @if (hintLabel) {
           <div [id]="_hintLabelId" class="mat-mdc-form-field-hint mat-mdc-form-field-bottom-align">{{hintLabel}}</div>
         }
-        <ng-content select="mat-hint:not([align='end'])"></ng-content>
+        <ng-content select="mat-hint:not([hintEnd])"></ng-content>
         <div class="mat-mdc-form-field-hint-spacer"></div>
-        <ng-content select="mat-hint[align='end']"></ng-content>
+        <ng-content select="mat-hint[hintEnd]"></ng-content>
       </div>
     }
   }

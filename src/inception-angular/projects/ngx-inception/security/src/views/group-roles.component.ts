@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, OnDestroy, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -40,8 +40,6 @@ import { SecurityService } from '../services/security.service';
   styleUrls: ['group-roles.component.css']
 })
 export class GroupRolesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
-  private securityService = inject(SecurityService);
-
   allRoles: Role[] = [];
 
   availableRoles$: Subject<Role[]> = new ReplaySubject<Role[]>(1);
@@ -59,6 +57,8 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
   readonly title = $localize`:@@security_group_roles_title:Group Roles`;
 
   userDirectoryId: string;
+
+  private securityService = inject(SecurityService);
 
   private subscriptions: Subscription = new Subscription();
 
