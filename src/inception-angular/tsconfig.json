@@ -22,10 +22,6 @@
     "types": [
       "@angular/localize"
     ],
-    "lib": [
-      "ES2022",
-      "dom"
-    ],
     "paths": {
       "ngx-inception": [
         "projects/ngx-inception/src/public-api.ts"

@@ -9,10 +9,6 @@
     "inlineSources": true,
     "types": [
       "@angular/localize"
-    ],
-    "lib": [
-      "dom",
-      "ES2022"
     ]
   },
   "angularCompilerOptions": {
