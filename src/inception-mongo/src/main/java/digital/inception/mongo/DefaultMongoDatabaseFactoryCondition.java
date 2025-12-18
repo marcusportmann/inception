@@ -17,6 +17,8 @@
 package digital.inception.mongo;
 
 import com.mongodb.ConnectionString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.env.Environment;
@@ -26,40 +28,74 @@ import org.springframework.util.StringUtils;
 /**
  * The {@code DefaultMongoDatabaseFactoryCondition} class implements the condition that must be
  * matched to enable the default MongoDatabaseFactory, which is that the MongoDB configuration is
- * specified under spring.data.mongodb.
+ * specified under spring.data.mongodb, and the application MongoDB configuration under
+ * inception.application.mongodb must not be specified.
  *
  * @author Marcus Portmann
  */
 public class DefaultMongoDatabaseFactoryCondition implements Condition {
+
+  private static final Logger log =
+      LoggerFactory.getLogger(DefaultMongoDatabaseFactoryCondition.class);
 
   /** Constructs a new {@code DefaultMongoDatabaseFactoryCondition}. */
   public DefaultMongoDatabaseFactoryCondition() {}
 
   @Override
   public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+    Environment environment = context.getEnvironment();
+
+    String applicationMongoDbUri = environment.getProperty("inception.application.mongodb.uri");
+    if (StringUtils.hasText(applicationMongoDbUri)) {
+      // Expected: application config takes precedence, so default must not activate
+      log.debug(
+          "Default MongoDB disabled: 'inception.application.mongodb.uri' is set so application MongoDB configuration takes precedence ({})",
+          MongoUtil.sanitizedMongoDbUri(applicationMongoDbUri));
+      return false;
+    }
+
+    String springMongoDbUri = environment.getProperty("spring.data.mongodb.uri");
+    if (!StringUtils.hasText(springMongoDbUri)) {
+      // Expected when default mongo is not configured
+      log.debug("Default MongoDB disabled: property 'spring.data.mongodb.uri' is not set or blank");
+      return false;
+    }
+
+    String sanitizedMongoDbUri = MongoUtil.sanitizedMongoDbUri(springMongoDbUri);
+
     try {
-      Environment environment = context.getEnvironment();
+      ConnectionString connectionString = new ConnectionString(springMongoDbUri);
 
-      // Ensure that we have a MongoDB URI specified via spring.data.mongodb.uri
-      String mongodbUri = environment.getProperty("spring.data.mongodb.uri");
-
-      if (!StringUtils.hasText(mongodbUri)) {
-        return false;
+      if (StringUtils.hasText(connectionString.getDatabase())) {
+        log.debug(
+            "Default MongoDB enabled: 'spring.data.mongodb.uri' contains database ({})",
+            sanitizedMongoDbUri);
+        return true;
       }
 
-      /*
-       * Check if the MongoDB URI includes the database name, otherwise check for an explicit
-       * database name specified via spring.data.mongodb.database.
-       */
-      ConnectionString connectionString = new ConnectionString(mongodbUri);
-
-      if (!StringUtils.hasText(connectionString.getDatabase())) {
-        return StringUtils.hasText(environment.getProperty("spring.data.mongodb.database"));
+      String mongoDbName = environment.getProperty("spring.data.mongodb.database");
+      if (StringUtils.hasText(mongoDbName)) {
+        log.debug(
+            "Default MongoDB enabled: database provided via 'spring.data.mongodb.database' ({}) ({})",
+            sanitizedMongoDbUri,
+            mongoDbName);
+        return true;
       }
 
-      return true;
-    } catch (Throwable e) {
-      return true;
+      // Misconfiguration: URI present but no db anywhere
+      log.warn(
+          "Default MongoDB configuration incomplete: 'spring.data.mongodb.uri' does not include "
+              + "a database  and 'spring.data.mongodb.database' is not set ({})",
+          sanitizedMongoDbUri);
+      return false;
+
+    } catch (RuntimeException ex) {
+      // Fail closed: invalid URI should not cause this condition to match
+      log.warn(
+          "Invalid MongoDB URI in property 'spring.data.mongodb.uri' ({})",
+          sanitizedMongoDbUri,
+          ex);
+      return false;
     }
   }
 }

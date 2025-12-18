@@ -205,7 +205,7 @@ public class Status implements Serializable {
   }
 
   /**
-   * Set the date the status is effective from.
+   * Sets the date the status is effective from.
    *
    * @param effectiveFrom the date the status is effective from
    */
@@ -214,7 +214,7 @@ public class Status implements Serializable {
   }
 
   /**
-   * Set the date the status is effective to.
+   * Sets the date the status is effective to.
    *
    * @param effectiveTo the date the status is effective to
    */
@@ -223,7 +223,7 @@ public class Status implements Serializable {
   }
 
   /**
-   * Set the party the status is associated with.
+   * Sets the party the status is associated with.
    *
    * @param party the party the status is associated with
    */
@@ -238,7 +238,7 @@ public class Status implements Serializable {
   }
 
   /**
-   * Set the code for the status type.
+   * Sets the code for the status type.
    *
    * @param type the code for the status type
    */

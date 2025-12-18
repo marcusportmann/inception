@@ -47,6 +47,8 @@ import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.FormDefinition;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
+import digital.inception.operations.model.InteractionSortBy;
+import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
@@ -71,7 +73,7 @@ import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
-import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowDocumentSummaries;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
@@ -108,7 +110,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
   /**
    * Constructs a new {@code WorkflowApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param workflowService the Workflow Service
    */
   public WorkflowApiControllerImpl(
@@ -127,22 +129,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.WorkflowAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    try {
-      if (!workflowService.workflowExists(tenantId, cancelWorkflowRequest.getWorkflowId())) {
-        throw new WorkflowNotFoundException(tenantId, cancelWorkflowRequest.getWorkflowId());
-      }
-    } catch (WorkflowNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to cancel the workflow ("
-              + cancelWorkflowRequest.getWorkflowId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
     }
 
     workflowService.cancelWorkflow(tenantId, cancelWorkflowRequest, getAuthenticationName());
@@ -249,6 +235,10 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
+    if (workflowId == null) {
+      throw new InvalidArgumentException("workflowId");
+    }
+
     try {
       if (!workflowService.workflowExists(tenantId, workflowId)) {
         throw new WorkflowNotFoundException(tenantId, workflowId);
@@ -300,6 +290,10 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new InvalidArgumentException("workflowId");
     }
 
+    if (workflowNoteId == null) {
+      throw new InvalidArgumentException("workflowId");
+    }
+
     try {
       if (!workflowService.workflowExists(tenantId, workflowId)) {
         throw new WorkflowNotFoundException(tenantId, workflowId);
@@ -339,24 +333,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    try {
-      if (!workflowService.workflowExists(tenantId, deleteWorkflowStepRequest.getWorkflowId())) {
-        throw new WorkflowNotFoundException(tenantId, deleteWorkflowStepRequest.getWorkflowId());
-      }
-    } catch (WorkflowNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to delete the workflow step ("
-              + deleteWorkflowStepRequest.getStep()
-              + ") for the workflow ("
-              + deleteWorkflowStepRequest.getWorkflowId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-
     workflowService.deleteWorkflowStep(tenantId, deleteWorkflowStepRequest);
   }
 
@@ -364,7 +340,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
   public void delinkInteractionFromWorkflow(
       UUID tenantId, DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest)
       throws InvalidArgumentException,
-          InteractionNotFoundException,
           WorkflowNotFoundException,
           WorkflowInteractionLinkNotFoundException,
           ServiceUnavailableException {
@@ -390,22 +365,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    try {
-      if (!workflowService.workflowExists(tenantId, finalizeWorkflowRequest.getWorkflowId())) {
-        throw new WorkflowNotFoundException(tenantId, finalizeWorkflowRequest.getWorkflowId());
-      }
-    } catch (WorkflowNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to finalize the workflow ("
-              + finalizeWorkflowRequest.getWorkflowId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-
     workflowService.finalizeWorkflow(tenantId, finalizeWorkflowRequest, getAuthenticationName());
   }
 
@@ -424,25 +383,29 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    try {
-      if (!workflowService.workflowExists(tenantId, finalizeWorkflowStepRequest.getWorkflowId())) {
-        throw new WorkflowNotFoundException(tenantId, finalizeWorkflowStepRequest.getWorkflowId());
-      }
-    } catch (WorkflowNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to finalize the workflow step ("
-              + finalizeWorkflowStepRequest.getStep()
-              + ") for the workflow ("
-              + finalizeWorkflowStepRequest.getWorkflowId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
+    workflowService.finalizeWorkflowStep(tenantId, finalizeWorkflowStepRequest);
+  }
+
+  @Override
+  public InteractionSummaries getInteractionSummariesForWorkflow(
+      UUID tenantId,
+      UUID workflowId,
+      String filter,
+      InteractionSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    workflowService.finalizeWorkflowStep(tenantId, finalizeWorkflowStepRequest);
+    return workflowService.getInteractionSummariesForWorkflow(
+        tenantId, workflowId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   @Override
@@ -547,12 +510,8 @@ public class WorkflowApiControllerImpl extends SecureApiController
     for (WorkflowDefinitionSummary workflowDefinitionSummary :
         workflowService.getWorkflowDefinitionSummaries(tenantId, workflowDefinitionCategoryId)) {
 
-      if ((hasAccessToFunction("Operations.OperationsAdministration"))
-          || (hasAccessToFunction("Operations.WorkflowAdministration"))
-          || (hasWorkflowDefinitionPermission(
-              workflowDefinitionSummary.getId(),
-              workflowDefinitionSummary.getVersion(),
-              WorkflowPermissionType.INITIATE_WORKFLOW))) {
+      if (hasWorkflowDefinitionPermission(
+          workflowDefinitionSummary.getPermissions(), WorkflowPermissionType.INITIATE_WORKFLOW)) {
 
         filteredWorkflowDefinitionSummaries.add(workflowDefinitionSummary);
       }
@@ -652,7 +611,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public WorkflowDocuments getWorkflowDocuments(
+  public WorkflowDocumentSummaries getWorkflowDocumentSummariesForWorkflow(
       UUID tenantId,
       UUID workflowId,
       String filter,
@@ -669,7 +628,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    return workflowService.getWorkflowDocuments(
+    return workflowService.getWorkflowDocumentSummariesForWorkflow(
         tenantId, workflowId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
@@ -763,6 +722,19 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
+    WorkflowDefinition workflowDefinition =
+        workflowService.getWorkflowDefinition(initiateWorkflowRequest.getDefinitionId());
+
+    if (!hasWorkflowDefinitionPermission(
+        workflowDefinition.getPermissions(), WorkflowPermissionType.INITIATE_WORKFLOW)) {
+      throw new AccessDeniedException(
+          "No permission ("
+              + WorkflowPermissionType.INITIATE_WORKFLOW
+              + ") for the workflow definition ("
+              + initiateWorkflowRequest.getDefinitionId()
+              + ")");
+    }
+
     Workflow workflow =
         workflowService.initiateWorkflow(
             tenantId, initiateWorkflowRequest, getAuthenticationName());
@@ -780,24 +752,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.WorkflowAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    try {
-      if (!workflowService.workflowExists(tenantId, initiateWorkflowStepRequest.getWorkflowId())) {
-        throw new WorkflowNotFoundException(tenantId, initiateWorkflowStepRequest.getWorkflowId());
-      }
-    } catch (WorkflowNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to initiate the workflow step ("
-              + initiateWorkflowStepRequest.getStep()
-              + ") for the workflow ("
-              + initiateWorkflowStepRequest.getWorkflowId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
     }
 
     WorkflowStep workflowStep =
@@ -941,22 +895,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    try {
-      if (!workflowService.workflowExists(tenantId, suspendWorkflowRequest.getWorkflowId())) {
-        throw new WorkflowNotFoundException(tenantId, suspendWorkflowRequest.getWorkflowId());
-      }
-    } catch (WorkflowNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to suspend the workflow ("
-              + suspendWorkflowRequest.getWorkflowId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-
     workflowService.suspendWorkflow(tenantId, suspendWorkflowRequest, getAuthenticationName());
   }
 
@@ -973,24 +911,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.WorkflowAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    try {
-      if (!workflowService.workflowExists(tenantId, suspendWorkflowStepRequest.getWorkflowId())) {
-        throw new WorkflowNotFoundException(tenantId, suspendWorkflowStepRequest.getWorkflowId());
-      }
-    } catch (WorkflowNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to suspend the workflow step ("
-              + suspendWorkflowStepRequest.getStep()
-              + ") for the workflow ("
-              + suspendWorkflowStepRequest.getWorkflowId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
     }
 
     workflowService.suspendWorkflowStep(tenantId, suspendWorkflowStepRequest);
@@ -1010,22 +930,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    try {
-      if (!workflowService.workflowExists(tenantId, unsuspendWorkflowRequest.getWorkflowId())) {
-        throw new WorkflowNotFoundException(tenantId, unsuspendWorkflowRequest.getWorkflowId());
-      }
-    } catch (WorkflowNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to unsuspend the workflow ("
-              + unsuspendWorkflowRequest.getWorkflowId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-
     workflowService.unsuspendWorkflow(tenantId, unsuspendWorkflowRequest);
   }
 
@@ -1042,24 +946,6 @@ public class WorkflowApiControllerImpl extends SecureApiController
         && (!hasAccessToFunction("Operations.WorkflowAdministration"))
         && (!hasAccessToTenant(tenantId))) {
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
-    }
-
-    try {
-      if (!workflowService.workflowExists(tenantId, unsuspendWorkflowStepRequest.getWorkflowId())) {
-        throw new WorkflowNotFoundException(tenantId, unsuspendWorkflowStepRequest.getWorkflowId());
-      }
-    } catch (WorkflowNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to unsuspend the workflow step ("
-              + unsuspendWorkflowStepRequest.getStep()
-              + ") for the workflow ("
-              + unsuspendWorkflowStepRequest.getWorkflowId()
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
     }
 
     workflowService.unsuspendWorkflowStep(tenantId, unsuspendWorkflowStepRequest);
@@ -1173,21 +1059,21 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    //    UUID workflowId =
-    //        workflowService.getWorkflowIdForWorkflowDocument(
-    //            tenantId, verifyWorkflowDocumentRequest.getWorkflowDocumentId());
-    //
-    //    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
-    //        && (!hasAccessToFunction("Operations.WorkflowAdministration"))
-    //        && (!hasWorkflowDefinitionPermission(
-    //            tenantId, workflowId, WorkflowPermissionType.INITIATE_WORKFLOW))) {
-    //      throw new AccessDeniedException(
-    //          "No permission ("
-    //              + WorkflowPermissionType.INITIATE_WORKFLOW
-    //              + ") for workflow ("
-    //              + workflowId
-    //              + ")");
-    //    }
+    UUID workflowId =
+        workflowService.getWorkflowIdForWorkflowDocument(
+            tenantId, verifyWorkflowDocumentRequest.getWorkflowDocumentId());
+
+    if (!hasWorkflowDefinitionPermission(
+        tenantId, workflowId, WorkflowPermissionType.VERIFY_WORKFLOW_DOCUMENT)) {
+      throw new AccessDeniedException(
+          "No permission ("
+              + WorkflowPermissionType.VERIFY_WORKFLOW_DOCUMENT
+              + ") for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")");
+    }
 
     workflowService.verifyWorkflowDocument(
         tenantId, verifyWorkflowDocumentRequest, getAuthenticationName());
@@ -1219,59 +1105,60 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
+    UUID workflowId =
+        workflowService.getWorkflowIdForWorkflowDocument(
+            tenantId, waiveWorkflowDocumentRequest.getWorkflowDocumentId());
+
+    if (!hasWorkflowDefinitionPermission(
+        tenantId, workflowId, WorkflowPermissionType.WAIVE_WORKFLOW_DOCUMENT)) {
+      throw new AccessDeniedException(
+          "No permission ("
+              + WorkflowPermissionType.WAIVE_WORKFLOW_DOCUMENT
+              + ") for the workflow ("
+              + workflowId
+              + ") for the tenant ("
+              + tenantId
+              + ")");
+    }
+
     workflowService.waiveWorkflowDocument(
         tenantId, waiveWorkflowDocumentRequest, getAuthenticationName());
   }
 
   /**
-   * Confirm that the user associated with the authenticated request has the specified permission
-   * for the workflow definition with the specified ID and version.
+   * Confirm that the user associated with the authenticated request has the specified workflow
+   * permission type.
    *
-   * @param workflowDefinitionId the ID for the workflow definition
-   * @param workflowDefinitionVersion the version of the workflow definition
+   * @param workflowDefinitionPermissions the workflow definition permissions for the workflow
+   *     definition
    * @param permissionType the workflow permission type
    * @return {@code true} if the user associated with the authenticated request has the specified
-   *     permission for the workflow definition with the specified ID and version or {@code false}
-   *     otherwise
+   *     workflow permission type or {@code false} otherwise
    */
   private boolean hasWorkflowDefinitionPermission(
-      String workflowDefinitionId,
-      int workflowDefinitionVersion,
-      WorkflowPermissionType permissionType)
-      throws ServiceUnavailableException {
-    if (isSecurityDisabled()) {
+      List<WorkflowDefinitionPermission> workflowDefinitionPermissions,
+      WorkflowPermissionType permissionType) {
+    if (isSecurityDisabled()
+        || hasRole("Administrator")
+        || hasRole("WorkflowEngine")
+        || hasAccessToFunction("Operations.OperationsAdministration")
+        || hasAccessToFunction("Operations.WorkflowAdministration")) {
       return true;
     }
 
-    try {
-      List<WorkflowDefinitionPermission> workflowDefinitionPermissions =
-          workflowService.getWorkflowDefinitionPermissions(
-              workflowDefinitionId, workflowDefinitionVersion);
+    // If no permissions have been defined for the workflow definition, allow access by default
+    // TODO: Verify if we should deny by default here instead -- MARCUS
+    if (workflowDefinitionPermissions.isEmpty()) {
+      return true;
+    }
 
-      // If no permissions have been defined for the workflow definition, allow access by default
-      // TODO: Verify if we should deny by default here instead -- MARCUS
-      if (workflowDefinitionPermissions.isEmpty()) {
-        return true;
-      }
-
-      for (WorkflowDefinitionPermission workflowDefinitionPermission :
-          workflowDefinitionPermissions) {
-        if (workflowDefinitionPermission.getType().equals(permissionType)) {
-          if (hasRole(workflowDefinitionPermission.getRoleCode())) {
-            return true;
-          }
+    for (WorkflowDefinitionPermission workflowDefinitionPermission :
+        workflowDefinitionPermissions) {
+      if (workflowDefinitionPermission.getType().equals(permissionType)) {
+        if (hasRole(workflowDefinitionPermission.getRoleCode())) {
+          return true;
         }
       }
-    } catch (WorkflowDefinitionVersionNotFoundException e) {
-      // Do nothing, we will return false below
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to verify whether the user associated with the authenticated request has the permission ("
-              + permissionType.code()
-              + ") for the workflow definition ("
-              + workflowDefinitionId
-              + ")",
-          e);
     }
 
     return false;
@@ -1294,13 +1181,16 @@ public class WorkflowApiControllerImpl extends SecureApiController
       WorkflowDefinitionId workflowDefinitionId =
           workflowService.getWorkflowDefinitionIdForWorkflow(tenantId, workflowId);
 
-      return hasWorkflowDefinitionPermission(
-          workflowDefinitionId.getId(), workflowDefinitionId.getVersion(), permissionType);
+      WorkflowDefinition workflowDefinition =
+          workflowService.getWorkflowDefinitionVersion(
+              workflowDefinitionId.getId(), workflowDefinitionId.getVersion());
+
+      return hasWorkflowDefinitionPermission(workflowDefinition.getPermissions(), permissionType);
     } catch (WorkflowNotFoundException e) {
       // Do nothing, we will return false below
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
-          "Failed to verify whether the user associated with the authenticated request has the permission ("
+          "Failed to verify whether the user associated with the authenticated request has the workflow permission type ("
               + permissionType.code()
               + ") for the workflow ("
               + workflowId

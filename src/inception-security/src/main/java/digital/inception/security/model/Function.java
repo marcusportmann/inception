@@ -184,7 +184,7 @@ public class Function implements java.io.Serializable {
   }
 
   /**
-   * Set the code for the function.
+   * Sets the code for the function.
    *
    * @param code the code for the function
    */
@@ -193,7 +193,7 @@ public class Function implements java.io.Serializable {
   }
 
   /**
-   * Set the description for the function.
+   * Sets the description for the function.
    *
    * @param description the description for the function
    */
@@ -202,7 +202,7 @@ public class Function implements java.io.Serializable {
   }
 
   /**
-   * Set the name of the function.
+   * Sets the name of the function.
    *
    * @param name the name of the function
    */
@@ -211,7 +211,7 @@ public class Function implements java.io.Serializable {
   }
 
   /**
-   * Set the roles the user is associated with.
+   * Sets the roles the user is associated with.
    *
    * @param roles the roles the user is associated with
    */

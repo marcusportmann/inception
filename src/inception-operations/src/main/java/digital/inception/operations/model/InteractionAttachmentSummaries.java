@@ -90,7 +90,7 @@ public class InteractionAttachmentSummaries implements Serializable {
   private int pageSize;
 
   /** The method used to sort the interaction attachment summaries e.g. by name. */
-  @Schema(description = "The method used to sort the interaction summaries e.g. by name")
+  @Schema(description = "The method used to sort the interaction attachment summaries e.g. by name")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private InteractionAttachmentSortBy sortBy;

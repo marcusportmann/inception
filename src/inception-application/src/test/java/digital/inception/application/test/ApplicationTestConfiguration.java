@@ -44,7 +44,7 @@ public class ApplicationTestConfiguration {
   /**
    * Constructs a new {@code ApplicationTestConfiguration}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public ApplicationTestConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
@@ -54,7 +54,7 @@ public class ApplicationTestConfiguration {
    * Returns the application test entity manager factory bean associated with the application data
    * source.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param dataSource the application data source
    * @return the application test entity manager factory bean associated with the application data
    *     source

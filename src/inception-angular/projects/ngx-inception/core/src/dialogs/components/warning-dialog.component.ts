@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NgIf } from '@angular/common';
+
 import { Component, Inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -28,7 +28,7 @@ import { DialogData } from '../services/dialog-data';
 @Component({
   selector: 'inception-core-warning-dialog',
   standalone: true,
-  imports: [MatButton, NgIf],
+  imports: [MatButton],
   template: `
     <div class="header">
       <i class="fas fa-3x fa-exclamation-triangle"></i>
@@ -39,15 +39,15 @@ import { DialogData } from '../services/dialog-data';
       </span>
     </div>
     <div class="button">
-      <button
-        mat-flat-button
-        color="warn"
-        *ngIf="data.buttonText; else defaultButton"
-        (click)="ok()"
-        tabindex="-1">
-        {{ data.buttonText }}
-      </button>
-      <ng-template #defaultButton>
+      @if (data.buttonText) {
+        <button
+          mat-flat-button
+          color="warn"
+          (click)="ok()"
+          tabindex="-1">
+          {{ data.buttonText }}
+        </button>
+      } @else {
         <button
           mat-flat-button
           color="warn"
@@ -56,9 +56,9 @@ import { DialogData } from '../services/dialog-data';
           i18n="@@warning_dialog_button_ok">
           OK
         </button>
-      </ng-template>
+      }
     </div>
-  `,
+    `,
   host: {
     class: 'warning-dialog',
     '(document:keydown.enter)': 'onEnter($event)'

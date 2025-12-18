@@ -272,7 +272,7 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the description for the document attribute.
+   * Sets the description for the document attribute.
    *
    * @param description the description for the document attribute
    */
@@ -281,7 +281,7 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the document definition the document attribute definition is associated with.
+   * Sets the document definition the document attribute definition is associated with.
    *
    * @param documentDefinition the document definition the document attribute definition is
    *     associated with
@@ -297,7 +297,7 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the label for the document attribute.
+   * Sets the label for the document attribute.
    *
    * @param label the label for the document attribute
    */
@@ -306,7 +306,7 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the name of the document attribute.
+   * Sets the name of the document attribute.
    *
    * @param name the name of the document attribute
    */
@@ -315,7 +315,7 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate the value for a document attribute
+   * Sets the regular expression pattern used to validate the value for a document attribute
    * associated with the document attribute definition.
    *
    * @param pattern the regular expression pattern used to validate the value for a document
@@ -335,7 +335,7 @@ public class DocumentAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the attribute type for the document attribute.
+   * Sets the attribute type for the document attribute.
    *
    * @param type the attribute type for the document attribute
    */

@@ -227,7 +227,7 @@ public class SkillType implements Serializable {
   }
 
   /**
-   * Set the code for the skill type.
+   * Sets the code for the skill type.
    *
    * @param code the code for the skill type
    */
@@ -236,7 +236,7 @@ public class SkillType implements Serializable {
   }
 
   /**
-   * Set the description for the skill type.
+   * Sets the description for the skill type.
    *
    * @param description the description for the skill type
    */
@@ -245,7 +245,7 @@ public class SkillType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the skill type.
+   * Sets the Unicode locale identifier for the skill type.
    *
    * @param localeId the Unicode locale identifier for the skill type
    */
@@ -254,7 +254,7 @@ public class SkillType implements Serializable {
   }
 
   /**
-   * Set the name of the skill type.
+   * Sets the name of the skill type.
    *
    * @param name the name of the skill type
    */
@@ -263,7 +263,7 @@ public class SkillType implements Serializable {
   }
 
   /**
-   * Set the code for the parent skill type the skill type is associated with.
+   * Sets the code for the parent skill type the skill type is associated with.
    *
    * @param parent the code for the parent skill type the skill type is associated with
    */
@@ -272,7 +272,7 @@ public class SkillType implements Serializable {
   }
 
   /**
-   * Set the sort order for the skill type.
+   * Sets the sort order for the skill type.
    *
    * @param sortOrder the sort order for the skill type
    */
@@ -281,7 +281,7 @@ public class SkillType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the skill type is specific to.
+   * Sets the ID for the tenant the skill type is specific to.
    *
    * @param tenantId the ID for the tenant the skill type is specific to
    */

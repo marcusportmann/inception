@@ -398,7 +398,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Set the date the association is effective from.
+   * Sets the date the association is effective from.
    *
    * @param effectiveFrom the date the association is effective from
    */
@@ -407,7 +407,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Set the date the association is effective to.
+   * Sets the date the association is effective to.
    *
    * @param effectiveTo the date the association is effective to
    */
@@ -416,7 +416,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Set the ID for the first party in the association.
+   * Sets the ID for the first party in the association.
    *
    * @param firstPartyId the ID for the first party in the association
    */
@@ -425,7 +425,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Set the ID for the association.
+   * Sets the ID for the association.
    *
    * @param id the ID for the association
    */
@@ -434,7 +434,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Set the properties for the association.
+   * Sets the properties for the association.
    *
    * @param properties the properties for the association
    */
@@ -445,7 +445,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Set the ID for the second party in the association.
+   * Sets the ID for the second party in the association.
    *
    * @param secondPartyId the ID for the second party in the association
    */
@@ -454,7 +454,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the association is associated with.
+   * Sets the ID for the tenant the association is associated with.
    *
    * @param tenantId the ID for the tenant the association is associated with
    */
@@ -463,7 +463,7 @@ public class Association implements Serializable {
   }
 
   /**
-   * Set the code for the association type.
+   * Sets the code for the association type.
    *
    * @param type the code for the association type
    */

@@ -244,7 +244,7 @@ public interface ConfigService {
   boolean idExists(String id) throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Set the config.
+   * Sets the config.
    *
    * @param config the config
    * @throws InvalidArgumentException if an argument is invalid
@@ -253,7 +253,7 @@ public interface ConfigService {
   void setConfig(Config config) throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Set the config.
+   * Sets the config.
    *
    * @param id the ID for the config
    * @param value the value for the config

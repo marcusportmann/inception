@@ -605,7 +605,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the code for the task type.
+   * Sets the code for the task type.
    *
    * @param code the code for the task type
    */
@@ -623,7 +623,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the event types that should be tracked for tasks of this type.
+   * Sets the event types that should be tracked for tasks of this type.
    *
    * @param eventTypes the event types that should be tracked for tasks of this type
    */
@@ -632,7 +632,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the event types that should be tracked for tasks of this type with task data.
+   * Sets the event types that should be tracked for tasks of this type with task data.
    *
    * @param eventTypesWithTaskData the event types that should be tracked for tasks of this type
    *     with task data
@@ -642,7 +642,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the amount of time in milliseconds after which a locked and executing task of this type
+   * Sets the amount of time in milliseconds after which a locked and executing task of this type
    * will be considered hung and will be reset.
    *
    * @param executionTimeout the amount of time in milliseconds after which a locked and executing
@@ -653,7 +653,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the fully qualified name of the Java class that executes tasks of this type.
+   * Sets the fully qualified name of the Java class that executes tasks of this type.
    *
    * @param executorClass the fully qualified name of the Java class that executes tasks of this
    *     type
@@ -663,7 +663,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the maximum execution attempts for tasks of this type.
+   * Sets the maximum execution attempts for tasks of this type.
    *
    * @param maximumExecutionAttempts the maximum execution attempts for tasks of this type
    */
@@ -672,7 +672,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the name of the task type.
+   * Sets the name of the task type.
    *
    * @param name the name of the task type
    */
@@ -681,7 +681,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the priority for tasks of this type.
+   * Sets the priority for tasks of this type.
    *
    * @param priority the priority for tasks of this type
    */
@@ -690,7 +690,7 @@ public class TaskType implements Serializable {
   }
 
   /**
-   * Set the retry delay for tasks of this type.
+   * Sets the retry delay for tasks of this type.
    *
    * @param retryDelay the retry delay for tasks of this type
    */

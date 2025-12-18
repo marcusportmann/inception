@@ -50,7 +50,7 @@ public class DataWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code DataWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param dataService the Data Service
    */
   public DataWebService(ApplicationContext applicationContext, DataService dataService) {

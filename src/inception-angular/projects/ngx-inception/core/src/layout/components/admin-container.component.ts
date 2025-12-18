@@ -15,8 +15,8 @@
  */
 
 
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+
+import { Component, Inject, OnDestroy, OnInit, DOCUMENT } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterOutlet } from '@angular/router';
 import { PerfectScrollbarModule } from 'ngx-om-perfect-scrollbar';
 

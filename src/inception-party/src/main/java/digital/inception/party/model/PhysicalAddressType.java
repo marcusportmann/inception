@@ -238,7 +238,7 @@ public class PhysicalAddressType implements Serializable {
   }
 
   /**
-   * Set the code for the physical address type.
+   * Sets the code for the physical address type.
    *
    * @param code the code for the physical address type
    */
@@ -247,7 +247,7 @@ public class PhysicalAddressType implements Serializable {
   }
 
   /**
-   * Set the description for the physical address type.
+   * Sets the description for the physical address type.
    *
    * @param description the description for the physical address type
    */
@@ -256,7 +256,7 @@ public class PhysicalAddressType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the physical address type.
+   * Sets the Unicode locale identifier for the physical address type.
    *
    * @param localeId the Unicode locale identifier for the physical address type
    */
@@ -265,7 +265,7 @@ public class PhysicalAddressType implements Serializable {
   }
 
   /**
-   * Set the name of the physical address type.
+   * Sets the name of the physical address type.
    *
    * @param name the name of the physical address type
    */
@@ -274,7 +274,7 @@ public class PhysicalAddressType implements Serializable {
   }
 
   /**
-   * Set the sort order for the physical address type.
+   * Sets the sort order for the physical address type.
    *
    * @param sortOrder the sort order for the physical address type
    */
@@ -283,7 +283,7 @@ public class PhysicalAddressType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the physical address type is specific to.
+   * Sets the ID for the tenant the physical address type is specific to.
    *
    * @param tenantId the ID for the tenant the physical address type is specific to
    */

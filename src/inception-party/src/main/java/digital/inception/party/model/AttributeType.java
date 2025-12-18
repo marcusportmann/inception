@@ -374,7 +374,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the code for the attribute type category the attribute type is associated with.
+   * Sets the code for the attribute type category the attribute type is associated with.
    *
    * @param category the code for the attribute type category the attribute type is associated with
    */
@@ -383,7 +383,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the code for the attribute type.
+   * Sets the code for the attribute type.
    *
    * @param code the code for the attribute type
    */
@@ -392,7 +392,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the description for the attribute type.
+   * Sets the description for the attribute type.
    *
    * @param description the description for the attribute type
    */
@@ -401,7 +401,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the attribute type.
+   * Sets the Unicode locale identifier for the attribute type.
    *
    * @param localeId the Unicode locale identifier for the attribute type
    */
@@ -410,7 +410,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the name of the attribute type.
+   * Sets the name of the attribute type.
    *
    * @param name the name of the attribute type
    */
@@ -419,7 +419,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the attribute type is associated with.
+   * Sets the codes for the party types the attribute type is associated with.
    *
    * @param partyTypes the codes for the party types the attribute type is associated with
    */
@@ -428,7 +428,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a string value for the attribute type.
+   * Sets the regular expression pattern used to validate a string value for the attribute type.
    *
    * @param pattern the regular expression pattern used to validate a string value for the attribute
    *     type
@@ -438,7 +438,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the sort order for the attribute type.
+   * Sets the sort order for the attribute type.
    *
    * @param sortOrder the sort order for the attribute type
    */
@@ -447,7 +447,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the attribute type is specific to.
+   * Sets the ID for the tenant the attribute type is specific to.
    *
    * @param tenantId the ID for the tenant the attribute type is specific to
    */
@@ -456,7 +456,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the measurement unit type for the attribute type.
+   * Sets the measurement unit type for the attribute type.
    *
    * @param unitType the measurement unit type for the attribute type
    */
@@ -465,7 +465,7 @@ public class AttributeType implements Serializable {
   }
 
   /**
-   * Set the value type for the attribute type.
+   * Sets the value type for the attribute type.
    *
    * @param valueType the value type for the attribute type
    */

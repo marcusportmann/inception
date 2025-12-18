@@ -259,7 +259,7 @@ public class QualificationType implements Serializable {
   }
 
   /**
-   * Set the code for the qualification type.
+   * Sets the code for the qualification type.
    *
    * @param code the code for the qualification type
    */
@@ -268,7 +268,7 @@ public class QualificationType implements Serializable {
   }
 
   /**
-   * Set the description for the qualification type.
+   * Sets the description for the qualification type.
    *
    * @param description the description for the qualification type
    */
@@ -277,7 +277,7 @@ public class QualificationType implements Serializable {
   }
 
   /**
-   * Set the code for the field of study for the qualification type.
+   * Sets the code for the field of study for the qualification type.
    *
    * @param fieldOfStudy the code for the field of study for the qualification type
    */
@@ -286,7 +286,7 @@ public class QualificationType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the qualification type.
+   * Sets the Unicode locale identifier for the qualification type.
    *
    * @param localeId the Unicode locale identifier for the qualification type
    */
@@ -295,7 +295,7 @@ public class QualificationType implements Serializable {
   }
 
   /**
-   * Set the name of the qualification type.
+   * Sets the name of the qualification type.
    *
    * @param name the name of the qualification type
    */
@@ -304,7 +304,7 @@ public class QualificationType implements Serializable {
   }
 
   /**
-   * Set the sort order for the qualification type.
+   * Sets the sort order for the qualification type.
    *
    * @param sortOrder the sort order for the qualification type
    */
@@ -313,7 +313,7 @@ public class QualificationType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the qualification type is specific to.
+   * Sets the ID for the tenant the qualification type is specific to.
    *
    * @param tenantId the ID for the tenant the qualification type is specific to
    */

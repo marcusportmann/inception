@@ -224,7 +224,7 @@ public class GenerateTokenRequest implements Serializable {
   }
 
   /**
-   * Set the claims for the token.
+   * Sets the claims for the token.
    *
    * @param claims the claims for the token
    */
@@ -233,7 +233,7 @@ public class GenerateTokenRequest implements Serializable {
   }
 
   /**
-   * Set the description for the token.
+   * Sets the description for the token.
    *
    * @param description the description for the token
    */
@@ -242,7 +242,7 @@ public class GenerateTokenRequest implements Serializable {
   }
 
   /**
-   * Set the date the token expires.
+   * Sets the date the token expires.
    *
    * @param expiryDate the date the token expires
    */
@@ -251,7 +251,7 @@ public class GenerateTokenRequest implements Serializable {
   }
 
   /**
-   * Set the name of the token.
+   * Sets the name of the token.
    *
    * @param name the name of the token
    */
@@ -260,7 +260,7 @@ public class GenerateTokenRequest implements Serializable {
   }
 
   /**
-   * Set the token type.
+   * Sets the token type.
    *
    * @param type the token type
    */
@@ -269,7 +269,7 @@ public class GenerateTokenRequest implements Serializable {
   }
 
   /**
-   * Set the date the token is valid from.
+   * Sets the date the token is valid from.
    *
    * @param validFromDate the date the token is valid from
    */

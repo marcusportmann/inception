@@ -232,7 +232,7 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
   }
 
   /**
-   * Set the code for the preference type.
+   * Sets the code for the preference type.
    *
    * @param preferenceType the code for the preference type
    */
@@ -241,7 +241,7 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
   }
 
   /**
-   * Set the code for the role type.
+   * Sets the code for the role type.
    *
    * @param roleType the code for the role type
    */
@@ -250,7 +250,7 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
   }
 
   /**
-   * Set the constraint type.
+   * Sets the constraint type.
    *
    * @param type the constraint type
    */
@@ -259,7 +259,7 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
   }
 
   /**
-   * Set the value to apply when validating the preference value, e.g. the length, the regular
+   * Sets the value to apply when validating the preference value, e.g. the length, the regular
    * expression pattern, etc.
    *
    * @param value the value to apply when validating the preference value

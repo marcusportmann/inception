@@ -49,7 +49,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
   /**
    * Constructs a new {@code ConfigServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param configRepository the Config Repository
    * @param configSummaryRepository the Config Summary Repository
    */

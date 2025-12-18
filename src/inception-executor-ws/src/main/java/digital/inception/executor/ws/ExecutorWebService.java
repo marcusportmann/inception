@@ -62,7 +62,7 @@ public class ExecutorWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code ExecutorWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param executorService the Executor Service
    */
   public ExecutorWebService(

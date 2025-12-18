@@ -221,7 +221,7 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Set the data.
+   * Sets the data.
    *
    * @param data the data
    */
@@ -231,7 +231,7 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Set the filename for the data, which will be stored as the filename parameter on the MIME type
+   * Sets the filename for the data, which will be stored as the filename parameter on the MIME type
    * for the data.
    *
    * @param filename the filename for the data
@@ -241,7 +241,7 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Set the MIME type for the data.
+   * Sets the MIME type for the data.
    *
    * @param mimeType the MIME type for the data
    */
@@ -250,7 +250,7 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Set the name for the data, which will be stored as the name parameter on the MIME type for the
+   * Sets the name for the data, which will be stored as the name parameter on the MIME type for the
    * data.
    *
    * @param name the name for the data

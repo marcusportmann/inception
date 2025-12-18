@@ -27,9 +27,6 @@ import org.springframework.dao.DataAccessResourceFailureException;
  */
 public final class OracleUtil {
 
-  /** Private default constructor to prevent instantiation. */
-  private OracleUtil() {}
-
   /**
    * Set of Oracle error codes that typically indicate transient, retryable failures such as
    * connection loss, listener/network issues, RAC/TAF failover, or database startup/shutdown.
@@ -64,6 +61,9 @@ public final class OracleUtil {
           // RAC/TAF failover indicator
           "ORA-25408" // cannot safely replay a call
           );
+
+  /** Private default constructor to prevent instantiation. */
+  private OracleUtil() {}
 
   /**
    * Determine whether the given exception represents a retryable Oracle error.

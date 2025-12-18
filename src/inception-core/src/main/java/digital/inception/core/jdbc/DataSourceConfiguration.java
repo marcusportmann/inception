@@ -178,7 +178,7 @@ public class DataSourceConfiguration implements Serializable {
   }
 
   /**
-   * Set the fully qualified name of the data source class used to connect to the database.
+   * Sets the fully qualified name of the data source class used to connect to the database.
    *
    * @param className the fully qualified name of the data source class used to connect to the
    *     database
@@ -188,7 +188,7 @@ public class DataSourceConfiguration implements Serializable {
   }
 
   /**
-   * Set the maximum size of the database connection pool used to connect to the database.
+   * Sets the maximum size of the database connection pool used to connect to the database.
    *
    * @param maxPoolSize the maximum size of the database connection pool used to connect to the
    *     database
@@ -198,7 +198,7 @@ public class DataSourceConfiguration implements Serializable {
   }
 
   /**
-   * Set the minimum size of the database connection pool used to connect to the database.
+   * Sets the minimum size of the database connection pool used to connect to the database.
    *
    * @param minPoolSize the minimum size of the database connection pool used to connect to the
    *     database
@@ -208,7 +208,7 @@ public class DataSourceConfiguration implements Serializable {
   }
 
   /**
-   * Set the password for the database.
+   * Sets the password for the database.
    *
    * @param password the password for the database
    */
@@ -217,7 +217,7 @@ public class DataSourceConfiguration implements Serializable {
   }
 
   /**
-   * Set the URL used to connect to the database.
+   * Sets the URL used to connect to the database.
    *
    * @param url the URL used to connect to the database
    */
@@ -226,7 +226,7 @@ public class DataSourceConfiguration implements Serializable {
   }
 
   /**
-   * Set the username for the database.
+   * Sets the username for the database.
    *
    * @param username the username for the database
    */
@@ -235,7 +235,7 @@ public class DataSourceConfiguration implements Serializable {
   }
 
   /**
-   * Set the timeout in seconds when validating a connection in the database connection pool.
+   * Sets the timeout in seconds when validating a connection in the database connection pool.
    *
    * @param validationTimeout the timeout in seconds when validating a connection in the database
    *     connection pool

@@ -317,7 +317,7 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country of issue for the identification.
+   * Sets the ISO 3166-1 alpha-2 code for the country of issue for the identification.
    *
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the
    *     identification
@@ -327,7 +327,7 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Set the expiry date for the identification.
+   * Sets the expiry date for the identification.
    *
    * @param expiryDate the expiry date for the identification
    */
@@ -336,7 +336,7 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Set the ID for the identification.
+   * Sets the ID for the identification.
    *
    * @param id the ID for the identification
    */
@@ -345,7 +345,7 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Set the issue date for the identification.
+   * Sets the issue date for the identification.
    *
    * @param issueDate the issue date for the identification
    */
@@ -354,7 +354,7 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Set the number for the identification.
+   * Sets the number for the identification.
    *
    * @param number the number for the identification
    */
@@ -363,7 +363,7 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Set the party the identification is associated with.
+   * Sets the party the identification is associated with.
    *
    * @param party the party the identification is associated with
    */
@@ -378,7 +378,7 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Set the date the identification was provided.
+   * Sets the date the identification was provided.
    *
    * @param dateProvided the date the identification was provided
    */
@@ -387,7 +387,7 @@ public class Identification implements Serializable {
   }
 
   /**
-   * Set the code for the identification type.
+   * Sets the code for the identification type.
    *
    * @param type the code for the identification type
    */

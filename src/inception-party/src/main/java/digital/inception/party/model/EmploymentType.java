@@ -256,7 +256,7 @@ public class EmploymentType implements Serializable {
   }
 
   /**
-   * Set the code for the employment type.
+   * Sets the code for the employment type.
    *
    * @param code the code for the employment type
    */
@@ -265,7 +265,7 @@ public class EmploymentType implements Serializable {
   }
 
   /**
-   * Set the description for the employment type.
+   * Sets the description for the employment type.
    *
    * @param description the description for the employment type
    */
@@ -274,7 +274,7 @@ public class EmploymentType implements Serializable {
   }
 
   /**
-   * Set the code for the employment status the employment type is associated with.
+   * Sets the code for the employment status the employment type is associated with.
    *
    * @param employmentStatus the code for the employment status the employment type is associated
    *     with
@@ -284,7 +284,7 @@ public class EmploymentType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the employment type.
+   * Sets the Unicode locale identifier for the employment type.
    *
    * @param localeId the Unicode locale identifier for the employment type
    */
@@ -293,7 +293,7 @@ public class EmploymentType implements Serializable {
   }
 
   /**
-   * Set the name of the employment type.
+   * Sets the name of the employment type.
    *
    * @param name the name of the employment type
    */
@@ -302,7 +302,7 @@ public class EmploymentType implements Serializable {
   }
 
   /**
-   * Set the sort order for the employment type.
+   * Sets the sort order for the employment type.
    *
    * @param sortOrder the sort order for the employment type
    */
@@ -311,7 +311,7 @@ public class EmploymentType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the employment type is specific to.
+   * Sets the ID for the tenant the employment type is specific to.
    *
    * @param tenantId the ID for the tenant the employment type is specific to
    */

@@ -268,7 +268,7 @@ public class WorkflowEngine implements Serializable {
   }
 
   /**
-   * Set the attributes for the workflow engine.
+   * Sets the attributes for the workflow engine.
    *
    * @param attributes the attributes for the workflow engine
    */
@@ -279,7 +279,7 @@ public class WorkflowEngine implements Serializable {
   }
 
   /**
-   * Set the fully qualified name of the connector class for the workflow engine.
+   * Sets the fully qualified name of the connector class for the workflow engine.
    *
    * @param connectorClassName the fully qualified name of the connector class for the workflow
    *     engine
@@ -289,7 +289,7 @@ public class WorkflowEngine implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow engine.
+   * Sets the ID for the workflow engine.
    *
    * @param id the ID for the workflow engine
    */
@@ -298,7 +298,7 @@ public class WorkflowEngine implements Serializable {
   }
 
   /**
-   * Set the name of the workflow engine.
+   * Sets the name of the workflow engine.
    *
    * @param name the name of the workflow engine
    */

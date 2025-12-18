@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 
 /**
@@ -44,6 +45,7 @@ public enum TestEnum implements CodeEnum {
    *
    * @return the code for the test enum
    */
+  @JsonValue
   public String code() {
     return code;
   }

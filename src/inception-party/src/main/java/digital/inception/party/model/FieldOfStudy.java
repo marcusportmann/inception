@@ -215,7 +215,7 @@ public class FieldOfStudy implements Serializable {
   }
 
   /**
-   * Set the code for the field of study.
+   * Sets the code for the field of study.
    *
    * @param code the code for the field of study
    */
@@ -224,7 +224,7 @@ public class FieldOfStudy implements Serializable {
   }
 
   /**
-   * Set the description for the field of study.
+   * Sets the description for the field of study.
    *
    * @param description the description for the field of study
    */
@@ -233,7 +233,7 @@ public class FieldOfStudy implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the field of study.
+   * Sets the Unicode locale identifier for the field of study.
    *
    * @param localeId the Unicode locale identifier for the field of study
    */
@@ -242,7 +242,7 @@ public class FieldOfStudy implements Serializable {
   }
 
   /**
-   * Set the name of the field of study.
+   * Sets the name of the field of study.
    *
    * @param name the name of the field of study
    */
@@ -251,7 +251,7 @@ public class FieldOfStudy implements Serializable {
   }
 
   /**
-   * Set the sort order for the field of study.
+   * Sets the sort order for the field of study.
    *
    * @param sortOrder the sort order for the field of study
    */
@@ -260,7 +260,7 @@ public class FieldOfStudy implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the field of study is specific to.
+   * Sets the ID for the tenant the field of study is specific to.
    *
    * @param tenantId the ID for the tenant the field of study is specific to
    */

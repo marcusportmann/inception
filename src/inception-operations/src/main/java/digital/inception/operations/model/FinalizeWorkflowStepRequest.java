@@ -156,7 +156,7 @@ public class FinalizeWorkflowStepRequest implements Serializable {
   }
 
   /**
-   * Set the code for the next workflow step to initiate.
+   * Sets the code for the next workflow step to initiate.
    *
    * @param nextStep the code for the next workflow step to initiate
    */
@@ -165,7 +165,7 @@ public class FinalizeWorkflowStepRequest implements Serializable {
   }
 
   /**
-   * Set the status for the workflow step.
+   * Sets the status for the workflow step.
    *
    * @param status the status for the workflow step
    */
@@ -174,7 +174,7 @@ public class FinalizeWorkflowStepRequest implements Serializable {
   }
 
   /**
-   * Set the code for the workflow step.
+   * Sets the code for the workflow step.
    *
    * @param step the code for the workflow step
    */
@@ -183,7 +183,7 @@ public class FinalizeWorkflowStepRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow the workflow step is associated with.
+   * Sets the ID for the workflow the workflow step is associated with.
    *
    * @param workflowId the ID for the workflow the workflow step is associated with
    */

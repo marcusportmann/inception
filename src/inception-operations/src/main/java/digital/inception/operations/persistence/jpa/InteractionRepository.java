@@ -20,16 +20,12 @@ import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummary;
-import jakarta.persistence.LockModeType;
+import digital.inception.processor.persistence.jpa.ProcessableObjectJpaRepository;
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -42,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Marcus Portmann
  */
 public interface InteractionRepository
-    extends JpaRepository<Interaction, UUID>, JpaSpecificationExecutor<Interaction> {
+    extends ProcessableObjectJpaRepository<Interaction, UUID, InteractionStatus> {
 
   /**
    * Assign the interaction to the user.
@@ -208,26 +204,6 @@ public interface InteractionRepository
       Pageable pageable);
 
   /**
-   * Find the interactions queued for processing.
-   *
-   * @param tenantId the ID for the tenant
-   * @param lastProcessedBefore the date and time used to select failed interactions for
-   *     re-processing
-   * @param pageable the pagination information
-   * @return the interactions queued for processing
-   */
-  @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query(
-      "select i from Interaction i "
-          + "where i.tenantId = :tenantId "
-          + "and i.status = digital.inception.operations.model.InteractionStatus.QUEUED "
-          + "and (i.lastProcessed < :lastProcessedBefore or i.lastProcessed is null)")
-  List<Interaction> findInteractionsQueuedForProcessingForWrite(
-      @Param("tenantId") UUID tenantId,
-      @Param("lastProcessedBefore") OffsetDateTime lastProcessedBefore,
-      Pageable pageable);
-
-  /**
    * Find the subject for the interaction.
    *
    * @param interactionId the ID for the interaction
@@ -260,45 +236,6 @@ public interface InteractionRepository
       @Param("partyId") UUID partyId);
 
   /**
-   * Lock the interaction for processing.
-   *
-   * @param tenantId the ID for the tenant
-   * @param interactionId the ID for the interaction
-   * @param lockName the name of the lock
-   * @param when the date and time the interaction is locked for processing
-   */
-  @Transactional
-  @Modifying(clearAutomatically = true, flushAutomatically = true)
-  @Query(
-      "update Interaction i set i.lockName = :lockName, i.status = digital.inception.operations.model.InteractionStatus.PROCESSING, "
-          + "i.processingAttempts = i.processingAttempts + 1, i.lastProcessed = :when "
-          + "where i.tenantId = :tenantId and  i.id = :interactionId")
-  void lockInteractionForProcessing(
-      @Param("tenantId") UUID tenantId,
-      @Param("interactionId") UUID interactionId,
-      @Param("lockName") String lockName,
-      @Param("when") OffsetDateTime when);
-
-  /**
-   * Reset the interaction locks with the specified status.
-   *
-   * @param tenantId the ID for the tenant
-   * @param status the status
-   * @param newStatus the new status for the interactions
-   * @param lockName the lock name
-   */
-  @Transactional
-  @Modifying(clearAutomatically = true, flushAutomatically = true)
-  @Query(
-      "update Interaction i set i.status = :newStatus, i.lockName = null "
-          + "where i.tenantId = :tenantId and i.lockName = :lockName and i.status = :status")
-  void resetInteractionLocks(
-      @Param("tenantId") UUID tenantId,
-      @Param("status") InteractionStatus status,
-      @Param("newStatus") InteractionStatus newStatus,
-      @Param("lockName") String lockName);
-
-  /**
    * Transfer the interaction to the interaction source.
    *
    * @param interactionId the ID for the interaction
@@ -312,21 +249,4 @@ public interface InteractionRepository
   void transferInteraction(
       @Param("interactionId") UUID interactionId,
       @Param("interactionSourceId") UUID interactionSourceId);
-
-  /**
-   * Unlock the interaction.
-   *
-   * @param tenantId the ID for the tenant
-   * @param interactionId the ID for the interaction
-   * @param status the status for the interaction
-   */
-  @Transactional
-  @Modifying(clearAutomatically = true, flushAutomatically = true)
-  @Query(
-      "update Interaction i set i.status = :status, i.lockName = null "
-          + "where i.tenantId = :tenantId and i.id = :interactionId")
-  void unlockInteraction(
-      @Param("tenantId") UUID tenantId,
-      @Param("interactionId") UUID interactionId,
-      @Param("status") InteractionStatus status);
 }

@@ -99,7 +99,7 @@ public class ExecuteTaskRequest implements Serializable {
   }
 
   /**
-   * Set the task data.
+   * Sets the task data.
    *
    * @param taskData the task data
    */
@@ -108,7 +108,7 @@ public class ExecuteTaskRequest implements Serializable {
   }
 
   /**
-   * Set the code for the task type.
+   * Sets the code for the task type.
    *
    * @param taskType the code for the task type
    */

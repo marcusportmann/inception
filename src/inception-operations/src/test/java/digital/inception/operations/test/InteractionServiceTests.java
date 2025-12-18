@@ -171,7 +171,7 @@ public class InteractionServiceTests {
       properties.put("mail.imap.port", "3143");
     }
 
-    // Create session and store
+    // Create tne session and store
     Session session = Session.getInstance(properties);
     Store store = session.getStore(ENABLE_GREEN_MAIL_SECURITY ? "imaps" : "imap");
 
@@ -423,7 +423,7 @@ public class InteractionServiceTests {
     assertEquals(1, retrievedInteractionSummaries.getInteractionSummaries().size());
     assertEquals(
         retrievedInteractionId,
-        retrievedInteractionSummaries.getInteractionSummaries().get(0).getId());
+        retrievedInteractionSummaries.getInteractionSummaries().getFirst().getId());
 
     numberOfNewInteractions =
         backgroundInteractionSourceSynchronizer.synchronizeInteractionSources();
@@ -759,6 +759,7 @@ public class InteractionServiceTests {
       greenMail = new GreenMail(ServerSetupTest.SMTP_IMAP);
     }
 
+    @SuppressWarnings("unused")
     GreenMailUser greenMailUser = greenMail.setUser(TO_EMAIL_ADDRESS, TO_USERNAME, TO_PASSWORD);
 
     greenMail.start();

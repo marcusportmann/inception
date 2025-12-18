@@ -905,7 +905,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the attributes for the workflow.
+   * Sets the attributes for the workflow.
    *
    * @param attributes the attributes for the workflow
    */
@@ -916,7 +916,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow was canceled.
+   * Sets the date and time the workflow was canceled.
    *
    * @param canceled the date and time the workflow was canceled
    */
@@ -925,7 +925,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the person or system who canceled the workflow.
+   * Sets the person or system who canceled the workflow.
    *
    * @param canceledBy the person or system who canceled the workflow
    */
@@ -934,7 +934,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the reason the workflow was canceled.
+   * Sets the reason the workflow was canceled.
    *
    * @param cancellationReason the reason the workflow was canceled
    */
@@ -943,7 +943,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the JSON or XML data for the workflow.
+   * Sets the JSON or XML data for the workflow.
    *
    * @param data the JSON or XML data for the workflow
    */
@@ -952,7 +952,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow definition the workflow is associated with.
+   * Sets the ID for the workflow definition the workflow is associated with.
    *
    * @param definitionId the ID for the workflow definition the workflow is associated with
    */
@@ -961,7 +961,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the version of the workflow definition the workflow is associated with.
+   * Sets the version of the workflow definition the workflow is associated with.
    *
    * @param definitionVersion the version of the workflow definition the workflow is associated with
    */
@@ -970,7 +970,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the description for the workflow.
+   * Sets the description for the workflow.
    *
    * @param description the description for the workflow
    */
@@ -979,7 +979,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the ID for the corresponding process or case instance in the workflow engine.
+   * Sets the ID for the corresponding process or case instance in the workflow engine.
    *
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow
    *     engine
@@ -989,7 +989,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the external references for the workflow.
+   * Sets the external references for the workflow.
    *
    * @param externalReferences the external references for the workflow
    */
@@ -1000,7 +1000,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow was finalized.
+   * Sets the date and time the workflow was finalized.
    *
    * @param finalized the date and time the workflow was finalized
    */
@@ -1009,7 +1009,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the person or system that finalized the workflow.
+   * Sets the person or system that finalized the workflow.
    *
    * @param finalizedBy the person or system that finalized the workflow
    */
@@ -1018,7 +1018,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow.
+   * Sets the ID for the workflow.
    *
    * @param id the ID for the workflow
    */
@@ -1027,7 +1027,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow was initiated.
+   * Sets the date and time the workflow was initiated.
    *
    * @param initiated the date and time the workflow was initiated
    */
@@ -1036,7 +1036,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the person or system that initiated the workflow.
+   * Sets the person or system that initiated the workflow.
    *
    * @param initiatedBy the person or system that initiated the workflow
    */
@@ -1045,7 +1045,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the interaction links for the workflow.
+   * Sets the interaction links for the workflow.
    *
    * @param interactionLinks the interaction links for the workflow
    */
@@ -1056,7 +1056,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the name of the workflow.
+   * Sets the name of the workflow.
    *
    * @param name the name of the workflow
    */
@@ -1065,7 +1065,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the ID for the parent workflow.
+   * Sets the ID for the parent workflow.
    *
    * @param parentId the ID for the parent workflow
    */
@@ -1074,7 +1074,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the ID for the party the workflow is associated with.
+   * Sets the ID for the party the workflow is associated with.
    *
    * @param partyId the ID for the party the workflow is associated with
    */
@@ -1083,7 +1083,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the status of the workflow.
+   * Sets the status of the workflow.
    *
    * @param status the status of the workflow
    */
@@ -1092,7 +1092,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the workflow steps for the workflow.
+   * Sets the workflow steps for the workflow.
    *
    * @param steps the workflow steps for the workflow
    */
@@ -1103,7 +1103,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow was suspended.
+   * Sets the date and time the workflow was suspended.
    *
    * @param suspended the date and time the workflow was suspended
    */
@@ -1112,7 +1112,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the person or system that suspended the workflow.
+   * Sets the person or system that suspended the workflow.
    *
    * @param suspendedBy the person or system that suspended the workflow
    */
@@ -1121,7 +1121,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the workflow is associated with.
+   * Sets the ID for the tenant the workflow is associated with.
    *
    * @param tenantId the ID for the tenant the workflow is associated with
    */
@@ -1130,7 +1130,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow was last updated.
+   * Sets the date and time the workflow was last updated.
    *
    * @param updated the date and time the workflow was last updated
    */
@@ -1139,7 +1139,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the person or system that last updated the workflow.
+   * Sets the person or system that last updated the workflow.
    *
    * @param updatedBy the person or system that last updated the workflow
    */
@@ -1148,7 +1148,7 @@ public class Workflow implements Serializable {
   }
 
   /**
-   * Set the variables for the workflow.
+   * Sets the variables for the workflow.
    *
    * @param variables the variables for the workflow
    */

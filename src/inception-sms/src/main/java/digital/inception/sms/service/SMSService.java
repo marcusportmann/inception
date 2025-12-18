@@ -132,7 +132,7 @@ public interface SMSService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Set the status for the SMS.
+   * Sets the status for the SMS.
    *
    * @param smsId the ID for the SMS
    * @param status the new status for the SMS

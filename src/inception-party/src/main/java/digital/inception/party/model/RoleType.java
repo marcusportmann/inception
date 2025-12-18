@@ -259,7 +259,7 @@ public class RoleType implements Serializable {
   }
 
   /**
-   * Set the code for the role type.
+   * Sets the code for the role type.
    *
    * @param code the code for the role type
    */
@@ -268,7 +268,7 @@ public class RoleType implements Serializable {
   }
 
   /**
-   * Set the description for the role type.
+   * Sets the description for the role type.
    *
    * @param description the description for the role type
    */
@@ -277,7 +277,7 @@ public class RoleType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the role type.
+   * Sets the Unicode locale identifier for the role type.
    *
    * @param localeId the Unicode locale identifier for the role type
    */
@@ -286,7 +286,7 @@ public class RoleType implements Serializable {
   }
 
   /**
-   * Set the name of the role type.
+   * Sets the name of the role type.
    *
    * @param name the name of the role type
    */
@@ -295,7 +295,7 @@ public class RoleType implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the role type is associated with.
+   * Sets the codes for the party types the role type is associated with.
    *
    * @param partyTypes the codes for the party types the role type is associated with
    */
@@ -304,7 +304,7 @@ public class RoleType implements Serializable {
   }
 
   /**
-   * Set the sort order for the role type.
+   * Sets the sort order for the role type.
    *
    * @param sortOrder the sort order for the role type
    */
@@ -313,7 +313,7 @@ public class RoleType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the role type is specific to.
+   * Sets the ID for the tenant the role type is specific to.
    *
    * @param tenantId the ID for the tenant the role type is specific to
    */

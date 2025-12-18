@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NgIf } from '@angular/common';
+
 import {
   Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
@@ -26,7 +26,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Component({
   selector: 'inception-core-table-filter',
   standalone: true,
-  imports: [MatIconButton, MatInput, NgIf],
+  imports: [MatIconButton, MatInput],
   template: `
     <div class="table-filter-container">
       <div class="table-filter-icon">
@@ -38,11 +38,13 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
         #tableFilterInput
         placeholder="Search..."
         autocomplete="off" />
-      <button class="table-filter-reset" mat-icon-button *ngIf="filter" (click)="reset(true)">
-        <i class="fa fa-times"></i>
-      </button>
+      @if (filter) {
+        <button class="table-filter-reset" mat-icon-button (click)="reset(true)">
+          <i class="fa fa-times"></i>
+        </button>
+      }
     </div>
-  `,
+    `,
   styles: [
     `
       .table-filter-container {

@@ -320,7 +320,7 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Set the code for the mandate property type.
+   * Sets the code for the mandate property type.
    *
    * @param code the code for the mandate property type
    */
@@ -329,7 +329,7 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Set the description for the mandate property type.
+   * Sets the description for the mandate property type.
    *
    * @param description the description for the mandate property type
    */
@@ -338,7 +338,7 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the mandate property type.
+   * Sets the Unicode locale identifier for the mandate property type.
    *
    * @param localeId the Unicode locale identifier for the mandate property type
    */
@@ -347,7 +347,7 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Set the code for the mandate type the mandate property type is associated with.
+   * Sets the code for the mandate type the mandate property type is associated with.
    *
    * @param mandateType the code for the mandate type the mandate property type is associated with
    */
@@ -356,7 +356,7 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Set the name of the mandate property type.
+   * Sets the name of the mandate property type.
    *
    * @param name the name of the mandate property type
    */
@@ -365,7 +365,7 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a string value for the mandate property
+   * Sets the regular expression pattern used to validate a string value for the mandate property
    * type.
    *
    * @param pattern the regular expression pattern used to validate a string value for the mandate
@@ -376,7 +376,7 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Set the sort order for the mandate property type.
+   * Sets the sort order for the mandate property type.
    *
    * @param sortOrder the sort order for the mandate property type
    */
@@ -385,7 +385,7 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the mandate property type is specific to.
+   * Sets the ID for the tenant the mandate property type is specific to.
    *
    * @param tenantId the ID for the tenant the mandate property type is specific to
    */
@@ -394,7 +394,7 @@ public class MandatePropertyType implements Serializable {
   }
 
   /**
-   * Set the value type for the mandate property type.
+   * Sets the value type for the mandate property type.
    *
    * @param valueType the value type for the mandate property type
    */

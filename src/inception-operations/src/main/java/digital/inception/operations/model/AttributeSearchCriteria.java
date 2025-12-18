@@ -100,7 +100,7 @@ public class AttributeSearchCriteria implements Serializable {
   }
 
   /**
-   * Set the name of the attribute.
+   * Sets the name of the attribute.
    *
    * @param name the name of the attribute
    */
@@ -109,7 +109,7 @@ public class AttributeSearchCriteria implements Serializable {
   }
 
   /**
-   * Set the value for the attribute.
+   * Sets the value for the attribute.
    *
    * @param value the value for the attribute
    */

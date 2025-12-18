@@ -88,7 +88,7 @@ public class ApplicationR2dbcConfiguration {
   /**
    * Constructs a new {@code ApplicationR2dbcConfiguration}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   ApplicationR2dbcConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;

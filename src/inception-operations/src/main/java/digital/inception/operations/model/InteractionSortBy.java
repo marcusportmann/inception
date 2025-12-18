@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
@@ -46,10 +47,26 @@ public enum InteractionSortBy implements CodeEnum {
   }
 
   /**
+   * Resolve the Spring Data sort property name for the method used to sort a list of interactions.
+   *
+   * @param sortBy the method used to sort a list of interactions
+   * @return the Spring Data sort property name for the method used to sort a list of interactions
+   */
+  @SuppressWarnings({"SwitchStatementWithTooFewBranches", "SameReturnValue"})
+  public static String resolveSortByPropertyName(InteractionSortBy sortBy) {
+    if (sortBy == null) return "occurred";
+    return switch (sortBy) {
+      case InteractionSortBy.OCCURRED -> "occurred";
+      default -> "occurred";
+    };
+  }
+
+  /**
    * Returns the code for the method used to sort a list of interactions.
    *
    * @return the code for the method used to sort a list of interactions
    */
+  @JsonValue
   public String code() {
     return code;
   }

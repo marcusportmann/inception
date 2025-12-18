@@ -164,7 +164,7 @@ public class WorkflowEngineAttribute implements Serializable {
   }
 
   /**
-   * Set the name of the workflow engine attribute.
+   * Sets the name of the workflow engine attribute.
    *
    * @param name the name of the workflow engine attribute
    */
@@ -173,7 +173,7 @@ public class WorkflowEngineAttribute implements Serializable {
   }
 
   /**
-   * Set the value for the workflow engine attribute.
+   * Sets the value for the workflow engine attribute.
    *
    * @param value the value for the workflow engine attribute
    */
@@ -182,7 +182,7 @@ public class WorkflowEngineAttribute implements Serializable {
   }
 
   /**
-   * Set the workflow engine the workflow engine attribute is associated with.
+   * Sets the workflow engine the workflow engine attribute is associated with.
    *
    * @param workflowEngine the workflow engine the workflow engine attribute is associated with
    */

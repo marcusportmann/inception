@@ -313,7 +313,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the code for the external reference type.
+   * Sets the code for the external reference type.
    *
    * @param code the code for the external reference type
    */
@@ -322,7 +322,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the description for the external reference type.
+   * Sets the description for the external reference type.
    *
    * @param description the description for the external reference type
    */
@@ -331,7 +331,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the external reference type.
+   * Sets the Unicode locale identifier for the external reference type.
    *
    * @param localeId the Unicode locale identifier for the external reference type
    */
@@ -340,7 +340,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the name of the external reference type.
+   * Sets the name of the external reference type.
    *
    * @param name the name of the external reference type
    */
@@ -349,7 +349,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the external reference type is associated with.
+   * Sets the codes for the party types the external reference type is associated with.
    *
    * @param partyTypes the codes for the party types the external reference type is associated with
    */
@@ -358,7 +358,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a value for the external reference type.
+   * Sets the regular expression pattern used to validate a value for the external reference type.
    *
    * @param pattern the regular expression pattern used to validate a value for the external
    *     reference type
@@ -368,7 +368,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the sort order for the external reference type.
+   * Sets the sort order for the external reference type.
    *
    * @param sortOrder the sort order for the external reference type
    */
@@ -377,7 +377,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the external reference type is specific to.
+   * Sets the ID for the tenant the external reference type is specific to.
    *
    * @param tenantId the ID for the tenant the external reference type is specific to
    */

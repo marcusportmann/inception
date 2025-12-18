@@ -16,6 +16,7 @@
 
 package digital.inception.party.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
@@ -57,6 +58,7 @@ public enum MeasurementUnitType implements CodeEnum {
    *
    * @return the code for the measurement unit type
    */
+  @JsonValue
   public String code() {
     return code;
   }

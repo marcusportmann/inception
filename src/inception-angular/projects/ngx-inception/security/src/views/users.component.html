@@ -3,9 +3,11 @@
     <span class="mat-header-label" i18n="@@security_users_component_user_directory">User Directory :</span>
     <mat-form-field class="mat-mdc-form-field-slim">
       <mat-select #userDirectorySelect i18n-placeholder="@@security_users_component_placeholder_select_a_user_directory" placeholder="Select a user directory">
-        <mat-option *ngFor="let userDirectory of userDirectories" [value]="userDirectory.id">
-          {{userDirectory.name}}
-        </mat-option>
+        @for (userDirectory of userDirectories; track userDirectory) {
+          <mat-option [value]="userDirectory.id">
+            {{userDirectory.name}}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
@@ -49,30 +51,30 @@
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-username="username" *ngIf="(userDirectoryCapabilities$ | async) as userDirectoryCapabilities">
-      <ng-container *ngIf="userDirectoryCapabilities.supportsUserAdministration">
+      @if (userDirectoryCapabilities.supportsUserAdministration) {
         <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-menu-item (click)="editUser(username)">
           <i class="fas fa-edit"></i>
           <span i18n="@@security_users_component_menu_item_edit">Edit</span>
         </button>
-      </ng-container>
-      <ng-container *ngIf="userDirectoryCapabilities.supportsGroupAdministration">
+      }
+      @if (userDirectoryCapabilities.supportsGroupAdministration) {
         <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-menu-item (click)="userGroups(username)">
           <i class="fas fa-users"></i>
           <span i18n="@@security_users_component_menu_item_groups">Groups</span>
         </button>
-      </ng-container>
-      <ng-container *ngIf="userDirectoryCapabilities.supportsAdminChangePassword">
+      }
+      @if (userDirectoryCapabilities.supportsAdminChangePassword) {
         <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.ResetUserPassword']" mat-menu-item (click)="resetUserPassword(username)">
           <i class="fas fa-unlock-alt"></i>
           <span i18n="@@security_users_component_menu_item_reset_user_password">Reset User Password</span>
         </button>
-      </ng-container>
-      <ng-container *ngIf="userDirectoryCapabilities.supportsUserAdministration">
+      }
+      @if (userDirectoryCapabilities.supportsUserAdministration) {
         <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-menu-item (click)="deleteUser(username)">
           <i class="far fa-trash-alt"></i>
           <span i18n="@@security_users_component_menu_item_delete">Delete</span>
         </button>
-      </ng-container>
+      }
     </ng-template>
   </mat-menu>
 

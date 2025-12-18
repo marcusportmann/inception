@@ -289,7 +289,7 @@ public class StatusType implements Serializable {
   }
 
   /**
-   * Set the code for the status type category the status type is associated with.
+   * Sets the code for the status type category the status type is associated with.
    *
    * @param category the code for the status type category the status type is associated with
    */
@@ -298,7 +298,7 @@ public class StatusType implements Serializable {
   }
 
   /**
-   * Set the code for the status type.
+   * Sets the code for the status type.
    *
    * @param code the code for the status type
    */
@@ -307,7 +307,7 @@ public class StatusType implements Serializable {
   }
 
   /**
-   * Set the description for the status type.
+   * Sets the description for the status type.
    *
    * @param description the description for the status type
    */
@@ -316,7 +316,7 @@ public class StatusType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the status type.
+   * Sets the Unicode locale identifier for the status type.
    *
    * @param localeId the Unicode locale identifier for the status type
    */
@@ -325,7 +325,7 @@ public class StatusType implements Serializable {
   }
 
   /**
-   * Set the name of the status type.
+   * Sets the name of the status type.
    *
    * @param name the name of the status type
    */
@@ -334,7 +334,7 @@ public class StatusType implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the status type is associated with.
+   * Sets the codes for the party types the status type is associated with.
    *
    * @param partyTypes the codes for the party types the status type is associated with
    */
@@ -343,7 +343,7 @@ public class StatusType implements Serializable {
   }
 
   /**
-   * Set the sort order for the status type.
+   * Sets the sort order for the status type.
    *
    * @param sortOrder the sort order for the status type
    */
@@ -352,7 +352,7 @@ public class StatusType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the status type is specific to.
+   * Sets the ID for the tenant the status type is specific to.
    *
    * @param tenantId the ID for the tenant the status type is specific to
    */

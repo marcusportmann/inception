@@ -72,7 +72,7 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
   Optional<String> findNameById(@Param("codeCategoryId") String codeCategoryId);
 
   /**
-   * Set the data and the date and time the code category was last modified.
+   * Sets the data and the date and time the code category was last modified.
    *
    * @param codeCategoryId the ID for the code category
    * @param data the data

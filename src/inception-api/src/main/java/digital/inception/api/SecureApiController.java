@@ -44,7 +44,7 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
   /**
    * Constructs a new {@code SecureApiController}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   protected SecureApiController(ApplicationContext applicationContext) {
     super(applicationContext);
@@ -109,6 +109,31 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
     }
 
     return values;
+  }
+
+  /**
+   * Returns the roles for the user associated with the authenticated request.
+   *
+   * @return the roles for the user associated with the authenticated request
+   */
+  protected List<String> getRolesForAuthenticatedUser() {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    // Could not retrieve the currently authenticated principal
+    if ((authentication == null) || (!authentication.isAuthenticated())) {
+      return List.of();
+    }
+
+    List<String> roles = new ArrayList<>();
+
+    for (GrantedAuthority authority : authentication.getAuthorities()) {
+      if (authority.getAuthority().startsWith("ROLE_")) {
+        roles.add(authority.getAuthority().substring("ROLE_".length()));
+      }
+    }
+
+    return roles;
   }
 
   /**

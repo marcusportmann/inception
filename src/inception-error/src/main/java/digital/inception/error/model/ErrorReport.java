@@ -370,7 +370,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the ID for the application that generated the error report.
+   * Sets the ID for the application that generated the error report.
    *
    * @param applicationId the ID for the application that generated the error report
    */
@@ -379,7 +379,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the version of the application that generated the error report.
+   * Sets the version of the application that generated the error report.
    *
    * @param applicationVersion the version of the application that generated the error report
    */
@@ -388,7 +388,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the date and time the error report was created.
+   * Sets the date and time the error report was created.
    *
    * @param created the date and time the error report was created
    */
@@ -397,7 +397,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the base-64 encoded data associated with the error report.
+   * Sets the base-64 encoded data associated with the error report.
    *
    * @param data the base-64 encoded data associated with the error report
    */
@@ -406,7 +406,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the description of the error.
+   * Sets the description of the error.
    *
    * @param description the description of the error
    */
@@ -415,7 +415,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the error detail.
+   * Sets the error detail.
    *
    * @param detail the error detail
    */
@@ -424,7 +424,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the ID for the device the error report originated from.
+   * Sets the ID for the device the error report originated from.
    *
    * @param deviceId the ID for the device the error report originated from
    */
@@ -433,7 +433,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the feedback provided by the user for the error.
+   * Sets the feedback provided by the user for the error.
    *
    * @param feedback the feedback provided by the user for the error
    */
@@ -442,7 +442,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the ID for the error report.
+   * Sets the ID for the error report.
    *
    * @param id the ID for the error report
    */
@@ -451,7 +451,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the username for the user associated with the error report.
+   * Sets the username for the user associated with the error report.
    *
    * @param who the username for the user associated with the error report
    */

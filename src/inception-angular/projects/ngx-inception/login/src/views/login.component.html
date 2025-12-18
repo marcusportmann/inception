@@ -9,37 +9,51 @@
           <div class="d-flex justify-content-center pb-3">
             <div>v {{ applicationVersion() }}</div>
           </div>          <mat-card-content>
-            <div class="row">
-              <div class="col">
-                <mat-form-field>
-                  <mat-label i18n="@@login_login_component_label_username">Username</mat-label>
-                  <input type="text" matInput formControlName="username" #usernameInput>
-                  <mat-error *ngIf="usernameControl.errors && !usernameControl.untouched">
-                    <span *ngIf="usernameControl.errors?.['required']" i18n="@@login_login_component_error_username_required">A username is required.</span>
-                    <span *ngIf="usernameControl.errors?.['maxlength']" i18n="@@login_login_component_error_username_maxlength">Username must not exceed 100 characters.</span>
+          <div class="row">
+            <div class="col">
+              <mat-form-field>
+                <mat-label i18n="@@login_login_component_label_username">Username</mat-label>
+                <input type="text" matInput formControlName="username" #usernameInput>
+                @if (usernameControl.errors && !usernameControl.untouched) {
+                  <mat-error>
+                    @if (usernameControl.errors?.['required']) {
+                      <span i18n="@@login_login_component_error_username_required">A username is required.</span>
+                    }
+                    @if (usernameControl.errors?.['maxlength']) {
+                      <span i18n="@@login_login_component_error_username_maxlength">Username must not exceed 100 characters.</span>
+                    }
                   </mat-error>
-                </mat-form-field>
-              </div>
+                }
+              </mat-form-field>
             </div>
-            <div class="row">
-              <div class="col">
-                <mat-form-field>
-                  <mat-label i18n="@@login_login_component_label_password">Password</mat-label>
-                  <input type="password" matInput formControlName="password">
-                  <mat-error *ngIf="passwordControl.errors && !passwordControl.untouched">
-                    <span *ngIf="passwordControl.errors?.['required']" i18n="@@login_login_component_error_password_required">A password is required.</span>
-                    <span *ngIf="passwordControl.errors?.['maxlength']" i18n="@@login_login_component_error_password_maxlength">Password must not exceed 100 characters.</span>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field>
+                <mat-label i18n="@@login_login_component_label_password">Password</mat-label>
+                <input type="password" matInput formControlName="password">
+                @if (passwordControl.errors && !passwordControl.untouched) {
+                  <mat-error>
+                    @if (passwordControl.errors?.['required']) {
+                      <span i18n="@@login_login_component_error_password_required">A password is required.</span>
+                    }
+                    @if (passwordControl.errors?.['maxlength']) {
+                      <span i18n="@@login_login_component_error_password_maxlength">Password must not exceed 100 characters.</span>
+                    }
                   </mat-error>
-                </mat-form-field>
-              </div>
+                }
+              </mat-form-field>
             </div>
-          </mat-card-content>
-          <mat-card-actions align="end">
-            <button *ngIf="isForgottenPasswordEnabled()" type="button" mat-flat-button color="link" (click)="forgotPassword()" i18n="@@login_login_component_button_forgot_password">Forgot password?</button>
-            <button type="submit" mat-flat-button color="primary" [disabled]="!loginForm.valid" i18n="@@login_login_component_button_login">Login</button>
-          </mat-card-actions>
-        </mat-card>
-      </form>
-    </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          @if (isForgottenPasswordEnabled()) {
+            <button type="button" mat-flat-button color="link" (click)="forgotPassword()" i18n="@@login_login_component_button_forgot_password">Forgot password?</button>
+          }
+          <button type="submit" mat-flat-button color="primary" [disabled]="!loginForm.valid" i18n="@@login_login_component_button_login">Login</button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
   </div>
+</div>
 </div>

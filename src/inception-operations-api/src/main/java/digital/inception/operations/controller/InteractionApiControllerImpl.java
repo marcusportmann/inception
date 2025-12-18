@@ -22,6 +22,7 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.operations.exception.DuplicateInteractionException;
+import digital.inception.operations.exception.DuplicateInteractionNoteException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
@@ -77,7 +78,7 @@ public class InteractionApiControllerImpl extends SecureApiController
   /**
    * Constructs a new {@code InteractionApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param interactionService the Interaction Service
    */
   public InteractionApiControllerImpl(
@@ -138,7 +139,10 @@ public class InteractionApiControllerImpl extends SecureApiController
   @Override
   public UUID createInteractionNote(
       UUID tenantId, CreateInteractionNoteRequest createInteractionNoteRequest)
-      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException,
+          DuplicateInteractionNoteException,
+          InteractionNotFoundException,
+          ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
@@ -555,6 +559,11 @@ public class InteractionApiControllerImpl extends SecureApiController
     }
 
     interactionService.linkPartyToInteraction(tenantId, linkPartyToInteractionRequest);
+  }
+
+  @Override
+  public void processInteractions() throws ServiceUnavailableException {
+    interactionService.processInteractions();
   }
 
   @Override

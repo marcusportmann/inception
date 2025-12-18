@@ -147,7 +147,7 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
       @Param("jobId") String jobId, @Param("nextExecution") OffsetDateTime nextExecution);
 
   /**
-   * Set the job status.
+   * Sets the job status.
    *
    * @param jobId the ID for the job
    * @param status the status for the job

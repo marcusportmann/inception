@@ -88,7 +88,7 @@ public class GenerateReportRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the report definition.
+   * Sets the ID for the report definition.
    *
    * @param reportDefinitionId the ID for the report definition
    */
@@ -97,7 +97,7 @@ public class GenerateReportRequest implements Serializable {
   }
 
   /**
-   * Set the report parameters.
+   * Sets the report parameters.
    *
    * @param reportParameters the report parameters
    */

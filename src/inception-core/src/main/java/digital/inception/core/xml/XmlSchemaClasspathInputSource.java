@@ -178,7 +178,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Set the base URI to be used for resolving a relative systemId to an absolute URI.
+   * Sets the base URI to be used for resolving a relative systemId to an absolute URI.
    *
    * @param baseURI the base URI to be used for resolving a relative systemId to an absolute URI
    */
@@ -188,7 +188,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Set the byte stream for the input source.
+   * Sets the byte stream for the input source.
    *
    * @param byteStream the byte stream for the input source
    */
@@ -222,7 +222,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Set the character stream for the input source
+   * Sets the character stream for the input source
    *
    * @param characterStream the character stream for the input source
    */
@@ -233,7 +233,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Set the character encoding for the input source.
+   * Sets the character encoding for the input source.
    *
    * @param encoding the character encoding for the input source
    */
@@ -243,7 +243,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Set the public identifier for this input source.
+   * Sets the public identifier for this input source.
    *
    * @param publicId the public identifier for this input source
    */
@@ -253,7 +253,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Set the {@code String} data for the input source.
+   * Sets the {@code String} data for the input source.
    *
    * @param stringData the {@code String} data for the input source
    */
@@ -264,7 +264,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Set the system identifier for this input source.
+   * Sets the system identifier for this input source.
    *
    * @param systemId the system identifier for this input source
    */

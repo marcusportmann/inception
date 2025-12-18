@@ -159,7 +159,7 @@ public class Skill implements Serializable {
   }
 
   /**
-   * Set the proficiency level for the skill.
+   * Sets the proficiency level for the skill.
    *
    * @param level the proficiency level for the skill
    */
@@ -168,7 +168,7 @@ public class Skill implements Serializable {
   }
 
   /**
-   * Set the person the skill is associated with.
+   * Sets the person the skill is associated with.
    *
    * @param person the party the skill is associated with
    */
@@ -183,7 +183,7 @@ public class Skill implements Serializable {
   }
 
   /**
-   * Set the code for the skill type.
+   * Sets the code for the skill type.
    *
    * @param type the code for the skill type
    */

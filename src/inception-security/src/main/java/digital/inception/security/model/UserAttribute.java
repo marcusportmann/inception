@@ -345,7 +345,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the binary value for the user attribute with the specified name in the specified list.
+   * Sets the binary value for the user attribute with the specified name in the specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
@@ -358,7 +358,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the binary value for the user attribute with the specified name in the specified list.
+   * Sets the binary value for the user attribute with the specified name in the specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
@@ -382,7 +382,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the {@code BigDecimal} value for the user attribute with the specified name in the
+   * Sets the {@code BigDecimal} value for the user attribute with the specified name in the
    * specified list.
    *
    * @param list the user attributes to search
@@ -407,7 +407,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the {@code double} value for the user attribute with the specified name in the specified
+   * Sets the {@code double} value for the user attribute with the specified name in the specified
    * list.
    *
    * @param list the user attributes to search
@@ -432,7 +432,8 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the {@code int} value for the user attribute with the specified name in the specified list.
+   * Sets the {@code int} value for the user attribute with the specified name in the specified
+   * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
@@ -456,7 +457,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the {@code long} value for the user attribute with the specified name in the specified
+   * Sets the {@code long} value for the user attribute with the specified name in the specified
    * list.
    *
    * @param list the user attributes to search
@@ -481,7 +482,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the {@code String} value for the user attribute with the specified name in the specified
+   * Sets the {@code String} value for the user attribute with the specified name in the specified
    * list.
    *
    * @param list the user attributes to search
@@ -612,7 +613,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the binary value for the user attribute.
+   * Sets the binary value for the user attribute.
    *
    * @param value the binary value for the user attribute
    */
@@ -621,7 +622,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the binary value for the user attribute.
+   * Sets the binary value for the user attribute.
    *
    * @param value the binary value for the user attribute
    */
@@ -630,7 +631,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the {@code BigDecimal} value for the user attribute.
+   * Sets the {@code BigDecimal} value for the user attribute.
    *
    * @param value the {@code BigDecimal} value for the user attribute
    */
@@ -639,7 +640,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the {@code double} value for the user attribute.
+   * Sets the {@code double} value for the user attribute.
    *
    * @param value the {@code double} value for the user attribute
    */
@@ -648,7 +649,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the {@code int} value for the user attribute.
+   * Sets the {@code int} value for the user attribute.
    *
    * @param value the {@code int} value for the user attribute
    */
@@ -657,7 +658,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the {@code long} value for the user attribute.
+   * Sets the {@code long} value for the user attribute.
    *
    * @param value the {@code long} value for the user attribute
    */
@@ -666,7 +667,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the name of the user attribute.
+   * Sets the name of the user attribute.
    *
    * @param name the name of the user attribute
    */
@@ -675,7 +676,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the {@code String} value for the user attribute.
+   * Sets the {@code String} value for the user attribute.
    *
    * @param value the {@code String} value for the user attribute
    */

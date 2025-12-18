@@ -23,12 +23,10 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-api</artifactId>
     </dependency>
-
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-api-client</artifactId>
     </dependency>
-
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-application</artifactId>
@@ -44,6 +42,10 @@
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-jta</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-mongo</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -125,6 +127,14 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-processor-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-processor-ws</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-reference-api</artifactId>
     </dependency>        
     <dependency>
@@ -164,6 +174,10 @@
     <dependency>
       <groupId>com.microsoft.sqlserver</groupId>
       <artifactId>mssql-jdbc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.flapdoodle.embed</groupId>
+      <artifactId>de.flapdoodle.embed.mongo</artifactId>
     </dependency>
     <dependency>
       <groupId>io.r2dbc</groupId>
@@ -230,6 +244,7 @@
                     <exclude>com.google.guava:guava:[31,34)</exclude>
                     <exclude>com.microsoft.azure:msal4j:[1,2)</exclude>
                     <exclude>com.nimbusds:nimbus-jose-jwt:[9,11)</exclude>
+                    <exclude>net.java.dev.jna:jna:[5,6)</exclude>
                     <exclude>net.java.dev.jna:jna-platform:[5,6)</exclude>
                     <exclude>org.apache.commons:commons-collections4:[4,5)</exclude>
                     <exclude>org.apache.commons:commons-text:[1,2)</exclude>

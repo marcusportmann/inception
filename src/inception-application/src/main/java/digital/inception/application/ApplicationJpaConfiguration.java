@@ -56,7 +56,7 @@ public class ApplicationJpaConfiguration {
   /**
    * Constructs a new {@code ApplicationJpaConfiguration}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   ApplicationJpaConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
@@ -66,7 +66,7 @@ public class ApplicationJpaConfiguration {
    * Returns the application entity manager factory bean associated with the application data
    * source.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param applicationDataSource the application data source
    * @return the application entity manager factory bean associated with the application data source
    */

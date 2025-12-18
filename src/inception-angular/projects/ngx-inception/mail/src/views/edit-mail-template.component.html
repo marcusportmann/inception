@@ -14,10 +14,16 @@
           <mat-form-field>
             <mat-label i18n="@@mail_edit_mail_template_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name">
-            <mat-error *ngIf="nameControl.errors && !nameControl.untouched">
-              <span *ngIf="nameControl.errors?.['required']" i18n="@@mail_edit_mail_template_component_error_name_required">A name is required.</span>
-              <span *ngIf="nameControl.errors?.['maxlength']" i18n="@@mail_edit_mail_template_component_error_name_maxlength">Name must not exceed 100 characters.</span>
-            </mat-error>
+            @if (nameControl.errors && !nameControl.untouched) {
+              <mat-error>
+                @if (nameControl.errors?.['required']) {
+                  <span i18n="@@mail_edit_mail_template_component_error_name_required">A name is required.</span>
+                }
+                @if (nameControl.errors?.['maxlength']) {
+                  <span i18n="@@mail_edit_mail_template_component_error_name_maxlength">Name must not exceed 100 characters.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -26,13 +32,19 @@
           <mat-form-field>
             <mat-label i18n="@@mail_edit_mail_template_component_label_content_type">Content Type</mat-label>
             <mat-select formControlName="contentType">
-              <mat-option *ngFor="let contentType of contentTypes" [value]="contentType">
-                {{ getMailTemplateContentTypeDescription(contentType) }}
-              </mat-option>
+              @for (contentType of contentTypes; track contentType) {
+                <mat-option [value]="contentType">
+                  {{ getMailTemplateContentTypeDescription(contentType) }}
+                </mat-option>
+              }
             </mat-select>
-            <mat-error *ngIf="contentTypeControl.errors && !contentTypeControl.untouched">
-              <span *ngIf="contentTypeControl.errors?.['required']" i18n="@@mail_edit_mail_template_component_error_content_type_required">A content type is required.</span>
-            </mat-error>
+            @if (contentTypeControl.errors && !contentTypeControl.untouched) {
+              <mat-error>
+                @if (contentTypeControl.errors?.['required']) {
+                  <span i18n="@@mail_edit_mail_template_component_error_content_type_required">A content type is required.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -41,11 +53,19 @@
           <mat-form-field>
             <mat-label i18n="@@mail_edit_mail_template_component_label_template">Template</mat-label>
             <inception-core-file-upload formControlName="template" i18n-placeholder="@@mail_edit_mail_template_component_placeholder_no_file_selected" placeholder="No file selected"></inception-core-file-upload>
-            <mat-error *ngIf="templateControl.errors && !templateControl.untouched">
-              <span *ngIf="templateControl.errors?.['required']" i18n="@@mail_edit_mail_template_component_error_template_required">A template is required.</span>
-              <span *ngIf="templateControl.errors?.['minsize']" i18n="@@mail_edit_mail_template_component_error_template_min_size">The template is empty.</span>
-              <span *ngIf="templateControl.errors?.['maxsize']" i18n="@@mail_edit_mail_template_component_error_template_max_size">The template exceeds the maximum allowed size.</span>
-            </mat-error>
+            @if (templateControl.errors && !templateControl.untouched) {
+              <mat-error>
+                @if (templateControl.errors?.['required']) {
+                  <span i18n="@@mail_edit_mail_template_component_error_template_required">A template is required.</span>
+                }
+                @if (templateControl.errors?.['minsize']) {
+                  <span i18n="@@mail_edit_mail_template_component_error_template_min_size">The template is empty.</span>
+                }
+                @if (templateControl.errors?.['maxsize']) {
+                  <span i18n="@@mail_edit_mail_template_component_error_template_max_size">The template exceeds the maximum allowed size.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>

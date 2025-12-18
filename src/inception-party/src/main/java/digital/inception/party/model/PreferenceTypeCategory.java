@@ -264,7 +264,7 @@ public class PreferenceTypeCategory implements Serializable {
   }
 
   /**
-   * Set the code for the preference type category.
+   * Sets the code for the preference type category.
    *
    * @param code the code for the preference type category
    */
@@ -273,7 +273,7 @@ public class PreferenceTypeCategory implements Serializable {
   }
 
   /**
-   * Set the description for the preference type category.
+   * Sets the description for the preference type category.
    *
    * @param description the description for the preference type category
    */
@@ -282,7 +282,7 @@ public class PreferenceTypeCategory implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the preference type category.
+   * Sets the Unicode locale identifier for the preference type category.
    *
    * @param localeId the Unicode locale identifier for the preference type category
    */
@@ -291,7 +291,7 @@ public class PreferenceTypeCategory implements Serializable {
   }
 
   /**
-   * Set the name of the preference type category.
+   * Sets the name of the preference type category.
    *
    * @param name the name of the preference type category
    */
@@ -300,7 +300,7 @@ public class PreferenceTypeCategory implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the preference type category is associated with.
+   * Sets the codes for the party types the preference type category is associated with.
    *
    * @param partyTypes the codes for the party types the preference type category is associated with
    */
@@ -309,7 +309,7 @@ public class PreferenceTypeCategory implements Serializable {
   }
 
   /**
-   * Set the sort order for the preference type category.
+   * Sets the sort order for the preference type category.
    *
    * @param sortOrder the sort order for the preference type category
    */
@@ -318,7 +318,7 @@ public class PreferenceTypeCategory implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the preference type category is specific to.
+   * Sets the ID for the tenant the preference type category is specific to.
    *
    * @param tenantId the ID for the tenant the preference type category is specific to
    */

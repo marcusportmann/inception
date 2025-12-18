@@ -296,7 +296,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the attributes for the document.
+   * Sets the attributes for the document.
    *
    * @param attributes the attributes for the document
    */
@@ -305,7 +305,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the data for the document.
+   * Sets the data for the document.
    *
    * @param data the data for the document
    */
@@ -314,7 +314,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the description for the workflow document.
+   * Sets the description for the workflow document.
    *
    * @param description the description for the workflow document
    */
@@ -323,7 +323,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the expiry date for the document.
+   * Sets the expiry date for the document.
    *
    * @param expiryDate the expiry date for the document
    */
@@ -332,7 +332,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the external references for the document.
+   * Sets the external references for the document.
    *
    * @param externalReferences the external references for the document
    */
@@ -341,7 +341,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the file type for the document.
+   * Sets the file type for the document.
    *
    * @param fileType the file type for the document
    */
@@ -350,7 +350,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the issue date for the document.
+   * Sets the issue date for the document.
    *
    * @param issueDate the issue date for the document
    */
@@ -359,7 +359,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the name of the document.
+   * Sets the name of the document.
    *
    * @param name the name of the document
    */
@@ -368,7 +368,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the source document that was split to create this document.
+   * Sets the ID for the source document that was split to create this document.
    *
    * @param sourceDocumentId the ID for the source document that was split to create this document
    */
@@ -377,7 +377,7 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow document.
+   * Sets the ID for the workflow document.
    *
    * @param workflowDocumentId the ID for the workflow document
    */

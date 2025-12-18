@@ -22,10 +22,23 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-jpa</artifactId>
     </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-mongo</artifactId>
+    </dependency>
 
     <!-- Dependencies -->
+    <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+    </dependency>
 
     <!-- Test Dependencies -->
+    <dependency>
+      <groupId>de.bwaldvogel</groupId>
+      <artifactId>mongo-java-server</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-test</artifactId>

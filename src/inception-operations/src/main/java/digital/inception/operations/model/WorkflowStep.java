@@ -247,7 +247,7 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow step was canceled.
+   * Sets the date and time the workflow step was canceled.
    *
    * @param canceled the date and time the workflow step was canceled
    */
@@ -256,7 +256,7 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
-   * Set the code for the workflow step.
+   * Sets the code for the workflow step.
    *
    * @param code the code for the workflow step
    */
@@ -265,7 +265,7 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow step was finalized.
+   * Sets the date and time the workflow step was finalized.
    *
    * @param finalized the date and time the workflow step was finalized
    */
@@ -274,7 +274,7 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow was initiated.
+   * Sets the date and time the workflow was initiated.
    *
    * @param initiated the date and time the workflow was initiated
    */
@@ -283,7 +283,7 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
-   * Set the status of the workflow step.
+   * Sets the status of the workflow step.
    *
    * @param status the status of the workflow step
    */
@@ -292,7 +292,7 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow step was suspended.
+   * Sets the date and time the workflow step was suspended.
    *
    * @param pended the date and time the workflow step was suspended
    */
@@ -301,7 +301,7 @@ public class WorkflowStep implements Serializable {
   }
 
   /**
-   * Set the workflow the workflow step is associated with.
+   * Sets the workflow the workflow step is associated with.
    *
    * @param workflow the workflow the workflow step is associated with
    */

@@ -45,7 +45,7 @@ public class AuditConfiguration {
   /**
    * Returns the audit entity manager factory bean associated with the application data source.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param dataSource the application data source
    * @return the audit entity manager factory bean associated with the application data source
    */

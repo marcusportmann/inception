@@ -284,7 +284,7 @@ public class WorkflowAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the description for the workflow attribute.
+   * Sets the description for the workflow attribute.
    *
    * @param description the description for the workflow attribute
    */
@@ -293,7 +293,7 @@ public class WorkflowAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the label for the workflow attribute.
+   * Sets the label for the workflow attribute.
    *
    * @param label the label for the workflow attribute
    */
@@ -302,7 +302,7 @@ public class WorkflowAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the name of the workflow attribute.
+   * Sets the name of the workflow attribute.
    *
    * @param name the name of the workflow attribute
    */
@@ -311,7 +311,7 @@ public class WorkflowAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate the value for a workflow attribute
+   * Sets the regular expression pattern used to validate the value for a workflow attribute
    * associated with the workflow attribute definition.
    *
    * @param pattern the regular expression pattern used to validate the value for a workflow
@@ -331,7 +331,7 @@ public class WorkflowAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the attribute type for the workflow attribute.
+   * Sets the attribute type for the workflow attribute.
    *
    * @param type the attribute type for the workflow attribute
    */
@@ -340,7 +340,7 @@ public class WorkflowAttributeDefinition implements Serializable {
   }
 
   /**
-   * Set the workflow definition the workflow attribute definition is associated with.
+   * Sets the workflow definition the workflow attribute definition is associated with.
    *
    * @param workflowDefinition the workflow definition the workflow attribute definition is
    *     associated with

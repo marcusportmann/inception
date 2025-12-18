@@ -23,7 +23,9 @@ import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
+import digital.inception.operations.exception.DuplicateWorkflowDocumentException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.DuplicateWorkflowException;
 import digital.inception.operations.exception.FormDefinitionNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
@@ -46,6 +48,8 @@ import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.FormDefinition;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
+import digital.inception.operations.model.InteractionSortBy;
+import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
@@ -70,7 +74,7 @@ import digital.inception.operations.model.WorkflowDefinitionPermission;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
-import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowDocumentSummaries;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.model.WorkflowNote;
@@ -102,6 +106,22 @@ public interface WorkflowService {
    */
   void cancelWorkflow(UUID tenantId, CancelWorkflowRequest cancelWorkflowRequest, String canceledBy)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Create the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflow the workflow
+   * @return the workflow
+   * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version for the
+   *     workflow could not be found
+   * @throws DuplicateWorkflowException if the workflow already exists
+   * @throws ServiceUnavailableException if the workflow could not be created
+   */
+  Workflow createWorkflow(UUID tenantId, Workflow workflow)
+      throws WorkflowDefinitionVersionNotFoundException,
+          DuplicateWorkflowException,
+          ServiceUnavailableException;
 
   /**
    * Create the workflow definition version.
@@ -138,6 +158,18 @@ public interface WorkflowService {
       throws InvalidArgumentException,
           DuplicateWorkflowDefinitionCategoryException,
           ServiceUnavailableException;
+
+  /**
+   * Create the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocument the workflow document
+   * @return the workflow document
+   * @throws DuplicateWorkflowDocumentException if the workflow document already exists
+   * @throws ServiceUnavailableException if the workflow document could not be created
+   */
+  WorkflowDocument createWorkflowDocument(UUID tenantId, WorkflowDocument workflowDocument)
+      throws DuplicateWorkflowDocumentException, ServiceUnavailableException;
 
   /**
    * Create the workflow engine.
@@ -264,11 +296,15 @@ public interface WorkflowService {
    * @param tenantId the ID for the tenant
    * @param deleteWorkflowStepRequest the request to delete the workflow step
    * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws WorkflowStepNotFoundException if the workflow step could not be found
    * @throws ServiceUnavailableException if the workflow step could not be deleted
    */
   void deleteWorkflowStep(UUID tenantId, DeleteWorkflowStepRequest deleteWorkflowStepRequest)
-      throws InvalidArgumentException, WorkflowStepNotFoundException, ServiceUnavailableException;
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowStepNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Delink an interaction from a workflow.
@@ -277,7 +313,6 @@ public interface WorkflowService {
    * @param delinkInteractionFromWorkflowRequest the request to delink an interaction from a
    *     workflow
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws InteractionNotFoundException if the interaction could not be found
    * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws WorkflowInteractionLinkNotFoundException if the workflow interaction link could not be
    *     found
@@ -286,7 +321,6 @@ public interface WorkflowService {
   void delinkInteractionFromWorkflow(
       UUID tenantId, DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest)
       throws InvalidArgumentException,
-          InteractionNotFoundException,
           WorkflowNotFoundException,
           WorkflowInteractionLinkNotFoundException,
           ServiceUnavailableException;
@@ -311,11 +345,15 @@ public interface WorkflowService {
    * @param tenantId the ID for the tenant
    * @param finalizeWorkflowStepRequest the request to finalize a workflow step
    * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws WorkflowStepNotFoundException if the workflow step could not be found
    * @throws ServiceUnavailableException if the workflow step could not be finalized
    */
   void finalizeWorkflowStep(UUID tenantId, FinalizeWorkflowStepRequest finalizeWorkflowStepRequest)
-      throws InvalidArgumentException, WorkflowStepNotFoundException, ServiceUnavailableException;
+      throws InvalidArgumentException,
+          WorkflowNotFoundException,
+          WorkflowStepNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Retrieve the IDs for the active workflows for the workflow engine.
@@ -329,6 +367,48 @@ public interface WorkflowService {
    */
   List<UUID> getActiveWorkflowIdsForWorkflowEngine(UUID tenantId, String workflowEngineId)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the document definition ID for the workflow document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowDocumentId the ID for the workflow document
+   * @return the document definition ID for the workflow document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowDocumentNotFoundException if the workflow document could not be found
+   * @throws ServiceUnavailableException if the document definition ID could not be retrieved for
+   *     the workflow document
+   */
+  String getDocumentDefinitionIdForWorkflowDocument(UUID tenantId, UUID workflowDocumentId)
+      throws InvalidArgumentException,
+          WorkflowDocumentNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the interactions linked to the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the interactions are linked to
+   * @param filter the filter to apply to the interaction summaries
+   * @param sortBy the method used to sort the interaction summaries, e.g. by occurred
+   * @param sortDirection the sort direction to apply to the interaction summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the interactions linked to the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the summaries for the interactions linked to the
+   *     workflow could not be retrieved
+   */
+  InteractionSummaries getInteractionSummariesForWorkflow(
+      UUID tenantId,
+      UUID workflowId,
+      String filter,
+      InteractionSortBy sortBy,
+      SortDirection sortDirection,
+      Integer pageIndex,
+      Integer pageSize)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the outstanding workflow documents for the workflow.
@@ -384,6 +464,17 @@ public interface WorkflowService {
           WorkflowDefinitionVersionNotFoundException,
           FormDefinitionNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow.
+   *
+   * @param workflowId the ID for the workflow
+   * @return the workflow
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow could not be retrieved
+   */
+  Workflow getWorkflow(UUID workflowId)
+      throws WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the workflow.
@@ -557,21 +648,22 @@ public interface WorkflowService {
           ServiceUnavailableException;
 
   /**
-   * Retrieve the workflow documents for the workflow.
+   * Retrieve the summaries for the workflow documents associated with the workflow.
    *
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow the workflow documents are associated with
-   * @param filter the filter to apply to the workflow documents
-   * @param sortBy the method used to sort the workflow documents, e.g. by created
-   * @param sortDirection the sort direction to apply to the workflow documents
+   * @param filter the filter to apply to the workflow document summaries
+   * @param sortBy the method used to sort the workflow document summaries, e.g., by created
+   * @param sortDirection the sort direction to apply to the workflow document summaries
    * @param pageIndex the page index
    * @param pageSize the page size
-   * @return the workflow documents
+   * @return the summaries for the workflow documents associated with the workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
-   * @throws ServiceUnavailableException if the workflow documents could not be retrieved
+   * @throws ServiceUnavailableException if the summaries for the workflow documents associated with
+   *     the workflow could not be retrieved
    */
-  WorkflowDocuments getWorkflowDocuments(
+  WorkflowDocumentSummaries getWorkflowDocumentSummariesForWorkflow(
       UUID tenantId,
       UUID workflowId,
       String filter,
@@ -579,6 +671,19 @@ public interface WorkflowService {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the workflow documents for the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the workflow documents are associated with
+   * @return the workflow documents
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the workflow documents could not be retrieved
+   */
+  List<WorkflowDocument> getWorkflowDocuments(UUID tenantId, UUID workflowId)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
@@ -839,7 +944,7 @@ public interface WorkflowService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Set the status for the workflow and, if applicable, the status for any associated workflow
+   * Sets the status for the workflow and, if applicable, the status for any associated workflow
    * steps.
    *
    * @param tenantId the ID for the tenant

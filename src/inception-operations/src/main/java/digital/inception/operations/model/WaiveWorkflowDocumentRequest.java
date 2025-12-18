@@ -132,7 +132,7 @@ public class WaiveWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the description for the workflow document.
+   * Sets the description for the workflow document.
    *
    * @param description the description for the workflow document
    */
@@ -141,7 +141,7 @@ public class WaiveWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the reason the workflow document was waived.
+   * Sets the reason the workflow document was waived.
    *
    * @param waiveReason the reason the workflow document was waived
    */
@@ -150,7 +150,7 @@ public class WaiveWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow document.
+   * Sets the ID for the workflow document.
    *
    * @param workflowDocumentId the ID for the workflow document
    */

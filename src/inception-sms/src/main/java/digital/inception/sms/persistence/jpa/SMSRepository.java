@@ -86,7 +86,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
       @Param("lockName") String lockName);
 
   /**
-   * Set the SMS status.
+   * Sets the SMS status.
    *
    * @param smsId the ID for the SMS
    * @param status the status for the SMS

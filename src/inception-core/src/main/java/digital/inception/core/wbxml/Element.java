@@ -418,7 +418,7 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Set the value of the attribute with the specified name for the element.
+   * Sets the value of the attribute with the specified name for the element.
    *
    * @param name the name of the attribute
    * @param value the value for the attribute
@@ -436,7 +436,7 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Set the binary data content for the element.
+   * Sets the binary data content for the element.
    *
    * @param data the binary data content for the element
    */
@@ -460,7 +460,7 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Set the text content for the element.
+   * Sets the text content for the element.
    *
    * @param text the text content for the element
    */
@@ -506,7 +506,7 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Set the name for the element.
+   * Sets the name for the element.
    *
    * @param name the name for the element
    */

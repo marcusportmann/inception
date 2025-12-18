@@ -102,7 +102,7 @@ public class UpdateDocumentNoteRequest implements Serializable {
   }
 
   /**
-   * Set the content for the document note.
+   * Sets the content for the document note.
    *
    * @param content the content for the document note
    */
@@ -111,7 +111,7 @@ public class UpdateDocumentNoteRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the document note.
+   * Sets the ID for the document note.
    *
    * @param documentNoteId the ID for the document note
    */

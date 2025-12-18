@@ -78,7 +78,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
   /**
    * Constructs a new {@code MailServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param mailTemplateRepository the Mail Template Repository
    * @param mailTemplateSummaryRepository the Mail Template Summary Repository
    */

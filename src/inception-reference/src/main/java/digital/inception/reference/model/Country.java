@@ -293,7 +293,7 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country.
+   * Sets the ISO 3166-1 alpha-2 code for the country.
    *
    * @param code the ISO 3166-1 alpha-2 code for the country
    */
@@ -302,7 +302,7 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the description for the country.
+   * Sets the description for the country.
    *
    * @param description the description for the country
    */
@@ -311,7 +311,7 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-3 code for the country.
+   * Sets the ISO 3166-1 alpha-3 code for the country.
    *
    * @param iso3Code the ISO 3166-1 alpha-3 code for the country
    */
@@ -320,7 +320,7 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the country.
+   * Sets the Unicode locale identifier for the country.
    *
    * @param localeId the Unicode locale identifier for the country
    */
@@ -329,7 +329,7 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the name of the country.
+   * Sets the name of the country.
    *
    * @param name the name of the country
    */
@@ -338,7 +338,7 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the nationality for the country.
+   * Sets the nationality for the country.
    *
    * @param nationality the nationality for the country
    */
@@ -347,7 +347,7 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the short name for the country.
+   * Sets the short name for the country.
    *
    * @param shortDescription the short name for the country
    */
@@ -356,7 +356,7 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the sort order for the country.
+   * Sets the sort order for the country.
    *
    * @param sortOrder the sort order for the country
    */
@@ -365,7 +365,7 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the sovereign state the country is associated with.
+   * Sets the ISO 3166-1 alpha-2 code for the sovereign state the country is associated with.
    *
    * @param sovereignState the ISO 3166-1 alpha-2 code for the sovereign state the country is
    *     associated with

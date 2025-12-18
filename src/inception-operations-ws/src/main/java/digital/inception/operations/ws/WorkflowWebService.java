@@ -41,7 +41,7 @@ public class WorkflowWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code WorkflowWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param workflowService the Workflow Service
    */
   public WorkflowWebService(

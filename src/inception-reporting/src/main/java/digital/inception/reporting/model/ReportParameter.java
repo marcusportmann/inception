@@ -101,7 +101,7 @@ public class ReportParameter implements Serializable {
   }
 
   /**
-   * Set the name of the report parameter.
+   * Sets the name of the report parameter.
    *
    * @param name the name of the report parameter
    */
@@ -110,7 +110,7 @@ public class ReportParameter implements Serializable {
   }
 
   /**
-   * Set the value for the report parameter.
+   * Sets the value for the report parameter.
    *
    * @param value the value for the report parameter
    */

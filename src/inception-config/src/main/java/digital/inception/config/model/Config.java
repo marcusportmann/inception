@@ -164,7 +164,7 @@ public class Config implements Serializable {
   }
 
   /**
-   * Set the description for the config.
+   * Sets the description for the config.
    *
    * @param description the description for the config
    */
@@ -173,7 +173,7 @@ public class Config implements Serializable {
   }
 
   /**
-   * Set the ID for the config.
+   * Sets the ID for the config.
    *
    * @param id the ID for the config
    */
@@ -182,7 +182,7 @@ public class Config implements Serializable {
   }
 
   /**
-   * Set the value for the config.
+   * Sets the value for the config.
    *
    * @param value the value for the config
    */

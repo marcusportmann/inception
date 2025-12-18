@@ -1,78 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-
   <artifactId>inception-ws</artifactId>
-  <name>inception-ws</name>
-
-  <parent>
-    <groupId>digital.inception</groupId>
-    <artifactId>inception-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
-
-  <dependencies>
-    <!-- Inception Dependencies -->
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-core</artifactId>
-    </dependency>
-
-    <!-- Dependencies -->
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-frontend-jaxws</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-transports-http</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-ws-security</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.wss4j</groupId>
-      <artifactId>wss4j-ws-security-common</artifactId>
-    </dependency>
-
-    <!-- Provided Dependencies -->
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <scope>provided</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot</artifactId>
-      <scope>provided</scope>
-      <optional>true</optional>
-    </dependency>
-  </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
         <executions>
           <execution>
-            <id>default-deploy</id>
-            <phase>deploy</phase>
             <goals>
               <goal>deploy</goal>
             </goals>
+            <id>default-deploy</id>
+            <phase>deploy</phase>
           </execution>
         </executions>
+        <groupId>org.apache.maven.plugins</groupId>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
         <executions>
           <execution>
-            <id>enforce</id>
             <configuration>
               <rules>
                 <dependencyConvergence>
@@ -89,11 +39,12 @@
             <goals>
               <goal>enforce</goal>
             </goals>
+            <id>enforce</id>
           </execution>
         </executions>
+        <groupId>org.apache.maven.plugins</groupId>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <failOnWarnings>true</failOnWarnings>
@@ -101,16 +52,66 @@
         </configuration>
         <executions>
           <execution>
-            <id>attach-javadocs</id>
             <goals>
               <goal>jar</goal>
             </goals>
+            <id>attach-javadocs</id>
           </execution>
         </executions>
+        <groupId>org.apache.maven.plugins</groupId>
       </plugin>
     </plugins>
   </build>
-  
+  <dependencies>
+    <!-- Inception Dependencies -->
+    <dependency>
+      <artifactId>inception-core</artifactId>
+      <groupId>digital.inception</groupId>
+    </dependency>
+
+    <!-- Dependencies -->
+    <dependency>
+      <artifactId>cxf-rt-frontend-jaxws</artifactId>
+      <groupId>org.apache.cxf</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>cxf-rt-transports-http</artifactId>
+      <groupId>org.apache.cxf</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>cxf-rt-ws-security</artifactId>
+      <groupId>org.apache.cxf</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>wss4j-ws-security-common</artifactId>
+      <groupId>org.apache.wss4j</groupId>
+    </dependency>
+
+    <!-- Provided Dependencies -->
+    <dependency>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <groupId>jakarta.servlet</groupId>
+      <optional>true</optional>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <optional>true</optional>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>inception-ws</name>
+
+  <parent>
+    <artifactId>inception-parent</artifactId>
+    <groupId>digital.inception</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
 </project>
 
 

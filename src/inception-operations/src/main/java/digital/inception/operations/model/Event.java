@@ -16,11 +16,13 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
+import digital.inception.processor.AbstractProcessableObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -58,9 +60,12 @@ import java.util.UUID;
   "actor",
   "processed",
   "processingAttempts",
+  "processingTime",
+  "processingSuspended",
+  "lastProcessed",
+  "nextProcessed",
   "locked",
-  "lockName",
-  "lastProcessed"
+  "lockName"
 })
 @XmlRootElement(name = "Event", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -77,15 +82,18 @@ import java.util.UUID;
       "actor",
       "processed",
       "processingAttempts",
+      "processingTime",
+      "processingSuspended",
+      "lastProcessed",
+      "nextProcessed",
       "locked",
-      "lockName",
-      "lastProcessed"
+      "lockName"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_events")
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Event implements Serializable {
+public class Event extends AbstractProcessableObject<UUID, EventStatus> implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -108,31 +116,6 @@ public class Event implements Serializable {
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
-
-  /** The date and time the last attempt was made to process the event. */
-  @Schema(description = "The date and time the last attempt was made to process the event")
-  @JsonProperty
-  @XmlElement(name = "LastProcessed")
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "last_processed")
-  private OffsetDateTime lastProcessed;
-
-  /** The name of the entity that has locked the event for processing. */
-  @Schema(description = "The name of the entity that has locked the event for processing")
-  @XmlElement(name = "LockName")
-  @Size(min = 1, max = 100)
-  @Column(name = "lock_name", length = 100)
-  private String lockName;
-
-  /** The date and time the event was locked for processing. */
-  @Schema(description = "The date and time the event was locked for processing")
-  @JsonProperty
-  @XmlElement(name = "Locked")
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "locked")
-  private OffsetDateTime locked;
 
   /** The ID for the object the event is associated with. */
   @Schema(
@@ -165,22 +148,6 @@ public class Event implements Serializable {
   @Column(name = "occurred", nullable = false)
   private OffsetDateTime occurred;
 
-  /** The date and time the event was processed. */
-  @Schema(description = "The date and time the event was processed")
-  @JsonProperty
-  @XmlElement(name = "Processed")
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "processed")
-  private OffsetDateTime processed;
-
-  /** The number of times the processing of the event has been attempted. */
-  @Schema(description = "The number of times the processing of the event has been attempted")
-  @JsonProperty
-  @XmlElement(name = "ProcessingAttempts")
-  @Column(name = "processing_attempts", nullable = false)
-  private Integer processingAttempts = 0;
-
   /** The status of the event. */
   @Schema(description = "The status of the event", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
@@ -208,7 +175,9 @@ public class Event implements Serializable {
   private EventType type;
 
   /** Constructs a new {@code Event}. */
-  public Event() {}
+  public Event() {
+    super(EventStatus.QUEUED);
+  }
 
   /**
    * Constructs a new {@code Event}.
@@ -227,6 +196,8 @@ public class Event implements Serializable {
       EventType type,
       OffsetDateTime occurred,
       String actor) {
+    super(EventStatus.QUEUED);
+
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.objectType = objectType;
@@ -251,35 +222,15 @@ public class Event implements Serializable {
    *
    * @return the ID for the event
    */
+  @Override
   public UUID getId() {
     return id;
   }
 
-  /**
-   * Returns the date and time the last attempt was made to process the event.
-   *
-   * @return the date and time the last attempt was made to process the event
-   */
-  public OffsetDateTime getLastProcessed() {
-    return lastProcessed;
-  }
-
-  /**
-   * Returns the name of the entity that has locked the event for processing.
-   *
-   * @return the name of the entity that has locked the event for processing
-   */
-  public String getLockName() {
-    return lockName;
-  }
-
-  /**
-   * Returns the date and time the event was locked for processing.
-   *
-   * @return the date and time the event was locked for processing
-   */
-  public OffsetDateTime getLocked() {
-    return locked;
+  @JsonIgnore
+  @Override
+  public String getIdAsKey() {
+    return id.toString();
   }
 
   /**
@@ -310,24 +261,6 @@ public class Event implements Serializable {
   }
 
   /**
-   * Returns the date and time the event was processed.
-   *
-   * @return the date and time the event was processed
-   */
-  public OffsetDateTime getProcessed() {
-    return processed;
-  }
-
-  /**
-   * Returns the number of times the processing of the event has been attempted.
-   *
-   * @return the number of times the processing of the event has been attempted
-   */
-  public Integer getProcessingAttempts() {
-    return processingAttempts;
-  }
-
-  /**
    * Returns the status of the event.
    *
    * @return the status of the event
@@ -354,17 +287,8 @@ public class Event implements Serializable {
     return type;
   }
 
-  /** Increment the number of times that the processing of the event was attempted. */
-  public void incrementProcessingAttempts() {
-    if (processingAttempts == null) {
-      processingAttempts = 1;
-    } else {
-      processingAttempts++;
-    }
-  }
-
   /**
-   * Set the person or system who completed the action that led to the event.
+   * Sets the person or system who completed the action that led to the event.
    *
    * @param actor the person or system who completed the action that led to the event
    */
@@ -373,7 +297,7 @@ public class Event implements Serializable {
   }
 
   /**
-   * Set the ID for the event.
+   * Sets the ID for the event.
    *
    * @param id the ID for the event
    */
@@ -382,34 +306,7 @@ public class Event implements Serializable {
   }
 
   /**
-   * Set the date and time the last attempt was made to process the event
-   *
-   * @param lastProcessed the date and time the last attempt was made to process the event
-   */
-  public void setLastProcessed(OffsetDateTime lastProcessed) {
-    this.lastProcessed = lastProcessed;
-  }
-
-  /**
-   * Set the name of the entity that has locked the event for processing.
-   *
-   * @param lockName the name of the entity that has locked the event for processing
-   */
-  public void setLockName(String lockName) {
-    this.lockName = lockName;
-  }
-
-  /**
-   * Set the date and time the event was locked for processing.
-   *
-   * @param locked the date and time the event was locked for processing
-   */
-  public void setLocked(OffsetDateTime locked) {
-    this.locked = locked;
-  }
-
-  /**
-   * Set the ID for the object the event is associated with.
+   * Sets the ID for the object the event is associated with.
    *
    * @param objectId the ID for the object the event is associated with
    */
@@ -418,7 +315,7 @@ public class Event implements Serializable {
   }
 
   /**
-   * Set the type of object the event is associated with.
+   * Sets the type of object the event is associated with.
    *
    * @param objectType the type of object the event is associated with
    */
@@ -427,7 +324,7 @@ public class Event implements Serializable {
   }
 
   /**
-   * Set the date and time the event occurred.
+   * Sets the date and time the event occurred.
    *
    * @param occurred the date and time the event occurred
    */
@@ -436,25 +333,7 @@ public class Event implements Serializable {
   }
 
   /**
-   * Set the date and time the event was processed.
-   *
-   * @param processed the date and time the event was processed
-   */
-  public void setProcessed(OffsetDateTime processed) {
-    this.processed = processed;
-  }
-
-  /**
-   * Set the number of times the processing of the event has been attempted.
-   *
-   * @param processingAttempts the number of times the processing of the event has been attempted
-   */
-  public void setProcessingAttempts(Integer processingAttempts) {
-    this.processingAttempts = processingAttempts;
-  }
-
-  /**
-   * Set the status of the event.
+   * Sets the status of the event.
    *
    * @param status the status of the event
    */
@@ -463,7 +342,7 @@ public class Event implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the event is associated with.
+   * Sets the ID for the tenant the event is associated with.
    *
    * @param tenantId the ID for the tenant the event is associated with
    */
@@ -472,7 +351,7 @@ public class Event implements Serializable {
   }
 
   /**
-   * Set the event type.
+   * Sets the event type.
    *
    * @param type the event type
    */

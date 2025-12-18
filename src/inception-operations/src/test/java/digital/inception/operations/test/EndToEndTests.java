@@ -53,8 +53,8 @@ import digital.inception.operations.model.InteractionAttachmentSummary;
 import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
+import digital.inception.operations.model.InteractionSortBy;
 import digital.inception.operations.model.InteractionSource;
-import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
@@ -76,9 +76,9 @@ import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
-import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
-import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowDocumentSummaries;
+import digital.inception.operations.model.WorkflowDocumentSummary;
 import digital.inception.operations.model.WorkflowExternalReference;
 import digital.inception.operations.model.WorkflowSortBy;
 import digital.inception.operations.model.WorkflowStatus;
@@ -266,7 +266,8 @@ public class EndToEndTests {
             documentDefinitionCategory.getId(),
             null,
             "Test Document Definition",
-            null,
+            "Test Document Definition Short Name",
+            "Test Document Definition Description",
             null,
             List.of(documentAttributeDefinition));
 
@@ -278,7 +279,8 @@ public class EndToEndTests {
             documentDefinitionCategory.getId(),
             null,
             "Another Test Document Definition",
-            null,
+            "Another Test Document Definition Short Name",
+            "Another Test Document Definition Description",
             null,
             List.of(documentAttributeDefinition));
 
@@ -444,6 +446,7 @@ public class EndToEndTests {
         new UpdateInteractionNoteRequest(
             interactionNote.getId(), "This is the interaction note content.");
 
+    @SuppressWarnings("unused")
     InteractionNote updatedInteractionNote =
         interactionService.updateInteractionNote(
             TenantUtil.DEFAULT_TENANT_ID, updateInteractionNoteRequest, "TEST2");
@@ -510,8 +513,7 @@ public class EndToEndTests {
             "This is the workflow description",
             List.of(
                 new WorkflowExternalReference(
-                    "test_workflow_external_reference",
-                    "test_workflow_external_reference_value")),
+                    "test_workflow_external_reference", "test_workflow_external_reference_value")),
             List.of(
                 new WorkflowAttribute("testWorkflowAttribute", "Test Workflow Attribute Value")),
             List.of(new InitiateWorkflowInteractionLink(firstInteractionId, firstConversationId)),
@@ -577,8 +579,8 @@ public class EndToEndTests {
 
     assertEquals(0, outstandingWorkflowDocuments.size());
 
-    WorkflowDocuments workflowDocuments =
-        workflowService.getWorkflowDocuments(
+    WorkflowDocumentSummaries workflowDocumentSummaries =
+        workflowService.getWorkflowDocumentSummariesForWorkflow(
             TenantUtil.DEFAULT_TENANT_ID,
             workflow.getId(),
             null,
@@ -588,14 +590,14 @@ public class EndToEndTests {
             10);
 
     List<UUID> documentIds =
-        workflowDocuments.getWorkflowDocuments().stream()
-            .map(WorkflowDocument::getDocumentId)
+        workflowDocumentSummaries.getWorkflowDocumentSummaries().stream()
+            .map(WorkflowDocumentSummary::getDocumentId)
             .toList();
 
     // Verify the first workflow document
     VerifyWorkflowDocumentRequest verifyWorkflowDocumentRequest =
         new VerifyWorkflowDocumentRequest(
-            workflowDocuments.getWorkflowDocuments().getFirst().getId());
+            workflowDocumentSummaries.getWorkflowDocumentSummaries().getFirst().getId());
 
     workflowService.verifyWorkflowDocument(
         TenantUtil.DEFAULT_TENANT_ID, verifyWorkflowDocumentRequest, "TEST1");
@@ -603,7 +605,7 @@ public class EndToEndTests {
     // Reject the second workflow document
     RejectWorkflowDocumentRequest rejectWorkflowDocumentRequest =
         new RejectWorkflowDocumentRequest(
-            workflowDocuments.getWorkflowDocuments().get(1).getId(),
+            workflowDocumentSummaries.getWorkflowDocumentSummaries().get(1).getId(),
             "This is a test rejection reason.");
 
     workflowService.rejectWorkflowDocument(
@@ -627,6 +629,18 @@ public class EndToEndTests {
 
     assertEquals(secondInteractionId, workflow.getInteractionLinks().get(1).getInteractionId());
     assertEquals("TEST2", workflow.getInteractionLinks().get(1).getLinkedBy());
+
+    InteractionSummaries retrievedInteractionSummaries =
+        workflowService.getInteractionSummariesForWorkflow(
+            TenantUtil.DEFAULT_TENANT_ID,
+            workflow.getId(),
+            null,
+            InteractionSortBy.OCCURRED,
+            SortDirection.ASCENDING,
+            0,
+            10);
+
+    assertEquals(2, retrievedInteractionSummaries.getInteractionSummaries().size());
 
     // Delink an interaction from the workflow
     DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest =
@@ -814,6 +828,7 @@ public class EndToEndTests {
       greenMail = new GreenMail(ServerSetupTest.SMTP_IMAP);
     }
 
+    @SuppressWarnings("unused")
     GreenMailUser greenMailUser =
         greenMail.setUser(FIRST_TO_EMAIL_ADDRESS, TO_USERNAME, TO_PASSWORD);
 
@@ -824,42 +839,6 @@ public class EndToEndTests {
   protected void tearDown() {
     // Stop the GreenMail server
     greenMail.stop();
-  }
-
-  private String documentSetUp() throws Exception {
-    // Create the document definition category
-    DocumentDefinitionCategory documentDefinitionCategory =
-        new DocumentDefinitionCategory(
-            "test_document_definition_category_" + randomId(), "Test Document Definition Category");
-
-    documentService.createDocumentDefinitionCategory(documentDefinitionCategory);
-
-    // Create the document definitions
-    DocumentDefinition documentDefinition =
-        new DocumentDefinition(
-            "test_document_definition_" + randomId(),
-            documentDefinitionCategory.getId(),
-            null,
-            "Test Document Definition",
-            null,
-            null,
-            null);
-
-    documentService.createDocumentDefinition(documentDefinition);
-
-    DocumentDefinition anotherDocumentDefinition =
-        new DocumentDefinition(
-            "another_test_document_definition_" + randomId(),
-            documentDefinitionCategory.getId(),
-            null,
-            "Another Test Document Definition",
-            null,
-            null,
-            null);
-
-    documentService.createDocumentDefinition(anotherDocumentDefinition);
-
-    return documentDefinitionCategory.getId();
   }
 
   private InteractionSource getFitLifeCustomerServiceMailboxInteractionSource() {
@@ -882,25 +861,4 @@ public class EndToEndTests {
   private String randomId() {
     return String.format("%04X", secureRandom.nextInt(0x10000));
   }
-
-  private void waitForInteractionToProcess(UUID tenantId, UUID interactionId) throws Exception {
-    for (int i = 0; i < 50; i++) {
-      Interaction interaction = interactionService.getInteraction(tenantId, interactionId);
-
-      if (interaction.getStatus() == InteractionStatus.AVAILABLE) {
-        return;
-      }
-
-      Thread.sleep(250);
-    }
-
-    throw new RuntimeException(
-        "Timed out waiting for the interaction ("
-            + interactionId
-            + ") for the tenant ("
-            + tenantId
-            + ") to process");
-  }
-
-  private void workflowSetUp() throws Exception {}
 }

@@ -112,7 +112,7 @@ public class WorkflowEngineIds implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow engine the workflow is associated with.
+   * Sets the ID for the workflow engine the workflow is associated with.
    *
    * @param engineId the ID for the workflow engine the workflow is associated with
    */
@@ -121,7 +121,7 @@ public class WorkflowEngineIds implements Serializable {
   }
 
   /**
-   * Set the ID for the corresponding process or case instance in the workflow engine for the
+   * Sets the ID for the corresponding process or case instance in the workflow engine for the
    * workflow.
    *
    * @param engineInstanceId the ID for the corresponding process or case instance in the workflow

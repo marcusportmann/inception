@@ -53,7 +53,7 @@ public class DataServiceImpl extends AbstractServiceBase implements DataService 
   /**
    * Constructs a new {@code DataServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param reactiveDataRepository the Reactive Data Repository
    */
   public DataServiceImpl(

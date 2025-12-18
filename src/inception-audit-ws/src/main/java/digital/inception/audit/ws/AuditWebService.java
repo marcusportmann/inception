@@ -41,7 +41,7 @@ public class AuditWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code AuditWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param auditService the Audit Service
    */
   public AuditWebService(ApplicationContext applicationContext, AuditService auditService) {

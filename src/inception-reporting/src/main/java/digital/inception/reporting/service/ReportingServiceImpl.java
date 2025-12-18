@@ -68,7 +68,7 @@ public class ReportingServiceImpl extends AbstractServiceBase implements Reporti
   /**
    * Constructs a new {@code ReportingServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param dataSource the data source used to provide connections to the application database
    * @param reportDefinitionRepository the Report Definition Repository
    * @param reportDefinitionSummaryRepository the Report Definition Summary Repository

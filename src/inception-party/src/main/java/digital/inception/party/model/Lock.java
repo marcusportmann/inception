@@ -204,7 +204,7 @@ public class Lock implements Serializable {
   }
 
   /**
-   * Set the date the lock is effective from.
+   * Sets the date the lock is effective from.
    *
    * @param effectiveFrom the date the lock is effective from
    */
@@ -213,7 +213,7 @@ public class Lock implements Serializable {
   }
 
   /**
-   * Set the date the lock is effective to.
+   * Sets the date the lock is effective to.
    *
    * @param effectiveTo the date the lock is effective to
    */
@@ -222,7 +222,7 @@ public class Lock implements Serializable {
   }
 
   /**
-   * Set the party the lock is associated with.
+   * Sets the party the lock is associated with.
    *
    * @param party the party the lock is associated with
    */
@@ -237,7 +237,7 @@ public class Lock implements Serializable {
   }
 
   /**
-   * Set the code for the lock type.
+   * Sets the code for the lock type.
    *
    * @param type the code for the lock type
    */

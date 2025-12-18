@@ -169,7 +169,7 @@ public class InteractionSourcePermission implements Serializable {
   }
 
   /**
-   * Set the interaction source the interaction permission type is associated with.
+   * Sets the interaction source the interaction permission type is associated with.
    *
    * @param interactionSource the interaction source the interaction permission type is associated
    *     with
@@ -185,7 +185,7 @@ public class InteractionSourcePermission implements Serializable {
   }
 
   /**
-   * Set the code for the role the interaction source permission is assigned to.
+   * Sets the code for the role the interaction source permission is assigned to.
    *
    * @param roleCode the code for the role the interaction source permission is assigned to
    */
@@ -194,7 +194,7 @@ public class InteractionSourcePermission implements Serializable {
   }
 
   /**
-   * Set the interaction permission type.
+   * Sets the interaction permission type.
    *
    * @param type the interaction permission type
    */

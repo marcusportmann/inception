@@ -41,18 +41,26 @@
             <mat-label>Name</mat-label>
             <input type="text" matInput formControlName="name" required autofocus>
             <mat-hint>The name.</mat-hint>
-            <mat-error *ngIf="exampleForm.controls['name'].errors && !exampleForm.controls['name'].untouched">
-              <span *ngIf="exampleForm.controls['name'].errors?.['required']">A name is required.</span>
-            </mat-error>
+            @if (exampleForm.controls['name'].errors && !exampleForm.controls['name'].untouched) {
+              <mat-error>
+                @if (exampleForm.controls['name'].errors?.['required']) {
+                  <span>A name is required.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Preferred name</mat-label>
             <input type="text" matInput formControlName="preferredName" required>
-            <mat-error *ngIf="exampleForm.controls['preferredName'].errors && !exampleForm.controls['preferredName'].untouched">
-              <span *ngIf="exampleForm.controls['preferredName'].errors?.['required']">A preferred name is required.</span>
-            </mat-error>
+            @if (exampleForm.controls['preferredName'].errors && !exampleForm.controls['preferredName'].untouched) {
+              <mat-error>
+                @if (exampleForm.controls['preferredName'].errors?.['required']) {
+                  <span>A preferred name is required.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -63,22 +71,32 @@
             <input matInput [matDatepicker]="datePicker" (focus)="datePicker.open()" formControlName="dateOfBirth" required readonly>
             <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
             <mat-datepicker #datePicker></mat-datepicker>
-            <mat-error *ngIf="exampleForm.controls['dateOfBirth'].errors && !exampleForm.controls['dateOfBirth'].untouched">
-              <span *ngIf="exampleForm.controls['dateOfBirth'].errors?.['required']">A date of birth is required.</span>
-            </mat-error>
+            @if (exampleForm.controls['dateOfBirth'].errors && !exampleForm.controls['dateOfBirth'].untouched) {
+              <mat-error>
+                @if (exampleForm.controls['dateOfBirth'].errors?.['required']) {
+                  <span>A date of birth is required.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Title</mat-label>
             <mat-select formControlName="title" required>
-              <mat-option *ngFor="let title of titles" [value]="title.value">
-                {{title.name}}
-              </mat-option>
+              @for (title of titles; track title) {
+                <mat-option [value]="title.value">
+                  {{title.name}}
+                </mat-option>
+              }
             </mat-select>
-            <mat-error *ngIf="exampleForm.controls['title'].errors && !exampleForm.controls['title'].untouched">
-              <span *ngIf="exampleForm.controls['title'].errors?.['required']">A title is required.</span>
-            </mat-error>
+            @if (exampleForm.controls['title'].errors && !exampleForm.controls['title'].untouched) {
+              <mat-error>
+                @if (exampleForm.controls['title'].errors?.['required']) {
+                  <span>A title is required.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -87,18 +105,26 @@
           <mat-form-field>
             <mat-label>Password</mat-label>
             <input type="password" matInput formControlName="password" required>
-            <mat-error *ngIf="exampleForm.controls['password'].errors && !exampleForm.controls['password'].untouched">
-              <span *ngIf="exampleForm.controls['password'].errors?.['required']">A password is required.</span>
-            </mat-error>
+            @if (exampleForm.controls['password'].errors && !exampleForm.controls['password'].untouched) {
+              <mat-error>
+                @if (exampleForm.controls['password'].errors?.['required']) {
+                  <span>A password is required.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Confirm Password</mat-label>
             <input type="password" matInput formControlName="confirmPassword" required>
-            <mat-error *ngIf="exampleForm.controls['confirmPassword'].errors && !exampleForm.controls['confirmPassword'].untouched">
-              <span *ngIf="exampleForm.controls['confirmPassword'].errors?.['required']">Password confirmation is required.</span>
-            </mat-error>
+            @if (exampleForm.controls['confirmPassword'].errors && !exampleForm.controls['confirmPassword'].untouched) {
+              <mat-error>
+                @if (exampleForm.controls['confirmPassword'].errors?.['required']) {
+                  <span>Password confirmation is required.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -112,9 +138,13 @@
           <mat-form-field>
             <mat-label>Favorite country</mat-label>
             <inception-reference-country-input [formControl]="favoriteCountryControl" required></inception-reference-country-input>
-            <mat-error *ngIf="favoriteCountryControl.errors && !favoriteCountryControl.untouched">
-              <span *ngIf="favoriteCountryControl.errors?.['required']">A favorite country is required.</span>
-            </mat-error>
+            @if (favoriteCountryControl.errors && !favoriteCountryControl.untouched) {
+              <mat-error>
+                @if (favoriteCountryControl.errors?.['required']) {
+                  <span>A favorite country is required.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col-sm">
@@ -124,9 +154,13 @@
             <span matTextPrefix>R&nbsp;</span>
             <span matTextSuffix>.00</span>
             <mat-hint>Your gross income.</mat-hint>
-            <mat-error *ngIf="exampleForm.controls['grossIncome'].errors && !exampleForm.controls['grossIncome'].untouched">
-              <span *ngIf="exampleForm.controls['grossIncome'].errors?.['required']">The gross income is required.</span>
-            </mat-error>
+            @if (exampleForm.controls['grossIncome'].errors && !exampleForm.controls['grossIncome'].untouched) {
+              <mat-error>
+                @if (exampleForm.controls['grossIncome'].errors?.['required']) {
+                  <span>The gross income is required.</span>
+                }
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -140,9 +174,13 @@
               <mat-radio-button value="3">Blue</mat-radio-button>
             </mat-radio-group>
             <mat-hint>Select a favorite color.</mat-hint>
-            <mat-error *ngIf="exampleForm.controls['favoriteColor'].errors && !exampleForm.controls['favoriteColor'].untouched">
-              <span *ngIf="exampleForm.controls['favoriteColor'].errors?.['required']">A favorite colour is required.</span>
-            </mat-error>
+            @if (exampleForm.controls['favoriteColor'].errors && !exampleForm.controls['favoriteColor'].untouched) {
+              <mat-error>
+                @if (exampleForm.controls['favoriteColor'].errors?.['required']) {
+                  <span>A favorite colour is required.</span>
+                }
+              </mat-error>
+            }
           </inception-core-group-form-field>
         </div>
         <div class="col-sm">

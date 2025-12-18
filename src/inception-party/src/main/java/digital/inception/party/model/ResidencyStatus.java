@@ -214,7 +214,7 @@ public class ResidencyStatus implements Serializable {
   }
 
   /**
-   * Set the code for the residency status.
+   * Sets the code for the residency status.
    *
    * @param code the code for the residency status
    */
@@ -223,7 +223,7 @@ public class ResidencyStatus implements Serializable {
   }
 
   /**
-   * Set the description for the residency status.
+   * Sets the description for the residency status.
    *
    * @param description the description for the residency status
    */
@@ -232,7 +232,7 @@ public class ResidencyStatus implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the residency status.
+   * Sets the Unicode locale identifier for the residency status.
    *
    * @param localeId the Unicode locale identifier for the residency status
    */
@@ -241,7 +241,7 @@ public class ResidencyStatus implements Serializable {
   }
 
   /**
-   * Set the name of the residency status.
+   * Sets the name of the residency status.
    *
    * @param name the name of the residency status
    */
@@ -250,7 +250,7 @@ public class ResidencyStatus implements Serializable {
   }
 
   /**
-   * Set the sort order for the residency status.
+   * Sets the sort order for the residency status.
    *
    * @param sortOrder the sort order for the residency status
    */
@@ -259,7 +259,7 @@ public class ResidencyStatus implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the residency status is specific to.
+   * Sets the ID for the tenant the residency status is specific to.
    *
    * @param tenantId the ID for the tenant the residency status is specific to
    */

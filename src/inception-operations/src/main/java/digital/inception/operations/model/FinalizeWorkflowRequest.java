@@ -98,7 +98,7 @@ public class FinalizeWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the status for the workflow.
+   * Sets the status for the workflow.
    *
    * @param status the status for the workflow
    */
@@ -107,7 +107,7 @@ public class FinalizeWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow.
+   * Sets the ID for the workflow.
    *
    * @param workflowId the ID for the workflow
    */

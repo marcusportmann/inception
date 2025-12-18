@@ -49,7 +49,7 @@ public final class DataSourceUtil {
   /**
    * Initialise the Agroal data source.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param dataSourceConfiguration the data source configuration
    * @return the Agroal data source
    */
@@ -61,7 +61,7 @@ public final class DataSourceUtil {
   /**
    * Initialise the Agroal data source.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param dataSourceConfiguration the data source configuration
    * @param enableTransactionIntegration enable transaction integration
    * @return the Agroal data source

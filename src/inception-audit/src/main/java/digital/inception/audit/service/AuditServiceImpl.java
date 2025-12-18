@@ -32,7 +32,7 @@ public class AuditServiceImpl extends AbstractServiceBase implements AuditServic
   /**
    * Constructs a new {@code AuditServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public AuditServiceImpl(ApplicationContext applicationContext) {
     super(applicationContext);

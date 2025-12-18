@@ -16,7 +16,8 @@
 
 package digital.inception.operations.model;
 
-import digital.inception.core.model.CodeEnum;
+import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.processor.ProcessableObjectStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -30,30 +31,33 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The event status")
 @XmlEnum
 @XmlType(name = "EventStatus", namespace = "https://inception.digital/operations")
-public enum EventStatus implements CodeEnum {
+public enum EventStatus implements ProcessableObjectStatus {
 
   /** Queued. */
   @XmlEnumValue("Queued")
-  QUEUED("queued", "Queued"),
+  QUEUED("queued", ProcessingPhase.PENDING, "Queued"),
 
   /** Processing. */
   @XmlEnumValue("Processing")
-  PROCESSING("processing", "Processing"),
+  PROCESSING("processing", ProcessingPhase.PROCESSING, "Processing"),
 
   /** Processed. */
   @XmlEnumValue("Processed")
-  PROCESSED("processed", "Processed"),
+  PROCESSED("processed", ProcessingPhase.COMPLETED, "Processed"),
 
   /** Failed. */
   @XmlEnumValue("Failed")
-  FAILED("failed", "Failed");
+  FAILED("failed", ProcessingPhase.FAILED, "Failed");
 
   private final String code;
 
   private final String description;
 
-  EventStatus(String code, String description) {
+  private final ProcessingPhase processingPhase;
+
+  EventStatus(String code, ProcessingPhase processingPhase, String description) {
     this.code = code;
+    this.processingPhase = processingPhase;
     this.description = description;
   }
 
@@ -62,6 +66,7 @@ public enum EventStatus implements CodeEnum {
    *
    * @return the code for the event status
    */
+  @JsonValue
   public String code() {
     return code;
   }
@@ -73,6 +78,16 @@ public enum EventStatus implements CodeEnum {
    */
   public String description() {
     return description;
+  }
+
+  /**
+   * Returns the processing phase for the event status.
+   *
+   * @return the processing phase for the event status
+   */
+  @Override
+  public ProcessingPhase getProcessingPhase() {
+    return processingPhase;
   }
 
   /**

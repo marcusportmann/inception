@@ -70,7 +70,7 @@ public class DefaultMongoDatabaseFactory
   /**
    * Constructs a new {@code DefaultMongoDatabaseFactory}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param uri the MongoDB URI
    * @param databaseName the MongoDB database name
    */
@@ -94,7 +94,7 @@ public class DefaultMongoDatabaseFactory
   /**
    * Constructs a new {@code DefaultMongoDatabaseFactory}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param databaseName the MongoDB database name
    */
   public DefaultMongoDatabaseFactory(ApplicationContext applicationContext, String databaseName) {
@@ -125,7 +125,7 @@ public class DefaultMongoDatabaseFactory
   /**
    * Constructs a new {@code DefaultMongoDatabaseFactory}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public DefaultMongoDatabaseFactory(ApplicationContext applicationContext) {
     Environment environment = applicationContext.getEnvironment();
@@ -162,7 +162,7 @@ public class DefaultMongoDatabaseFactory
   /**
    * Constructs a new {@code DefaultMongoDatabaseFactory} from a MongoDB URI.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param uri the MongoDB URI
    * @return the {@code DefaultMongoDatabaseFactory} instance for the MongoDB URI
    */
@@ -209,7 +209,7 @@ public class DefaultMongoDatabaseFactory
   }
 
   /**
-   * Set the writeConcern controlling the acknowledgment of write operations.
+   * Sets the writeConcern controlling the acknowledgment of write operations.
    *
    * @param writeConcern the writeConcern controlling the acknowledgment of write operations
    */

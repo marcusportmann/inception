@@ -83,7 +83,7 @@ import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
 import digital.inception.operations.model.WorkflowDocumentStatus;
-import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowDocumentSummaries;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowEngineAttribute;
 import digital.inception.operations.model.WorkflowExternalReference;
@@ -313,6 +313,7 @@ public class WorkflowServiceTests {
             "Test Document Definition",
             null,
             null,
+            null,
             List.of(
                 new DocumentAttributeDefinition(
                     "testDocumentAttribute",
@@ -330,6 +331,7 @@ public class WorkflowServiceTests {
             documentDefinitionCategory.getId(),
             null,
             "Another Test Document Definition",
+            null,
             null,
             null,
             null);
@@ -500,13 +502,12 @@ public class WorkflowServiceTests {
             "This is the workflow description",
             List.of(
                 new WorkflowExternalReference(
-                    "test_workflow_external_reference",
-                    "test_workflow_external_reference_value")),
+                    "test_workflow_external_reference", "test_workflow_external_reference_value")),
             List.of(
                 new WorkflowAttribute("testWorkflowAttribute", "Test Workflow Attribute Value")),
             List.of(),
             List.of(new WorkflowVariable("testVariable", "Test Variable Value")),
-            null);
+            testWorkflowDataJson);
 
     Workflow workflow =
         workflowService.initiateWorkflow(
@@ -592,8 +593,8 @@ public class WorkflowServiceTests {
         "Invalid value for the \"tenantId\" workflow summary property");
 
     // Retrieve the workflow documents for the workflow
-    WorkflowDocuments retrievedWorkflowDocuments =
-        workflowService.getWorkflowDocuments(
+    WorkflowDocumentSummaries retrievedWorkflowDocumentSummaries =
+        workflowService.getWorkflowDocumentSummariesForWorkflow(
             TenantUtil.DEFAULT_TENANT_ID,
             workflow.getId(),
             "TEST1",
@@ -602,12 +603,19 @@ public class WorkflowServiceTests {
             0,
             10);
 
-    assertEquals(1, retrievedWorkflowDocuments.getTotal());
+    assertEquals(1, retrievedWorkflowDocumentSummaries.getTotal());
     assertEquals(
         documentDefinition.getId(),
-        retrievedWorkflowDocuments.getWorkflowDocuments().getFirst().getDocumentDefinitionId());
+        retrievedWorkflowDocumentSummaries
+            .getWorkflowDocumentSummaries()
+            .getFirst()
+            .getDocumentDefinitionId());
     assertEquals(
-        "TEST1", retrievedWorkflowDocuments.getWorkflowDocuments().getFirst().getRequestedBy());
+        "TEST1",
+        retrievedWorkflowDocumentSummaries
+            .getWorkflowDocumentSummaries()
+            .getFirst()
+            .getRequestedBy());
 
     // Retrieve the outstanding workflow documents for the workflow
     List<OutstandingWorkflowDocument> outstandingWorkflowDocuments =
@@ -624,7 +632,7 @@ public class WorkflowServiceTests {
 
     ProvideWorkflowDocumentRequest provideWorkflowDocumentRequest =
         new ProvideWorkflowDocumentRequest(
-            retrievedWorkflowDocuments.getWorkflowDocuments().getFirst().getId(),
+            retrievedWorkflowDocumentSummaries.getWorkflowDocumentSummaries().getFirst().getId(),
             FileType.PDF,
             "MultiPagePdf.pdf",
             null,
@@ -632,8 +640,7 @@ public class WorkflowServiceTests {
             null,
             List.of(
                 new DocumentExternalReference(
-                    "test_document_external_reference",
-                    "Test Document External Reference Value")),
+                    "test_document_external_reference", "Test Document External Reference Value")),
             List.of(
                 new DocumentAttribute("testDocumentAttribute", "Test Document Attribute Value")),
             null,
@@ -757,8 +764,8 @@ public class WorkflowServiceTests {
         workflowService.requestWorkflowDocument(
             TenantUtil.DEFAULT_TENANT_ID, requestWorkflowDocumentRequest, "TEST1");
 
-    retrievedWorkflowDocuments =
-        workflowService.getWorkflowDocuments(
+    retrievedWorkflowDocumentSummaries =
+        workflowService.getWorkflowDocumentSummariesForWorkflow(
             TenantUtil.DEFAULT_TENANT_ID,
             workflow.getId(),
             "TEST1",
@@ -767,7 +774,7 @@ public class WorkflowServiceTests {
             0,
             10);
 
-    assertEquals(2, retrievedWorkflowDocuments.getTotal());
+    assertEquals(2, retrievedWorkflowDocumentSummaries.getTotal());
 
     outstandingWorkflowDocuments =
         workflowService.getOutstandingWorkflowDocuments(
@@ -779,8 +786,8 @@ public class WorkflowServiceTests {
     workflowService.deleteWorkflowDocument(
         TenantUtil.DEFAULT_TENANT_ID, provideWorkflowDocumentRequest.getWorkflowDocumentId());
 
-    retrievedWorkflowDocuments =
-        workflowService.getWorkflowDocuments(
+    retrievedWorkflowDocumentSummaries =
+        workflowService.getWorkflowDocumentSummariesForWorkflow(
             TenantUtil.DEFAULT_TENANT_ID,
             workflow.getId(),
             "TEST1",
@@ -789,7 +796,7 @@ public class WorkflowServiceTests {
             0,
             10);
 
-    assertEquals(1, retrievedWorkflowDocuments.getTotal());
+    assertEquals(1, retrievedWorkflowDocumentSummaries.getTotal());
 
     outstandingWorkflowDocuments =
         workflowService.getOutstandingWorkflowDocuments(
@@ -1066,8 +1073,7 @@ public class WorkflowServiceTests {
     assertEquals(0, retrievedExternalReferenceTypes.size());
 
     ExternalReferenceType retrievedExternalReferenceType =
-        operationsReferenceService.getExternalReferenceType(
-            "test_workflow_external_reference");
+        operationsReferenceService.getExternalReferenceType("test_workflow_external_reference");
 
     assertEquals("test_workflow_external_reference", retrievedExternalReferenceType.getCode());
     assertEquals("Test Workflow External Reference", retrievedExternalReferenceType.getName());
@@ -1079,8 +1085,7 @@ public class WorkflowServiceTests {
 
     WorkflowEngineAttribute workflowEngineAttribute =
         new WorkflowEngineAttribute(
-            "testWorkflowEngineAttribute" + randomId(),
-            "Test Workflow Engine Attribute Value");
+            "testWorkflowEngineAttribute" + randomId(), "Test Workflow Engine Attribute Value");
 
     List<WorkflowEngineAttribute> workflowEngineAttributes = List.of(workflowEngineAttribute);
 
@@ -1129,6 +1134,7 @@ public class WorkflowServiceTests {
             "Test Shared Document Definition",
             null,
             null,
+            null,
             null);
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
@@ -1139,6 +1145,7 @@ public class WorkflowServiceTests {
             tenantDocumentDefinitionCategory.getId(),
             TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Document Definition",
+            null,
             null,
             null,
             null);
@@ -1465,8 +1472,7 @@ public class WorkflowServiceTests {
 
     workflowEngineAttribute =
         new WorkflowEngineAttribute(
-            "testWorkflowEngineAttribute" + randomId(),
-            "Test Workflow Engine Attribute Value");
+            "testWorkflowEngineAttribute" + randomId(), "Test Workflow Engine Attribute Value");
 
     workflowEngine.addAttribute(workflowEngineAttribute);
     workflowEngine.setName("Test Workflow Engine Updated");

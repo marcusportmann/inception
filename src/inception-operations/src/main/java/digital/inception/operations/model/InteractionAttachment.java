@@ -349,7 +349,7 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the binary data for the interaction attachment.
+   * Sets the binary data for the interaction attachment.
    *
    * @param data the binary data for the interaction attachment
    */
@@ -358,7 +358,7 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the file type for the interaction attachment.
+   * Sets the file type for the interaction attachment.
    *
    * @param fileType the file type for the interaction attachment
    */
@@ -367,7 +367,7 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the base-64 encoded SHA-256 hash of the data for the interaction attachment.
+   * Sets the base-64 encoded SHA-256 hash of the data for the interaction attachment.
    *
    * @param hash the base-64 encoded SHA-256 hash of the data for the interaction attachment
    */
@@ -376,7 +376,7 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction attachment.
+   * Sets the ID for the interaction attachment.
    *
    * @param id the ID for the interaction attachment
    */
@@ -385,7 +385,7 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction that the interaction attachment is associated with.
+   * Sets the ID for the interaction that the interaction attachment is associated with.
    *
    * @param interactionId the ID for the interaction that the interaction attachment is associated
    *     with
@@ -395,7 +395,7 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the name of the interaction attachment.
+   * Sets the name of the interaction attachment.
    *
    * @param name the name of the interaction attachment
    */
@@ -404,7 +404,7 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction source the interaction attachment is associated with.
+   * Sets the ID for the interaction source the interaction attachment is associated with.
    *
    * @param sourceId the ID for the interaction source the interaction attachment is associated with
    */
@@ -413,7 +413,7 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the interaction source specific reference for the interaction attachment.
+   * Sets the interaction source specific reference for the interaction attachment.
    *
    * @param sourceReference the interaction source specific reference for the interaction attachment
    */
@@ -422,7 +422,7 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the interaction attachment is associated with.
+   * Sets the ID for the tenant the interaction attachment is associated with.
    *
    * @param tenantId the ID for the tenant the interaction attachment is associated with
    */

@@ -16,6 +16,8 @@
 
 package digital.inception.core.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * The {@code CodeEnum} interface must be implemented by all custom Enum types that use snake case
  * code values, e.g. task_status, as the String representation for the Enum value.
@@ -52,6 +54,7 @@ public interface CodeEnum {
    *
    * @return the snake case code for the enumeration value
    */
+  @JsonValue
   String code();
 
   /**

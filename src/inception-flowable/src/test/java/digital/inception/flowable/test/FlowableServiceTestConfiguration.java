@@ -47,7 +47,7 @@
 //  /**
 //   * Constructs a new {@code FlowableServiceTestConfiguration}.
 //   *
-//   * @param applicationContext the Spring application context
+//   * @param applicationContext the Spring {@link ApplicationContext}
 //   * @param dataSource the data source used to provide connections to the application database
 //   * @param transactionManager the Spring platform transaction manager
 //   */

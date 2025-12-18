@@ -281,7 +281,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Set the ID for the task event.
+   * Sets the ID for the task event.
    *
    * @param id the ID for the task event
    */
@@ -290,7 +290,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Set the task data.
+   * Sets the task data.
    *
    * @param taskData the task data
    */
@@ -299,7 +299,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Set the ID for the task.
+   * Sets the ID for the task.
    *
    * @param taskId the ID for the task
    */
@@ -308,7 +308,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Set the code for the task step for a multistep task.
+   * Sets the code for the task step for a multistep task.
    *
    * @param taskStep the code for the task step for a multistep task
    */
@@ -317,7 +317,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Set the code for the task type.
+   * Sets the code for the task type.
    *
    * @param taskType the code for the task type
    */
@@ -326,7 +326,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Set the date and time the task event occurred.
+   * Sets the date and time the task event occurred.
    *
    * @param timestamp the date and time the task event occurred
    */
@@ -335,7 +335,7 @@ public class TaskEvent implements Serializable {
   }
 
   /**
-   * Set the task event type.
+   * Sets the task event type.
    *
    * @param type the task event type
    */

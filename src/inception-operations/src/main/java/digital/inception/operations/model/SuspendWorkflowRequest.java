@@ -78,7 +78,7 @@ public class SuspendWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow.
+   * Sets the ID for the workflow.
    *
    * @param workflowId the ID for the workflow
    */

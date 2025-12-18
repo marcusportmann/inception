@@ -214,7 +214,7 @@ public class MaritalStatus implements Serializable {
   }
 
   /**
-   * Set the code for the marital status.
+   * Sets the code for the marital status.
    *
    * @param code the code for the marital status
    */
@@ -223,7 +223,7 @@ public class MaritalStatus implements Serializable {
   }
 
   /**
-   * Set the description for the marital status.
+   * Sets the description for the marital status.
    *
    * @param description the description for the marital status
    */
@@ -232,7 +232,7 @@ public class MaritalStatus implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the marital status.
+   * Sets the Unicode locale identifier for the marital status.
    *
    * @param localeId the Unicode locale identifier for the marital status
    */
@@ -241,7 +241,7 @@ public class MaritalStatus implements Serializable {
   }
 
   /**
-   * Set the name of the marital status.
+   * Sets the name of the marital status.
    *
    * @param name the name of the marital status
    */
@@ -250,7 +250,7 @@ public class MaritalStatus implements Serializable {
   }
 
   /**
-   * Set the sort order for the marital status.
+   * Sets the sort order for the marital status.
    *
    * @param sortOrder the sort order for the marital status
    */
@@ -259,7 +259,7 @@ public class MaritalStatus implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the marital status is specific to.
+   * Sets the ID for the tenant the marital status is specific to.
    *
    * @param tenantId the ID for the tenant the marital status is specific to
    */

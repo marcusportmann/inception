@@ -557,7 +557,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * Set the additional static resource URI patterns.
+   * Sets the additional static resource URI patterns.
    *
    * @param additionalStaticResourceUriPatterns the additional static resource URI patterns
    */
@@ -567,7 +567,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * Set the security policy directives for the content security policy.
+   * Sets the security policy directives for the content security policy.
    *
    * @param contentSecurityPolicyDirectives the security policy directives for the content security
    *     policy
@@ -577,7 +577,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * Set the JWT configuration.
+   * Sets the JWT configuration.
    *
    * @param jwtConfiguration the JWT configuration
    */
@@ -586,7 +586,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   }
 
   /**
-   * Set the configuration for the XACML policy decision point.
+   * Sets the configuration for the XACML policy decision point.
    *
    * @param xacmlPolicyDecisionPoint the configuration for the XACML policy decision point
    */
@@ -598,7 +598,7 @@ public class ResourceServerConfiguration implements InitializingBean {
   /**
    * Returns the method security expression handler.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @return the method security expression handler
    */
   @Bean

@@ -206,7 +206,7 @@ public class SegmentAllocation implements Serializable {
   }
 
   /**
-   * Set the date the segment allocation is effective from.
+   * Sets the date the segment allocation is effective from.
    *
    * @param effectiveFrom the date the segment allocation is effective from
    */
@@ -215,7 +215,7 @@ public class SegmentAllocation implements Serializable {
   }
 
   /**
-   * Set the date the segment allocation is effective to.
+   * Sets the date the segment allocation is effective to.
    *
    * @param effectiveTo the date the segment allocation is effective to
    */
@@ -224,7 +224,7 @@ public class SegmentAllocation implements Serializable {
   }
 
   /**
-   * Set the party the segment allocation is associated with.
+   * Sets the party the segment allocation is associated with.
    *
    * @param party the party the segment allocation is associated with
    */
@@ -239,7 +239,7 @@ public class SegmentAllocation implements Serializable {
   }
 
   /**
-   * Set the code for the segment.
+   * Sets the code for the segment.
    *
    * @param segment the code for the segment
    */

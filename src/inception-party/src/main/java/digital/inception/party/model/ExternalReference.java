@@ -162,7 +162,7 @@ public class ExternalReference implements Serializable {
   }
 
   /**
-   * Set the party the external reference is associated with.
+   * Sets the party the external reference is associated with.
    *
    * @param party the party the external reference is associated with
    */
@@ -177,7 +177,7 @@ public class ExternalReference implements Serializable {
   }
 
   /**
-   * Set the code for the external reference type.
+   * Sets the code for the external reference type.
    *
    * @param type the code for the external reference type
    */
@@ -186,7 +186,7 @@ public class ExternalReference implements Serializable {
   }
 
   /**
-   * Set the value for the external reference.
+   * Sets the value for the external reference.
    *
    * @param value the value for the external reference
    */

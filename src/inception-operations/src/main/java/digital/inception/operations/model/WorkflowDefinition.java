@@ -987,7 +987,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the workflow attribute definitions for the workflow definition.
+   * Sets the workflow attribute definitions for the workflow definition.
    *
    * @param attributeDefinitions the workflow attribute definitions for the workflow definition
    */
@@ -999,7 +999,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the attributes for the workflow definition.
+   * Sets the attributes for the workflow definition.
    *
    * @param attributes the attributes for the workflow definition
    */
@@ -1010,7 +1010,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow definition category the workflow definition is associated with.
+   * Sets the ID for the workflow definition category the workflow definition is associated with.
    *
    * @param categoryId the ID for the workflow definition category the workflow definition is
    *     associated with
@@ -1020,7 +1020,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the description for the workflow definition.
+   * Sets the description for the workflow definition.
    *
    * @param description the description for the workflow definition
    */
@@ -1029,7 +1029,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the document definitions associated with the workflow definition.
+   * Sets the document definitions associated with the workflow definition.
    *
    * @param documentDefinitions the document definitions associated with the workflow definition
    */
@@ -1043,7 +1043,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow engine the workflow definition is associated with.
+   * Sets the ID for the workflow engine the workflow definition is associated with.
    *
    * @param engineId the ID for the workflow engine the workflow definition is associated with
    */
@@ -1052,7 +1052,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow definition.
+   * Sets the ID for the workflow definition.
    *
    * @param id the ID for the workflow definition
    */
@@ -1061,7 +1061,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the name of the workflow definition.
+   * Sets the name of the workflow definition.
    *
    * @param name the name of the workflow definition
    */
@@ -1070,7 +1070,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the template string used to generate the names of workflows associated with the workflow
+   * Sets the template string used to generate the names of workflows associated with the workflow
    * definition.
    *
    * @param nameTemplate the template string used to generate the names of workflows associated with
@@ -1081,7 +1081,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the permissions for the workflow definition.
+   * Sets the permissions for the workflow definition.
    *
    * @param permissions the permissions for the workflow definition
    */
@@ -1092,7 +1092,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the codes for the required external reference types for the workflow definition.
+   * Sets the codes for the required external reference types for the workflow definition.
    *
    * @param requiredExternalReferenceTypes the codes for the required external reference types for
    *     the workflow definition
@@ -1102,7 +1102,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the workflow step definitions for the workflow definition.
+   * Sets the workflow step definitions for the workflow definition.
    *
    * @param stepDefinitions the workflow step definitions for the workflow definition
    */
@@ -1113,7 +1113,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the supported workflow form types for the workflow definition.
+   * Sets the supported workflow form types for the workflow definition.
    *
    * @param supportedWorkflowFormTypes the supported workflow form types for the workflow definition
    */
@@ -1122,7 +1122,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the workflow definition is specific to.
+   * Sets the ID for the tenant the workflow definition is specific to.
    *
    * @param tenantId the ID for the tenant the workflow definition is specific to
    */
@@ -1131,7 +1131,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the ISO-8601 duration format amount of time to complete a workflow associated with the
+   * Sets the ISO-8601 duration format amount of time to complete a workflow associated with the
    * workflow definition.
    *
    * @param timeToComplete the ISO-8601 duration format amount of time to complete a workflow
@@ -1142,7 +1142,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the JSON or XML (XSD) schema for the workflow definition.
+   * Sets the JSON or XML (XSD) schema for the workflow definition.
    *
    * @param validationSchema the JSON or XML (XSD) validation schema for the workflow definition
    */
@@ -1151,7 +1151,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the validation schema type for the workflow definition.
+   * Sets the validation schema type for the workflow definition.
    *
    * @param validationSchemaType the validation schema type for the workflow definition
    */
@@ -1160,7 +1160,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the workflow variable definitions for the workflow definition.
+   * Sets the workflow variable definitions for the workflow definition.
    *
    * @param variableDefinitions the workflow variable definitions for the workflow definition
    */
@@ -1172,7 +1172,7 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
-   * Set the version of the workflow definition.
+   * Sets the version of the workflow definition.
    *
    * @param version the version of the workflow definition
    */

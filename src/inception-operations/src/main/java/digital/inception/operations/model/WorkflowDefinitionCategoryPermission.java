@@ -148,7 +148,7 @@ public class WorkflowDefinitionCategoryPermission implements Serializable {
   }
 
   /**
-   * Set the code for the role the workflow definition category permission is assigned to.
+   * Sets the code for the role the workflow definition category permission is assigned to.
    *
    * @param roleCode the code for the role the workflow definition category permission is assigned
    *     to
@@ -158,7 +158,7 @@ public class WorkflowDefinitionCategoryPermission implements Serializable {
   }
 
   /**
-   * Set the workflow definition category the workflow definition category permission is associated
+   * Sets the workflow definition category the workflow definition category permission is associated
    * with.
    *
    * @param workflowDefinitionCategory the workflow definition category the workflow definition

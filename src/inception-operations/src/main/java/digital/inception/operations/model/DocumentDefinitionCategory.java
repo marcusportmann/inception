@@ -179,7 +179,7 @@ public class DocumentDefinitionCategory implements Serializable {
   }
 
   /**
-   * Set the ID for the document definition category.
+   * Sets the ID for the document definition category.
    *
    * @param id the ID for the document definition category
    */
@@ -188,7 +188,7 @@ public class DocumentDefinitionCategory implements Serializable {
   }
 
   /**
-   * Set the name of the document definition category.
+   * Sets the name of the document definition category.
    *
    * @param name the name of the document definition category
    */
@@ -197,7 +197,7 @@ public class DocumentDefinitionCategory implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the document definition category is specific to.
+   * Sets the ID for the tenant the document definition category is specific to.
    *
    * @param tenantId the ID for the tenant the document definition category is specific to
    */

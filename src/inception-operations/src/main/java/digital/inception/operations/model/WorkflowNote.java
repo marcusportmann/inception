@@ -290,7 +290,7 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the content for the workflow note.
+   * Sets the content for the workflow note.
    *
    * @param content the content for the workflow note
    */
@@ -299,7 +299,7 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow note was created.
+   * Sets the date and time the workflow note was created.
    *
    * @param created the date and time the workflow note was created
    */
@@ -308,7 +308,7 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the person or system that created the workflow note.
+   * Sets the person or system that created the workflow note.
    *
    * @param createdBy the person or system that created the workflow note
    */
@@ -317,7 +317,7 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow note.
+   * Sets the ID for the workflow note.
    *
    * @param id the ID for the workflow note
    */
@@ -326,7 +326,7 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the workflow note is associated with.
+   * Sets the ID for the tenant the workflow note is associated with.
    *
    * @param tenantId the ID for the tenant the workflow note is associated with
    */
@@ -335,7 +335,7 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow note was last updated.
+   * Sets the date and time the workflow note was last updated.
    *
    * @param updated the date and time the workflow note was last updated
    */
@@ -344,7 +344,7 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the person or system that last updated the workflow note.
+   * Sets the person or system that last updated the workflow note.
    *
    * @param updatedBy the person or system that last updated the workflow note
    */
@@ -353,7 +353,7 @@ public class WorkflowNote implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow the workflow note is associated with.
+   * Sets the ID for the workflow the workflow note is associated with.
    *
    * @param workflowId the ID for the workflow the workflow note is associated with
    */

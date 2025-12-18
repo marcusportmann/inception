@@ -57,14 +57,15 @@ import { Region } from '../services/region';
         (closed)="onClosed()"
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
-        <mat-option
-          *ngFor="let filteredOption of filteredOptions$ | async"
-          [value]="filteredOption">
-          {{ filteredOption.name }}
-        </mat-option>
+        @for (filteredOption of filteredOptions$ | async; track filteredOption) {
+          <mat-option
+            [value]="filteredOption">
+            {{ filteredOption.name }}
+          </mat-option>
+        }
       </mat-autocomplete>
     </div>
-  `,
+    `,
   providers: [
     {
       provide: MatFormFieldControl,

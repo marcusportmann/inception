@@ -158,7 +158,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   /**
    * Constructs a new {@code ExecutorServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param applicationEventPublisher the Spring application event publisher
    * @param archivedTaskRepository the Archived Task Repository
    * @param taskEventRepository the Task Event Repository

@@ -55,7 +55,7 @@ public class PolicyDecisionPointMethodSecurityExpressionHandler
   /**
    * Constructs a new {@code PolicyDecisionPointMethodSecurityExpressionHandler}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public PolicyDecisionPointMethodSecurityExpressionHandler(ApplicationContext applicationContext) {
 

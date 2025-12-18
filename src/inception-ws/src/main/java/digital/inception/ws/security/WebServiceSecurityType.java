@@ -16,6 +16,7 @@
 
 package digital.inception.ws.security;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 
 /** The enumeration giving the supported types of web service security. */
@@ -55,6 +56,7 @@ public enum WebServiceSecurityType implements CodeEnum {
    *
    * @return the code for the web service security type
    */
+  @JsonValue
   public String code() {
     return code;
   }

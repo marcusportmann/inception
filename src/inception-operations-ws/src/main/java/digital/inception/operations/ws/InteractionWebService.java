@@ -41,7 +41,7 @@ public class InteractionWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code InteractionWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param interactionService the Interaction Service
    */
   public InteractionWebService(

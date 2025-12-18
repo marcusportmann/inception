@@ -58,7 +58,7 @@ public final class JpaUtil {
   /**
    * Create a new entity manager factory bean.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param persistenceUnitName the name of the persistence unit
    * @param dataSource the data source
    * @param packagesToScan the packages to scan for entities
@@ -222,7 +222,7 @@ public final class JpaUtil {
   /**
    * Returns the names of the packages to scan for JPA entity classes.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @return the names of the packages to scan for JPA entity classes
    */
   public static List<String> packagesToScanForEntities(ApplicationContext applicationContext) {

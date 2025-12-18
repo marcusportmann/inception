@@ -210,7 +210,7 @@ public class Gender implements Serializable {
   }
 
   /**
-   * Set the code for the gender.
+   * Sets the code for the gender.
    *
    * @param code the code for the gender
    */
@@ -219,7 +219,7 @@ public class Gender implements Serializable {
   }
 
   /**
-   * Set the description for the gender.
+   * Sets the description for the gender.
    *
    * @param description the description for the gender
    */
@@ -228,7 +228,7 @@ public class Gender implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the gender.
+   * Sets the Unicode locale identifier for the gender.
    *
    * @param localeId the Unicode locale identifier for the gender
    */
@@ -237,7 +237,7 @@ public class Gender implements Serializable {
   }
 
   /**
-   * Set the name of the gender.
+   * Sets the name of the gender.
    *
    * @param name the name of the gender
    */
@@ -246,7 +246,7 @@ public class Gender implements Serializable {
   }
 
   /**
-   * Set the sort order for the gender.
+   * Sets the sort order for the gender.
    *
    * @param sortOrder the sort order for the gender
    */
@@ -255,7 +255,7 @@ public class Gender implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the gender is specific to.
+   * Sets the ID for the tenant the gender is specific to.
    *
    * @param tenantId the ID for the tenant the gender is specific to
    */

@@ -67,7 +67,7 @@ public class ValidDocumentValidator implements ConstraintValidator<ValidDocument
           constraintValidatorContext.unwrap(HibernateConstraintValidatorContext.class);
 
       try {
-        if (documentService.documentDefinitionExists(document.getDefinitionId())) {
+        if (!documentService.documentDefinitionExists(document.getDefinitionId())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("documentDefinitionId", document.getDefinitionId())
               .buildConstraintViolationWithTemplate(

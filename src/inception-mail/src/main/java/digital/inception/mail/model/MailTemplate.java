@@ -209,7 +209,7 @@ public class MailTemplate implements Serializable {
   }
 
   /**
-   * Set the content type for the mail template.
+   * Sets the content type for the mail template.
    *
    * @param contentType the content type for the mail template
    */
@@ -218,7 +218,7 @@ public class MailTemplate implements Serializable {
   }
 
   /**
-   * Set the ID for the mail template.
+   * Sets the ID for the mail template.
    *
    * @param id the ID for the mail template
    */
@@ -227,7 +227,7 @@ public class MailTemplate implements Serializable {
   }
 
   /**
-   * Set the name of the mail template.
+   * Sets the name of the mail template.
    *
    * @param name the name of the mail template
    */
@@ -236,7 +236,7 @@ public class MailTemplate implements Serializable {
   }
 
   /**
-   * Set the Apache FreeMarker template for the mail template.
+   * Sets the Apache FreeMarker template for the mail template.
    *
    * @param template the Apache FreeMarker template for the mail template
    */

@@ -245,7 +245,7 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Set the XML configuration data for the user directory.
+   * Sets the XML configuration data for the user directory.
    *
    * @param configuration the XML configuration data for the user directory
    * @throws InvalidConfigurationException if the XML configuration data could not be set for the
@@ -292,7 +292,7 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Set the ID for the user directory.
+   * Sets the ID for the user directory.
    *
    * @param id the ID for the user directory
    */
@@ -301,7 +301,7 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Set the name of the user directory.
+   * Sets the name of the user directory.
    *
    * @param name the name of the user directory
    */
@@ -310,7 +310,7 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Set the parameters for the user directory.
+   * Sets the parameters for the user directory.
    *
    * @param parameters the parameters for the user directory
    */
@@ -319,7 +319,7 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Set the tenants the user directory is associated with.
+   * Sets the tenants the user directory is associated with.
    *
    * @param tenants the tenants the user directory is associated with
    */
@@ -328,7 +328,7 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Set the code for the user directory type.
+   * Sets the code for the user directory type.
    *
    * @param type the code for the user directory type
    */

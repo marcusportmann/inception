@@ -441,7 +441,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the email address for the user.
+   * Sets the email address for the user.
    *
    * @param email the email address for the user
    */
@@ -450,7 +450,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the groups the user is associated with.
+   * Sets the groups the user is associated with.
    *
    * @param groups the groups the user is associated with
    */
@@ -459,7 +459,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the ID for the user.
+   * Sets the ID for the user.
    *
    * @param id the ID for the user
    */
@@ -468,7 +468,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the international format mobile number for the user.
+   * Sets the international format mobile number for the user.
    *
    * @param mobileNumber the international format mobile number for the user
    */
@@ -477,7 +477,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the name of the user.
+   * Sets the name of the user.
    *
    * @param name the name of the user
    */
@@ -486,7 +486,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the password or encoded password for the user.
+   * Sets the password or encoded password for the user.
    *
    * @param password the password or encoded password for the user
    */
@@ -495,7 +495,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the password attempts for the user.
+   * Sets the password attempts for the user.
    *
    * @param passwordAttempts the password attempts for the user
    */
@@ -504,7 +504,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the date and time the password for the user expires.
+   * Sets the date and time the password for the user expires.
    *
    * @param passwordExpiry the date and time the password for the user expires
    */
@@ -513,7 +513,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the phone number for the user.
+   * Sets the phone number for the user.
    *
    * @param phoneNumber the phone number for the user
    */
@@ -522,7 +522,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the preferred name for the user.
+   * Sets the preferred name for the user.
    *
    * @param preferredName the preferred name for the user
    */
@@ -531,7 +531,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the status for the user.
+   * Sets the status for the user.
    *
    * @param status the status for the user
    */
@@ -540,7 +540,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the ID for the user directory the user is associated with.
+   * Sets the ID for the user directory the user is associated with.
    *
    * @param userDirectoryId the ID for the user directory the user is associated with
    */
@@ -549,7 +549,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the username for the user.
+   * Sets the username for the user.
    *
    * @param username the username for the user
    */

@@ -47,7 +47,7 @@ public class SchedulerApiControllerImpl extends SecureApiController
   /**
    * Constructs a new {@code SchedulerApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param schedulerService the Scheduler Service
    */
   public SchedulerApiControllerImpl(

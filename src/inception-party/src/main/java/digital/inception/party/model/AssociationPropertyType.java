@@ -321,7 +321,7 @@ public class AssociationPropertyType implements Serializable {
   }
 
   /**
-   * Set the code for the association type the association property type is associated with.
+   * Sets the code for the association type the association property type is associated with.
    *
    * @param associationType the code for the association type the association property type is
    *     associated with
@@ -332,7 +332,7 @@ public class AssociationPropertyType implements Serializable {
   }
 
   /**
-   * Set the code for the association property type.
+   * Sets the code for the association property type.
    *
    * @param code the code for the association property type
    */
@@ -341,7 +341,7 @@ public class AssociationPropertyType implements Serializable {
   }
 
   /**
-   * Set the description for the association property type.
+   * Sets the description for the association property type.
    *
    * @param description the description for the association property type
    */
@@ -350,7 +350,7 @@ public class AssociationPropertyType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the association property type.
+   * Sets the Unicode locale identifier for the association property type.
    *
    * @param localeId the Unicode locale identifier for the association property type
    */
@@ -359,7 +359,7 @@ public class AssociationPropertyType implements Serializable {
   }
 
   /**
-   * Set the name of the association property type.
+   * Sets the name of the association property type.
    *
    * @param name the name of the association property type
    */
@@ -368,8 +368,8 @@ public class AssociationPropertyType implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a string value for the association property
-   * type.
+   * Sets the regular expression pattern used to validate a string value for the association
+   * property type.
    *
    * @param pattern the regular expression pattern used to validate a string value for the
    *     association property type
@@ -379,7 +379,7 @@ public class AssociationPropertyType implements Serializable {
   }
 
   /**
-   * Set the sort order for the association property type.
+   * Sets the sort order for the association property type.
    *
    * @param sortOrder the sort order for the association property type
    */
@@ -388,7 +388,7 @@ public class AssociationPropertyType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the association property type is specific to.
+   * Sets the ID for the tenant the association property type is specific to.
    *
    * @param tenantId the ID for the tenant the association property type is specific to
    */
@@ -397,7 +397,7 @@ public class AssociationPropertyType implements Serializable {
   }
 
   /**
-   * Set the value type for the association property type.
+   * Sets the value type for the association property type.
    *
    * @param valueType the value type for the association property type
    */

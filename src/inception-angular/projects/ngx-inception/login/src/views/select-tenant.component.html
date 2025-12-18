@@ -13,13 +13,19 @@
                 <mat-form-field>
                   <input type="text" matInput autocompleteSelectionRequired [formControl]="tenantControl" [matAutocomplete]="auto" i18n-placeholder="@@login_select_tenant_component_placeholder_select_an_tenant" placeholder="Select a tenant">
                   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayTenant">
-                    <mat-option *ngFor="let filteredTenant of filteredTenants$ | async" [value]="filteredTenant">
-                      {{filteredTenant.name}}
-                    </mat-option>
+                    @for (filteredTenant of filteredTenants$ | async; track filteredTenant) {
+                      <mat-option [value]="filteredTenant">
+                        {{filteredTenant.name}}
+                      </mat-option>
+                    }
                   </mat-autocomplete>
-                  <mat-error *ngIf="tenantControl.errors && !tenantControl.untouched">
-                    <span *ngIf="tenantControl.errors?.['required']" i18n="@@login_select_tenant_component_error_please_select_an_tenant">Please select a tenant.</span>
-                  </mat-error>
+                  @if (tenantControl.errors && !tenantControl.untouched) {
+                    <mat-error>
+                      @if (tenantControl.errors?.['required']) {
+                        <span i18n="@@login_select_tenant_component_error_please_select_an_tenant">Please select a tenant.</span>
+                      }
+                    </mat-error>
+                  }
                 </mat-form-field>
               </div>
             </div>

@@ -382,7 +382,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the binary value for the user directory parameter with the specified name in the specified
+   * Sets the binary value for the user directory parameter with the specified name in the specified
    * list.
    *
    * @param parameters the user directory parameters to search
@@ -398,7 +398,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the binary value for the user directory parameter with the specified name in the specified
+   * Sets the binary value for the user directory parameter with the specified name in the specified
    * list.
    *
    * @param parameters the user directory parameters to search
@@ -425,7 +425,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code BigDecimal} value for the user directory parameter with the specified name in
+   * Sets the {@code BigDecimal} value for the user directory parameter with the specified name in
    * the specified list.
    *
    * @param parameters the user directory parameters to search
@@ -452,7 +452,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code double} value for the user directory parameter with the specified name in the
+   * Sets the {@code double} value for the user directory parameter with the specified name in the
    * specified list.
    *
    * @param parameters the user directory parameters to search
@@ -479,7 +479,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code int} value for the user directory parameter with the specified name in the
+   * Sets the {@code int} value for the user directory parameter with the specified name in the
    * specified list.
    *
    * @param parameters the user directory parameters to search
@@ -506,7 +506,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code long} value for the user directory parameter with the specified name in the
+   * Sets the {@code long} value for the user directory parameter with the specified name in the
    * specified list.
    *
    * @param parameters the user directory parameters to search
@@ -532,7 +532,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code String} value for the user directory parameter with the specified name in the
+   * Sets the {@code String} value for the user directory parameter with the specified name in the
    * specified list.
    *
    * @param parameters the user directory parameters to search
@@ -672,7 +672,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the binary value for the user directory parameter.
+   * Sets the binary value for the user directory parameter.
    *
    * @param value the binary value for the user directory parameter
    */
@@ -682,7 +682,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the binary value for the user directory parameter.
+   * Sets the binary value for the user directory parameter.
    *
    * @param value the binary value for the user directory parameter
    */
@@ -692,7 +692,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code boolean} value for the user directory parameter.
+   * Sets the {@code boolean} value for the user directory parameter.
    *
    * @param value the {@code boolean} value for the user directory parameter
    */
@@ -702,7 +702,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code BigDecimal} value for the user directory parameter.
+   * Sets the {@code BigDecimal} value for the user directory parameter.
    *
    * @param value the {@code BigDecimal} value for the user directory parameter
    */
@@ -712,7 +712,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code double} value for the user directory parameter.
+   * Sets the {@code double} value for the user directory parameter.
    *
    * @param value the {@code double} value for the user directory parameter
    */
@@ -722,7 +722,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code int} value for the user directory parameter.
+   * Sets the {@code int} value for the user directory parameter.
    *
    * @param value the {@code int} value for the user directory parameter
    */
@@ -732,7 +732,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code long} value for the user directory parameter.
+   * Sets the {@code long} value for the user directory parameter.
    *
    * @param value the {@code long} value for the user directory parameter
    */
@@ -742,7 +742,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the name of the user directory parameter.
+   * Sets the name of the user directory parameter.
    *
    * @param name the name of the user directory parameter
    */
@@ -751,7 +751,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code String} value for the user directory parameter.
+   * Sets the {@code String} value for the user directory parameter.
    *
    * @param value the {@code String} value for the user directory parameter
    */
@@ -761,7 +761,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the {@code String} value for the user directory parameter.
+   * Sets the {@code String} value for the user directory parameter.
    *
    * @param value the {@code String} value for the user directory parameter
    */

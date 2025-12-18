@@ -345,7 +345,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the association the association property is associated with.
+   * Sets the association the association property is associated with.
    *
    * @param association the association the association property is associated with
    */
@@ -360,7 +360,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the boolean value for the association property.
+   * Sets the boolean value for the association property.
    *
    * @param booleanValue the boolean value for the association property
    */
@@ -369,7 +369,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the date value for the association property.
+   * Sets the date value for the association property.
    *
    * @param dateValue the date value for the association property
    */
@@ -378,7 +378,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the decimal value for the association property.
+   * Sets the decimal value for the association property.
    *
    * @param decimalValue the decimal value for the association property
    */
@@ -387,7 +387,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the decimal value for the association property.
+   * Sets the decimal value for the association property.
    *
    * @param decimalValue the decimal value for the association property
    */
@@ -398,7 +398,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the decimal value for the association property.
+   * Sets the decimal value for the association property.
    *
    * @param decimalValue the decimal value for the association property
    */
@@ -409,7 +409,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the decimal value for the association property.
+   * Sets the decimal value for the association property.
    *
    * @param decimalValue the decimal value for the association property
    */
@@ -420,7 +420,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the double value for the association property.
+   * Sets the double value for the association property.
    *
    * @param doubleValue the double value for the association property
    */
@@ -429,7 +429,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the integer value for the association property.
+   * Sets the integer value for the association property.
    *
    * @param integerValue the integer value for the association property
    */
@@ -438,7 +438,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the string value for the association property.
+   * Sets the string value for the association property.
    *
    * @param stringValue the string value for the association property
    */
@@ -447,7 +447,7 @@ public class AssociationProperty implements Serializable {
   }
 
   /**
-   * Set the code for the association property type.
+   * Sets the code for the association property type.
    *
    * @param type the code for the association property type
    */

@@ -214,7 +214,7 @@ public class ResidentialType implements Serializable {
   }
 
   /**
-   * Set the code for the residential type.
+   * Sets the code for the residential type.
    *
    * @param code the code for the residential type
    */
@@ -223,7 +223,7 @@ public class ResidentialType implements Serializable {
   }
 
   /**
-   * Set the description for the residential type.
+   * Sets the description for the residential type.
    *
    * @param description the description for the residential type
    */
@@ -232,7 +232,7 @@ public class ResidentialType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the residential type.
+   * Sets the Unicode locale identifier for the residential type.
    *
    * @param localeId the Unicode locale identifier for the residential type
    */
@@ -241,7 +241,7 @@ public class ResidentialType implements Serializable {
   }
 
   /**
-   * Set the name of the residential type.
+   * Sets the name of the residential type.
    *
    * @param name the name of the residential type
    */
@@ -250,7 +250,7 @@ public class ResidentialType implements Serializable {
   }
 
   /**
-   * Set the sort order for the residential type.
+   * Sets the sort order for the residential type.
    *
    * @param sortOrder the sort order for the residential type
    */
@@ -259,7 +259,7 @@ public class ResidentialType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the residential type is specific to.
+   * Sets the ID for the tenant the residential type is specific to.
    *
    * @param tenantId the ID for the tenant the residential type is specific to
    */

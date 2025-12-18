@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NgClass, NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -37,70 +37,75 @@ import { NavigationItem } from '../services/navigation-item';
   selector: 'sidebar-nav-item',
   standalone: true,
   template: `
-    <ng-container *ngIf="navItem as item">
+    @if (navItem; as item) {
       <!-- Divider -->
-      <li *ngIf="item.divider" class="nav-divider"></li>
-
+      @if (item.divider) {
+        <li class="nav-divider"></li>
+      }
       <!-- Title -->
-      <li *ngIf="!item.divider && item.title" class="nav-title">
-        {{ item.name }}
-      </li>
-
+      @if (!item.divider && item.title) {
+        <li class="nav-title">
+          {{ item.name }}
+        </li>
+      }
       <!-- Dropdown -->
-      <li
-        *ngIf="!item.divider && !item.title && item.children?.length; else sidebarNavLink"
-        [ngClass]="['nav-item', 'nav-dropdown', item.cssClass || '']"
-        [class.open]="isActive()"
-        sidebarNavDropdown>
-        <div class="sidebar-nav-dropdown">
-          <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
-            <ng-container *ngTemplateOutlet="navContent; context: { $implicit: item }">
-            </ng-container>
-          </a>
-          <ul class="nav-dropdown-items">
-            <sidebar-nav-item *ngFor="let child of item.children" [navItem]="child">
-            </sidebar-nav-item>
-          </ul>
-        </div>
-      </li>
-
-      <!-- Simple link (internal / external) -->
-      <ng-template #sidebarNavLink>
+      @if (!item.divider && !item.title && item.children?.length) {
+        <li
+          [ngClass]="['nav-item', 'nav-dropdown', item.cssClass || '']"
+          [class.open]="isActive()"
+          sidebarNavDropdown>
+          <div class="sidebar-nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
+              <ng-container *ngTemplateOutlet="navContent; context: { $implicit: item }">
+              </ng-container>
+            </a>
+            <ul class="nav-dropdown-items">
+              @for (child of item.children; track child) {
+                <sidebar-nav-item [navItem]="child">
+                </sidebar-nav-item>
+              }
+            </ul>
+          </div>
+        </li>
+      } @else {
         <li [ngClass]="['nav-item', item.cssClass || '']">
           <!-- Internal route -->
-          <a
-            *ngIf="!isExternalLink; else externalLink"
-            [ngClass]="['nav-link', item.variant ? 'nav-link-' + item.variant : '']"
-            [routerLink]="[item.url]"
-            [state]="{ resetState: true }"
-            routerLinkActive="active"
-            (click)="hideMobile()">
-            <ng-container *ngTemplateOutlet="navContent; context: { $implicit: item }">
-            </ng-container>
-          </a>
-
-          <!-- External link -->
-          <ng-template #externalLink>
+          @if (!isExternalLink) {
+            <a
+              [ngClass]="['nav-link', item.variant ? 'nav-link-' + item.variant : '']"
+              [routerLink]="[item.url]"
+              [state]="{ resetState: true }"
+              routerLinkActive="active"
+              (click)="hideMobile()">
+              <ng-container *ngTemplateOutlet="navContent; context: { $implicit: item }">
+              </ng-container>
+            </a>
+          } @else {
             <a
               [ngClass]="['nav-link', item.variant ? 'nav-link-' + item.variant : '']"
               [href]="item.url">
               <ng-container *ngTemplateOutlet="navContent; context: { $implicit: item }">
               </ng-container>
             </a>
-          </ng-template>
+          }
+          <!-- External link -->
         </li>
-      </ng-template>
-
+      }
+      <!-- Simple link (internal / external) -->
       <!-- Shared icon / text / badge template -->
       <ng-template #navContent let-item>
-        <i *ngIf="item.icon" class="nav-icon {{ item.icon }}"></i>
+        @if (item.icon) {
+          <i class="nav-icon {{ item.icon }}"></i>
+        }
         <span class="nav-item-name">{{ item.name }}</span>
-        <span *ngIf="item.badge" class="badge" [ngClass]="'badge-' + item.badge.variant">
-          {{ item.badge.text }}
-        </span>
+        @if (item.badge) {
+          <span class="badge" [ngClass]="'badge-' + item.badge.variant">
+            {{ item.badge.text }}
+          </span>
+        }
       </ng-template>
-    </ng-container>
-  `,
+    }
+    `,
   styles: ['.nav-dropdown-toggle { cursor: pointer; }'],
   imports: [
     SidebarNavDropdownDirective,
@@ -108,10 +113,8 @@ import { NavigationItem } from '../services/navigation-item';
     NgClass,
     RouterLink,
     RouterLinkActive,
-    NgIf,
-    NgTemplateOutlet,
-    NgForOf
-  ],
+    NgTemplateOutlet
+],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarNavItemComponent {

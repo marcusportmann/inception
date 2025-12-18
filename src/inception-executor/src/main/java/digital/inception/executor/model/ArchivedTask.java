@@ -362,7 +362,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the ID for the task batch.
+   * Sets the ID for the task batch.
    *
    * @param batchId the ID for the task batch
    */
@@ -371,7 +371,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the task data.
+   * Sets the task data.
    *
    * @param data the task data
    */
@@ -380,7 +380,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the date and time the task was executed.
+   * Sets the date and time the task was executed.
    *
    * @param executed the date and time the task was executed
    */
@@ -389,7 +389,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the time taken to execute the task in milliseconds.
+   * Sets the time taken to execute the task in milliseconds.
    *
    * @param executionTime the time taken to execute the task in milliseconds
    */
@@ -398,7 +398,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the external reference for the task.
+   * Sets the external reference for the task.
    *
    * @param externalReference the external reference for the task
    */
@@ -407,7 +407,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the description of the failure for a failed task.
+   * Sets the description of the failure for a failed task.
    *
    * @param failure the description of the failure for a failed task
    */
@@ -420,7 +420,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the ID for the task.
+   * Sets the ID for the task.
    *
    * @param id the ID for the task
    */
@@ -429,7 +429,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the date and time the task was queued for execution.
+   * Sets the date and time the task was queued for execution.
    *
    * @param queued the date and time the task was queued for execution
    */
@@ -438,7 +438,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the status of the task.
+   * Sets the status of the task.
    *
    * @param status the status of the task
    */
@@ -447,7 +447,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the code for the last task step for a multistep task.
+   * Sets the code for the last task step for a multistep task.
    *
    * @param step the code for the last task step for a multistep task
    */
@@ -456,7 +456,7 @@ public class ArchivedTask implements Serializable {
   }
 
   /**
-   * Set the code for the task type.
+   * Sets the code for the task type.
    *
    * @param type the code for the task type
    */

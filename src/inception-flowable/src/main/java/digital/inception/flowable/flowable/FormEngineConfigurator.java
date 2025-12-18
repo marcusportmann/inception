@@ -85,7 +85,7 @@ public class FormEngineConfigurator implements EngineConfigurator {
   }
 
   /**
-   * Set the form engine configuration.
+   * Sets the form engine configuration.
    *
    * @param formEngineConfiguration the form engine configuration
    * @return the form engine configurator

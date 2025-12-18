@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -40,20 +40,26 @@ import { BreadcrumbsService } from '../services/breadcrumbs.service';
   selector: 'breadcrumbs',
   standalone: true,
   template: `
-    <ng-container *ngIf="this.visible">
+    @if (this.visible) {
       <ol class="breadcrumbs">
-        <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last="last">
-          <li class="breadcrumbs-item" *ngIf="breadcrumb.label" [ngClass]="{ active: last }">
-            <a *ngIf="!last && !!breadcrumb.url" [routerLink]="breadcrumb.url">{{
-              breadcrumb.label
-            }}</a>
-            <span *ngIf="last || !breadcrumb.url">{{ breadcrumb.label }}</span>
-          </li>
-        </ng-template>
+        @for (breadcrumb of breadcrumbs | async; track breadcrumb; let last = $last) {
+          @if (breadcrumb.label) {
+            <li class="breadcrumbs-item" [ngClass]="{ active: last }">
+              @if (!last && !!breadcrumb.url) {
+                <a [routerLink]="breadcrumb.url">{{
+                  breadcrumb.label
+                }}</a>
+              }
+              @if (last || !breadcrumb.url) {
+                <span>{{ breadcrumb.label }}</span>
+              }
+            </li>
+          }
+        }
       </ol>
-    </ng-container>
-  `,
-  imports: [NgForOf, AsyncPipe, NgClass, RouterLink, NgIf],
+    }
+    `,
+  imports: [AsyncPipe, NgClass, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {

@@ -240,7 +240,7 @@ public class IndustryAllocation implements Serializable {
   }
 
   /**
-   * Set the date the industry allocation is effective from.
+   * Sets the date the industry allocation is effective from.
    *
    * @param effectiveFrom the date the industry allocation is effective from
    */
@@ -249,7 +249,7 @@ public class IndustryAllocation implements Serializable {
   }
 
   /**
-   * Set the date the industry allocation is effective to.
+   * Sets the date the industry allocation is effective to.
    *
    * @param effectiveTo the date the industry allocation is effective to
    */
@@ -258,7 +258,7 @@ public class IndustryAllocation implements Serializable {
   }
 
   /**
-   * Set the code for the industry classification.
+   * Sets the code for the industry classification.
    *
    * @param industry the code for the industry classification
    */
@@ -267,7 +267,7 @@ public class IndustryAllocation implements Serializable {
   }
 
   /**
-   * Set the organization the industry allocation is associated with.
+   * Sets the organization the industry allocation is associated with.
    *
    * @param organization the organization the industry allocation is associated with
    */
@@ -282,7 +282,7 @@ public class IndustryAllocation implements Serializable {
   }
 
   /**
-   * Set the code for the industry classification system.
+   * Sets the code for the industry classification system.
    *
    * @param system the code for the industry classification system
    */

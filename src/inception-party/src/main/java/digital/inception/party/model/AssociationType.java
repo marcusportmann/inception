@@ -354,7 +354,7 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the code for the association type.
+   * Sets the code for the association type.
    *
    * @param code the code for the association type
    */
@@ -363,7 +363,7 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the description for the association type.
+   * Sets the description for the association type.
    *
    * @param description the description for the association type
    */
@@ -372,7 +372,7 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the code for the role type for the first party in the association.
+   * Sets the code for the role type for the first party in the association.
    *
    * @param firstPartyRole the code for the role type for the first party in the association
    */
@@ -381,7 +381,7 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the codes for the party types for the first party in the association.
+   * Sets the codes for the party types for the first party in the association.
    *
    * @param firstPartyTypes the codes for the party types for the first party in the association
    */
@@ -390,7 +390,7 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the association type.
+   * Sets the Unicode locale identifier for the association type.
    *
    * @param localeId the Unicode locale identifier for the association type
    */
@@ -399,7 +399,7 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the name of the association type.
+   * Sets the name of the association type.
    *
    * @param name the name of the association type
    */
@@ -408,7 +408,7 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the code for the role type for the second party in the association.
+   * Sets the code for the role type for the second party in the association.
    *
    * @param secondPartyRole the code for the role type for the second party in the association
    */
@@ -417,7 +417,7 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the codes for the party types for the second party in the association.
+   * Sets the codes for the party types for the second party in the association.
    *
    * @param secondPartyTypes the codes for the party types for the second party in the association
    */
@@ -426,7 +426,7 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the sort order for the association type.
+   * Sets the sort order for the association type.
    *
    * @param sortOrder the sort order for the association type
    */
@@ -435,7 +435,7 @@ public class AssociationType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the association type is specific to.
+   * Sets the ID for the tenant the association type is specific to.
    *
    * @param tenantId the ID for the tenant the association type is specific to
    */

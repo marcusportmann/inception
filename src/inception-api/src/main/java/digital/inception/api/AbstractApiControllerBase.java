@@ -59,7 +59,7 @@ public abstract class AbstractApiControllerBase {
   /**
    * Constructs a new {@code AbstractApiControllerBase}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   protected AbstractApiControllerBase(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;

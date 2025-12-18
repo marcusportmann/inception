@@ -89,7 +89,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
   /**
    * Constructs a new {@code CodesServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param codeCategoryRepository the Code Category Repository
    * @param codeCategorySummaryRepository the Code Category Summary Repository
    * @param codeRepository the Code Repository

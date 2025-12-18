@@ -313,7 +313,7 @@ public class Predictor {
   }
 
   /**
-   * Set the time zone for predictions.
+   * Sets the time zone for predictions.
    *
    * @param timeZone the time zone to user for predictions
    */

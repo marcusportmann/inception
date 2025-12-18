@@ -171,7 +171,7 @@ public interface SchedulerService {
   boolean scheduleNextUnscheduledJobForExecution() throws ServiceUnavailableException;
 
   /**
-   * Set the status for the job.
+   * Sets the status for the job.
    *
    * @param jobId the ID for the job
    * @param status the new status for the job

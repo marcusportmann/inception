@@ -164,7 +164,7 @@ public class WorkflowAttribute implements Serializable {
   }
 
   /**
-   * Set the name of the workflow attribute.
+   * Sets the name of the workflow attribute.
    *
    * @param name the name of the workflow attribute
    */
@@ -173,7 +173,7 @@ public class WorkflowAttribute implements Serializable {
   }
 
   /**
-   * Set the value for the workflow attribute.
+   * Sets the value for the workflow attribute.
    *
    * @param value the value for the workflow attribute
    */
@@ -182,7 +182,7 @@ public class WorkflowAttribute implements Serializable {
   }
 
   /**
-   * Set the workflow the workflow attribute is associated with.
+   * Sets the workflow the workflow attribute is associated with.
    *
    * @param workflow the workflow the workflow attribute is associated with
    */

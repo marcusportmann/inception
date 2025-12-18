@@ -290,7 +290,7 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Set the content for the document note.
+   * Sets the content for the document note.
    *
    * @param content the content for the document note
    */
@@ -299,7 +299,7 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Set the date and time the document note was created.
+   * Sets the date and time the document note was created.
    *
    * @param created the date and time the document note was created
    */
@@ -308,7 +308,7 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Set the person or system that created the document note.
+   * Sets the person or system that created the document note.
    *
    * @param createdBy the person or system that created the document note
    */
@@ -317,7 +317,7 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Set the ID for the document the document note is associated with.
+   * Sets the ID for the document the document note is associated with.
    *
    * @param documentId the ID for the document the document note is associated with
    */
@@ -326,7 +326,7 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Set the ID for the document note.
+   * Sets the ID for the document note.
    *
    * @param id the ID for the document note
    */
@@ -335,7 +335,7 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the document note is associated with.
+   * Sets the ID for the tenant the document note is associated with.
    *
    * @param tenantId the ID for the tenant the document note is associated with
    */
@@ -344,7 +344,7 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Set the date and time the document note was last updated.
+   * Sets the date and time the document note was last updated.
    *
    * @param updated the date and time the document note was last updated
    */
@@ -353,7 +353,7 @@ public class DocumentNote implements Serializable {
   }
 
   /**
-   * Set the person or system that last updated the document note.
+   * Sets the person or system that last updated the document note.
    *
    * @param updatedBy the person or system that last updated the document note
    */

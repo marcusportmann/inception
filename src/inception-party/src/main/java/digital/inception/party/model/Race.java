@@ -208,7 +208,7 @@ public class Race implements Serializable {
   }
 
   /**
-   * Set the code for the race.
+   * Sets the code for the race.
    *
    * @param code the code for the race
    */
@@ -217,7 +217,7 @@ public class Race implements Serializable {
   }
 
   /**
-   * Set the description for the race.
+   * Sets the description for the race.
    *
    * @param description the description for the race
    */
@@ -226,7 +226,7 @@ public class Race implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the race.
+   * Sets the Unicode locale identifier for the race.
    *
    * @param localeId the Unicode locale identifier for the race
    */
@@ -235,7 +235,7 @@ public class Race implements Serializable {
   }
 
   /**
-   * Set the name of the race.
+   * Sets the name of the race.
    *
    * @param name the name of the race
    */
@@ -244,7 +244,7 @@ public class Race implements Serializable {
   }
 
   /**
-   * Set the sort order for the race.
+   * Sets the sort order for the race.
    *
    * @param sortOrder the sort order for the race
    */
@@ -253,7 +253,7 @@ public class Race implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the race is specific to.
+   * Sets the ID for the tenant the race is specific to.
    *
    * @param tenantId the ID for the tenant the race is specific to
    */

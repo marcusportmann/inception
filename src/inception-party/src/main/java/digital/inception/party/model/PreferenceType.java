@@ -335,7 +335,7 @@ public class PreferenceType implements Serializable {
   }
 
   /**
-   * Set the code for the preference type category the preference type is associated with.
+   * Sets the code for the preference type category the preference type is associated with.
    *
    * @param category the code for the preference type category the preference type is associated
    *     with
@@ -345,7 +345,7 @@ public class PreferenceType implements Serializable {
   }
 
   /**
-   * Set the code for the preference type.
+   * Sets the code for the preference type.
    *
    * @param code the code for the preference type
    */
@@ -354,7 +354,7 @@ public class PreferenceType implements Serializable {
   }
 
   /**
-   * Set the description for the preference type.
+   * Sets the description for the preference type.
    *
    * @param description the description for the preference type
    */
@@ -363,7 +363,7 @@ public class PreferenceType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the preference type.
+   * Sets the Unicode locale identifier for the preference type.
    *
    * @param localeId the Unicode locale identifier for the preference type
    */
@@ -372,7 +372,7 @@ public class PreferenceType implements Serializable {
   }
 
   /**
-   * Set the name of the preference type.
+   * Sets the name of the preference type.
    *
    * @param name the name of the preference type
    */
@@ -381,7 +381,7 @@ public class PreferenceType implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the preference type is associated with.
+   * Sets the codes for the party types the preference type is associated with.
    *
    * @param partyTypes the codes for the party types the preference type is associated with
    */
@@ -390,7 +390,7 @@ public class PreferenceType implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a string value for the preference type.
+   * Sets the regular expression pattern used to validate a string value for the preference type.
    *
    * @param pattern the regular expression pattern used to validate a string value for the
    *     preference type
@@ -400,7 +400,7 @@ public class PreferenceType implements Serializable {
   }
 
   /**
-   * Set the sort order for the preference type.
+   * Sets the sort order for the preference type.
    *
    * @param sortOrder the sort order for the preference type
    */
@@ -409,7 +409,7 @@ public class PreferenceType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the preference type is specific to.
+   * Sets the ID for the tenant the preference type is specific to.
    *
    * @param tenantId the ID for the tenant the preference type is specific to
    */

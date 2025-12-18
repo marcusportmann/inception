@@ -185,7 +185,7 @@ public class QueueTaskRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the task batch.
+   * Sets the ID for the task batch.
    *
    * @param batchId the ID for the task batch
    */
@@ -194,7 +194,7 @@ public class QueueTaskRequest implements Serializable {
   }
 
   /**
-   * Set the task data.
+   * Sets the task data.
    *
    * @param data the task data
    */
@@ -203,7 +203,7 @@ public class QueueTaskRequest implements Serializable {
   }
 
   /**
-   * Set the date and time the task should be executed.
+   * Sets the date and time the task should be executed.
    *
    * @param executeAt the date and time the task should be executed
    */
@@ -212,7 +212,7 @@ public class QueueTaskRequest implements Serializable {
   }
 
   /**
-   * Set the external reference for the task.
+   * Sets the external reference for the task.
    *
    * @param externalReference the external reference for the task
    */
@@ -221,7 +221,7 @@ public class QueueTaskRequest implements Serializable {
   }
 
   /**
-   * Set the flag indicating that the task must be suspended.
+   * Sets the flag indicating that the task must be suspended.
    *
    * @param suspended the flag indicating that the task must be suspended
    */
@@ -230,7 +230,7 @@ public class QueueTaskRequest implements Serializable {
   }
 
   /**
-   * Set the code for the task type.
+   * Sets the code for the task type.
    *
    * @param type the code for the task type
    */

@@ -165,7 +165,7 @@ public class UpdateDocumentTemplateRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the document template category the document template is associated with.
+   * Sets the ID for the document template category the document template is associated with.
    *
    * @param categoryId the ID for the document template category the document template is associated
    *     with
@@ -175,7 +175,7 @@ public class UpdateDocumentTemplateRequest implements Serializable {
   }
 
   /**
-   * Set the data for the document template.
+   * Sets the data for the document template.
    *
    * @param data the data for the document template
    */
@@ -184,7 +184,7 @@ public class UpdateDocumentTemplateRequest implements Serializable {
   }
 
   /**
-   * Set the description for the document template.
+   * Sets the description for the document template.
    *
    * @param description the description for the document template
    */
@@ -193,7 +193,7 @@ public class UpdateDocumentTemplateRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the document template.
+   * Sets the ID for the document template.
    *
    * @param id the ID for the document template
    */
@@ -202,7 +202,7 @@ public class UpdateDocumentTemplateRequest implements Serializable {
   }
 
   /**
-   * Set the name of the document template.
+   * Sets the name of the document template.
    *
    * @param name the name of the document template
    */
@@ -211,7 +211,7 @@ public class UpdateDocumentTemplateRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the document template is specific to.
+   * Sets the ID for the tenant the document template is specific to.
    *
    * @param tenantId the ID for the tenant the document template is specific to
    */

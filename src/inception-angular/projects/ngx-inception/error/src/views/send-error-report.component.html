@@ -11,9 +11,9 @@
               An error occurred while processing your request.
             </p>
             <p class="mat-error">
-              <ng-container *ngIf="error">
-              {{error.message}}
-              </ng-container>
+              @if (error) {
+                {{error.message}}
+              }
             </p>
             <p i18n="@@error_send_error_component_provide_feedback">
               Please provide a detailed description of what you were doing when the problem occurred.
@@ -23,9 +23,13 @@
                 <mat-form-field>
                   <mat-label i18n="@@error_send_error_component_label_email_address">Email address</mat-label>
                   <input type="text" matInput formControlName="email">
-                  <mat-error *ngIf="emailControl.errors && !emailControl.untouched">
-                    <span *ngIf="emailControl.errors?.['email']" i18n="@@error_send_error_component_error_email_invalid">A valid email address is required.</span>
-                  </mat-error>
+                  @if (emailControl.errors && !emailControl.untouched) {
+                    <mat-error>
+                      @if (emailControl.errors?.['email']) {
+                        <span i18n="@@error_send_error_component_error_email_invalid">A valid email address is required.</span>
+                      }
+                    </mat-error>
+                  }
                 </mat-form-field>
               </div>
             </div>

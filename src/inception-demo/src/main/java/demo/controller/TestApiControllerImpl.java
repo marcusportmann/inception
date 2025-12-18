@@ -53,7 +53,7 @@ public class TestApiControllerImpl extends SecureApiController implements TestAp
   /**
    * Constructs a new {@code TestApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param webClientBuilder the web client builder
    * @param executorService the Executor Service
    */

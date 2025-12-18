@@ -57,7 +57,7 @@ public class CodesWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code CodesWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param codesService the Codes Service
    */
   public CodesWebService(ApplicationContext applicationContext, CodesService codesService) {

@@ -487,7 +487,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the date the association is effective from.
+   * Sets the date the association is effective from.
    *
    * @param effectiveFrom the date the association is effective from
    */
@@ -496,7 +496,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the date the association is effective to.
+   * Sets the date the association is effective to.
    *
    * @param effectiveTo the date the association is effective to
    */
@@ -505,7 +505,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the ID for the association.
+   * Sets the ID for the association.
    *
    * @param id the ID for the association
    */
@@ -514,7 +514,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the links for the mandate.
+   * Sets the links for the mandate.
    *
    * @param links the links for the mandate
    */
@@ -525,7 +525,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the mandataries for the mandate.
+   * Sets the mandataries for the mandate.
    *
    * @param mandataries the mandataries for the mandate
    */
@@ -536,7 +536,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the properties for the mandate.
+   * Sets the properties for the mandate.
    *
    * @param properties the properties for the mandate
    */
@@ -547,7 +547,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the number of mandataries required to execute the mandate.
+   * Sets the number of mandataries required to execute the mandate.
    *
    * @param requiredMandataries the number of mandataries required to execute the mandate
    */
@@ -556,7 +556,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the association is associated with.
+   * Sets the ID for the tenant the association is associated with.
    *
    * @param tenantId the ID for the tenant the association is associated with
    */
@@ -565,7 +565,7 @@ public class Mandate implements Serializable {
   }
 
   /**
-   * Set the code for the association type.
+   * Sets the code for the association type.
    *
    * @param type the code for the association type
    */

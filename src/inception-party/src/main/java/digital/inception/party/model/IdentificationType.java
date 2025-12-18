@@ -335,7 +335,7 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Set the code for the identification type.
+   * Sets the code for the identification type.
    *
    * @param code the code for the identification type
    */
@@ -344,7 +344,7 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Set the code for the country of issue for the identification type.
+   * Sets the code for the country of issue for the identification type.
    *
    * @param countryOfIssue the code for the country of issue for the identification type
    */
@@ -353,7 +353,7 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Set the description for the identification type.
+   * Sets the description for the identification type.
    *
    * @param description the description for the identification type
    */
@@ -362,7 +362,7 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the identification type.
+   * Sets the Unicode locale identifier for the identification type.
    *
    * @param localeId the Unicode locale identifier for the identification type
    */
@@ -371,7 +371,7 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Set the name of the identification type.
+   * Sets the name of the identification type.
    *
    * @param name the name of the identification type
    */
@@ -380,7 +380,7 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the identification type is associated with.
+   * Sets the codes for the party types the identification type is associated with.
    *
    * @param partyTypes the codes for the party types the identification type is associated with
    */
@@ -389,7 +389,7 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a number for the identification type.
+   * Sets the regular expression pattern used to validate a number for the identification type.
    *
    * @param pattern the regular expression pattern used to validate a number for the identification
    *     type
@@ -399,7 +399,7 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Set the sort order for the identification type.
+   * Sets the sort order for the identification type.
    *
    * @param sortOrder the sort order for the identification type
    */
@@ -408,7 +408,7 @@ public class IdentificationType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the identification type is specific to.
+   * Sets the ID for the tenant the identification type is specific to.
    *
    * @param tenantId the ID for the tenant the identification type is specific to
    */

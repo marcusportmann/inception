@@ -558,7 +558,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer address line 4.
+   * Sets the employer address line 4.
    *
    * @return the employer address line 4
    */
@@ -685,7 +685,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer address city.
+   * Sets the employer address city.
    *
    * @param employerAddressCity the employer address city
    */
@@ -694,7 +694,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the employer address country.
+   * Sets the ISO 3166-1 alpha-2 code for the employer address country.
    *
    * @param employerAddressCountry the ISO 3166-1 alpha-2 code for the employer address country
    */
@@ -703,7 +703,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer address line 1.
+   * Sets the employer address line 1.
    *
    * @param employerAddressLine1 the employer address line 1
    */
@@ -712,7 +712,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer address line 2.
+   * Sets the employer address line 2.
    *
    * @param employerAddressLine2 the employer address line 2
    */
@@ -721,7 +721,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer address line 3.
+   * Sets the employer address line 3.
    *
    * @param employerAddressLine3 the employer address line 3
    */
@@ -739,7 +739,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer address postal code.
+   * Sets the employer address postal code.
    *
    * @param employerAddressPostalCode the employer address postal code
    */
@@ -748,7 +748,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-2 subdivision code for the employer address region.
+   * Sets the ISO 3166-2 subdivision code for the employer address region.
    *
    * @param employerAddressRegion the ISO 3166-2 subdivision code for the employer address region
    */
@@ -757,7 +757,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer address suburb.
+   * Sets the employer address suburb.
    *
    * @param employerAddressSuburb the employer address suburb
    */
@@ -766,7 +766,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer contact person.
+   * Sets the employer contact person.
    *
    * @param employerContactPerson the employer contact person
    */
@@ -775,7 +775,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer email address.
+   * Sets the employer email address.
    *
    * @param employerEmailAddress the employer email address
    */
@@ -784,7 +784,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer name.
+   * Sets the employer name.
    *
    * @param employerName the employer name
    */
@@ -793,7 +793,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the employer phone number.
+   * Sets the employer phone number.
    *
    * @param employerPhoneNumber the employer phone number
    */
@@ -802,7 +802,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the end date for the employment.
+   * Sets the end date for the employment.
    *
    * @param endDate the end date for the employment
    */
@@ -811,7 +811,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the ID for the employment.
+   * Sets the ID for the employment.
    *
    * @param id the ID for the employment
    */
@@ -820,7 +820,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the code for the occupation for the employment.
+   * Sets the code for the occupation for the employment.
    *
    * @param occupation the code for the occupation for the employment
    */
@@ -829,7 +829,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the person the employment is associated with.
+   * Sets the person the employment is associated with.
    *
    * @param person the person the employment is associated with
    */
@@ -844,7 +844,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the start date for the employment.
+   * Sets the start date for the employment.
    *
    * @param startDate the start date for the employment
    */
@@ -853,7 +853,7 @@ public class Employment implements Serializable {
   }
 
   /**
-   * Set the code for the employment type for the employment.
+   * Sets the code for the employment type for the employment.
    *
    * @param type the code for the employment type for the employment
    */

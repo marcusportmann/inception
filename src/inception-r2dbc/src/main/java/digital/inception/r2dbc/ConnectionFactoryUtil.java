@@ -61,7 +61,7 @@ public final class ConnectionFactoryUtil {
   /**
    * Initialise the R2DBC connection factory.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param connectionFactoryConfiguration the R2DBC connection factory configuration
    * @return the R2DBC connection factory
    */

@@ -70,7 +70,7 @@ public final class RequestBodyObjectContext {
   }
 
   /**
-   * Set the Java object populated from the JSON request body for a RESTful API invocation by the
+   * Sets the Java object populated from the JSON request body for a RESTful API invocation by the
    * Spring web framework.
    *
    * @param requestBody the Java object populated from the JSON request body for a RESTful API
@@ -81,7 +81,7 @@ public final class RequestBodyObjectContext {
   }
 
   /**
-   * Set the Java object populated from the JSON request body for a RESTful API invocation by the
+   * Sets the Java object populated from the JSON request body for a RESTful API invocation by the
    * Spring web framework.
    *
    * @param methodInvocation the method invocation the Java object populated from the JSON request

@@ -169,7 +169,7 @@ public class Car extends VehicleBase implements Serializable {
   }
 
   /**
-   * Set the ID for the car.
+   * Sets the ID for the car.
    *
    * @param id the ID for the car
    */
@@ -179,7 +179,7 @@ public class Car extends VehicleBase implements Serializable {
   }
 
   /**
-   * Set the name of the car.
+   * Sets the name of the car.
    *
    * @param name the name of the car
    */
@@ -189,7 +189,7 @@ public class Car extends VehicleBase implements Serializable {
   }
 
   /**
-   * Set the number of doors for the car.
+   * Sets the number of doors for the car.
    *
    * @param numberOfDoors the number of doors for the car
    */

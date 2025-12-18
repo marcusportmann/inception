@@ -99,7 +99,7 @@ public class LinkPartyToInteractionRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction.
+   * Sets the ID for the interaction.
    *
    * @param interactionId the ID for the interaction
    */
@@ -108,7 +108,7 @@ public class LinkPartyToInteractionRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the party.
+   * Sets the ID for the party.
    *
    * @param partyId the ID for the party
    */

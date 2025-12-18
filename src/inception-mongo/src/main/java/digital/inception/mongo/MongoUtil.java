@@ -23,6 +23,7 @@ import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
+import org.springframework.util.StringUtils;
 
 /**
  * The {@code MongoUtil} class provides mongo-related utility methods.
@@ -55,5 +56,42 @@ public class MongoUtil {
     converter.setCodecRegistryProvider(mongoDatabaseFactory);
     converter.afterPropertiesSet();
     return converter;
+  }
+
+  /**
+   * Returns a sanitized MongoDB connection URI suitable for logging by redacting any {@code
+   * userinfo} component (typically {@code username[:password]@}) from the authority section.
+   *
+   * <p>If the input contains credentials (e.g. {@code mongodb://user:pass@host:27017/db}), the
+   * returned value replaces the credential portion with {@code "***:***@"} while preserving the
+   * remainder of the URI (hosts, database path, and query options).
+   *
+   * <p>This method is intentionally conservative and does not attempt full URI parsing; it performs
+   * a simple string-based redaction to avoid leaking credentials into logs.
+   *
+   * <p>Special return values:
+   *
+   * <ul>
+   *   <li>{@code "<empty>"} if {@code uri} is {@code null}, empty, or only whitespace
+   *   <li>{@code "<unparseable>"} if {@code uri} does not contain a scheme separator ({@code ://})
+   * </ul>
+   *
+   * @param mongoDbUri the MongoDB connection URI that may contain credentials
+   * @return a sanitized URI with any userinfo redacted, or a placeholder value if empty or
+   *     unparseable
+   */
+  public static String sanitizedMongoDbUri(String mongoDbUri) {
+    if (!StringUtils.hasText(mongoDbUri)) return "<empty>";
+
+    int schemeSeparatorIndex = mongoDbUri.indexOf("://");
+    if (schemeSeparatorIndex < 0) return "<unparseable>";
+
+    int authorityStart = schemeSeparatorIndex + 3;
+    int atIndex = mongoDbUri.indexOf('@', authorityStart);
+    if (atIndex < 0) {
+      return mongoDbUri;
+    }
+
+    return mongoDbUri.substring(0, authorityStart) + "***:***@" + mongoDbUri.substring(atIndex + 1);
   }
 }

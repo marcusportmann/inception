@@ -16,6 +16,7 @@
 
 package digital.inception.sms.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
@@ -69,6 +70,7 @@ public enum SMSStatus implements CodeEnum {
    *
    * @return the code for the SMS status
    */
+  @JsonValue
   public String code() {
     return code;
   }

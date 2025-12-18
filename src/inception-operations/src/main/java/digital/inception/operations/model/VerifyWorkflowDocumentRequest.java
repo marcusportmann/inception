@@ -111,7 +111,7 @@ public class VerifyWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the description for the workflow document.
+   * Sets the description for the workflow document.
    *
    * @param description the description for the workflow document
    */
@@ -120,7 +120,7 @@ public class VerifyWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow document.
+   * Sets the ID for the workflow document.
    *
    * @param workflowDocumentId the ID for the workflow document
    */

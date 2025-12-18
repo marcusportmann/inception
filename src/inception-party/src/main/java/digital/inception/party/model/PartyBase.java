@@ -203,7 +203,7 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Set the ID for the party.
+   * Sets the ID for the party.
    *
    * @param id the ID for the party
    */
@@ -212,7 +212,7 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Set the name of the party.
+   * Sets the name of the party.
    *
    * @param name the name of the party
    */
@@ -221,7 +221,7 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the party is associated with.
+   * Sets the ID for the tenant the party is associated with.
    *
    * @param tenantId the ID for the tenant the party is associated with
    */
@@ -230,7 +230,7 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Set the type for the party.
+   * Sets the type for the party.
    *
    * @param partyType the type for the party
    */

@@ -420,7 +420,7 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the number of times the current execution of the job has been attempted.
+   * Sets the number of times the current execution of the job has been attempted.
    *
    * @param executionAttempts the number of times the current execution of the job has been
    *     attempted
@@ -430,7 +430,7 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the ID for the job.
+   * Sets the ID for the job.
    *
    * @param id the ID for the scheduled job
    */
@@ -439,7 +439,7 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the fully qualified name of the Java class that implements the job.
+   * Sets the fully qualified name of the Java class that implements the job.
    *
    * @param jobClass the fully qualified name of the Java class that implements the job
    */
@@ -448,7 +448,7 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the date and time the job was last executed.
+   * Sets the date and time the job was last executed.
    *
    * @param lastExecuted the date and time the job was last executed
    */
@@ -457,7 +457,7 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the name of the entity that has locked the job for execution.
+   * Sets the name of the entity that has locked the job for execution.
    *
    * @param lockName the name of the entity that has locked the job for execution
    */
@@ -466,7 +466,7 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the name of the job.
+   * Sets the name of the job.
    *
    * @param name the name of the job
    */
@@ -475,7 +475,7 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the date and time when the job will next be executed.
+   * Sets the date and time when the job will next be executed.
    *
    * @param nextExecution the date and time when the job will next be executed
    */
@@ -484,7 +484,7 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the parameters for the job.
+   * Sets the parameters for the job.
    *
    * @param parameters the parameters for the job
    */
@@ -494,7 +494,7 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the cron-style scheduling pattern for the job.
+   * Sets the cron-style scheduling pattern for the job.
    *
    * @param schedulingPattern the cron-style scheduling pattern for the job
    */
@@ -503,7 +503,7 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the status of the job.
+   * Sets the status of the job.
    *
    * @param status the status of the job
    */

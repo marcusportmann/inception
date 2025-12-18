@@ -140,7 +140,7 @@ public final class XacmlPolicyDecisionPoint implements PolicyDecisionPoint {
   /**
    * Constructs a new {@code XacmlPolicyDecisionPoint}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param classpathPoliciesEnabled should policy sets and policies be loaded from the classpath
    *     under pdp/policies
    * @param externalPoliciesEnabled should policy sets and policies be loaded by invoking an

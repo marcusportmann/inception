@@ -179,11 +179,11 @@ public class DocumentTemplateSummary implements Serializable {
   /**
    * Constructs a new {@code DocumentTemplate}.
    *
-   * @param id ID for the document template
+   * @param id the ID for the document template
    * @param categoryId the ID for the document template category the document template is associated
    *     with
-   * @param tenantId ID for the tenant the document template is specific to
-   * @param name name of the document template
+   * @param tenantId the ID for the tenant the document template is specific to
+   * @param name the name of the document template
    * @param description the description for the document template
    * @param hash the base-64 encoded SHA-256 hash of the data for the document template
    * @param created the date and time the document template was created

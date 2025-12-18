@@ -335,7 +335,7 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the code for the tax number type.
+   * Sets the code for the tax number type.
    *
    * @param code the code for the tax number type
    */
@@ -344,7 +344,7 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country of issue for the tax number type.
+   * Sets the ISO 3166-1 alpha-2 code for the country of issue for the tax number type.
    *
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
    *     type
@@ -354,7 +354,7 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the description for the tax number type.
+   * Sets the description for the tax number type.
    *
    * @param description the description for the tax number type
    */
@@ -363,7 +363,7 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the tax number type.
+   * Sets the Unicode locale identifier for the tax number type.
    *
    * @param localeId the Unicode locale identifier for the tax number type
    */
@@ -372,7 +372,7 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the name of the tax number type.
+   * Sets the name of the tax number type.
    *
    * @param name the name of the tax number type
    */
@@ -381,7 +381,7 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the tax number type is associated with.
+   * Sets the codes for the party types the tax number type is associated with.
    *
    * @param partyTypes the codes for the party types the tax number type is associated with
    */
@@ -390,7 +390,7 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a number for the tax number type.
+   * Sets the regular expression pattern used to validate a number for the tax number type.
    *
    * @param pattern the regular expression pattern used to validate a number for the tax number type
    */
@@ -399,7 +399,7 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the sort order for the tax number type.
+   * Sets the sort order for the tax number type.
    *
    * @param sortOrder the sort order for the tax number type
    */
@@ -408,7 +408,7 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the tax number type is specific to.
+   * Sets the ID for the tenant the tax number type is specific to.
    *
    * @param tenantId the ID for the tenant the tax number type is specific to
    */

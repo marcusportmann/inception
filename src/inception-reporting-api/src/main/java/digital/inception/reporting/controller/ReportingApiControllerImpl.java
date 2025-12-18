@@ -64,7 +64,7 @@ public class ReportingApiControllerImpl extends SecureApiController
   /**
    * Constructs a new {@code ReportingApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param dataSource the data source used to provide connections to the application database
    * @param reportingService the Reporting Service
    */

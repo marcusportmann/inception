@@ -41,7 +41,7 @@ public class DocumentWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code DocumentWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param documentService the Document Service
    */
   public DocumentWebService(

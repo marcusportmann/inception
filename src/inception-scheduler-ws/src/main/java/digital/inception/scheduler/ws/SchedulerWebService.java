@@ -51,7 +51,7 @@ public class SchedulerWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code SchedulerWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param schedulerService the Scheduler Service
    */
   public SchedulerWebService(

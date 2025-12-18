@@ -168,7 +168,7 @@ public class Language implements Serializable {
   }
 
   /**
-   * Set the ISO 639-1 alpha-2 code for the language.
+   * Sets the ISO 639-1 alpha-2 code for the language.
    *
    * @param code the ISO 639-1 alpha-2 code for the language
    */
@@ -177,7 +177,7 @@ public class Language implements Serializable {
   }
 
   /**
-   * Set the description for the language.
+   * Sets the description for the language.
    *
    * @param description the description for the language
    */
@@ -186,7 +186,7 @@ public class Language implements Serializable {
   }
 
   /**
-   * Set the ISO 639-2 alpha-3 code for the language.
+   * Sets the ISO 639-2 alpha-3 code for the language.
    *
    * @param iso3Code the ISO 639-2 alpha-3 code for the language
    */
@@ -195,7 +195,7 @@ public class Language implements Serializable {
   }
 
   /**
-   * Set the name of the language.
+   * Sets the name of the language.
    *
    * @param name the name of the language
    */
@@ -204,7 +204,7 @@ public class Language implements Serializable {
   }
 
   /**
-   * Set the short name for the language.
+   * Sets the short name for the language.
    *
    * @param shortName the short name for the language
    */
@@ -213,7 +213,7 @@ public class Language implements Serializable {
   }
 
   /**
-   * Set the sort order for the language.
+   * Sets the sort order for the language.
    *
    * @param sortOrder the sort order for the language
    */

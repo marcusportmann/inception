@@ -133,7 +133,7 @@ public class RejectWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the description for the workflow document.
+   * Sets the description for the workflow document.
    *
    * @param description the description for the workflow document
    */
@@ -142,7 +142,7 @@ public class RejectWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the reason the workflow document was rejected.
+   * Sets the reason the workflow document was rejected.
    *
    * @param rejectionReason the reason the workflow document was rejected
    */
@@ -151,7 +151,7 @@ public class RejectWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow document.
+   * Sets the ID for the workflow document.
    *
    * @param workflowDocumentId the ID for the workflow document
    */

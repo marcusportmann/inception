@@ -48,7 +48,7 @@ public class OperationsReferenceServiceImpl extends AbstractServiceBase
   /**
    * Constructs a new {@code OperationsReferenceServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param externalReferenceTypeRepository the External Reference Type Repository
    */
   public OperationsReferenceServiceImpl(

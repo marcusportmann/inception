@@ -100,7 +100,7 @@ public class NarayanaTransactionIntegration
   /**
    * Constructs a new {@code NarayanaTransactionIntegration}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   @Autowired
   public NarayanaTransactionIntegration(ApplicationContext applicationContext) {

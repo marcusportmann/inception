@@ -278,7 +278,7 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country of issue for the residence permit.
+   * Sets the ISO 3166-1 alpha-2 code for the country of issue for the residence permit.
    *
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the residence
    *     permit
@@ -288,7 +288,7 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Set the expiry date for the residence permit.
+   * Sets the expiry date for the residence permit.
    *
    * @param expiryDate the expiry date for the residence permit
    */
@@ -297,7 +297,7 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Set the ID for the residence permit.
+   * Sets the ID for the residence permit.
    *
    * @param id the ID for the residence permit
    */
@@ -306,7 +306,7 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Set the issue date for the residence permit.
+   * Sets the issue date for the residence permit.
    *
    * @param issueDate the issue date for the residence permit
    */
@@ -315,7 +315,7 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Set the number for the residence permit.
+   * Sets the number for the residence permit.
    *
    * @param number the number for the residence permit
    */
@@ -324,7 +324,7 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Set the person the residence permit is associated with.
+   * Sets the person the residence permit is associated with.
    *
    * @param person the person the residence permit is associated with
    */
@@ -339,7 +339,7 @@ public class ResidencePermit implements Serializable {
   }
 
   /**
-   * Set the code for the residence permit type.
+   * Sets the code for the residence permit type.
    *
    * @param type the code for the residence permit type
    */

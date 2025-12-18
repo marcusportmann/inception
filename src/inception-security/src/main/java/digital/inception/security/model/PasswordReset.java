@@ -262,7 +262,7 @@ public class PasswordReset implements Serializable {
   }
 
   /**
-   * Set the date and time the password reset was completed.
+   * Sets the date and time the password reset was completed.
    *
    * @param completed the date and time the password reset was completed
    */
@@ -271,7 +271,7 @@ public class PasswordReset implements Serializable {
   }
 
   /**
-   * Set the date and time the password reset expired.
+   * Sets the date and time the password reset expired.
    *
    * @param expired the date and time the password reset expired
    */
@@ -280,7 +280,7 @@ public class PasswordReset implements Serializable {
   }
 
   /**
-   * Set the ID for the password reset.
+   * Sets the ID for the password reset.
    *
    * @param id the ID for the password reset
    */
@@ -289,7 +289,7 @@ public class PasswordReset implements Serializable {
   }
 
   /**
-   * Set the date and time the password reset was requested.
+   * Sets the date and time the password reset was requested.
    *
    * @param requested the date and time the password reset was requested
    */
@@ -298,7 +298,7 @@ public class PasswordReset implements Serializable {
   }
 
   /**
-   * Set the security code hash.
+   * Sets the security code hash.
    *
    * @param securityCodeHash the security code hash
    */
@@ -307,7 +307,7 @@ public class PasswordReset implements Serializable {
   }
 
   /**
-   * Set the status of the password reset.
+   * Sets the status of the password reset.
    *
    * @param status the status of the password reset
    */
@@ -316,7 +316,7 @@ public class PasswordReset implements Serializable {
   }
 
   /**
-   * Set the username for the user associated with the password reset.
+   * Sets the username for the user associated with the password reset.
    *
    * @param username the username for the user associated with the password reset
    */

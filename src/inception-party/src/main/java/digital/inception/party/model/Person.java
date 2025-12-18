@@ -2423,7 +2423,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the attributes for the person.
+   * Sets the attributes for the person.
    *
    * @param attributes the attributes for the person
    */
@@ -2434,7 +2434,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the consents provided by the person.
+   * Sets the consents provided by the person.
    *
    * @param consents the consents provided by the person
    */
@@ -2445,7 +2445,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the contact mechanisms for the person.
+   * Sets the contact mechanisms for the person.
    *
    * @param contactMechanisms the contact mechanisms for the person
    */
@@ -2456,7 +2456,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 codes for the countries of citizenship for the person.
+   * Sets the ISO 3166-1 alpha-2 codes for the countries of citizenship for the person.
    *
    * @param countriesOfCitizenship the ISO 3166-1 alpha-2 codes for the countries of citizenship for
    *     the person
@@ -2466,7 +2466,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 codes for the countries of tax residence for the person.
+   * Sets the ISO 3166-1 alpha-2 codes for the countries of tax residence for the person.
    *
    * @param countriesOfTaxResidence the ISO 3166-1 alpha-2 codes for the countries of tax residence
    *     for the person
@@ -2476,7 +2476,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country of birth for the person.
+   * Sets the ISO 3166-1 alpha-2 code for the country of birth for the person.
    *
    * @param countryOfBirth the ISO 3166-1 alpha-2 code for the country of birth for the person
    */
@@ -2485,7 +2485,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the single country of citizenship for the person.
+   * Sets the code for the single country of citizenship for the person.
    *
    * @param countryOfCitizenship the code for the single country of citizenship for the person
    */
@@ -2497,7 +2497,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country of residence for the person.
+   * Sets the ISO 3166-1 alpha-2 code for the country of residence for the person.
    *
    * @param countryOfResidence the ISO 3166-1 alpha-2 code for the country of residence for the
    *     person
@@ -2507,7 +2507,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the single country of tax residence for the person.
+   * Sets the code for the single country of tax residence for the person.
    *
    * @param countryOfTaxResidence the code for the single country of tax residence for the person
    */
@@ -2519,7 +2519,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the date of birth for the person.
+   * Sets the date of birth for the person.
    *
    * @param dateOfBirth the date of birth for the person
    */
@@ -2528,7 +2528,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the date of death for the person.
+   * Sets the date of death for the person.
    *
    * @param dateOfDeath the date of death for the person
    */
@@ -2537,7 +2537,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the educations for the person.
+   * Sets the educations for the person.
    *
    * @param educations the educations for the person
    */
@@ -2548,7 +2548,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the employment status for the person.
+   * Sets the code for the employment status for the person.
    *
    * @param employmentStatus the code for the employment status for the person
    */
@@ -2557,7 +2557,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the employment type for the person.
+   * Sets the code for the employment type for the person.
    *
    * @param employmentType the code for the employment type for the person
    */
@@ -2566,7 +2566,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the employments for the person.
+   * Sets the employments for the person.
    *
    * @param employments the employments for the person
    */
@@ -2577,7 +2577,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the external references for the person.
+   * Sets the external references for the person.
    *
    * @param externalReferences the external references for the person
    */
@@ -2588,7 +2588,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the gender for the person.
+   * Sets the code for the gender for the person.
    *
    * @param gender the code for the gender for the person
    */
@@ -2597,7 +2597,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the given name, firstname, forename, or Christian name for the person.
+   * Sets the given name, firstname, forename, or Christian name for the person.
    *
    * @param givenName the given name, firstname, forename, or Christian name for the person
    */
@@ -2608,7 +2608,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the highest qualification type for the person.
+   * Sets the code for the highest qualification type for the person.
    *
    * @param highestQualificationType the code for the highest qualification type for the person
    */
@@ -2617,7 +2617,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ID for the person.
+   * Sets the ID for the person.
    *
    * @param id the ID for the person
    */
@@ -2626,7 +2626,8 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country of issue for the identification for the person.
+   * Sets the ISO 3166-1 alpha-2 code for the country of issue for the identification for the
+   * person.
    *
    * @param identificationCountryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for
    *     the identification for the person
@@ -2636,7 +2637,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the expiry date for the identification for the person.
+   * Sets the expiry date for the identification for the person.
    *
    * @param identificationExpiryDate the expiry date for the identification for the person
    */
@@ -2645,7 +2646,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the issue date for the identification for the person.
+   * Sets the issue date for the identification for the person.
    *
    * @param identificationIssueDate the issue date for the identification for the person
    */
@@ -2654,7 +2655,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the identification number for the person.
+   * Sets the identification number for the person.
    *
    * @param identificationNumber the identification number for the person
    */
@@ -2663,7 +2664,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the identification type for the person.
+   * Sets the code for the identification type for the person.
    *
    * @param identificationType the code for the identification type for the person
    */
@@ -2672,7 +2673,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the identifications for the person.
+   * Sets the identifications for the person.
    *
    * @param identifications the identifications for the person
    */
@@ -2683,7 +2684,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the initials for the person.
+   * Sets the initials for the person.
    *
    * @param initials the initials for the person
    */
@@ -2692,7 +2693,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ISO 639-1 alpha-2 code for the language for the person.
+   * Sets the ISO 639-1 alpha-2 code for the language for the person.
    *
    * @param language the ISO 639-1 alpha-2 code for the language for the person
    */
@@ -2701,7 +2702,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the language proficiencies for the person.
+   * Sets the language proficiencies for the person.
    *
    * @param languageProficiencies the language proficiencies for the person
    */
@@ -2712,7 +2713,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the locks for the person.
+   * Sets the locks for the person.
    *
    * @param locks the locks for the person
    */
@@ -2723,7 +2724,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the maiden name for the person.
+   * Sets the maiden name for the person.
    *
    * @param maidenName the maiden name for the person
    */
@@ -2732,7 +2733,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the marital status for the person.
+   * Sets the code for the marital status for the person.
    *
    * @param maritalStatus the code for the marital status for the person
    */
@@ -2741,7 +2742,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the date for the marital status for the person.
+   * Sets the date for the marital status for the person.
    *
    * @param maritalStatusDate the date for the marital status for the person
    */
@@ -2750,7 +2751,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the marriage type for the person if the person is married.
+   * Sets the code for the marriage type for the person if the person is married.
    *
    * @param marriageType the code for the marriage type for the person if the person is married
    */
@@ -2759,7 +2760,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the measurement system for the person.
+   * Sets the measurement system for the person.
    *
    * @param measurementSystem the measurement system for the person
    */
@@ -2768,7 +2769,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the middle names for the person.
+   * Sets the middle names for the person.
    *
    * @param middleNames the middle names for the person
    */
@@ -2779,7 +2780,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the personal name or full name of the person.
+   * Sets the personal name or full name of the person.
    *
    * <p>In Western culture, this is constructed from a combination of the given name (also known as
    * the first name, forename, or Christian name), and the surname (also known as the last name or
@@ -2795,7 +2796,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the next of kin for the person.
+   * Sets the next of kin for the person.
    *
    * @param nextOfKin the next of kin for the person
    */
@@ -2806,7 +2807,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the occupation for the person.
+   * Sets the code for the occupation for the person.
    *
    * @param occupation the code for the occupation for the person
    */
@@ -2815,7 +2816,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the physical addresses for the person.
+   * Sets the physical addresses for the person.
    *
    * @param physicalAddresses the physical addresses for the person
    */
@@ -2826,7 +2827,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the preferences for the person.
+   * Sets the preferences for the person.
    *
    * @param preferences the preferences for the person
    */
@@ -2837,7 +2838,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the preferred name for the person.
+   * Sets the preferred name for the person.
    *
    * <p>In Western culture, this is usually the given name, which is also known as the first name,
    * forename, or Christian name.
@@ -2849,7 +2850,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the race for the person.
+   * Sets the code for the race for the person.
    *
    * @param race the code for the race for the person
    */
@@ -2858,7 +2859,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the residence permits for the person.
+   * Sets the residence permits for the person.
    *
    * @param residencePermits the residence permits for the person
    */
@@ -2869,7 +2870,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the residency status for the person.
+   * Sets the code for the residency status for the person.
    *
    * @param residencyStatus the code for the residency status for the person
    */
@@ -2878,7 +2879,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the residential type for the person.
+   * Sets the code for the residential type for the person.
    *
    * @param residentialType the code for the residential type for the person
    */
@@ -2887,7 +2888,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the roles assigned directly to the person.
+   * Sets the roles assigned directly to the person.
    *
    * @param roles the roles assigned directly to the person
    */
@@ -2898,7 +2899,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the segment allocations for the person.
+   * Sets the segment allocations for the person.
    *
    * @param segmentAllocations the segment allocations for the person
    */
@@ -2909,7 +2910,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the skills for the person.
+   * Sets the skills for the person.
    *
    * @param skills the skills for the person
    */
@@ -2920,7 +2921,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the source of funds for the person.
+   * Sets the source of funds for the person.
    *
    * @param sourcesOfFunds the sources of funds for the person
    */
@@ -2931,7 +2932,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the source of wealth for the person.
+   * Sets the source of wealth for the person.
    *
    * @param sourcesOfWealth the sources of wealth for the person
    */
@@ -2942,7 +2943,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the statuses for the person.
+   * Sets the statuses for the person.
    *
    * @param statuses the statuses for the person
    */
@@ -2953,7 +2954,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the surname, last name, or family name for the person.
+   * Sets the surname, last name, or family name for the person.
    *
    * @param surname the surname, last name, or family name for the person
    */
@@ -2964,7 +2965,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the tax numbers for the person.
+   * Sets the tax numbers for the person.
    *
    * @param taxNumbers the tax numbers for the person
    */
@@ -2975,7 +2976,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the person is associated with.
+   * Sets the ID for the tenant the person is associated with.
    *
    * @param tenantId the ID for the tenant the person is associated with
    */
@@ -2984,7 +2985,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the time zone ID for the person.
+   * Sets the time zone ID for the person.
    *
    * @param timeZone the time zone ID for the person
    */
@@ -2993,7 +2994,7 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the title for the person.
+   * Sets the code for the title for the person.
    *
    * @param title the code for the title for the person
    */

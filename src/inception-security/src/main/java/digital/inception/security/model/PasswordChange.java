@@ -247,7 +247,7 @@ public class PasswordChange implements Serializable {
   }
 
   /**
-   * Set the new password when performing a user password change.
+   * Sets the new password when performing a user password change.
    *
    * @param newPassword the new password when performing a new password change
    */
@@ -256,7 +256,7 @@ public class PasswordChange implements Serializable {
   }
 
   /**
-   * Set the password for the user that is used to authorise the operation when performing a user
+   * Sets the password for the user that is used to authorise the operation when performing a user
    * password change.
    *
    * @param password the password for the user that is used to authorise the operation when
@@ -267,7 +267,7 @@ public class PasswordChange implements Serializable {
   }
 
   /**
-   * Set the reason for changing the password.
+   * Sets the reason for changing the password.
    *
    * @param reason the reason for changing the password
    */
@@ -287,7 +287,7 @@ public class PasswordChange implements Serializable {
   }
 
   /**
-   * Set the security code when performing a forgotten password change.
+   * Sets the security code when performing a forgotten password change.
    *
    * @param securityCode the security code when performing a forgotten password change
    */

@@ -61,7 +61,7 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
   /**
    * Constructs a new {@code ValidationServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public ValidationServiceImpl(ApplicationContext applicationContext) {
     super(applicationContext);

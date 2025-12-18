@@ -136,7 +136,7 @@ public class TokenClaim implements Serializable {
   }
 
   /**
-   * Set the name of the token claim.
+   * Sets the name of the token claim.
    *
    * @param name the name of the token claim
    */
@@ -145,7 +145,7 @@ public class TokenClaim implements Serializable {
   }
 
   /**
-   * Set the single value for the token claim.
+   * Sets the single value for the token claim.
    *
    * @param value the single value for the token claim
    */
@@ -154,7 +154,7 @@ public class TokenClaim implements Serializable {
   }
 
   /**
-   * Set the values for the token claim.
+   * Sets the values for the token claim.
    *
    * @param values the values for the token claim
    */

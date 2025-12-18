@@ -225,7 +225,7 @@ public class Policy implements Serializable {
   }
 
   /**
-   * Set the policy data.
+   * Sets the policy data.
    *
    * @param data the policy data
    */
@@ -234,7 +234,7 @@ public class Policy implements Serializable {
   }
 
   /**
-   * Set the ID for the policy.
+   * Sets the ID for the policy.
    *
    * @param id the ID for the policy
    */
@@ -243,7 +243,7 @@ public class Policy implements Serializable {
   }
 
   /**
-   * Set the date and time the policy was last modified.
+   * Sets the date and time the policy was last modified.
    *
    * @param lastModified the date and time the policy was last modified
    */
@@ -252,7 +252,7 @@ public class Policy implements Serializable {
   }
 
   /**
-   * Set the name of the policy.
+   * Sets the name of the policy.
    *
    * @param name the name of the policy
    */
@@ -261,7 +261,7 @@ public class Policy implements Serializable {
   }
 
   /**
-   * Set the policy type.
+   * Sets the policy type.
    *
    * @param type the policy type
    */
@@ -270,7 +270,7 @@ public class Policy implements Serializable {
   }
 
   /**
-   * Set the version of the policy.
+   * Sets the version of the policy.
    *
    * @param version the version of the policy
    */

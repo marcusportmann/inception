@@ -180,7 +180,7 @@ public class SearchInteractionsRequest implements Serializable {
   }
 
   /**
-   * Set the interaction ID search criteria to apply to the interactions.
+   * Sets the interaction ID search criteria to apply to the interactions.
    *
    * @param interactionIds the interaction ID search criteria to apply to the interactions
    */
@@ -189,7 +189,7 @@ public class SearchInteractionsRequest implements Serializable {
   }
 
   /**
-   * Set the page index.
+   * Sets the page index.
    *
    * @param pageIndex the page index
    */
@@ -198,7 +198,7 @@ public class SearchInteractionsRequest implements Serializable {
   }
 
   /**
-   * Set the page size.
+   * Sets the page size.
    *
    * @param pageSize the page size
    */
@@ -207,7 +207,7 @@ public class SearchInteractionsRequest implements Serializable {
   }
 
   /**
-   * Set the method used to sort the interactions e.g. by occurred
+   * Sets the method used to sort the interactions e.g. by occurred
    *
    * @param sortBy the method used to sort the interactions e.g. by occurred
    */
@@ -216,7 +216,7 @@ public class SearchInteractionsRequest implements Serializable {
   }
 
   /**
-   * Set the sort direction to apply to the interactions.
+   * Sets the sort direction to apply to the interactions.
    *
    * @param sortDirection the sort direction to apply to the interactions
    */
@@ -225,7 +225,7 @@ public class SearchInteractionsRequest implements Serializable {
   }
 
   /**
-   * Set the interaction source ID search criteria to apply to the interactions.
+   * Sets the interaction source ID search criteria to apply to the interactions.
    *
    * @param sourceId the interaction source ID search criteria to apply to the interactions
    */

@@ -273,7 +273,7 @@ public class PhysicalAddressPurpose implements Serializable {
   }
 
   /**
-   * Set the code for the physical address purpose.
+   * Sets the code for the physical address purpose.
    *
    * @param code the code for the physical address purpose
    */
@@ -282,7 +282,7 @@ public class PhysicalAddressPurpose implements Serializable {
   }
 
   /**
-   * Set the description for the physical address purpose.
+   * Sets the description for the physical address purpose.
    *
    * @param description the description for the physical address purpose
    */
@@ -291,7 +291,7 @@ public class PhysicalAddressPurpose implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the physical address purpose.
+   * Sets the Unicode locale identifier for the physical address purpose.
    *
    * @param localeId the Unicode locale identifier for the physical address purpose
    */
@@ -300,7 +300,7 @@ public class PhysicalAddressPurpose implements Serializable {
   }
 
   /**
-   * Set the name of the physical address purpose.
+   * Sets the name of the physical address purpose.
    *
    * @param name the name of the physical address purpose
    */
@@ -309,7 +309,7 @@ public class PhysicalAddressPurpose implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the physical address purpose is associated with.
+   * Sets the codes for the party types the physical address purpose is associated with.
    *
    * @param partyTypes the codes for the party types the physical address purpose is associated with
    */
@@ -318,7 +318,7 @@ public class PhysicalAddressPurpose implements Serializable {
   }
 
   /**
-   * Set the sort order for the physical address purpose.
+   * Sets the sort order for the physical address purpose.
    *
    * @param sortOrder the sort order for the physical address purpose
    */
@@ -327,7 +327,7 @@ public class PhysicalAddressPurpose implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the physical address purpose is specific to.
+   * Sets the ID for the tenant the physical address purpose is specific to.
    *
    * @param tenantId the ID for the tenant the physical address purpose is specific to
    */

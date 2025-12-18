@@ -105,7 +105,7 @@ public class UpdateInteractionNoteRequest implements Serializable {
   }
 
   /**
-   * Set the content for the interaction note.
+   * Sets the content for the interaction note.
    *
    * @param content the content for the interaction note
    */
@@ -114,7 +114,7 @@ public class UpdateInteractionNoteRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction note.
+   * Sets the ID for the interaction note.
    *
    * @param interactionNoteId the ID for the interaction note
    */

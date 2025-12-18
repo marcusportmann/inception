@@ -433,7 +433,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Set the claims for the token.
+   * Sets the claims for the token.
    *
    * @param claims the claims for the token
    */
@@ -442,7 +442,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Set the data for the token.
+   * Sets the data for the token.
    *
    * @param data the data for the token
    */
@@ -451,7 +451,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Set the description for the token.
+   * Sets the description for the token.
    *
    * @param description the description for the token
    */
@@ -460,7 +460,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Set the date the token expires.
+   * Sets the date the token expires.
    *
    * @param expiryDate the date the token expires
    */
@@ -469,7 +469,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Set the ID for the token.
+   * Sets the ID for the token.
    *
    * @param id the ID for the token
    */
@@ -478,7 +478,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Set the date and time the token was issued.
+   * Sets the date and time the token was issued.
    *
    * @param issued the date and time the token was issued
    */
@@ -487,7 +487,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Set the name of the token.
+   * Sets the name of the token.
    *
    * @param name the name of the token
    */
@@ -496,7 +496,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Set the date the token was revoked.
+   * Sets the date the token was revoked.
    *
    * @param revocationDate the date the token was revoked
    */
@@ -505,7 +505,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Set the token type.
+   * Sets the token type.
    *
    * @param type the token type
    */
@@ -514,7 +514,7 @@ public class Token implements Serializable {
   }
 
   /**
-   * Set the date the token is valid from.
+   * Sets the date the token is valid from.
    *
    * @param validFromDate the date the token is valid from
    */

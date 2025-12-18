@@ -466,7 +466,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the attribute search criteria to apply when searching for workflows.
+   * Sets the attribute search criteria to apply when searching for workflows.
    *
    * @param attributes the attribute search criteria to apply when searching for workflows
    */
@@ -475,7 +475,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the person or system who canceled the workflow search criteria to apply when searching for
+   * Sets the person or system who canceled the workflow search criteria to apply when searching for
    * workflows.
    *
    * @param canceledBy the person or system who canceled the workflow search criteria to apply when
@@ -486,7 +486,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the workflow definition ID search criteria to apply to the workflows.
+   * Sets the workflow definition ID search criteria to apply to the workflows.
    *
    * @param definitionId the workflow definition ID search criteria to apply to the workflows
    */
@@ -495,7 +495,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the external reference search criteria to apply when searching for workflows.
+   * Sets the external reference search criteria to apply when searching for workflows.
    *
    * @param externalReferences the external reference search criteria to apply when searching for
    *     workflows
@@ -505,7 +505,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the person or system that finalized the workflow search criteria to apply when searching
+   * Sets the person or system that finalized the workflow search criteria to apply when searching
    * for workflows.
    *
    * @param finalizedBy the person or system that finalized the workflow search criteria to apply
@@ -516,7 +516,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the ID search criteria to apply when searching for workflows.
+   * Sets the ID search criteria to apply when searching for workflows.
    *
    * @param id the ID search criteria to apply when searching for workflows
    */
@@ -525,7 +525,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the person or system that initiated the workflow search criteria to apply when searching
+   * Sets the person or system that initiated the workflow search criteria to apply when searching
    * for workflows.
    *
    * @param initiatedBy the person or system that initiated the workflow search criteria to apply
@@ -536,7 +536,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the interaction ID search criteria to apply when searching for workflows.
+   * Sets the interaction ID search criteria to apply when searching for workflows.
    *
    * @param interactionId the interaction ID search criteria to apply when searching for workflows
    */
@@ -545,7 +545,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the page index.
+   * Sets the page index.
    *
    * @param pageIndex the page index
    */
@@ -554,7 +554,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the page size.
+   * Sets the page size.
    *
    * @param pageSize the page size
    */
@@ -563,7 +563,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the parent ID search criteria to apply when searching for workflows.
+   * Sets the parent ID search criteria to apply when searching for workflows.
    *
    * @param parentId the parent ID search criteria to apply when searching for workflows
    */
@@ -572,7 +572,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the party ID search criteria to apply when searching for workflows.
+   * Sets the party ID search criteria to apply when searching for workflows.
    *
    * @param partyId the party ID search criteria to apply when searching for workflows
    */
@@ -581,7 +581,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the method used to sort the workflows e.g. by definition ID.
+   * Sets the method used to sort the workflows e.g. by definition ID.
    *
    * @param sortBy the method used to sort the workflows e.g. by definition ID
    */
@@ -590,7 +590,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the sort direction to apply to the workflows.
+   * Sets the sort direction to apply to the workflows.
    *
    * @param sortDirection the sort direction to apply to the workflows
    */
@@ -599,7 +599,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the status search criteria to apply to the workflows.
+   * Sets the status search criteria to apply to the workflows.
    *
    * @param status the status search criteria to apply to the workflows
    */
@@ -608,7 +608,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the person or system that suspended the workflow search criteria to apply when searching
+   * Sets the person or system that suspended the workflow search criteria to apply when searching
    * for workflows.
    *
    * @param suspendedBy the person or system that suspended the workflow search criteria to apply
@@ -619,8 +619,8 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the person or system that last updated the workflow search criteria to apply when searching
-   * for workflows.
+   * Sets the person or system that last updated the workflow search criteria to apply when
+   * searching for workflows.
    *
    * @param updatedBy the person or system that last updated the workflow search criteria to apply
    *     when searching for workflows
@@ -630,7 +630,7 @@ public class SearchWorkflowsRequest implements Serializable {
   }
 
   /**
-   * Set the variable search criteria to apply when searching for workflows.
+   * Sets the variable search criteria to apply when searching for workflows.
    *
    * @param variables the variable search criteria to apply when searching for workflows
    */

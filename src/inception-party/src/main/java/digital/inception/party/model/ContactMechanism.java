@@ -299,7 +299,7 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Set the party the contact mechanism is associated with.
+   * Sets the party the contact mechanism is associated with.
    *
    * @param party the party the contact mechanism is associated with
    */
@@ -314,7 +314,7 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Set the codes for the contact mechanism purposes.
+   * Sets the codes for the contact mechanism purposes.
    *
    * @param purposes the codes for the contact mechanism purposes
    */
@@ -323,7 +323,7 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Set the code for the contact mechanism role.
+   * Sets the code for the contact mechanism role.
    *
    * @param purpose the code for the contact mechanism role
    */
@@ -332,7 +332,7 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Set the code for the contact mechanism type.
+   * Sets the code for the contact mechanism type.
    *
    * @param type the code for the contact mechanism type
    */
@@ -341,7 +341,7 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Set the value for the contact mechanism.
+   * Sets the value for the contact mechanism.
    *
    * @param value the value for the contact mechanism
    */

@@ -262,7 +262,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Set the description for the source of wealth.
+   * Sets the description for the source of wealth.
    *
    * @param description the description for the source of wealth
    */
@@ -271,7 +271,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Set the date the source of wealth is effective from.
+   * Sets the date the source of wealth is effective from.
    *
    * @param effectiveFrom the date the source of wealth is effective from
    */
@@ -280,7 +280,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Set the date the source of wealth is effective to.
+   * Sets the date the source of wealth is effective to.
    *
    * @param effectiveTo the date the source of wealth is effective to
    */
@@ -289,7 +289,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Set the person the source of wealth is associated with.
+   * Sets the person the source of wealth is associated with.
    *
    * @param person the person the source of wealth is associated with
    */
@@ -304,7 +304,7 @@ public class SourceOfWealth implements Serializable {
   }
 
   /**
-   * Set the code for the source of wealth type.
+   * Sets the code for the source of wealth type.
    *
    * @param type the code for the source of wealth type
    */

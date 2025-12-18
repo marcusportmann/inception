@@ -35,7 +35,7 @@ public class ApplicationConfiguration {
   /**
    * Constructs a new {@code ApplicationConfiguration}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public ApplicationConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;

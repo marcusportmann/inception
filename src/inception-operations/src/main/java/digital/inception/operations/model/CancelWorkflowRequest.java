@@ -100,7 +100,7 @@ public class CancelWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the reason the workflow was canceled.
+   * Sets the reason the workflow was canceled.
    *
    * @param cancellationReason the reason the workflow was canceled
    */
@@ -109,7 +109,7 @@ public class CancelWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow.
+   * Sets the ID for the workflow.
    *
    * @param workflowId the ID for the workflow
    */

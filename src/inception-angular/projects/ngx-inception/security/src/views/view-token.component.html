@@ -41,7 +41,7 @@
           </mat-form-field>
         </div>
       </div>
-      <ng-container *ngIf="token?.validFromDate">
+      @if (token?.validFromDate) {
         <div class="row">
           <div class="col-sm">
             <mat-form-field class="static">
@@ -50,8 +50,8 @@
             </mat-form-field>
           </div>
         </div>
-      </ng-container>
-      <ng-container *ngIf="token?.expiryDate">
+      }
+      @if (token?.expiryDate) {
         <div class="row">
           <div class="col-sm">
             <mat-form-field class="static">
@@ -60,8 +60,8 @@
             </mat-form-field>
           </div>
         </div>
-      </ng-container>
-      <ng-container *ngIf="token?.revocationDate">
+      }
+      @if (token?.revocationDate) {
         <div class="row">
           <div class="col-sm">
             <mat-form-field class="static">
@@ -70,7 +70,7 @@
             </mat-form-field>
           </div>
         </div>
-      </ng-container>
+      }
       <div class="row">
         <div class="col-sm">
           <mat-form-field class="static">
@@ -89,14 +89,16 @@
               <th class="mat-mdc-nested-header-cell" i18n="@@security_view_token_component_claims_table_header_name">Name</th>
               <th class="mat-mdc-nested-header-cell" i18n="@@security_view_token_component_claims_table_header_value">Value</th>
             </tr>
-            <tr class="mat-mdc-nested-row" *ngFor="let claim of token?.claims">
-              <td class="mat-mdc-nested-cell">
-                {{claim.name}}
-              </td>
-              <td class="mat-mdc-nested-cell">
-                {{(claim.value !== null && claim.value!==undefined && claim.value.length > 0) ? claim.value : claim.values.join(',')}}
-              </td>
-            </tr>
+            @for (claim of token?.claims; track claim) {
+              <tr class="mat-mdc-nested-row">
+                <td class="mat-mdc-nested-cell">
+                  {{claim.name}}
+                </td>
+                <td class="mat-mdc-nested-cell">
+                  {{(claim.value !== null && claim.value!==undefined && claim.value.length > 0) ? claim.value : claim.values.join(',')}}
+                </td>
+              </tr>
+            }
           </table>
         </div>
       </div>

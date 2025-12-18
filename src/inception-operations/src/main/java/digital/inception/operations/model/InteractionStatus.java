@@ -16,7 +16,8 @@
 
 package digital.inception.operations.model;
 
-import digital.inception.core.model.CodeEnum;
+import com.fasterxml.jackson.annotation.JsonValue;
+import digital.inception.processor.ProcessableObjectStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -30,38 +31,45 @@ import jakarta.xml.bind.annotation.XmlType;
 @Schema(description = "The interaction status")
 @XmlEnum
 @XmlType(name = "InteractionStatus", namespace = "https://inception.digital/operations")
-public enum InteractionStatus implements CodeEnum {
+public enum InteractionStatus implements ProcessableObjectStatus {
 
   /** Queued. */
   @XmlEnumValue("Queued")
-  QUEUED("queued", "Queued"),
+  QUEUED("queued", ProcessingPhase.PENDING, "Queued"),
 
   /** Processing. */
   @XmlEnumValue("Processing")
-  PROCESSING("processing", "Processing"),
+  PROCESSING("processing", ProcessingPhase.PROCESSING, "Processing"),
 
   /** Available. */
   @XmlEnumValue("Available")
-  AVAILABLE("available", "Available"),
+  AVAILABLE("available", ProcessingPhase.COMPLETED, "Available"),
 
   /** Assigned. */
   @XmlEnumValue("Assigned")
-  ASSIGNED("assigned", "Assigned"),
+  ASSIGNED("assigned", ProcessingPhase.COMPLETED, "Assigned"),
 
   /** Resolved. */
   @XmlEnumValue("Resolved")
-  RESOLVED("resolved", "Resolved"),
+  RESOLVED("resolved", ProcessingPhase.COMPLETED, "Resolved"),
 
   /** Archived. */
   @XmlEnumValue("Archived")
-  ARCHIVED("archived", "Archived");
+  ARCHIVED("archived", ProcessingPhase.COMPLETED, "Archived"),
+
+  /** Failed. */
+  @XmlEnumValue("Failed")
+  FAILED("failed", ProcessingPhase.FAILED, "Failed");
 
   private final String code;
 
   private final String description;
 
-  InteractionStatus(String code, String description) {
+  private final ProcessingPhase processingPhase;
+
+  InteractionStatus(String code, ProcessingPhase processingPhase, String description) {
     this.code = code;
+    this.processingPhase = processingPhase;
     this.description = description;
   }
 
@@ -70,6 +78,7 @@ public enum InteractionStatus implements CodeEnum {
    *
    * @return the code for the interaction status
    */
+  @JsonValue
   public String code() {
     return code;
   }
@@ -81,6 +90,16 @@ public enum InteractionStatus implements CodeEnum {
    */
   public String description() {
     return description;
+  }
+
+  /**
+   * Returns the processing phase for the interaction status.
+   *
+   * @return the processing phase for the interaction status
+   */
+  @Override
+  public ProcessingPhase getProcessingPhase() {
+    return processingPhase;
   }
 
   /**

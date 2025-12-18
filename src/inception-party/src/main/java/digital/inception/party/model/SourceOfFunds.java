@@ -376,7 +376,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Set the description for the source of funds.
+   * Sets the description for the source of funds.
    *
    * @param description the description for the source of funds
    */
@@ -385,7 +385,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Set the date the source of funds is effective from.
+   * Sets the date the source of funds is effective from.
    *
    * @param effectiveFrom the date the source of funds is effective from
    */
@@ -394,7 +394,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Set the date the source of funds is effective to.
+   * Sets the date the source of funds is effective to.
    *
    * @param effectiveTo the date the source of funds is effective to
    */
@@ -403,7 +403,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Set the percentage of the total of all sources of funds attributed to the source of funds.
+   * Sets the percentage of the total of all sources of funds attributed to the source of funds.
    *
    * @param percentage the percentage of the total of all sources of funds attributed to the source
    *     of funds
@@ -413,7 +413,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Set the person the source of funds is associated with.
+   * Sets the person the source of funds is associated with.
    *
    * @param person the person the source of funds is associated with
    */
@@ -428,7 +428,7 @@ public class SourceOfFunds implements Serializable {
   }
 
   /**
-   * Set the code for the source of funds type.
+   * Sets the code for the source of funds type.
    *
    * @param type the code for the source of funds type
    */

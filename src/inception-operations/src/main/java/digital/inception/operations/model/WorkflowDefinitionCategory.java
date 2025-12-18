@@ -246,7 +246,7 @@ public class WorkflowDefinitionCategory implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow definition category.
+   * Sets the ID for the workflow definition category.
    *
    * @param id the ID for the workflow definition category
    */
@@ -255,7 +255,7 @@ public class WorkflowDefinitionCategory implements Serializable {
   }
 
   /**
-   * Set the name of the workflow definition category.
+   * Sets the name of the workflow definition category.
    *
    * @param name the name of the workflow definition category
    */
@@ -264,7 +264,7 @@ public class WorkflowDefinitionCategory implements Serializable {
   }
 
   /**
-   * Set the permissions for the workflow definition category.
+   * Sets the permissions for the workflow definition category.
    *
    * @param permissions the permissions for the workflow definition category
    */
@@ -275,7 +275,7 @@ public class WorkflowDefinitionCategory implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the workflow definition category is specific to.
+   * Sets the ID for the tenant the workflow definition category is specific to.
    *
    * @param tenantId the ID for the tenant the workflow definition category is specific to
    */

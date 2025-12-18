@@ -140,7 +140,7 @@ public class XacmlPolicyDecisionPointPolicyProvider extends AbstractPolicyProvid
   }
 
   /**
-   * Set the external API endpoint used to retrieve policy sets and policies.
+   * Sets the external API endpoint used to retrieve policy sets and policies.
    *
    * @param externalPoliciesEndpoint the external API endpoint used to retrieve policy sets and
    *     policies
@@ -150,7 +150,7 @@ public class XacmlPolicyDecisionPointPolicyProvider extends AbstractPolicyProvid
   }
 
   /**
-   * Set the reload period in seconds for external policies.
+   * Sets the reload period in seconds for external policies.
    *
    * @param externalPoliciesReloadPeriod the reload period in seconds for external policies
    */

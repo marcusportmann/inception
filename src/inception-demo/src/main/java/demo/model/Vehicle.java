@@ -172,7 +172,7 @@ public class Vehicle implements Serializable {
   }
 
   /**
-   * Set the ID for the vehicle.
+   * Sets the ID for the vehicle.
    *
    * @param id the ID for the vehicle
    */
@@ -181,7 +181,7 @@ public class Vehicle implements Serializable {
   }
 
   /**
-   * Set the name of the vehicle.
+   * Sets the name of the vehicle.
    *
    * @param name the name of the vehicle
    */
@@ -190,7 +190,7 @@ public class Vehicle implements Serializable {
   }
 
   /**
-   * Set the vehicle type.
+   * Sets the vehicle type.
    *
    * @param type the vehicle type
    */

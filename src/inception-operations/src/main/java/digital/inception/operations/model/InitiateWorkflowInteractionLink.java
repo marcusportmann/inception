@@ -106,7 +106,7 @@ public class InitiateWorkflowInteractionLink implements Serializable {
   }
 
   /**
-   * Set the ID for the conversation the workflow interaction link is associated with.
+   * Sets the ID for the conversation the workflow interaction link is associated with.
    *
    * @param conversationId the ID for the conversation the workflow interaction link is associated
    *     with
@@ -116,7 +116,7 @@ public class InitiateWorkflowInteractionLink implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction the workflow interaction link is associated with.
+   * Sets the ID for the interaction the workflow interaction link is associated with.
    *
    * @param interactionId the ID for the interaction the workflow interaction link is associated
    *     with

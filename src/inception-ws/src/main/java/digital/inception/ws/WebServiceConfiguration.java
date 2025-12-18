@@ -96,7 +96,7 @@ public class WebServiceConfiguration {
   /**
    * Constructs a new {@code WebServiceConfiguration}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public WebServiceConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;

@@ -22,11 +22,9 @@ import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.exception.DuplicateEventException;
-import digital.inception.operations.exception.EventNotFoundException;
 import digital.inception.operations.exception.WorkflowDocumentNotFoundException;
 import digital.inception.operations.exception.WorkflowNotFoundException;
 import digital.inception.operations.model.Event;
-import digital.inception.operations.model.EventStatus;
 import digital.inception.operations.model.EventType;
 import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.WorkflowDefinition;
@@ -36,17 +34,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * The {@code EventServiceImpl} class provides the Workflow Document Event Service implementation.
@@ -57,14 +49,14 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 @SuppressWarnings("unused")
 public class EventServiceImpl extends AbstractServiceBase implements EventService {
 
-  /** The Spring application event publisher. */
-  private final ApplicationEventPublisher applicationEventPublisher;
-
   /** The Event Repository. */
   private final EventRepository eventRepository;
 
   /* The name of the Event Service instance. */
   private final String instanceName = ServiceUtil.getServiceInstanceName("EventService");
+
+  /** The Background Event Processor. */
+  private BackgroundEventProcessor backgroundEventProcessor;
 
   /* Entity Manager */
   @PersistenceContext(unitName = "operations")
@@ -80,17 +72,12 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
   /**
    * Constructs a new {@code EventServiceImpl}.
    *
-   * @param applicationContext the Spring application context
-   * @param applicationEventPublisher the Spring application event publisher
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param eventRepository the Event Repository
    */
-  public EventServiceImpl(
-      ApplicationContext applicationContext,
-      ApplicationEventPublisher applicationEventPublisher,
-      EventRepository eventRepository) {
+  public EventServiceImpl(ApplicationContext applicationContext, EventRepository eventRepository) {
     super(applicationContext);
 
-    this.applicationEventPublisher = applicationEventPublisher;
     this.eventRepository = eventRepository;
   }
 
@@ -114,55 +101,6 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
               + ") of type ("
               + objectType
               + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public int getMaximumEventProcessingAttempts() {
-    return maximumEventProcessingAttempts;
-  }
-
-  @Override
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public Optional<Event> getNextEventQueuedForProcessing(UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    try {
-      // Handle the situation where different time precisions are used in the database
-      OffsetDateTime now = OffsetDateTime.now().plusSeconds(1);
-
-      PageRequest pageRequest = PageRequest.of(0, 1);
-
-      List<Event> events =
-          eventRepository.findEventsQueuedForProcessingForWrite(tenantId, now, pageRequest);
-
-      if (!events.isEmpty()) {
-        Event event = events.getFirst();
-
-        OffsetDateTime locked = OffsetDateTime.now();
-
-        eventRepository.lockEventForProcessing(tenantId, event.getId(), instanceName, locked);
-
-        entityManager.detach(event);
-
-        event.setStatus(EventStatus.PROCESSING);
-        event.setLocked(locked);
-        event.setLockName(instanceName);
-        event.incrementProcessingAttempts();
-
-        return Optional.of(event);
-      } else {
-        return Optional.empty();
-      }
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the next event that has been queued for processing for the tenant ("
               + tenantId
               + ")",
           e);
@@ -207,7 +145,7 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
 
       eventRepository.saveAndFlush(event);
 
-      triggerEventProcessing();
+      getBackgroundEventProcessor().triggerProcessing();
     } catch (DuplicateEventException e) {
       throw e;
     } catch (Throwable e) {
@@ -227,78 +165,17 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
         new Event(tenantId, objectType, objectId, eventType, OffsetDateTime.now(), actor));
   }
 
-  @Override
-  public void resetEventLocks(UUID tenantId, EventStatus status, EventStatus newStatus)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
+  /**
+   * Returns the lazily evaluated Background Event Processor to avoid circular references.
+   *
+   * @return the lazily evaluated Background Event Processor to avoid circular references.
+   */
+  private BackgroundEventProcessor getBackgroundEventProcessor() {
+    if (backgroundEventProcessor == null) {
+      backgroundEventProcessor = getApplicationContext().getBean(BackgroundEventProcessor.class);
     }
 
-    if (status == null) {
-      throw new InvalidArgumentException("status");
-    }
-
-    if (newStatus == null) {
-      throw new InvalidArgumentException("newStatus");
-    }
-
-    try {
-      eventRepository.resetEventLocks(tenantId, status, newStatus, instanceName);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to reset the locks for the events with status ("
-              + status
-              + ") that have been locked using the lock name ("
-              + instanceName
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void triggerEventProcessing() {
-    TransactionSynchronizationManager.registerSynchronization(
-        new TransactionSynchronization() {
-          @Override
-          public void afterCommit() {
-            // Fire-and-forget trigger *after* the TX is really committed
-            applicationEventPublisher.publishEvent(new TriggerEventProcessingEvent());
-          }
-        });
-  }
-
-  @Override
-  public void unlockEvent(UUID tenantId, UUID eventId, EventStatus status)
-      throws InvalidArgumentException, EventNotFoundException, ServiceUnavailableException {
-    if (eventId == null) {
-      throw new InvalidArgumentException("eventId");
-    }
-
-    if (status == null) {
-      throw new InvalidArgumentException("status");
-    }
-
-    try {
-      if (!eventRepository.existsByTenantIdAndId(tenantId, eventId)) {
-        throw new EventNotFoundException(tenantId, eventId);
-      }
-
-      eventRepository.unlockEvent(tenantId, eventId, status);
-    } catch (EventNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to unlock and set the status for the event ("
-              + eventId
-              + ") for the tenant ("
-              + tenantId
-              + ") to ("
-              + status
-              + ")",
-          e);
-    }
+    return backgroundEventProcessor;
   }
 
   /**

@@ -215,7 +215,7 @@ public class Role implements java.io.Serializable {
   }
 
   /**
-   * Set the code for the role.
+   * Sets the code for the role.
    *
    * @param code the code for the role
    */
@@ -224,7 +224,7 @@ public class Role implements java.io.Serializable {
   }
 
   /**
-   * Set the description for the role.
+   * Sets the description for the role.
    *
    * @param description the description for the role
    */
@@ -233,7 +233,7 @@ public class Role implements java.io.Serializable {
   }
 
   /**
-   * Set the functions associated with the role.
+   * Sets the functions associated with the role.
    *
    * @param functions the functions associated with the role
    */
@@ -242,7 +242,7 @@ public class Role implements java.io.Serializable {
   }
 
   /**
-   * Set the groups the role is associated with.
+   * Sets the groups the role is associated with.
    *
    * @param groups the groups the role is associated with
    */
@@ -251,7 +251,7 @@ public class Role implements java.io.Serializable {
   }
 
   /**
-   * Set the name of the role.
+   * Sets the name of the role.
    *
    * @param name the name of the role
    */

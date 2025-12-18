@@ -263,7 +263,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Set the date the role is effective from.
+   * Sets the date the role is effective from.
    *
    * @param effectiveFrom the date the role is effective from
    */
@@ -272,7 +272,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Set the date the role is effective to.
+   * Sets the date the role is effective to.
    *
    * @param effectiveTo the date the role is effective to
    */
@@ -281,7 +281,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Set the party the role is associated with.
+   * Sets the party the role is associated with.
    *
    * @param party the party the role is associated with
    */
@@ -296,7 +296,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Set the code for the role purpose.
+   * Sets the code for the role purpose.
    *
    * @param purpose the code for the role purpose
    */
@@ -305,7 +305,7 @@ public class Role implements Serializable {
   }
 
   /**
-   * Set the code for the role type.
+   * Sets the code for the role type.
    *
    * @param type the code for the role type
    */

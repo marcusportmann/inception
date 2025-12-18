@@ -160,7 +160,7 @@ public class Preference implements Serializable {
   }
 
   /**
-   * Set the party the preference is associated with.
+   * Sets the party the preference is associated with.
    *
    * @param party the party the preference is associated with
    */
@@ -175,7 +175,7 @@ public class Preference implements Serializable {
   }
 
   /**
-   * Set the code for the preference type.
+   * Sets the code for the preference type.
    *
    * @param type the code for the preference type
    */
@@ -184,7 +184,7 @@ public class Preference implements Serializable {
   }
 
   /**
-   * Set the value for the preference.
+   * Sets the value for the preference.
    *
    * @param value the value for the preference
    */

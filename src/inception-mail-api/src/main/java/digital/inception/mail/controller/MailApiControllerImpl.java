@@ -47,7 +47,7 @@ public class MailApiControllerImpl extends SecureApiController implements MailAp
   /**
    * Constructs a new {@code MailApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param mailService the Mail Service
    */
   public MailApiControllerImpl(ApplicationContext applicationContext, MailService mailService) {

@@ -244,7 +244,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
   /**
    * Constructs a new {@code SecurityServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param resourceLoader the Spring resource loader
    * @param mailService the Mail Service
    * @param policyDataStore the Policy Data Store

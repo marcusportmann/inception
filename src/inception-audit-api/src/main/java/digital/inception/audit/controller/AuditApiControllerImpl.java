@@ -38,7 +38,7 @@ public class AuditApiControllerImpl extends SecureApiController implements Audit
   /**
    * Constructs a new {@code AuditApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param auditService the Audit Service
    */
   public AuditApiControllerImpl(ApplicationContext applicationContext, AuditService auditService) {

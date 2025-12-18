@@ -56,12 +56,17 @@
         remarks="The number of times the processing of the event has been attempted">
         <constraints nullable="false"/>
       </column>
+      <column name="processing_time" type="int"
+        remarks="The cumulative processing time, in milliseconds, for the event across all processing attempts"/>
+      <column name="processing_suspended" type="boolean" remarks="Has processing been suspended for the event"/>
       <column name="locked" type="timestamp with time zone"
         remarks="The date and time the event was locked for processing"/>
       <column name="lock_name" type="nvarchar(100)"
         remarks="The name of the entity that has locked the event for processing"/>
       <column name="last_processed" type="timestamp with time zone"
         remarks="The date and time the last attempt was made to process the event"/>
+      <column name="next_processed" type="timestamp with time zone"
+        remarks="The date and time the next attempt will be made to process the event"/>
     </createTable>
     <createIndex indexName="operations_events_object_ix"
       tableName="operations_events">
@@ -217,6 +222,7 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the document definition">
         <constraints nullable="false"/>
       </column>
+      <column name="short_name" type="nvarchar(50)" remarks="The short name for the document definition"/>
       <column name="description" type="nvarchar(500)" defaultValue="" remarks="The description for the document definition"/>
       <column name="template_id" type="nvarchar(50)"
         remarks="The ID for the document template for the document definition"/>
@@ -1218,16 +1224,17 @@
         remarks="The number of times the processing of the interaction has been attempted">
         <constraints nullable="false"/>
       </column>
-      <column name="processing_time" type="bigint" defaultValueNumeric="0"
-        remarks="The time taken to process the interaction in milliseconds">
-        <constraints nullable="false"/>
-      </column>
+      <column name="processing_time" type="int"
+        remarks="The cumulative processing time, in milliseconds, for the interaction across all processing attempts"/>
+      <column name="processing_suspended" type="boolean" remarks="Has processing been suspended for the interaction"/>
       <column name="locked" type="timestamp with time zone"
         remarks="The date and time the interaction was locked for processing"/>
       <column name="lock_name" type="nvarchar(100)"
         remarks="The name of the entity that has locked the interaction for processing"/>
       <column name="last_processed" type="timestamp with time zone"
         remarks="The date and time the last attempt was made to process the interaction"/>
+      <column name="next_processed" type="timestamp with time zone"
+        remarks="The date and time the next attempt will be made to process the interaction"/>
     </createTable>
     <addForeignKeyConstraint constraintName="operations_interactions_interaction_source_fk"
       baseTableName="operations_interactions" baseColumnNames="source_id"

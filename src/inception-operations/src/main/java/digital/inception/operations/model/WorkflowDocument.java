@@ -590,7 +590,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the description for the workflow document.
+   * Sets the description for the workflow document.
    *
    * @param description the description for the workflow document
    */
@@ -599,7 +599,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the ID for the document definition the workflow document is associated with.
+   * Sets the ID for the document definition the workflow document is associated with.
    *
    * @param documentDefinitionId the ID for the document definition the workflow document is
    *     associated with
@@ -609,7 +609,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the ID for the document.
+   * Sets the ID for the document.
    *
    * @param documentId the ID for the document
    */
@@ -618,7 +618,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow document.
+   * Sets the ID for the workflow document.
    *
    * @param id the ID for the workflow document
    */
@@ -637,7 +637,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow document was provided.
+   * Sets the date and time the workflow document was provided.
    *
    * @param provided the date and time the workflow document was provided
    */
@@ -646,7 +646,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the person or system that provided the workflow document.
+   * Sets the person or system that provided the workflow document.
    *
    * @param providedBy the person or system that provided the workflow document
    */
@@ -655,7 +655,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow document was rejected.
+   * Sets the date and time the workflow document was rejected.
    *
    * @param rejected the date and time the workflow document was rejected
    */
@@ -664,7 +664,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the person or system that rejected the workflow document.
+   * Sets the person or system that rejected the workflow document.
    *
    * @param rejectedBy the person or system that rejected the workflow document
    */
@@ -673,7 +673,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the reason the workflow document was rejected.
+   * Sets the reason the workflow document was rejected.
    *
    * @param rejectionReason the reason the workflow document was rejected
    */
@@ -682,7 +682,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow document was requested.
+   * Sets the date and time the workflow document was requested.
    *
    * @param requested the date and time the workflow document was requested
    */
@@ -691,7 +691,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the person or system that requested the workflow document.
+   * Sets the person or system that requested the workflow document.
    *
    * @param requestedBy the person or system that requested the workflow document
    */
@@ -700,7 +700,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the ID for the party the workflow document was requested from.
+   * Sets the ID for the party the workflow document was requested from.
    *
    * @param requestedFromPartyId the ID for the party the workflow document was requested from
    */
@@ -709,7 +709,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the status of the workflow document.
+   * Sets the status of the workflow document.
    *
    * @param status the status of the workflow document
    */
@@ -718,7 +718,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the workflow document is associated with.
+   * Sets the ID for the tenant the workflow document is associated with.
    *
    * @param tenantId the ID for the tenant the workflow document is associated with
    */
@@ -727,7 +727,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow document was verified.
+   * Sets the date and time the workflow document was verified.
    *
    * @param verified the date and time the workflow document was verified
    */
@@ -736,7 +736,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the person or system that verified the workflow document.
+   * Sets the person or system that verified the workflow document.
    *
    * @param verifiedBy the person or system that verified the workflow document
    */
@@ -745,7 +745,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the reason the workflow document was waived.
+   * Sets the reason the workflow document was waived.
    *
    * @param waiveReason the reason the workflow document was waived
    */
@@ -754,7 +754,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the date and time the workflow document was waived.
+   * Sets the date and time the workflow document was waived.
    *
    * @param waived the date and time the workflow document was waived
    */
@@ -763,7 +763,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the person or system that waived the workflow document.
+   * Sets the person or system that waived the workflow document.
    *
    * @param waivedBy the person or system that waived the workflow document
    */
@@ -772,7 +772,7 @@ public class WorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow.
+   * Sets the ID for the workflow.
    *
    * @param workflowId the ID for the workflow
    */

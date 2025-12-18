@@ -192,7 +192,7 @@ public interface ReportingService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Set the real path to the folder where the local Jasper reports are stored.
+   * Sets the real path to the folder where the local Jasper reports are stored.
    *
    * @param localReportFolderPath the real path to the folder where the local Jasper reports are
    *     stored

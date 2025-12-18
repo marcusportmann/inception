@@ -306,7 +306,7 @@ public class PartyReferenceServiceImpl extends AbstractServiceBase
   /**
    * Constructs a new {@code PartyReferenceServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param associationPropertyTypeRepository the Association Property Type Repository
    * @param associationTypeRepository the Association Type Repository
    * @param attributeTypeCategoryRepository the Attribute Type Category Repository

@@ -494,7 +494,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the attributes for the document.
+   * Sets the attributes for the document.
    *
    * @param attributes the attributes for the document
    */
@@ -505,7 +505,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the date and time the document was created.
+   * Sets the date and time the document was created.
    *
    * @param created the date and time the document was created
    */
@@ -514,7 +514,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the person or system that created the document.
+   * Sets the person or system that created the document.
    *
    * @param createdBy the person or system that created the document
    */
@@ -523,7 +523,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the data for the document.
+   * Sets the data for the document.
    *
    * @param data the data for the document
    */
@@ -532,7 +532,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the ID for the document definition the document is associated with.
+   * Sets the ID for the document definition the document is associated with.
    *
    * @param definitionId the ID for the document definition the document is associated with
    */
@@ -541,7 +541,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the external references for the document.
+   * Sets the external references for the document.
    *
    * @param externalReferences the external references for the document
    */
@@ -552,7 +552,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the file type for the document.
+   * Sets the file type for the document.
    *
    * @param fileType the file type for the document
    */
@@ -561,7 +561,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the base-64 encoded SHA-256 hash of the data for the document.
+   * Sets the base-64 encoded SHA-256 hash of the data for the document.
    *
    * @param hash the base-64 encoded SHA-256 hash of the data for the document
    */
@@ -570,7 +570,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the ID for the document.
+   * Sets the ID for the document.
    *
    * @param id the ID for the document
    */
@@ -579,7 +579,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the name of the document.
+   * Sets the name of the document.
    *
    * @param name the name of the document
    */
@@ -588,7 +588,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the ID for the source document that was split to create this document.
+   * Sets the ID for the source document that was split to create this document.
    *
    * @param sourceDocumentId the ID for the source document that was split to create this document
    */
@@ -597,7 +597,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the document is associated with.
+   * Sets the ID for the tenant the document is associated with.
    *
    * @param tenantId the ID for the tenant the document is associated with
    */
@@ -606,7 +606,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the date and time the document was last updated.
+   * Sets the date and time the document was last updated.
    *
    * @param updated the date and time the document was last updated
    */
@@ -615,7 +615,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Set the person or system that last updated the document.
+   * Sets the person or system that last updated the document.
    *
    * @param updatedBy the person or system that last updated the document
    */

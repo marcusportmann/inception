@@ -200,7 +200,7 @@ public class TimeZone implements Serializable {
   }
 
   /**
-   * Set the description for the time zone.
+   * Sets the description for the time zone.
    *
    * @param description the description for the time zone
    */
@@ -209,7 +209,7 @@ public class TimeZone implements Serializable {
   }
 
   /**
-   * Set the ID for the time zone.
+   * Sets the ID for the time zone.
    *
    * @param id the ID for the time zone
    */
@@ -218,7 +218,7 @@ public class TimeZone implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the time zone.
+   * Sets the Unicode locale identifier for the time zone.
    *
    * @param localeId the Unicode locale identifier for the time zone
    */
@@ -227,7 +227,7 @@ public class TimeZone implements Serializable {
   }
 
   /**
-   * Set the name of the time zone.
+   * Sets the name of the time zone.
    *
    * @param name the name of the time zone
    */
@@ -236,7 +236,7 @@ public class TimeZone implements Serializable {
   }
 
   /**
-   * Set the sort order for the time zone.
+   * Sets the sort order for the time zone.
    *
    * @param sortOrder the sort order for the time zone
    */

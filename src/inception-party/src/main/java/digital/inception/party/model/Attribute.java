@@ -501,7 +501,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the boolean value for the attribute.
+   * Sets the boolean value for the attribute.
    *
    * @param booleanValue the boolean value for the attribute
    */
@@ -510,7 +510,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the date value for the attribute.
+   * Sets the date value for the attribute.
    *
    * @param dateValue the date value for the attribute
    */
@@ -519,7 +519,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the decimal value for the attribute.
+   * Sets the decimal value for the attribute.
    *
    * @param decimalValue the decimal value for the attribute
    */
@@ -528,7 +528,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the decimal value for the attribute.
+   * Sets the decimal value for the attribute.
    *
    * @param decimalValue the decimal value for the attribute
    */
@@ -539,7 +539,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the decimal value for the attribute.
+   * Sets the decimal value for the attribute.
    *
    * @param decimalValue the decimal value for the attribute
    */
@@ -550,7 +550,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the decimal value for the attribute.
+   * Sets the decimal value for the attribute.
    *
    * @param decimalValue the decimal value for the attribute
    */
@@ -561,7 +561,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the double value for the attribute.
+   * Sets the double value for the attribute.
    *
    * @param doubleValue the double value for the attribute
    */
@@ -570,7 +570,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the integer value for the attribute.
+   * Sets the integer value for the attribute.
    *
    * @param integerValue the integer value for the attribute
    */
@@ -579,7 +579,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the party the attribute is associated with.
+   * Sets the party the attribute is associated with.
    *
    * @param party the party the attribute is associated with
    */
@@ -594,7 +594,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the string value for the attribute.
+   * Sets the string value for the attribute.
    *
    * @param stringValue the string value for the attribute
    */
@@ -603,7 +603,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the code for the attribute type.
+   * Sets the code for the attribute type.
    *
    * @param type the code for the attribute type
    */
@@ -612,7 +612,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the measurement unit for the attribute.
+   * Sets the measurement unit for the attribute.
    *
    * @param unit the measurement unit for the attribute
    */

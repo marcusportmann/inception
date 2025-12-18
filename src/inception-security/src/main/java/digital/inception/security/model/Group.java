@@ -278,7 +278,7 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the description for the group.
+   * Sets the description for the group.
    *
    * @param description the description for the group
    */
@@ -287,7 +287,7 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the ID for the group.
+   * Sets the ID for the group.
    *
    * @param id the ID for the group
    */
@@ -296,7 +296,7 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the name of the group.
+   * Sets the name of the group.
    *
    * @param name the name of the group
    */
@@ -305,7 +305,7 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the roles associated with the group.
+   * Sets the roles associated with the group.
    *
    * @param roles the roles associated with the group
    */
@@ -314,7 +314,7 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the ID for the user directory the group is associated with.
+   * Sets the ID for the user directory the group is associated with.
    *
    * @param userDirectoryId the ID for the user directory the group is associated with
    */
@@ -323,7 +323,7 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the users associated with the group.
+   * Sets the users associated with the group.
    *
    * @param users the users associated with the group
    */

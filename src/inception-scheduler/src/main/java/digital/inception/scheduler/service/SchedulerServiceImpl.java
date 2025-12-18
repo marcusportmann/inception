@@ -90,7 +90,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
   /**
    * Constructs a new {@code SchedulerServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param applicationEventPublisher the Spring application event publisher
    * @param jobRepository the Job Repository
    */

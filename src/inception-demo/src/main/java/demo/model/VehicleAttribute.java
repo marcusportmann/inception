@@ -183,7 +183,7 @@ public class VehicleAttribute implements Serializable {
   }
 
   /**
-   * Set the code for the vehicle attribute type.
+   * Sets the code for the vehicle attribute type.
    *
    * @param type the code for the vehicle attribute type
    */
@@ -192,7 +192,7 @@ public class VehicleAttribute implements Serializable {
   }
 
   /**
-   * Set the value for the vehicle attribute.
+   * Sets the value for the vehicle attribute.
    *
    * @param value the value for the vehicle attribute
    */
@@ -201,7 +201,7 @@ public class VehicleAttribute implements Serializable {
   }
 
   /**
-   * Set the vehicle the vehicle attribute is associated with.
+   * Sets the vehicle the vehicle attribute is associated with.
    *
    * @param vehicle the vehicle the vehicle attribute is associated with
    */

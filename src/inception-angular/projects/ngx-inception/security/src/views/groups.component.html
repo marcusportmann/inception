@@ -3,9 +3,11 @@
     <span class="mat-header-label" i18n="@@security_groups_component_user_directory">User Directory :</span>
     <mat-form-field class="mat-mdc-form-field-slim">
       <mat-select #userDirectorySelect i18n-placeholder="@@security_groups_component_placeholder_select_a_user_directory" placeholder="Select a user directory">
-        <mat-option *ngFor="let userDirectory of userDirectories" [value]="userDirectory.id">
-          {{userDirectory.name}}
-        </mat-option>
+        @for (userDirectory of userDirectories; track userDirectory) {
+          <mat-option [value]="userDirectory.id">
+            {{userDirectory.name}}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>

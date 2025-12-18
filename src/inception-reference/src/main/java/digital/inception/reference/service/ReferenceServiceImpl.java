@@ -75,7 +75,7 @@ public class ReferenceServiceImpl extends AbstractServiceBase implements Referen
   /**
    * Constructs a new {@code ReferenceServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param countryRepository the Country Repository
    * @param languageRepository the Language Repository
    * @param measurementSystemRepository the Measurement System Repository

@@ -214,7 +214,7 @@ public class LockTypeCategory implements Serializable {
   }
 
   /**
-   * Set the code for the lock type category.
+   * Sets the code for the lock type category.
    *
    * @param code the code for the lock type category
    */
@@ -223,7 +223,7 @@ public class LockTypeCategory implements Serializable {
   }
 
   /**
-   * Set the description for the lock type category.
+   * Sets the description for the lock type category.
    *
    * @param description the description for the lock type category
    */
@@ -232,7 +232,7 @@ public class LockTypeCategory implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the lock type category.
+   * Sets the Unicode locale identifier for the lock type category.
    *
    * @param localeId the Unicode locale identifier for the lock type category
    */
@@ -241,7 +241,7 @@ public class LockTypeCategory implements Serializable {
   }
 
   /**
-   * Set the name of the lock type category.
+   * Sets the name of the lock type category.
    *
    * @param name the name of the lock type category
    */
@@ -250,7 +250,7 @@ public class LockTypeCategory implements Serializable {
   }
 
   /**
-   * Set the sort order for the lock type category.
+   * Sets the sort order for the lock type category.
    *
    * @param sortOrder the sort order for the lock type category
    */
@@ -259,7 +259,7 @@ public class LockTypeCategory implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the lock type category is specific to.
+   * Sets the ID for the tenant the lock type category is specific to.
    *
    * @param tenantId the ID for the tenant the lock type category is specific to
    */

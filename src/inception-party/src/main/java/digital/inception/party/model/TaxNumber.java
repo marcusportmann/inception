@@ -196,7 +196,7 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country of issue for the tax number.
+   * Sets the ISO 3166-1 alpha-2 code for the country of issue for the tax number.
    *
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
    */
@@ -205,7 +205,7 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Set the tax number.
+   * Sets the tax number.
    *
    * @param number the tax number
    */
@@ -214,7 +214,7 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Set the party the tax number is associated with.
+   * Sets the party the tax number is associated with.
    *
    * @param party the party the tax number is associated with
    */
@@ -229,7 +229,7 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Set the code for the tax number type.
+   * Sets the code for the tax number type.
    *
    * @param type the code for the tax number type
    */

@@ -21,6 +21,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DuplicateInteractionException;
+import digital.inception.operations.exception.DuplicateInteractionNoteException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
@@ -222,6 +223,7 @@ public interface InteractionApiController {
    * @param createInteractionNoteRequest the request to create the interaction note
    * @return the ID for the interaction note
    * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateInteractionNoteException if the interaction note already exists
    * @throws InteractionNotFoundException if the interaction could not be found
    * @throws ServiceUnavailableException if the interaction note could not be created
    */
@@ -246,6 +248,13 @@ public interface InteractionApiController {
         @ApiResponse(
             responseCode = "404",
             description = "The interaction could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "An interaction note with the specified ID already exists",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -281,7 +290,10 @@ public interface InteractionApiController {
               required = true)
           @RequestBody
           CreateInteractionNoteRequest createInteractionNoteRequest)
-      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
+      throws InvalidArgumentException,
+          DuplicateInteractionNoteException,
+          InteractionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Create the interaction source.
@@ -1370,6 +1382,44 @@ public interface InteractionApiController {
           InteractionNotFoundException,
           PartyNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Trigger interaction processing..
+   *
+   * @throws ServiceUnavailableException if the interaction processing could not be triggered
+   */
+  @Operation(
+      summary = "Trigger interaction processing",
+      description = "Trigger interaction processing")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The interaction processing was successfully triggered"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/process-interactions",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
+  void processInteractions() throws ServiceUnavailableException;
 
   /**
    * Search for interactions.

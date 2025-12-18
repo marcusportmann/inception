@@ -45,7 +45,7 @@ public class OperationsConfiguration {
   /**
    * Constructs a new {@code OperationsConfiguration}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public OperationsConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
@@ -54,7 +54,7 @@ public class OperationsConfiguration {
   /**
    * Returns the operations entity manager factory bean associated with the application data source.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param dataSource the application data source
    * @return the operations entity manager factory bean associated with the application data source
    */

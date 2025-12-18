@@ -29,23 +29,31 @@ import digital.inception.operations.exception.DocumentTemplateCategoryNotFoundEx
 import digital.inception.operations.exception.DocumentTemplateNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
+import digital.inception.operations.exception.DuplicateDocumentException;
+import digital.inception.operations.exception.DuplicateDocumentNoteException;
 import digital.inception.operations.exception.DuplicateDocumentTemplateCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentTemplateException;
+import digital.inception.operations.model.AttributeSearchCriteria;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
 import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.CreateDocumentTemplateRequest;
 import digital.inception.operations.model.Document;
+import digital.inception.operations.model.DocumentAttribute;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
+import digital.inception.operations.model.DocumentExternalReference;
 import digital.inception.operations.model.DocumentNote;
 import digital.inception.operations.model.DocumentNoteSortBy;
 import digital.inception.operations.model.DocumentNotes;
+import digital.inception.operations.model.DocumentSortBy;
 import digital.inception.operations.model.DocumentSummaries;
+import digital.inception.operations.model.DocumentSummary;
 import digital.inception.operations.model.DocumentTemplate;
 import digital.inception.operations.model.DocumentTemplateCategory;
 import digital.inception.operations.model.DocumentTemplateSortBy;
 import digital.inception.operations.model.DocumentTemplateSummaries;
 import digital.inception.operations.model.DocumentTemplateSummary;
+import digital.inception.operations.model.ExternalReferenceSearchCriteria;
 import digital.inception.operations.model.ObjectType;
 import digital.inception.operations.model.SearchDocumentsRequest;
 import digital.inception.operations.model.UpdateDocumentNoteRequest;
@@ -53,11 +61,17 @@ import digital.inception.operations.model.UpdateDocumentRequest;
 import digital.inception.operations.model.UpdateDocumentTemplateRequest;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionCategoryRepository;
 import digital.inception.operations.persistence.jpa.DocumentDefinitionRepository;
+import digital.inception.operations.persistence.jpa.DocumentNoteRepository;
+import digital.inception.operations.persistence.jpa.DocumentRepository;
+import digital.inception.operations.persistence.jpa.DocumentSummaryRepository;
 import digital.inception.operations.persistence.jpa.DocumentTemplateCategoryRepository;
 import digital.inception.operations.persistence.jpa.DocumentTemplateRepository;
-import digital.inception.operations.store.DocumentStore;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.criteria.Predicate;
+import java.security.MessageDigest;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -66,7 +80,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -84,8 +100,14 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   /** The Document Definition Repository. */
   private final DocumentDefinitionRepository documentDefinitionRepository;
 
-  /** The Document Store. */
-  private final DocumentStore documentStore;
+  /** The Document Note Repository. */
+  private final DocumentNoteRepository documentNoteRepository;
+
+  /** The Document Repository. */
+  private final DocumentRepository documentRepository;
+
+  /** The Document Summary Repository. */
+  private final DocumentSummaryRepository documentSummaryRepository;
 
   /** The Document Template Category Repository. */
   private final DocumentTemplateCategoryRepository documentTemplateCategoryRepository;
@@ -114,27 +136,33 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   /**
    * Constructs a new {@code DocumentServiceImpl}.
    *
-   * @param applicationContext the Spring application context
-   * @param documentStore the Document Store
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param documentDefinitionCategoryRepository the Document Definition Category Repository
    * @param documentDefinitionRepository the Document Definition Repository
+   * @param documentNoteRepository the Document Note Repository
+   * @param documentRepository the Document Repository
    * @param documentTemplateRepository the Document Template Repository
+   * @param documentSummaryRepository the Document Summary Repository
    * @param documentTemplateCategoryRepository the Document Template Category Repository
    * @param validationService the Validation Service
    */
   public DocumentServiceImpl(
       ApplicationContext applicationContext,
-      DocumentStore documentStore,
       DocumentDefinitionCategoryRepository documentDefinitionCategoryRepository,
       DocumentDefinitionRepository documentDefinitionRepository,
+      DocumentNoteRepository documentNoteRepository,
+      DocumentRepository documentRepository,
+      DocumentSummaryRepository documentSummaryRepository,
       DocumentTemplateCategoryRepository documentTemplateCategoryRepository,
       DocumentTemplateRepository documentTemplateRepository,
       ValidationService validationService) {
     super(applicationContext);
 
-    this.documentStore = documentStore;
     this.documentDefinitionCategoryRepository = documentDefinitionCategoryRepository;
     this.documentDefinitionRepository = documentDefinitionRepository;
+    this.documentNoteRepository = documentNoteRepository;
+    this.documentRepository = documentRepository;
+    this.documentSummaryRepository = documentSummaryRepository;
     this.documentTemplateCategoryRepository = documentTemplateCategoryRepository;
     this.documentTemplateRepository = documentTemplateRepository;
     this.validationService = validationService;
@@ -143,9 +171,51 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   @Override
   public String calculateDataHash(byte[] data) {
     try {
-      return documentStore.calculateDocumentDataHash(data);
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+      digest.update(data);
+
+      return Base64.getEncoder().encodeToString(digest.digest());
     } catch (Throwable e) {
-      throw new RuntimeException("Failed to calculate the hash for the document data", e);
+      throw new RuntimeException("Failed to calculate the hash for the data", e);
+    }
+  }
+
+  @Override
+  public Document createDocument(UUID tenantId, Document document)
+      throws InvalidArgumentException,
+          DocumentDefinitionNotFoundException,
+          DuplicateDocumentException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("document", document);
+
+    try {
+      DocumentDefinition documentDefinition =
+          getDocumentService().getDocumentDefinition(document.getDefinitionId());
+
+      if (documentRepository.existsById(document.getId())) {
+        throw new DuplicateDocumentException(document.getId());
+      }
+
+      return documentRepository.saveAndFlush(document);
+    } catch (InvalidArgumentException
+        | DocumentDefinitionNotFoundException
+        | DuplicateDocumentException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to create the document ("
+              + document.getId()
+              + ") with the document definition ID ("
+              + document.getDefinitionId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
     }
   }
 
@@ -203,7 +273,11 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       document.setSourceDocumentId(createDocumentRequest.getSourceDocumentId());
       document.setTenantId(tenantId);
 
-      return documentStore.createDocument(tenantId, document);
+      if (documentRepository.existsById(document.getId())) {
+        throw new DuplicateDocumentException(document.getId());
+      }
+
+      return documentRepository.saveAndFlush(document);
     } catch (InvalidArgumentException | DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -295,7 +369,11 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               OffsetDateTime.now(),
               createdBy);
 
-      return documentStore.createDocumentNote(tenantId, documentNote);
+      if (documentNoteRepository.existsById(documentNote.getId())) {
+        throw new DuplicateDocumentNoteException(documentNote.getId());
+      }
+
+      return documentNoteRepository.saveAndFlush(documentNote);
     } catch (DocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -385,7 +463,19 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       throw new InvalidArgumentException("documentId");
     }
 
-    documentStore.deleteDocument(tenantId, documentId);
+    try {
+      if (!documentRepository.existsByTenantIdAndId(tenantId, documentId)) {
+        throw new DocumentNotFoundException(tenantId, documentId);
+      }
+
+      documentRepository.deleteById(documentId);
+    } catch (DocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the document (" + documentId + ") for the tenant (" + tenantId + ")",
+          e);
+    }
   }
 
   @Override
@@ -449,7 +539,11 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     }
 
     try {
-      documentStore.deleteDocumentNote(tenantId, documentNoteId);
+      if (!documentNoteRepository.existsByTenantIdAndId(tenantId, documentNoteId)) {
+        throw new DocumentNoteNotFoundException(tenantId, documentNoteId);
+      }
+
+      documentNoteRepository.deleteById(documentNoteId);
     } catch (DocumentNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -573,7 +667,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   @Override
   public boolean documentExists(UUID tenantId, UUID documentId) throws ServiceUnavailableException {
     try {
-      return documentStore.documentExists(tenantId, documentId);
+      return documentRepository.existsByTenantIdAndId(tenantId, documentId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to check whether the document ("
@@ -589,7 +683,8 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   public boolean documentNoteExists(UUID tenantId, UUID documentId, UUID documentNoteId)
       throws ServiceUnavailableException {
     try {
-      return documentStore.documentNoteExists(tenantId, documentId, documentNoteId);
+      return documentNoteRepository.existsByTenantIdAndDocumentIdAndId(
+          tenantId, documentId, documentNoteId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to check whether the document note ("
@@ -614,7 +709,26 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       throw new InvalidArgumentException("documentId");
     }
 
-    return documentStore.getDocument(tenantId, documentId);
+    try {
+      /*
+       * NOTE: The search by both tenant ID and document ID includes a security check to ensure
+       * that the document not only exists, but is also associated with the specified tenant.
+       */
+      Optional<Document> documentOptional =
+          documentRepository.findByTenantIdAndId(tenantId, documentId);
+
+      if (documentOptional.isEmpty()) {
+        throw new DocumentNotFoundException(tenantId, documentId);
+      }
+
+      return documentOptional.get();
+    } catch (DocumentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the document (" + documentId + ") for the tenant (" + tenantId + ")",
+          e);
+    }
   }
 
   @Override
@@ -727,7 +841,18 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     }
 
     try {
-      return documentStore.getDocumentNote(tenantId, documentNoteId);
+      /*
+       * NOTE: The search by both tenant ID and document note ID includes a security check to ensure
+       * that the document note not only exists, but is also associated with the specified tenant.
+       */
+      Optional<DocumentNote> documentNoteOptional =
+          documentNoteRepository.findByTenantIdAndId(tenantId, documentNoteId);
+
+      if (documentNoteOptional.isEmpty()) {
+        throw new DocumentNoteNotFoundException(tenantId, documentNoteId);
+      }
+
+      return documentNoteOptional.get();
     } catch (DocumentNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -760,15 +885,52 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     }
 
     try {
-      return documentStore.getDocumentNotes(
-          tenantId,
-          documentId,
-          filter,
+      if (!documentRepository.existsByTenantIdAndId(tenantId, documentId)) {
+        throw new DocumentNotFoundException(tenantId, documentId);
+      }
+
+      // Paging normalisation
+      pageIndex = (pageIndex == null) ? 0 : Math.max(0, pageIndex);
+      pageSize =
+          (pageSize == null) ? 50 : Math.max(1, Math.min(pageSize, maxFilteredDocumentNotes));
+
+      // Sorting normalisation
+      String sortProperty = DocumentNoteSortBy.resolveSortByPropertyName(sortBy);
+      Sort.Direction direction =
+          (sortDirection == SortDirection.DESCENDING) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+      PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, direction, sortProperty);
+
+      // Specification
+      Specification<DocumentNote> spec =
+          (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+            predicates.add(criteriaBuilder.equal(root.get("documentId"), documentId));
+
+            if (StringUtils.hasText(filter)) {
+              String f = filter.trim().toLowerCase();
+              predicates.add(
+                  criteriaBuilder.or(
+                      criteriaBuilder.like(
+                          criteriaBuilder.lower(root.get("createdBy")), "%" + f + "%"),
+                      criteriaBuilder.like(
+                          criteriaBuilder.lower(root.get("updatedBy")), "%" + f + "%")));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+          };
+
+      Page<DocumentNote> documentNotePage = documentNoteRepository.findAll(spec, pageRequest);
+
+      return new DocumentNotes(
+          documentNotePage.getContent(), // getContent() avoids extra copying
+          documentNotePage.getTotalElements(),
           sortBy,
           sortDirection,
           pageIndex,
-          pageSize,
-          maxFilteredDocumentNotes);
+          pageSize);
     } catch (DocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -811,6 +973,10 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   @Override
   public List<DocumentTemplateCategory> getDocumentTemplateCategories(UUID tenantId)
       throws InvalidArgumentException, ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     try {
       return documentTemplateCategoryRepository.findForTenantOrGlobal(tenantId);
     } catch (Throwable e) {
@@ -999,7 +1165,141 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     validateArgument("searchDocumentsRequest", searchDocumentsRequest);
 
     try {
-      return documentStore.searchDocuments(tenantId, searchDocumentsRequest, maxFilteredDocuments);
+      // Build Specification
+      Specification<DocumentSummary> specification =
+          (root, query, criteriaBuilder) -> {
+            // Avoid duplicates when joins or subqueries are involved
+            if (query != null) {
+              query.distinct(true);
+            }
+
+            // AND'ed top-level predicates
+            List<Predicate> andPredicates = new ArrayList<>();
+
+            // Tenant filter
+            andPredicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+
+            // Top-level filters
+            if (StringUtils.hasText(searchDocumentsRequest.getDefinitionId())) {
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      criteriaBuilder.lower(root.get("definitionId")),
+                      searchDocumentsRequest.getDefinitionId().toLowerCase()));
+            }
+
+            // Attribute criteria (OR all attribute pairs)
+            if (searchDocumentsRequest.getAttributes() != null
+                && !searchDocumentsRequest.getAttributes().isEmpty()) {
+              List<Predicate> attributePredicates = new ArrayList<>();
+
+              for (AttributeSearchCriteria attributeSearchCriteria :
+                  searchDocumentsRequest.getAttributes()) {
+                if (attributeSearchCriteria == null) continue;
+
+                var subQuery = query.subquery(Integer.class);
+                var documentAttributeRoot = subQuery.from(DocumentAttribute.class);
+                Predicate subPredicate =
+                    criteriaBuilder.equal(documentAttributeRoot.get("documentId"), root.get("id"));
+
+                if (StringUtils.hasText(attributeSearchCriteria.getName())) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(documentAttributeRoot.get("name")),
+                              attributeSearchCriteria.getName().toLowerCase()));
+                }
+                if (StringUtils.hasText(attributeSearchCriteria.getValue())) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(documentAttributeRoot.get("value")),
+                              attributeSearchCriteria.getValue().toLowerCase()));
+                }
+
+                subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
+                attributePredicates.add(criteriaBuilder.exists(subQuery));
+              }
+
+              if (!attributePredicates.isEmpty()) {
+                andPredicates.add(
+                    criteriaBuilder.or(attributePredicates.toArray(new Predicate[0])));
+              }
+            }
+
+            // External reference criteria (OR all external reference pairs)
+            if (searchDocumentsRequest.getExternalReferences() != null
+                && !searchDocumentsRequest.getExternalReferences().isEmpty()) {
+              List<Predicate> externalReferencePredicates = new ArrayList<>();
+
+              for (ExternalReferenceSearchCriteria externalReferenceSearchCriteria :
+                  searchDocumentsRequest.getExternalReferences()) {
+                if (externalReferenceSearchCriteria == null) continue;
+
+                var subQuery = query.subquery(Integer.class);
+                var documentExternalReferenceRoot = subQuery.from(DocumentExternalReference.class);
+                Predicate subPredicate =
+                    criteriaBuilder.equal(
+                        documentExternalReferenceRoot.get("objectId"), root.get("id"));
+
+                if (StringUtils.hasText(externalReferenceSearchCriteria.getType())) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(documentExternalReferenceRoot.get("type")),
+                              externalReferenceSearchCriteria.getType().toLowerCase()));
+                }
+                if (StringUtils.hasText(externalReferenceSearchCriteria.getValue())) {
+                  subPredicate =
+                      criteriaBuilder.and(
+                          subPredicate,
+                          criteriaBuilder.equal(
+                              criteriaBuilder.lower(documentExternalReferenceRoot.get("value")),
+                              externalReferenceSearchCriteria.getValue().toLowerCase()));
+                }
+
+                subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
+                externalReferencePredicates.add(criteriaBuilder.exists(subQuery));
+              }
+
+              if (!externalReferencePredicates.isEmpty()) {
+                andPredicates.add(
+                    criteriaBuilder.or(externalReferencePredicates.toArray(new Predicate[0])));
+              }
+            }
+
+            return criteriaBuilder.and(andPredicates.toArray(new Predicate[0]));
+          };
+
+      // Sorting
+      String sortByPropertyName =
+          DocumentSortBy.resolveSortByPropertyName(searchDocumentsRequest.getSortBy());
+      Sort.Direction dir = resolveSortDirection(searchDocumentsRequest.getSortDirection());
+      Sort sort = Sort.by(dir, sortByPropertyName);
+
+      // Paging
+      int pageIndex =
+          searchDocumentsRequest.getPageIndex() == null
+              ? 0
+              : Math.max(0, searchDocumentsRequest.getPageIndex());
+      int pageSize =
+          searchDocumentsRequest.getPageSize() == null
+              ? 50
+              : Math.max(1, Math.min(searchDocumentsRequest.getPageSize(), maxFilteredDocuments));
+      Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
+
+      Page<DocumentSummary> documentSummaryPage =
+          documentSummaryRepository.findAll(specification, pageable);
+
+      return new DocumentSummaries(
+          documentSummaryPage.toList(),
+          documentSummaryPage.getTotalElements(),
+          searchDocumentsRequest.getSortBy(),
+          searchDocumentsRequest.getSortDirection(),
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to search for documents for the tenant (" + tenantId + ")", e);
@@ -1017,8 +1317,14 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     validateArgument("updateDocumentRequest", updateDocumentRequest);
 
     try {
-      Document document =
-          documentStore.getDocument(tenantId, updateDocumentRequest.getDocumentId());
+      Optional<Document> documentOptional =
+          documentRepository.findByTenantIdAndId(tenantId, updateDocumentRequest.getDocumentId());
+
+      if (documentOptional.isEmpty()) {
+        throw new DocumentNotFoundException(tenantId, updateDocumentRequest.getDocumentId());
+      }
+
+      Document document = documentOptional.get();
 
       if (updateDocumentRequest.getExternalReferences() != null) {
         // Validate the external references
@@ -1057,7 +1363,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       document.setUpdated(OffsetDateTime.now());
       document.setUpdatedBy(updatedBy);
 
-      return documentStore.updateDocument(tenantId, document);
+      return documentRepository.saveAndFlush(document);
     } catch (InvalidArgumentException | DocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1133,14 +1439,22 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     validateArgument("updateDocumentNoteRequest", updateDocumentNoteRequest);
 
     try {
-      DocumentNote documentNote =
-          documentStore.getDocumentNote(tenantId, updateDocumentNoteRequest.getDocumentNoteId());
+      Optional<DocumentNote> documentNoteOptional =
+          documentNoteRepository.findByTenantIdAndId(
+              tenantId, updateDocumentNoteRequest.getDocumentNoteId());
+
+      if (documentNoteOptional.isEmpty()) {
+        throw new DocumentNoteNotFoundException(
+            tenantId, updateDocumentNoteRequest.getDocumentNoteId());
+      }
+
+      DocumentNote documentNote = documentNoteOptional.get();
 
       documentNote.setContent(updateDocumentNoteRequest.getContent());
       documentNote.setUpdated(OffsetDateTime.now());
       documentNote.setUpdatedBy(updatedBy);
 
-      return documentStore.updateDocumentNote(tenantId, documentNote);
+      return documentNoteRepository.saveAndFlush(documentNote);
     } catch (DocumentNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1234,5 +1548,15 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     }
 
     return documentService;
+  }
+
+  private Sort.Direction resolveSortDirection(SortDirection sortDirection) {
+    if (sortDirection == null) {
+      return Sort.Direction.DESC;
+    } else if (sortDirection == SortDirection.ASCENDING) {
+      return Sort.Direction.ASC;
+    } else {
+      return Sort.Direction.DESC;
+    }
   }
 }

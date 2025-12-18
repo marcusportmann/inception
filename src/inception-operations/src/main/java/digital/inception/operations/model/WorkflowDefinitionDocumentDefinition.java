@@ -373,7 +373,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the document definition.
+   * Sets the ID for the document definition.
    *
    * @param documentDefinitionId the ID for the document definition
    */
@@ -417,7 +417,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the ISO-8601 duration format validity period from a document's issue date during which the
+   * Sets the ISO-8601 duration format validity period from a document's issue date during which the
    * document, with the document definition ID, can be associated with a workflow with the workflow
    * definition ID and workflow definition version.
    *
@@ -443,7 +443,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the workflow definition the workflow definition document definition is associated with.
+   * Sets the workflow definition the workflow definition document definition is associated with.
    *
    * @param workflowDefinition the workflow definition the workflow definition document definition
    *     is associated with

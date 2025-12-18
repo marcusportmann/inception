@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import digital.inception.operations.persistence.jpa.RecipientsAttributeConverter;
+import digital.inception.processor.AbstractProcessableObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.mail.Address;
 import jakarta.mail.internet.InternetAddress;
@@ -79,9 +80,11 @@ import org.springframework.util.StringUtils;
   "processed",
   "processingAttempts",
   "processingTime",
+  "processingSuspended",
+  "lastProcessed",
+  "nextProcessed",
   "locked",
-  "lockName",
-  "lastProcessed"
+  "lockName"
 })
 @XmlRootElement(name = "Interaction", namespace = "https://inception.digital/operations")
 @XmlType(
@@ -109,15 +112,18 @@ import org.springframework.util.StringUtils;
       "processed",
       "processingAttempts",
       "processingTime",
+      "processingSuspended",
+      "lastProcessed",
+      "nextProcessed",
       "locked",
-      "lockName",
-      "lastProcessed"
+      "lockName"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_interactions")
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Interaction implements Serializable {
+public class Interaction extends AbstractProcessableObject<UUID, InteractionStatus>
+    implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -176,31 +182,6 @@ public class Interaction implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The date and time the last attempt was made to process the interaction. */
-  @Schema(description = "The date and time the last attempt was made to process the interaction")
-  @JsonProperty
-  @XmlElement(name = "LastProcessed")
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "last_processed")
-  private OffsetDateTime lastProcessed;
-
-  /** The name of the entity that has locked the interaction for processing. */
-  @Schema(description = "The name of the entity that has locked the interaction for processing")
-  @XmlElement(name = "LockName")
-  @Size(min = 1, max = 100)
-  @Column(name = "lock_name", length = 100)
-  private String lockName;
-
-  /** The date and time the interaction was locked for processing. */
-  @Schema(description = "The date and time the interaction was locked for processing")
-  @JsonProperty
-  @XmlElement(name = "Locked")
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "locked")
-  private OffsetDateTime locked;
-
   /** The mime type for the content for the interaction. */
   @Schema(
       description = "The mime type for the content for the interaction",
@@ -239,32 +220,6 @@ public class Interaction implements Serializable {
   @NotNull
   @Column(name = "priority", nullable = false)
   private InteractionPriority priority;
-
-  /** The date and time the interaction was processed. */
-  @Schema(description = "The date and time the interaction was processed")
-  @JsonProperty
-  @XmlElement(name = "Processed")
-  @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "processed")
-  private OffsetDateTime processed;
-
-  /** The number of times the processing of the interaction has been attempted. */
-  @Schema(description = "The number of times the processing of the interaction has been attempted")
-  @JsonProperty
-  @XmlElement(name = "ProcessingAttempts")
-  @Column(name = "processing_attempts", nullable = false)
-  private Integer processingAttempts = 0;
-
-  /** The time taken to process the interaction in milliseconds. */
-  @Schema(
-      description = "The time taken to process the interaction in milliseconds",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "ProcessingTime", required = true)
-  @NotNull
-  @Column(name = "processing_time", nullable = false)
-  private long processingTime;
 
   /**
    * The identifiers representing the recipients for the interaction, e.g. email addresses, mobile
@@ -352,7 +307,9 @@ public class Interaction implements Serializable {
   private InteractionType type;
 
   /** Constructs a new {@code Interaction}. */
-  public Interaction() {}
+  public Interaction() {
+    super(InteractionStatus.QUEUED);
+  }
 
   /**
    * Constructs a new {@code Interaction}.
@@ -385,6 +342,8 @@ public class Interaction implements Serializable {
       InteractionMimeType mimeType,
       InteractionPriority priority,
       InteractionStatus status) {
+    super(status);
+
     this.id = id;
     this.tenantId = tenantId;
     this.sourceId = sourceId;
@@ -433,6 +392,8 @@ public class Interaction implements Serializable {
       InteractionMimeType mimeType,
       InteractionPriority priority,
       InteractionStatus status) {
+    super(status);
+
     this.id = id;
     this.tenantId = tenantId;
     this.sourceId = sourceId;
@@ -525,35 +486,15 @@ public class Interaction implements Serializable {
    *
    * @return the ID for the interaction
    */
+  @Override
   public UUID getId() {
     return id;
   }
 
-  /**
-   * Returns the date and time the last attempt was made to process the interaction.
-   *
-   * @return the date and time the last attempt was made to process the interaction
-   */
-  public OffsetDateTime getLastProcessed() {
-    return lastProcessed;
-  }
-
-  /**
-   * Returns the name of the entity that has locked the interaction for processing.
-   *
-   * @return the name of the entity that has locked the interaction for processing
-   */
-  public String getLockName() {
-    return lockName;
-  }
-
-  /**
-   * Returns the date and time the interaction was locked for processing.
-   *
-   * @return the date and time the interaction was locked for processing
-   */
-  public OffsetDateTime getLocked() {
-    return locked;
+  @JsonIgnore
+  @Override
+  public String getIdAsKey() {
+    return id.toString();
   }
 
   /**
@@ -590,33 +531,6 @@ public class Interaction implements Serializable {
    */
   public InteractionPriority getPriority() {
     return priority;
-  }
-
-  /**
-   * Returns the date and time the interaction was processed.
-   *
-   * @return the date and time the interaction was processed
-   */
-  public OffsetDateTime getProcessed() {
-    return processed;
-  }
-
-  /**
-   * Returns the number of times the processing of the interaction has been attempted.
-   *
-   * @return the number of times the processing of the interaction has been attempted
-   */
-  public Integer getProcessingAttempts() {
-    return processingAttempts;
-  }
-
-  /**
-   * Returns the time taken to process the interaction in milliseconds.
-   *
-   * @return the time taken to process the interaction in milliseconds
-   */
-  public long getProcessingTime() {
-    return processingTime;
   }
 
   /**
@@ -758,17 +672,8 @@ public class Interaction implements Serializable {
     return (id == null) ? 0 : id.hashCode();
   }
 
-  /** Increment the number of times that the processing of the interaction was attempted. */
-  public void incrementProcessingAttempts() {
-    if (processingAttempts == null) {
-      processingAttempts = 1;
-    } else {
-      processingAttempts++;
-    }
-  }
-
   /**
-   * Set the date and time the interaction was assigned.
+   * Sets the date and time the interaction was assigned.
    *
    * @param assigned the date and time the interaction was assigned
    */
@@ -777,7 +682,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the username for the user the interaction is assigned to.
+   * Sets the username for the user the interaction is assigned to.
    *
    * @param assignedTo the username for the user the interaction is assigned to
    */
@@ -786,7 +691,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the content for the interaction.
+   * Sets the content for the interaction.
    *
    * @param content the content for the interaction
    */
@@ -795,7 +700,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the ID for the conversation the interaction is associated with.
+   * Sets the ID for the conversation the interaction is associated with.
    *
    * @param conversationId the ID for the conversation the interaction is associated with
    */
@@ -804,7 +709,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the direction for the interaction, i.e., inbound or outbound.
+   * Sets the direction for the interaction, i.e., inbound or outbound.
    *
    * @param direction the direction for the interaction, i.e., inbound or outbound
    */
@@ -813,7 +718,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction.
+   * Sets the ID for the interaction.
    *
    * @param id the ID for the interaction
    */
@@ -822,34 +727,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the date and time the last attempt was made to process the interaction.
-   *
-   * @param lastProcessed the date and time the last attempt was made to process the interaction
-   */
-  public void setLastProcessed(OffsetDateTime lastProcessed) {
-    this.lastProcessed = lastProcessed;
-  }
-
-  /**
-   * Set the name of the entity that has locked the interaction for processing.
-   *
-   * @param lockName the name of the entity that has locked the interaction for processing
-   */
-  public void setLockName(String lockName) {
-    this.lockName = lockName;
-  }
-
-  /**
-   * Set the date and time the interaction was locked for processing.
-   *
-   * @param locked the date and time the interaction was locked for processing
-   */
-  public void setLocked(OffsetDateTime locked) {
-    this.locked = locked;
-  }
-
-  /**
-   * Set the mime type for the content for the interaction.
+   * Sets the mime type for the content for the interaction.
    *
    * @param mimeType the mime type for the content for the interaction
    */
@@ -858,7 +736,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the date and time the interaction occurred (received if inbound, sent if outbound).
+   * Sets the date and time the interaction occurred (received if inbound, sent if outbound).
    *
    * @param occurred the date and time the interaction occurred (received if inbound, sent if
    *     outbound)
@@ -868,7 +746,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the ID for the party the interaction is associated with.
+   * Sets the ID for the party the interaction is associated with.
    *
    * @param partyId the ID for the party the interaction is associated with
    */
@@ -877,7 +755,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the priority for the interaction.
+   * Sets the priority for the interaction.
    *
    * @param priority the priority for the interaction
    */
@@ -886,35 +764,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the date and time the interaction was processed.
-   *
-   * @param processed the date and time the interaction was processed
-   */
-  public void setProcessed(OffsetDateTime processed) {
-    this.processed = processed;
-  }
-
-  /**
-   * Set the number of times the processing of the interaction has been attempted.
-   *
-   * @param processingAttempts the number of times the processing of the interaction has been
-   *     attempted
-   */
-  public void setProcessingAttempts(Integer processingAttempts) {
-    this.processingAttempts = processingAttempts;
-  }
-
-  /**
-   * Set the time taken to process the interaction in milliseconds.
-   *
-   * @param processingTime the time taken to process the interaction in milliseconds
-   */
-  public void setProcessingTime(@NotNull long processingTime) {
-    this.processingTime = processingTime;
-  }
-
-  /**
-   * Set the identifiers representing the recipients for the interaction, e.g. email addresses,
+   * Sets the identifiers representing the recipients for the interaction, e.g. email addresses,
    * mobile numbers, etc.
    *
    * @param recipients the identifiers representing the recipients for the interaction, e.g. email
@@ -925,7 +775,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the identifier representing who the interaction is from.
+   * Sets the identifier representing who the interaction is from.
    *
    * @param from the identifier representing who the interaction is from
    */
@@ -934,7 +784,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction source the interaction is associated with.
+   * Sets the ID for the interaction source the interaction is associated with.
    *
    * @param sourceId the ID for the interaction source the interaction is associated with
    */
@@ -943,7 +793,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the interaction source specific reference for the interaction.
+   * Sets the interaction source specific reference for the interaction.
    *
    * @param sourceReference the interaction source specific reference for the interaction
    */
@@ -952,7 +802,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the status of the interaction.
+   * Sets the status of the interaction.
    *
    * @param status the status of the interaction
    */
@@ -961,7 +811,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the subject for the interaction.
+   * Sets the subject for the interaction.
    *
    * @param subject the subject for the interaction
    */
@@ -970,7 +820,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the interaction is associated with.
+   * Sets the ID for the tenant the interaction is associated with.
    *
    * @param tenantId the ID for the tenant the interaction is associated with
    */
@@ -979,7 +829,7 @@ public class Interaction implements Serializable {
   }
 
   /**
-   * Set the type of interaction.
+   * Sets the type of interaction.
    *
    * @param type the type of interaction
    */

@@ -178,7 +178,7 @@ public class ConnectionFactoryConfiguration implements Serializable {
   }
 
   /**
-   * Set the initial size of the R2DBC connection pool holding R2DBC connections to the database.
+   * Sets the initial size of the R2DBC connection pool holding R2DBC connections to the database.
    *
    * @param initialPoolSize the initial size of the R2DBC connection pool holding R2DBC connections
    *     to the database
@@ -188,7 +188,7 @@ public class ConnectionFactoryConfiguration implements Serializable {
   }
 
   /**
-   * Set the maximum amount of time a R2DBC connection to the database can remain idle before it is
+   * Sets the maximum amount of time a R2DBC connection to the database can remain idle before it is
    * closed.
    *
    * @param maxIdleTime the maximum amount of time a R2DBC connection to the database can remain
@@ -199,7 +199,7 @@ public class ConnectionFactoryConfiguration implements Serializable {
   }
 
   /**
-   * Set the maximum amount of time a R2DBC connection to the database can remain idle before it is
+   * Sets the maximum amount of time a R2DBC connection to the database can remain idle before it is
    * closed.
    *
    * @param maxPoolSize the maximum amount of time a R2DBC connection to the database can remain
@@ -210,7 +210,7 @@ public class ConnectionFactoryConfiguration implements Serializable {
   }
 
   /**
-   * Set the password used to create R2DBC connections to the database.
+   * Sets the password used to create R2DBC connections to the database.
    *
    * @param password the password used to create R2DBC connections to the database
    */
@@ -219,7 +219,7 @@ public class ConnectionFactoryConfiguration implements Serializable {
   }
 
   /**
-   * Set the URL used to create R2DBC connections to the database.
+   * Sets the URL used to create R2DBC connections to the database.
    *
    * @param url the URL used to create R2DBC connections to the database
    */
@@ -228,7 +228,7 @@ public class ConnectionFactoryConfiguration implements Serializable {
   }
 
   /**
-   * Set the username used to create R2DBC connections to the database.
+   * Sets the username used to create R2DBC connections to the database.
    *
    * @param username the username used to create R2DBC connections to the database
    */

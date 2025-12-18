@@ -166,7 +166,7 @@ public class RequestWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the description for the workflow document.
+   * Sets the description for the workflow document.
    *
    * @param description the description for the workflow document
    */
@@ -175,7 +175,7 @@ public class RequestWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the document definition the workflow document will be associated with.
+   * Sets the ID for the document definition the workflow document will be associated with.
    *
    * @param documentDefinitionId the ID for the document definition the workflow document will be
    *     associated with
@@ -185,7 +185,7 @@ public class RequestWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the party the workflow document was requested from.
+   * Sets the ID for the party the workflow document was requested from.
    *
    * @param requestedFromPartyId the ID for the party the workflow document was requested from
    */
@@ -194,7 +194,7 @@ public class RequestWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow.
+   * Sets the ID for the workflow.
    *
    * @param workflowId the ID for the workflow
    */

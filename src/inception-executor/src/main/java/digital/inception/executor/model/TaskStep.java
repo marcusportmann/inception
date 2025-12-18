@@ -124,7 +124,7 @@ public class TaskStep implements Serializable {
   }
 
   /**
-   * Set the code for the task step.
+   * Sets the code for the task step.
    *
    * @param code the code for the task step
    */
@@ -133,7 +133,7 @@ public class TaskStep implements Serializable {
   }
 
   /**
-   * Set the name of the task step.
+   * Sets the name of the task step.
    *
    * @param name the name of the task step
    */
@@ -142,7 +142,7 @@ public class TaskStep implements Serializable {
   }
 
   /**
-   * Set the delay in milliseconds before the next task step for a multistep task is executed.
+   * Sets the delay in milliseconds before the next task step for a multistep task is executed.
    *
    * @param postExecutionDelay the delay in milliseconds before the next task step for a multistep
    *     task is executed

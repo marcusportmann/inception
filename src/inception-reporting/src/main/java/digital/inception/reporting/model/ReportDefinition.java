@@ -169,7 +169,7 @@ public class ReportDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the report definition.
+   * Sets the ID for the report definition.
    *
    * @param id the ID for the report definition
    */
@@ -178,7 +178,7 @@ public class ReportDefinition implements Serializable {
   }
 
   /**
-   * Set the name of the report definition.
+   * Sets the name of the report definition.
    *
    * @param name the name of the report definition
    */
@@ -187,7 +187,7 @@ public class ReportDefinition implements Serializable {
   }
 
   /**
-   * Set the JasperReports template for the report definition.
+   * Sets the JasperReports template for the report definition.
    *
    * @param template the JasperReports template for the report definition
    */

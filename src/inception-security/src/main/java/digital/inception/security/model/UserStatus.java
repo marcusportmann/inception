@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
@@ -61,6 +62,7 @@ public enum UserStatus implements CodeEnum {
    *
    * @return the code value for the user status
    */
+  @JsonValue
   public String code() {
     return code;
   }

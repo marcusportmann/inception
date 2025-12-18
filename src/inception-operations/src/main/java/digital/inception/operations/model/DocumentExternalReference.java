@@ -104,7 +104,7 @@ public class DocumentExternalReference extends ExternalReference implements Seri
   }
 
   /**
-   * Set the document the document external reference is associated with.
+   * Sets the document the document external reference is associated with.
    *
    * @param document the document the document external reference is associated with
    */
@@ -119,7 +119,7 @@ public class DocumentExternalReference extends ExternalReference implements Seri
   }
 
   /**
-   * Set the code for the external reference type.
+   * Sets the code for the external reference type.
    *
    * @param type the code for the external reference type
    */
@@ -128,7 +128,7 @@ public class DocumentExternalReference extends ExternalReference implements Seri
   }
 
   /**
-   * Set the value for the external reference.
+   * Sets the value for the external reference.
    *
    * @param value the value for the external reference
    */

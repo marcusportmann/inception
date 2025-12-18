@@ -311,7 +311,7 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Set the code for the contact mechanism type.
+   * Sets the code for the contact mechanism type.
    *
    * @param code the code for the contact mechanism type
    */
@@ -320,7 +320,7 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Set the description for the contact mechanism type.
+   * Sets the description for the contact mechanism type.
    *
    * @param description the description for the contact mechanism type
    */
@@ -329,7 +329,7 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the contact mechanism type.
+   * Sets the Unicode locale identifier for the contact mechanism type.
    *
    * @param localeId the Unicode locale identifier for the contact mechanism type
    */
@@ -338,7 +338,7 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Set the name of the contact mechanism type.
+   * Sets the name of the contact mechanism type.
    *
    * @param name the name of the contact mechanism type
    */
@@ -347,7 +347,7 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a contact mechanism value for the contact
+   * Sets the regular expression pattern used to validate a contact mechanism value for the contact
    * mechanism type.
    *
    * @param pattern the regular expression pattern used to validate a contact mechanism value for
@@ -358,7 +358,7 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Set the plural for the contact mechanism type.
+   * Sets the plural for the contact mechanism type.
    *
    * @param plural the plural for the contact mechanism type
    */
@@ -367,7 +367,7 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Set the sort order for the contact mechanism type.
+   * Sets the sort order for the contact mechanism type.
    *
    * @param sortOrder the sort order for the contact mechanism type
    */
@@ -376,7 +376,7 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the contact mechanism type is specific to.
+   * Sets the ID for the tenant the contact mechanism type is specific to.
    *
    * @param tenantId the ID for the tenant the contact mechanism type is specific to
    */

@@ -104,7 +104,7 @@ public class CreateDocumentNoteRequest implements Serializable {
   }
 
   /**
-   * Set the content for the document note.
+   * Sets the content for the document note.
    *
    * @param content the content for the document note
    */
@@ -113,7 +113,7 @@ public class CreateDocumentNoteRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the document the document note is associated with.
+   * Sets the ID for the document the document note is associated with.
    *
    * @param documentId the ID for the document the document note is associated with
    */

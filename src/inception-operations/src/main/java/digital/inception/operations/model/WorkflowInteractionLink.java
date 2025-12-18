@@ -240,7 +240,7 @@ public class WorkflowInteractionLink implements Serializable {
   }
 
   /**
-   * Set the ID for the conversation the workflow interaction link is associated with.
+   * Sets the ID for the conversation the workflow interaction link is associated with.
    *
    * @param conversationId the ID for the conversation the workflow interaction link is associated
    *     with
@@ -250,7 +250,7 @@ public class WorkflowInteractionLink implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction the workflow interaction link is associated with.
+   * Sets the ID for the interaction the workflow interaction link is associated with.
    *
    * @param interactionId the ID for the interaction the workflow interaction link is associated
    *     with
@@ -260,7 +260,7 @@ public class WorkflowInteractionLink implements Serializable {
   }
 
   /**
-   * Set the date and time the interaction was linked to the workflow.
+   * Sets the date and time the interaction was linked to the workflow.
    *
    * @param linked the date and time the interaction was linked to the workflow
    */
@@ -269,7 +269,7 @@ public class WorkflowInteractionLink implements Serializable {
   }
 
   /**
-   * Set the person or system who linked the interaction to the workflow.
+   * Sets the person or system who linked the interaction to the workflow.
    *
    * @param linkedBy the person or system who linked the interaction to the workflow
    */
@@ -278,7 +278,7 @@ public class WorkflowInteractionLink implements Serializable {
   }
 
   /**
-   * Set the workflow the workflow interaction link is associated with.
+   * Sets the workflow the workflow interaction link is associated with.
    *
    * @param workflow the workflow the workflow interaction link is associated with
    */

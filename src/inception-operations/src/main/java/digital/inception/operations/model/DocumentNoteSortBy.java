@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
@@ -58,10 +59,32 @@ public enum DocumentNoteSortBy implements CodeEnum {
   }
 
   /**
+   * Resolve the Spring Data sort property name for the method used to sort a list of document
+   * notes.
+   *
+   * @param sortBy the method used to sort a list of document notes
+   * @return the Spring Data sort property name for the method used to sort a list of document notes
+   */
+  @SuppressWarnings({"SameReturnValue"})
+  public static String resolveSortByPropertyName(DocumentNoteSortBy sortBy) {
+    if (sortBy == null) {
+      return "created";
+    }
+    return switch (sortBy) {
+      case CREATED -> "created";
+      case CREATED_BY -> "createdBy";
+      case UPDATED -> "updated";
+      case UPDATED_BY -> "updatedBy";
+      default -> "created";
+    };
+  }
+
+  /**
    * Returns the code for the method used to sort a list of document notes.
    *
    * @return the code for the method used to sort a list of document notes
    */
+  @JsonValue
   public String code() {
     return code;
   }

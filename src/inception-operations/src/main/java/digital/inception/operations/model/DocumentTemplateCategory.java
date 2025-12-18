@@ -168,7 +168,7 @@ public class DocumentTemplateCategory implements Serializable {
   }
 
   /**
-   * Set the ID for the document template category.
+   * Sets the ID for the document template category.
    *
    * @param id the ID for the document template category
    */
@@ -177,7 +177,7 @@ public class DocumentTemplateCategory implements Serializable {
   }
 
   /**
-   * Set the name of the document template category.
+   * Sets the name of the document template category.
    *
    * @param name the name of the document template category
    */
@@ -186,7 +186,7 @@ public class DocumentTemplateCategory implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the document template category is specific to.
+   * Sets the ID for the tenant the document template category is specific to.
    *
    * @param tenantId the ID for the tenant the document template category is specific to
    */

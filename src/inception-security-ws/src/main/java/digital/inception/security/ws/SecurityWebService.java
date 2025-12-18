@@ -105,7 +105,7 @@ public class SecurityWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code SecurityWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param securityService the Security Service
    */
   public SecurityWebService(

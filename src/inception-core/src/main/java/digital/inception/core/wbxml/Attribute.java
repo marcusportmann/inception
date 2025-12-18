@@ -70,7 +70,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the name of the attribute.
+   * Sets the name of the attribute.
    *
    * @param name the name of the attribute
    */
@@ -79,7 +79,7 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the value of the attribute.
+   * Sets the value of the attribute.
    *
    * @param value the value of the attribute
    */

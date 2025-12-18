@@ -399,7 +399,7 @@ public class ExecutorServiceTests {
             "test_multistep_" + generateSuffix(),
             "Test Multistep",
             TaskPriority.NORMAL,
-            "za.co.discovery.nova.executor.test.TestMultistepTaskExecutor",
+            "digital.inception.executor.test.TestMultistepTaskExecutor",
             10);
 
     executorService.createTaskType(testMultistepTaskType);

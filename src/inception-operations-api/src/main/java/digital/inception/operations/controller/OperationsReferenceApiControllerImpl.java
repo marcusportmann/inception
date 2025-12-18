@@ -48,7 +48,7 @@ public class OperationsReferenceApiControllerImpl extends SecureApiController
   /**
    * Constructs a new {@code OperationsReferenceApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param operationsReferenceService the Operations Reference Service
    */
   public OperationsReferenceApiControllerImpl(

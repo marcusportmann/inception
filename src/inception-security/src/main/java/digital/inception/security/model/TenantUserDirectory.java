@@ -85,7 +85,7 @@ public class TenantUserDirectory implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant.
+   * Sets the ID for the tenant.
    *
    * @param tenantId the ID for the tenant
    */
@@ -94,7 +94,7 @@ public class TenantUserDirectory implements Serializable {
   }
 
   /**
-   * Set the ID for the user directory.
+   * Sets the ID for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
    */

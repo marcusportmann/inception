@@ -409,7 +409,7 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Set the code for the contact mechanism role.
+   * Sets the code for the contact mechanism role.
    *
    * @param code the code for the contact mechanism role
    */
@@ -418,7 +418,7 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Set the code for the contact mechanism type the contact mechanism role is associated with.
+   * Sets the code for the contact mechanism type the contact mechanism role is associated with.
    *
    * @param type the code for the contact mechanism type the contact mechanism role is associated
    *     with
@@ -428,7 +428,7 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Set the description for the contact mechanism role.
+   * Sets the description for the contact mechanism role.
    *
    * @param description the description for the contact mechanism role
    */
@@ -437,7 +437,7 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the contact mechanism role.
+   * Sets the Unicode locale identifier for the contact mechanism role.
    *
    * @param localeId the Unicode locale identifier for the contact mechanism role
    */
@@ -446,7 +446,7 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Set the name of the contact mechanism role.
+   * Sets the name of the contact mechanism role.
    *
    * @param name the name of the contact mechanism role
    */
@@ -455,7 +455,7 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the contact mechanism role is associated with.
+   * Sets the codes for the party types the contact mechanism role is associated with.
    *
    * @param partyTypes the codes for the party types the contact mechanism role is associated with
    */
@@ -464,7 +464,7 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a contact mechanism value for the contact
+   * Sets the regular expression pattern used to validate a contact mechanism value for the contact
    * mechanism role.
    *
    * @param pattern the regular expression pattern used to validate a contact mechanism value for
@@ -475,7 +475,7 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Set the sort order for the contact mechanism role.
+   * Sets the sort order for the contact mechanism role.
    *
    * @param sortOrder the sort order for the contact mechanism role
    */
@@ -484,7 +484,7 @@ public class ContactMechanismRole implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the contact mechanism role is specific to.
+   * Sets the ID for the tenant the contact mechanism role is specific to.
    *
    * @param tenantId the ID for the tenant the contact mechanism role is specific to
    */

@@ -65,18 +65,22 @@ export interface JobParameterDialogData {
                 Name
               </mat-label>
               <input type="text" matInput formControlName="name" required="true" />
-              <mat-error *ngIf="nameControl.errors && !nameControl.untouched">
-                <span
-                  *ngIf="nameControl.errors?.['required']"
-                  i18n="@@scheduler_job_parameter_dialog_component_error_name_required">
+              @if (nameControl.errors && !nameControl.untouched) {
+                <mat-error>
+                  @if (nameControl.errors?.['required']) {
+                    <span
+                      i18n="@@scheduler_job_parameter_dialog_component_error_name_required">
                   A name is required.
                 </span>
-                <span
-                  *ngIf="nameControl.errors?.['maxlength']"
-                  i18n="@@scheduler_job_parameter_dialog_component_error_name_maxlength">
+                  }
+                  @if (nameControl.errors?.['maxlength']) {
+                    <span
+                      i18n="@@scheduler_job_parameter_dialog_component_error_name_maxlength">
                   Name must not exceed 100 characters.
                 </span>
-              </mat-error>
+                  }
+                </mat-error>
+              }
             </mat-form-field>
           </div>
         </div>
@@ -87,13 +91,16 @@ export interface JobParameterDialogData {
                 Value
               </mat-label>
               <input type="text" matInput formControlName="value" />
-              <mat-error *ngIf="valueControl.errors && !valueControl.untouched">
-                <span
-                  *ngIf="valueControl.errors?.['maxlength']"
-                  i18n="@@scheduler_job_parameter_dialog_component_error_value_maxlength">
+              @if (valueControl.errors && !valueControl.untouched) {
+                <mat-error>
+                  @if (valueControl.errors?.['maxlength']) {
+                    <span
+                      i18n="@@scheduler_job_parameter_dialog_component_error_value_maxlength">
                   Value must not exceed 100 characters.
                 </span>
-              </mat-error>
+                  }
+                </mat-error>
+              }
             </mat-form-field>
           </div>
         </div>
@@ -120,7 +127,7 @@ export interface JobParameterDialogData {
         OK
       </button>
     </div>
-  `
+    `
 })
 export class JobParameterDialogComponent {
   jobParameterForm: FormGroup;

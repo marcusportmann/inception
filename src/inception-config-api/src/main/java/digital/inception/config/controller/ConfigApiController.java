@@ -286,7 +286,7 @@ public interface ConfigApiController {
   List<Config> getConfigs() throws ServiceUnavailableException;
 
   /**
-   * Set the config.
+   * Sets the config.
    *
    * @param config the config
    * @throws InvalidArgumentException if an argument is invalid

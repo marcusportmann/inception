@@ -295,7 +295,7 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the code for the residence permit type.
+   * Sets the code for the residence permit type.
    *
    * @param code the code for the residence permit type
    */
@@ -304,7 +304,7 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country of issue for the residence permit type.
+   * Sets the ISO 3166-1 alpha-2 code for the country of issue for the residence permit type.
    *
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the
    *     identification type
@@ -314,7 +314,7 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the description for the residence permit type.
+   * Sets the description for the residence permit type.
    *
    * @param description the description for the residence permit type
    */
@@ -323,7 +323,7 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the residence permit type.
+   * Sets the Unicode locale identifier for the residence permit type.
    *
    * @param localeId the Unicode locale identifier for the residence permit type
    */
@@ -332,7 +332,7 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the name of the residence permit type.
+   * Sets the name of the residence permit type.
    *
    * @param name the name of the residence permit type
    */
@@ -341,7 +341,7 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the regular expression pattern used to validate a number for the residence permit type.
+   * Sets the regular expression pattern used to validate a number for the residence permit type.
    *
    * @param pattern the regular expression pattern used to validate a number for the residence
    *     permit type
@@ -351,7 +351,7 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the sort order for the residence permit type.
+   * Sets the sort order for the residence permit type.
    *
    * @param sortOrder the sort order for the residence permit type
    */
@@ -360,7 +360,7 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the residence permit type is specific to.
+   * Sets the ID for the tenant the residence permit type is specific to.
    *
    * @param tenantId the ID for the tenant the residence permit type is specific to
    */

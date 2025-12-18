@@ -35,31 +35,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The {@code HazelcastServerCacheConfiguration} class provides the Hazelcast server cache
- * configuration.
+ * The {@code HazelcastCacheConfiguration} class provides the Hazelcast cache configuration.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @ConditionalOnClass(name = "com.hazelcast.config.Config")
 @ConditionalOnProperty(value = "inception.cache.hazelcast.server.enabled", havingValue = "true")
-@ConfigurationProperties("inception.cache.hazelcast.server")
-public class HazelcastServerCacheConfiguration {
+@ConfigurationProperties("inception.cache.hazelcast")
+public class HazelcastCacheConfiguration {
 
-  /** The distributed in-memory caches. */
+  /** The distributed in-memory caches. (inception.cache.hazelcast.caches) */
   private List<CacheConfig> caches;
 
-  /** The distributed in-memory cache cluster configuration. */
-  private ClusterConfig cluster;
+  /** The server configuration. (inception.cache.hazelcast.server) */
+  private ServerConfig server;
 
-  /** Is the Hazelcast server cache enabled? */
-  private boolean enabled;
-
-  /** Is port auto increment enabled? */
-  private boolean portAutoIncrement;
-
-  /** Constructs a new {@code HazelcastServerCacheConfiguration}. */
-  public HazelcastServerCacheConfiguration() {}
+  /** Constructs a new {@code HazelcastCacheConfiguration}. */
+  public HazelcastCacheConfiguration() {}
 
   /**
    * Returns the distributed in-memory caches.
@@ -71,21 +64,30 @@ public class HazelcastServerCacheConfiguration {
   }
 
   /**
-   * Returns the distributed in-memory cache cluster configuration.
+   * Convenience accessor for the cluster configuration.
    *
    * @return the distributed in-memory cache cluster configuration
    */
   public ClusterConfig getCluster() {
-    return cluster;
+    return (server != null) ? server.getCluster() : null;
   }
 
   /**
-   * Returns whether port auto increment is enabled.
+   * Convenience accessor for the port auto-increment flag.
    *
    * @return whether port auto increment is enabled
    */
   public boolean getPortAutoIncrement() {
-    return portAutoIncrement;
+    return (server != null) && server.isPortAutoIncrement();
+  }
+
+  /**
+   * Returns the server configuration.
+   *
+   * @return the server configuration
+   */
+  public ServerConfig getServer() {
+    return server;
   }
 
   /**
@@ -97,15 +99,17 @@ public class HazelcastServerCacheConfiguration {
   public Config hazelcastConfig() {
     Config config = new Config();
 
-    config.setInstanceName(getCluster().getName());
+    ClusterConfig cluster = getCluster();
+
+    config.setInstanceName(cluster.getName());
 
     config.setProperty("hazelcast.logging.type", "slf4j");
     config.setProperty("hazelcast.rest.enabled", "false");
 
     NetworkConfig networkConfig = config.getNetworkConfig();
 
-    networkConfig.setPort(getCluster().getPort());
-    networkConfig.setPortAutoIncrement(portAutoIncrement);
+    networkConfig.setPort(cluster.getPort());
+    networkConfig.setPortAutoIncrement(getPortAutoIncrement());
     networkConfig.setReuseAddress(true);
 
     JoinConfig joinConfig = networkConfig.getJoin();
@@ -122,17 +126,17 @@ public class HazelcastServerCacheConfiguration {
     // Add the cache members
     String[] members = {"127.0.0.1"};
 
-    if ((getCluster().getMembers() != null) && (getCluster().getMembers().trim().length() > 0)) {
-      members = getCluster().getMembers().trim().split(",");
+    if ((cluster.getMembers() != null) && (!cluster.getMembers().trim().isEmpty())) {
+      members = cluster.getMembers().trim().split(",");
     }
 
     for (String member : members) {
       tcpIpConfig.addMember(member);
     }
 
-    config.setProperty("hazelcast.application.validation.token", getCluster().getPassword());
+    config.setProperty("hazelcast.application.validation.token", cluster.getPassword());
 
-    config.setClusterName(getCluster().getName());
+    config.setClusterName(cluster.getName());
 
     // Initialise the caches
     if (getCaches() != null) {
@@ -172,11 +176,11 @@ public class HazelcastServerCacheConfiguration {
    * @return {@code true} if the Hazelcast server cache is enabled or {@code false} otherwise
    */
   public boolean isEnabled() {
-    return enabled;
+    return (server != null) && server.isEnabled();
   }
 
   /**
-   * Set the distributed in-memory caches.
+   * Sets the distributed in-memory caches.
    *
    * @param caches the distributed in-memory caches
    */
@@ -185,30 +189,12 @@ public class HazelcastServerCacheConfiguration {
   }
 
   /**
-   * Set the distributed in-memory cache cluster configuration.
+   * Sets the server configuration.
    *
-   * @param cluster the distributed in-memory cache cluster configuration
+   * @param server the server configuration
    */
-  public void setCluster(ClusterConfig cluster) {
-    this.cluster = cluster;
-  }
-
-  /**
-   * Set whether the Hazelcast server cache is enabled.
-   *
-   * @param enabled {@code true} if the Hazelcast server cache is enabled or {@code false} otherwise
-   */
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  /**
-   * Set whether port auto increment is enabled.
-   *
-   * @param portAutoIncrement is port auto increment enabled
-   */
-  public void setPortAutoIncrement(boolean portAutoIncrement) {
-    this.portAutoIncrement = portAutoIncrement;
+  public void setServer(ServerConfig server) {
+    this.server = server;
   }
 
   /**
@@ -342,7 +328,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the number of asynchronous backups for the distributed in-memory cache.
+     * Sets the number of asynchronous backups for the distributed in-memory cache.
      *
      * @param asyncBackupCount the number of asynchronous backups for the distributed in-memory
      *     cache
@@ -352,7 +338,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the number of synchronous backups for the distributed in-memory cache.
+     * Sets the number of synchronous backups for the distributed in-memory cache.
      *
      * @param backupCount the number of synchronous backups for the distributed in-memory cache
      */
@@ -361,7 +347,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the eviction policy for the distributed in-memory cache.
+     * Sets the eviction policy for the distributed in-memory cache.
      *
      * @param evictionPolicy the eviction policy for the distributed in-memory cache
      */
@@ -370,7 +356,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the in-memory format for the distributed in-memory cache.
+     * Sets the in-memory format for the distributed in-memory cache.
      *
      * @param inMemoryFormat the in-memory format for the distributed in-memory cache
      */
@@ -379,7 +365,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the maximum idle seconds for the distributed in-memory cache.
+     * Sets the maximum idle seconds for the distributed in-memory cache.
      *
      * @param maxIdleSeconds the maximum idle seconds for the distributed in-memory cache
      */
@@ -388,7 +374,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the maximum size for the distributed in-memory cache.
+     * Sets the maximum size for the distributed in-memory cache.
      *
      * @param maxSize the maximum size for the distributed in-memory cache
      */
@@ -397,7 +383,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the maximum size policy for the distributed in-memory cache.
+     * Sets the maximum size policy for the distributed in-memory cache.
      *
      * @param maxSizePolicy the maximum size policy for the distributed in-memory cache
      */
@@ -406,7 +392,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the name of the distributed in-memory cache.
+     * Sets the name of the distributed in-memory cache.
      *
      * @param name the name of the distributed in-memory cache
      */
@@ -415,7 +401,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set whether read-backup-data is enabled for the distributed in-memory cache.
+     * Sets whether read-backup-data is enabled for the distributed in-memory cache.
      *
      * @param readBackupData {@code true} if read-backup-data enabled for the distributed in-memory
      *     cache or {@code false} otherwise
@@ -425,7 +411,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set whether statistics are enabled for the distributed in-memory cache.
+     * Sets whether statistics are enabled for the distributed in-memory cache.
      *
      * @param statisticsEnabled {@code true} if statistics are enabled for the distributed in-memory
      *     cache or {@code false} otherwise
@@ -498,7 +484,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the comma-delimited IP addresses or hostnames for the members of the distributed
+     * Sets the comma-delimited IP addresses or hostnames for the members of the distributed
      * in-memory cache cluster.
      *
      * @param members the comma-delimited IP addresses or hostnames for the members of the
@@ -509,7 +495,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the name of the distributed in-memory cache cluster.
+     * Sets the name of the distributed in-memory cache cluster.
      *
      * @param name the name of the distributed in-memory cache cluster
      */
@@ -518,7 +504,7 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the password used to connect to the distributed in-memory cache cluster.
+     * Sets the password used to connect to the distributed in-memory cache cluster.
      *
      * @param password the password used to connect to the distributed in-memory cache cluster
      */
@@ -527,12 +513,87 @@ public class HazelcastServerCacheConfiguration {
     }
 
     /**
-     * Set the port for the distributed in-memory cache cluster.
+     * Sets the port for the distributed in-memory cache cluster.
      *
      * @param port the port for the distributed in-memory cache cluster
      */
     public void setPort(int port) {
       this.port = port;
+    }
+  }
+
+  /**
+   * The {@code ServerConfig} class provides access to the Hazelcast server configuration.
+   *
+   * <p>Bound under: inception.cache.hazelcast.server
+   */
+  public static class ServerConfig {
+
+    /** The distributed in-memory cache cluster configuration. */
+    private ClusterConfig cluster;
+
+    /** Is the Hazelcast server cache enabled? */
+    private boolean enabled;
+
+    /** Is port auto increment enabled? */
+    private boolean portAutoIncrement;
+
+    /** Constructs a new {@code ServerConfig}. */
+    public ServerConfig() {}
+
+    /**
+     * Returns the distributed in-memory cache cluster configuration.
+     *
+     * @return the distributed in-memory cache cluster configuration
+     */
+    public ClusterConfig getCluster() {
+      return cluster;
+    }
+
+    /**
+     * Returns whether the Hazelcast server cache is enabled.
+     *
+     * @return {@code true} if the Hazelcast server cache is enabled or {@code false} otherwise
+     */
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    /**
+     * Returns whether port auto increment is enabled.
+     *
+     * @return whether port auto increment is enabled
+     */
+    public boolean isPortAutoIncrement() {
+      return portAutoIncrement;
+    }
+
+    /**
+     * Sets the distributed in-memory cache cluster configuration.
+     *
+     * @param cluster the distributed in-memory cache cluster configuration
+     */
+    public void setCluster(ClusterConfig cluster) {
+      this.cluster = cluster;
+    }
+
+    /**
+     * Sets whether the Hazelcast server cache is enabled.
+     *
+     * @param enabled {@code true} if the Hazelcast server cache is enabled or {@code false}
+     *     otherwise
+     */
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    /**
+     * Sets whether port auto increment is enabled.
+     *
+     * @param portAutoIncrement is port auto increment enabled
+     */
+    public void setPortAutoIncrement(boolean portAutoIncrement) {
+      this.portAutoIncrement = portAutoIncrement;
     }
   }
 }

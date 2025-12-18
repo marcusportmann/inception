@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
@@ -112,9 +111,6 @@ public class DocumentServiceTests {
   /** The Document Service. */
   @Autowired private DocumentService documentService;
 
-  /** The Jackson Object Mapper. */
-  @Autowired private ObjectMapper objectMapper;
-
   /** The Operations Reference Service. */
   @Autowired private OperationsReferenceService operationsReferenceService;
 
@@ -148,8 +144,7 @@ public class DocumentServiceTests {
     assertEquals(0, retrievedExternalReferenceTypes.size());
 
     ExternalReferenceType retrievedExternalReferenceType =
-        operationsReferenceService.getExternalReferenceType(
-            "test_document_external_reference");
+        operationsReferenceService.getExternalReferenceType("test_document_external_reference");
 
     assertEquals("test_document_external_reference", retrievedExternalReferenceType.getCode());
     assertEquals("Test Document External Reference", retrievedExternalReferenceType.getName());
@@ -185,9 +180,7 @@ public class DocumentServiceTests {
 
     assertThrows(
         DuplicateDocumentDefinitionCategoryException.class,
-        () -> {
-          documentService.createDocumentDefinitionCategory(tenantDocumentDefinitionCategory);
-        });
+        () -> documentService.createDocumentDefinitionCategory(tenantDocumentDefinitionCategory));
 
     retrievedDocumentDefinitionCategory =
         documentService.getDocumentDefinitionCategory(tenantDocumentDefinitionCategory.getId());
@@ -214,6 +207,7 @@ public class DocumentServiceTests {
             sharedDocumentDefinitionCategory.getId(),
             null,
             "Test Shared Document Definition",
+            "Test Shared Document Definition Short Name",
             "The description for the test shared document definition",
             null,
             List.of(
@@ -244,6 +238,7 @@ public class DocumentServiceTests {
             tenantDocumentDefinitionCategory.getId(),
             TenantUtil.DEFAULT_TENANT_ID,
             "Test Tenant Document Definition",
+            "Test Tenant Document Definition Short Name",
             "The description for the test tenant document definition",
             null,
             null);
@@ -252,9 +247,7 @@ public class DocumentServiceTests {
 
     assertThrows(
         DuplicateDocumentDefinitionException.class,
-        () -> {
-          documentService.createDocumentDefinition(tenantDocumentDefinition);
-        });
+        () -> documentService.createDocumentDefinition(tenantDocumentDefinition));
 
     retrievedDocumentDefinition =
         documentService.getDocumentDefinition(tenantDocumentDefinition.getId());
@@ -313,6 +306,7 @@ public class DocumentServiceTests {
 
     UpdateDocumentRequest updateDocumentRequest = getUpdateDocumentRequest(document);
 
+    @SuppressWarnings("unused")
     Document updatedDocument =
         documentService.updateDocument(
             TenantUtil.DEFAULT_TENANT_ID, updateDocumentRequest, "TEST2");
@@ -349,8 +343,7 @@ public class DocumentServiceTests {
         new ArrayList<>();
     documentExternalReferenceSearchCriteria.add(
         new ExternalReferenceSearchCriteria(
-            "test_document_external_reference",
-            "Test Document External Reference Updated Value"));
+            "test_document_external_reference", "Test Document External Reference Updated Value"));
 
     SearchDocumentsRequest searchDocumentsRequest =
         new SearchDocumentsRequest(
@@ -432,17 +425,13 @@ public class DocumentServiceTests {
 
     assertThrows(
         DocumentNoteNotFoundException.class,
-        () -> {
-          documentService.getDocumentNote(TenantUtil.DEFAULT_TENANT_ID, documentNote.getId());
-        });
+        () -> documentService.getDocumentNote(TenantUtil.DEFAULT_TENANT_ID, documentNote.getId()));
 
     documentService.deleteDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId());
 
     assertThrows(
         DocumentNotFoundException.class,
-        () -> {
-          documentService.getDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId());
-        });
+        () -> documentService.getDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId()));
 
     documentService.deleteDocumentDefinition(tenantDocumentDefinition.getId());
 
@@ -450,9 +439,7 @@ public class DocumentServiceTests {
 
     assertThrows(
         DocumentDefinitionNotFoundException.class,
-        () -> {
-          documentService.getDocumentDefinition(sharedDocumentDefinition.getId());
-        });
+        () -> documentService.getDocumentDefinition(sharedDocumentDefinition.getId()));
 
     sharedDocumentDefinitionCategory.setName(
         "Updated " + sharedDocumentDefinitionCategory.getName());
@@ -472,9 +459,9 @@ public class DocumentServiceTests {
 
     assertThrows(
         DocumentDefinitionCategoryNotFoundException.class,
-        () -> {
-          documentService.getDocumentDefinitionCategory(sharedDocumentDefinitionCategory.getId());
-        });
+        () ->
+            documentService.getDocumentDefinitionCategory(
+                sharedDocumentDefinitionCategory.getId()));
 
     operationsReferenceService.deleteExternalReferenceType("test_document_external_reference");
   }
@@ -533,6 +520,7 @@ public class DocumentServiceTests {
 
     documentService.createDocumentTemplate(createSharedDocumentTemplateRequest, "TEST1");
 
+    @SuppressWarnings("UnusedAssignment")
     DocumentTemplate retrievedDocumentTemplate =
         documentService.getDocumentTemplate(createSharedDocumentTemplateRequest.getId());
 
@@ -627,9 +615,7 @@ public class DocumentServiceTests {
 
     assertThrows(
         DocumentTemplateCategoryNotFoundException.class,
-        () -> {
-          documentService.getDocumentTemplateCategory(sharedDocumentTemplateCategory.getId());
-        });
+        () -> documentService.getDocumentTemplateCategory(sharedDocumentTemplateCategory.getId()));
   }
 
   private void compareDocumentAttributeDefinitions(
@@ -697,6 +683,10 @@ public class DocumentServiceTests {
         documentDefinition2.getName(),
         "The name values for the document definitions do not match");
     assertEquals(
+        documentDefinition1.getShortName(),
+        documentDefinition2.getShortName(),
+        "The short name values for the document definitions do not match");
+    assertEquals(
         documentDefinition1.getDescription(),
         documentDefinition2.getDescription(),
         "The description values for the document definitions do not match");
@@ -725,7 +715,7 @@ public class DocumentServiceTests {
               assertEquals(1, foundAttributeDefinitions.size());
 
               compareDocumentAttributeDefinitions(
-                  documentAttributeDefinition1, foundAttributeDefinitions.get(0));
+                  documentAttributeDefinition1, foundAttributeDefinitions.getFirst());
             });
   }
 
@@ -853,8 +843,7 @@ public class DocumentServiceTests {
     createDocumentRequest.setExternalReferences(
         List.of(
             new DocumentExternalReference(
-                "test_document_external_reference",
-                "Test Document External Reference Value")));
+                "test_document_external_reference", "Test Document External Reference Value")));
     createDocumentRequest.setFileType(FileType.TEXT);
     createDocumentRequest.setIssueDate(LocalDate.of(2016, 7, 16));
     createDocumentRequest.setName("test.txt");

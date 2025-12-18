@@ -184,7 +184,7 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction source.
+   * Sets the ID for the interaction source.
    *
    * @param id the ID for the interaction source
    */
@@ -193,7 +193,7 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Set the name of the interaction source.
+   * Sets the name of the interaction source.
    *
    * @param name the name of the interaction source
    */
@@ -202,7 +202,7 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the interaction source is associated with.
+   * Sets the ID for the tenant the interaction source is associated with.
    *
    * @param tenantId the ID for the tenant the interaction source is associated with
    */
@@ -211,7 +211,7 @@ public class InteractionSourceBase implements Serializable {
   }
 
   /**
-   * Set the type for the interaction source.
+   * Sets the type for the interaction source.
    *
    * @param interactionSourceType the type for the interaction source
    */

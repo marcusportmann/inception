@@ -289,7 +289,7 @@ public class LockType implements Serializable {
   }
 
   /**
-   * Set the code for the lock type category the lock type is associated with.
+   * Sets the code for the lock type category the lock type is associated with.
    *
    * @param category the code for the lock type category the lock type is associated with
    */
@@ -298,7 +298,7 @@ public class LockType implements Serializable {
   }
 
   /**
-   * Set the code for the lock type.
+   * Sets the code for the lock type.
    *
    * @param code the code for the lock type
    */
@@ -307,7 +307,7 @@ public class LockType implements Serializable {
   }
 
   /**
-   * Set the description for the lock type.
+   * Sets the description for the lock type.
    *
    * @param description the description for the lock type
    */
@@ -316,7 +316,7 @@ public class LockType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the lock type.
+   * Sets the Unicode locale identifier for the lock type.
    *
    * @param localeId the Unicode locale identifier for the lock type
    */
@@ -325,7 +325,7 @@ public class LockType implements Serializable {
   }
 
   /**
-   * Set the name of the lock type.
+   * Sets the name of the lock type.
    *
    * @param name the name of the lock type
    */
@@ -334,7 +334,7 @@ public class LockType implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the lock type is associated with.
+   * Sets the codes for the party types the lock type is associated with.
    *
    * @param partyTypes the codes for the party types the lock type is associated with
    */
@@ -343,7 +343,7 @@ public class LockType implements Serializable {
   }
 
   /**
-   * Set the sort order for the lock type.
+   * Sets the sort order for the lock type.
    *
    * @param sortOrder the sort order for the lock type
    */
@@ -352,7 +352,7 @@ public class LockType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the lock type is specific to.
+   * Sets the ID for the tenant the lock type is specific to.
    *
    * @param tenantId the ID for the tenant the lock type is specific to
    */

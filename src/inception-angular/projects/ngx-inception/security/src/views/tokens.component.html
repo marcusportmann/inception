@@ -55,22 +55,22 @@
         <i class="far fa-trash-alt"></i>
         <span i18n="@@security_tokens_component_menu_item_delete">Delete</span>
       </button>
-      <ng-container *ngIf="tokenStatus === TokenStatus.Revoked">
+      @if (tokenStatus === TokenStatus.Revoked) {
         <button mat-menu-item (click)="reinstateToken(tokenId)">
           <i class="fa-solid fa-lock-open"></i>
           <span i18n="@@security_tokens_component_menu_item_reinstate">Reinstate</span>
         </button>
-      </ng-container>
+      }
       <button mat-menu-item (click)="reissueToken(tokenId)">
         <i class="fa-solid fa-arrow-rotate-right"></i>
         <span i18n="@@security_tokens_component_menu_item_reissue">Reissue</span>
       </button>
-      <ng-container *ngIf="tokenStatus !== TokenStatus.Revoked">
+      @if (tokenStatus !== TokenStatus.Revoked) {
         <button mat-menu-item (click)="revokeToken(tokenId)">
           <i class="fa-solid fa-ban"></i>
           <span i18n="@@security_tokens_component_menu_item_revoke">Revoke</span>
         </button>
-      </ng-container>
+      }
       <button mat-menu-item (click)="viewToken(tokenId)">
         <i class="fas fa-eye"></i>
         <span i18n="@@security_tokens_component_menu_item_view">View</span>

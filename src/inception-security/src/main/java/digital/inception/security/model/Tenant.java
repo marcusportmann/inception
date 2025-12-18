@@ -212,7 +212,7 @@ public class Tenant implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant.
+   * Sets the ID for the tenant.
    *
    * @param id the ID for the tenant
    */
@@ -221,7 +221,7 @@ public class Tenant implements Serializable {
   }
 
   /**
-   * Set the name of the tenant.
+   * Sets the name of the tenant.
    *
    * @param name the name of the tenant
    */
@@ -230,7 +230,7 @@ public class Tenant implements Serializable {
   }
 
   /**
-   * Set the status for the tenant.
+   * Sets the status for the tenant.
    *
    * @param status the status for the tenant
    */
@@ -239,7 +239,7 @@ public class Tenant implements Serializable {
   }
 
   /**
-   * Set the user directories associated with the tenant.
+   * Sets the user directories associated with the tenant.
    *
    * @param userDirectories the user directories associated with the tenant
    */

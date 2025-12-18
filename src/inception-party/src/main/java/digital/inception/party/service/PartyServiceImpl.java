@@ -103,7 +103,7 @@ public class PartyServiceImpl extends AbstractServiceBase implements PartyServic
   /**
    * Constructs a new {@code PartyServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param partyStore the Party Store
    */
   public PartyServiceImpl(ApplicationContext applicationContext, PartyStore partyStore) {

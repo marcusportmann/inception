@@ -205,7 +205,7 @@ public class ValidationError implements Serializable, Cloneable {
   }
 
   /**
-   * Set the error message for the validation error.
+   * Sets the error message for the validation error.
    *
    * @param message the error message for the validation error
    */
@@ -214,7 +214,7 @@ public class ValidationError implements Serializable, Cloneable {
   }
 
   /**
-   * Set the path for the property that resulted in the validation error.
+   * Sets the path for the property that resulted in the validation error.
    *
    * @param property the path for the property that resulted in the validation error
    */

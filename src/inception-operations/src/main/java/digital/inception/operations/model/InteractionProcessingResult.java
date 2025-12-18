@@ -80,7 +80,7 @@ public class InteractionProcessingResult implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction.
+   * Sets the ID for the interaction.
    *
    * @param interactionId the ID for the interaction
    */

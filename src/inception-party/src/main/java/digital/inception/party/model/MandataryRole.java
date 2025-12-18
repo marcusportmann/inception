@@ -248,7 +248,7 @@ public class MandataryRole implements Serializable {
   }
 
   /**
-   * Set the code for the mandatary role.
+   * Sets the code for the mandatary role.
    *
    * @param code the code for the mandatary role
    */
@@ -257,7 +257,7 @@ public class MandataryRole implements Serializable {
   }
 
   /**
-   * Set the description for the mandatary role.
+   * Sets the description for the mandatary role.
    *
    * @param description the description for the mandatary role
    */
@@ -266,7 +266,7 @@ public class MandataryRole implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the mandatary role.
+   * Sets the Unicode locale identifier for the mandatary role.
    *
    * @param localeId the Unicode locale identifier for the mandatary role
    */
@@ -275,7 +275,7 @@ public class MandataryRole implements Serializable {
   }
 
   /**
-   * Set the code for the mandate type the mandatary role is associated with.
+   * Sets the code for the mandate type the mandatary role is associated with.
    *
    * @param mandateType the code for the mandate type the mandatary role is associated with
    */
@@ -284,7 +284,7 @@ public class MandataryRole implements Serializable {
   }
 
   /**
-   * Set the name of the mandatary role.
+   * Sets the name of the mandatary role.
    *
    * @param name the name of the mandatary role
    */
@@ -293,7 +293,7 @@ public class MandataryRole implements Serializable {
   }
 
   /**
-   * Set the sort order for the mandatary role.
+   * Sets the sort order for the mandatary role.
    *
    * @param sortOrder the sort order for the mandatary role
    */
@@ -302,7 +302,7 @@ public class MandataryRole implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the mandatary role is specific to.
+   * Sets the ID for the tenant the mandatary role is specific to.
    *
    * @param tenantId the ID for the tenant the mandatary role is specific to
    */

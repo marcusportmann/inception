@@ -103,7 +103,7 @@ public class AssignInteractionRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction.
+   * Sets the ID for the interaction.
    *
    * @param interactionId the ID for the interaction
    */
@@ -112,7 +112,7 @@ public class AssignInteractionRequest implements Serializable {
   }
 
   /**
-   * Set the username for the user the interaction should be assigned to.
+   * Sets the username for the user the interaction should be assigned to.
    *
    * @param username the username for the user the interaction should be assigned to
    */

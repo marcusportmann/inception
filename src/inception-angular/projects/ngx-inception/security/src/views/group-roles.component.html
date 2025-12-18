@@ -3,9 +3,11 @@
     <span class="mat-header-label" i18n="@@security_group_roles_component_new_role">New Role :</span>
     <mat-form-field class="mat-mdc-form-field-slim">
       <mat-select [(ngModel)]="selectedRole" i18n-placeholder="@@security_group_roles_component_placeholder_select_a_role" placeholder="Select a role">
-        <mat-option *ngFor="let availableRole of availableRoles$ | async" [value]="availableRole">
-          {{availableRole.name}}
-        </mat-option>
+        @for (availableRole of availableRoles$ | async; track availableRole) {
+          <mat-option [value]="availableRole">
+            {{availableRole.name}}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <button mat-flat-button color="primary" [disabled]="!selectedRole" (click)="addRoleToGroup()" i18n="@@security_group_roles_component_button_add">Add</button>

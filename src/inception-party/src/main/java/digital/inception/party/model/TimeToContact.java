@@ -214,7 +214,7 @@ public class TimeToContact implements Serializable {
   }
 
   /**
-   * Set the code for the time to contact.
+   * Sets the code for the time to contact.
    *
    * @param code the code for the time to contact
    */
@@ -223,7 +223,7 @@ public class TimeToContact implements Serializable {
   }
 
   /**
-   * Set the description for the time to contact.
+   * Sets the description for the time to contact.
    *
    * @param description the description for the time to contact
    */
@@ -232,7 +232,7 @@ public class TimeToContact implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the time to contact.
+   * Sets the Unicode locale identifier for the time to contact.
    *
    * @param localeId the Unicode locale identifier for the time to contact
    */
@@ -241,7 +241,7 @@ public class TimeToContact implements Serializable {
   }
 
   /**
-   * Set the name of the time to contact.
+   * Sets the name of the time to contact.
    *
    * @param name the name of the time to contact
    */
@@ -250,7 +250,7 @@ public class TimeToContact implements Serializable {
   }
 
   /**
-   * Set the sort order for the time to contact.
+   * Sets the sort order for the time to contact.
    *
    * @param sortOrder the sort order for the time to contact
    */
@@ -259,7 +259,7 @@ public class TimeToContact implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the time to contact is specific to.
+   * Sets the ID for the tenant the time to contact is specific to.
    *
    * @param tenantId the ID for the tenant the time to contact is specific to
    */

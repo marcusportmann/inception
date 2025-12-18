@@ -102,7 +102,7 @@ public class TransferInteractionRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction.
+   * Sets the ID for the interaction.
    *
    * @param interactionId the ID for the interaction
    */
@@ -111,7 +111,7 @@ public class TransferInteractionRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction source the interaction should be transferred to.
+   * Sets the ID for the interaction source the interaction should be transferred to.
    *
    * @param interactionSourceId the ID for the interaction source the interaction should be
    *     transferred to

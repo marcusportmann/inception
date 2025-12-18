@@ -303,7 +303,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the ID for the SMS.
+   * Sets the ID for the SMS.
    *
    * @param id the ID for the SMS
    */
@@ -312,7 +312,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the date and time the last attempt was made to send the SMS.
+   * Sets the date and time the last attempt was made to send the SMS.
    *
    * @param lastProcessed the date and time the last attempt was made to send the SMS
    */
@@ -321,7 +321,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the name of the entity that has locked the SMS for sending.
+   * Sets the name of the entity that has locked the SMS for sending.
    *
    * @param lockName the name of the entity that has locked the SMS for sending
    */
@@ -330,7 +330,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the message to send.
+   * Sets the message to send.
    *
    * @param message the message to send
    */
@@ -339,7 +339,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the mobile number to send the SMS to.
+   * Sets the mobile number to send the SMS to.
    *
    * @param mobileNumber the mobile number to send the SMS to
    */
@@ -348,7 +348,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the number of times that the sending of the SMS was attempted.
+   * Sets the number of times that the sending of the SMS was attempted.
    *
    * @param sendAttempts the number of times that the sending of the SMS was attempted
    */
@@ -357,7 +357,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the status of the SMS.
+   * Sets the status of the SMS.
    *
    * @param status the status of the SMS
    */

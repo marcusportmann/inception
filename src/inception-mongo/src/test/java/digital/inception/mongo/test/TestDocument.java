@@ -95,7 +95,7 @@ public class TestDocument implements Serializable {
   }
 
   /**
-   * Set the age for the test document.
+   * Sets the age for the test document.
    *
    * @param age the age for the test document
    */
@@ -104,7 +104,7 @@ public class TestDocument implements Serializable {
   }
 
   /**
-   * Set the ID for the test document.
+   * Sets the ID for the test document.
    *
    * @param id the ID for the test document
    */
@@ -113,7 +113,7 @@ public class TestDocument implements Serializable {
   }
 
   /**
-   * Set the name for the test document.
+   * Sets the name for the test document.
    *
    * @param name the name for the test document
    */

@@ -200,7 +200,7 @@ public class MeasurementSystem implements Serializable {
   }
 
   /**
-   * Set the code for the measurement system.
+   * Sets the code for the measurement system.
    *
    * @param code the code for the measurement system
    */
@@ -209,7 +209,7 @@ public class MeasurementSystem implements Serializable {
   }
 
   /**
-   * Set the description for the measurement system.
+   * Sets the description for the measurement system.
    *
    * @param description the description for the measurement system
    */
@@ -218,7 +218,7 @@ public class MeasurementSystem implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the measurement system.
+   * Sets the Unicode locale identifier for the measurement system.
    *
    * @param localeId the Unicode locale identifier for the measurement system
    */
@@ -227,7 +227,7 @@ public class MeasurementSystem implements Serializable {
   }
 
   /**
-   * Set the name of the measurement system.
+   * Sets the name of the measurement system.
    *
    * @param name the name of the measurement system
    */
@@ -236,7 +236,7 @@ public class MeasurementSystem implements Serializable {
   }
 
   /**
-   * Set the sort order for the measurement system.
+   * Sets the sort order for the measurement system.
    *
    * @param sortOrder the sort order for the measurement system
    */

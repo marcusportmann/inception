@@ -108,7 +108,7 @@ public class ApplicationDataSourceConfiguration {
   /**
    * Constructs a new {@code ApplicationDataSourceConfiguration}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public ApplicationDataSourceConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;

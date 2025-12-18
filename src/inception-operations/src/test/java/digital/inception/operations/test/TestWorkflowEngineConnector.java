@@ -45,7 +45,7 @@ public class TestWorkflowEngineConnector extends AbstractWorkflowEngineConnector
   /**
    * Constructs a {@code TestWorkflowEngineConnector}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param workflowEngine the workflow engine the workflow engine connector is associated with
    */
   public TestWorkflowEngineConnector(

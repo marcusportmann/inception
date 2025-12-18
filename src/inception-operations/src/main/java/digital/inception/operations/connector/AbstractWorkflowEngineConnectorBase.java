@@ -47,7 +47,7 @@ public abstract class AbstractWorkflowEngineConnectorBase {
   /**
    * Constructs a {@code AbstractServiceBase}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param workflowEngine the workflow engine the workflow engine connector is associated with
    */
   public AbstractWorkflowEngineConnectorBase(

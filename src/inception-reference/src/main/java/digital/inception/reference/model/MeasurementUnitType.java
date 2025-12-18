@@ -194,7 +194,7 @@ public class MeasurementUnitType implements Serializable {
   }
 
   /**
-   * Set the code for the measurement unit type.
+   * Sets the code for the measurement unit type.
    *
    * @param code the code for the measurement unit type
    */
@@ -203,7 +203,7 @@ public class MeasurementUnitType implements Serializable {
   }
 
   /**
-   * Set the description for the measurement unit type.
+   * Sets the description for the measurement unit type.
    *
    * @param description the description for the measurement unit type
    */
@@ -212,7 +212,7 @@ public class MeasurementUnitType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the measurement unit type.
+   * Sets the Unicode locale identifier for the measurement unit type.
    *
    * @param localeId the Unicode locale identifier for the measurement unit type
    */
@@ -221,7 +221,7 @@ public class MeasurementUnitType implements Serializable {
   }
 
   /**
-   * Set the name of the measurement unit type.
+   * Sets the name of the measurement unit type.
    *
    * @param name the name of the measurement unit type
    */
@@ -230,7 +230,7 @@ public class MeasurementUnitType implements Serializable {
   }
 
   /**
-   * Set the sort order for the measurement unit type.
+   * Sets the sort order for the measurement unit type.
    *
    * @param sortOrder the sort order for the measurement unit type
    */

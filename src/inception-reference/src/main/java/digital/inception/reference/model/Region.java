@@ -219,7 +219,7 @@ public class Region implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-2 subdivision code for the region.
+   * Sets the ISO 3166-2 subdivision code for the region.
    *
    * @param code the ISO 3166-2 subdivision code for the region
    */
@@ -228,7 +228,7 @@ public class Region implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country the region is associated with.
+   * Sets the ISO 3166-1 alpha-2 code for the country the region is associated with.
    *
    * @param country the ISO 3166-1 alpha-2 code for the country the region is associated with
    */
@@ -237,7 +237,7 @@ public class Region implements Serializable {
   }
 
   /**
-   * Set the description for the region.
+   * Sets the description for the region.
    *
    * @param description the description for the region
    */
@@ -246,7 +246,7 @@ public class Region implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the region.
+   * Sets the Unicode locale identifier for the region.
    *
    * @param localeId the Unicode locale identifier for the region
    */
@@ -255,7 +255,7 @@ public class Region implements Serializable {
   }
 
   /**
-   * Set the name of the region.
+   * Sets the name of the region.
    *
    * @param name the name of the region
    */
@@ -264,7 +264,7 @@ public class Region implements Serializable {
   }
 
   /**
-   * Set the sort order for the region.
+   * Sets the sort order for the region.
    *
    * @param sortOrder the sort order for the region
    */

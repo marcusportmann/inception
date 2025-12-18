@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -31,24 +31,26 @@ import { BackNavigation } from './back-navigation';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'title-bar',
   standalone: true,
-  imports: [NgIf, AsyncPipe],
+  imports: [AsyncPipe],
   template: `
-    <div *ngIf="title | async as title; else noTitle" class="title-bar">
-      <div
-        *ngIf="backNavigation | async as backNavigation"
-        class="back"
-        (click)="navigateBack(backNavigation)">
-        <span class="fa fa-chevron-left"></span> {{ backNavigation.title }}
+    @if (title | async; as title) {
+      <div class="title-bar">
+        @if (backNavigation | async; as backNavigation) {
+          <div
+            class="back"
+            (click)="navigateBack(backNavigation)">
+            <span class="fa fa-chevron-left"></span> {{ backNavigation.title }}
+          </div>
+        }
+        <div class="title">{{ title }}</div>
       </div>
-      <div class="title">{{ title }}</div>
-    </div>
-
-    <ng-template #noTitle>
+    } @else {
       <div class="title-bar">
         <div class="title">No Title</div>
       </div>
-    </ng-template>
-  `
+    }
+    
+    `
 })
 export class TitleBarComponent implements OnInit {
   @Input() fixed = false;

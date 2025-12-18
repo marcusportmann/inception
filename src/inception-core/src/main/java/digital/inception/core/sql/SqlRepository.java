@@ -84,7 +84,7 @@ public class SqlRepository {
    * Constructs a new {@code SqlRepository} instance and eagerly loads SQL resources if enabled and
    * present.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public SqlRepository(ApplicationContext applicationContext) {
     Environment environment = applicationContext.getEnvironment();

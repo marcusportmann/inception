@@ -59,6 +59,7 @@ import java.util.UUID;
   "categoryId",
   "tenantId",
   "name",
+  "shortName",
   "description",
   "templateId",
   "attributeDefinitions"
@@ -72,6 +73,7 @@ import java.util.UUID;
       "categoryId",
       "tenantId",
       "name",
+      "shortName",
       "description",
       "templateId",
       "attributeDefinitions"
@@ -144,6 +146,14 @@ public class DocumentDefinition implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /** The short name for the document definition. */
+  @Schema(description = "The short name for the document definition")
+  @JsonProperty
+  @XmlElement(name = "ShortName")
+  @Size(min = 1, max = 50)
+  @Column(name = "short_name", length = 50)
+  private String shortName;
+
   /** The ID for the document template for the document definition. */
   @Schema(description = "The ID for the document template for the document definition")
   @JsonProperty
@@ -165,11 +175,12 @@ public class DocumentDefinition implements Serializable {
   /**
    * Constructs a new {@code DocumentDefinition}.
    *
-   * @param id ID for the document definition
+   * @param id the ID for the document definition
    * @param categoryId the ID for the document definition category the document definition is
    *     associated with
-   * @param tenantId ID for the tenant the document definition is specific to
+   * @param tenantId the ID for the tenant the document definition is specific to
    * @param name name of the document definition
+   * @param shortName the short name for the document definition
    * @param description the description for the document definition
    * @param templateId the ID for the document template for the document definition
    * @param attributeDefinitions the document attribute definitions for the document definition
@@ -179,6 +190,7 @@ public class DocumentDefinition implements Serializable {
       String categoryId,
       UUID tenantId,
       String name,
+      String shortName,
       String description,
       String templateId,
       List<DocumentAttributeDefinition> attributeDefinitions) {
@@ -186,6 +198,7 @@ public class DocumentDefinition implements Serializable {
     this.categoryId = categoryId;
     this.tenantId = tenantId;
     this.name = name;
+    this.shortName = shortName;
     this.description = description;
     this.templateId = templateId;
 
@@ -285,6 +298,15 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
+   * Returns the short name for the document definition.
+   *
+   * @return the short name for the document definition
+   */
+  public String getShortName() {
+    return shortName;
+  }
+
+  /**
    * Returns the ID for the document template for the document definition.
    *
    * @return the ID for the document template for the document definition
@@ -324,7 +346,7 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the document attribute definitions for the document definition.
+   * Sets the document attribute definitions for the document definition.
    *
    * @param attributeDefinitions the document attribute definitions for the document definition
    */
@@ -336,7 +358,7 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the document definition category the document definition is associated with.
+   * Sets the ID for the document definition category the document definition is associated with.
    *
    * @param categoryId the ID for the document definition category the document definition is
    *     associated with
@@ -346,7 +368,7 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the description for the document definition.
+   * Sets the description for the document definition.
    *
    * @param description the description for the document definition
    */
@@ -355,7 +377,7 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the document definition.
+   * Sets the ID for the document definition.
    *
    * @param id the ID for the document definition
    */
@@ -364,7 +386,7 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the name of the document definition.
+   * Sets the name of the document definition.
    *
    * @param name the name of the document definition
    */
@@ -373,7 +395,16 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the document template for the document definition.
+   * Set the short name for the document definition.
+   *
+   * @param shortName the short name for the document definition
+   */
+  public void setShortName(String shortName) {
+    this.shortName = shortName;
+  }
+
+  /**
+   * Sets the ID for the document template for the document definition.
    *
    * @param templateId the ID for the document template for the document definition
    */
@@ -382,7 +413,7 @@ public class DocumentDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the document definition is specific to.
+   * Sets the ID for the tenant the document definition is specific to.
    *
    * @param tenantId the ID for the tenant the document definition is specific to
    */

@@ -16,6 +16,7 @@
 
 package digital.inception.core.data;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
@@ -104,6 +105,7 @@ public enum DataFormat implements CodeEnum {
    *
    * @return the code for the data format
    */
+  @JsonValue
   public String code() {
     return code;
   }

@@ -21,6 +21,7 @@ import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
 import digital.inception.operations.exception.DuplicateInteractionException;
+import digital.inception.operations.exception.DuplicateInteractionNoteException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
@@ -111,12 +112,16 @@ public interface InteractionService {
    * @param createdBy the person or system that created the interaction note
    * @return the interaction note
    * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateInteractionNoteException if the interaction note already exists
    * @throws InteractionNotFoundException if the interaction could not be found
    * @throws ServiceUnavailableException if the interaction note could not be created
    */
   InteractionNote createInteractionNote(
       UUID tenantId, CreateInteractionNoteRequest createInteractionNoteRequest, String createdBy)
-      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
+      throws InvalidArgumentException,
+          DuplicateInteractionNoteException,
+          InteractionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Create the interaction source.
@@ -229,6 +234,22 @@ public interface InteractionService {
           ServiceUnavailableException;
 
   /**
+   * Retrieve the ID for the interaction attachment with the specified interaction ID and hash.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction that the interaction attachment is associated
+   *     with
+   * @param hash the hash for interaction attachment
+   * @return an Optional containing the ID for the interaction attachment with the specified
+   *     interaction ID and hash or an empty optional if the interaction attachment could not be
+   *     found
+   * @throws ServiceUnavailableException if the ID for the interaction attachment with the specified
+   *     interaction ID and hash could not be retrieved
+   */
+  Optional<UUID> getInteractionAttachmentIdByInteractionIdAndHash(
+      UUID tenantId, UUID interactionId, String hash) throws ServiceUnavailableException;
+
+  /**
    * Retrieve the summaries for the interaction attachments for the interaction with the specified
    * ID.
    *
@@ -254,6 +275,20 @@ public interface InteractionService {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the ID for the interaction with the specified source reference and source ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param sourceId the ID for the interaction source the interaction is associated with
+   * @param sourceReference the interaction source-specific reference
+   * @return an Optional containing the ID for the interaction with the specified source reference
+   *     and source ID or an empty optional if the interaction could not be found
+   * @throws ServiceUnavailableException if the ID for the interaction with the specified source
+   *     reference and source ID could not be retrieved
+   */
+  Optional<UUID> getInteractionIdBySourceIdAndSourceReference(
+      UUID tenantId, UUID sourceId, String sourceReference) throws ServiceUnavailableException;
 
   /**
    * Retrieve the interaction note.
@@ -435,28 +470,6 @@ public interface InteractionService {
           ServiceUnavailableException;
 
   /**
-   * Returns the maximum number of processing attempts for an interaction.
-   *
-   * @return the maximum number of processing attempts for an interaction
-   */
-  int getMaximumInteractionProcessingAttempts();
-
-  /**
-   * Retrieve the next interaction queued for processing.
-   *
-   * <p>The interaction will be locked to prevent duplicate processing.
-   *
-   * @param tenantId the ID for the tenant
-   * @return an Optional containing the next interaction queued for processing or an empty Optional
-   *     if no interactions are currently queued for processing
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the next interaction queued for processing could not be
-   *     retrieved
-   */
-  Optional<Interaction> getNextInteractionQueuedForProcessing(UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException;
-
-  /**
    * Returns whether an interaction attachment with the specified ID exists.
    *
    * @param tenantId the ID for the tenant
@@ -570,16 +583,11 @@ public interface InteractionService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Reset the interaction locks.
+   * Trigger interaction processing.
    *
-   * @param tenantId the ID for the tenant
-   * @param status the current status of the interactions that have been locked
-   * @param newStatus the new status for the interactions that have been unlocked
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws ServiceUnavailableException if the interaction locks could not be reset
+   * @throws ServiceUnavailableException if the interaction processing could not be triggered
    */
-  void resetInteractionLocks(UUID tenantId, InteractionStatus status, InteractionStatus newStatus)
-      throws InvalidArgumentException, ServiceUnavailableException;
+  void processInteractions() throws ServiceUnavailableException;
 
   /**
    * Search for interactions.
@@ -626,25 +634,6 @@ public interface InteractionService {
           InteractionNotFoundException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException;
-
-  /** Trigger the interaction processing. */
-  void triggerInteractionProcessing();
-
-  /** Trigger the interaction source synchronization. */
-  void triggerInteractionSourceSynchronization();
-
-  /**
-   * Unlock a locked interaction.
-   *
-   * @param tenantId the ID for the tenant
-   * @param interactionId the ID for the interaction
-   * @param status the new status for the unlocked interaction
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws InteractionNotFoundException if the interaction could not be found
-   * @throws ServiceUnavailableException if the interaction could not be unlocked
-   */
-  void unlockInteraction(UUID tenantId, UUID interactionId, InteractionStatus status)
-      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the interaction.
@@ -706,9 +695,6 @@ public interface InteractionService {
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException;
-
-  /** The {@code TriggerInteractionProcessingEvent} record. */
-  record TriggerInteractionProcessingEvent() {}
 
   /** The {@code TriggerInteractionSourceSynchronizationEvent} record. */
   record TriggerInteractionSourceSynchronizationEvent() {}

@@ -400,7 +400,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the code for the field of study.
+   * Sets the code for the field of study.
    *
    * @param fieldOfStudy the code for the field of study
    */
@@ -409,7 +409,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the first year attended.
+   * Sets the first year attended.
    *
    * @param firstYearAttended the first year attended
    */
@@ -418,7 +418,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the ID for the education.
+   * Sets the ID for the education.
    *
    * @param id the ID for the education
    */
@@ -427,7 +427,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country the educational institution is located in
+   * Sets the ISO 3166-1 alpha-2 code for the country the educational institution is located in
    *
    * @param institutionCountry the ISO 3166-1 alpha-2 code for the country the educational
    *     institution is located in
@@ -437,7 +437,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the name of the educational institution.
+   * Sets the name of the educational institution.
    *
    * @param institutionName name of the educational institution
    */
@@ -446,7 +446,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the last year attended.
+   * Sets the last year attended.
    *
    * @param lastYearAttended the last year attended
    */
@@ -455,7 +455,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the person the education is associated with.
+   * Sets the person the education is associated with.
    *
    * @param person the person the education is associated with
    */
@@ -470,7 +470,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the name of the qualification.
+   * Sets the name of the qualification.
    *
    * @param qualificationName the name of the qualification
    */
@@ -479,7 +479,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the code for the qualification type.
+   * Sets the code for the qualification type.
    *
    * @param qualificationType the code for the qualification type
    */
@@ -488,7 +488,7 @@ public class Education implements Serializable {
   }
 
   /**
-   * Set the year the qualification was obtained.
+   * Sets the year the qualification was obtained.
    *
    * @param qualificationYear the year the qualification was obtained
    */

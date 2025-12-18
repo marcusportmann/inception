@@ -110,6 +110,7 @@
     <commons-io.version>2.20.0</commons-io.version>
     <!-- NOTE: Version of Apache CXF compatible with jaxb-xew-plugin -->
     <cxf.version>4.0.2</cxf.version>
+    <de.bwaldvogel.mongo-java-server.version>1.47.0</de.bwaldvogel.mongo-java-server.version>
     <de.flapdoodle.embed.mongo.version>4.21.0</de.flapdoodle.embed.mongo.version>
     <easymock.version>5.6.0</easymock.version>
     <excel-streaming-reader.version>5.1.1</excel-streaming-reader.version>
@@ -234,6 +235,11 @@
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>de.bwaldvogel</groupId>
+        <artifactId>mongo-java-server</artifactId>
+        <version>${de.bwaldvogel.mongo-java-server.version}</version>
       </dependency>
       <dependency>
         <groupId>de.flapdoodle.embed</groupId>
@@ -619,6 +625,16 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-processor-api</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-processor-ws</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-operations</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -798,13 +814,15 @@
     <module>inception-mail-ws</module>
     <module>inception-mongo</module>
     <module>inception-opentelemetry</module>
-    <module>inception-processor</module>
     <module>inception-operations</module>
     <module>inception-operations-api</module>
     <module>inception-operations-ws</module>
     <module>inception-party</module>
     <module>inception-party-api</module>
     <module>inception-party-ws</module>
+    <module>inception-processor</module>
+    <module>inception-processor-api</module>
+    <module>inception-processor-ws</module>
     <module>inception-r2dbc</module>
     <module>inception-resource-server</module>
     <module>inception-reporting</module>

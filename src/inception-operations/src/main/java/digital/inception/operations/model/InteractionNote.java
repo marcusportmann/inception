@@ -292,7 +292,7 @@ public class InteractionNote implements Serializable {
   }
 
   /**
-   * Set the content for the interaction note.
+   * Sets the content for the interaction note.
    *
    * @param content the content for the interaction note
    */
@@ -301,7 +301,7 @@ public class InteractionNote implements Serializable {
   }
 
   /**
-   * Set the date and time the interaction note was created.
+   * Sets the date and time the interaction note was created.
    *
    * @param created the date and time the interaction note was created
    */
@@ -310,7 +310,7 @@ public class InteractionNote implements Serializable {
   }
 
   /**
-   * Set the person or system that created the interaction note.
+   * Sets the person or system that created the interaction note.
    *
    * @param createdBy the person or system that created the interaction note
    */
@@ -319,7 +319,7 @@ public class InteractionNote implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction note.
+   * Sets the ID for the interaction note.
    *
    * @param id the ID for the interaction note
    */
@@ -328,7 +328,7 @@ public class InteractionNote implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction the interaction note is associated with.
+   * Sets the ID for the interaction the interaction note is associated with.
    *
    * @param interactionId the ID for the interaction the interaction note is associated with
    */
@@ -337,7 +337,7 @@ public class InteractionNote implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the interaction note is associated with.
+   * Sets the ID for the tenant the interaction note is associated with.
    *
    * @param tenantId the ID for the tenant the interaction note is associated with
    */
@@ -346,7 +346,7 @@ public class InteractionNote implements Serializable {
   }
 
   /**
-   * Set the date and time the interaction note was last updated.
+   * Sets the date and time the interaction note was last updated.
    *
    * @param updated the date and time the interaction note was last updated
    */
@@ -355,7 +355,7 @@ public class InteractionNote implements Serializable {
   }
 
   /**
-   * Set the person or system that last updated the interaction note.
+   * Sets the person or system that last updated the interaction note.
    *
    * @param updatedBy the person or system that last updated the interaction note
    */

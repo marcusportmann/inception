@@ -193,7 +193,7 @@ public class WorkflowVariableDefinition implements Serializable {
   }
 
   /**
-   * Set the description for the workflow variable.
+   * Sets the description for the workflow variable.
    *
    * @param description the description for the workflow variable
    */
@@ -202,7 +202,7 @@ public class WorkflowVariableDefinition implements Serializable {
   }
 
   /**
-   * Set the name of the workflow variable.
+   * Sets the name of the workflow variable.
    *
    * @param name the name of the workflow variable
    */
@@ -220,7 +220,7 @@ public class WorkflowVariableDefinition implements Serializable {
   }
 
   /**
-   * Set the workflow definition the workflow variable definition is associated with.
+   * Sets the workflow definition the workflow variable definition is associated with.
    *
    * @param workflowDefinition the workflow definition the workflow variable definition is
    *     associated with

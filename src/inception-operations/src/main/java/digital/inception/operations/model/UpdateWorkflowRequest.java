@@ -236,7 +236,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the attributes for the workflow.
+   * Sets the attributes for the workflow.
    *
    * @param attributes the attributes for the workflow
    */
@@ -245,7 +245,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the updated JSON or XML data for the workflow.
+   * Sets the updated JSON or XML data for the workflow.
    *
    * @param data the updated JSON or XML data for the workflow
    */
@@ -254,7 +254,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the description for the workflow.
+   * Sets the description for the workflow.
    *
    * @param description the description for the workflow
    */
@@ -263,7 +263,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the external references for the workflow.
+   * Sets the external references for the workflow.
    *
    * @param externalReferences the external references for the workflow
    */
@@ -272,7 +272,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the name of the workflow.
+   * Sets the name of the workflow.
    *
    * @param name the name of the workflow
    */
@@ -281,7 +281,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the updated status of the workflow.
+   * Sets the updated status of the workflow.
    *
    * @param status the updated status of the workflow
    */
@@ -290,7 +290,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the variables for the workflow.
+   * Sets the variables for the workflow.
    *
    * @param variables the variables for the workflow
    */
@@ -299,7 +299,7 @@ public class UpdateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow.
+   * Sets the ID for the workflow.
    *
    * @param workflowId the ID for the workflow
    */

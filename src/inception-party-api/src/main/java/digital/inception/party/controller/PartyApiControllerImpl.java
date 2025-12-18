@@ -54,7 +54,7 @@ public class PartyApiControllerImpl extends SecureApiController implements Party
   /**
    * Constructs a new {@code PartyApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param partyService the Party Service
    */
   public PartyApiControllerImpl(ApplicationContext applicationContext, PartyService partyService) {

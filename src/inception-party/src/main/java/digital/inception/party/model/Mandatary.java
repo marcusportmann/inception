@@ -203,7 +203,7 @@ public class Mandatary implements Serializable {
   }
 
   /**
-   * Set the date the mandatary is effective from.
+   * Sets the date the mandatary is effective from.
    *
    * @param effectiveFrom the date the mandatary is effective from
    */
@@ -212,7 +212,7 @@ public class Mandatary implements Serializable {
   }
 
   /**
-   * Set the date the mandatary is effective to.
+   * Sets the date the mandatary is effective to.
    *
    * @param effectiveTo the date the mandatary is effective to
    */
@@ -221,7 +221,7 @@ public class Mandatary implements Serializable {
   }
 
   /**
-   * Set the mandate the mandatary is associated with.
+   * Sets the mandate the mandatary is associated with.
    *
    * @param mandate the mandate the mandatary is associated with
    */
@@ -235,7 +235,7 @@ public class Mandatary implements Serializable {
   }
 
   /**
-   * Set the ID for the party who is the recipient of the mandate.
+   * Sets the ID for the party who is the recipient of the mandate.
    *
    * @param partyId the ID for the party who is the recipient of the mandate
    */
@@ -244,7 +244,7 @@ public class Mandatary implements Serializable {
   }
 
   /**
-   * Set the code for the mandatary role.
+   * Sets the code for the mandatary role.
    *
    * @param role the code for the mandatary role
    */

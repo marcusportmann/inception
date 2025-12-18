@@ -87,7 +87,7 @@ public class CDATA implements Serializable, Content {
   }
 
   /**
-   * Set the text content for the {@code CDATA} instance.
+   * Sets the text content for the {@code CDATA} instance.
    *
    * @param text the text content for the {@code CDATA} instance
    */

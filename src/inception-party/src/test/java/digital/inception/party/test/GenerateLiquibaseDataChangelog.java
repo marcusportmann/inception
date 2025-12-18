@@ -112,7 +112,7 @@ public class GenerateLiquibaseDataChangelog implements CommandLineRunner {
   /**
    * Constructs a new {@code GenerateLiquibaseDataChangelog}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param partyReferenceService the Party Reference Service
    */
   public GenerateLiquibaseDataChangelog(

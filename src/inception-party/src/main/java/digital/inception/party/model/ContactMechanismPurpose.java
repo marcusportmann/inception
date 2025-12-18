@@ -325,7 +325,7 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Set the code for the contact mechanism purpose.
+   * Sets the code for the contact mechanism purpose.
    *
    * @param code the code for the contact mechanism purpose
    */
@@ -334,7 +334,8 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Set the codes for the contact mechanism types the contact mechanism purpose is associated with.
+   * Sets the codes for the contact mechanism types the contact mechanism purpose is associated
+   * with.
    *
    * @param contactMechanismTypes the codes for the contact mechanism types the contact mechanism
    *     purpose is associated with
@@ -344,7 +345,7 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Set the description for the contact mechanism purpose.
+   * Sets the description for the contact mechanism purpose.
    *
    * @param description the description for the contact mechanism purpose
    */
@@ -353,7 +354,7 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the contact mechanism purpose.
+   * Sets the Unicode locale identifier for the contact mechanism purpose.
    *
    * @param localeId the Unicode locale identifier for the contact mechanism purpose
    */
@@ -362,7 +363,7 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Set the name of the contact mechanism purpose.
+   * Sets the name of the contact mechanism purpose.
    *
    * @param name the name of the contact mechanism purpose
    */
@@ -371,7 +372,7 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the contact mechanism purpose is associated with.
+   * Sets the codes for the party types the contact mechanism purpose is associated with.
    *
    * @param partyTypes the codes for the party types the contact mechanism purpose is associated
    *     with
@@ -381,7 +382,7 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Set the sort order for the contact mechanism purpose.
+   * Sets the sort order for the contact mechanism purpose.
    *
    * @param sortOrder the sort order for the contact mechanism purpose
    */
@@ -390,7 +391,7 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the contact mechanism purpose is specific to.
+   * Sets the ID for the tenant the contact mechanism purpose is specific to.
    *
    * @param tenantId the ID for the tenant the contact mechanism purpose is specific to
    */

@@ -1283,7 +1283,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the attributes for the organization.
+   * Sets the attributes for the organization.
    *
    * @param attributes the attributes for the organization
    */
@@ -1294,7 +1294,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the contact mechanisms for the organization.
+   * Sets the contact mechanisms for the organization.
    *
    * @param contactMechanisms the contact mechanisms for the organization
    */
@@ -1305,7 +1305,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization.
+   * Sets the ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization.
    *
    * @param countriesOfTaxResidence the ISO 3166-1 alpha-2 codes for the countries of tax residence
    *     for the organization
@@ -1315,7 +1315,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the single country of tax residence for the organization.
+   * Sets the code for the single country of tax residence for the organization.
    *
    * @param countryOfTaxResidence the code for the single country of tax residence for the
    *     organization
@@ -1328,7 +1328,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the external references for the organization.
+   * Sets the external references for the organization.
    *
    * @param externalReferences the external references for the organization
    */
@@ -1339,7 +1339,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ID for the organization.
+   * Sets the ID for the organization.
    *
    * @param id the ID for the organization
    */
@@ -1349,7 +1349,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country of issue for the identification for the
+   * Sets the ISO 3166-1 alpha-2 code for the country of issue for the identification for the
    * organization.
    *
    * @param identificationCountryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for
@@ -1360,7 +1360,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the expiry date for the identification for the organization.
+   * Sets the expiry date for the identification for the organization.
    *
    * @param identificationExpiryDate the expiry date for the identification for the organization
    */
@@ -1369,7 +1369,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the issue date for the identification for the organization.
+   * Sets the issue date for the identification for the organization.
    *
    * @param identificationIssueDate the issue date for the identification for the organization
    */
@@ -1378,7 +1378,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the identification number for the organization.
+   * Sets the identification number for the organization.
    *
    * @param identificationNumber the identification number for the organization
    */
@@ -1387,7 +1387,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the code for the identification type for the organization.
+   * Sets the code for the identification type for the organization.
    *
    * @param identificationType the code for the identification type for the organization
    */
@@ -1396,7 +1396,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the identifications for the organization.
+   * Sets the identifications for the organization.
    *
    * @param identifications the identifications for the organization
    */
@@ -1407,7 +1407,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the industry allocations for the organization.
+   * Sets the industry allocations for the organization.
    *
    * @param industryAllocations the industry allocations for the organization
    */
@@ -1418,7 +1418,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the locks for the organization.
+   * Sets the locks for the organization.
    *
    * @param locks the locks for the organization
    */
@@ -1429,7 +1429,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the name of the organization.
+   * Sets the name of the organization.
    *
    * @param name the name of the organization
    */
@@ -1439,7 +1439,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the physical addresses for the organization.
+   * Sets the physical addresses for the organization.
    *
    * @param physicalAddresses the physical addresses for the organization
    */
@@ -1450,7 +1450,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the preferences for the organization.
+   * Sets the preferences for the organization.
    *
    * @param preferences the preferences for the organization
    */
@@ -1461,7 +1461,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the roles assigned directly to the organization.
+   * Sets the roles assigned directly to the organization.
    *
    * @param roles the roles
    */
@@ -1472,7 +1472,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the segment allocations for the organization.
+   * Sets the segment allocations for the organization.
    *
    * @param segmentAllocations the segment allocations for the organization
    */
@@ -1483,7 +1483,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the statuses for the organization.
+   * Sets the statuses for the organization.
    *
    * @param statuses the statuses for the organization
    */
@@ -1494,7 +1494,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the tax numbers for the organization.
+   * Sets the tax numbers for the organization.
    *
    * @param taxNumbers the tax numbers for the organization
    */
@@ -1505,7 +1505,7 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the organization is associated with.
+   * Sets the ID for the tenant the organization is associated with.
    *
    * @param tenantId the ID for the tenant the organization is associated with
    */

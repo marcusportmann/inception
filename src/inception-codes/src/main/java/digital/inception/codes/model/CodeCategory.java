@@ -197,7 +197,7 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Set the code data for the code category.
+   * Sets the code data for the code category.
    *
    * @param data the code data for the code category
    */
@@ -206,7 +206,7 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Set the ID for the code category.
+   * Sets the ID for the code category.
    *
    * @param id the ID for the code category
    */
@@ -215,7 +215,7 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Set the name of the code category.
+   * Sets the name of the code category.
    *
    * @param name the name of the code category
    */

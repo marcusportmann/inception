@@ -138,7 +138,7 @@ public class GroupMember implements Serializable {
   }
 
   /**
-   * Set the name of the group.
+   * Sets the name of the group.
    *
    * @param groupName the name of the group
    */
@@ -147,7 +147,7 @@ public class GroupMember implements Serializable {
   }
 
   /**
-   * Set the name of the group member.
+   * Sets the name of the group member.
    *
    * @param memberName the name of the group member
    */
@@ -156,7 +156,7 @@ public class GroupMember implements Serializable {
   }
 
   /**
-   * Set the group member type.
+   * Sets the group member type.
    *
    * @param memberType the group member type
    */
@@ -165,7 +165,7 @@ public class GroupMember implements Serializable {
   }
 
   /**
-   * Set the ID for the user directory the group is associated with.
+   * Sets the ID for the user directory the group is associated with.
    *
    * @param userDirectoryId the ID for the user directory the group is associated with
    */

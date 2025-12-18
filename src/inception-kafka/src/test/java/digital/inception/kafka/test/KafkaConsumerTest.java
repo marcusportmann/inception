@@ -36,7 +36,7 @@ public class KafkaConsumerTest extends ProcessorApplication {
   /**
    * Constructs a new {@code KafkaConsumerTest}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public KafkaConsumerTest(ApplicationContext applicationContext) {
     super(applicationContext);

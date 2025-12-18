@@ -166,7 +166,7 @@ public class TestWorkflowData implements Serializable {
   }
 
   /**
-   * Set the date.
+   * Sets the date.
    *
    * @param date the date
    */
@@ -175,7 +175,7 @@ public class TestWorkflowData implements Serializable {
   }
 
   /**
-   * Set the ID.
+   * Sets the ID.
    *
    * @param id the ID
    */
@@ -184,7 +184,7 @@ public class TestWorkflowData implements Serializable {
   }
 
   /**
-   * Set the name.
+   * Sets the name.
    *
    * @param name the name
    */
@@ -193,7 +193,7 @@ public class TestWorkflowData implements Serializable {
   }
 
   /**
-   * Set the number.
+   * Sets the number.
    *
    * @param number the number
    */
@@ -202,7 +202,7 @@ public class TestWorkflowData implements Serializable {
   }
 
   /**
-   * Set the timestamp.
+   * Sets the timestamp.
    *
    * @param timestamp the timestamp
    */

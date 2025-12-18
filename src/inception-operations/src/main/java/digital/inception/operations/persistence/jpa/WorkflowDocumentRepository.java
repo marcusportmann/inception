@@ -93,6 +93,14 @@ public interface WorkflowDocumentRepository
   Optional<WorkflowDocument> findByTenantIdAndId(UUID tenantId, UUID workflowDocumentId);
 
   /**
+   * Find the workflow documents for the workflow.
+   *
+   * @param workflowId the ID for the workflow the workflow documents are associated with
+   * @return the workflow documents
+   */
+  List<WorkflowDocument> findByWorkflowId(UUID workflowId);
+
+  /**
    * Find the document definition ID for the workflow document.
    *
    * @param tenantId the ID for the tenant
@@ -141,6 +149,7 @@ public interface WorkflowDocumentRepository
         wd.workflowId,
         wd.documentDefinitionId,
         dd.name,
+        dd.shortName,
         dd.description,
         wd.status,
         wd.requested,
@@ -156,6 +165,50 @@ public interface WorkflowDocumentRepository
       order by dd.name asc, wd.requested asc
     """)
   List<OutstandingWorkflowDocument> findOutstandingWorkflowDocumentsForWorkflow(
+      @Param("workflowId") UUID workflowId);
+
+  /**
+   * Find the workflow document summaries for the workflow.
+   *
+   * @param workflowId the ID for the workflow the workflow documents are associated with
+   * @return the workflow document summaries for the workflow
+   */
+  @Query(
+      """
+      select new digital.inception.operations.model.WorkflowDocumentSummary(
+        wd.id,
+        wd.tenantId,
+        wd.workflowId,
+        wd.documentDefinitionId,
+        dd.name,
+        dd.shortName,
+        dd.description,
+        wd.requested,
+        wd.requestedFromPartyId,
+        wd.requestedBy,
+        wd.provided,
+        wd.providedBy,
+        wd.rejected,
+        wd.rejectedBy,
+        wd.rejectionReason,
+        wd.verified,
+        wd.verifiedBy,
+        wd.waived,
+        wd.waivedBy,
+        wd.waiveReason,
+        wd.internal,
+        wd.status,
+        wd.documentId,
+        wd.description
+      )
+      from WorkflowDocument wd
+      join wd.documentDefinition dd
+      where wd.workflowId = :workflowId
+        and wd.status in (digital.inception.operations.model.WorkflowDocumentStatus.REJECTED,
+                          digital.inception.operations.model.WorkflowDocumentStatus.REQUESTED)
+      order by dd.name asc, wd.requested asc
+    """)
+  List<OutstandingWorkflowDocument> findWorkflowDocumentSummariesForWorkflow(
       @Param("workflowId") UUID workflowId);
 
   /**

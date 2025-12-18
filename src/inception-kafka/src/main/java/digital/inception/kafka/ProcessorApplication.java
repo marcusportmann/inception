@@ -48,7 +48,7 @@ public abstract class ProcessorApplication
   /**
    * Constructs a new {@code ProcessorApplication}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public ProcessorApplication(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;

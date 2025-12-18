@@ -47,7 +47,7 @@ public class VehicleWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code VehicleWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param vehicleService the Vehicle Service
    */
   public VehicleWebService(ApplicationContext applicationContext, VehicleService vehicleService) {

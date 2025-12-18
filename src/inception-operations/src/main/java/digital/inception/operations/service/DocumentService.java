@@ -27,6 +27,7 @@ import digital.inception.operations.exception.DocumentTemplateCategoryNotFoundEx
 import digital.inception.operations.exception.DocumentTemplateNotFoundException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentDefinitionException;
+import digital.inception.operations.exception.DuplicateDocumentException;
 import digital.inception.operations.exception.DuplicateDocumentTemplateCategoryException;
 import digital.inception.operations.exception.DuplicateDocumentTemplateException;
 import digital.inception.operations.model.CreateDocumentNoteRequest;
@@ -82,6 +83,23 @@ public interface DocumentService {
       UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
+          ServiceUnavailableException;
+
+  /**
+   * Create the document.
+   *
+   * @param tenantId the ID for the tenant
+   * @param document the document
+   * @return the document
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentDefinitionNotFoundException if the document definition could not be found
+   * @throws DuplicateDocumentException if the document already exists
+   * @throws ServiceUnavailableException if the document could not be created
+   */
+  Document createDocument(UUID tenantId, Document document)
+      throws InvalidArgumentException,
+          DocumentDefinitionNotFoundException,
+          DuplicateDocumentException,
           ServiceUnavailableException;
 
   /**

@@ -119,7 +119,7 @@ public class GroupRole implements Serializable {
   }
 
   /**
-   * Set the name of the group.
+   * Sets the name of the group.
    *
    * @param groupName the name of the group
    */
@@ -128,7 +128,7 @@ public class GroupRole implements Serializable {
   }
 
   /**
-   * Set the code for the role.
+   * Sets the code for the role.
    *
    * @param roleCode the code for the role
    */
@@ -137,7 +137,7 @@ public class GroupRole implements Serializable {
   }
 
   /**
-   * Set the ID for the user directory the group is associated with.
+   * Sets the ID for the user directory the group is associated with.
    *
    * @param userDirectoryId the ID for the user directory the group is associated with
    */

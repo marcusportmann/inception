@@ -212,7 +212,7 @@ public class ConsentType implements Serializable {
   }
 
   /**
-   * Set the code for the consent type.
+   * Sets the code for the consent type.
    *
    * @param code the code for the consent type
    */
@@ -221,7 +221,7 @@ public class ConsentType implements Serializable {
   }
 
   /**
-   * Set the description for the consent type.
+   * Sets the description for the consent type.
    *
    * @param description the description for the consent type
    */
@@ -230,7 +230,7 @@ public class ConsentType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the consent type.
+   * Sets the Unicode locale identifier for the consent type.
    *
    * @param localeId the Unicode locale identifier for the consent type
    */
@@ -239,7 +239,7 @@ public class ConsentType implements Serializable {
   }
 
   /**
-   * Set the name of the consent type.
+   * Sets the name of the consent type.
    *
    * @param name the name of the consent type
    */
@@ -248,7 +248,7 @@ public class ConsentType implements Serializable {
   }
 
   /**
-   * Set the sort order for the consent type.
+   * Sets the sort order for the consent type.
    *
    * @param sortOrder the sort order for the consent type
    */
@@ -257,7 +257,7 @@ public class ConsentType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the consent type is specific to.
+   * Sets the ID for the tenant the consent type is specific to.
    *
    * @param tenantId the ID for the tenant the consent type is specific to
    */

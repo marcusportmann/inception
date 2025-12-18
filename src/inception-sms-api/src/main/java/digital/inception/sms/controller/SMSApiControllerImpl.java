@@ -39,7 +39,7 @@ public class SMSApiControllerImpl extends SecureApiController implements SMSApiC
   /**
    * Constructs a new {@code SMSApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param smsService the SMS Service
    */
   public SMSApiControllerImpl(ApplicationContext applicationContext, SMSService smsService) {

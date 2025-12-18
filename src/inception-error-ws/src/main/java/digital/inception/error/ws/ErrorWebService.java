@@ -56,7 +56,7 @@ public class ErrorWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code ErrorWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param errorService the Error Service
    */
   public ErrorWebService(ApplicationContext applicationContext, ErrorService errorService) {

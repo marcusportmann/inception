@@ -59,7 +59,7 @@ public abstract class AbstractServiceBase {
   /**
    * Constructs a {@code AbstractServiceBase}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   protected AbstractServiceBase(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;

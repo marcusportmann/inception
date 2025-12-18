@@ -298,7 +298,7 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Set the code for the physical address role.
+   * Sets the code for the physical address role.
    *
    * @param code the code for the physical address role
    */
@@ -307,7 +307,7 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Set the description for the physical address role.
+   * Sets the description for the physical address role.
    *
    * @param description the description for the physical address role
    */
@@ -316,7 +316,7 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the physical address role.
+   * Sets the Unicode locale identifier for the physical address role.
    *
    * @param localeId the Unicode locale identifier for the physical address role
    */
@@ -325,7 +325,7 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Set the name of the physical address role.
+   * Sets the name of the physical address role.
    *
    * @param name the name of the physical address role
    */
@@ -334,7 +334,7 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the physical address role is associated with.
+   * Sets the codes for the party types the physical address role is associated with.
    *
    * @param partyTypes the codes for the party types the physical address role is associated with
    */
@@ -343,7 +343,7 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Set the sort order for the physical address role.
+   * Sets the sort order for the physical address role.
    *
    * @param sortOrder the sort order for the physical address role
    */
@@ -352,7 +352,7 @@ public class PhysicalAddressRole implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the physical address role is specific to.
+   * Sets the ID for the tenant the physical address role is specific to.
    *
    * @param tenantId the ID for the tenant the physical address role is specific to
    */

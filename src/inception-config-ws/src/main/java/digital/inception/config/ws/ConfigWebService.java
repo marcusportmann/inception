@@ -51,7 +51,7 @@ public class ConfigWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code ConfigWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param configService the Config Service
    */
   public ConfigWebService(ApplicationContext applicationContext, ConfigService configService) {
@@ -131,7 +131,7 @@ public class ConfigWebService extends AbstractWebServiceBase {
   }
 
   /**
-   * Set the config.
+   * Sets the config.
    *
    * @param config the config
    * @throws InvalidArgumentException if an argument is invalid

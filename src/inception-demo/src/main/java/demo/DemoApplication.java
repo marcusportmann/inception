@@ -75,7 +75,7 @@ public class DemoApplication extends Application {
   /**
    * Constructs a new {@code DemoApplication}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param errorService the Error Service
    * @param executorService the Executor Service
    * @param reportingService the Reporting Service
@@ -156,7 +156,8 @@ public class DemoApplication extends Application {
             demoPolicyData.replace("PolicyId=\"DemoPolicy\"", "PolicyId=\"" + policyId + "\"");
 
         Policy demoPolicy =
-            new Policy(policyId, "1.0", "Demo Policy " + i, PolicyType.XACML_POLICY, demoPolicyData);
+            new Policy(
+                policyId, "1.0", "Demo Policy " + i, PolicyType.XACML_POLICY, demoPolicyData);
 
         securityService.createPolicy(demoPolicy);
       }

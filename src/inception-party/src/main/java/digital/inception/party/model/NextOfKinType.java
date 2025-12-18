@@ -214,7 +214,7 @@ public class NextOfKinType implements Serializable {
   }
 
   /**
-   * Set the code for the next of kin type.
+   * Sets the code for the next of kin type.
    *
    * @param code the code for the next of kin type
    */
@@ -223,7 +223,7 @@ public class NextOfKinType implements Serializable {
   }
 
   /**
-   * Set the description for the next of kin type.
+   * Sets the description for the next of kin type.
    *
    * @param description the description for the next of kin type
    */
@@ -232,7 +232,7 @@ public class NextOfKinType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the next of kin type.
+   * Sets the Unicode locale identifier for the next of kin type.
    *
    * @param localeId the Unicode locale identifier for the next of kin type
    */
@@ -241,7 +241,7 @@ public class NextOfKinType implements Serializable {
   }
 
   /**
-   * Set the name of the next of kin type.
+   * Sets the name of the next of kin type.
    *
    * @param name the name of the next of kin type
    */
@@ -250,7 +250,7 @@ public class NextOfKinType implements Serializable {
   }
 
   /**
-   * Set the sort order for the next of kin type.
+   * Sets the sort order for the next of kin type.
    *
    * @param sortOrder the sort order for the next of kin type
    */
@@ -259,7 +259,7 @@ public class NextOfKinType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the next of kin type is specific to.
+   * Sets the ID for the tenant the next of kin type is specific to.
    *
    * @param tenantId the ID for the tenant the next of kin type is specific to
    */

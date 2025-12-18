@@ -32,34 +32,38 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The {@code WorkflowDocuments} class holds the results of a request to retrieve a list of workflow
- * documents for a workflow.
+ * The {@code WorkflowDocumentSummaries} class represents the results of a request to retrieve a
+ * list of workflow document summaries.
  *
  * @author Marcus Portmann
  */
-@Schema(
-    description =
-        "The results of a request to retrieve a list of workflow documents for a workflow")
+@Schema(description = "The results of a request to retrieve a list of workflow document summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "tenantId",
-  "workflowId",
-  "workflowDocuments",
+  "workflowDocumentSummaries",
   "total",
   "sortBy",
   "sortDirection",
   "pageIndex",
-  "pageSize",
-  "filter"
+  "pageSize"
 })
-@XmlRootElement(name = "WorkflowDocuments", namespace = "https://inception.digital/operations")
+@XmlRootElement(
+    name = "WorkflowDocumentSummaries",
+    namespace = "https://inception.digital/operations")
 @XmlType(
-    name = "WorkflowDocuments",
+    name = "WorkflowDocumentSummaries",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowDocuments", "total", "sortBy", "sortDirection", "pageIndex", "pageSize"})
+    propOrder = {
+      "workflowDocumentSummaries",
+      "total",
+      "sortBy",
+      "sortDirection",
+      "pageIndex",
+      "pageSize"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
-public class WorkflowDocuments implements Serializable {
+public class WorkflowDocumentSummaries implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
@@ -75,54 +79,56 @@ public class WorkflowDocuments implements Serializable {
   @XmlElement(name = "PageSize", required = true)
   private int pageSize;
 
-  /** The method used to sort the workflow documents e.g. by created. */
-  @Schema(description = "The method used to sort the workflow documents e.g. by created")
+  /** The method used to sort the workflow document summaries e.g. by requested. */
+  @Schema(description = "The method used to sort the workflow document summaries e.g. by requested")
   @JsonProperty
   @XmlElement(name = "SortBy")
   private WorkflowDocumentSortBy sortBy;
 
-  /** The sort direction that was applied to the workflow documents. */
-  @Schema(description = "The sort direction that was applied to the workflow documents")
+  /** The sort direction that was applied to the workflow document summaries. */
+  @Schema(description = "The sort direction that was applied to the workflow document summaries")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The total number of workflow documents. */
+  /** The total number of workflow document summaries. */
   @Schema(
-      description = "The total number of workflow documents",
+      description = "The total number of workflow document summaries",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** The workflow documents. */
-  @Schema(description = "The workflow documents", requiredMode = Schema.RequiredMode.REQUIRED)
+  /** The workflow document summaries. */
+  @Schema(
+      description = "The workflow document summaries",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
-  @XmlElementWrapper(name = "WorkflowDocuments", required = true)
-  @XmlElement(name = "WorkflowDocument", required = true)
-  private List<WorkflowDocument> workflowDocuments;
+  @XmlElementWrapper(name = "WorkflowDocumentSummaries", required = true)
+  @XmlElement(name = "WorkflowDocumentSummary", required = true)
+  private List<WorkflowDocumentSummary> workflowDocumentSummaries;
 
-  /** Constructs a new {@code WorkflowDocuments}. */
-  public WorkflowDocuments() {}
+  /** Constructs a new {@code WorkflowDocumentSummaries}. */
+  public WorkflowDocumentSummaries() {}
 
   /**
-   * Constructs a new {@code WorkflowDocuments}.
+   * Constructs a new {@code WorkflowDocumentSummaries}.
    *
-   * @param workflowDocuments the workflow documents
-   * @param total the total number of workflow documents
-   * @param sortBy the method used to sort the workflow documents e.g. by created
-   * @param sortDirection the sort direction that was applied to the workflow documents
+   * @param workflowDocumentSummaries the workflow document summaries
+   * @param total the total number of workflow document summaries
+   * @param sortBy the method used to sort the workflow document summaries e.g. by requested
+   * @param sortDirection the sort direction that was applied to the workflow document summaries
    * @param pageIndex the page index
    * @param pageSize the page size
    */
-  public WorkflowDocuments(
-      List<WorkflowDocument> workflowDocuments,
+  public WorkflowDocumentSummaries(
+      List<WorkflowDocumentSummary> workflowDocumentSummaries,
       long total,
       WorkflowDocumentSortBy sortBy,
       SortDirection sortDirection,
       int pageIndex,
       int pageSize) {
-    this.workflowDocuments = workflowDocuments;
+    this.workflowDocumentSummaries = workflowDocumentSummaries;
     this.total = total;
     this.sortBy = sortBy;
     this.sortDirection = sortDirection;
@@ -149,38 +155,38 @@ public class WorkflowDocuments implements Serializable {
   }
 
   /**
-   * Returns the method used to sort the workflow documents e.g. by created.
+   * Returns the method used to sort the workflow document summaries e.g. by requested.
    *
-   * @return the method used to sort the workflow documents
+   * @return the method used to sort the workflow document summaries
    */
   public WorkflowDocumentSortBy getSortBy() {
     return sortBy;
   }
 
   /**
-   * Returns the sort direction that was applied to the workflow documents.
+   * Returns the sort direction that was applied to the workflow document summaries.
    *
-   * @return the sort direction that was applied to the workflow documents
+   * @return the sort direction that was applied to the workflow document summaries
    */
   public SortDirection getSortDirection() {
     return sortDirection;
   }
 
   /**
-   * Returns the total number of workflow documents.
+   * Returns the total number of workflow document summaries.
    *
-   * @return the total number of workflow documents
+   * @return the total number of workflow document summaries
    */
   public long getTotal() {
     return total;
   }
 
   /**
-   * Returns the workflow documents.
+   * Returns the workflow document summaries.
    *
-   * @return the workflow documents
+   * @return the workflow document summaries
    */
-  public List<WorkflowDocument> getWorkflowDocuments() {
-    return workflowDocuments;
+  public List<WorkflowDocumentSummary> getWorkflowDocumentSummaries() {
+    return workflowDocumentSummaries;
   }
 }

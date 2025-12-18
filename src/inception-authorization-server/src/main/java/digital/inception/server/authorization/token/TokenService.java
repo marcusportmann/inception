@@ -89,7 +89,7 @@ public class TokenService {
   /**
    * Constructs a new {@code TokenService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param resourceLoader the Spring resource loader
    * @param securityService the Security Service
    */

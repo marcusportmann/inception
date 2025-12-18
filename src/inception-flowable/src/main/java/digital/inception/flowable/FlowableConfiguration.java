@@ -73,7 +73,7 @@ public class FlowableConfiguration {
   /**
    * Constructs a new {@code FlowableConfiguration}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param dataSource the data source used to provide connections to the application database
    * @param transactionManager the Spring platform transaction manager
    * @param objectMapper the Jackson ObjectMapper

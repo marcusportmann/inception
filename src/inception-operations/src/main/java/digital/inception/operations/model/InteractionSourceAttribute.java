@@ -166,7 +166,7 @@ public class InteractionSourceAttribute implements Serializable {
   }
 
   /**
-   * Set the interaction source the interaction source attribute is associated with.
+   * Sets the interaction source the interaction source attribute is associated with.
    *
    * @param interactionSource the interaction source the interaction source attribute is associated
    *     with
@@ -182,7 +182,7 @@ public class InteractionSourceAttribute implements Serializable {
   }
 
   /**
-   * Set the name of the interaction source attribute.
+   * Sets the name of the interaction source attribute.
    *
    * @param name the name of the interaction source attribute
    */
@@ -191,7 +191,7 @@ public class InteractionSourceAttribute implements Serializable {
   }
 
   /**
-   * Set the value for the interaction source attribute.
+   * Sets the value for the interaction source attribute.
    *
    * @param value the value for the interaction source attribute
    */

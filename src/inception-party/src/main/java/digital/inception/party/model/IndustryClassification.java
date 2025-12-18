@@ -277,7 +277,7 @@ public class IndustryClassification implements Serializable {
   }
 
   /**
-   * Set the code for the industry classification category for the industry classification.
+   * Sets the code for the industry classification category for the industry classification.
    *
    * @param category the code for the industry classification category for the industry
    *     classification
@@ -287,7 +287,7 @@ public class IndustryClassification implements Serializable {
   }
 
   /**
-   * Set the code for the industry classification.
+   * Sets the code for the industry classification.
    *
    * @param code the code for the industry classification
    */
@@ -296,7 +296,7 @@ public class IndustryClassification implements Serializable {
   }
 
   /**
-   * Set the description for the industry classification.
+   * Sets the description for the industry classification.
    *
    * @param description the description for the industry classification
    */
@@ -305,7 +305,7 @@ public class IndustryClassification implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the industry classification.
+   * Sets the Unicode locale identifier for the industry classification.
    *
    * @param localeId the Unicode locale identifier for the industry classification
    */
@@ -314,7 +314,7 @@ public class IndustryClassification implements Serializable {
   }
 
   /**
-   * Set the name of the industry classification.
+   * Sets the name of the industry classification.
    *
    * @param name the name of the industry classification
    */
@@ -323,7 +323,7 @@ public class IndustryClassification implements Serializable {
   }
 
   /**
-   * Set the sort order for the industry classification.
+   * Sets the sort order for the industry classification.
    *
    * @param sortOrder the sort order for the industry classification
    */
@@ -332,7 +332,7 @@ public class IndustryClassification implements Serializable {
   }
 
   /**
-   * Set the code for the industry classification system for the industry classification.
+   * Sets the code for the industry classification system for the industry classification.
    *
    * @param system the code for the industry classification system for the industry classification
    */
@@ -341,7 +341,7 @@ public class IndustryClassification implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the industry classification is specific to.
+   * Sets the ID for the tenant the industry classification is specific to.
    *
    * @param tenantId the ID for the tenant the industry classification is specific to
    */

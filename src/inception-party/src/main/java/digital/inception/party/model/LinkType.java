@@ -210,7 +210,7 @@ public class LinkType implements Serializable {
   }
 
   /**
-   * Set the code for the link type.
+   * Sets the code for the link type.
    *
    * @param code the code for the link type
    */
@@ -219,7 +219,7 @@ public class LinkType implements Serializable {
   }
 
   /**
-   * Set the description for the link type.
+   * Sets the description for the link type.
    *
    * @param description the description for the link type
    */
@@ -228,7 +228,7 @@ public class LinkType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the link type.
+   * Sets the Unicode locale identifier for the link type.
    *
    * @param localeId the Unicode locale identifier for the link type
    */
@@ -237,7 +237,7 @@ public class LinkType implements Serializable {
   }
 
   /**
-   * Set the name of the link type.
+   * Sets the name of the link type.
    *
    * @param name the name of the link type
    */
@@ -246,7 +246,7 @@ public class LinkType implements Serializable {
   }
 
   /**
-   * Set the sort order for the link type.
+   * Sets the sort order for the link type.
    *
    * @param sortOrder the sort order for the link type
    */
@@ -255,7 +255,7 @@ public class LinkType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the link type is specific to.
+   * Sets the ID for the tenant the link type is specific to.
    *
    * @param tenantId the ID for the tenant the link type is specific to
    */

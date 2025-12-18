@@ -52,7 +52,7 @@ public class MailWebService extends AbstractWebServiceBase {
   /**
    * Constructs a new {@code MailWebService}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param mailService the Mail Service
    */
   public MailWebService(ApplicationContext applicationContext, MailService mailService) {

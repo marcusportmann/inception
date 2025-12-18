@@ -50,7 +50,7 @@ public class ReferenceApiControllerImpl extends SecureApiController
   /**
    * Constructs a new {@code ReferenceApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param referenceService the Reference Service
    */
   public ReferenceApiControllerImpl(

@@ -236,7 +236,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the code for the external reference type.
+   * Sets the code for the external reference type.
    *
    * @param code the code for the external reference type
    */
@@ -245,7 +245,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the description for the external reference type.
+   * Sets the description for the external reference type.
    *
    * @param description the description for the external reference type
    */
@@ -254,7 +254,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the name of the external reference type.
+   * Sets the name of the external reference type.
    *
    * @param name the name of the external reference type
    */
@@ -263,7 +263,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the type of object the external reference type is specific to.
+   * Sets the type of object the external reference type is specific to.
    *
    * @param objectType the type of object the external reference type is specific to
    */
@@ -272,7 +272,7 @@ public class ExternalReferenceType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the external reference type is specific to.
+   * Sets the ID for the tenant the external reference type is specific to.
    *
    * @param tenantId the ID for the tenant the external reference type is specific to
    */

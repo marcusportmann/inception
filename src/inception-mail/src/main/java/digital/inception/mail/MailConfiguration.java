@@ -45,7 +45,7 @@ public class MailConfiguration {
   /**
    * Returns the mail entity manager factory bean associated with the application data source.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param dataSource the application data source
    * @return the mail entity manager factory bean associated with the application data source
    */

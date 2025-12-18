@@ -292,7 +292,7 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Set the code for the segment.
+   * Sets the code for the segment.
    *
    * @param code the code for the segment
    */
@@ -301,7 +301,7 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Set the description for the segment.
+   * Sets the description for the segment.
    *
    * @param description the description for the segment
    */
@@ -310,7 +310,7 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the segment.
+   * Sets the Unicode locale identifier for the segment.
    *
    * @param localeId the Unicode locale identifier for the segment
    */
@@ -319,7 +319,7 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Set the name of the segment.
+   * Sets the name of the segment.
    *
    * @param name the name of the segment
    */
@@ -328,7 +328,7 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Set the codes for the party types the segment is associated with.
+   * Sets the codes for the party types the segment is associated with.
    *
    * @param partyTypes the codes for the party types the segment is associated with
    */
@@ -337,7 +337,7 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Set the sort order for the segment.
+   * Sets the sort order for the segment.
    *
    * @param sortOrder the sort order for the segment
    */
@@ -346,7 +346,7 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the segment is specific to.
+   * Sets the ID for the tenant the segment is specific to.
    *
    * @param tenantId the ID for the tenant the segment is specific to
    */
@@ -355,7 +355,7 @@ public class Segment implements Serializable {
   }
 
   /**
-   * Set the code for the segmentation type for the segment.
+   * Sets the code for the segmentation type for the segment.
    *
    * @param type the code for the segmentation type for the segment
    */

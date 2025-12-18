@@ -104,7 +104,7 @@ public class UnsuspendWorkflowStepRequest implements Serializable {
   }
 
   /**
-   * Set the code for the workflow step.
+   * Sets the code for the workflow step.
    *
    * @param step the code for the workflow step
    */
@@ -113,7 +113,7 @@ public class UnsuspendWorkflowStepRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow the workflow step is associated with.
+   * Sets the ID for the workflow the workflow step is associated with.
    *
    * @param workflowId the ID for the workflow the workflow step is associated with
    */

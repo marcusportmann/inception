@@ -374,7 +374,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the boolean value for the data.
+   * Sets the boolean value for the data.
    *
    * @param booleanValue the boolean value for the data
    */
@@ -383,7 +383,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 country code value for the data.
+   * Sets the ISO 3166-1 country code value for the data.
    *
    * @param country the ISO 3166-1 country code value for the data
    */
@@ -392,7 +392,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the date value for the data.
+   * Sets the date value for the data.
    *
    * @param dateValue the date value for the data
    */
@@ -401,7 +401,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the decimal value for the data.
+   * Sets the decimal value for the data.
    *
    * @param decimalValue the decimal value for the data
    */
@@ -410,7 +410,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the double value for the data.
+   * Sets the double value for the data.
    *
    * @param doubleValue the double value for the data
    */
@@ -419,7 +419,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the float value for the data.
+   * Sets the float value for the data.
    *
    * @param floatValue the float value for the data
    */
@@ -428,7 +428,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the ID for the data.
+   * Sets the ID for the data.
    *
    * @param id the ID for the data.
    */
@@ -437,7 +437,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the integer value for the data.
+   * Sets the integer value for the data.
    *
    * @param integerValue the integer value for the data
    */
@@ -446,7 +446,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the ISO 639-1 language code value for the data.
+   * Sets the ISO 639-1 language code value for the data.
    *
    * @param language the ISO 639-1 language code value for the data
    */
@@ -455,7 +455,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the string value for the data.
+   * Sets the string value for the data.
    *
    * @param stringValue the string value for the data
    */
@@ -464,7 +464,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the time value for the data.
+   * Sets the time value for the data.
    *
    * @param timeValue the time value for the data
    */
@@ -473,7 +473,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the time with time zone value for the data.
+   * Sets the time with time zone value for the data.
    *
    * @param timeWithTimeZoneValue the time with time zone value for the data
    */
@@ -482,7 +482,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the timestamp value for the data.
+   * Sets the timestamp value for the data.
    *
    * @param timestampValue the timestamp value for the data
    */
@@ -491,7 +491,7 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the timestamp with time zone value for the data.
+   * Sets the timestamp with time zone value for the data.
    *
    * @param timestampWithTimeZoneValue the timestamp with time zone value for the data
    */

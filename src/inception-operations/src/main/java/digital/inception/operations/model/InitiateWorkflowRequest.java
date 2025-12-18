@@ -308,7 +308,7 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the attributes for the workflow.
+   * Sets the attributes for the workflow.
    *
    * @param attributes the attributes for the workflow
    */
@@ -317,7 +317,7 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the JSON or XML data for the workflow.
+   * Sets the JSON or XML data for the workflow.
    *
    * @param data the JSON or XML data for the workflow
    */
@@ -326,7 +326,7 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow definition the workflow is associated with.
+   * Sets the ID for the workflow definition the workflow is associated with.
    *
    * @param definitionId the ID for the workflow definition the workflow is associated with
    */
@@ -335,7 +335,7 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the description for the workflow.
+   * Sets the description for the workflow.
    *
    * @param description the description for the workflow
    */
@@ -344,7 +344,7 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the external references for the workflow.
+   * Sets the external references for the workflow.
    *
    * @param externalReferences the external references for the workflow
    */
@@ -353,7 +353,7 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the interaction links for the workflow.
+   * Sets the interaction links for the workflow.
    *
    * @param interactionLinks the interaction links for the workflow
    */
@@ -362,7 +362,7 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the name of the workflow.
+   * Sets the name of the workflow.
    *
    * @param name the name of the workflow
    */
@@ -371,7 +371,7 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the parent workflow.
+   * Sets the ID for the parent workflow.
    *
    * @param parentId the ID for the parent workflow
    */
@@ -380,7 +380,7 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the party the workflow is associated with.
+   * Sets the ID for the party the workflow is associated with.
    *
    * @param partyId the ID for the party the workflow is associated with
    */
@@ -399,7 +399,7 @@ public class InitiateWorkflowRequest implements Serializable {
   }
 
   /**
-   * Set the variables for the workflow.
+   * Sets the variables for the workflow.
    *
    * @param variables the variables for the workflow
    */

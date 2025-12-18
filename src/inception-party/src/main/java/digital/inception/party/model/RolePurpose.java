@@ -212,7 +212,7 @@ public class RolePurpose implements Serializable {
   }
 
   /**
-   * Set the code for the role purpose.
+   * Sets the code for the role purpose.
    *
    * @param code the code for the role purpose
    */
@@ -221,7 +221,7 @@ public class RolePurpose implements Serializable {
   }
 
   /**
-   * Set the description for the role purpose.
+   * Sets the description for the role purpose.
    *
    * @param description the description for the role purpose
    */
@@ -230,7 +230,7 @@ public class RolePurpose implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the role purpose.
+   * Sets the Unicode locale identifier for the role purpose.
    *
    * @param localeId the Unicode locale identifier for the role purpose
    */
@@ -239,7 +239,7 @@ public class RolePurpose implements Serializable {
   }
 
   /**
-   * Set the name of the role purpose.
+   * Sets the name of the role purpose.
    *
    * @param name the name of the role purpose
    */
@@ -248,7 +248,7 @@ public class RolePurpose implements Serializable {
   }
 
   /**
-   * Set the sort order for the role purpose.
+   * Sets the sort order for the role purpose.
    *
    * @param sortOrder the sort order for the role purpose
    */
@@ -257,7 +257,7 @@ public class RolePurpose implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the role purpose is specific to.
+   * Sets the ID for the tenant the role purpose is specific to.
    *
    * @param tenantId the ID for the tenant the role purpose is specific to
    */

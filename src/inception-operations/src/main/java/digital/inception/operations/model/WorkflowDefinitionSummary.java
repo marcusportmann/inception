@@ -353,23 +353,4 @@ public class WorkflowDefinitionSummary implements Serializable {
   public int hashCode() {
     return ((id == null) ? 0 : id.hashCode()) + version;
   }
-
-  /**
-   * Set the codes for the required external reference types for the workflow definition.
-   *
-   * @param requiredExternalReferenceTypes the codes for the required external reference types for
-   *     the workflow definition
-   */
-  public void setRequiredExternalReferenceTypes(List<String> requiredExternalReferenceTypes) {
-    this.requiredExternalReferenceTypes = requiredExternalReferenceTypes;
-  }
-
-  /**
-   * Set the supported workflow form types for the workflow definition.
-   *
-   * @param supportedWorkflowFormTypes the supported workflow form types for the workflow definition
-   */
-  public void setSupportedWorkflowFormTypes(List<WorkflowFormType> supportedWorkflowFormTypes) {
-    this.supportedWorkflowFormTypes = supportedWorkflowFormTypes;
-  }
 }

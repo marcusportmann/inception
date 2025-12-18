@@ -100,7 +100,7 @@ public class ExternalReferenceSearchCriteria implements Serializable {
   }
 
   /**
-   * Set the code for the external reference type.
+   * Sets the code for the external reference type.
    *
    * @param type the code for the external reference type
    */
@@ -109,7 +109,7 @@ public class ExternalReferenceSearchCriteria implements Serializable {
   }
 
   /**
-   * Set the value for the external reference.
+   * Sets the value for the external reference.
    *
    * @param value the value for the external reference
    */

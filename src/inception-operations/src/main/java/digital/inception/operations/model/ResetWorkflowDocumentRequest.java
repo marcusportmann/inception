@@ -82,7 +82,7 @@ public class ResetWorkflowDocumentRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow document.
+   * Sets the ID for the workflow document.
    *
    * @param workflowDocumentId the ID for the workflow document
    */

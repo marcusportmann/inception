@@ -65,7 +65,7 @@ public class ErrorServiceImpl extends AbstractServiceBase implements ErrorServic
   /**
    * Constructs a new {@code ErrorServiceImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param errorReportRepository the Error Report Repository
    * @param errorReportSummaryRepository the Error Report Summary Repository
    */

@@ -124,7 +124,7 @@ public class TestMultistepTaskData implements Serializable {
   }
 
   /**
-   * Set the finish timestamp.
+   * Sets the finish timestamp.
    *
    * @param finishTimestamp the finish timestamp
    */
@@ -133,7 +133,7 @@ public class TestMultistepTaskData implements Serializable {
   }
 
   /**
-   * Set the message.
+   * Sets the message.
    *
    * @param message the message
    */
@@ -151,7 +151,7 @@ public class TestMultistepTaskData implements Serializable {
   }
 
   /**
-   * Set the start timestamp.
+   * Sets the start timestamp.
    *
    * @param startTimestamp the start timestamp
    */

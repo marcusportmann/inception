@@ -822,7 +822,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the building floor for the physical address.
+   * Sets the building floor for the physical address.
    *
    * @param buildingFloor the building floor for the physical address
    */
@@ -831,7 +831,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the building name for the physical address.
+   * Sets the building name for the physical address.
    *
    * @param buildingName the building name for the physical address
    */
@@ -840,7 +840,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the building room for the physical address.
+   * Sets the building room for the physical address.
    *
    * @param buildingRoom the building room for the physical address
    */
@@ -849,7 +849,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the town or city for the physical address.
+   * Sets the town or city for the physical address.
    *
    * @param city the town or city for the physical address
    */
@@ -858,7 +858,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the complex name for the physical address.
+   * Sets the complex name for the physical address.
    *
    * @param complexName the complex name for the physical address
    */
@@ -867,7 +867,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the complex unit number for the physical address.
+   * Sets the complex unit number for the physical address.
    *
    * @param complexUnitNumber the complex unit number for the physical address
    */
@@ -876,7 +876,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the country for the physical address.
+   * Sets the ISO 3166-1 alpha-2 code for the country for the physical address.
    *
    * @param country the ISO 3166-1 alpha-2 code for the country for the physical address
    */
@@ -885,7 +885,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the farm description for the physical address.
+   * Sets the farm description for the physical address.
    *
    * @param farmDescription the farm description for the physical address
    */
@@ -894,7 +894,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the farm name for the physical address.
+   * Sets the farm name for the physical address.
    *
    * @param farmName the farm name for the physical address
    */
@@ -903,7 +903,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the farm number for the physical address.
+   * Sets the farm number for the physical address.
    *
    * @param farmNumber farm number for the physical address
    */
@@ -912,7 +912,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the ID for the physical address.
+   * Sets the ID for the physical address.
    *
    * @param id the ID for the physical address
    */
@@ -921,7 +921,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the GPS latitude for the physical address.
+   * Sets the GPS latitude for the physical address.
    *
    * @param latitude the GPS latitude for the physical address
    */
@@ -930,7 +930,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the address line 1 for the physical address.
+   * Sets the address line 1 for the physical address.
    *
    * @param line1 the address line 1 for the physical address
    */
@@ -939,7 +939,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the address line 2 for the physical address.
+   * Sets the address line 2 for the physical address.
    *
    * @param line2 the address line 2 for the physical address
    */
@@ -948,7 +948,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the address line 3 for the physical address.
+   * Sets the address line 3 for the physical address.
    *
    * @param line3 the address line 3 for the physical address
    */
@@ -957,7 +957,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the address line 4 for the physical address.
+   * Sets the address line 4 for the physical address.
    *
    * @param line4 the address line 4 for the physical address
    */
@@ -966,7 +966,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the GPS longitude for the physical address.
+   * Sets the GPS longitude for the physical address.
    *
    * @param longitude the GPS longitude for the physical address
    */
@@ -975,7 +975,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the party the physical address is associated with.
+   * Sets the party the physical address is associated with.
    *
    * @param party the party the physical address is associated with
    */
@@ -990,7 +990,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the postal code for the physical address.
+   * Sets the postal code for the physical address.
    *
    * @param postalCode the postal code for the physical address
    */
@@ -999,7 +999,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the codes for the physical address purposes.
+   * Sets the codes for the physical address purposes.
    *
    * @param purposes the codes for the physical address purposes
    */
@@ -1008,7 +1008,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-2 subdivision code for the region for the physical address.
+   * Sets the ISO 3166-2 subdivision code for the region for the physical address.
    *
    * @param region the ISO 3166-2 subdivision code for the region for the physical address
    */
@@ -1017,7 +1017,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the code for the physical address role.
+   * Sets the code for the physical address role.
    *
    * @param role the code for the physical address role
    */
@@ -1026,7 +1026,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the site block for the physical address.
+   * Sets the site block for the physical address.
    *
    * @param siteBlock the site block for the physical address
    */
@@ -1035,7 +1035,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the site number for the physical address.
+   * Sets the site number for the physical address.
    *
    * @param siteNumber the site number for the physical address
    */
@@ -1044,7 +1044,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the street name for the physical address.
+   * Sets the street name for the physical address.
    *
    * @param streetName the street name for the physical address
    */
@@ -1053,7 +1053,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the street number for the physical address.
+   * Sets the street number for the physical address.
    *
    * @param streetNumber the street number for the physical address
    */
@@ -1062,7 +1062,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the suburb for the physical address.
+   * Sets the suburb for the physical address.
    *
    * @param suburb suburb for the physical address
    */
@@ -1071,7 +1071,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the code for the physical address type.
+   * Sets the code for the physical address type.
    *
    * @param type the code for the physical address type
    */

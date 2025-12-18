@@ -210,7 +210,7 @@ public class Occupation implements Serializable {
   }
 
   /**
-   * Set the code for the occupation.
+   * Sets the code for the occupation.
    *
    * @param code the code for the occupation
    */
@@ -219,7 +219,7 @@ public class Occupation implements Serializable {
   }
 
   /**
-   * Set the description for the occupation.
+   * Sets the description for the occupation.
    *
    * @param description the description for the occupation
    */
@@ -228,7 +228,7 @@ public class Occupation implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the occupation.
+   * Sets the Unicode locale identifier for the occupation.
    *
    * @param localeId the Unicode locale identifier for the occupation
    */
@@ -237,7 +237,7 @@ public class Occupation implements Serializable {
   }
 
   /**
-   * Set the name of the occupation.
+   * Sets the name of the occupation.
    *
    * @param name the name of the occupation
    */
@@ -246,7 +246,7 @@ public class Occupation implements Serializable {
   }
 
   /**
-   * Set the sort order for the occupation.
+   * Sets the sort order for the occupation.
    *
    * @param sortOrder the sort order for the occupation
    */
@@ -255,7 +255,7 @@ public class Occupation implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the occupation is specific to.
+   * Sets the ID for the tenant the occupation is specific to.
    *
    * @param tenantId the ID for the tenant the occupation is specific to
    */

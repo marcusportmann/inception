@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NgForOf } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -39,11 +39,12 @@ import { SidebarNavItemComponent } from './sidebar-nav-item.component';
   selector: 'sidebar-nav',
   standalone: true,
   template: ` <ul class="nav">
-    <sidebar-nav-item
-      *ngFor="let navItem of navItems"
-      [navItem]="navItem"></sidebar-nav-item>
-  </ul>`,
-  imports: [NgForOf, SidebarNavItemComponent],
+      @for (navItem of navItems; track navItem) {
+        <sidebar-nav-item
+        [navItem]="navItem"></sidebar-nav-item>
+      }
+    </ul>`,
+  imports: [SidebarNavItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarNavComponent implements OnInit, OnDestroy {

@@ -454,7 +454,7 @@ public class InteractionSource implements Serializable {
   }
 
   /**
-   * Set the attributes for the interaction source.
+   * Sets the attributes for the interaction source.
    *
    * @param attributes the attributes for the interaction source
    */
@@ -474,7 +474,7 @@ public class InteractionSource implements Serializable {
   }
 
   /**
-   * Set the ID for the interaction source.
+   * Sets the ID for the interaction source.
    *
    * @param id the ID for the interaction source
    */
@@ -483,7 +483,7 @@ public class InteractionSource implements Serializable {
   }
 
   /**
-   * Set the name of the interaction source.
+   * Sets the name of the interaction source.
    *
    * @param name the name of the interaction source
    */
@@ -492,7 +492,7 @@ public class InteractionSource implements Serializable {
   }
 
   /**
-   * Set the permissions for the interaction source.
+   * Sets the permissions for the interaction source.
    *
    * @param permissions the permissions for the interaction source
    */
@@ -503,7 +503,7 @@ public class InteractionSource implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the interaction source is associated with.
+   * Sets the ID for the tenant the interaction source is associated with.
    *
    * @param tenantId the ID for the tenant the interaction source is associated with
    */
@@ -512,7 +512,7 @@ public class InteractionSource implements Serializable {
   }
 
   /**
-   * Set the interaction source type.
+   * Sets the interaction source type.
    *
    * @param type the interaction source type
    */

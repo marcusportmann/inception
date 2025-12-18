@@ -32,7 +32,7 @@ public class CacheConfiguration {
   /**
    * Constructs a new {@code CacheConfiguration}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   public CacheConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;

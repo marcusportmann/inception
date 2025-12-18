@@ -199,7 +199,7 @@ public class Code implements Serializable {
   }
 
   /**
-   * Set the ID for the code category the code is associated with.
+   * Sets the ID for the code category the code is associated with.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    */
@@ -208,7 +208,7 @@ public class Code implements Serializable {
   }
 
   /**
-   * Set the ID for the code.
+   * Sets the ID for the code.
    *
    * @param id the ID for the code
    */
@@ -217,7 +217,7 @@ public class Code implements Serializable {
   }
 
   /**
-   * Set the name of the code.
+   * Sets the name of the code.
    *
    * @param name the name of the code
    */
@@ -226,7 +226,7 @@ public class Code implements Serializable {
   }
 
   /**
-   * Set the value for the code.
+   * Sets the value for the code.
    *
    * @param value the value for the code
    */

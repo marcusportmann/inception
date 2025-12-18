@@ -598,7 +598,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the next of kin address city.
+   * Sets the next of kin address city.
    *
    * @param addressCity the next of kin address city
    */
@@ -607,7 +607,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-1 alpha-2 code for the next of kin address country.
+   * Sets the ISO 3166-1 alpha-2 code for the next of kin address country.
    *
    * @param addressCountry the ISO 3166-1 alpha-2 code for the next of kin address country
    */
@@ -616,7 +616,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the next of kin address line 1.
+   * Sets the next of kin address line 1.
    *
    * @param addressLine1 the next of kin address line 1
    */
@@ -625,7 +625,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the next of kin address line 2
+   * Sets the next of kin address line 2
    *
    * @param addressLine2 the next of kin address line 2
    */
@@ -634,7 +634,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the next of kin address line 3.
+   * Sets the next of kin address line 3.
    *
    * @param addressLine3 the next of kin address line 3
    */
@@ -643,7 +643,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the next of kin address line 4.
+   * Sets the next of kin address line 4.
    *
    * @param addressLine4 the next of kin address line 4
    */
@@ -652,7 +652,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the next of kin address postal code.
+   * Sets the next of kin address postal code.
    *
    * @param addressPostalCode the next of kin address postal code
    */
@@ -661,7 +661,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the ISO 3166-2 subdivision code for the next of kin address region.
+   * Sets the ISO 3166-2 subdivision code for the next of kin address region.
    *
    * @param addressRegion the ISO 3166-2 subdivision code for the next of kin address region
    */
@@ -670,7 +670,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the next of kin address suburb.
+   * Sets the next of kin address suburb.
    *
    * @param addressSuburb the next of kin address suburb
    */
@@ -679,7 +679,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the email address for the next of kin.
+   * Sets the email address for the next of kin.
    *
    * @param emailAddress the email address for the next of kin
    */
@@ -688,7 +688,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the given name, firstname, forename, or Christian name for the next of kin.
+   * Sets the given name, firstname, forename, or Christian name for the next of kin.
    *
    * @param givenName the given name, firstname, forename, or Christian name for the next of kin
    */
@@ -697,7 +697,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the home number for the next of kin.
+   * Sets the home number for the next of kin.
    *
    * @param homeNumber the home number for the next of kin
    */
@@ -715,7 +715,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the mobile number for the next of kin.
+   * Sets the mobile number for the next of kin.
    *
    * @param mobileNumber the mobile number for the next of kin
    */
@@ -724,7 +724,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the name of the next of kin.
+   * Sets the name of the next of kin.
    *
    * @param name the name of the next of kin
    */
@@ -733,7 +733,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the person the next of kin is associated with.
+   * Sets the person the next of kin is associated with.
    *
    * @param person the person the next of kin is associated with
    */
@@ -748,7 +748,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the surname, last name, or family name for the next of kin.
+   * Sets the surname, last name, or family name for the next of kin.
    *
    * @param surname the surname, last name, or family name for the next of kin
    */
@@ -757,7 +757,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the code for the next of kin type for the next of kin.
+   * Sets the code for the next of kin type for the next of kin.
    *
    * @param type the code for the next of kin type for the next of kin
    */
@@ -766,7 +766,7 @@ public class NextOfKin implements Serializable {
   }
 
   /**
-   * Set the work number for the next of kin.
+   * Sets the work number for the next of kin.
    *
    * @param workNumber the work number for the next of kin
    */

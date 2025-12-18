@@ -466,7 +466,7 @@ public interface ExecutorService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
-   * Set the number of days historical tasks will be retained before they are archived or deleted.
+   * Sets the number of days historical tasks will be retained before they are archived or deleted.
    *
    * @param historicalTaskRetentionDays the number of days historical tasks will be retained before
    *     they are archived or deleted

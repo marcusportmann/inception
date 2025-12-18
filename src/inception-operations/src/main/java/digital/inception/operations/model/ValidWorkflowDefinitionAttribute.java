@@ -162,7 +162,7 @@ public class ValidWorkflowDefinitionAttribute implements Serializable {
   }
 
   /**
-   * Set the code for the workflow definition attribute.
+   * Sets the code for the workflow definition attribute.
    *
    * @param code the code for the workflow definition attribute
    */
@@ -171,7 +171,7 @@ public class ValidWorkflowDefinitionAttribute implements Serializable {
   }
 
   /**
-   * Set the description for the workflow definition attribute.
+   * Sets the description for the workflow definition attribute.
    *
    * @param description the description for the workflow definition attribute
    */

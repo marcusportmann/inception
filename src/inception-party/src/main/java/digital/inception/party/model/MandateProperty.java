@@ -344,7 +344,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the boolean value for the mandate property.
+   * Sets the boolean value for the mandate property.
    *
    * @param booleanValue the boolean value for the mandate property
    */
@@ -353,7 +353,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the date value for the mandate property.
+   * Sets the date value for the mandate property.
    *
    * @param dateValue the date value for the mandate property
    */
@@ -362,7 +362,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the decimal value for the mandate property.
+   * Sets the decimal value for the mandate property.
    *
    * @param decimalValue the decimal value for the mandate property
    */
@@ -371,7 +371,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the decimal value for the mandate property.
+   * Sets the decimal value for the mandate property.
    *
    * @param decimalValue the decimal value for the mandate property
    */
@@ -382,7 +382,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the decimal value for the mandate property.
+   * Sets the decimal value for the mandate property.
    *
    * @param decimalValue the decimal value for the mandate property
    */
@@ -393,7 +393,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the decimal value for the mandate property.
+   * Sets the decimal value for the mandate property.
    *
    * @param decimalValue the decimal value for the mandate property
    */
@@ -404,7 +404,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the double value for the mandate property.
+   * Sets the double value for the mandate property.
    *
    * @param doubleValue the double value for the mandate property
    */
@@ -413,7 +413,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the integer value for the mandate property.
+   * Sets the integer value for the mandate property.
    *
    * @param integerValue the integer value for the mandate property
    */
@@ -422,7 +422,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the mandate the mandate property is associated with.
+   * Sets the mandate the mandate property is associated with.
    *
    * @param mandate the mandate the mandate property is associated with
    */
@@ -437,7 +437,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the string value for the mandate property.
+   * Sets the string value for the mandate property.
    *
    * @param stringValue the string value for the mandate property
    */
@@ -446,7 +446,7 @@ public class MandateProperty implements Serializable {
   }
 
   /**
-   * Set the code for the mandate property type.
+   * Sets the code for the mandate property type.
    *
    * @param type the code for the mandate property type
    */

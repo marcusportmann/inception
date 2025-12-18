@@ -256,7 +256,7 @@ public class MarriageType implements Serializable {
   }
 
   /**
-   * Set the code for the marriage type.
+   * Sets the code for the marriage type.
    *
    * @param code the code for the marriage type
    */
@@ -265,7 +265,7 @@ public class MarriageType implements Serializable {
   }
 
   /**
-   * Set the description for the marriage type.
+   * Sets the description for the marriage type.
    *
    * @param description the description for the marriage type
    */
@@ -274,7 +274,7 @@ public class MarriageType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the marriage type.
+   * Sets the Unicode locale identifier for the marriage type.
    *
    * @param localeId the Unicode locale identifier for the marriage type
    */
@@ -283,7 +283,7 @@ public class MarriageType implements Serializable {
   }
 
   /**
-   * Set the code for the marital status the marriage type is associated with.
+   * Sets the code for the marital status the marriage type is associated with.
    *
    * @param maritalStatus the code for the marital status the marriage type is associated with
    */
@@ -292,7 +292,7 @@ public class MarriageType implements Serializable {
   }
 
   /**
-   * Set the name of the marriage type.
+   * Sets the name of the marriage type.
    *
    * @param name the name of the marriage type
    */
@@ -301,7 +301,7 @@ public class MarriageType implements Serializable {
   }
 
   /**
-   * Set the sort order for the marriage type.
+   * Sets the sort order for the marriage type.
    *
    * @param sortOrder the sort order for the marriage type
    */
@@ -310,7 +310,7 @@ public class MarriageType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the marriage type is specific to.
+   * Sets the ID for the tenant the marriage type is specific to.
    *
    * @param tenantId the ID for the tenant the marriage type is specific to
    */

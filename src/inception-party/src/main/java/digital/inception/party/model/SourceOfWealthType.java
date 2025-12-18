@@ -214,7 +214,7 @@ public class SourceOfWealthType implements Serializable {
   }
 
   /**
-   * Set the code for the source of wealth type.
+   * Sets the code for the source of wealth type.
    *
    * @param code the code for the source of wealth type
    */
@@ -223,7 +223,7 @@ public class SourceOfWealthType implements Serializable {
   }
 
   /**
-   * Set the description for the source of wealth type.
+   * Sets the description for the source of wealth type.
    *
    * @param description the description for the source of wealth type
    */
@@ -232,7 +232,7 @@ public class SourceOfWealthType implements Serializable {
   }
 
   /**
-   * Set the Unicode locale identifier for the source of wealth type.
+   * Sets the Unicode locale identifier for the source of wealth type.
    *
    * @param localeId the Unicode locale identifier for the source of wealth type
    */
@@ -241,7 +241,7 @@ public class SourceOfWealthType implements Serializable {
   }
 
   /**
-   * Set the name of the source of wealth type.
+   * Sets the name of the source of wealth type.
    *
    * @param name the name of the source of wealth type
    */
@@ -250,7 +250,7 @@ public class SourceOfWealthType implements Serializable {
   }
 
   /**
-   * Set the sort order for the source of wealth type.
+   * Sets the sort order for the source of wealth type.
    *
    * @param sortOrder the sort order for the source of wealth type
    */
@@ -259,7 +259,7 @@ public class SourceOfWealthType implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the source of wealth type is specific to.
+   * Sets the ID for the tenant the source of wealth type is specific to.
    *
    * @param tenantId the ID for the tenant the source of wealth type is specific to
    */

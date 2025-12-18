@@ -101,7 +101,7 @@ public class VariableSearchCriteria implements Serializable {
   }
 
   /**
-   * Set the name for the variable
+   * Sets the name for the variable
    *
    * @param name the name for the variable
    */
@@ -110,7 +110,7 @@ public class VariableSearchCriteria implements Serializable {
   }
 
   /**
-   * Set the value for the variable.
+   * Sets the value for the variable.
    *
    * @param value the value for the variable
    */

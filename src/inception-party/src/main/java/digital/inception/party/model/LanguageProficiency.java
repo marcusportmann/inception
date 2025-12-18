@@ -235,7 +235,7 @@ public class LanguageProficiency implements Serializable {
   }
 
   /**
-   * Set the ISO 639-1 alpha-2 code for the language.
+   * Sets the ISO 639-1 alpha-2 code for the language.
    *
    * @param language the ISO 639-1 alpha-2 code for the language
    */
@@ -244,7 +244,7 @@ public class LanguageProficiency implements Serializable {
   }
 
   /**
-   * Set the listen proficiency level for the language.
+   * Sets the listen proficiency level for the language.
    *
    * @param listenLevel the listen proficiency level for the language
    */
@@ -253,7 +253,7 @@ public class LanguageProficiency implements Serializable {
   }
 
   /**
-   * Set the person the language proficiency is associated with.
+   * Sets the person the language proficiency is associated with.
    *
    * @param person the person the language proficiency is associated with
    */
@@ -268,7 +268,7 @@ public class LanguageProficiency implements Serializable {
   }
 
   /**
-   * Set the read proficiency level for the language.
+   * Sets the read proficiency level for the language.
    *
    * @param readLevel the read proficiency level for the language
    */
@@ -277,7 +277,7 @@ public class LanguageProficiency implements Serializable {
   }
 
   /**
-   * Set the speak proficiency level for the language.
+   * Sets the speak proficiency level for the language.
    *
    * @param speakLevel the speak proficiency level for the language
    */
@@ -286,7 +286,7 @@ public class LanguageProficiency implements Serializable {
   }
 
   /**
-   * Set the write proficiency level for the language.
+   * Sets the write proficiency level for the language.
    *
    * @param writeLevel the write proficiency level for the language
    */

@@ -72,7 +72,7 @@ public class AuthenticationResponse {
   }
 
   /**
-   * Set the expiry time in minutes for the token.
+   * Sets the expiry time in minutes for the token.
    *
    * @param expiresInMinutes the expiry time in minutes for the token
    */
@@ -81,7 +81,7 @@ public class AuthenticationResponse {
   }
 
   /**
-   * Set the token schema.
+   * Sets the token schema.
    *
    * @param schema the token schema
    */
@@ -90,7 +90,7 @@ public class AuthenticationResponse {
   }
 
   /**
-   * Set the token.
+   * Sets the token.
    *
    * @param token the token
    */

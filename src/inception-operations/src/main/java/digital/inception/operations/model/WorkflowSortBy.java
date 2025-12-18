@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
@@ -71,10 +72,32 @@ public enum WorkflowSortBy implements CodeEnum {
   }
 
   /**
+   * Resolve the Spring Data sort property name for the method used to sort a list of workflows.
+   *
+   * @param sortBy the method used to sort a list of workflows
+   * @return the Spring Data sort property name for the method used to sort a list of workflows
+   */
+  @SuppressWarnings({"SameReturnValue"})
+  public static String resolveSortByPropertyName(WorkflowSortBy sortBy) {
+    if (sortBy == null) return "initiated";
+    return switch (sortBy) {
+      case WorkflowSortBy.DEFINITION_ID -> "definitionId";
+      case WorkflowSortBy.FINALIZED -> "finalized";
+      case WorkflowSortBy.FINALIZED_BY -> "finalizedBy";
+      case WorkflowSortBy.INITIATED -> "initiated";
+      case WorkflowSortBy.INITIATED_BY -> "initiatedBy";
+      case WorkflowSortBy.UPDATED -> "updated";
+      case WorkflowSortBy.UPDATED_BY -> "updatedBy";
+      default -> "initiated";
+    };
+  }
+
+  /**
    * Returns the code for the method used to sort a list of workflows.
    *
    * @return the code for the method used to sort a list of workflows
    */
+  @JsonValue
   public String code() {
     return code;
   }

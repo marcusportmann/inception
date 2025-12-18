@@ -207,7 +207,7 @@ public class Consent implements Serializable {
   }
 
   /**
-   * Set the date the consent is effective from.
+   * Sets the date the consent is effective from.
    *
    * @param effectiveFrom the date the consent is effective from
    */
@@ -216,7 +216,7 @@ public class Consent implements Serializable {
   }
 
   /**
-   * Set the date the consent is effective to.
+   * Sets the date the consent is effective to.
    *
    * @param effectiveTo the date the consent is effective to
    */
@@ -225,7 +225,7 @@ public class Consent implements Serializable {
   }
 
   /**
-   * Set the person the consent is associated with.
+   * Sets the person the consent is associated with.
    *
    * @param person the person the consent is associated with
    */
@@ -240,7 +240,7 @@ public class Consent implements Serializable {
   }
 
   /**
-   * Set the code for the consent type.
+   * Sets the code for the consent type.
    *
    * @param type the code for the consent type
    */

@@ -215,7 +215,7 @@ public class XACMLPDPTests {
     /**
      * Returns the policy decision point.
      *
-     * @param applicationContext the Spring application context
+     * @param applicationContext the Spring {@link ApplicationContext}
      * @return the policy decision point
      */
     @Bean

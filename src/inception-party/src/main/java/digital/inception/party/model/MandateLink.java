@@ -167,7 +167,7 @@ public class MandateLink implements Serializable {
   }
 
   /**
-   * Set the mandate the mandate link is associated with.
+   * Sets the mandate the mandate link is associated with.
    *
    * @param mandate the mandate the mandate link is associated with
    */
@@ -182,7 +182,7 @@ public class MandateLink implements Serializable {
   }
 
   /**
-   * Set the target for the mandate link.
+   * Sets the target for the mandate link.
    *
    * @param target the target for the mandate link
    */
@@ -191,7 +191,7 @@ public class MandateLink implements Serializable {
   }
 
   /**
-   * Set the code for the mandate link type.
+   * Sets the code for the mandate link type.
    *
    * @param type the code for the mandate link type
    */

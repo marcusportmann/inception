@@ -105,7 +105,7 @@ public class WorkflowDefinitionId implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow definition.
+   * Sets the ID for the workflow definition.
    *
    * @param id the ID for the workflow definition
    */
@@ -114,7 +114,7 @@ public class WorkflowDefinitionId implements Serializable {
   }
 
   /**
-   * Set the version of the workflow definition.
+   * Sets the version of the workflow definition.
    *
    * @param version the version of the workflow definition
    */

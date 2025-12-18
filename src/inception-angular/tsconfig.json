@@ -14,7 +14,7 @@
     "sourceMap": true,
     "declaration": false,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
@@ -61,7 +61,6 @@
         "projects/ngx-inception/security/public-api.ts"
       ]
     },
-    /* Inception Options */
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "pretty": true,

@@ -211,7 +211,7 @@ public class SearchDocumentsRequest implements Serializable {
   }
 
   /**
-   * Set the attribute search criteria to apply when searching for documents.
+   * Sets the attribute search criteria to apply when searching for documents.
    *
    * @param attributes the attribute search criteria to apply when searching for documents
    */
@@ -220,7 +220,7 @@ public class SearchDocumentsRequest implements Serializable {
   }
 
   /**
-   * Set the document definition ID search criteria to apply to the documents.
+   * Sets the document definition ID search criteria to apply to the documents.
    *
    * @param definitionId the document definition ID search criteria to apply to the documents
    */
@@ -229,7 +229,7 @@ public class SearchDocumentsRequest implements Serializable {
   }
 
   /**
-   * Set the external reference search criteria to apply when searching for documents.
+   * Sets the external reference search criteria to apply when searching for documents.
    *
    * @param externalReferences the external reference search criteria to apply when searching for
    *     documents
@@ -239,7 +239,7 @@ public class SearchDocumentsRequest implements Serializable {
   }
 
   /**
-   * Set the page index.
+   * Sets the page index.
    *
    * @param pageIndex the page index
    */
@@ -248,7 +248,7 @@ public class SearchDocumentsRequest implements Serializable {
   }
 
   /**
-   * Set the page size.
+   * Sets the page size.
    *
    * @param pageSize the page size
    */
@@ -257,7 +257,7 @@ public class SearchDocumentsRequest implements Serializable {
   }
 
   /**
-   * Set the method used to sort the documents e.g. by definition ID.
+   * Sets the method used to sort the documents e.g. by definition ID.
    *
    * @param sortBy the method used to sort the documents e.g. by definition ID
    */
@@ -266,7 +266,7 @@ public class SearchDocumentsRequest implements Serializable {
   }
 
   /**
-   * Set the sort direction to apply to the documents.
+   * Sets the sort direction to apply to the documents.
    *
    * @param sortDirection the sort direction to apply to the documents
    */

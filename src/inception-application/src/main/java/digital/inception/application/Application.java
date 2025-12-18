@@ -55,7 +55,7 @@ public abstract class Application {
   /**
    * Constructs a new {@code Application}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    */
   protected Application(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;

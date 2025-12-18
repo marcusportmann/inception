@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -50,9 +49,11 @@ import java.util.UUID;
   "workflowId",
   "documentDefinitionId",
   "documentDefinitionName",
+  "documentDefinitionShortName",
   "documentDefinitionDescription",
   "requested",
   "requestedFromPartyId",
+  "status",
   "description"
 })
 @XmlRootElement(
@@ -67,9 +68,11 @@ import java.util.UUID;
       "workflowId",
       "documentDefinitionId",
       "documentDefinitionName",
+      "documentDefinitionShortName",
       "documentDefinitionDescription",
       "requested",
       "requestedFromPartyId",
+      "status",
       "description"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -82,7 +85,6 @@ public class OutstandingWorkflowDocument implements Serializable {
   @JsonProperty
   @XmlElement(name = "Description")
   @Size(max = 500)
-  @Column(name = "description", length = 500)
   private String description;
 
   /** The description for the document definition the workflow document is associated with. */
@@ -113,6 +115,15 @@ public class OutstandingWorkflowDocument implements Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   private String documentDefinitionName;
+
+  /** The short name for the document definition the workflow document is associated with. */
+  @Schema(
+      description =
+          "The short name for the document definition the workflow document is associated with")
+  @JsonProperty
+  @XmlElement(name = "DocumentDefinitionShortName")
+  @Size(min = 1, max = 50)
+  private String documentDefinitionShortName;
 
   /** The ID for the workflow document. */
   @Schema(
@@ -187,6 +198,8 @@ public class OutstandingWorkflowDocument implements Serializable {
    *     associated with
    * @param documentDefinitionName the name for the document definition the workflow document is
    *     associated with
+   * @param documentDefinitionShortName the short name for the document definition the workflow
+   *     document is associated with
    * @param documentDefinitionDescription the description for the document definition the workflow
    *     document is associated with
    * @param status the status of the workflow document
@@ -201,6 +214,7 @@ public class OutstandingWorkflowDocument implements Serializable {
       UUID workflowId,
       String documentDefinitionId,
       String documentDefinitionName,
+      String documentDefinitionShortName,
       String documentDefinitionDescription,
       WorkflowDocumentStatus status,
       OffsetDateTime requested,
@@ -212,6 +226,7 @@ public class OutstandingWorkflowDocument implements Serializable {
     this.workflowId = workflowId;
     this.documentDefinitionId = documentDefinitionId;
     this.documentDefinitionName = documentDefinitionName;
+    this.documentDefinitionShortName = documentDefinitionShortName;
     this.documentDefinitionDescription = documentDefinitionDescription;
     this.status = status;
     this.requested = requested;
@@ -254,6 +269,15 @@ public class OutstandingWorkflowDocument implements Serializable {
    */
   public String getDocumentDefinitionName() {
     return documentDefinitionName;
+  }
+
+  /**
+   * Returns the short name for the document definition the workflow document is associated with.
+   *
+   * @return the short name for the document definition the workflow document is associated with
+   */
+  public String getDocumentDefinitionShortName() {
+    return documentDefinitionShortName;
   }
 
   /**
@@ -321,7 +345,7 @@ public class OutstandingWorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the description for the workflow document.
+   * Sets the description for the workflow document.
    *
    * @param description the description for the workflow document
    */
@@ -330,13 +354,23 @@ public class OutstandingWorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the description for the document definition the workflow document is associated with.
+   * Sets the description for the document definition the workflow document is associated with.
    *
    * @param documentDefinitionDescription the description for the document definition the workflow
    *     document is associated with
    */
   public void setDocumentDefinitionDescription(String documentDefinitionDescription) {
     this.documentDefinitionDescription = documentDefinitionDescription;
+  }
+
+  /**
+   * Sets the short name for the document definition the workflow document is associated with.
+   *
+   * @param documentDefinitionShortName the short name for the document definition the workflow
+   *     document is associated with
+   */
+  public void setDocumentDefinitionShortName(String documentDefinitionShortName) {
+    this.documentDefinitionShortName = documentDefinitionShortName;
   }
 
   /**
@@ -350,7 +384,7 @@ public class OutstandingWorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the ID for the party the workflow document was requested from.
+   * Sets the ID for the party the workflow document was requested from.
    *
    * @param requestedFromPartyId the ID for the party the workflow document was requested from
    */
@@ -359,7 +393,7 @@ public class OutstandingWorkflowDocument implements Serializable {
   }
 
   /**
-   * Set the status of the workflow document.
+   * Sets the status of the workflow document.
    *
    * @param status the status of the workflow document
    */

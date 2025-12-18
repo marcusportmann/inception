@@ -102,7 +102,7 @@ public class UpdateWorkflowNoteRequest implements Serializable {
   }
 
   /**
-   * Set the content for the workflow note.
+   * Sets the content for the workflow note.
    *
    * @param content the content for the workflow note
    */
@@ -111,7 +111,7 @@ public class UpdateWorkflowNoteRequest implements Serializable {
   }
 
   /**
-   * Set the ID for the workflow note.
+   * Sets the ID for the workflow note.
    *
    * @param workflowNoteId the ID for the workflow note
    */

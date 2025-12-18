@@ -162,7 +162,7 @@ public class JobParameter implements Serializable {
   }
 
   /**
-   * Set the job the job parameter is associated with.
+   * Sets the job the job parameter is associated with.
    *
    * @param job the job the job parameter is associated with
    */
@@ -176,7 +176,7 @@ public class JobParameter implements Serializable {
   }
 
   /**
-   * Set the name of the job parameter.
+   * Sets the name of the job parameter.
    *
    * @param name the name of the job parameter
    */
@@ -185,7 +185,7 @@ public class JobParameter implements Serializable {
   }
 
   /**
-   * Set the value of the job parameter.
+   * Sets the value of the job parameter.
    *
    * @param value the value of the job parameter
    */

@@ -225,7 +225,7 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Set the JSON data for the entity.
+   * Sets the JSON data for the entity.
    *
    * @param data the JSON data for the entity
    */
@@ -234,7 +234,7 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Set the ID for the entity.
+   * Sets the ID for the entity.
    *
    * @param entityId the ID for the entity
    */
@@ -243,7 +243,7 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Set the type of entity.
+   * Sets the type of entity.
    *
    * @param entityType the type of entity
    */
@@ -252,7 +252,7 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Set the ID for the snapshot.
+   * Sets the ID for the snapshot.
    *
    * @param id the ID for the snapshot
    */
@@ -261,7 +261,7 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Set the ID for the tenant the snapshot is associated with.
+   * Sets the ID for the tenant the snapshot is associated with.
    *
    * @param tenantId the ID for the tenant the snapshot is associated with
    */
@@ -270,7 +270,7 @@ public class Snapshot implements Serializable {
   }
 
   /**
-   * Set the date and time the snapshot was created.
+   * Sets the date and time the snapshot was created.
    *
    * @param timestamp the date and time the snapshot was created
    */

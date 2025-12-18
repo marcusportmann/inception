@@ -30,6 +30,7 @@ import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.MimeData;
 import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
 import digital.inception.operations.exception.DuplicateInteractionException;
+import digital.inception.operations.exception.DuplicateInteractionNoteException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
 import digital.inception.operations.exception.InteractionAttachmentNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
@@ -43,6 +44,7 @@ import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
 import digital.inception.operations.model.InteractionAttachmentSortBy;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
+import digital.inception.operations.model.InteractionAttachmentSummary;
 import digital.inception.operations.model.InteractionDirection;
 import digital.inception.operations.model.InteractionMimeType;
 import digital.inception.operations.model.InteractionNote;
@@ -57,6 +59,7 @@ import digital.inception.operations.model.InteractionSourceSummary;
 import digital.inception.operations.model.InteractionSourceType;
 import digital.inception.operations.model.InteractionStatus;
 import digital.inception.operations.model.InteractionSummaries;
+import digital.inception.operations.model.InteractionSummary;
 import digital.inception.operations.model.InteractionType;
 import digital.inception.operations.model.LinkPartyToInteractionRequest;
 import digital.inception.operations.model.MailboxInteractionSourceAttributeName;
@@ -64,9 +67,12 @@ import digital.inception.operations.model.MailboxProtocol;
 import digital.inception.operations.model.SearchInteractionsRequest;
 import digital.inception.operations.model.TransferInteractionRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
+import digital.inception.operations.persistence.jpa.InteractionAttachmentRepository;
+import digital.inception.operations.persistence.jpa.InteractionAttachmentSummaryRepository;
+import digital.inception.operations.persistence.jpa.InteractionNoteRepository;
+import digital.inception.operations.persistence.jpa.InteractionRepository;
 import digital.inception.operations.persistence.jpa.InteractionSourceRepository;
 import digital.inception.operations.persistence.jpa.InteractionSourceSummaryRepository;
-import digital.inception.operations.store.InteractionStore;
 import digital.inception.operations.util.AttributeUtil;
 import digital.inception.operations.util.HtmlToSimplifiedHtml;
 import digital.inception.operations.util.MessageUtil;
@@ -78,8 +84,16 @@ import jakarta.mail.Message;
 import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
 import jakarta.mail.Store;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -95,11 +109,14 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
 
 /**
@@ -111,22 +128,28 @@ import org.springframework.util.StringUtils;
 public class InteractionServiceImpl extends AbstractServiceBase implements InteractionService {
 
   /** The characters for a base-62 encoded conversation ID. */
-  private static final String BASE_62_ENCODING_CHARACTERS =
-      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
   private static final char[] CORRELATION_ID_CHARACTERS = {
     '2', '3', '4', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M',
     'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
   };
 
-  /** The Spring application event publisher. */
-  private final ApplicationEventPublisher applicationEventPublisher;
-
   /** The regular expression pattern used to extract the conversation ID from an email subject. */
   private final Pattern conversationIdPattern = Pattern.compile("\\[CID:([A-Z0-9]+)\\]");
 
+  /** The Interaction Attachment Repository. */
+  private final InteractionAttachmentRepository interactionAttachmentRepository;
+
+  /** The Interaction Attachment Summary Repository. */
+  private final InteractionAttachmentSummaryRepository interactionAttachmentSummaryRepository;
+
+  /** The Interaction Note Repository. */
+  private final InteractionNoteRepository interactionNoteRepository;
+
   /** The Interaction Processor. */
   private final InteractionProcessor interactionProcessor;
+
+  /** The Interaction Repository. */
+  private final InteractionRepository interactionRepository;
 
   /** The Interaction Source Repository. */
   private final InteractionSourceRepository interactionSourceRepository;
@@ -134,13 +157,17 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   /** The Interaction Source Summary Repository. */
   private final InteractionSourceSummaryRepository interactionSourceSummaryRepository;
 
-  /** The Interaction Store. */
-  private final InteractionStore interactionStore;
-
   private final SecureRandom secureRandom = new SecureRandom();
 
   /** The internal reference to the Interaction Service to enable caching. */
   private InteractionService InteractionService;
+
+  /** The Background Interaction Processor. */
+  private BackgroundInteractionProcessor backgroundInteractionProcessor;
+
+  /* Entity Manager */
+  @PersistenceContext(unitName = "operations")
+  private EntityManager entityManager;
 
   /** The maximum number of filtered interactions that will be returned by the service. */
   @Value("${inception.operations.max-filtered-interaction-attachments:#{100}}")
@@ -154,10 +181,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   @Value("${inception.operations.max-filtered-interactions:#{100}}")
   private int maxFilteredInteractions;
 
-  /** The maximum number of processing attempts for an interaction. */
-  @Value("${inception.operations.max-interaction-processing-attempts:#{100}}")
-  private int maximumInteractionProcessingAttempts;
-
   /**
    * The minimum size for an image attachment on an email for it be processed as a valid attachment.
    */
@@ -167,24 +190,30 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   /**
    * Constructs a new {@code InteractionServiceImpl}.
    *
-   * @param applicationContext the Spring application context
-   * @param applicationEventPublisher the Spring application event publisher
-   * @param interactionStore the Interaction Store
+   * @param applicationContext the Spring {@link ApplicationContext}
+   * @param interactionAttachmentRepository the Interaction Attachment Repository
+   * @param interactionAttachmentSummaryRepository the Interaction Attachment Summary Repository
+   * @param interactionNoteRepository the Interaction Note Repository
+   * @param interactionRepository the Interaction Repository
    * @param interactionSourceRepository the Interaction Source Repository
    * @param interactionSourceSummaryRepository the Interaction Source Summary Repository
    * @param interactionProcessor the Interaction Processor
    */
   public InteractionServiceImpl(
       ApplicationContext applicationContext,
-      ApplicationEventPublisher applicationEventPublisher,
-      InteractionStore interactionStore,
+      InteractionAttachmentRepository interactionAttachmentRepository,
+      InteractionAttachmentSummaryRepository interactionAttachmentSummaryRepository,
+      InteractionNoteRepository interactionNoteRepository,
+      InteractionRepository interactionRepository,
       InteractionSourceRepository interactionSourceRepository,
       InteractionSourceSummaryRepository interactionSourceSummaryRepository,
       InteractionProcessor interactionProcessor) {
     super(applicationContext);
 
-    this.applicationEventPublisher = applicationEventPublisher;
-    this.interactionStore = interactionStore;
+    this.interactionAttachmentRepository = interactionAttachmentRepository;
+    this.interactionAttachmentSummaryRepository = interactionAttachmentSummaryRepository;
+    this.interactionNoteRepository = interactionNoteRepository;
+    this.interactionRepository = interactionRepository;
     this.interactionSourceRepository = interactionSourceRepository;
     this.interactionSourceSummaryRepository = interactionSourceSummaryRepository;
     this.interactionProcessor = interactionProcessor;
@@ -200,9 +229,15 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     validateArgument("assignInteractionRequest", assignInteractionRequest);
 
     try {
-      interactionStore.assignInteraction(
-          tenantId,
+      if (!interactionRepository.existsByTenantIdAndId(
+          tenantId, assignInteractionRequest.getInteractionId())) {
+        throw new InteractionNotFoundException(
+            tenantId, assignInteractionRequest.getInteractionId());
+      }
+
+      interactionRepository.assignInteraction(
           assignInteractionRequest.getInteractionId(),
+          OffsetDateTime.now(),
           assignInteractionRequest.getUsername());
     } catch (InteractionNotFoundException e) {
       throw e;
@@ -237,7 +272,13 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       // Retrieve the interaction source using the InteractionService interface to leverage caching
       getInteractionService().getInteractionSource(tenantId, interaction.getSourceId());
 
-      return interactionStore.createInteraction(tenantId, interaction);
+      if (interactionRepository.existsById(interaction.getId())) {
+        throw new DuplicateInteractionException(interaction.getId());
+      }
+
+      interactionRepository.saveAndFlush(interaction);
+
+      return interaction;
     } catch (DuplicateInteractionException e) {
       throw e;
     } catch (InteractionSourceNotFoundException e) {
@@ -274,7 +315,13 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       // Retrieve the interaction source using the InteractionService interface to leverage caching
       getInteractionService().getInteractionSource(tenantId, interactionAttachment.getSourceId());
 
-      return interactionStore.createInteractionAttachment(tenantId, interactionAttachment);
+      if (interactionAttachmentRepository.existsById(interactionAttachment.getId())) {
+        throw new DuplicateInteractionAttachmentException(interactionAttachment.getId());
+      }
+
+      interactionAttachmentRepository.saveAndFlush(interactionAttachment);
+
+      return interactionAttachment;
     } catch (DuplicateInteractionAttachmentException e) {
       throw e;
     } catch (InteractionSourceNotFoundException e) {
@@ -293,7 +340,10 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   @Override
   public InteractionNote createInteractionNote(
       UUID tenantId, CreateInteractionNoteRequest createInteractionNoteRequest, String createdBy)
-      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
+      throws InvalidArgumentException,
+          DuplicateInteractionNoteException,
+          InteractionNotFoundException,
+          ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -318,8 +368,12 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               OffsetDateTime.now(),
               createdBy);
 
-      return interactionStore.createInteractionNote(tenantId, interactionNote);
-    } catch (InteractionNotFoundException e) {
+      if (interactionNoteRepository.existsById(interactionNote.getId())) {
+        throw new DuplicateInteractionNoteException(interactionNote.getId());
+      }
+
+      return interactionNoteRepository.saveAndFlush(interactionNote);
+    } catch (DuplicateInteractionNoteException | InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -389,7 +443,23 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throw new InvalidArgumentException("interactionId");
     }
 
-    interactionStore.deleteInteraction(tenantId, interactionId);
+    try {
+      if (!interactionRepository.existsByTenantIdAndId(tenantId, interactionId)) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+
+      interactionRepository.deleteById(interactionId);
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -406,7 +476,24 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throw new InvalidArgumentException("interactionAttachmentId");
     }
 
-    interactionStore.deleteInteractionAttachment(tenantId, interactionAttachmentId);
+    try {
+      if (!interactionAttachmentRepository.existsByTenantIdAndId(
+          tenantId, interactionAttachmentId)) {
+        throw new InteractionAttachmentNotFoundException(interactionAttachmentId);
+      }
+
+      interactionAttachmentRepository.deleteById(interactionAttachmentId);
+    } catch (InteractionAttachmentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to delete the interaction attachment ("
+              + interactionAttachmentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -423,7 +510,11 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      interactionStore.deleteInteractionNote(tenantId, interactionNoteId);
+      if (!interactionNoteRepository.existsByTenantIdAndId(tenantId, interactionNoteId)) {
+        throw new InteractionNoteNotFoundException(tenantId, interactionNoteId);
+      }
+
+      interactionNoteRepository.deleteById(interactionNoteId);
     } catch (InteractionNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -490,8 +581,12 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     validateArgument("delinkPartyFromInteractionRequest", delinkPartyFromInteractionRequest);
 
     try {
-      interactionStore.delinkPartyFromInteraction(
-          tenantId, delinkPartyFromInteractionRequest.getInteractionId());
+      if (interactionRepository.delinkPartyFromInteraction(
+              tenantId, delinkPartyFromInteractionRequest.getInteractionId())
+          <= 0) {
+        throw new InteractionNotFoundException(
+            tenantId, delinkPartyFromInteractionRequest.getInteractionId());
+      }
     } catch (InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -516,7 +611,30 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throw new InvalidArgumentException("interactionId");
     }
 
-    return interactionStore.getInteraction(tenantId, interactionId);
+    try {
+      /*
+       * NOTE: The search by both tenant ID and interaction ID includes a security check to ensure
+       * that the interaction not only exists, but is also associated with the specified tenant.
+       */
+      Optional<Interaction> interactionOptional =
+          interactionRepository.findByTenantIdAndId(tenantId, interactionId);
+
+      if (interactionOptional.isPresent()) {
+        return interactionOptional.get();
+      } else {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the interaction ("
+              + interactionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -532,7 +650,51 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throw new InvalidArgumentException("interactionAttachmentId");
     }
 
-    return interactionStore.getInteractionAttachment(tenantId, interactionAttachmentId);
+    try {
+      /*
+       * NOTE: The search by both tenant ID and interaction attachment ID includes a security check
+       *       to ensure that the interaction attachment not only exists, but is also associated
+       *       with the specified tenant.
+       */
+
+      Optional<InteractionAttachment> interactionAttachmentOptional =
+          interactionAttachmentRepository.findByTenantIdAndId(tenantId, interactionAttachmentId);
+
+      if (interactionAttachmentOptional.isPresent()) {
+        return interactionAttachmentOptional.get();
+      } else {
+        throw new InteractionAttachmentNotFoundException(interactionAttachmentId);
+      }
+    } catch (InteractionAttachmentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the interaction attachment ("
+              + interactionAttachmentId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public Optional<UUID> getInteractionAttachmentIdByInteractionIdAndHash(
+      UUID tenantId, UUID interactionId, String hash) throws ServiceUnavailableException {
+    try {
+      return interactionAttachmentRepository.findIdByTenantIdAndInteractionIdAndHash(
+          tenantId, interactionId, hash);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the ID for the interaction attachment with interaction ID ("
+              + interactionId
+              + ") and hash ("
+              + hash
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -578,25 +740,86 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      if (!interactionStore.interactionExists(tenantId, interactionId)) {
+      if (!interactionExists(tenantId, interactionId)) {
         throw new InteractionNotFoundException(tenantId, interactionId);
       }
 
-      return interactionStore.getInteractionAttachmentSummaries(
-          tenantId,
-          interactionId,
-          filter,
+      PageRequest pageRequest;
+
+      if (sortBy == InteractionAttachmentSortBy.NAME) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxFilteredInteractionAttachments),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "name");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxFilteredInteractionAttachments),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "name");
+      }
+
+      Page<InteractionAttachmentSummary> interactionAttachmentSummaryPage =
+          interactionAttachmentSummaryRepository.findAll(
+              (Specification<InteractionAttachmentSummary>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+
+                    predicates.add(criteriaBuilder.equal(root.get("interactionId"), interactionId));
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.or(
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("name")),
+                                  "%" + filter.toLowerCase() + "%")));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
+
+      return new InteractionAttachmentSummaries(
+          interactionAttachmentSummaryPage.toList(),
+          interactionAttachmentSummaryPage.getTotalElements(),
           sortBy,
           sortDirection,
           pageIndex,
-          pageSize,
-          maxFilteredInteractionAttachments);
+          pageSize);
     } catch (InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the interaction attachments for the interaction ("
               + interactionId
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public Optional<UUID> getInteractionIdBySourceIdAndSourceReference(
+      UUID tenantId, UUID sourceId, String sourceReference) throws ServiceUnavailableException {
+    try {
+      return interactionRepository.findIdByTenantIdAndSourceIdAndSourceReference(
+          tenantId, sourceId, sourceReference);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the ID for the interaction with source ID ("
+              + sourceId
+              + ") and source reference ("
+              + sourceReference
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -618,7 +841,19 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      return interactionStore.getInteractionNote(tenantId, interactionNoteId);
+      /*
+       * NOTE: The search by both tenant ID and interaction note ID includes a security check to ensure
+       * that the interaction note not only exists, but is also associated with the specified tenant.
+       */
+      Optional<InteractionNote> interactionNoteOptional =
+          interactionNoteRepository.findByTenantIdAndId(tenantId, interactionNoteId);
+
+      if (interactionNoteOptional.isEmpty()) {
+        throw new InteractionNoteNotFoundException(tenantId, interactionNoteId);
+      }
+
+      return interactionNoteOptional.get();
+
     } catch (InteractionNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -651,15 +886,90 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      return interactionStore.getInteractionNotes(
-          tenantId,
-          interactionId,
-          filter,
+      if (!interactionRepository.existsByTenantIdAndId(tenantId, interactionId)) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+
+      PageRequest pageRequest;
+
+      if (sortBy == InteractionNoteSortBy.CREATED) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxFilteredInteractionNotes),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "created");
+      } else if (sortBy == InteractionNoteSortBy.CREATED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxFilteredInteractionNotes),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "createdBy");
+      } else if (sortBy == InteractionNoteSortBy.UPDATED) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxFilteredInteractionNotes),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "updated");
+      } else if (sortBy == InteractionNoteSortBy.UPDATED_BY) {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxFilteredInteractionNotes),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "updatedBy");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                Math.min(pageSize, maxFilteredInteractionNotes),
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "created");
+      }
+
+      Page<InteractionNote> interactionNotePage =
+          interactionNoteRepository.findAll(
+              (Specification<InteractionNote>)
+                  (root, query, criteriaBuilder) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    predicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+                    predicates.add(criteriaBuilder.equal(root.get("interactionId"), interactionId));
+
+                    if (StringUtils.hasText(filter)) {
+                      predicates.add(
+                          criteriaBuilder.or(
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("createdBy")),
+                                  "%" + filter.toLowerCase() + "%"),
+                              criteriaBuilder.like(
+                                  criteriaBuilder.lower(root.get("updatedBy")),
+                                  "%" + filter.toLowerCase() + "%")));
+                    }
+
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                  },
+              pageRequest);
+
+      return new InteractionNotes(
+          interactionNotePage.toList(),
+          interactionNotePage.getTotalElements(),
           sortBy,
           sortDirection,
           pageIndex,
-          pageSize,
-          maxFilteredInteractionNotes);
+          pageSize);
     } catch (InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -727,7 +1037,15 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      return interactionStore.getInteractionSourceIdForInteraction(tenantId, interactionId);
+      Optional<UUID> interactionSourceIdOptional =
+          interactionRepository.findInteractionSourceIdByTenantIdAndInteractionId(
+              tenantId, interactionId);
+
+      if (interactionSourceIdOptional.isEmpty()) {
+        throw new InteractionNotFoundException(tenantId, interactionId);
+      }
+
+      return interactionSourceIdOptional.get();
     } catch (InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -755,7 +1073,15 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      return interactionStore.getInteractionSourceIdForInteractionNote(tenantId, interactionNoteId);
+      Optional<UUID> interactionSourceIdOptional =
+          interactionNoteRepository.getInteractionSourceIdByTenantIdAndInteractionNoteId(
+              tenantId, interactionNoteId);
+
+      if (interactionSourceIdOptional.isEmpty()) {
+        throw new InteractionNoteNotFoundException(tenantId, interactionNoteId);
+      }
+
+      return interactionSourceIdOptional.get();
     } catch (InteractionNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -922,17 +1248,36 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new InteractionSourceNotFoundException(tenantId, interactionSourceId);
       }
 
-      return interactionStore.getInteractionSummaries(
-          tenantId,
-          interactionSourceId,
-          status,
-          direction,
-          filter,
+      Sort sort;
+
+      if (sortBy == InteractionSortBy.OCCURRED) {
+        sort =
+            Sort.by(
+                Order.asc("priority"),
+                sortDirection.isAscending() ? Order.asc("occurred") : Order.desc("occurred"));
+      } else {
+        sort =
+            Sort.by(
+                Order.asc("priority"),
+                sortDirection.isAscending() ? Order.asc("occurred") : Order.desc("occurred"));
+      }
+
+      PageRequest pageRequest =
+          PageRequest.of(pageIndex, Math.min(pageSize, maxFilteredInteractions), sort);
+
+      String filterLike = (filter == null) ? null : "%" + filter.toLowerCase() + "%";
+
+      Page<InteractionSummary> interactionSummaryPage =
+          interactionRepository.findInteractionSummaries(
+              tenantId, interactionSourceId, status, direction, filterLike, pageRequest);
+
+      return new InteractionSummaries(
+          interactionSummaryPage.toList(),
+          interactionSummaryPage.getTotalElements(),
           sortBy,
           sortDirection,
           pageIndex,
-          pageSize,
-          maxFilteredInteractions);
+          pageSize);
     } catch (InteractionSourceNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -940,29 +1285,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
           "Failed to retrieve the summaries for the interactions for the interaction source ("
               + interactionSourceId
               + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public int getMaximumInteractionProcessingAttempts() {
-    return maximumInteractionProcessingAttempts;
-  }
-
-  @Override
-  public Optional<Interaction> getNextInteractionQueuedForProcessing(UUID tenantId)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    try {
-      return interactionStore.getNextInteractionQueuedForProcessing(tenantId);
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to retrieve the next interaction queued for processing for the tenant ("
               + tenantId
               + ")",
           e);
@@ -980,7 +1302,17 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throw new InvalidArgumentException("interactionAttachmentId");
     }
 
-    return interactionStore.interactionAttachmentExistsWithId(tenantId, interactionAttachmentId);
+    try {
+      return interactionAttachmentRepository.existsByTenantIdAndId(
+          tenantId, interactionAttachmentId);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether the interaction attachment ("
+              + interactionAttachmentId
+              + ") exists for the tenant ("
+              + tenantId
+              + ")");
+    }
   }
 
   @Override
@@ -1000,8 +1332,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      return interactionStore
-          .getInteractionAttachmentIdByInteractionIdAndHash(tenantId, interactionId, hash)
+      return getInteractionAttachmentIdByInteractionIdAndHash(tenantId, interactionId, hash)
           .isPresent();
 
     } catch (Throwable e) {
@@ -1017,6 +1348,24 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
   }
 
+  //  @Override
+  //  public Optional<Interaction> getNextInteractionQueuedForProcessing(UUID tenantId)
+  //      throws InvalidArgumentException, ServiceUnavailableException {
+  //    if (tenantId == null) {
+  //      throw new InvalidArgumentException("tenantId");
+  //    }
+  //
+  //    try {
+  //      return interactionStore.getNextInteractionQueuedForProcessing(tenantId);
+  //    } catch (Throwable e) {
+  //      throw new ServiceUnavailableException(
+  //          "Failed to retrieve the next interaction queued for processing for the tenant ("
+  //              + tenantId
+  //              + ")",
+  //          e);
+  //    }
+  //  }
+
   @Override
   public boolean interactionExists(UUID tenantId, UUID interactionId)
       throws InvalidArgumentException, ServiceUnavailableException {
@@ -1029,7 +1378,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      return interactionStore.interactionExists(tenantId, interactionId);
+      return interactionRepository.existsByTenantIdAndId(tenantId, interactionId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to check whether the interaction ("
@@ -1058,8 +1407,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      return interactionStore
-          .getInteractionIdBySourceIdAndSourceReference(tenantId, sourceId, sourceReference)
+      return getInteractionIdBySourceIdAndSourceReference(tenantId, sourceId, sourceReference)
           .isPresent();
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -1090,7 +1438,8 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
 
     try {
-      return interactionStore.interactionNoteExists(tenantId, interactionId, interactionNoteId);
+      return interactionNoteRepository.existsByTenantIdAndInteractionIdAndId(
+          tenantId, interactionId, interactionNoteId);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to check whether the interaction note ("
@@ -1142,10 +1491,20 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     validateArgument("linkPartyToInteractionRequest", linkPartyToInteractionRequest);
 
     try {
-      interactionStore.linkPartyToInteraction(
-          tenantId,
-          linkPartyToInteractionRequest.getInteractionId(),
-          linkPartyToInteractionRequest.getPartyId());
+      // TODO: Check if party exists
+      //noinspection ConstantValue
+      if (false) {
+        throw new PartyNotFoundException(tenantId, linkPartyToInteractionRequest.getPartyId());
+      }
+
+      if (interactionRepository.linkPartyToInteraction(
+              tenantId,
+              linkPartyToInteractionRequest.getInteractionId(),
+              linkPartyToInteractionRequest.getPartyId())
+          <= 0) {
+        throw new InteractionNotFoundException(
+            tenantId, linkPartyToInteractionRequest.getInteractionId());
+      }
     } catch (InteractionNotFoundException | PartyNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1168,33 +1527,11 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
-  public void resetInteractionLocks(
-      UUID tenantId, InteractionStatus status, InteractionStatus newStatus)
-      throws InvalidArgumentException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    if (status == null) {
-      throw new InvalidArgumentException("status");
-    }
-
-    if (newStatus == null) {
-      throw new InvalidArgumentException("newStatus");
-    }
-
+  public void processInteractions() throws ServiceUnavailableException {
     try {
-      interactionStore.resetInteractionLocks(tenantId, status, newStatus);
+      getBackgroundInteractionProcessor().triggerProcessing();
     } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to reset the locks for the interactions with status ("
-              + status
-              + ") and set their status to ("
-              + newStatus
-              + ") for the tenant ("
-              + tenantId
-              + ")",
-          e);
+      throw new ServiceUnavailableException("Failed to trigger the interaction processing", e);
     }
   }
 
@@ -1209,8 +1546,138 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     validateArgument("searchInteractionsRequest", searchInteractionsRequest);
 
     try {
-      return interactionStore.searchInteractions(
-          tenantId, searchInteractionsRequest, maxFilteredInteractions);
+      // Build Specification
+      Specification<Interaction> specification =
+          (root, query, criteriaBuilder) -> {
+            // Avoid duplicates when joins or subqueries are involved
+            if (query != null) {
+              query.distinct(true);
+            }
+
+            // AND'ed top-level predicates
+            List<Predicate> andPredicates = new ArrayList<>();
+
+            // Tenant filter
+            andPredicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+
+            // Top-level filters
+            if (searchInteractionsRequest.getSourceId() != null) {
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      root.get("sourceId"), searchInteractionsRequest.getSourceId()));
+            }
+
+            // Match on any of the interaction IDs that have been specified
+            if ((searchInteractionsRequest.getInteractionIds() != null)
+                && (!searchInteractionsRequest.getInteractionIds().isEmpty())) {
+              andPredicates.add(root.get("id").in(searchInteractionsRequest.getInteractionIds()));
+            }
+
+            return criteriaBuilder.and(andPredicates.toArray(new Predicate[0]));
+          };
+
+      // Sorting
+      String sortByPropertyName =
+          InteractionSortBy.resolveSortByPropertyName(searchInteractionsRequest.getSortBy());
+      Sort.Direction dir = resolveSortDirection(searchInteractionsRequest.getSortDirection());
+      Sort sort = Sort.by(dir, sortByPropertyName);
+
+      // Paging
+      int pageIndex =
+          searchInteractionsRequest.getPageIndex() == null
+              ? 0
+              : Math.max(0, searchInteractionsRequest.getPageIndex());
+      int pageSize =
+          searchInteractionsRequest.getPageSize() == null
+              ? 50
+              : Math.max(
+                  1, Math.min(searchInteractionsRequest.getPageSize(), maxFilteredInteractions));
+      Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
+
+      final int firstResult = pageIndex * pageSize;
+
+      // Retrieve the criteria builder
+      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+      // Create a query using the InteractionSummary projection
+      CriteriaQuery<InteractionSummary> dataCriteriaQuery =
+          criteriaBuilder.createQuery(InteractionSummary.class);
+
+      // Create the root
+      Root<Interaction> root = dataCriteriaQuery.from(Interaction.class);
+
+      // Apply the spec as predicate
+      Predicate dataPredicate = specification.toPredicate(root, dataCriteriaQuery, criteriaBuilder);
+
+      // Select only the fields required by InteractionSummary (no counts variant)
+      dataCriteriaQuery
+          .select(
+              criteriaBuilder.construct(
+                  InteractionSummary.class,
+                  root.get("id"),
+                  root.get("tenantId"),
+                  root.get("status"),
+                  root.get("sourceId"),
+                  root.get("conversationId"),
+                  root.get("partyId"),
+                  root.get("type"),
+                  root.get("direction"),
+                  root.get("sender"),
+                  root.get("recipients"),
+                  root.get("subject"),
+                  root.get("mimeType"),
+                  root.get("priority"),
+                  root.get("occurred"),
+                  root.get("assigned"),
+                  root.get("assignedTo")))
+          .where(dataPredicate);
+
+      SortDirection sortDirection =
+          (searchInteractionsRequest.getSortDirection() != null)
+              ? searchInteractionsRequest.getSortDirection()
+              : SortDirection.ASCENDING;
+
+      if (sortDirection == SortDirection.ASCENDING) {
+        dataCriteriaQuery.orderBy(
+            criteriaBuilder.asc(
+                root.get(
+                    InteractionSortBy.resolveSortByPropertyName(
+                        searchInteractionsRequest.getSortBy()))));
+      } else {
+        dataCriteriaQuery.orderBy(
+            criteriaBuilder.desc(
+                root.get(
+                    InteractionSortBy.resolveSortByPropertyName(
+                        searchInteractionsRequest.getSortBy()))));
+      }
+
+      TypedQuery<InteractionSummary> dataQuery = entityManager.createQuery(dataCriteriaQuery);
+      dataQuery.setFirstResult(firstResult);
+      dataQuery.setMaxResults(pageSize);
+
+      List<InteractionSummary> interactionSummaries = dataQuery.getResultList();
+
+      // Count query (for total elements)
+      CriteriaQuery<Long> countCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+      Root<Interaction> countRoot = countCriteriaQuery.from(Interaction.class);
+
+      Predicate countPredicate =
+          specification.toPredicate(countRoot, countCriteriaQuery, criteriaBuilder);
+
+      // Because we used query.distinct(true) above due to joins, prefer countDistinct on the PK
+      countCriteriaQuery
+          .select(criteriaBuilder.countDistinct(countRoot.get("id")))
+          .where(countPredicate);
+
+      Long total = entityManager.createQuery(countCriteriaQuery).getSingleResult();
+
+      return new InteractionSummaries(
+          interactionSummaries,
+          total,
+          searchInteractionsRequest.getSortBy(),
+          searchInteractionsRequest.getSortDirection(),
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to search for interactions for the tenant (" + tenantId + ")", e);
@@ -1259,8 +1726,13 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
             tenantId, transferInteractionRequest.getInteractionSourceId());
       }
 
-      interactionStore.transferInteraction(
-          tenantId,
+      if (!interactionRepository.existsByTenantIdAndId(
+          tenantId, transferInteractionRequest.getInteractionId())) {
+        throw new InteractionNotFoundException(
+            tenantId, transferInteractionRequest.getInteractionId());
+      }
+
+      interactionRepository.transferInteraction(
           transferInteractionRequest.getInteractionId(),
           transferInteractionRequest.getInteractionSourceId());
     } catch (InteractionNotFoundException | InteractionSourceNotFoundException e) {
@@ -1273,63 +1745,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               + transferInteractionRequest.getInteractionSourceId()
               + ") for the tenant ("
               + tenantId
-              + ")",
-          e);
-    }
-  }
-
-  @Override
-  public void triggerInteractionProcessing() {
-    TransactionSynchronizationManager.registerSynchronization(
-        new TransactionSynchronization() {
-          @Override
-          public void afterCommit() {
-            // Fire-and-forget trigger *after* the TX is really committed
-            applicationEventPublisher.publishEvent(new TriggerInteractionProcessingEvent());
-          }
-        });
-  }
-
-  @Override
-  public void triggerInteractionSourceSynchronization() {
-    TransactionSynchronizationManager.registerSynchronization(
-        new TransactionSynchronization() {
-          @Override
-          public void afterCommit() {
-            // Fire-and-forget trigger *after* the TX is really committed
-            applicationEventPublisher.publishEvent(
-                new TriggerInteractionSourceSynchronizationEvent());
-          }
-        });
-  }
-
-  @Override
-  public void unlockInteraction(UUID tenantId, UUID interactionId, InteractionStatus status)
-      throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    if (interactionId == null) {
-      throw new InvalidArgumentException("interactionId");
-    }
-
-    if (status == null) {
-      throw new InvalidArgumentException("status");
-    }
-
-    try {
-      interactionStore.unlockInteraction(tenantId, interactionId, status);
-    } catch (InteractionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ServiceUnavailableException(
-          "Failed to unlock and set the status for the interaction ("
-              + interactionId
-              + ") for the tenant ("
-              + tenantId
-              + ") to ("
-              + status
               + ")",
           e);
     }
@@ -1349,7 +1764,25 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throw new InvalidArgumentException("interaction.tenantId");
     }
 
-    return interactionStore.updateInteraction(tenantId, interaction);
+    try {
+      if (!interactionRepository.existsByTenantIdAndId(tenantId, interaction.getId())) {
+        throw new InteractionNotFoundException(tenantId, interaction.getId());
+      }
+
+      interactionRepository.saveAndFlush(interaction);
+
+      return interaction;
+    } catch (InteractionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the interaction ("
+              + interaction.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -1369,7 +1802,26 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       throw new InvalidArgumentException("interactionAttachment.tenantId");
     }
 
-    return interactionStore.updateInteractionAttachment(tenantId, interactionAttachment);
+    try {
+      if (!interactionAttachmentRepository.existsByTenantIdAndId(
+          tenantId, interactionAttachment.getId())) {
+        throw new InteractionAttachmentNotFoundException(interactionAttachment.getId());
+      }
+
+      interactionAttachmentRepository.saveAndFlush(interactionAttachment);
+
+      return interactionAttachment;
+    } catch (InteractionAttachmentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to update the interaction attachment ("
+              + interactionAttachment.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
   }
 
   @Override
@@ -1385,15 +1837,28 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     validateArgument("updateInteractionNoteRequest", updateInteractionNoteRequest);
 
     try {
-      InteractionNote interactionNote =
-          interactionStore.getInteractionNote(
+      if (!interactionNoteRepository.existsByTenantIdAndId(
+          tenantId, updateInteractionNoteRequest.getInteractionNoteId())) {
+        throw new InteractionNoteNotFoundException(
+            tenantId, updateInteractionNoteRequest.getInteractionNoteId());
+      }
+
+      Optional<InteractionNote> interactionNoteOptional =
+          interactionNoteRepository.findByTenantIdAndId(
               tenantId, updateInteractionNoteRequest.getInteractionNoteId());
+
+      if (interactionNoteOptional.isEmpty()) {
+        throw new InteractionNoteNotFoundException(
+            tenantId, updateInteractionNoteRequest.getInteractionNoteId());
+      }
+
+      InteractionNote interactionNote = interactionNoteOptional.get();
 
       interactionNote.setContent(updateInteractionNoteRequest.getContent());
       interactionNote.setUpdated(OffsetDateTime.now());
       interactionNote.setUpdatedBy(updatedBy);
 
-      return interactionStore.updateInteractionNote(tenantId, interactionNote);
+      return interactionNoteRepository.saveAndFlush(interactionNote);
     } catch (InteractionNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1554,6 +2019,20 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         CORRELATION_ID_CHARACTERS[secureRandom.nextInt(CORRELATION_ID_CHARACTERS.length)]);
 
     return encoded.toString();
+  }
+
+  /**
+   * Returns the lazily evaluated Background Interaction Processor to avoid circular references.
+   *
+   * @return the lazily evaluated Background Interaction Processor to avoid circular references.
+   */
+  private BackgroundInteractionProcessor getBackgroundInteractionProcessor() {
+    if (backgroundInteractionProcessor == null) {
+      backgroundInteractionProcessor =
+          getApplicationContext().getBean(BackgroundInteractionProcessor.class);
+    }
+
+    return backgroundInteractionProcessor;
   }
 
   /**
@@ -1769,6 +2248,16 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
     }
   }
 
+  private Sort.Direction resolveSortDirection(SortDirection sortDirection) {
+    if (sortDirection == null) {
+      return Sort.Direction.DESC;
+    } else if (sortDirection == SortDirection.ASCENDING) {
+      return Sort.Direction.ASC;
+    } else {
+      return Sort.Direction.DESC;
+    }
+  }
+
   private int synchronizeMailboxInteractionSource(InteractionSource interactionSource)
       throws ServiceUnavailableException {
     int numberOfNewInteractions = 0;
@@ -1827,7 +2316,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
           Interaction interaction = createEmailInteraction(interactionSource, message);
 
           Optional<UUID> interactionIdOptional =
-              interactionStore.getInteractionIdBySourceIdAndSourceReference(
+              getInteractionIdBySourceIdAndSourceReference(
                   interaction.getTenantId(),
                   interaction.getSourceId(),
                   interaction.getSourceReference());
@@ -1838,7 +2327,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
           if (interactionIdOptional.isEmpty()) {
             interactionId = interaction.getId();
 
-            interactionStore.createInteraction(interactionSource.getTenantId(), interaction);
+            getInteractionService().createInteraction(interactionSource.getTenantId(), interaction);
 
             numberOfNewInteractions++;
           } else {
@@ -1875,8 +2364,9 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               interactionAttachment.setHash(interactionAttachmentMimeData.getHash());
               interactionAttachment.setData(interactionAttachmentMimeData.getData());
 
-              interactionStore.createInteractionAttachment(
-                  interactionSource.getTenantId(), interactionAttachment);
+              getInteractionService()
+                  .createInteractionAttachment(
+                      interactionSource.getTenantId(), interactionAttachment);
 
               // TODO: Publish event
             }
@@ -1928,7 +2418,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
       // Trigger the processing of any new interactions
       if (numberOfNewInteractions > 0) {
-        triggerInteractionProcessing();
+        getInteractionService().processInteractions();
       }
 
       return numberOfNewInteractions;

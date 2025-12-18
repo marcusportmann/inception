@@ -77,7 +77,7 @@ public class DocumentApiControllerImpl extends SecureApiController
   /**
    * Constructs a new {@code DocumentApiControllerImpl}.
    *
-   * @param applicationContext the Spring application context
+   * @param applicationContext the Spring {@link ApplicationContext}
    * @param documentService the Document Service
    */
   public DocumentApiControllerImpl(

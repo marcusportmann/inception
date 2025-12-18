@@ -46,6 +46,8 @@ import digital.inception.operations.model.FinalizeWorkflowStepRequest;
 import digital.inception.operations.model.FormDefinition;
 import digital.inception.operations.model.InitiateWorkflowRequest;
 import digital.inception.operations.model.InitiateWorkflowStepRequest;
+import digital.inception.operations.model.InteractionSortBy;
+import digital.inception.operations.model.InteractionSummaries;
 import digital.inception.operations.model.LinkInteractionToWorkflowRequest;
 import digital.inception.operations.model.OutstandingWorkflowDocument;
 import digital.inception.operations.model.ProvideWorkflowDocumentRequest;
@@ -68,7 +70,7 @@ import digital.inception.operations.model.WorkflowDefinitionCategory;
 import digital.inception.operations.model.WorkflowDefinitionSummary;
 import digital.inception.operations.model.WorkflowDocument;
 import digital.inception.operations.model.WorkflowDocumentSortBy;
-import digital.inception.operations.model.WorkflowDocuments;
+import digital.inception.operations.model.WorkflowDocumentSummaries;
 import digital.inception.operations.model.WorkflowEngine;
 import digital.inception.operations.model.WorkflowNote;
 import digital.inception.operations.model.WorkflowNoteSortBy;
@@ -153,7 +155,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
   void cancelWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -237,7 +239,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createWorkflowDefinition(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The workflow definition version to create",
@@ -304,7 +306,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createWorkflowDefinitionCategory(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The workflow definition category to create",
@@ -363,7 +365,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createWorkflowEngine(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The workflow engine to create",
@@ -424,7 +426,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   UUID createWorkflowNote(
       @Parameter(
               name = "Tenant-ID",
@@ -491,7 +493,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
   void deleteWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -557,7 +559,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteWorkflowDefinition(
       @Parameter(
               name = "workflowDefinitionId",
@@ -622,7 +624,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteWorkflowDefinitionCategory(
       @Parameter(
               name = "workflowDefinitionCategoryId",
@@ -689,7 +691,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteWorkflowDefinitionVersion(
       @Parameter(
               name = "workflowDefinitionId",
@@ -759,7 +761,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void deleteWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -832,7 +834,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteWorkflowEngine(
       @Parameter(
               name = "workflowEngineId",
@@ -893,7 +895,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void deleteWorkflowNote(
       @Parameter(
               name = "Tenant-ID",
@@ -968,7 +970,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
   void deleteWorkflowStep(
       @Parameter(
               name = "Tenant-ID",
@@ -996,7 +998,6 @@ public interface WorkflowApiController {
    * @param delinkInteractionFromWorkflowRequest the request to delink an interaction from a
    *     workflow
    * @throws InvalidArgumentException if an argument is invalid
-   * @throws InteractionNotFoundException if the interaction could not be found
    * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws WorkflowInteractionLinkNotFoundException if the workflow interaction link could not be
    *     found
@@ -1026,8 +1027,7 @@ public interface WorkflowApiController {
                     schema = @Schema(implementation = ProblemDetails.class))),
         @ApiResponse(
             responseCode = "404",
-            description =
-                "The interaction, workflow or workflow interaction link could not be found",
+            description = "The workflow or workflow interaction link could not be found",
             content =
                 @Content(
                     mediaType = "application/problem+json",
@@ -1047,7 +1047,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowInteractionLinkAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowInteractionLinkAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void delinkInteractionFromWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -1064,7 +1064,6 @@ public interface WorkflowApiController {
           @RequestBody
           DelinkInteractionFromWorkflowRequest delinkInteractionFromWorkflowRequest)
       throws InvalidArgumentException,
-          InteractionNotFoundException,
           WorkflowNotFoundException,
           WorkflowInteractionLinkNotFoundException,
           ServiceUnavailableException;
@@ -1118,7 +1117,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
   void finalizeWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -1186,7 +1185,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
   void finalizeWorkflowStep(
       @Parameter(
               name = "Tenant-ID",
@@ -1206,6 +1205,102 @@ public interface WorkflowApiController {
           WorkflowNotFoundException,
           WorkflowStepNotFoundException,
           ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the interactions linked to the workflow.
+   *
+   * @param tenantId the ID for the tenant
+   * @param workflowId the ID for the workflow the interactions are linked to
+   * @param filter the filter to apply to the interaction summaries
+   * @param sortBy the method used to sort the interaction summaries, e.g. by occurred
+   * @param sortDirection the sort direction to apply to the interaction summaries
+   * @param pageIndex the page index
+   * @param pageSize the page size
+   * @return the summaries for the interactions linked to the workflow
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ServiceUnavailableException if the summaries for the interactions linked to the
+   *     workflow could not be retrieved
+   */
+  @Operation(
+      summary = "Retrieve the summaries for the interactions linked to the workflow",
+      description = "Retrieve the summaries for the interactions linked to the workflow")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description =
+                "The summaries for the interactions linked to the workflow were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The workflow could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/workflows/{workflowId}/interactions",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  InteractionSummaries getInteractionSummariesForWorkflow(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(name = "workflowId", description = "The ID for the workflow", required = true)
+          @PathVariable
+          UUID workflowId,
+      @Parameter(name = "filter", description = "The filter to apply to the interaction summaries")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortBy",
+              description = "The method used to sort the interaction summaries e.g. by occurred")
+          @RequestParam(value = "sortBy", required = false)
+          InteractionSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The sort direction to apply to the interaction summaries")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The page size", example = "10")
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
+          Integer pageSize)
+      throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the outstanding workflow documents for the workflow.
@@ -1263,7 +1358,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<OutstandingWorkflowDocument> getOutstandingWorkflowDocuments(
       @Parameter(
               name = "Tenant-ID",
@@ -1335,7 +1430,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   FormDefinition getStartFormDefinitionForWorkflowDefinition(
       @Parameter(
               name = "workflowDefinitionId",
@@ -1410,7 +1505,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   FormDefinition getWorkFormDefinitionForWorkflowDefinition(
       @Parameter(
               name = "workflowDefinitionId",
@@ -1479,7 +1574,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   Workflow getWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -1549,7 +1644,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   WorkflowDefinition getWorkflowDefinition(
       @Parameter(
               name = "workflowDefinitionId",
@@ -1607,7 +1702,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<WorkflowDefinitionCategory> getWorkflowDefinitionCategories(
       @Parameter(
               name = "Tenant-ID",
@@ -1674,7 +1769,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   WorkflowDefinitionCategory getWorkflowDefinitionCategory(
       @Parameter(
               name = "workflowDefinitionCategoryId",
@@ -1747,7 +1842,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<WorkflowDefinitionSummary> getWorkflowDefinitionSummariesForWorkflowDefinitionCategory(
       @Parameter(
               name = "Tenant-ID",
@@ -1823,7 +1918,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   WorkflowDefinition getWorkflowDefinitionVersion(
       @Parameter(
               name = "workflowDefinitionId",
@@ -1895,7 +1990,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   WorkflowDocument getWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -1977,7 +2072,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<Event> getWorkflowDocumentEvents(
       @Parameter(
               name = "Tenant-ID",
@@ -2003,28 +2098,31 @@ public interface WorkflowApiController {
           ServiceUnavailableException;
 
   /**
-   * Retrieve the workflow documents for the workflow.
+   * Retrieve the summaries for the workflow documents associated with the workflow.
    *
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow the workflow documents are associated with
-   * @param filter the filter to apply to the workflow documents
-   * @param sortBy the method used to sort the workflow documents, e.g. by created
-   * @param sortDirection the sort direction to apply to the workflow documents
+   * @param filter the filter to apply to the workflow document summaries
+   * @param sortBy the method used to sort the workflow document summaries, e.g., by created
+   * @param sortDirection the sort direction to apply to the workflow document summaries
    * @param pageIndex the page index
    * @param pageSize the page size
-   * @return the workflow documents
+   * @return the summaries for the workflow documents associated with the workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
-   * @throws ServiceUnavailableException if the workflow documents could not be retrieved
+   * @throws ServiceUnavailableException if the summaries for the workflow documents associated with
+   *     the workflow could not be retrieved
    */
   @Operation(
-      summary = "Retrieve the workflow documents for the workflow",
-      description = "Retrieve the workflow documents for the workflow")
+      summary = "Retrieve the summaries for the workflow documents associated with the workflow",
+      description =
+          "Retrieve the summaries for the workflow documents associated with the workflow")
   @ApiResponses(
       value = {
         @ApiResponse(
             responseCode = "200",
-            description = "The workflow documents for the workflow were retrieved"),
+            description =
+                "The summaries for the workflow documents associated with the workflow were retrieved"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -2061,8 +2159,8 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  WorkflowDocuments getWorkflowDocuments(
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  WorkflowDocumentSummaries getWorkflowDocumentSummariesForWorkflow(
       @Parameter(
               name = "Tenant-ID",
               description = "The ID for the tenant",
@@ -2075,17 +2173,20 @@ public interface WorkflowApiController {
       @Parameter(name = "workflowId", description = "The ID for the workflow", required = true)
           @PathVariable
           UUID workflowId,
-      @Parameter(name = "filter", description = "The filter to apply to the workflow documents")
+      @Parameter(
+              name = "filter",
+              description = "The filter to apply to the workflow document summaries")
           @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
               name = "sortBy",
-              description = "The method used to sort the workflow documents e.g. by created")
+              description =
+                  "The method used to sort the workflow document summaries e.g. by created")
           @RequestParam(value = "sortBy", required = false)
           WorkflowDocumentSortBy sortBy,
       @Parameter(
               name = "sortDirection",
-              description = "The sort direction to apply to the workflow documents")
+              description = "The sort direction to apply to the workflow document summaries")
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The page index", example = "0")
@@ -2145,7 +2246,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   WorkflowEngine getWorkflowEngine(
       @Parameter(
               name = "workflowEngineId",
@@ -2197,7 +2298,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   List<WorkflowEngine> getWorkflowEngines()
       throws InvalidArgumentException, ServiceUnavailableException;
 
@@ -2253,7 +2354,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   WorkflowNote getWorkflowNote(
       @Parameter(
               name = "Tenant-ID",
@@ -2337,7 +2438,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   WorkflowNotes getWorkflowNotes(
       @Parameter(
               name = "Tenant-ID",
@@ -2425,7 +2526,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   UUID initiateWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -2495,7 +2596,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
   void initiateWorkflowStep(
       @Parameter(
               name = "Tenant-ID",
@@ -2567,7 +2668,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowInteractionLinkAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowInteractionLinkAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void linkInteractionToWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -2638,7 +2739,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   UUID provideWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -2707,7 +2808,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration')")
   void rejectWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -2778,7 +2879,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   UUID requestWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -2848,7 +2949,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration')")
   void resetWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -2910,7 +3011,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   WorkflowSummaries searchWorkflows(
       @Parameter(
               name = "Tenant-ID",
@@ -2985,7 +3086,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void startWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -3063,7 +3164,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
   void suspendWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -3134,7 +3235,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
   void suspendWorkflowStep(
       @Parameter(
               name = "Tenant-ID",
@@ -3212,7 +3313,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
   void unsuspendWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -3283,7 +3384,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration')")
   void unsuspendWorkflowStep(
       @Parameter(
               name = "Tenant-ID",
@@ -3353,7 +3454,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void updateWorkflow(
       @Parameter(
               name = "Tenant-ID",
@@ -3432,7 +3533,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateWorkflowDefinition(
       @Parameter(
               name = "workflowDefinitionId",
@@ -3512,7 +3613,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateWorkflowDefinitionCategory(
       @Parameter(
               name = "workflowDefinitionCategoryId",
@@ -3578,7 +3679,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateWorkflowEngine(
       @Parameter(
               name = "workflowEngineId",
@@ -3642,7 +3743,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void updateWorkflowNote(
       @Parameter(
               name = "Tenant-ID",
@@ -3709,7 +3810,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration')")
   void verifyWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -3760,7 +3861,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void verifyWorkflowStatuses() throws ServiceUnavailableException;
 
   /**
@@ -3812,7 +3913,7 @@ public interface WorkflowApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.WorkflowAdministration') or hasAuthority('FUNCTION_Operations.WorkflowDocumentAdministration')")
   void waiveWorkflowDocument(
       @Parameter(
               name = "Tenant-ID",

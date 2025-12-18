@@ -391,7 +391,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
       @Param("lockName") String lockName);
 
   /**
-   * Set the task status.
+   * Sets the task status.
    *
    * @param taskId the ID for the task
    * @param status the status for the task

@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
@@ -48,9 +49,17 @@ public enum WorkflowPermissionType implements CodeEnum {
   @XmlEnumValue("UnsuspendWorkflow")
   UNSUSPEND_WORKFLOW("unsuspend_workflow", "Unsuspend Workflow"),
 
+  /** Verify Workflow Document. */
+  @XmlEnumValue("VerifyWorkflowDocument")
+  VERIFY_WORKFLOW_DOCUMENT("verify_workflow_document", "Verify Workflow Document"),
+
   /** View Workflow. */
   @XmlEnumValue("ViewWorkflow")
-  VIEW_WORKFLOW("view_workflow", "View Workflow");
+  VIEW_WORKFLOW("view_workflow", "View Workflow"),
+
+  /** Waive Workflow Document. */
+  @XmlEnumValue("WaiveWorkflowDocument")
+  WAIVE_WORKFLOW_DOCUMENT("waive_workflow_document", "Waive Workflow Document");
 
   private final String code;
 
@@ -66,6 +75,7 @@ public enum WorkflowPermissionType implements CodeEnum {
    *
    * @return the code for the workflow permission type
    */
+  @JsonValue
   public String code() {
     return code;
   }

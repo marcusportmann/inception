@@ -189,7 +189,7 @@ public class FormDefinition implements Serializable {
   }
 
   /**
-   * Set the JSON or XML data for the form definition.
+   * Sets the JSON or XML data for the form definition.
    *
    * @param data the JSON or XML data for the form definition
    */
@@ -198,7 +198,7 @@ public class FormDefinition implements Serializable {
   }
 
   /**
-   * Set the ID for the form definition.
+   * Sets the ID for the form definition.
    *
    * @param id the ID for the form definition
    */
@@ -207,7 +207,7 @@ public class FormDefinition implements Serializable {
   }
 
   /**
-   * Set the name of the form definition.
+   * Sets the name of the form definition.
    *
    * @param name the name of the form definition
    */
@@ -216,7 +216,7 @@ public class FormDefinition implements Serializable {
   }
 
   /**
-   * Set the form type for the form definition.
+   * Sets the form type for the form definition.
    *
    * @param type the form type for the form definition
    */

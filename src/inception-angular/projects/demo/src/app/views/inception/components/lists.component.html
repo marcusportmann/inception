@@ -22,9 +22,11 @@
       <mat-card-subtitle>A selection list provides an interface for selecting values, where each list item is an option.</mat-card-subtitle>
       <mat-card-content class="mt-0 pt-0">
         <mat-selection-list #shoes>
-          <mat-list-option *ngFor="let shoe of typesOfShoes">
-            {{shoe}}
-          </mat-list-option>
+          @for (shoe of typesOfShoes; track shoe) {
+            <mat-list-option>
+              {{shoe}}
+            </mat-list-option>
+          }
         </mat-selection-list>
         <p>
           Options selected: {{shoes.selectedOptions.selected.length}}
@@ -38,10 +40,12 @@
       <mat-card-subtitle>A multi-line list where each item has a title and description.</mat-card-subtitle>
       <mat-card-content class="mt-0 pt-0">
         <mat-list>
-          <mat-list-item *ngFor="let planet of planets">
-            <p matListItemTitle>{{planet.name}}</p>
-            <p matListItemLine>{{planet.description}}</p>
-          </mat-list-item>
+          @for (planet of planets; track planet) {
+            <mat-list-item>
+              <p matListItemTitle>{{planet.name}}</p>
+              <p matListItemLine>{{planet.description}}</p>
+            </mat-list-item>
+          }
         </mat-list>
       </mat-card-content>
     </mat-card>
@@ -54,17 +58,19 @@
       <mat-card-subtitle>A multi-line list where each item has an avatar, title and description.</mat-card-subtitle>
       <mat-card-content class="mt-0 pt-0">
         <mat-list>
-          <mat-list-item *ngFor="let planet of planets">
-            <img
-              matListItemAvatar
-              [ngSrc]="planet.image"
-              width="40"
-              height="40"
-              alt="Image of {{ planet.name }}"
-            />
-            <p matListItemTitle>{{planet.description}}</p>
-            <p matListItemLine>{{planet.detail}}</p>
-          </mat-list-item>
+          @for (planet of planets; track planet) {
+            <mat-list-item>
+              <img
+                matListItemAvatar
+                [ngSrc]="planet.image"
+                width="40"
+                height="40"
+                alt="Image of {{ planet.name }}"
+                />
+              <p matListItemTitle>{{planet.description}}</p>
+              <p matListItemLine>{{planet.detail}}</p>
+            </mat-list-item>
+          }
         </mat-list>
       </mat-card-content>
     </mat-card>
@@ -78,20 +84,24 @@
       <mat-list>
         <mat-card-content class="mt-0 pt-0 mb-0">
           <h3 class="mb-0 pb-0" matSubheader>Folders</h3>
-          <mat-list-item *ngFor="let folder of folders">
-            <i matListItemIcon class="far fa-folder"></i>
-            <p matListItemTitle>{{folder.name}}</p>
-            <p matListItemLine>{{folder.updated | date}}</p>
-          </mat-list-item>
+          @for (folder of folders; track folder) {
+            <mat-list-item>
+              <i matListItemIcon class="far fa-folder"></i>
+              <p matListItemTitle>{{folder.name}}</p>
+              <p matListItemLine>{{folder.updated | date}}</p>
+            </mat-list-item>
+          }
         </mat-card-content>
         <mat-divider></mat-divider>
         <mat-card-content>
           <h3 class="mb-0 pb-0" matSubheader>Notes</h3>
-          <mat-list-item *ngFor="let note of notes">
-            <mat-icon matListItemIcon>note</mat-icon>
-            <p matListItemTitle>{{note.name}}</p>
-            <p matListItemLine>{{note.updated | date}}</p>
-          </mat-list-item>
+          @for (note of notes; track note) {
+            <mat-list-item>
+              <mat-icon matListItemIcon>note</mat-icon>
+              <p matListItemTitle>{{note.name}}</p>
+              <p matListItemLine>{{note.updated | date}}</p>
+            </mat-list-item>
+          }
         </mat-card-content>
       </mat-list>
     </mat-card>

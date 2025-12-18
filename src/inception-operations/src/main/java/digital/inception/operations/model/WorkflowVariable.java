@@ -92,7 +92,8 @@ public class WorkflowVariable implements Serializable {
    *
    * <p>NOTE: All values are stored as a {@code String} with a maximum length of 4000 characters.
    */
-  @Schema(description = "The value for the workflow variable",
+  @Schema(
+      description = "The value for the workflow variable",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
@@ -274,7 +275,7 @@ public class WorkflowVariable implements Serializable {
   }
 
   /**
-   * Set the name of the workflow variable.
+   * Sets the name of the workflow variable.
    *
    * @param name the name of the workflow variable
    */
@@ -283,7 +284,7 @@ public class WorkflowVariable implements Serializable {
   }
 
   /**
-   * Set the variable type for the workflow variable.
+   * Sets the variable type for the workflow variable.
    *
    * @param type the variable type for the workflow variable
    */
@@ -292,7 +293,7 @@ public class WorkflowVariable implements Serializable {
   }
 
   /**
-   * Set the value for the workflow variable.
+   * Sets the value for the workflow variable.
    *
    * @param value the value for the workflow variable
    */
@@ -301,7 +302,7 @@ public class WorkflowVariable implements Serializable {
   }
 
   /**
-   * Set the workflow the workflow variable is associated with.
+   * Sets the workflow the workflow variable is associated with.
    *
    * @param workflow the workflow the workflow variable is associated with
    */

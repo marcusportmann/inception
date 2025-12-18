@@ -164,7 +164,7 @@ public class DocumentAttribute implements Serializable {
   }
 
   /**
-   * Set the document the document attribute is associated with.
+   * Sets the document the document attribute is associated with.
    *
    * @param document the document the document attribute is associated with
    */
@@ -179,7 +179,7 @@ public class DocumentAttribute implements Serializable {
   }
 
   /**
-   * Set the name of the document attribute.
+   * Sets the name of the document attribute.
    *
    * @param name the name of the document attribute
    */
@@ -188,7 +188,7 @@ public class DocumentAttribute implements Serializable {
   }
 
   /**
-   * Set the value for the document attribute.
+   * Sets the value for the document attribute.
    *
    * @param value the value for the document attribute
    */

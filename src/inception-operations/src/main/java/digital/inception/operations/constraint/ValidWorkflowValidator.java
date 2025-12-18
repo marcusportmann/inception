@@ -66,7 +66,7 @@ public class ValidWorkflowValidator implements ConstraintValidator<ValidWorkflow
           constraintValidatorContext.unwrap(HibernateConstraintValidatorContext.class);
 
       try {
-        if (workflowService.workflowDefinitionVersionExists(
+        if (!workflowService.workflowDefinitionVersionExists(
             workflow.getDefinitionId(), workflow.getDefinitionVersion())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("workflowDefinitionId", workflow.getDefinitionId())

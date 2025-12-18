@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlEnum;
@@ -65,6 +66,7 @@ public enum TokenSortBy implements CodeEnum {
    *
    * @return the code for the method used to sort a list of tokens
    */
+  @JsonValue
   public String code() {
     return code;
   }

@@ -406,7 +406,7 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
-   * Set the code for the workflow step.
+   * Sets the code for the workflow step.
    *
    * @param code the code for the workflow step
    */
@@ -415,7 +415,7 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
-   * Set the description for the workflow step.
+   * Sets the description for the workflow step.
    *
    * @param description the description for the workflow step
    */
@@ -444,7 +444,7 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
-   * Set the name of the workflow step.
+   * Sets the name of the workflow step.
    *
    * @param name the name of the workflow step
    */
@@ -453,7 +453,7 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
-   * Set the code(s) for the next workflow step(s).
+   * Sets the code(s) for the next workflow step(s).
    *
    * @param nextSteps the code(s) for the next workflow step(s)
    */
@@ -471,7 +471,7 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
-   * Set the code(s) for the previous workflow step(s).
+   * Sets the code(s) for the previous workflow step(s).
    *
    * @param previousSteps the code(s) for the previous workflow step(s)
    */
@@ -480,7 +480,7 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
-   * Set the sequence number for the workflow step.
+   * Sets the sequence number for the workflow step.
    *
    * @param sequence the sequence number for the workflow step
    */
@@ -489,7 +489,7 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
-   * Set the ISO-8601 duration format amount of time to complete the workflow step.
+   * Sets the ISO-8601 duration format amount of time to complete the workflow step.
    *
    * @param timeToComplete the ISO-8601 duration format amount of time to complete the workflow step
    */
@@ -498,7 +498,7 @@ public class WorkflowStepDefinition implements Serializable {
   }
 
   /**
-   * Set the workflow definition the workflow step definition is associated with.
+   * Sets the workflow definition the workflow step definition is associated with.
    *
    * @param workflowDefinition the workflow definition the workflow step definition is associated
    *     with
