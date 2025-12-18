@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, Error, FileValidator,
@@ -36,6 +36,8 @@ import { ReportingService } from '../services/reporting.service';
   styleUrls: ['new-report-definition.component.css']
 })
 export class NewReportDefinitionComponent extends AdminContainerView implements AfterViewInit {
+  private reportingService = inject(ReportingService);
+
   idControl: FormControl;
 
   nameControl: FormControl;
@@ -48,7 +50,7 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
 
   readonly title = $localize`:@@reporting_new_report_definition_title:New Report Definition`;
 
-  constructor(private reportingService: ReportingService) {
+  constructor() {
     super();
 
     // Initialize the form controls

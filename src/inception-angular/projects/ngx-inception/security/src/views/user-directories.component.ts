@@ -39,6 +39,8 @@ import { UserDirectorySummaryDataSource } from '../services/user-directory-summa
   styleUrls: ['user-directories.component.css']
 })
 export class UserDirectoriesComponent extends StatefulListView implements AfterViewInit {
+  private securityService = inject(SecurityService);
+
   readonly dataSource: UserDirectorySummaryDataSource;
 
   displayedColumns = ['name', 'actions'];
@@ -61,7 +63,7 @@ export class UserDirectoriesComponent extends StatefulListView implements AfterV
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     const nav = this.router.getCurrentNavigation();

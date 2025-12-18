@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, GroupFormFieldComponent,
@@ -39,6 +39,8 @@ import { UserStatus } from '../services/user-status';
   styleUrls: ['new-user.component.css']
 })
 export class NewUserComponent extends AdminContainerView implements AfterViewInit {
+  private securityService = inject(SecurityService);
+
   confirmPasswordControl: FormControl;
 
   emailControl: FormControl;
@@ -69,7 +71,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
 
   usernameControl: FormControl;
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

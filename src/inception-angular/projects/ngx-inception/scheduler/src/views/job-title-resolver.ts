@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SchedulerService } from '../services/scheduler.service';
@@ -27,13 +27,8 @@ import { SchedulerService } from '../services/scheduler.service';
  */
 @Injectable()
 export class JobTitleResolver {
-  /**
-   * Constructs a new JobTitleResolver.
-   *
-   * @param schedulerService The scheduler service.
-   */
-  constructor(
-    @Inject(SchedulerService) private schedulerService: SchedulerService) {}
+  private schedulerService = inject<SchedulerService>(SchedulerService);
+
 
   /**
    * Resolve the title.

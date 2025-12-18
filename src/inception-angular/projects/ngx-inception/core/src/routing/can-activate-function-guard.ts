@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
@@ -29,16 +29,9 @@ import { SessionService } from '../session/services/session.service';
  */
 @Injectable()
 export class CanActivateFunctionGuard {
-  /**
-   * Constructs a new CanActivateFunctionGuard.
-   *
-   * @param router         The router.
-   * @param sessionService The session service.
-   */
-  constructor(
-    private router: Router,
-    private sessionService: SessionService
-  ) {}
+  private router = inject(Router);
+  private sessionService = inject(SessionService);
+
 
   // noinspection JSUnusedGlobalSymbols
   canActivate(

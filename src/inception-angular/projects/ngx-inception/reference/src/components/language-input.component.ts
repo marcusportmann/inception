@@ -15,10 +15,7 @@
  */
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit,
-  Optional, Self, ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldControl } from '@angular/material/form-field';
@@ -76,6 +73,10 @@ import { ReferenceService } from '../services/reference.service';
 export class LanguageInputComponent
   implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy
 {
+  private readonly referenceService = inject(ReferenceService);
+  readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly cdr = inject(ChangeDetectorRef);
+
   private static _nextId = 0;
 
   /**
@@ -125,11 +126,7 @@ export class LanguageInputComponent
 
   private readonly subscriptions = new Subscription();
 
-  constructor(
-    private readonly referenceService: ReferenceService,
-    @Optional() @Self() public readonly ngControl: NgControl | null,
-    private readonly cdr: ChangeDetectorRef
-  ) {
+  constructor() {
     if (this.ngControl) {
       // Avoid circular DI by setting the accessor directly.
       this.ngControl.valueAccessor = this;

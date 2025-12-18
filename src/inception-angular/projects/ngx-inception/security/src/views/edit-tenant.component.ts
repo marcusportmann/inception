@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
@@ -36,6 +36,8 @@ import { Tenant } from '../services/tenant';
   styleUrls: ['edit-tenant.component.css']
 })
 export class EditTenantComponent extends AdminContainerView implements AfterViewInit {
+  private securityService = inject(SecurityService);
+
   editTenantForm: FormGroup;
 
   nameControl: FormControl;
@@ -46,7 +48,7 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
 
   readonly title = $localize`:@@security_edit_tenant_title:Edit Tenant`;
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

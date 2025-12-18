@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, Error, FileUploadComponent, FileValidator,
@@ -36,6 +36,8 @@ import { ReportingService } from '../services/reporting.service';
   styleUrls: ['edit-report-definition.component.css']
 })
 export class EditReportDefinitionComponent extends AdminContainerView implements AfterViewInit {
+  private reportingService = inject(ReportingService);
+
   editReportDefinitionForm: FormGroup;
 
   idControl: FormControl;
@@ -50,7 +52,7 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
 
   readonly title = $localize`:@@reporting_edit_report_definition_title:Edit Report Definition`;
 
-  constructor(private reportingService: ReportingService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

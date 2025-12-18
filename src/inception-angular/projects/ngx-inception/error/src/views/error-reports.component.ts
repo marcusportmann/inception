@@ -48,6 +48,8 @@ import { ErrorService } from '../services/error.service';
   styleUrls: ['error-reports.component.css']
 })
 export class ErrorReportsComponent extends StatefulListView implements AfterViewInit {
+  private errorService = inject(ErrorService);
+
   readonly dataSource: ErrorReportSummaryDataSource;
 
   displayedColumns = ['created', 'who', 'description', 'actions'];
@@ -74,7 +76,7 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  constructor(private errorService: ErrorService) {
+  constructor() {
     super();
 
     // Read the reset flag from the current navigation

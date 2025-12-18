@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   AbstractControl, FormControl, FormGroup, ValidationErrors, Validators
 } from '@angular/forms';
@@ -39,6 +39,12 @@ import { catchError, finalize, first, Observable, throwError } from 'rxjs';
   templateUrl: 'reset-password.component.html'
 })
 export class ResetPasswordComponent implements OnInit {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private dialogService = inject(DialogService);
+  private securityService = inject(SecurityService);
+  private spinnerService = inject(SpinnerService);
+
   readonly confirmNewPasswordControl: FormControl<string>;
 
   readonly newPasswordControl: FormControl<string>;
@@ -53,13 +59,7 @@ export class ResetPasswordComponent implements OnInit {
 
   private securityCode: string | null = null;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private dialogService: DialogService,
-    private securityService: SecurityService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor() {
     this.newPasswordControl = new FormControl<string>('', {
       nonNullable: true,
       validators: [Validators.required, Validators.maxLength(100)]

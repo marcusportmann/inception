@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, GroupFormFieldComponent,
@@ -38,6 +38,8 @@ import { TenantStatus } from '../services/tenant-status';
   styleUrls: ['new-tenant.component.css']
 })
 export class NewTenantComponent extends AdminContainerView implements AfterViewInit {
+  private securityService = inject(SecurityService);
+
   createUserDirectoryControl: FormControl;
 
   nameControl: FormControl;
@@ -48,7 +50,7 @@ export class NewTenantComponent extends AdminContainerView implements AfterViewI
 
   readonly title = $localize`:@@security_new_tenant_title:New Tenant`;
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     // Initialize the form controls

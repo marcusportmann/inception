@@ -15,7 +15,7 @@
  */
 
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject, Observable, of, Subject, throwError, timer } from 'rxjs';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
@@ -36,6 +36,9 @@ import { TokenResponse } from './token-response';
   providedIn: 'root'
 })
 export class SessionService {
+  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private httpClient = inject(HttpClient);
+
   /**
    * The current active session.
    */
@@ -47,10 +50,7 @@ export class SessionService {
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
    */
-  constructor(
-    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-    private httpClient: HttpClient
-  ) {
+  constructor() {
     console.log('Initializing the Session Service');
 
     // Start the session refresher

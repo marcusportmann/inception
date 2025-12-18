@@ -15,7 +15,7 @@
  */
 
 import { AsyncPipe } from '@angular/common';
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Replace } from '../../util/replace';
@@ -53,20 +53,11 @@ import { BackNavigation } from './back-navigation';
     `
 })
 export class TitleBarComponent implements OnInit {
-  @Input() fixed = false;
+  private elementRef = inject(ElementRef);
+  private router = inject(Router);
+  private titleBarService = inject(TitleBarService);
 
-  /**
-   * Constructs a new TitleBarComponent.
-   *
-   * @param elementRef      The element reference.
-   * @param router          The router.
-   * @param titleBarService The title bar service.
-   */
-  constructor(
-    private elementRef: ElementRef,
-    private router: Router,
-    private titleBarService: TitleBarService
-  ) {}
+  @Input() fixed = false;
 
   /**
    * The back navigation.

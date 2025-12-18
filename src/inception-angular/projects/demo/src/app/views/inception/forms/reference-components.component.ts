@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
@@ -42,6 +42,10 @@ import { CountriesChipGridComponent, CountryInputComponent, LanguageInputCompone
   templateUrl: 'reference-components.component.html'
 })
 export class ReferenceComponentsComponent {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private formBuilder = inject(FormBuilder);
+
   countriesControl: FormControl = new FormControl([], Validators.required);
 
   countryControl: FormControl = new FormControl('', Validators.required);
@@ -54,11 +58,7 @@ export class ReferenceComponentsComponent {
 
   timeZoneControl: FormControl = new FormControl('', Validators.required);
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder
-  ) {
+  constructor() {
     this.referenceForm = this.formBuilder.group({
       // hideRequired: false,
       // floatLabel: 'auto',

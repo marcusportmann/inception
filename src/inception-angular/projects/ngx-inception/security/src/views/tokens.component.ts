@@ -47,6 +47,8 @@ interface TokenListExtras {
   styleUrls: ['tokens.component.css']
 })
 export class TokensComponent extends StatefulListView<TokenListExtras> implements AfterViewInit {
+  private securityService = inject(SecurityService);
+
   readonly dataSource: TokenSummaryDataSource;
 
   displayedColumns = ['name', 'type', 'status', 'actions'];
@@ -76,7 +78,7 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     // Read the reset flag from the current navigation (if any)

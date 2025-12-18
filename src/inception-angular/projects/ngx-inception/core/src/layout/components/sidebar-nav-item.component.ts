@@ -15,11 +15,7 @@
  */
 
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import {
   SidebarNavDropdownTogglerDirective
@@ -118,9 +114,9 @@ import { NavigationItem } from '../services/navigation-item';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarNavItemComponent {
-  @Input() navItem?: NavigationItem;
+  private router = inject(Router);
 
-  constructor(private router: Router) {}
+  @Input() navItem?: NavigationItem;
 
   hideMobile(): void {
     document.body.classList.remove('sidebar-show');

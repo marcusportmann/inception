@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
@@ -41,6 +41,9 @@ import { TokenClaimDialogComponent, TokenClaimDialogData } from './token-claim-d
   styleUrls: ['new-token.component.css']
 })
 export class NewTokenComponent extends AdminContainerView implements AfterViewInit {
+  private securityService = inject(SecurityService);
+  private matDialog = inject(MatDialog);
+
   descriptionControl: FormControl;
 
   existingTokenId: string | null = null;
@@ -59,10 +62,7 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
 
   validFromDateControl: FormControl;
 
-  constructor(
-    private securityService: SecurityService,
-    private matDialog: MatDialog
-  ) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

@@ -15,7 +15,7 @@
  */
 
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
   ResponseConverter, ServiceUnavailableError
@@ -33,16 +33,16 @@ import { Data } from './data';
   providedIn: 'root'
 })
 export class DataService {
+  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private httpClient = inject(HttpClient);
+
   /**
    * Constructs a new DataService.
    *
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
    */
-  constructor(
-    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-    private httpClient: HttpClient
-  ) {
+  constructor() {
     console.log('Initializing the Data Service');
   }
 

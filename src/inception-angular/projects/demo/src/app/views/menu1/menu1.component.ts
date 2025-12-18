@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CoreModule } from 'ngx-inception/core';
 import { first } from 'rxjs/operators';
 import { Data } from '../../services/data';
@@ -36,7 +36,8 @@ import { DataService } from '../../services/data.service';
   `
 })
 export class Menu1Component {
-  constructor(private dataService: DataService) {}
+  private dataService = inject(DataService);
+
 
   clickMe(): void {
     this.dataService

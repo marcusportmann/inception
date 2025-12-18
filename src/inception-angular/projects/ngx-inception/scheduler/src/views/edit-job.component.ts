@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective } from 'ngx-inception/core';
@@ -39,6 +39,9 @@ import {
   styleUrls: ['edit-job.component.css']
 })
 export class EditJobComponent extends AdminContainerView implements AfterViewInit {
+  private schedulerService = inject(SchedulerService);
+  private matDialog = inject(MatDialog);
+
   JobStatus = JobStatus;
 
   editJobForm: FormGroup;
@@ -75,10 +78,7 @@ export class EditJobComponent extends AdminContainerView implements AfterViewIni
 
   readonly title = $localize`:@@scheduler_edit_job_title:Edit Job`;
 
-  constructor(
-    private schedulerService: SchedulerService,
-    private matDialog: MatDialog
-  ) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

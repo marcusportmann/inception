@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -46,6 +46,8 @@ export class TenantUserDirectoriesComponent
   extends AdminContainerView
   implements AfterViewInit, OnDestroy
 {
+  private securityService = inject(SecurityService);
+
   allUserDirectories: UserDirectorySummary[] = [];
 
   availableUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<
@@ -70,7 +72,7 @@ export class TenantUserDirectoriesComponent
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

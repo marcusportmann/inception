@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { render } from 'es6-template-string';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -30,6 +30,9 @@ import { Breadcrumb } from './breadcrumb';
   providedIn: 'root'
 })
 export class BreadcrumbsService {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+
   breadcrumbs$: Subject<Breadcrumb[]> = new ReplaySubject<Breadcrumb[]>(1);
 
   breadcrumbsVisible$: Subject<boolean> = new ReplaySubject<boolean>(1);
@@ -40,10 +43,7 @@ export class BreadcrumbsService {
    * @param router         The router.
    * @param activatedRoute The activated route.
    */
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) {
+  constructor() {
     console.log('Initializing the Breadcrumbs Service');
 
     this.router.events

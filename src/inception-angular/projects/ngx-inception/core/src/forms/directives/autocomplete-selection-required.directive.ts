@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Directive, Host, Input, OnDestroy, Self } from '@angular/core';
+import { AfterViewInit, Directive, Input, OnDestroy, inject } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatOptionSelectionChange } from '@angular/material/core';
@@ -26,17 +26,13 @@ import { Subscription } from 'rxjs';
   standalone: true
 })
 export class AutocompleteSelectionRequiredDirective implements AfterViewInit, OnDestroy {
+  private readonly autoCompleteTrigger = inject(MatAutocompleteTrigger, { host: true, self: true });
+  private readonly ngControl = inject(NgControl);
+
   @Input()
   matAutocomplete: MatAutocomplete | undefined;
 
   private subscriptions: Subscription = new Subscription();
-
-  constructor(
-    @Host()
-    @Self()
-    private readonly autoCompleteTrigger: MatAutocompleteTrigger,
-    private readonly ngControl: NgControl
-  ) {}
 
   ngAfterViewInit() {
     this.subscriptions.add(

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, inject } from '@angular/core';
 import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 
@@ -34,6 +34,8 @@ import { CodesService } from '../services/codes.service';
   styleUrls: ['code-categories.component.css']
 })
 export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCategorySummary> {
+  private codesService = inject(CodesService);
+
   readonly displayedColumns: readonly string[] = ['id', 'name', 'actions'];
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
@@ -41,10 +43,6 @@ export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCateg
   readonly listKey = 'codes.code-categories';
 
   readonly title = $localize`:@@codes_code_categories_title:Code Categories`;
-
-  constructor(private codesService: CodesService) {
-    super();
-  }
 
   codesAdministration(codeCategoryId: string): void {
     this.listStateService.clear('codes.' + codeCategoryId);

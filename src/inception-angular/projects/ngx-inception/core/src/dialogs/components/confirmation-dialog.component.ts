@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -72,16 +72,9 @@ export interface ConfirmationDialogData {
   }
 })
 export class ConfirmationDialogComponent {
-  /**
-   * Constructs a new ConfirmationDialogComponent.
-   *
-   * @param dialogRef The dialog reference.
-   * @param data      The dialog data.
-   */
-  constructor(
-    private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: ConfirmationDialogData
-  ) {}
+  private dialogRef = inject<MatDialogRef<ConfirmationDialogComponent>>(MatDialogRef);
+  private data = inject<ConfirmationDialogData>(MAT_DIALOG_DATA);
+
 
   get message(): string {
     return this.data.message;

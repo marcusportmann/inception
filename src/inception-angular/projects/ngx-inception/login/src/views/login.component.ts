@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -37,6 +37,14 @@ import { catchError, finalize, first, map, Observable, of, switchMap, throwError
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements AfterViewInit, OnInit {
+  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private dialogService = inject(DialogService);
+  private securityService = inject(SecurityService);
+  private sessionService = inject(SessionService);
+  private spinnerService = inject(SpinnerService);
+
   readonly loginForm: FormGroup;
 
   readonly passwordControl: FormControl<string>;
@@ -45,15 +53,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
   @ViewChild('usernameInput') usernameInput!: ElementRef<HTMLInputElement>;
 
-  constructor(
-    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private dialogService: DialogService,
-    private securityService: SecurityService,
-    private sessionService: SessionService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor() {
     this.passwordControl = new FormControl<string>(this.config.prepopulatedLoginPassword || '', {
       nonNullable: true,
       validators: [Validators.required, Validators.maxLength(100)]

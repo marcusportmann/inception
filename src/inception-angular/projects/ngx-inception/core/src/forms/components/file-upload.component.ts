@@ -16,10 +16,7 @@
 
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  ChangeDetectionStrategy, Component, DoCheck, ElementRef, HostBinding, Input, OnDestroy, Optional,
-  Self, ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DoCheck, ElementRef, HostBinding, Input, OnDestroy, ViewChild, inject } from '@angular/core';
 import {
   AbstractControl, ControlValueAccessor, FormGroupDirective, NgControl, NgForm
 } from '@angular/forms';
@@ -90,6 +87,12 @@ import { Subject } from 'rxjs';
 export class FileUploadComponent
   implements MatFormFieldControl<File[]>, ControlValueAccessor, OnDestroy, DoCheck
 {
+  private fm = inject(FocusMonitor);
+  private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly _parentForm = inject(NgForm, { optional: true });
+  private readonly _parentFormGroup = inject(FormGroupDirective, { optional: true });
+
   /** Static counter for unique id */
   private static nextId = 0;
 
@@ -130,14 +133,9 @@ export class FileUploadComponent
 
   private _files: File[] | null = null;
 
-  constructor(
-    private fm: FocusMonitor,
-    private readonly _elementRef: ElementRef<HTMLElement>,
-    @Optional() @Self() public ngControl: NgControl,
-    @Optional() private readonly _parentForm: NgForm,
-    @Optional() private readonly _parentFormGroup: FormGroupDirective,
-    defaultErrorStateMatcher: ErrorStateMatcher
-  ) {
+  constructor() {
+    const defaultErrorStateMatcher = inject(ErrorStateMatcher);
+
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
     }

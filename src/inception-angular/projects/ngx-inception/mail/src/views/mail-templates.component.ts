@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, inject } from '@angular/core';
 import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 
@@ -35,6 +35,8 @@ import { MailService } from '../services/mail.service';
   styleUrls: ['mail-templates.component.css']
 })
 export class MailTemplatesComponent extends FilteredPaginatedListView<MailTemplateSummary> {
+  private mailService = inject(MailService);
+
   // noinspection JSUnusedGlobalSymbols
   readonly MailTemplateContentType = MailTemplateContentType;
 
@@ -48,10 +50,6 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
   readonly listKey = 'mail.mail-templates';
 
   readonly title = $localize`:@@mail_mail_templates_title:Mail Templates`;
-
-  constructor(private mailService: MailService) {
-    super();
-  }
 
   deleteMailTemplate(mailTemplateId: string): void {
     this.confirmAndProcessAction(

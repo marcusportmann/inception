@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -29,12 +29,8 @@ import { CodesService } from '../services/codes.service';
  */
 @Injectable()
 export class CodeCategoryTitleResolver {
-  /**
-   * Constructs a new CodeCategoryTitleResolver.
-   *
-   * @param codesService The codes service.
-   */
-  constructor(@Inject(CodesService) private codesService: CodesService) {}
+  private codesService = inject<CodesService>(CodesService);
+
 
   /**
    * Resolve the title.

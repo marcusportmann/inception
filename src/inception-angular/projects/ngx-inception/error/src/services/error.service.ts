@@ -20,7 +20,7 @@ import {
   HttpParams,
   HttpResponse
 } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   AccessDeniedError,
   CommunicationError,
@@ -51,16 +51,16 @@ import { ErrorReportNotFoundError } from './error.service.errors';
   providedIn: 'root'
 })
 export class ErrorService {
+  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private httpClient = inject(HttpClient);
+
   /**
    * Constructs a new ErrorService.
    *
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
    */
-  constructor(
-    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-    private httpClient: HttpClient
-  ) {
+  constructor() {
     console.log('Initializing the Error Service');
   }
 

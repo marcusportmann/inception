@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
@@ -50,6 +50,9 @@ export class NewUserDirectoryComponent
   extends AdminContainerView
   implements AfterViewInit, OnDestroy
 {
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  private securityService = inject(SecurityService);
+
   @ViewChild(InternalUserDirectoryComponent)
   internalUserDirectoryComponent?: InternalUserDirectoryComponent;
 
@@ -70,10 +73,7 @@ export class NewUserDirectoryComponent
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private securityService: SecurityService
-  ) {
+  constructor() {
     super();
 
     // Initialize the form controls

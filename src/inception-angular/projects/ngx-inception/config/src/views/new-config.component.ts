@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
@@ -36,6 +36,8 @@ import { ConfigService } from '../services/config.service';
   styleUrls: ['new-config.component.css']
 })
 export class NewConfigComponent extends AdminContainerView {
+  private configService = inject(ConfigService);
+
   config: Config;
 
   descriptionControl: FormControl;
@@ -48,7 +50,7 @@ export class NewConfigComponent extends AdminContainerView {
 
   valueControl: FormControl;
 
-  constructor(private configService: ConfigService) {
+  constructor() {
     super();
 
     // Initialize the form controls

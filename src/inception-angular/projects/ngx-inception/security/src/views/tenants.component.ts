@@ -38,6 +38,8 @@ import { TenantDataSource } from '../services/tenant-data-source';
   styleUrls: ['tenants.component.css']
 })
 export class TenantsComponent extends StatefulListView implements AfterViewInit {
+  private securityService = inject(SecurityService);
+
   readonly dataSource: TenantDataSource;
 
   displayedColumns = ['name', 'actions'];
@@ -60,7 +62,7 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     const nav = this.router.getCurrentNavigation();

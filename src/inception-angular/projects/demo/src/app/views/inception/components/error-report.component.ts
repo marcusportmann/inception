@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   AccessDeniedError, CoreModule, DialogService, Error, InvalidArgumentError, ServiceUnavailableError
@@ -34,11 +34,10 @@ import { TestService } from '../../../services/test.service';
   templateUrl: 'error-report.component.html'
 })
 export class ErrorReportComponent {
-  constructor(
-    private router: Router,
-    private dialogService: DialogService,
-    private testService: TestService
-  ) {}
+  private router = inject(Router);
+  private dialogService = inject(DialogService);
+  private testService = inject(TestService);
+
 
   testErrorReport(): void {
     this.testService

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterContentInit, Directive, ElementRef } from '@angular/core';
+import { AfterContentInit, Directive, ElementRef, inject } from '@angular/core';
 
 /**
  * The AutofocusDirective class implements the autofocus directive.
@@ -27,12 +27,8 @@ import { AfterContentInit, Directive, ElementRef } from '@angular/core';
   standalone: true
 })
 export class AutofocusDirective implements AfterContentInit {
-  /**
-   * Constructs a new AutofocusDirective.
-   *
-   * @param elementRef The element reference.
-   */
-  constructor(private elementRef: ElementRef) {}
+  private elementRef = inject(ElementRef);
+
 
   ngAfterContentInit(): void {
     this.elementRef.nativeElement.focus();

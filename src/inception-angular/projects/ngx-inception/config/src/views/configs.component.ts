@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, inject } from '@angular/core';
 import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 
@@ -34,6 +34,8 @@ import { ConfigService } from '../services/config.service';
   styleUrls: ['configs.component.css']
 })
 export class ConfigsComponent extends FilteredPaginatedListView<Config> {
+  private configService = inject(ConfigService);
+
   readonly displayedColumns: readonly string[] = ['id', 'value', 'actions'];
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
@@ -41,10 +43,6 @@ export class ConfigsComponent extends FilteredPaginatedListView<Config> {
   readonly listKey = 'config.configs';
 
   readonly title = $localize`:@@config_configs_title:Configs`;
-
-  constructor(private configService: ConfigService) {
-    super();
-  }
 
   deleteConfig(id: string): void {
     this.confirmAndProcessAction(

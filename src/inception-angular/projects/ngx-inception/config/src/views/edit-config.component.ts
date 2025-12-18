@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
@@ -37,6 +37,8 @@ import { ConfigService } from '../services/config.service';
   styleUrls: ['edit-config.component.css']
 })
 export class EditConfigComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+  private configService = inject(ConfigService);
+
   config: Config | null = null;
 
   descriptionControl: FormControl<string | null>;
@@ -53,7 +55,7 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
 
   private destroy$ = new Subject<void>();
 
-  constructor(private configService: ConfigService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { Session } from '../../session/services/session';
 import { SessionService } from '../../session/services/session.service';
@@ -29,6 +29,8 @@ import { NavigationItem } from './navigation-item';
   providedIn: 'root'
 })
 export class NavigationService {
+  private sessionService = inject(SessionService);
+
   userNavigation$: Subject<NavigationItem[]> = new ReplaySubject<
     NavigationItem[]
   >(1);
@@ -40,7 +42,7 @@ export class NavigationService {
    *
    * @param sessionService The session service.
    */
-  constructor(private sessionService: SessionService) {
+  constructor() {
     console.log('Initializing the Navigation Service');
 
     this.sessionService.session$.subscribe((session: Session | null) => {

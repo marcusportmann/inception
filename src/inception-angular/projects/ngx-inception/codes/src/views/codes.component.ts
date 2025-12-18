@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, inject } from '@angular/core';
 import {
   BackNavigation, CoreModule, Error, FilteredPaginatedListView, TableFilterComponent
 } from 'ngx-inception/core';
@@ -35,6 +35,8 @@ import { CodesService } from '../services/codes.service';
   styleUrls: ['codes.component.css']
 })
 export class CodesComponent extends FilteredPaginatedListView<Code> {
+  private codesService = inject(CodesService);
+
   readonly codeCategoryId: string;
 
   readonly displayedColumns: readonly string[] = ['id', 'name', 'actions'];
@@ -45,7 +47,7 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
 
   readonly title = $localize`:@@codes_codes_title:Codes`;
 
-  constructor(private codesService: CodesService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

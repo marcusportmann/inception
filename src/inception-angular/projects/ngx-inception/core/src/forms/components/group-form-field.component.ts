@@ -19,11 +19,7 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CdkObserveContent } from '@angular/cdk/observers';
 import { Platform } from '@angular/cdk/platform';
 import { NgTemplateOutlet } from '@angular/common';
-import {
-  AfterContentChecked, AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
-  ContentChild, ContentChildren, ElementRef, Inject, InjectionToken, Input, NgZone, OnDestroy,
-  Optional, QueryList, ViewChild, ViewEncapsulation
-} from '@angular/core';
+import { AfterContentChecked, AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, ElementRef, InjectionToken, Input, NgZone, OnDestroy, QueryList, ViewChild, ViewEncapsulation, inject } from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import {
   FloatLabelType, getMatFormFieldDuplicatedHintError, MAT_ERROR, MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -83,6 +79,13 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
   }
 })
 export class GroupFormFieldComponent implements AfterContentInit, AfterContentChecked, OnDestroy {
+  _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly _changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly _dir = inject(Directionality, { optional: true });
+  private readonly _defaults = inject<MatFormFieldDefaultOptions | null>(MAT_FORM_FIELD_DEFAULT_OPTIONS, { optional: true });
+  private readonly _platform = inject(Platform);
+  private readonly _ngZone = inject(NgZone);
+
   static ngAcceptInputType_hideRequiredMarker: BooleanInput;
 
   @ContentChildren(MatCheckbox, { descendants: true })
@@ -133,16 +136,7 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
   /** Whether the outline gap needs to be calculated next time the zone has stabilized. */
   private _outlineGapCalculationNeededOnStable = false;
 
-  constructor(
-    public _elementRef: ElementRef<HTMLElement>,
-    private readonly _changeDetectorRef: ChangeDetectorRef,
-    @Optional() private readonly _dir: Directionality | null,
-    @Optional()
-    @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS)
-    private readonly _defaults: MatFormFieldDefaultOptions | null,
-    private readonly _platform: Platform,
-    private readonly _ngZone: NgZone
-  ) {
+  constructor() {
     this.floatLabel = this._getDefaultFloatLabelState();
   }
 

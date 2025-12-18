@@ -15,15 +15,7 @@
  */
 
 import { AsyncPipe, NgClass } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Replace } from '../../util/replace';
@@ -63,6 +55,10 @@ import { BreadcrumbsService } from '../services/breadcrumbs.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
+  private elementRef = inject(ElementRef);
+  private breadcrumbsService = inject(BreadcrumbsService);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
   breadcrumbs: Observable<Breadcrumb[]>;
 
   @Input() fixed = false;
@@ -78,11 +74,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
    * @param breadcrumbsService The breadcrumbs service.
    * @param changeDetectorRef  The ChangeDetectorRef instance.
    */
-  constructor(
-    private elementRef: ElementRef,
-    private breadcrumbsService: BreadcrumbsService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {
+  constructor() {
     this.breadcrumbs = this.breadcrumbsService.breadcrumbs$;
   }
 

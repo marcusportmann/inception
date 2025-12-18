@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AdminContainerView, BackNavigation, CoreModule, Error } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
@@ -34,6 +34,8 @@ import { ErrorService } from '../services/error.service';
   styleUrls: ['error-report.component.css']
 })
 export class ErrorReportComponent extends AdminContainerView implements AfterViewInit {
+  private errorService = inject(ErrorService);
+
   applicationIdControl: FormControl;
 
   applicationVersionControl: FormControl;
@@ -60,7 +62,7 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
 
   whoControl: FormControl;
 
-  constructor(private errorService: ErrorService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

@@ -15,10 +15,7 @@
  */
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit,
-  Optional, Self, ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldControl } from '@angular/material/form-field';
@@ -77,6 +74,10 @@ import { Region } from '../services/region';
 export class RegionInputComponent
   implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy
 {
+  private readonly referenceService = inject(ReferenceService);
+  readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   private static _nextId = 0;
 
   /** The name for the control type. */
@@ -115,11 +116,7 @@ export class RegionInputComponent
   /** Emits when the component is destroyed. */
   private readonly destroy$ = new Subject<void>();
 
-  constructor(
-    private readonly referenceService: ReferenceService,
-    @Optional() @Self() public readonly ngControl: NgControl | null,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {
+  constructor() {
     if (this.ngControl != null) {
       // Setting the value accessor directly to avoid circular imports.
       this.ngControl.valueAccessor = this;

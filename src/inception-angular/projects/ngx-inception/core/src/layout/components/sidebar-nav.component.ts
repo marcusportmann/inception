@@ -15,14 +15,7 @@
  */
 
 
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostBinding,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, OnDestroy, OnInit, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NavigationItem } from '../services/navigation-item';
@@ -48,6 +41,10 @@ import { SidebarNavItemComponent } from './sidebar-nav-item.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarNavComponent implements OnInit, OnDestroy {
+  private navigationService = inject(NavigationService);
+  private router = inject(Router);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
   navItems: NavigationItem[];
 
   @HostBinding('attr.role') role = 'nav';
@@ -63,11 +60,7 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
    * @param router            The router.
    * @param changeDetectorRef The ChangeDetectorRef instance.
    */
-  constructor(
-    private navigationService: NavigationService,
-    private router: Router,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {
+  constructor() {
     this.navItems = new Array<NavigationItem>();
   }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, inject } from '@angular/core';
 
 /**
  * The SpinnerComponent class implements the spinner component.
@@ -49,12 +49,8 @@ import { Component, ElementRef } from '@angular/core';
   ]
 })
 export class SpinnerComponent {
-  /**
-   * Constructs a new SpinnerComponent.
-   *
-   * @param elementRef The element reference.
-   */
-  constructor(private elementRef: ElementRef) {}
+  private elementRef = inject(ElementRef);
+
 
   // noinspection JSUnusedGlobalSymbols
   show(): void {

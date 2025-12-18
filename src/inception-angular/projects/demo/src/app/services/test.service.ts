@@ -15,7 +15,7 @@
  */
 
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
   ResponseConverter, ServiceUnavailableError
@@ -32,16 +32,16 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class TestService {
+  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private httpClient = inject(HttpClient);
+
   /**
    * Constructs a new TestService.
    *
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
    */
-  constructor(
-    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-    private httpClient: HttpClient
-  ) {
+  constructor() {
     console.log('Initializing the Test Service');
   }
 

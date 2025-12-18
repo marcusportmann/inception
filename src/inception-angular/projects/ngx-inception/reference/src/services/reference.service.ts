@@ -15,7 +15,7 @@
  */
 
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Injectable, LOCALE_ID, inject } from '@angular/core';
 import {
   AccessDeniedError, CacheService, CommunicationError, INCEPTION_CONFIG, InceptionConfig,
   ServiceUnavailableError
@@ -36,6 +36,11 @@ import { TimeZone } from './time-zone';
   providedIn: 'root'
 })
 export class ReferenceService {
+  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private localeId = inject(LOCALE_ID);
+  private httpClient = inject(HttpClient);
+  private cacheService = inject(CacheService);
+
   /**
    * Constructs a new ReferenceService.
    *
@@ -44,12 +49,9 @@ export class ReferenceService {
    * @param httpClient The HTTP client.
    * @param cacheService The cache service for caching reference data.
    */
-  constructor(
-    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-    @Inject(LOCALE_ID) private localeId: string,
-    private httpClient: HttpClient,
-    private cacheService: CacheService
-  ) {
+  constructor() {
+    const localeId = this.localeId;
+
     console.log(`Initializing the Reference Service (${localeId})`);
   }
 

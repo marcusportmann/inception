@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
@@ -130,6 +130,8 @@ export interface JobParameterDialogData {
     `
 })
 export class JobParameterDialogComponent {
+  private dialogRef = inject<MatDialogRef<JobParameterDialogComponent>>(MatDialogRef);
+
   jobParameterForm: FormGroup;
 
   nameControl: FormControl;
@@ -142,10 +144,9 @@ export class JobParameterDialogComponent {
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(
-    private dialogRef: MatDialogRef<JobParameterDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: JobParameterDialogData
-  ) {
+  constructor() {
+    const data = inject<JobParameterDialogData>(MAT_DIALOG_DATA);
+
     // Initialize the form controls
     this.nameControl = new FormControl(
       {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, inject } from '@angular/core';
 import { Replace } from '../../util/replace';
 
 /**
@@ -31,12 +31,8 @@ import { Replace } from '../../util/replace';
   </div>`
 })
 export class SidebarFooterComponent implements OnInit {
-  /**
-   * Constructs a new SidebarFooterComponent.
-   *
-   * @param elementRef The element reference.
-   */
-  constructor(private elementRef: ElementRef) {}
+  private elementRef = inject(ElementRef);
+
 
   ngOnInit(): void {
     Replace(this.elementRef);

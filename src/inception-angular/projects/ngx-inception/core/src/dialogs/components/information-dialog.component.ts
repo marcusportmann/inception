@@ -15,7 +15,7 @@
  */
 
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DialogData } from '../services/dialog-data';
@@ -61,16 +61,9 @@ import { DialogData } from '../services/dialog-data';
   }
 })
 export class InformationDialogComponent {
-  /**
-   * Constructs a new InformationDialogComponent.
-   *
-   * @param dialogRef The dialog reference.
-   * @param data      The dialog data.
-   */
-  constructor(
-    private dialogRef: MatDialogRef<InformationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {}
+  private dialogRef = inject<MatDialogRef<InformationDialogComponent>>(MatDialogRef);
+  data = inject<DialogData>(MAT_DIALOG_DATA);
+
 
   ok(): void {
     this.dialogRef.close();

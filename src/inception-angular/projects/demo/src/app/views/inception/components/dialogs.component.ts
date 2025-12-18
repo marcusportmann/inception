@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationDialogComponent, CoreModule, DialogService, Error } from 'ngx-inception/core';
 import { first } from 'rxjs/operators';
@@ -31,12 +31,8 @@ import { first } from 'rxjs/operators';
   templateUrl: 'dialogs.component.html'
 })
 export class DialogsComponent {
-  /**
-   * Constructs a new DialogsComponent.
-   *
-   * @param dialogService The dialog service.
-   */
-  constructor(private dialogService: DialogService) {}
+  private dialogService = inject(DialogService);
+
 
   confirmation(): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =

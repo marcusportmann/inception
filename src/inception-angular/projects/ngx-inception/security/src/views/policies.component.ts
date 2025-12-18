@@ -44,6 +44,8 @@ import { SecurityService } from '../services/security.service';
   styleUrls: ['policies.component.css']
 })
 export class PoliciesComponent extends StatefulListView implements AfterViewInit {
+  private securityService = inject(SecurityService);
+
   readonly dataSource: PolicySummaryDataSource;
 
   displayedColumns = ['id', 'version', 'name', 'type', 'actions'];
@@ -68,7 +70,7 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     // Read the reset flag from the current navigation

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Directive, Host, HostListener, Optional, Self, ViewContainerRef } from '@angular/core';
+import { Directive, HostListener, ViewContainerRef, inject } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 
 /**
@@ -28,16 +28,9 @@ import { FormGroupDirective } from '@angular/forms';
   standalone: true
 })
 export class ValidatedFormDirective {
-  /**
-   * Constructs a new ValidatedFormDirective.
-   *
-   * @param viewContainerRef   The view container reference.
-   * @param formGroupDirective The form group directive.
-   */
-  constructor(
-    private viewContainerRef: ViewContainerRef,
-    @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective
-  ) {}
+  private viewContainerRef = inject(ViewContainerRef);
+  private formGroupDirective = inject(FormGroupDirective, { host: true, self: true, optional: true });
+
 
   @HostListener('reset')
   onReset(): void {

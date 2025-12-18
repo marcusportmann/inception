@@ -19,7 +19,7 @@ import {
   HttpErrorResponse,
   HttpResponse
 } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   AccessDeniedError,
   CommunicationError,
@@ -47,6 +47,9 @@ import {
   providedIn: 'root'
 })
 export class ReportingService {
+  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private httpClient = inject(HttpClient);
+
   static readonly MAX_TEMPLATE_SIZE: number = 10485760;
 
   /**
@@ -55,10 +58,7 @@ export class ReportingService {
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
    */
-  constructor(
-    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-    private httpClient: HttpClient
-  ) {
+  constructor() {
     console.log('Initializing the Reporting Service');
   }
 

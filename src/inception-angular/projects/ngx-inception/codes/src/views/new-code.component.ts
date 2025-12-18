@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
@@ -38,6 +38,8 @@ import { CodesService } from '../services/codes.service';
   styleUrls: ['new-code.component.css']
 })
 export class NewCodeComponent extends AdminContainerView implements AfterViewInit {
+  private codesService = inject(CodesService);
+
   code: Code | null = null;
 
   codeCategoryId: string;
@@ -52,7 +54,7 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
 
   valueControl: FormControl;
 
-  constructor(private codesService: CodesService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

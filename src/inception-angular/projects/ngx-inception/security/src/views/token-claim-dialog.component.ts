@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
@@ -162,6 +162,8 @@ export interface TokenClaimDialogData {
     `
 })
 export class TokenClaimDialogComponent {
+  private dialogRef = inject<MatDialogRef<TokenClaimDialogComponent>>(MatDialogRef);
+
   nameControl: FormControl;
 
   tokenClaimForm: FormGroup;
@@ -176,10 +178,9 @@ export class TokenClaimDialogComponent {
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(
-    private dialogRef: MatDialogRef<TokenClaimDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: TokenClaimDialogData
-  ) {
+  constructor() {
+    const data = inject<TokenClaimDialogData>(MAT_DIALOG_DATA);
+
     // Initialize the form controls
     this.nameControl = new FormControl(
       {

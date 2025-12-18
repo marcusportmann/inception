@@ -16,7 +16,7 @@
 
 
 
-import { Component, Inject, OnDestroy, OnInit, DOCUMENT } from '@angular/core';
+import { Component, OnDestroy, OnInit, DOCUMENT, inject } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterOutlet } from '@angular/router';
 
 import { Observable, Subscription } from 'rxjs';
@@ -88,6 +88,16 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
   `
 })
 export class AdminContainerComponent implements OnInit, OnDestroy {
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private readonly document = inject<Document>(DOCUMENT);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly breadcrumbsService = inject(BreadcrumbsService);
+  private readonly sessionService = inject(SessionService);
+  private readonly sidebarService = inject(SidebarService);
+  private readonly spinnerService = inject(SpinnerService);
+  private readonly titleBarService = inject(TitleBarService);
+
   sidebarMinimized = true;
 
   private adminContainerViewTitleSubscription?: Subscription;
@@ -99,17 +109,7 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
   /**
    * Constructs a new AdminContainerComponent.
    */
-  constructor(
-    @Inject(INCEPTION_CONFIG) private readonly config: InceptionConfig,
-    @Inject(DOCUMENT) private readonly document: Document,
-    private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly breadcrumbsService: BreadcrumbsService,
-    private readonly sessionService: SessionService,
-    private readonly sidebarService: SidebarService,
-    private readonly spinnerService: SpinnerService,
-    private readonly titleBarService: TitleBarService
-  ) {
+  constructor() {
     this.mutationObserver = new MutationObserver(() => {
       this.sidebarMinimized = this.document.body.classList.contains('sidebar-minimized');
     });

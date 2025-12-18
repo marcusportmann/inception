@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, GroupFormFieldComponent, ValidatedFormDirective
@@ -37,6 +37,8 @@ import { UserDirectoryCapabilities } from '../services/user-directory-capabiliti
   styleUrls: ['edit-user.component.css']
 })
 export class EditUserComponent extends AdminContainerView implements AfterViewInit {
+  private securityService = inject(SecurityService);
+
   editUserForm: FormGroup;
 
   emailControl: FormControl;
@@ -61,7 +63,7 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
   usernameControl: FormControl;
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

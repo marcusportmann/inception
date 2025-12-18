@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { AdminContainerView, BackNavigation, CoreModule, Error } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
@@ -34,13 +34,15 @@ import { TokenType } from '../services/token-type';
   styleUrls: ['view-token.component.css']
 })
 export class ViewTokenComponent extends AdminContainerView implements AfterViewInit {
+  private securityService = inject(SecurityService);
+
   readonly title = $localize`:@@security_view_token_title:View Token`;
 
   token: Token | null = null;
 
   tokenId: string;
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

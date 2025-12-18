@@ -15,7 +15,7 @@
  */
 
 import { AsyncPipe } from '@angular/common';
-import { Component, ElementRef, Inject, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, inject } from '@angular/core';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -94,25 +94,15 @@ import { SidebarTogglerDirective } from '../directives/sidebar-toggler.directive
     `
 })
 export class AdminHeaderComponent implements OnInit {
+  private elementRef = inject(ElementRef);
+  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private router = inject(Router);
+  private sessionService = inject(SessionService);
+
   @Input() fixed = false;
 
   // eslint-disable-next-line
   @Input() sidebarToggler!: any;
-
-  /**
-   * Constructs a new AdminHeaderComponent.
-   *
-   * @param elementRef     The element reference.
-   * @param config         The Inception configuration.
-   * @param router         The router.
-   * @param sessionService The session service.
-   */
-  constructor(
-    private elementRef: ElementRef,
-    @Inject(INCEPTION_CONFIG) private config: InceptionConfig,
-    private router: Router,
-    private sessionService: SessionService
-  ) {}
 
   isLoggedIn(): Observable<boolean> {
     return this.sessionService.session$.pipe(

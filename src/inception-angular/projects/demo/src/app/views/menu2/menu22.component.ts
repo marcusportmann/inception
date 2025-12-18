@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostBinding, ViewChild, inject } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -44,6 +44,11 @@ import { DataService } from '../../services/data.service';
   templateUrl: 'menu22.component.html'
 })
 export class Menu22Component implements AfterViewInit {
+  private router = inject(Router);
+  private dataService = inject(DataService);
+  private dialogService = inject(DialogService);
+  private spinnerService = inject(SpinnerService);
+
   dataSource = new MatTableDataSource<Data>();
 
   displayedColumns = ['id', 'stringValue', 'dateValue', 'integerValue'];
@@ -54,12 +59,7 @@ export class Menu22Component implements AfterViewInit {
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  constructor(
-    private router: Router,
-    private dataService: DataService,
-    private dialogService: DialogService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor() {
     // Set the data source filter
     this.dataSource.filterPredicate = (data, filter): boolean =>
       data.stringValue.toLowerCase().includes(filter);

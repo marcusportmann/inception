@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, Error, FileUploadComponent, FileValidator,
@@ -38,6 +38,8 @@ import { MailService } from '../services/mail.service';
   styleUrls: ['edit-mail-template.component.css']
 })
 export class EditMailTemplateComponent extends AdminContainerView implements AfterViewInit {
+  private mailService = inject(MailService);
+
   // noinspection JSUnusedGlobalSymbols
   MailTemplateContentType = MailTemplateContentType;
 
@@ -64,7 +66,7 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
 
   readonly title = $localize`:@@mail_edit_mail_template_title:Edit Mail Template`;
 
-  constructor(private mailService: MailService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters

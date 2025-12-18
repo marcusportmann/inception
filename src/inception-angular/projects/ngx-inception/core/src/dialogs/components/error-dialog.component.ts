@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Error } from '../../errors/error';
@@ -66,16 +66,9 @@ export interface ErrorDialogData {
   }
 })
 export class ErrorDialogComponent {
-  /**
-   * Constructs a new ErrorDialogComponent.
-   *
-   * @param dialogRef The dialog reference.
-   * @param data      The dialog data.
-   */
-  constructor(
-    private dialogRef: MatDialogRef<ErrorDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData
-  ) {}
+  private dialogRef = inject<MatDialogRef<ErrorDialogComponent>>(MatDialogRef);
+  private data = inject<ErrorDialogData>(MAT_DIALOG_DATA);
+
 
   get message(): string {
     return this.data.error.message;

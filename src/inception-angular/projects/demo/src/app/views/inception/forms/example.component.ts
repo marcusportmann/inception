@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CoreModule, GroupFormFieldComponent, ValidatedFormDirective } from 'ngx-inception/core';
 import { Country, CountryInputComponent } from 'ngx-inception/reference';
@@ -61,6 +61,8 @@ interface ExampleForm {
   templateUrl: 'example.component.html'
 })
 export class ExampleComponent implements OnDestroy {
+  private formBuilder = inject(FormBuilder);
+
   static readonly MAX_DATE = Date.now();
   static readonly MIN_DATE = new Date(1900, 1, 1);
 
@@ -79,7 +81,7 @@ export class ExampleComponent implements OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor() {
     // Initialize the form controls with proper types
     this.confirmPasswordControl = new FormControl<string | null>(null, Validators.required);
     this.dateOfBirthControl = new FormControl<Date | null>(null, Validators.required);

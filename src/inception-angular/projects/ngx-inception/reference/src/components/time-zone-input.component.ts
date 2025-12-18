@@ -15,9 +15,7 @@
  */
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild
-} from '@angular/core';
+import { ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldControl } from '@angular/material/form-field';
@@ -73,6 +71,10 @@ import { TimeZone } from '../services/time-zone';
 export class TimeZoneInputComponent
   implements MatFormFieldControl<string | null>, ControlValueAccessor, OnInit, OnDestroy
 {
+  private readonly referenceService = inject(ReferenceService);
+  readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   private static _nextId = 0;
 
   /** Name for the control type. */
@@ -108,11 +110,7 @@ export class TimeZoneInputComponent
   /** The observable providing access to the value for the input as it changes. */
   private readonly inputValue$ = new ReplaySubject<string>(1);
 
-  constructor(
-    private readonly referenceService: ReferenceService,
-    @Optional() @Self() public readonly ngControl: NgControl | null,
-    private readonly changeDetectorRef: ChangeDetectorRef
-  ) {
+  constructor() {
     if (this.ngControl) {
       // Avoid circular imports from using providers
       this.ngControl.valueAccessor = this;

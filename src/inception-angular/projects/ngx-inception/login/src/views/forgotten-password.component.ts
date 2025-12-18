@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -38,19 +38,19 @@ import { catchError, finalize, first } from 'rxjs/operators';
   templateUrl: 'forgotten-password.component.html'
 })
 export class ForgottenPasswordComponent {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private dialogService = inject(DialogService);
+  private securityService = inject(SecurityService);
+  private spinnerService = inject(SpinnerService);
+
   readonly forgottenPasswordForm: FormGroup<{
     username: FormControl<string>;
   }>;
 
   readonly usernameControl: FormControl<string>;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private dialogService: DialogService,
-    private securityService: SecurityService,
-    private spinnerService: SpinnerService
-  ) {
+  constructor() {
     // Initialize the form controls
     this.usernameControl = new FormControl<string>('', {
       nonNullable: true,

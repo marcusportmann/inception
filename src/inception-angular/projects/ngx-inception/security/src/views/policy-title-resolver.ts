@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SecurityService } from '../services/security.service';
@@ -27,13 +27,8 @@ import { SecurityService } from '../services/security.service';
  */
 @Injectable()
 export class PolicyTitleResolver {
-  /**
-   * Constructs a new PolicyTitleResolver.
-   *
-   * @param securityService The security service.
-   */
-  constructor(
-    @Inject(SecurityService) private securityService: SecurityService) {}
+  private securityService = inject<SecurityService>(SecurityService);
+
 
   /**
    * Resolve the title.

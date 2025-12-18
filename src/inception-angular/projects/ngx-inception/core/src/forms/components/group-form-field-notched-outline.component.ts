@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, NgZone, ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, NgZone, ViewChild, ViewEncapsulation, inject } from '@angular/core';
 
 /**
  * Internal component that creates an instance of the MDC notched-outline component.
@@ -42,16 +39,14 @@ import {
   encapsulation: ViewEncapsulation.None
 })
 export class GroupFormFieldNotchedOutlineComponent implements AfterViewInit {
+  private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly _ngZone = inject(NgZone);
+
   /** Whether the notch should be opened. */
   @Input() groupFormFieldNotchedOutlineOpen = false;
 
   /** Reference to the notch element. Assigned by Angular after view init. */
   @ViewChild('notch') private _notch!: ElementRef<HTMLDivElement>;
-
-  constructor(
-    private readonly _elementRef: ElementRef<HTMLElement>,
-    private readonly _ngZone: NgZone
-  ) {}
 
   /** Updates the visual width of the notch based on the label width. */
   _setNotchWidth(labelWidth: number): void {

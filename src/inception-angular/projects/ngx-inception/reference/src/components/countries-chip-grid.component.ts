@@ -16,10 +16,7 @@
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import {
-  ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipGrid } from '@angular/material/chips';
@@ -91,6 +88,10 @@ import { ReferenceService } from '../services/reference.service';
 export class CountriesChipGridComponent
   implements MatFormFieldControl<string[]>, ControlValueAccessor, OnInit, OnDestroy
 {
+  private referenceService = inject(ReferenceService);
+  ngControl = inject(NgControl, { optional: true, self: true });
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
   private static nextId = 0;
 
   @ViewChild(MatInput, { static: true }) addCountryInput!: MatInput;
@@ -130,11 +131,7 @@ export class CountriesChipGridComponent
   /** Destroy notifier for subscriptions. */
   private readonly destroy$ = new Subject<void>();
 
-  constructor(
-    private referenceService: ReferenceService,
-    @Optional() @Self() public ngControl: NgControl,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {
+  constructor() {
     if (this.ngControl != null) {
       // Avoid circular dependency with providers
       this.ngControl.valueAccessor = this;

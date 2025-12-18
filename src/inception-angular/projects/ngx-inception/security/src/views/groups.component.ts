@@ -71,6 +71,9 @@ export class GroupsComponent
   extends StatefulListView<GroupsListExtras>
   implements AfterViewInit
 {
+  private securityService = inject(SecurityService);
+  private sessionService = inject(SessionService);
+
   readonly dataSource: GroupDataSource;
 
   displayedColumns = ['name', 'actions'];
@@ -102,10 +105,7 @@ export class GroupsComponent
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  constructor(
-    private securityService: SecurityService,
-    private sessionService: SessionService
-  ) {
+  constructor() {
     super();
 
     const nav = this.router.getCurrentNavigation();

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { CoreModule, TitleBarService } from 'ngx-inception/core';
 
 /**
@@ -33,12 +33,8 @@ import { CoreModule, TitleBarService } from 'ngx-inception/core';
   `
 })
 export class Menu321Component implements AfterViewInit {
-  /**
-   * Constructs a new Menu321Component.
-   *
-   * @param titleBarService The title bar service.
-   */
-  constructor(private titleBarService: TitleBarService) {}
+  private titleBarService = inject(TitleBarService);
+
 
   ngAfterViewInit(): void {
     this.titleBarService.setTitle('Custom Menu 3.2.1 Title');

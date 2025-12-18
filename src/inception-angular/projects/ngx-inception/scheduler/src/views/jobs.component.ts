@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, inject } from '@angular/core';
 import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { Job } from '../services/job';
@@ -34,6 +34,8 @@ import { SchedulerService } from '../services/scheduler.service';
   styleUrls: ['jobs.component.css']
 })
 export class JobsComponent extends FilteredPaginatedListView<Job> {
+  private schedulerService = inject(SchedulerService);
+
   // noinspection JSUnusedGlobalSymbols
   readonly JobStatus = JobStatus;
 
@@ -52,10 +54,6 @@ export class JobsComponent extends FilteredPaginatedListView<Job> {
   readonly listKey = 'scheduler.jobs';
 
   readonly title = $localize`:@@scheduler_jobs_title:Jobs`;
-
-  constructor(private schedulerService: SchedulerService) {
-    super();
-  }
 
   deleteJob(jobId: string): void {
     this.confirmAndProcessAction(

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Error } from '../../errors/error';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog.component';
@@ -32,12 +32,14 @@ import { DialogData } from './dialog-data';
   providedIn: 'root'
 })
 export class DialogService {
+  private matDialog = inject(MatDialog);
+
   /**
    * Constructs a new DialogService.
    *
    * @param matDialog The material dialog.
    */
-  constructor(private matDialog: MatDialog) {
+  constructor() {
     console.log('Initializing the Dialog Service');
   }
 

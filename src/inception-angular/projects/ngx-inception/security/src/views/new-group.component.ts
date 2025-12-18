@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
@@ -37,6 +37,8 @@ import { UserDirectoryCapabilities } from '../services/user-directory-capabiliti
   styleUrls: ['new-group.component.css']
 })
 export class NewGroupComponent extends AdminContainerView implements AfterViewInit {
+  private securityService = inject(SecurityService);
+
   descriptionControl: FormControl;
 
   group: Group | null = null;
@@ -51,7 +53,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
 
   userDirectoryId: string;
 
-  constructor(private securityService: SecurityService) {
+  constructor() {
     super();
 
     // Retrieve the route parameters
