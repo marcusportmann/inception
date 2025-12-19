@@ -19,7 +19,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
+  AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { combineLatest, Subscription } from 'rxjs';
 import { finalize, first, pairwise, startWith } from 'rxjs/operators';

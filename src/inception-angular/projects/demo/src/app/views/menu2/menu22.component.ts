@@ -20,8 +20,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import {
-  AccessDeniedError, CoreModule, DialogService, Error, InvalidArgumentError,
-  ServiceUnavailableError, SpinnerService, TableFilterComponent
+  AccessDeniedError, CoreModule, DialogService, InvalidArgumentError, ServiceUnavailableError,
+  SpinnerService, TableFilterComponent
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Data } from '../../services/data';

@@ -15,14 +15,14 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error } from './error';
+import { FrameworkError } from './framework-error';
 
 /**
  * The CommunicationError class holds the information for a communication error.
  *
  * @author Marcus Portmann
  */
-export class CommunicationError extends Error {
+export class CommunicationError extends FrameworkError {
   /**
    *  The HTTP status-code for the error.
    */

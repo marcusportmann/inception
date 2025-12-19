@@ -21,7 +21,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import {
-  CoreModule, Error, HasAuthorityDirective, Session, SessionService, SortDirection,
+  CoreModule, HasAuthorityDirective, Session, SessionService, SortDirection,
   StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
 import { BehaviorSubject, EMPTY, forkJoin, Observable, of } from 'rxjs';

@@ -16,7 +16,7 @@
 
 import { Component, HostBinding, inject } from '@angular/core';
 import {
-  BackNavigation, CoreModule, Error, FilteredPaginatedListView, TableFilterComponent
+  BackNavigation, CoreModule, FilteredPaginatedListView, TableFilterComponent
 } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { Code } from '../services/code';

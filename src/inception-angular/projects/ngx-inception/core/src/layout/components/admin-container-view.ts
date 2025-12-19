@@ -19,9 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { DialogService } from '../../dialogs/services/dialog.service';
-import {
-  AccessDeniedError, Error, InvalidArgumentError, ServiceUnavailableError
-} from '../../errors';
+import { AccessDeniedError, InvalidArgumentError, ServiceUnavailableError } from '../../errors';
 import { SpinnerService } from '../services/spinner.service';
 import { BackNavigation } from './back-navigation';
 

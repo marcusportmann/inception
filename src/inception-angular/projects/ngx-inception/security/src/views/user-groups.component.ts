@@ -19,8 +19,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {
-  AdminContainerView, BackNavigation, ConfirmationDialogComponent, CoreModule, Error
-} from 'ngx-inception/core';
+  AdminContainerView, BackNavigation, ConfirmationDialogComponent, CoreModule } from 'ngx-inception/core';
 import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { finalize, first } from 'rxjs/operators';
 import { GroupMemberType } from '../services/group-member-type';

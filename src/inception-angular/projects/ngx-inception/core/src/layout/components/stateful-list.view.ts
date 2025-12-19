@@ -22,7 +22,6 @@ import { EMPTY, merge, Observable, Subject } from 'rxjs';
 import {
   catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
 } from 'rxjs/operators';
-import { Error } from '../../errors/error';
 import { TableFilterComponent } from '../../forms/components/table-filter.component';
 import { ListState, ListStateService } from '../services/list-state.service';
 import { AdminContainerView } from './admin-container-view';

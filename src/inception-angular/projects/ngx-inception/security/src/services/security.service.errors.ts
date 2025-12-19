@@ -15,14 +15,14 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
+import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The AuthenticationFailedError class holds the information for an authentication failed error.
  *
  * @author Marcus Portmann
  */
-export class AuthenticationFailedError extends Error {
+export class AuthenticationFailedError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/authentication-failed';
 
   /**
@@ -40,7 +40,7 @@ export class AuthenticationFailedError extends Error {
  *
  * @author Marcus Portmann
  */
-export class DuplicateGroupError extends Error {
+export class DuplicateGroupError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/duplicate-group';
 
   /**
@@ -61,7 +61,7 @@ export class DuplicateGroupError extends Error {
  *
  * @author Marcus Portmann
  */
-export class DuplicatePolicyError extends Error {
+export class DuplicatePolicyError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/duplicate-policy';
 
   /**
@@ -82,7 +82,7 @@ export class DuplicatePolicyError extends Error {
  *
  * @author Marcus Portmann
  */
-export class DuplicateTenantError extends Error {
+export class DuplicateTenantError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/duplicate-tenant';
 
   /**
@@ -103,7 +103,7 @@ export class DuplicateTenantError extends Error {
  *
  * @author Marcus Portmann
  */
-export class DuplicateUserDirectoryError extends Error {
+export class DuplicateUserDirectoryError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/duplicate-user-directory';
 
   /**
@@ -124,7 +124,7 @@ export class DuplicateUserDirectoryError extends Error {
  *
  * @author Marcus Portmann
  */
-export class DuplicateUserError extends Error {
+export class DuplicateUserError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/duplicate-user';
 
   /**
@@ -145,7 +145,7 @@ export class DuplicateUserError extends Error {
  *
  * @author Marcus Portmann
  */
-export class ExistingGroupMembersError extends Error {
+export class ExistingGroupMembersError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/existing-group-members';
 
   /**
@@ -166,7 +166,7 @@ export class ExistingGroupMembersError extends Error {
  *
  * @author Marcus Portmann
  */
-export class ExistingGroupsError extends Error {
+export class ExistingGroupsError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/existing-groups';
 
   /**
@@ -187,7 +187,7 @@ export class ExistingGroupsError extends Error {
  *
  * @author Marcus Portmann
  */
-export class ExistingPasswordError extends Error {
+export class ExistingPasswordError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/existing-password';
 
   /**
@@ -208,7 +208,7 @@ export class ExistingPasswordError extends Error {
  *
  * @author Marcus Portmann
  */
-export class ExistingUsersError extends Error {
+export class ExistingUsersError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/existing-users';
 
   /**
@@ -229,7 +229,7 @@ export class ExistingUsersError extends Error {
  *
  * @author Marcus Portmann
  */
-export class GroupMemberNotFoundError extends Error {
+export class GroupMemberNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/group-member-not-found';
 
   /**
@@ -250,7 +250,7 @@ export class GroupMemberNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class GroupNotFoundError extends Error {
+export class GroupNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/group-not-found';
 
   /**
@@ -268,7 +268,7 @@ export class GroupNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class GroupRoleNotFoundError extends Error {
+export class GroupRoleNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/group-role-not-found';
 
   /**
@@ -289,7 +289,7 @@ export class GroupRoleNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class InvalidPolicyDataError extends Error {
+export class InvalidPolicyDataError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/invalid-policy-data';
 
   /**
@@ -307,7 +307,7 @@ export class InvalidPolicyDataError extends Error {
  *
  * @author Marcus Portmann
  */
-export class InvalidSecurityCodeError extends Error {
+export class InvalidSecurityCodeError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/invalid-security-code';
 
   /**
@@ -325,7 +325,7 @@ export class InvalidSecurityCodeError extends Error {
  *
  * @author Marcus Portmann
  */
-export class PolicyDataMismatchError extends Error {
+export class PolicyDataMismatchError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/policy-data-mismatch';
 
   /**
@@ -346,7 +346,7 @@ export class PolicyDataMismatchError extends Error {
  *
  * @author Marcus Portmann
  */
-export class PolicyNotFoundError extends Error {
+export class PolicyNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/policy-not-found';
 
   /**
@@ -364,7 +364,7 @@ export class PolicyNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class RoleNotFoundError extends Error {
+export class RoleNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/role-not-found';
 
   /**
@@ -382,7 +382,7 @@ export class RoleNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class SessionError extends Error {
+export class SessionError extends FrameworkError {
   /**
    * Constructs a new SessionError.
    *
@@ -399,7 +399,7 @@ export class SessionError extends Error {
  *
  * @author Marcus Portmann
  */
-export class TenantNotFoundError extends Error {
+export class TenantNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/tenant-not-found';
 
   /**
@@ -418,7 +418,7 @@ export class TenantNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class TenantUserDirectoryNotFoundError extends Error {
+export class TenantUserDirectoryNotFoundError extends FrameworkError {
   static readonly TYPE =
     'https://inception.digital/problems/security/tenant-user-directory-not-found';
 
@@ -440,7 +440,7 @@ export class TenantUserDirectoryNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class TokenNotFoundError extends Error {
+export class TokenNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/token-not-found';
 
   /**
@@ -458,7 +458,7 @@ export class TokenNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class UserDirectoryNotFoundError extends Error {
+export class UserDirectoryNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/user-directory-not-found';
 
   /**
@@ -479,7 +479,7 @@ export class UserDirectoryNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class UserLockedError extends Error {
+export class UserLockedError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/user-locked';
 
   /**
@@ -500,7 +500,7 @@ export class UserLockedError extends Error {
  *
  * @author Marcus Portmann
  */
-export class UserNotFoundError extends Error {
+export class UserNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/security/user-not-found';
 
   /**

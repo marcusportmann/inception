@@ -18,7 +18,7 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
-  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
+  AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Job } from '../services/job';

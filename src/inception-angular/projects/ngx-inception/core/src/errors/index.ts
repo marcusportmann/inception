@@ -16,7 +16,7 @@
 
 export * from './access-denied-error';
 export * from './communication-error';
-export * from './error';
+export * from './framework-error';
 export * from './http-error';
 export * from './invalid-argument-error';
 export * from './oauth-error';

@@ -15,14 +15,14 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
+import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The ErrorReportNotFoundError class holds the information for an error report not found error.
  *
  * @author Marcus Portmann
  */
-export class ErrorReportNotFoundError extends Error {
+export class ErrorReportNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/error/error-report-not-found';
 
   /**

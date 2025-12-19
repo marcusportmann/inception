@@ -15,14 +15,14 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
+import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The ConfigNotFoundError class holds the information for a config not found error.
  *
  * @author Marcus Portmann
  */
-export class ConfigNotFoundError extends Error {
+export class ConfigNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/config/config-not-found';
 
   /**

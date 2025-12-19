@@ -15,7 +15,7 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error } from './error';
+import { FrameworkError } from './framework-error';
 import { HttpError } from './http-error';
 import { ProblemDetails } from './problem-details';
 
@@ -24,7 +24,7 @@ import { ProblemDetails } from './problem-details';
  *
  * @author Marcus Portmann
  */
-export class ServiceUnavailableError extends Error {
+export class ServiceUnavailableError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/service-unavailable';
 
   /**

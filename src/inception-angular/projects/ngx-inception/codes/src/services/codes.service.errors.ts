@@ -15,14 +15,14 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
+import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The CodeCategoryNotFoundError class holds the information for a code category not found error.
  *
  * @author Marcus Portmann
  */
-export class CodeCategoryNotFoundError extends Error {
+export class CodeCategoryNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/codes/code-category-not-found';
 
   /**
@@ -43,7 +43,7 @@ export class CodeCategoryNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class CodeNotFoundError extends Error {
+export class CodeNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/codes/code-not-found';
 
   /**
@@ -61,7 +61,7 @@ export class CodeNotFoundError extends Error {
  *
  * @author Marcus Portmann
  */
-export class DuplicateCodeCategoryError extends Error {
+export class DuplicateCodeCategoryError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/codes/duplicate-code-category';
 
   /**
@@ -82,7 +82,7 @@ export class DuplicateCodeCategoryError extends Error {
  *
  * @author Marcus Portmann
  */
-export class DuplicateCodeError extends Error {
+export class DuplicateCodeError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/codes/duplicate-code';
 
   /**

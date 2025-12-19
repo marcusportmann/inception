@@ -15,14 +15,14 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
+import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The DuplicateJobError class holds the information for a duplicate job error.
  *
  * @author Marcus Portmann
  */
-export class DuplicateJobError extends Error {
+export class DuplicateJobError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/scheduler/duplicate-job';
 
   /**
@@ -40,7 +40,7 @@ export class DuplicateJobError extends Error {
  *
  * @author Marcus Portmann
  */
-export class JobNotFoundError extends Error {
+export class JobNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/scheduler/job-not-found';
 
   /**

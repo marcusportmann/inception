@@ -487,14 +487,14 @@
       <column name="description" value="Configuration Administration"/>
     </insert>
     <insert tableName="security_functions">
-      <column name="code" value="Error.ErrorReportAdministration"/>
-      <column name="name" value="Error Report Administration"/>
-      <column name="description" value="Error Report Administration"/>
+      <column name="code" value="FrameworkError.ErrorReportAdministration"/>
+      <column name="name" value="FrameworkError Report Administration"/>
+      <column name="description" value="FrameworkError Report Administration"/>
     </insert>
     <insert tableName="security_functions">
-      <column name="code" value="Error.ViewErrorReport"/>
-      <column name="name" value="View Error Report"/>
-      <column name="description" value="View Error Report"/>
+      <column name="code" value="FrameworkError.ViewErrorReport"/>
+      <column name="name" value="View FrameworkError Report"/>
+      <column name="description" value="View FrameworkError Report"/>
     </insert>
     <insert tableName="security_functions">
       <column name="code" value="Mail.MailTemplateAdministration"/>

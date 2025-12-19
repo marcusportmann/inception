@@ -20,7 +20,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
-  BackNavigation, CoreModule, Error, SortDirection, StatefulListView, TableFilterComponent
+  BackNavigation, CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';

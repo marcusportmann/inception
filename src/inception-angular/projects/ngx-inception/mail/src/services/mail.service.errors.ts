@@ -15,14 +15,14 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
+import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The DuplicateMailTemplateError class holds the information for a duplicate mail template error.
  *
  * @author Marcus Portmann
  */
-export class DuplicateMailTemplateError extends Error {
+export class DuplicateMailTemplateError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/mail/duplicate-mail-template';
 
   /**
@@ -43,7 +43,7 @@ export class DuplicateMailTemplateError extends Error {
  *
  * @author Marcus Portmann
  */
-export class MailTemplateNotFoundError extends Error {
+export class MailTemplateNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/mail/mail-template-not-found';
 
   /**

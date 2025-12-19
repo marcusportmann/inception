@@ -17,8 +17,8 @@
 import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {
-  AccessDeniedError, CommunicationError, Error, INCEPTION_CONFIG, InceptionConfig,
-  InvalidArgumentError, ProblemDetails, ResponseConverter, ServiceUnavailableError, SortDirection
+  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
+  ProblemDetails, ResponseConverter, ServiceUnavailableError, SortDirection
 } from 'ngx-inception/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -143,13 +143,28 @@ export class ErrorService {
    * @param feedback The feedback from the user submitting the error report.
    */
   sendErrorReport(error: Error, email?: string, feedback?: string): Observable<boolean> {
+    const maybeTimestamp = (error as { timestamp?: unknown }).timestamp;
+
+    const timestamp = maybeTimestamp instanceof Date ? maybeTimestamp : new Date();
+
+    const causeString = (() => {
+      if (error.cause === undefined || error.cause === null) {
+        return '';
+      }
+      try {
+        return JSON.stringify(error.cause);
+      } catch {
+        return '';
+      }
+    })();
+
     const errorReport: ErrorReport = new ErrorReport(
       uuid(),
       this.config.applicationId,
       this.config.applicationVersion,
       error.message,
-      error.cause ? JSON.stringify(error.cause) : '',
-      error.timestamp,
+      causeString,
+      timestamp,
       email,
       feedback
     );
@@ -160,9 +175,7 @@ export class ErrorService {
       })
       .pipe(
         map(ErrorService.isResponse204),
-        catchError((error) =>
-          ErrorService.handleApiError(error, 'Failed to send the error report.')
-        )
+        catchError((err) => ErrorService.handleApiError(err, 'Failed to send the error report.'))
       );
   }
 

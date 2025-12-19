@@ -15,14 +15,14 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error } from './error';
+import { FrameworkError } from './framework-error';
 
 /**
  * The AccessDeniedError class holds the information for an access denied error.
  *
  * @author Marcus Portmann
  */
-export class AccessDeniedError extends Error {
+export class AccessDeniedError extends FrameworkError {
   /**
    *  The HTTP status-code for the error.
    */

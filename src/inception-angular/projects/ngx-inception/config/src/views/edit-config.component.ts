@@ -17,7 +17,7 @@
 import { AfterViewInit, Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  AdminContainerView, BackNavigation, CoreModule, Error, ValidatedFormDirective
+  AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { Subject } from 'rxjs';
 import { finalize, first, takeUntil } from 'rxjs/operators';

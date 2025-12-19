@@ -18,7 +18,7 @@ import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AccessDeniedError, CoreModule, DialogService, Error, INCEPTION_CONFIG, InceptionConfig,
+  AccessDeniedError, CoreModule, DialogService, INCEPTION_CONFIG, InceptionConfig,
   InvalidArgumentError, PasswordExpiredError, ServiceUnavailableError, Session, SessionService,
   SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';

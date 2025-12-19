@@ -20,7 +20,7 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
-  AdminContainerView, CoreModule, Error, Session, SessionService, ValidatedFormDirective
+  AdminContainerView, CoreModule, Session, SessionService, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { EMPTY, Observable } from 'rxjs';
 import { finalize, first, map, switchMap } from 'rxjs/operators';

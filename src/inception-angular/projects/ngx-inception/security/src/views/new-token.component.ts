@@ -18,7 +18,7 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
-  AdminContainerView, BackNavigation, CoreModule, Error, ISO8601Util, ValidatedFormDirective
+  AdminContainerView, BackNavigation, CoreModule, ISO8601Util, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { GenerateTokenRequest } from '../services/generate-token-request';

@@ -16,7 +16,6 @@
 
 import { inject, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Error } from '../../errors/error';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog.component';
 import { ErrorDialogComponent } from '../components/error-dialog.component';
 import { InformationDialogComponent } from '../components/information-dialog.component';

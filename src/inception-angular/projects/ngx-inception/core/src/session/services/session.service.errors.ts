@@ -15,14 +15,14 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error, HttpError, ProblemDetails } from '../../errors';
+import { FrameworkError, HttpError, ProblemDetails } from '../../errors';
 
 /**
  * The LoginError class holds the information for a login error.
  *
  * @author Marcus Portmann
  */
-export class LoginError extends Error {
+export class LoginError extends FrameworkError {
   /**
    * Constructs a new LoginError.
    *
@@ -38,7 +38,7 @@ export class LoginError extends Error {
  *
  * @author Marcus Portmann
  */
-export class PasswordExpiredError extends Error {
+export class PasswordExpiredError extends FrameworkError {
   /**
    * Constructs a new PasswordExpiredError.
    *
@@ -54,7 +54,7 @@ export class PasswordExpiredError extends Error {
  *
  * @author Marcus Portmann
  */
-export class UserLockedError extends Error {
+export class UserLockedError extends FrameworkError {
   /**
    * Constructs a new UserLockedError.
    *

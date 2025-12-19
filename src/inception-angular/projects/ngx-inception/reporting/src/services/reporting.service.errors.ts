@@ -15,7 +15,7 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
+import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
 
 /**
  * The DuplicateReportDefinitionError class holds the information for a duplicate report definition
@@ -23,7 +23,7 @@ import { Error, HttpError, ProblemDetails } from 'ngx-inception/core';
  *
  * @author Marcus Portmann
  */
-export class DuplicateReportDefinitionError extends Error {
+export class DuplicateReportDefinitionError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/reporting/duplicate-report-definition';
 
   /**
@@ -45,7 +45,7 @@ export class DuplicateReportDefinitionError extends Error {
  *
  * @author Marcus Portmann
  */
-export class ReportDefinitionNotFoundError extends Error {
+export class ReportDefinitionNotFoundError extends FrameworkError {
   static readonly TYPE = 'https://inception.digital/problems/reporting/report-definition-not-found';
 
   /**

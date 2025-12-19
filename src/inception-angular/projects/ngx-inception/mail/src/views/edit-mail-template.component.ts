@@ -17,7 +17,7 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  AdminContainerView, BackNavigation, Base64, CoreModule, Error, FileUploadComponent, FileValidator,
+  AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
   ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';

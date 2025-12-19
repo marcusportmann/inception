@@ -21,7 +21,6 @@ import {
   BackNavigation,
   Base64,
   CoreModule,
-  Error,
   FileUploadComponent,
   FileValidator,
   ValidatedFormDirective

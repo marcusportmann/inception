@@ -16,7 +16,7 @@
 
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { AdminContainerView, BackNavigation, CoreModule, Error } from 'ngx-inception/core';
+import { AdminContainerView, BackNavigation, CoreModule } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { ErrorReport } from '../services/error-report';
 import { ErrorService } from '../services/error.service';

@@ -18,7 +18,6 @@ export * from './core.module';
 
 export * from './cache/services/cache.service';
 
-
 export * from './dialogs/components/confirmation-dialog.component';
 export * from './dialogs/components/error-dialog.component';
 export * from './dialogs/components/information-dialog.component';
@@ -27,17 +26,15 @@ export * from './dialogs/components/warning-dialog.component';
 export * from './dialogs/services/dialog.service';
 export * from './dialogs/services/dialog-data';
 
-
 export * from './errors/access-denied-error';
 export * from './errors/communication-error';
-export * from './errors/error';
+export * from './errors/framework-error';
 export * from './errors/http-error';
 export * from './errors/invalid-argument-error';
 export * from './errors/oauth-error';
 export * from './errors/problem-details';
 export * from './errors/service-unavailable-error';
 export * from './errors/validation-error';
-
 
 export * from './forms/components/file-upload.component';
 export * from './forms/components/group-form-field.component';
@@ -49,7 +46,6 @@ export * from './forms/directives/autofocus.directive';
 export * from './forms/directives/validated-form.directive';
 
 export * from './forms/validators/file-validator';
-
 
 export * from './layout/components/admin-container.component';
 export * from './layout/components/admin-container-view';
@@ -91,10 +87,8 @@ export * from './layout/services/sidebar.service';
 export * from './layout/services/spinner.service';
 export * from './layout/services/title-bar.service';
 
-
 export * from './routing/can-activate-function-guard';
 export * from './routing/disabled-function-guard';
-
 
 export * from './session/directives/has-authority.directive';
 
@@ -104,9 +98,7 @@ export * from './session/services/session.service';
 export * from './session/services/session';
 export * from './session/services/token-response';
 
-
 export * from './sorting/sort-direction';
-
 
 export * from './util/base64';
 export * from './util/iso-8601-util';
@@ -115,11 +107,6 @@ export * from './util/response-converter';
 export * from './util/toggle-classes';
 export * from './util/value-change';
 
-
 export * from './inception-app.module';
 export * from './inception-config';
 export * from './inception-injector';
-
-
-
-

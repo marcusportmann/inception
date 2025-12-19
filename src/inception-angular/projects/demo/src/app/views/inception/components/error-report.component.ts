@@ -17,7 +17,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  AccessDeniedError, CoreModule, DialogService, Error, InvalidArgumentError, ServiceUnavailableError
+  AccessDeniedError, CoreModule, DialogService, InvalidArgumentError, ServiceUnavailableError
 } from 'ngx-inception/core';
 import { first } from 'rxjs/operators';
 import { TestService } from '../../../services/test.service';

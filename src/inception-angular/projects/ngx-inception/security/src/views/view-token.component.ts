@@ -15,7 +15,7 @@
  */
 
 import { AfterViewInit, Component, inject } from '@angular/core';
-import { AdminContainerView, BackNavigation, CoreModule, Error } from 'ngx-inception/core';
+import { AdminContainerView, BackNavigation, CoreModule } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
 import { Token } from '../services/token';

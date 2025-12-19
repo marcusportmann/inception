@@ -19,7 +19,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  CoreModule, DialogService, Error, InformationDialogComponent, ProblemDetails, SpinnerService,
+  CoreModule, DialogService, InformationDialogComponent, ProblemDetails, SpinnerService,
   ValidatedFormDirective
 } from 'ngx-inception/core';
 import { Observable, throwError } from 'rxjs';
