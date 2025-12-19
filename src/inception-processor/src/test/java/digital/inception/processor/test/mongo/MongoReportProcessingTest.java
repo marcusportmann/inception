@@ -1,37 +1,44 @@
 /*
- * Copyright (c) Discovery Ltd. All Rights Reserved.
+ * Copyright Marcus Portmann
  *
- * This software is the confidential and proprietary information of Discovery Ltd
- * ("Confidential Information"). It may not be copied or reproduced in any manner
- * without the express written permission of Discovery Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package digital.inception.processor.test;
+package digital.inception.processor.test.mongo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import digital.inception.mongo.DefaultMongoDatabaseFactoryCondition;
 import digital.inception.mongo.MongoConfiguration;
-import digital.inception.processor.AbstractProcessableObject;
 import digital.inception.processor.BackgroundObjectProcessor;
 import digital.inception.processor.ObjectProcessingResult;
 import digital.inception.processor.ObjectProcessor;
-import digital.inception.processor.ProcessableObjectStatus;
 import digital.inception.processor.ProcessableObjectStatus.ProcessingPhase;
 import digital.inception.processor.RetryHandling;
 import digital.inception.processor.persistence.mongo.AbstractProcessableObjectMongoOperations;
 import digital.inception.processor.persistence.mongo.MongoRepositoryBackedBackgroundObjectProcessor;
 import digital.inception.processor.persistence.mongo.MongoRepositoryBackedObjectProcessor;
 import digital.inception.processor.persistence.mongo.ProcessableObjectMongoOperations;
-import digital.inception.processor.test.MongoReportProcessingTest.MongoReportProcessingTestConfig;
-import io.swagger.v3.oas.annotations.media.Schema;
+import digital.inception.processor.test.model.Report;
+import digital.inception.processor.test.model.ReportStatus;
+import digital.inception.processor.test.mongo.MongoReportProcessingTest.MongoReportProcessingTestConfig;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.Map;
-import org.bson.types.ObjectId;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +46,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Repository;
@@ -180,95 +186,14 @@ public class MongoReportProcessingTest {
   }
 
   /**
-   * The {@code ReportStatus} enumeration defines the possible statuses for a report and maps each
-   * status to a high-level {@link ProcessingPhase} for use by the processing infrastructure.
-   */
-  @Schema(description = "The report status")
-  public enum ReportStatus implements ProcessableObjectStatus {
-
-    // PENDING
-    REQUESTED("requested", ProcessingPhase.PENDING, "Requested"),
-    GENERATION_INITIATED("generation_initiated", ProcessingPhase.PENDING, "Generation Initiated"),
-    QUEUED_FOR_PUBLISHING(
-        "queued_for_publishing", ProcessingPhase.PENDING, "Queued For Publishing"),
-    QUEUED_FOR_SENDING("queued_for_sending", ProcessingPhase.PENDING, "Queued For Sending"),
-    SEND_INITIATED("send_initiated", ProcessingPhase.PENDING, "Send Initiated"),
-    CONFIRM_DELIVERY("confirm_delivery", ProcessingPhase.PENDING, "Confirm Delivery"),
-
-    // PROCESSING
-    GENERATING("generating", ProcessingPhase.PROCESSING, "Generating"),
-    VERIFYING_GENERATION(
-        "verifying_generation", ProcessingPhase.PROCESSING, "Verifying Generation"),
-    PUBLISHING("publishing", ProcessingPhase.PROCESSING, "Publishing"),
-    SENDING("sending", ProcessingPhase.PROCESSING, "Sending"),
-    VERIFYING_SENDING("verifying_sending", ProcessingPhase.PROCESSING, "Verifying Sending"),
-    CONFIRMING_DELIVERY("confirming_delivery", ProcessingPhase.PROCESSING, "Confirming Delivery"),
-
-    // COMPLETED
-    PUBLISHED("published", ProcessingPhase.COMPLETED, "Published"),
-    SENT("sent", ProcessingPhase.COMPLETED, "Sent"),
-    DELIVERED("delivered", ProcessingPhase.COMPLETED, "Delivered"),
-
-    // FAILED
-    REJECTED("rejected", ProcessingPhase.FAILED, "Rejected"),
-    UNDELIVERABLE("undeliverable", ProcessingPhase.FAILED, "Undeliverable"),
-    FAILED("failed", ProcessingPhase.FAILED, "Failed");
-
-    private final String code;
-    private final String description;
-    private final ProcessingPhase processingPhase;
-
-    ReportStatus(String code, ProcessingPhase processingPhase, String description) {
-      this.code = code;
-      this.processingPhase = processingPhase;
-      this.description = description;
-    }
-
-    /**
-     * Returns the set of statuses that represent PENDING states in the report state machine.
-     *
-     * @return the set of PENDING statuses
-     */
-    public static EnumSet<ReportStatus> pendingStatuses() {
-      EnumSet<ReportStatus> set = EnumSet.noneOf(ReportStatus.class);
-      for (ReportStatus status : ReportStatus.values()) {
-        if (status.processingPhase == ProcessingPhase.PENDING) {
-          set.add(status);
-        }
-      }
-      return set;
-    }
-
-    @Override
-    public String code() {
-      return code;
-    }
-
-    @Override
-    public String description() {
-      return description;
-    }
-
-    @Override
-    public ProcessingPhase getProcessingPhase() {
-      return processingPhase;
-    }
-
-    @Override
-    public String toString() {
-      return description;
-    }
-  }
-
-  /**
    * Spring Data Mongo repository for {@link Report}, extending the shared {@link
    * ProcessableObjectMongoOperations} abstraction via {@link MongoReportRepositoryCustom}.
    */
   public interface MongoReportRepository
-      extends MongoRepository<Report, String>, MongoReportRepositoryCustom {}
+      extends MongoRepository<Report, UUID>, MongoReportRepositoryCustom {}
 
   public interface MongoReportRepositoryCustom
-      extends ProcessableObjectMongoOperations<Report, String, ReportStatus> {
+      extends ProcessableObjectMongoOperations<Report, UUID, ReportStatus> {
     // No extra methods yet – add report-specific Mongo operations here if needed.
   }
 
@@ -279,7 +204,7 @@ public class MongoReportProcessingTest {
    */
   public static class MongoBackgroundReportProcessor
       extends MongoRepositoryBackedBackgroundObjectProcessor<
-          Report, String, ReportStatus, MongoReportRepositoryCustom> {
+          Report, UUID, ReportStatus, MongoReportRepositoryCustom> {
 
     private int permanentFailureCount;
     private int successCount;
@@ -356,12 +281,12 @@ public class MongoReportProcessingTest {
 
   @Configuration
   @EnableMongoRepositories(
+      basePackages = {"digital.inception.processor.test.mongo"},
       considerNestedRepositories = true,
       mongoTemplateRef = "defaultMongoTemplate")
   @EnableMongoAuditing
-  static class MongoReportProcessingTestConfig {
-    // Spring Boot + @EnableMongoRepositories + embedded Mongo do the heavy lifting.
-  }
+  @Conditional(DefaultMongoDatabaseFactoryCondition.class)
+  static class MongoReportProcessingTestConfig {}
 
   /**
    * Mongo-backed {@link ObjectProcessor} implementation for {@link Report} used in tests.
@@ -371,7 +296,7 @@ public class MongoReportProcessingTest {
    */
   public static class MongoReportProcessor
       extends MongoRepositoryBackedObjectProcessor<
-          Report, String, ReportStatus, MongoReportRepository> {
+          Report, UUID, ReportStatus, MongoReportRepository> {
 
     // Map PENDING states to the PROCESSING state used when claiming.
     public static final Map<ReportStatus, ReportStatus> PROCESSING_STATUS_TRANSITIONS =
@@ -405,6 +330,7 @@ public class MongoReportProcessingTest {
 
     private final boolean alwaysFail;
 
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final long retryDelayMillis;
 
     public MongoReportProcessor(
@@ -438,7 +364,7 @@ public class MongoReportProcessingTest {
     }
 
     @Override
-    public ObjectProcessingResult<ReportStatus> process(Report report) throws Exception {
+    public ObjectProcessingResult<ReportStatus> process(Report report) {
       System.out.println("Mongo process(): " + report.getStatus());
 
       if (alwaysFail) {
@@ -472,39 +398,12 @@ public class MongoReportProcessingTest {
 
   @Repository
   public static class MongoReportRepositoryImpl
-      extends AbstractProcessableObjectMongoOperations<Report, String, ReportStatus>
+      extends AbstractProcessableObjectMongoOperations<Report, UUID, ReportStatus>
       implements MongoReportRepositoryCustom {
 
     public MongoReportRepositoryImpl(
         @Qualifier("defaultMongoTemplate") MongoTemplate mongoTemplate) {
       super(mongoTemplate, Report.class);
-    }
-  }
-
-  /** Mongo-backed report domain object used for tests. */
-  @Document("reports")
-  public static class Report extends AbstractProcessableObject<String, ReportStatus> {
-
-    @Id private String id;
-
-    public Report() {
-      super(ReportStatus.REQUESTED);
-      // Pre-assign an ObjectId-based identifier.
-      this.id = new ObjectId().toHexString();
-    }
-
-    @Override
-    public String getId() {
-      return id;
-    }
-
-    @Override
-    public String getIdAsKey() {
-      return id;
-    }
-
-    public void setId(String id) {
-      this.id = id;
     }
   }
 }

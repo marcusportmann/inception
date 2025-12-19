@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="h2"/>
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="h2"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
+
+  <changeSet id="inception-processor-test-1.0.0" author="Marcus Portmann">
+    <comment>inception-processor-test-1.0.0</comment>
+
+    <createTable tableName="reports" remarks="Reports">
+      <column name="id" type="uuid" remarks="The ID for the report">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="status" type="nvarchar(50)"
+        remarks="The code for the status of the report">
+        <constraints nullable="false"/>
+      </column>
+      <column name="processed" type="timestamp with time zone"
+        remarks="The date and time the report was processed"/>
+      <column name="processing_attempts" type="int" defaultValue="0"
+        remarks="The number of times the processing of the report has been attempted">
+        <constraints nullable="false"/>
+      </column>
+      <column name="processing_time" type="int"
+        remarks="The cumulative processing time, in milliseconds, for the report across all processing attempts"/>
+      <column name="processing_suspended" type="boolean" remarks="Has processing been suspended for the report"/>
+      <column name="locked" type="timestamp with time zone"
+        remarks="The date and time the report was locked for processing"/>
+      <column name="lock_name" type="nvarchar(100)"
+        remarks="The name of the entity that has locked the report for processing"/>
+      <column name="last_processed" type="timestamp with time zone"
+        remarks="The date and time the last attempt was made to process the report"/>
+      <column name="next_processed" type="timestamp with time zone"
+        remarks="The date and time the next attempt will be made to process the report"/>
+    </createTable>
+
+    <rollback>
+      <dropTable tableName="reports"/>
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>

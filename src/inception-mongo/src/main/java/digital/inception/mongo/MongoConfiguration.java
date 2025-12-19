@@ -67,7 +67,7 @@ import org.springframework.util.StringUtils;
  */
 @Configuration
 @Import(CoreConfiguration.class)
-@ComponentScan(basePackages = {"digital.inception"})
+@ComponentScan(basePackages = {"digital.inception.mongo"})
 public class MongoConfiguration {
 
   /** Constructs a new {@code MongoConfiguration}. */

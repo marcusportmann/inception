@@ -1,12 +1,20 @@
 /*
- * Copyright (c) Discovery Ltd. All Rights Reserved.
+ * Copyright Marcus Portmann
  *
- * This software is the confidential and proprietary information of Discovery Ltd
- * ("Confidential Information"). It may not be copied or reproduced in any manner
- * without the express written permission of Discovery Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package digital.inception.processor.test;
+package digital.inception.processor.test.simple;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -16,14 +24,13 @@ import digital.inception.processor.AbstractProcessableObject;
 import digital.inception.processor.BackgroundObjectProcessor;
 import digital.inception.processor.ObjectProcessingResult;
 import digital.inception.processor.ObjectProcessor;
-import digital.inception.processor.ProcessableObjectStatus;
 import digital.inception.processor.ProcessableObjectStatus.ProcessingPhase;
 import digital.inception.processor.RetryHandling;
-import digital.inception.processor.test.ReportProcessingTest.ReportProcessingTestConfig;
-import io.swagger.v3.oas.annotations.media.Schema;
+import digital.inception.processor.test.simple.ReportProcessingTest.ReportProcessingTestConfig;
+import digital.inception.processor.test.model.Report;
+import digital.inception.processor.test.model.ReportStatus;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,7 +61,7 @@ public class ReportProcessingTest {
    */
   @Test
   void testReportHappyPathDelivered() throws Exception {
-    Report report = new Report(1L);
+    Report report = new Report();
 
     InMemoryReportProcessor inMemoryReportProcessor =
         new InMemoryReportProcessor(List.of(report), false);
@@ -86,7 +93,7 @@ public class ReportProcessingTest {
    */
   @Test
   void testReportPermanentFailureAfterMaxAttempts() throws Exception {
-    Report report = new Report(2L);
+    Report report = new Report();
 
     InMemoryReportProcessor inMemoryReportProcessor =
         new InMemoryReportProcessor(List.of(report), true);
@@ -113,87 +120,6 @@ public class ReportProcessingTest {
   private boolean isNotTerminal(Report report) {
     ProcessingPhase phase = report.getStatus().getProcessingPhase();
     return phase != ProcessingPhase.COMPLETED && phase != ProcessingPhase.FAILED;
-  }
-
-  /**
-   * The {@code ReportStatus} enumeration defines the possible statuses for a report and maps each
-   * status to a high-level {@link ProcessingPhase} for use by the processing infrastructure.
-   */
-  @Schema(description = "The report status")
-  public enum ReportStatus implements ProcessableObjectStatus {
-
-    // PENDING
-    REQUESTED("requested", ProcessingPhase.PENDING, "Requested"),
-    GENERATION_INITIATED("generation_initiated", ProcessingPhase.PENDING, "Generation Initiated"),
-    QUEUED_FOR_PUBLISHING(
-        "queued_for_publishing", ProcessingPhase.PENDING, "Queued For Publishing"),
-    QUEUED_FOR_SENDING("queued_for_sending", ProcessingPhase.PENDING, "Queued For Sending"),
-    SEND_INITIATED("send_initiated", ProcessingPhase.PENDING, "Send Initiated"),
-    CONFIRM_DELIVERY("confirm_delivery", ProcessingPhase.PENDING, "Confirm Delivery"),
-
-    // PROCESSING
-    GENERATING("generating", ProcessingPhase.PROCESSING, "Generating"),
-    VERIFYING_GENERATION(
-        "verifying_generation", ProcessingPhase.PROCESSING, "Verifying Generation"),
-    PUBLISHING("publishing", ProcessingPhase.PROCESSING, "Publishing"),
-    SENDING("sending", ProcessingPhase.PROCESSING, "Sending"),
-    VERIFYING_SENDING("verifying_sending", ProcessingPhase.PROCESSING, "Verifying Sending"),
-    CONFIRMING_DELIVERY("confirming_delivery", ProcessingPhase.PROCESSING, "Confirming Delivery"),
-
-    // COMPLETED
-    PUBLISHED("published", ProcessingPhase.COMPLETED, "Published"),
-    SENT("sent", ProcessingPhase.COMPLETED, "Sent"),
-    DELIVERED("delivered", ProcessingPhase.COMPLETED, "Delivered"),
-
-    // FAILED
-    REJECTED("rejected", ProcessingPhase.FAILED, "Rejected"),
-    UNDELIVERABLE("undeliverable", ProcessingPhase.FAILED, "Undeliverable"),
-    FAILED("failed", ProcessingPhase.FAILED, "Failed");
-
-    private final String code;
-    private final String description;
-    private final ProcessingPhase processingPhase;
-
-    ReportStatus(String code, ProcessingPhase processingPhase, String description) {
-      this.code = code;
-      this.processingPhase = processingPhase;
-      this.description = description;
-    }
-
-    /**
-     * Returns the set of statuses that represent PENDING states in the report state machine.
-     *
-     * @return the set of PENDING statuses
-     */
-    public static EnumSet<ReportStatus> pendingStatuses() {
-      EnumSet<ReportStatus> set = EnumSet.noneOf(ReportStatus.class);
-      for (ReportStatus status : ReportStatus.values()) {
-        if (status.processingPhase == ProcessingPhase.PENDING) {
-          set.add(status);
-        }
-      }
-      return set;
-    }
-
-    @Override
-    public String code() {
-      return code;
-    }
-
-    @Override
-    public String description() {
-      return description;
-    }
-
-    @Override
-    public ProcessingPhase getProcessingPhase() {
-      return processingPhase;
-    }
-
-    @Override
-    public String toString() {
-      return description;
-    }
   }
 
   /**
@@ -280,9 +206,9 @@ public class ReportProcessingTest {
    *
    * <p>This processor uses a simple, deterministic state machine to drive a report from REQUESTED
    * through various intermediate states to DELIVERED on success. It can also be configured to
-   * always fail during {@link #process} to test retry and failure behaviour.
+   * always fail during {@link #process} to test retry and failure behavior.
    *
-   * <p>It honours the {@link AbstractProcessableObject#getNextProcessed} field by only claiming
+   * <p>It honors the {@link AbstractProcessableObject#getNextProcessed} field by only claiming
    * reports whose next processing time is due (i.e., {@code null} or less than or equal to now).
    */
   public static class InMemoryReportProcessor implements ObjectProcessor<Report, ReportStatus> {
@@ -428,34 +354,6 @@ public class ReportProcessingTest {
       if (newStatus.getProcessingPhase() == ProcessingPhase.COMPLETED) {
         object.setProcessed(object.getLastProcessed());
         object.setNextProcessed(null);
-      }
-    }
-  }
-
-  /**
-   * Simple report domain object used for tests. In production this would be a JPA entity extending
-   * {@code AbstractProcessableObject<Long>}.
-   */
-  public static class Report extends AbstractProcessableObject<Long, ReportStatus> {
-
-    private final Long id;
-
-    public Report(Long id) {
-      super(ReportStatus.REQUESTED);
-      this.id = id;
-    }
-
-    @Override
-    public Long getId() {
-      return id;
-    }
-
-    @Override
-    public String getIdAsKey() {
-      if (id != null) {
-        return String.valueOf(id);
-      } else {
-        return "";
       }
     }
   }
