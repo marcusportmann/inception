@@ -55,10 +55,10 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
     const tenantId = this.activatedRoute.snapshot.paramMap.get('tenantId');
 
     if (!tenantId) {
-      throw new Error('No tenantId route parameter found');
+      throw new globalThis.Error('No tenantId route parameter found');
     }
 
-    this.tenantId = decodeURIComponent(tenantId);
+    this.tenantId = tenantId;
 
     // Initialize the form controls
     this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);

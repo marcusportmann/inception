@@ -68,18 +68,18 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
-      throw new Error('No userDirectoryId route parameter found');
+      throw new globalThis.Error('No userDirectoryId route parameter found');
     }
 
-    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+    this.userDirectoryId = userDirectoryId;
 
     const groupName = this.activatedRoute.snapshot.paramMap.get('groupName');
 
     if (!groupName) {
-      throw new Error('No groupName route parameter found');
+      throw new globalThis.Error('No groupName route parameter found');
     }
 
-    this.groupName = decodeURIComponent(groupName);
+    this.groupName = groupName;
   }
 
   override get backNavigation(): BackNavigation {

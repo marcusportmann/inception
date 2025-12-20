@@ -44,13 +44,11 @@ export class JobTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let jobId = activatedRouteSnapshot.paramMap.get('jobId');
+    const jobId = activatedRouteSnapshot.paramMap.get('jobId');
 
     if (!jobId) {
-      throw new Error('No jobId route parameter found');
+      throw new globalThis.Error('No jobId route parameter found');
     }
-
-    jobId = decodeURIComponent(jobId);
 
     return this.schedulerService.getJobName(jobId);
   }

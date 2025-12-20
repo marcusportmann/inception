@@ -81,7 +81,7 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
     this.saveState();
 
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(tenantId) + '/edit'], {
+    this.router.navigate([encodeURIComponent(tenantId), 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
@@ -104,7 +104,7 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
     this.saveState();
 
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(tenantId) + '/user-directories'], {
+    this.router.navigate([encodeURIComponent(tenantId), 'user-directories'], {
       relativeTo: this.activatedRoute
     });
   }

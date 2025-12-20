@@ -61,9 +61,9 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
     // Retrieve the route parameters
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (!id) {
-      throw new Error('No id route parameter found');
+      throw new globalThis.Error('No id route parameter found');
     }
-    this.id = decodeURIComponent(id);
+    this.id = id;
 
     // Initialize form controls
     this.descriptionControl = new FormControl('', [Validators.maxLength(100)]);

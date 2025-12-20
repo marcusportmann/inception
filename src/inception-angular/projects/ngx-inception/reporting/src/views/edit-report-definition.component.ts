@@ -64,10 +64,10 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
     const reportDefinitionId = this.activatedRoute.snapshot.paramMap.get('reportDefinitionId');
 
     if (!reportDefinitionId) {
-      throw new Error('No reportDefinitionId route parameter found');
+      throw new globalThis.Error('No reportDefinitionId route parameter found');
     }
 
-    this.reportDefinitionId = decodeURIComponent(reportDefinitionId);
+    this.reportDefinitionId = reportDefinitionId;
 
     // Initialize the form controls
     this.idControl = new FormControl(

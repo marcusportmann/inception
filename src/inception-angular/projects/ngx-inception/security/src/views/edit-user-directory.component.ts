@@ -84,10 +84,10 @@ export class EditUserDirectoryComponent
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
-      throw new Error('No userDirectoryId route parameter found');
+      throw new globalThis.Error('No userDirectoryId route parameter found');
     }
 
-    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+    this.userDirectoryId = userDirectoryId;
 
     // Initialize the form controls
     this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);

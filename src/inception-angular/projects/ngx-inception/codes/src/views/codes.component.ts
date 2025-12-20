@@ -37,7 +37,7 @@ import { CodesService } from '../services/codes.service';
 export class CodesComponent extends FilteredPaginatedListView<Code> {
   readonly codeCategoryId: string;
 
-  readonly displayedColumns: readonly string[] = ['id', 'name', 'actions'];
+  readonly displayedColumns = ['id', 'name', 'actions'] as const;
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
@@ -53,11 +53,11 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
     // Retrieve the route parameters
     const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
     if (!codeCategoryId) {
-      throw new Error('No codeCategoryId route parameter found');
+      throw new globalThis.Error('No codeCategoryId route parameter found');
     }
-    this.codeCategoryId = decodeURIComponent(codeCategoryId);
+    this.codeCategoryId = codeCategoryId;
 
-    this.listKey = `codes.${this.codeCategoryId}`;
+    this.listKey = `codes.${encodeURIComponent(this.codeCategoryId)}`;
   }
 
   override get backNavigation(): BackNavigation {
@@ -77,7 +77,7 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
 
   editCode(codeId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(codeId) + '/edit'], {
+    this.router.navigate([encodeURIComponent(codeId), 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
@@ -89,7 +89,7 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
 
   protected override createFilterPredicate(): (data: Code, filter: string) => boolean {
     return (data: Code, filter: string): boolean => {
-      const normalizedFilter = (filter ?? '').toLowerCase();
+      const normalizedFilter = (filter ?? '').trim().toLowerCase();
       const id = (data.id ?? '').toLowerCase();
       const name = (data.name ?? '').toLowerCase();
       return id.includes(normalizedFilter) || name.includes(normalizedFilter);

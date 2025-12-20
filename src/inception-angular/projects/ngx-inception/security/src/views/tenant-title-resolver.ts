@@ -44,13 +44,11 @@ export class TenantTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let tenantId = activatedRouteSnapshot.paramMap.get('tenantId');
+    const tenantId = activatedRouteSnapshot.paramMap.get('tenantId');
 
     if (!tenantId) {
-      throw new Error('No tenantId route parameter found');
+      throw new globalThis.Error('No tenantId route parameter found');
     }
-
-    tenantId = decodeURIComponent(tenantId);
 
     return this.securityService.getTenantName(tenantId);
   }

@@ -46,7 +46,7 @@ import { SecurityService } from '../services/security.service';
 export class GroupMembersComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: GroupMemberDataSource;
 
-  readonly displayedColumns: readonly string[] = ['memberName', 'memberType', 'actions'];
+  readonly displayedColumns = ['memberName', 'memberType', 'actions'] as const;
 
   readonly groupName: string;
 
@@ -83,15 +83,15 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
     // Retrieve the route parameters
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
     if (!userDirectoryId) {
-      throw new Error('No userDirectoryId route parameter found');
+      throw new globalThis.Error('No userDirectoryId route parameter found');
     }
-    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+    this.userDirectoryId = userDirectoryId;
 
     const groupName = this.activatedRoute.snapshot.paramMap.get('groupName');
     if (!groupName) {
-      throw new Error('No groupName route parameter found');
+      throw new globalThis.Error('No groupName route parameter found');
     }
-    this.groupName = decodeURIComponent(groupName);
+    this.groupName = groupName;
 
     this.dataSource = new GroupMemberDataSource(this.securityService);
   }

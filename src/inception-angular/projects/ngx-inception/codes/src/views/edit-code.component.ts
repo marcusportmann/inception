@@ -62,11 +62,11 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
     const codeId = this.activatedRoute.snapshot.paramMap.get('codeId');
 
     if (!codeCategoryId || !codeId) {
-      throw new Error('Required route parameters are missing');
+      throw new globalThis.Error('Required route parameters are missing');
     }
 
-    this.codeCategoryId = decodeURIComponent(codeCategoryId);
-    this.codeId = decodeURIComponent(codeId);
+    this.codeCategoryId = codeCategoryId;
+    this.codeId = codeId;
 
     // Initialize the form controls
     this.idControl = new FormControl(

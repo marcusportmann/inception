@@ -58,9 +58,9 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
     // Retrieve the route parameter
     const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
     if (!codeCategoryId) {
-      throw new Error('No codeCategoryId route parameter found');
+      throw new globalThis.Error('No codeCategoryId route parameter found');
     }
-    this.codeCategoryId = decodeURIComponent(codeCategoryId);
+    this.codeCategoryId = codeCategoryId;
 
     // Initialize form controls
     this.dataControl = new FormControl('');

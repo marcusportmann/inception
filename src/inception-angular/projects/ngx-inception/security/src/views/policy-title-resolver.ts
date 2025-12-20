@@ -44,13 +44,11 @@ export class PolicyTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let policyId = activatedRouteSnapshot.paramMap.get('policyId');
+    const policyId = activatedRouteSnapshot.paramMap.get('policyId');
 
     if (!policyId) {
-      throw new Error('No policyId route parameter found');
+      throw new globalThis.Error('No policyId route parameter found');
     }
-
-    policyId = decodeURIComponent(policyId);
 
     return this.securityService.getPolicyName(policyId);
   }

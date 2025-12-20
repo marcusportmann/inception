@@ -63,10 +63,10 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
     const policyId = this.activatedRoute.snapshot.paramMap.get('policyId');
 
     if (!policyId) {
-      throw new Error('No policyId route parameter found');
+      throw new globalThis.Error('No policyId route parameter found');
     }
 
-    this.policyId = decodeURIComponent(policyId);
+    this.policyId = policyId;
 
     // Initialize the form controls
     this.dataControl = new FormControl('', [Validators.required]);

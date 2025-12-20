@@ -73,10 +73,10 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
     const mailTemplateId = this.activatedRoute.snapshot.paramMap.get('mailTemplateId');
 
     if (!mailTemplateId) {
-      throw new Error('No mailTemplateId route parameter found');
+      throw new globalThis.Error('No mailTemplateId route parameter found');
     }
 
-    this.mailTemplateId = decodeURIComponent(mailTemplateId);
+    this.mailTemplateId = mailTemplateId;
 
     // Initialize the form controls
     this.contentTypeControl = new FormControl('', [Validators.required]);

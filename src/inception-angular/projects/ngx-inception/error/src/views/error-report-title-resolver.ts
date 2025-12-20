@@ -41,13 +41,11 @@ export class ErrorReportTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let errorReportId = activatedRouteSnapshot.paramMap.get('errorReportId');
+    const errorReportId = activatedRouteSnapshot.paramMap.get('errorReportId');
 
     if (!errorReportId) {
-      throw new Error('No errorReportId route parameter found');
+      throw new globalThis.Error('No errorReportId route parameter found');
     }
-
-    errorReportId = decodeURIComponent(errorReportId);
 
     return of(errorReportId);
   }

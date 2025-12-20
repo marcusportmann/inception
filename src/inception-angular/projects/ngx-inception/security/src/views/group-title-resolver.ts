@@ -41,13 +41,11 @@ export class GroupTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let groupName = activatedRouteSnapshot.paramMap.get('groupName');
+    const groupName = activatedRouteSnapshot.paramMap.get('groupName');
 
     if (!groupName) {
-      throw new Error('No groupName route parameter found');
+      throw new globalThis.Error('No groupName route parameter found');
     }
-
-    groupName = decodeURIComponent(groupName);
 
     return of(groupName);
   }

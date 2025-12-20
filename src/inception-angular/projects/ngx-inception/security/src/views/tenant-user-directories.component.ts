@@ -78,10 +78,10 @@ export class TenantUserDirectoriesComponent
     const tenantId = this.activatedRoute.snapshot.paramMap.get('tenantId');
 
     if (!tenantId) {
-      throw new Error('No tenantId route parameter found');
+      throw new globalThis.Error('No tenantId route parameter found');
     }
 
-    this.tenantId = decodeURIComponent(tenantId);
+    this.tenantId = tenantId;
 
     // Initialize the form controls
     this.newUserDirectoryControl = new FormControl('');

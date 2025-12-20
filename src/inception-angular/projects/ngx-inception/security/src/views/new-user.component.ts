@@ -78,10 +78,10 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
-      throw new Error('No userDirectoryId route parameter found');
+      throw new globalThis.Error('No userDirectoryId route parameter found');
     }
 
-    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+    this.userDirectoryId = userDirectoryId;
 
     // Initialize the form controls
     this.confirmPasswordControl = new FormControl('', [

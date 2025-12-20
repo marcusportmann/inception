@@ -37,13 +37,13 @@ export class JobsComponent extends FilteredPaginatedListView<Job> {
   // noinspection JSUnusedGlobalSymbols
   readonly JobStatus = JobStatus;
 
-  readonly displayedColumns: readonly string[] = [
+  readonly displayedColumns = [
     'name',
     'status',
     'executionAttempts',
     'nextExecution',
     'actions'
-  ];
+  ] as const;
 
   readonly getJobStatusDescription = SchedulerService.getJobStatusDescription;
 

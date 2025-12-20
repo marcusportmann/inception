@@ -34,7 +34,7 @@ import { ReportingService } from '../services/reporting.service';
   styleUrls: ['report-definitions.component.css']
 })
 export class ReportDefinitionsComponent extends FilteredPaginatedListView<ReportDefinitionSummary> {
-  readonly displayedColumns: readonly string[] = ['name', 'actions'];
+  readonly displayedColumns = ['name', 'actions'] as const;
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
@@ -68,7 +68,7 @@ export class ReportDefinitionsComponent extends FilteredPaginatedListView<Report
     filter: string
   ) => boolean {
     return (data: ReportDefinitionSummary, filter: string): boolean => {
-      const normalizedFilter = (filter ?? '').toLowerCase();
+      const normalizedFilter = (filter ?? '').trim().toLowerCase();
       const name = (data.name ?? '').toLowerCase();
 
       return name.includes(normalizedFilter);

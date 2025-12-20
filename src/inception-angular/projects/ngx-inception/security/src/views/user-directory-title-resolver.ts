@@ -44,13 +44,11 @@ export class UserDirectoryTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
+    const userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
-      throw new Error('No userDirectoryId route parameter found');
+      throw new globalThis.Error('No userDirectoryId route parameter found');
     }
-
-    userDirectoryId = decodeURIComponent(userDirectoryId);
 
     return this.securityService.getUserDirectoryName(userDirectoryId);
   }

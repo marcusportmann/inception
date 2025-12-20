@@ -44,13 +44,11 @@ export class MailTemplateTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let mailTemplateId = activatedRouteSnapshot.paramMap.get('mailTemplateId');
+    const mailTemplateId = activatedRouteSnapshot.paramMap.get('mailTemplateId');
 
     if (!mailTemplateId) {
-      throw new Error('No mailTemplateId route parameter found');
+      throw new globalThis.Error('No mailTemplateId route parameter found');
     }
-
-    mailTemplateId = decodeURIComponent(mailTemplateId);
 
     return this.mailService.getMailTemplateName(mailTemplateId);
   }

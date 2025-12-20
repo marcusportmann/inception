@@ -88,10 +88,10 @@ export class EditJobComponent extends AdminContainerView implements AfterViewIni
     const jobId = this.activatedRoute.snapshot.paramMap.get('jobId');
 
     if (!jobId) {
-      throw new Error('No jobId route parameter found');
+      throw new globalThis.Error('No jobId route parameter found');
     }
 
-    this.jobId = decodeURIComponent(jobId);
+    this.jobId = jobId;
 
     // Initialize the form controls
     this.enabledControl = new FormControl(true, [Validators.required]);

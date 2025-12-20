@@ -34,7 +34,7 @@ import { ConfigService } from '../services/config.service';
   styleUrls: ['configs.component.css']
 })
 export class ConfigsComponent extends FilteredPaginatedListView<Config> {
-  readonly displayedColumns: readonly string[] = ['id', 'value', 'actions'];
+  readonly displayedColumns = ['id', 'value', 'actions'] as const;
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
@@ -53,7 +53,7 @@ export class ConfigsComponent extends FilteredPaginatedListView<Config> {
 
   editConfig(id: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(id) + '/edit'], {
+    this.router.navigate([encodeURIComponent(id), 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
@@ -65,7 +65,7 @@ export class ConfigsComponent extends FilteredPaginatedListView<Config> {
 
   protected override createFilterPredicate(): (data: Config, filter: string) => boolean {
     return (data: Config, filter: string): boolean => {
-      const normalizedFilter = (filter ?? '').toLowerCase();
+      const normalizedFilter = (filter ?? '').trim().toLowerCase();
       const id = (data.id ?? '').toLowerCase();
       return id.includes(normalizedFilter);
     };

@@ -68,9 +68,9 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
     // Retrieve the route parameters
     const errorReportId = this.activatedRoute.snapshot.paramMap.get('errorReportId');
     if (!errorReportId) {
-      throw new Error('No errorReportId route parameter found');
+      throw new globalThis.Error('No errorReportId route parameter found');
     }
-    this.errorReportId = decodeURIComponent(errorReportId);
+    this.errorReportId = errorReportId;
 
     // Initialize form controls
     this.applicationIdControl = new FormControl({

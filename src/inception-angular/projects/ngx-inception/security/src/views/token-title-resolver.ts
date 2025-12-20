@@ -44,13 +44,11 @@ export class TokenTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let tokenId = activatedRouteSnapshot.paramMap.get('tokenId');
+    const tokenId = activatedRouteSnapshot.paramMap.get('tokenId');
 
     if (!tokenId) {
-      throw new Error('No tokenId route parameter found');
+      throw new globalThis.Error('No tokenId route parameter found');
     }
-
-    tokenId = decodeURIComponent(tokenId);
 
     return this.securityService.getTokenName(tokenId);
   }

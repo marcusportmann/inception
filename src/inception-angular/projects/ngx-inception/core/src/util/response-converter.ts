@@ -79,7 +79,7 @@ export function ResponseConverter(
   const originalMethod = descriptor.value;
 
   if (typeof originalMethod !== 'function') {
-    throw new Error('ResponseConverter can only be applied to methods.');
+    throw new globalThis.Error('ResponseConverter can only be applied to methods.');
   }
 
   descriptor.value = function (...args: unknown[]) {

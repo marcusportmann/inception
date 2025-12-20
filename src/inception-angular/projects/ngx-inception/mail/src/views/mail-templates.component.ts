@@ -38,7 +38,7 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
   // noinspection JSUnusedGlobalSymbols
   readonly MailTemplateContentType = MailTemplateContentType;
 
-  readonly displayedColumns: readonly string[] = ['name', 'contentType', 'actions'];
+  readonly displayedColumns = ['name', 'contentType', 'actions'] as const;
 
   readonly getMailTemplateContentTypeDescription =
     MailService.getMailTemplateContentTypeDescription;
@@ -60,7 +60,7 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
 
   editMailTemplate(mailTemplateId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(mailTemplateId) + '/edit'], {
+    this.router.navigate([encodeURIComponent(mailTemplateId), 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
@@ -75,7 +75,7 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
     filter: string
   ) => boolean {
     return (data: MailTemplateSummary, filter: string): boolean => {
-      const normalizedFilter = (filter ?? '').toLowerCase();
+      const normalizedFilter = (filter ?? '').trim().toLowerCase();
       const name = (data.name ?? '').toLowerCase();
 
       return name.includes(normalizedFilter);

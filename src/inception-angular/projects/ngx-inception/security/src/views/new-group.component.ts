@@ -60,10 +60,10 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
-      throw new Error('No userDirectoryId route parameter found');
+      throw new globalThis.Error('No userDirectoryId route parameter found');
     }
 
-    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+    this.userDirectoryId = userDirectoryId;
 
     // Initialize the form controls
     this.descriptionControl = new FormControl('', [Validators.maxLength(100)]);

@@ -44,13 +44,11 @@ export class ReportDefinitionTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let reportDefinitionId = activatedRouteSnapshot.paramMap.get('reportDefinitionId');
+    const reportDefinitionId = activatedRouteSnapshot.paramMap.get('reportDefinitionId');
 
     if (!reportDefinitionId) {
-      throw new Error('No reportDefinitionId route parameter found');
+      throw new globalThis.Error('No reportDefinitionId route parameter found');
     }
-
-    reportDefinitionId = decodeURIComponent(reportDefinitionId);
 
     return this.reportingService.getReportDefinitionName(reportDefinitionId);
   }

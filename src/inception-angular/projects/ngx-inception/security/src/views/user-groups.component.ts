@@ -67,18 +67,18 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {
-      throw new Error('No userDirectoryId route parameter found');
+      throw new globalThis.Error('No userDirectoryId route parameter found');
     }
 
-    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+    this.userDirectoryId = userDirectoryId;
 
     const username = this.activatedRoute.snapshot.paramMap.get('username');
 
     if (!username) {
-      throw new Error('No username route parameter found');
+      throw new globalThis.Error('No username route parameter found');
     }
 
-    this.username = decodeURIComponent(username);
+    this.username = username;
   }
 
   override get backNavigation(): BackNavigation {

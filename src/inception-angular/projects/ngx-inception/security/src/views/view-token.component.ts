@@ -49,10 +49,10 @@ export class ViewTokenComponent extends AdminContainerView implements AfterViewI
     const tokenId = this.activatedRoute.snapshot.paramMap.get('tokenId');
 
     if (!tokenId) {
-      throw new Error('No tokenId route parameter found');
+      throw new globalThis.Error('No tokenId route parameter found');
     }
 
-    this.tokenId = decodeURIComponent(tokenId);
+    this.tokenId = tokenId;
   }
 
   override get backNavigation(): BackNavigation {

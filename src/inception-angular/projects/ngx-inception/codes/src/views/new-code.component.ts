@@ -60,9 +60,9 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
     // Retrieve the route parameters
     const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
     if (!codeCategoryId) {
-      throw new Error('No codeCategoryId route parameter found');
+      throw new globalThis.Error('No codeCategoryId route parameter found');
     }
-    this.codeCategoryId = decodeURIComponent(codeCategoryId);
+    this.codeCategoryId = codeCategoryId;
 
     // Initialize the form controls
     this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);

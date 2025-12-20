@@ -41,13 +41,11 @@ export class ConfigTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let id = activatedRouteSnapshot.paramMap.get('id');
+    const id = activatedRouteSnapshot.paramMap.get('id');
 
     if (!id) {
-      throw new Error('No id route parameter found');
+      throw new globalThis.Error('No id route parameter found');
     }
-
-    id = decodeURIComponent(id);
 
     return of(id);
   }

@@ -45,13 +45,11 @@ export class CodeCategoryTitleResolver {
     void activatedRouteSnapshot;
     void routerStateSnapshot;
 
-    let codeCategoryId = activatedRouteSnapshot.paramMap.get('codeCategoryId');
+    const codeCategoryId = activatedRouteSnapshot.paramMap.get('codeCategoryId');
 
     if (!codeCategoryId) {
-      throw new Error('No codeCategoryId route parameter found');
+      throw new globalThis.Error('No codeCategoryId route parameter found');
     }
-
-    codeCategoryId = decodeURIComponent(codeCategoryId);
 
     return this.codesService.getCodeCategoryName(codeCategoryId);
   }

@@ -155,7 +155,7 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
     this.saveState();
 
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([userDirectoryId + '/new'], {
+    this.router.navigate([userDirectoryId, 'new'], {
       relativeTo: this.activatedRoute
     });
   }

@@ -34,7 +34,7 @@ import { CodesService } from '../services/codes.service';
   styleUrls: ['code-categories.component.css']
 })
 export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCategorySummary> {
-  readonly displayedColumns: readonly string[] = ['id', 'name', 'actions'];
+  readonly displayedColumns = ['id', 'name', 'actions'] as const;
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
@@ -48,7 +48,7 @@ export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCateg
     this.listStateService.clear('codes.' + codeCategoryId);
 
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(codeCategoryId) + '/codes'], {
+    this.router.navigate([encodeURIComponent(codeCategoryId), 'codes'], {
       relativeTo: this.activatedRoute
     });
   }
@@ -62,7 +62,7 @@ export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCateg
 
   editCodeCategory(codeCategoryId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(codeCategoryId) + '/edit'], {
+    this.router.navigate([encodeURIComponent(codeCategoryId), 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
@@ -77,7 +77,7 @@ export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCateg
     filter: string
   ) => boolean {
     return (data: CodeCategorySummary, filter: string): boolean => {
-      const normalizedFilter = (filter ?? '').toLowerCase();
+      const normalizedFilter = (filter ?? '').trim().toLowerCase();
       const id = (data.id ?? '').toLowerCase();
       const name = (data.name ?? '').toLowerCase();
 
