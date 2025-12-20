@@ -65,6 +65,7 @@
                     <exclude>com.google.guava:guava:[31,34)</exclude>
                     <exclude>com.microsoft.azure:msal4j:[1,2)</exclude>
                     <exclude>com.nimbusds:nimbus-jose-jwt:[9,11)</exclude>
+                    <exclude>net.java.dev.jna:jna-platform:[5,6)</exclude>
                     <exclude>org.apache.santuario:xmlsec:[2,4)</exclude>
                     <exclude>org.bouncycastle:bcpkix-jdk18on:[1,2)</exclude>
                     <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>

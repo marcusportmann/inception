@@ -32,7 +32,7 @@ import java.util.List;
  * <p>This class is internal and is hence not for public use. Its APIs are unstable and can change
  * at any time.
  */
-public class RateLimitedRuleBasedSamplerComponentProvider implements ComponentProvider<Sampler> {
+public class RateLimitedRuleBasedSamplerComponentProvider implements ComponentProvider {
 
   private static final String ACTION_DROP = "DROP";
 
