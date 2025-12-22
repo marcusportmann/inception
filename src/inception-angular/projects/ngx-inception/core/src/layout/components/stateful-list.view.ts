@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Directive, inject, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Directive, inject, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
@@ -36,6 +36,8 @@ export abstract class StatefulListView<TExtras = unknown>
 {
   /** Unique key for persisting list state (must be provided by subclass). */
   abstract readonly listKey: string;
+
+  protected readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   /** Shared destroy notifier for subscriptions. */
   protected readonly destroy$ = new Subject<void>();
@@ -189,6 +191,8 @@ export abstract class StatefulListView<TExtras = unknown>
     this.resetExtrasState();
 
     this.restoringState = false;
+
+    this.changeDetectorRef.markForCheck();
   }
 
   /**
@@ -204,25 +208,25 @@ export abstract class StatefulListView<TExtras = unknown>
   protected restoreStateBeforeData(): void {
     const state = this.listStateService.get(this.listKey) as ListState<TExtras> | undefined;
 
-    if (!state || !this.paginator || !this.sort) {
-      return;
+    if (state && this.paginator && this.sort) {
+      this.restoringState = true;
+
+      if (this.tableFilter) {
+        this.tableFilter.value = state.filter ?? '';
+      }
+
+      this.paginator.pageSize = state.pageSize;
+      this.paginator.pageIndex = state.pageIndex;
+
+      this.sort.active = state.sortActive;
+      this.sort.direction = state.sortDirection;
+
+      this.restoreExtrasState(state.extras);
+
+      this.restoringState = false;
     }
 
-    this.restoringState = true;
-
-    if (this.tableFilter) {
-      this.tableFilter.value = state.filter ?? '';
-    }
-
-    this.paginator.pageSize = state.pageSize;
-    this.paginator.pageIndex = state.pageIndex;
-
-    this.sort.active = state.sortActive;
-    this.sort.direction = state.sortDirection;
-
-    this.restoreExtrasState(state.extras);
-
-    this.restoringState = false;
+    this.changeDetectorRef.markForCheck();
   }
 
   /**

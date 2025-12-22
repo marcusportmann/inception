@@ -54,7 +54,7 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
 
   userDirectoryId: string;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -93,18 +93,17 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@security_edit_group_back_navigation:Groups`,
-      ['../../..'],
+      ['.'],
       {
-        relativeTo: this.activatedRoute,
+        relativeTo: this.activatedRoute.parent?.parent,
         state: { userDirectoryId: this.userDirectoryId }
       }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../../..'], {
-      relativeTo: this.activatedRoute,
+    void this.router.navigate(['.'], {
+      relativeTo: this.activatedRoute.parent?.parent,
       state: { userDirectoryId: this.userDirectoryId }
     });
   }
@@ -150,9 +149,8 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
       )
       .subscribe({
         next: () => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../../..'], {
-            relativeTo: this.activatedRoute,
+          void this.router.navigate(['.'], {
+            relativeTo: this.activatedRoute.parent?.parent,
             state: { userDirectoryId: this.userDirectoryId }
           });
         },

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
 import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 
@@ -31,7 +31,8 @@ import { CodesService } from '../services/codes.service';
   standalone: true,
   templateUrl: 'code-categories.component.html',
   imports: [CoreModule, TableFilterComponent],
-  styleUrls: ['code-categories.component.css']
+  styleUrls: ['code-categories.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCategorySummary> {
   readonly displayedColumns = ['id', 'name', 'actions'] as const;
@@ -42,13 +43,12 @@ export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCateg
 
   readonly title = $localize`:@@codes_code_categories_title:Code Categories`;
 
-  private codesService = inject(CodesService);
+  private readonly codesService = inject(CodesService);
 
   codesAdministration(codeCategoryId: string): void {
     this.listStateService.clear('codes.' + codeCategoryId);
 
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(codeCategoryId), 'codes'], {
+    void this.router.navigate([codeCategoryId, 'codes'], {
       relativeTo: this.activatedRoute
     });
   }
@@ -61,15 +61,13 @@ export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCateg
   }
 
   editCodeCategory(codeCategoryId: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(codeCategoryId), 'edit'], {
+    void this.router.navigate([codeCategoryId, 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
 
   newCodeCategory(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   protected override createFilterPredicate(): (

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
 import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 import { Job } from '../services/job';
@@ -31,7 +31,8 @@ import { SchedulerService } from '../services/scheduler.service';
   standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'jobs.component.html',
-  styleUrls: ['jobs.component.css']
+  styleUrls: ['jobs.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JobsComponent extends FilteredPaginatedListView<Job> {
   // noinspection JSUnusedGlobalSymbols
@@ -53,7 +54,7 @@ export class JobsComponent extends FilteredPaginatedListView<Job> {
 
   readonly title = $localize`:@@scheduler_jobs_title:Jobs`;
 
-  private schedulerService = inject(SchedulerService);
+  private readonly schedulerService = inject(SchedulerService);
 
   deleteJob(jobId: string): void {
     this.confirmAndProcessAction(
@@ -63,15 +64,13 @@ export class JobsComponent extends FilteredPaginatedListView<Job> {
   }
 
   editJob(jobId: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(jobId) + '/edit'], {
+    void this.router.navigate([jobId, 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
 
   newJob(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   protected override createFilterPredicate(): (data: Job, filter: string) => boolean {

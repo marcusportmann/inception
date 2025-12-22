@@ -55,11 +55,11 @@ export class ReferenceComponentsComponent {
 
   timeZoneControl: FormControl = new FormControl('', Validators.required);
 
-  private activatedRoute = inject(ActivatedRoute);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
-  private formBuilder = inject(FormBuilder);
+  private readonly formBuilder = inject(FormBuilder);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   constructor() {
     this.referenceForm = this.formBuilder.group({

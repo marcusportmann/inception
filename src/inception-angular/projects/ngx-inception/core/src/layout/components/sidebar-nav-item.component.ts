@@ -115,7 +115,7 @@ import { NavigationItem } from '../services/navigation-item';
 export class SidebarNavItemComponent {
   @Input() navItem?: NavigationItem;
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   get isExternalLink(): boolean {
     const url = this.navItem?.url ?? '';

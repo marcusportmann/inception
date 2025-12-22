@@ -29,7 +29,7 @@ import { SidebarNavDropdownDirective } from './sidebar-nav-dropdown.directive';
   standalone: true
 })
 export class SidebarNavDropdownTogglerDirective {
-  private dropdown = inject(SidebarNavDropdownDirective);
+  private readonly dropdown = inject(SidebarNavDropdownDirective);
 
   // eslint-disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {

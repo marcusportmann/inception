@@ -87,7 +87,7 @@ export class ExampleComponent implements OnDestroy {
 
   titles: Title[] = [new Title('Mr', 'Mr'), new Title('Mrs', 'Mrs'), new Title('Ms', 'Ms')];
 
-  private formBuilder = inject(FormBuilder);
+  private readonly formBuilder = inject(FormBuilder);
 
   private subscriptions: Subscription = new Subscription();
 

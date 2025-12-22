@@ -15,7 +15,13 @@
  */
 
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, OnDestroy, OnInit
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  inject,
+  OnDestroy,
+  OnInit
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -45,11 +51,11 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
 
   @HostBinding('attr.role') role = 'nav';
 
-  private changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  private navigationService = inject(NavigationService);
+  private readonly navigationService = inject(NavigationService);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   private routerEventSubscription?: Subscription;
 

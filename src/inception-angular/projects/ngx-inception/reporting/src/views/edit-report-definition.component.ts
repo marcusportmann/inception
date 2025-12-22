@@ -55,7 +55,7 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
 
   readonly title = $localize`:@@reporting_edit_report_definition_title:Edit Report Definition`;
 
-  private reportingService = inject(ReportingService);
+  private readonly reportingService = inject(ReportingService);
 
   constructor() {
     super();
@@ -95,14 +95,13 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@reporting_edit_report_definition_back_navigation:Report Definitions`,
-      ['../..'],
-      { relativeTo: this.activatedRoute }
+      ['.'],
+      { relativeTo: this.activatedRoute.parent?.parent }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   ngAfterViewInit(): void {
@@ -121,7 +120,7 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
           this.idControl.setValue(reportDefinition.id);
           this.nameControl.setValue(reportDefinition.name);
         },
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 
@@ -163,10 +162,7 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
         )
         .subscribe({
           next: () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['../..'], {
-              relativeTo: this.activatedRoute
-            });
+            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
           },
           error: (error: Error) => this.handleError(error, false)
         });

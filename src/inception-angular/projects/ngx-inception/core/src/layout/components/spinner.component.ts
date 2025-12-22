@@ -49,7 +49,7 @@ import { Component, ElementRef, inject } from '@angular/core';
   ]
 })
 export class SpinnerComponent {
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   // noinspection JSUnusedGlobalSymbols
   show(): void {

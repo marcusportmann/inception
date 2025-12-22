@@ -62,13 +62,13 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   visible = false;
 
-  private breadcrumbsService = inject(BreadcrumbsService);
+  private readonly breadcrumbsService = inject(BreadcrumbsService);
 
-  private changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
-  private subscriptions: Subscription = new Subscription();
+  private readonly subscriptions: Subscription = new Subscription();
 
   /**
    * Constructs a new BreadcrumbsComponent.

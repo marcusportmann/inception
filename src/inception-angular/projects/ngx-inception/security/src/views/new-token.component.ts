@@ -59,9 +59,9 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
 
   validFromDateControl: FormControl;
 
-  private matDialog = inject(MatDialog);
+  private readonly matDialog = inject(MatDialog);
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -87,28 +87,13 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
   }
 
   override get backNavigation(): BackNavigation {
-    if (this.existingTokenId) {
-      return new BackNavigation(
-        $localize`:@@security_new_token_back_navigation:Tokens`,
-        ['../..'],
-        { relativeTo: this.activatedRoute }
-      );
-    } else {
-      return new BackNavigation($localize`:@@security_new_token_back_navigation:Tokens`, ['..'], {
-        relativeTo: this.activatedRoute
-      });
-    }
+    return new BackNavigation($localize`:@@security_new_token_back_navigation:Tokens`, ['.'], {
+      relativeTo: this.activatedRoute.parent
+    });
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    if (this.existingTokenId) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
-    } else {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(['..'], { relativeTo: this.activatedRoute });
-    }
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
   deleteTokenClaim(existingTokenClaim: TokenClaim): void {
@@ -270,18 +255,7 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
       )
       .subscribe({
         next: () => {
-          // noinspection JSIgnoredPromiseFromCall
-          if (this.existingTokenId) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['../..'], {
-              relativeTo: this.activatedRoute
-            });
-          } else {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['..'], {
-              relativeTo: this.activatedRoute
-            });
-          }
+          void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
         },
         error: (error: Error) => this.handleError(error, false)
       });

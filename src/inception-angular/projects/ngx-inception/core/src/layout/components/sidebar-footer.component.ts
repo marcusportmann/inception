@@ -31,7 +31,7 @@ import { Replace } from '../../util/replace';
   </div>`
 })
 export class SidebarFooterComponent implements OnInit {
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   ngOnInit(): void {
     Replace(this.elementRef);

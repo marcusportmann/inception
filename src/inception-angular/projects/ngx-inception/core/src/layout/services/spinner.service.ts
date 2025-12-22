@@ -30,7 +30,7 @@ import { SpinnerComponent } from '../components/spinner.component';
 export class SpinnerService {
   private counter = 0; // Reference count
 
-  private overlay = inject(Overlay);
+  private readonly overlay = inject(Overlay);
 
   private overlayRef?: OverlayRef;
 

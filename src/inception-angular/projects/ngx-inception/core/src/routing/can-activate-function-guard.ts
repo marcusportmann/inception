@@ -29,8 +29,9 @@ import { SessionService } from '../session/services/session.service';
  */
 @Injectable()
 export class CanActivateFunctionGuard {
-  private router = inject(Router);
-  private sessionService = inject(SessionService);
+  private readonly router = inject(Router);
+
+  private readonly sessionService = inject(SessionService);
 
   // noinspection JSUnusedGlobalSymbols
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
@@ -47,13 +48,11 @@ export class CanActivateFunctionGuard {
                   }
                 }
 
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['/login']);
+                void this.router.navigate(['/login']);
 
                 return false;
               } else {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['/login']);
+                void this.router.navigate(['/login']);
 
                 return false;
               }
@@ -64,8 +63,7 @@ export class CanActivateFunctionGuard {
             return true;
           }
         } else {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/login']);
+          void this.router.navigate(['/login']);
 
           return false;
         }

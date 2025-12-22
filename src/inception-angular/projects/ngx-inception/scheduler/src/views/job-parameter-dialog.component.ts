@@ -133,7 +133,7 @@ export class JobParameterDialogComponent {
 
   valueControl: FormControl;
 
-  private dialogRef = inject<MatDialogRef<JobParameterDialogComponent>>(MatDialogRef);
+  private readonly dialogRef = inject<MatDialogRef<JobParameterDialogComponent>>(MatDialogRef);
 
   /**
    * Constructs a new JobParameterDialogComponent.

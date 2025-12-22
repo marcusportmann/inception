@@ -17,8 +17,13 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {
-  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
-  ResponseConverter, ServiceUnavailableError
+  AccessDeniedError,
+  CommunicationError,
+  INCEPTION_CONFIG,
+  InceptionConfig,
+  InvalidArgumentError,
+  ResponseConverter,
+  ServiceUnavailableError
 } from 'ngx-inception/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -33,8 +38,9 @@ import { Data } from './data';
   providedIn: 'root'
 })
 export class DataService {
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
-  private httpClient = inject(HttpClient);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
+
+  private readonly httpClient = inject(HttpClient);
 
   /**
    * Constructs a new DataService.

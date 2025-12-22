@@ -41,9 +41,9 @@ export class SessionService {
    */
   session$: Subject<Session | null> = new BehaviorSubject<Session | null>(null);
 
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
 
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
   /**
    * Constructs a new SessionService.
@@ -208,8 +208,7 @@ export class SessionService {
                     if (httpErrorResponse.status === 400 || httpErrorResponse.status === 401) {
                       this.session$.next(null);
 
-                      // // noinspection JSIgnoredPromiseFromCall
-                      // this.router.navigate(['/']);
+                      // void this.router.navigate(['/']);
                     }
 
                     return of(null);

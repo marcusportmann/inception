@@ -15,7 +15,12 @@
  */
 
 import {
-  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  inject,
+  ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -38,7 +43,8 @@ import { UserDirectorySummaryDataSource } from '../services/user-directory-summa
   standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'user-directories.component.html',
-  styleUrls: ['user-directories.component.css']
+  styleUrls: ['user-directories.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserDirectoriesComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: UserDirectorySummaryDataSource;
@@ -58,12 +64,10 @@ export class UserDirectoriesComponent extends StatefulListView implements AfterV
 
   readonly title = $localize`:@@security_user_directories_title:User Directories`;
 
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -86,8 +90,7 @@ export class UserDirectoriesComponent extends StatefulListView implements AfterV
   editUserDirectory(userDirectoryId: string): void {
     this.saveState();
 
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(userDirectoryId)], {
+    void this.router.navigate([userDirectoryId], {
       relativeTo: this.activatedRoute
     });
   }
@@ -95,8 +98,7 @@ export class UserDirectoriesComponent extends StatefulListView implements AfterV
   newUserDirectory(): void {
     this.saveState();
 
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {

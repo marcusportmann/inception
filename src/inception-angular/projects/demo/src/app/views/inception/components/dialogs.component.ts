@@ -31,7 +31,7 @@ import { first } from 'rxjs/operators';
   templateUrl: 'dialogs.component.html'
 })
 export class DialogsComponent {
-  private dialogService = inject(DialogService);
+  private readonly dialogService = inject(DialogService);
 
   confirmation(): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =

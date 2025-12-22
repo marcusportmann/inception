@@ -35,7 +35,7 @@ import { Replace } from '../../util/replace';
 export class AdminFooterComponent implements OnInit {
   @Input() fixed = false;
 
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   ngOnInit(): void {
     Replace(this.elementRef);

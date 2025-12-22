@@ -57,9 +57,9 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   userDirectoryId: string;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
-  private subscriptions: Subscription = new Subscription();
+  private readonly subscriptions: Subscription = new Subscription();
 
   constructor() {
     super();

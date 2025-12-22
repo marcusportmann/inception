@@ -34,8 +34,9 @@ import { ConfigNotFoundError } from './config.service.errors';
   providedIn: 'root'
 })
 export class ConfigService {
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
-  private httpClient = inject(HttpClient);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
+
+  private readonly httpClient = inject(HttpClient);
 
   /**
    * Constructs a new ConfigService.
@@ -53,7 +54,7 @@ export class ConfigService {
    */
   deleteConfig(id: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(`${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}`, {
+      .delete<boolean>(`${this.config.apiUrlPrefix}/config/configs/${id}`, {
         observe: 'response'
       })
       .pipe(
@@ -71,7 +72,7 @@ export class ConfigService {
    */
   getConfig(id: string): Observable<Config> {
     return this.httpClient
-      .get<Config>(`${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}`, {
+      .get<Config>(`${this.config.apiUrlPrefix}/config/configs/${id}`, {
         reportProgress: true
       })
       .pipe(
@@ -88,7 +89,7 @@ export class ConfigService {
    */
   getConfigValue(id: string): Observable<string> {
     return this.httpClient
-      .get<string>(`${this.config.apiUrlPrefix}/config/configs/${encodeURIComponent(id)}/value`, {
+      .get<string>(`${this.config.apiUrlPrefix}/config/configs/${id}/value`, {
         reportProgress: true
       })
       .pipe(

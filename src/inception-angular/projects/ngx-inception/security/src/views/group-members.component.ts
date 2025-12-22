@@ -15,7 +15,12 @@
  */
 
 import {
-  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  inject,
+  ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -41,7 +46,8 @@ import { SecurityService } from '../services/security.service';
   standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'group-members.component.html',
-  styleUrls: ['group-members.component.css']
+  styleUrls: ['group-members.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupMembersComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: GroupMemberDataSource;
@@ -65,12 +71,10 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
 
   readonly userDirectoryId: string;
 
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -109,7 +113,6 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
 
   addMemberToGroup(): void {
     // When implemented, remember to call this.saveState() before navigation.
-    // // noinspection JSIgnoredPromiseFromCall
     // this.saveState();
     // this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }

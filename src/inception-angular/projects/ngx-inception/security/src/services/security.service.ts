@@ -68,8 +68,9 @@ import { Users } from './users';
   providedIn: 'root'
 })
 export class SecurityService {
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
-  private httpClient = inject(HttpClient);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
+
+  private readonly httpClient = inject(HttpClient);
 
   /**
    * Constructs a new SecurityService.
@@ -102,7 +103,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/groups/' +
-          encodeURIComponent(groupName) +
+          groupName +
           '/members',
         groupMember,
         { observe: 'response' }
@@ -135,7 +136,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/groups/' +
-          encodeURIComponent(groupName) +
+          groupName +
           '/roles',
         groupRole,
         { observe: 'response' }
@@ -208,7 +209,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/users/' +
-          encodeURIComponent(username) +
+          username +
           '/password',
         passwordChange,
         {
@@ -239,7 +240,7 @@ export class SecurityService {
 
     return this.httpClient
       .put<boolean>(
-        this.config.apiUrlPrefix + '/security/users/' + encodeURIComponent(username) + '/password',
+        this.config.apiUrlPrefix + '/security/users/' + username + '/password',
         passwordChange,
         {
           observe: 'response'
@@ -392,7 +393,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/groups/' +
-          encodeURIComponent(groupName),
+          groupName,
         { observe: 'response' }
       )
       .pipe(
@@ -470,7 +471,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/users/' +
-          encodeURIComponent(username),
+          username,
         { observe: 'response' }
       )
       .pipe(
@@ -525,7 +526,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/groups/' +
-          encodeURIComponent(groupName),
+          groupName,
         { reportProgress: true }
       )
       .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the group.')));
@@ -561,7 +562,7 @@ export class SecurityService {
     return this.httpClient
       .get<
         string[]
-      >(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' + encodeURIComponent(username) + '/group-names', { reportProgress: true })
+      >(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' + username + '/group-names', { reportProgress: true })
       .pipe(
         catchError(
           SecurityService.handleApiError('Failed to retrieve the group names for the user.')
@@ -660,7 +661,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/groups/' +
-          encodeURIComponent(groupName) +
+          groupName +
           '/members',
         {
           params,
@@ -778,7 +779,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/groups/' +
-          encodeURIComponent(groupName) +
+          groupName +
           '/role-codes',
         {
           reportProgress: true
@@ -819,7 +820,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/groups/' +
-          encodeURIComponent(groupName) +
+          groupName +
           '/roles',
         {
           reportProgress: true
@@ -1022,7 +1023,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/users/' +
-          encodeURIComponent(username),
+          username,
         { reportProgress: true }
       )
       .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the user.')));
@@ -1212,7 +1213,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/users/' +
-          encodeURIComponent(username) +
+          username +
           '/name',
         { reportProgress: true }
       )
@@ -1288,7 +1289,7 @@ export class SecurityService {
       .post<boolean>(
         this.config.apiUrlPrefix +
           '/security/users/' +
-          encodeURIComponent(username) +
+          username +
           '/reset-password',
         null,
         {
@@ -1344,11 +1345,11 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/groups/' +
-          encodeURIComponent(groupName) +
+          groupName +
           '/members/' +
           memberType +
           '/' +
-          encodeURIComponent(memberName),
+          memberName,
         { observe: 'response' }
       )
       .pipe(
@@ -1379,7 +1380,7 @@ export class SecurityService {
           '/security/user-directories/' +
           userDirectoryId +
           '/groups/' +
-          encodeURIComponent(groupName) +
+          groupName +
           '/roles/' +
           roleCode,
         { observe: 'response' }
@@ -1436,7 +1437,7 @@ export class SecurityService {
 
     return this.httpClient
       .put<boolean>(
-        this.config.apiUrlPrefix + '/security/users/' + encodeURIComponent(username) + '/password',
+        this.config.apiUrlPrefix + '/security/users/' + username + '/password',
         passwordChange,
         {
           observe: 'response'
@@ -1480,7 +1481,7 @@ export class SecurityService {
           '/security/user-directories/' +
           group.userDirectoryId +
           '/groups/' +
-          encodeURIComponent(group.name),
+          group.name,
         group,
         {
           observe: 'response'
@@ -1554,7 +1555,7 @@ export class SecurityService {
           '/security/user-directories/' +
           user.userDirectoryId +
           '/users/' +
-          encodeURIComponent(user.username),
+          user.username,
         user,
         {
           params: httpParams,

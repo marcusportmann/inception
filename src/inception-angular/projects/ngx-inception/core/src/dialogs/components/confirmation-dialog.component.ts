@@ -72,9 +72,9 @@ export interface ConfirmationDialogData {
   }
 })
 export class ConfirmationDialogComponent {
-  private data = inject<ConfirmationDialogData>(MAT_DIALOG_DATA);
+  private readonly data = inject<ConfirmationDialogData>(MAT_DIALOG_DATA);
 
-  private dialogRef = inject<MatDialogRef<ConfirmationDialogComponent>>(MatDialogRef);
+  private readonly dialogRef = inject<MatDialogRef<ConfirmationDialogComponent>>(MatDialogRef);
 
   get message(): string {
     return this.data.message;

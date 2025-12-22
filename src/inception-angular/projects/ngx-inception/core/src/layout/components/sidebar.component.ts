@@ -49,7 +49,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   private sidebarMinimizedSubscription?: Subscription;
 
-  private sidebarService = inject(SidebarService);
+  private readonly sidebarService = inject(SidebarService);
 
   ngOnDestroy(): void {
     if (this.sidebarMinimizedSubscription) {

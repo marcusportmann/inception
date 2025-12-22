@@ -36,13 +36,13 @@ import { TimeZone } from './time-zone';
   providedIn: 'root'
 })
 export class ReferenceService {
-  private cacheService = inject(CacheService);
+  private readonly cacheService = inject(CacheService);
 
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
 
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
-  private localeId = inject(LOCALE_ID);
+  private readonly localeId = inject(LOCALE_ID);
 
   /**
    * Constructs a new ReferenceService.

@@ -52,7 +52,7 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
 
   valueControl: FormControl;
 
-  private codesService = inject(CodesService);
+  private readonly codesService = inject(CodesService);
 
   constructor() {
     super();
@@ -78,14 +78,13 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@codes_new_code_back_navigation:Codes`, ['..'], {
-      relativeTo: this.activatedRoute
+    return new BackNavigation($localize`:@@codes_new_code_back_navigation:Codes`, ['.'], {
+      relativeTo: this.activatedRoute.parent
     });
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
   ngAfterViewInit(): void {
@@ -109,8 +108,7 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
         )
         .subscribe({
           next: () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
           },
           error: (error: Error) => this.handleError(error, false)
         });

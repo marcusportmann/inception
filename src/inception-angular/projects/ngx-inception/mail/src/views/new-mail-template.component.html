@@ -59,7 +59,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label i18n="@@mail_new_mail_template_component_label_template">Template</mat-label>
-            <file-upload formControlName="template" i18n-placeholder="@@mail_new_mail_template_component_placeholder_no_file_selected" placeholder="No file selected"></file-upload>
+            <inception-core-file-upload formControlName="template" i18n-placeholder="@@mail_new_mail_template_component_placeholder_no_file_selected" placeholder="No file selected"></inception-core-file-upload>
             @if (templateControl.errors && !templateControl.untouched) {
               <mat-error>
                 @if (templateControl.errors['required']) {

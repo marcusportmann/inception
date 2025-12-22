@@ -67,9 +67,9 @@ export class TenantUserDirectoriesComponent
 
   readonly title = $localize`:@@security_tenant_user_directories_title:Tenant User Directories`;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
-  private subscriptions: Subscription = new Subscription();
+  private readonly subscriptions: Subscription = new Subscription();
 
   constructor() {
     super();
@@ -90,9 +90,9 @@ export class TenantUserDirectoriesComponent
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@security_tenant_user_directories_back_navigation:Back`,
-      ['../..'],
+      ['.'],
       {
-        relativeTo: this.activatedRoute
+        relativeTo: this.activatedRoute.parent?.parent
       }
     );
   }

@@ -27,7 +27,7 @@ import { SchedulerService } from '../services/scheduler.service';
  */
 @Injectable()
 export class JobTitleResolver {
-  private schedulerService = inject<SchedulerService>(SchedulerService);
+  private readonly schedulerService = inject<SchedulerService>(SchedulerService);
 
   /**
    * Resolve the title.

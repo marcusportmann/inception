@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
 import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 
@@ -31,7 +31,8 @@ import { ReportingService } from '../services/reporting.service';
   standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'report-definitions.component.html',
-  styleUrls: ['report-definitions.component.css']
+  styleUrls: ['report-definitions.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReportDefinitionsComponent extends FilteredPaginatedListView<ReportDefinitionSummary> {
   readonly displayedColumns = ['name', 'actions'] as const;
@@ -42,7 +43,7 @@ export class ReportDefinitionsComponent extends FilteredPaginatedListView<Report
 
   readonly title = $localize`:@@reporting_report_definitions_title:Report Definitions`;
 
-  private reportingService = inject(ReportingService);
+  private readonly reportingService = inject(ReportingService);
 
   deleteReportDefinition(reportDefinitionId: string): void {
     this.confirmAndProcessAction(
@@ -52,15 +53,13 @@ export class ReportDefinitionsComponent extends FilteredPaginatedListView<Report
   }
 
   editReportDefinition(reportDefinitionId: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(reportDefinitionId) + '/edit'], {
+    void this.router.navigate([reportDefinitionId, 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
 
   newReportDefinition(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   protected override createFilterPredicate(): (

@@ -57,10 +57,8 @@ import { SidebarTogglerDirective } from '../directives/sidebar-toggler.directive
         </li>
         -->
         @if (isLoggedIn() | async) {
-          <li
-            class="nav-item"
-            [matMenuTriggerFor]="userMenu">
-            <a href="#" class="nav-link" (click)="false">
+          <li class="nav-item" [matMenuTriggerFor]="userMenu">
+            <a href="#" class="nav-link" (click)="(false)">
               <span class="user-icon"></span>
               <span class="user-name d-md-down-none">{{ userName() | async }}</span>
             </a>
@@ -71,27 +69,26 @@ import { SidebarTogglerDirective } from '../directives/sidebar-toggler.directive
               <span class="login-icon"></span>
               <span class="login d-md-down-none" i18n="@@admin_header_component_link_login"
                 >Login</span
-                >
-              </a>
-            </li>
-          }
-
-          <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false" class="user-menu">
-            @if (isUserProfileEnabled()) {
-              <a mat-menu-item (click)="profile()">
-                <i class="fas fa-user-circle"></i>
-                <span i18n="@@admin_header_component_menu_item_profile">Profile</span>
-              </a>
-            }
-            <a mat-menu-item (click)="logout()">
-              <i class="fas fa-sign-out-alt"></i>
-              <span i18n="@@admin_header_component_menu_item_logout">Logout</span>
+              >
             </a>
-          </mat-menu>
+          </li>
+        }
 
-        </ul>
-      </header>
-    `
+        <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false" class="user-menu">
+          @if (isUserProfileEnabled()) {
+            <a mat-menu-item (click)="profile()">
+              <i class="fas fa-user-circle"></i>
+              <span i18n="@@admin_header_component_menu_item_profile">Profile</span>
+            </a>
+          }
+          <a mat-menu-item (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span i18n="@@admin_header_component_menu_item_logout">Logout</span>
+          </a>
+        </mat-menu>
+      </ul>
+    </header>
+  `
 })
 export class AdminHeaderComponent implements OnInit {
   @Input() fixed = false;
@@ -99,13 +96,13 @@ export class AdminHeaderComponent implements OnInit {
   // eslint-disable-next-line
   @Input() sidebarToggler!: any;
 
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
 
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
-  private sessionService = inject(SessionService);
+  private readonly sessionService = inject(SessionService);
 
   isLoggedIn(): Observable<boolean> {
     return this.sessionService.session$.pipe(
@@ -120,8 +117,7 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   login(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['/login']);
+    void this.router.navigate(['/login']);
   }
 
   logout(): void {
@@ -141,8 +137,7 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   profile(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['/profile']).then(() => {
+    void this.router.navigate(['/profile']).then(() => {
       /* empty */
     });
   }

@@ -15,7 +15,12 @@
  */
 
 import {
-  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  inject,
+  ViewChild
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
@@ -41,7 +46,8 @@ import { ErrorService } from '../services/error.service';
   standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'error-reports.component.html',
-  styleUrls: ['error-reports.component.css']
+  styleUrls: ['error-reports.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ErrorReportsComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: ErrorReportSummaryDataSource;
@@ -65,9 +71,7 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
 
   toDateControl: FormControl<Date | null>;
 
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
-  private errorService = inject(ErrorService);
+  private readonly errorService = inject(ErrorService);
 
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
@@ -125,8 +129,7 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
   }
 
   viewErrorReport(errorReportId: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(errorReportId)], {
+    void this.router.navigate([errorReportId], {
       relativeTo: this.activatedRoute
     });
   }

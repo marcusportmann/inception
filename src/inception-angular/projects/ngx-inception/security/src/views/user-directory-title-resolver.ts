@@ -27,7 +27,7 @@ import { SecurityService } from '../services/security.service';
  */
 @Injectable()
 export class UserDirectoryTitleResolver {
-  private securityService = inject<SecurityService>(SecurityService);
+  private readonly securityService = inject<SecurityService>(SecurityService);
 
   /**
    * Resolve the title.

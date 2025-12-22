@@ -52,11 +52,11 @@ import { BackNavigation } from './back-navigation';
 export class TitleBarComponent implements OnInit {
   @Input() fixed = false;
 
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
-  private titleBarService = inject(TitleBarService);
+  private readonly titleBarService = inject(TitleBarService);
 
   /**
    * The back navigation.
@@ -77,8 +77,7 @@ export class TitleBarComponent implements OnInit {
    */
   navigateBack(backNavigation: BackNavigation): void {
     if (backNavigation) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(backNavigation.commands, backNavigation.extras).then(() => {
+      void this.router.navigate(backNavigation.commands, backNavigation.extras).then(() => {
         /* empty */
       });
     }

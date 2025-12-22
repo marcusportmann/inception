@@ -65,9 +65,9 @@ export interface ErrorDialogData {
   }
 })
 export class ErrorDialogComponent {
-  private data = inject<ErrorDialogData>(MAT_DIALOG_DATA);
+  private readonly data = inject<ErrorDialogData>(MAT_DIALOG_DATA);
 
-  private dialogRef = inject<MatDialogRef<ErrorDialogComponent>>(MatDialogRef);
+  private readonly dialogRef = inject<MatDialogRef<ErrorDialogComponent>>(MatDialogRef);
 
   get message(): string {
     return this.data.error.message;

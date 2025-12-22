@@ -51,7 +51,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
 
   userDirectoryId: string;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -77,16 +77,15 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@security_new_group_back_navigation:Groups`, ['../..'], {
-      relativeTo: this.activatedRoute,
+    return new BackNavigation($localize`:@@security_new_group_back_navigation:Groups`, ['.'], {
+      relativeTo: this.activatedRoute.parent,
       state: { userDirectoryId: this.userDirectoryId }
     });
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {
-      relativeTo: this.activatedRoute,
+    void this.router.navigate(['.'], {
+      relativeTo: this.activatedRoute.parent,
       state: { userDirectoryId: this.userDirectoryId }
     });
   }
@@ -128,9 +127,8 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
       )
       .subscribe({
         next: () => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {
-            relativeTo: this.activatedRoute,
+          void this.router.navigate(['.'], {
+            relativeTo: this.activatedRoute.parent,
             state: { userDirectoryId: this.userDirectoryId }
           });
         },

@@ -62,7 +62,7 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
   usernameControl: FormControl;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -119,18 +119,17 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@security_edit_user_back_navigation:Users`,
-      ['../../..'],
+      ['.'],
       {
-        relativeTo: this.activatedRoute,
+        relativeTo: this.activatedRoute.parent?.parent,
         state: { userDirectoryId: this.userDirectoryId }
       }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../../..'], {
-      relativeTo: this.activatedRoute,
+    void this.router.navigate(['.'], {
+      relativeTo: this.activatedRoute.parent?.parent,
       state: { userDirectoryId: this.userDirectoryId }
     });
   }
@@ -196,9 +195,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
       )
       .subscribe({
         next: () => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../../..'], {
-            relativeTo: this.activatedRoute,
+          void this.router.navigate(['.'], {
+            relativeTo: this.activatedRoute.parent?.parent,
             state: { userDirectoryId: this.userDirectoryId }
           });
         },

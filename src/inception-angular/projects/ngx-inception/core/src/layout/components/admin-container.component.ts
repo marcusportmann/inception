@@ -61,7 +61,7 @@ import { TitleBarComponent } from './title-bar.component';
 
     <div class="admin-body">
       <sidebar class="sidebar" [fixed]="true" [display]="'lg'">
-        <ng-scrollbar>
+        <ng-scrollbar appearance="compact" orientation="vertical" visibility="hover">
           <sidebar-nav></sidebar-nav>
         </ng-scrollbar>
         <sidebar-minimizer></sidebar-minimizer>
@@ -147,8 +147,7 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
         if (!session) {
           this.spinnerService.hideSpinner();
 
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate([this.config.logoutRedirectUri ?? '/']);
+          void this.router.navigate([this.config.logoutRedirectUri ?? '/']);
         }
       })
     );

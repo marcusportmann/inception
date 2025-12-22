@@ -27,7 +27,7 @@ import { AfterContentInit, Directive, ElementRef, inject } from '@angular/core';
   standalone: true
 })
 export class AutofocusDirective implements AfterContentInit {
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   ngAfterContentInit(): void {
     this.elementRef.nativeElement.focus();

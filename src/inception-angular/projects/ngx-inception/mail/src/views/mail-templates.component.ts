@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
 import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 
@@ -32,7 +32,8 @@ import { MailService } from '../services/mail.service';
   standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'mail-templates.component.html',
-  styleUrls: ['mail-templates.component.css']
+  styleUrls: ['mail-templates.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MailTemplatesComponent extends FilteredPaginatedListView<MailTemplateSummary> {
   // noinspection JSUnusedGlobalSymbols
@@ -49,7 +50,7 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
 
   readonly title = $localize`:@@mail_mail_templates_title:Mail Templates`;
 
-  private mailService = inject(MailService);
+  private readonly mailService = inject(MailService);
 
   deleteMailTemplate(mailTemplateId: string): void {
     this.confirmAndProcessAction(
@@ -59,15 +60,13 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
   }
 
   editMailTemplate(mailTemplateId: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(mailTemplateId), 'edit'], {
+    void this.router.navigate([mailTemplateId, 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
 
   newMailTemplate(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   protected override createFilterPredicate(): (

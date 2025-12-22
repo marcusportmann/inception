@@ -51,7 +51,7 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
 
   valueControl: FormControl<string | null>;
 
-  private configService = inject(ConfigService);
+  private readonly configService = inject(ConfigService);
 
   private destroy$ = new Subject<void>();
 
@@ -85,14 +85,13 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@config_edit_config_back_navigation:Config`, ['../..'], {
-      relativeTo: this.activatedRoute
+    return new BackNavigation($localize`:@@config_edit_config_back_navigation:Config`, ['.'], {
+      relativeTo: this.activatedRoute.parent?.parent
     });
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   ngAfterViewInit(): void {
@@ -112,7 +111,7 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
           this.valueControl.setValue(config.value);
           this.descriptionControl.setValue(config.description);
         },
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 
@@ -136,10 +135,7 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
         )
         .subscribe({
           next: () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['../..'], {
-              relativeTo: this.activatedRoute
-            });
+            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
           },
           error: (error: Error) => this.handleError(error, false)
         });

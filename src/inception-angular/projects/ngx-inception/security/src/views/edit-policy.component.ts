@@ -54,7 +54,7 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
 
   versionControl: FormControl;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -94,14 +94,13 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@security_edit_policy_back_navigation:Policies`,
-      ['../..'],
-      { relativeTo: this.activatedRoute }
+      ['.'],
+      { relativeTo: this.activatedRoute.parent?.parent }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   ngAfterViewInit(): void {
@@ -124,7 +123,7 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
           this.typeControl.setValue(policy.type);
           this.dataControl.setValue(policy.data);
         },
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 
@@ -148,9 +147,8 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
       )
       .subscribe({
         next: () => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {
-            relativeTo: this.activatedRoute
+          void this.router.navigate(['.'], {
+            relativeTo: this.activatedRoute.parent?.parent
           });
         },
         error: (error: Error) => this.handleError(error, false)

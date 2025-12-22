@@ -38,8 +38,9 @@ import { ErrorReportNotFoundError } from './error.service.errors';
   providedIn: 'root'
 })
 export class ErrorService {
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
-  private httpClient = inject(HttpClient);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
+
+  private readonly httpClient = inject(HttpClient);
 
   /**
    * Constructs a new ErrorService.
@@ -58,7 +59,7 @@ export class ErrorService {
   @ResponseConverter getErrorReport(errorReportId: string): Observable<ErrorReport> {
     return this.httpClient
       .get<ErrorReport>(
-        `${this.config.apiUrlPrefix}/error/error-reports/${encodeURIComponent(errorReportId)}`,
+        `${this.config.apiUrlPrefix}/error/error-reports/${errorReportId}`,
         { reportProgress: true }
       )
       .pipe(

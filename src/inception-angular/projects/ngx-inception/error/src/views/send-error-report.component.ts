@@ -48,15 +48,15 @@ export class SendErrorReportComponent implements OnInit {
 
   sendErrorReportForm: FormGroup;
 
-  private activatedRoute = inject(ActivatedRoute);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
-  private dialogService = inject(DialogService);
+  private readonly dialogService = inject(DialogService);
 
-  private errorService = inject(ErrorService);
+  private readonly errorService = inject(ErrorService);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
-  private spinnerService = inject(SpinnerService);
+  private readonly spinnerService = inject(SpinnerService);
 
   constructor() {
     // Initialize form controls
@@ -85,8 +85,8 @@ export class SendErrorReportComponent implements OnInit {
           this.logErrorDetails(this.error!);
         } else {
           console.log('No error found, redirecting to the application root');
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
+
+          void this.router.navigate(['/']);
         }
       });
   }
@@ -112,8 +112,7 @@ export class SendErrorReportComponent implements OnInit {
             .afterClosed()
             .pipe(first())
             .subscribe(() => {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['/']);
+              void this.router.navigate(['/']);
             });
         });
     }

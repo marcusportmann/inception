@@ -31,12 +31,12 @@ import { DataService } from '../../services/data.service';
   imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
-      <mat-card-content> </mat-card-content>
+      <mat-card-content> Menu 1 </mat-card-content>
     </mat-card>
   `
 })
 export class Menu1Component {
-  private dataService = inject(DataService);
+  private readonly dataService = inject(DataService);
 
   clickMe(): void {
     this.dataService

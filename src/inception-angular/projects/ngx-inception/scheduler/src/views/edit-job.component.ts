@@ -77,9 +77,9 @@ export class EditJobComponent extends AdminContainerView implements AfterViewIni
 
   readonly title = $localize`:@@scheduler_edit_job_title:Edit Job`;
 
-  private matDialog = inject(MatDialog);
+  private readonly matDialog = inject(MatDialog);
 
-  private schedulerService = inject(SchedulerService);
+  private readonly schedulerService = inject(SchedulerService);
 
   constructor() {
     super();
@@ -125,14 +125,13 @@ export class EditJobComponent extends AdminContainerView implements AfterViewIni
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@scheduler_edit_job_back_navigation:Jobs`, ['../..'], {
-      relativeTo: this.activatedRoute
+    return new BackNavigation($localize`:@@scheduler_edit_job_back_navigation:Jobs`, ['.'], {
+      relativeTo: this.activatedRoute.parent?.parent
     });
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   deleteJobParameter(existingJobParameter: JobParameter): void {
@@ -237,7 +236,7 @@ export class EditJobComponent extends AdminContainerView implements AfterViewIni
           this.statusControl.setValue(job.status);
           this.jobParameters = job.parameters;
         },
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 
@@ -264,9 +263,8 @@ export class EditJobComponent extends AdminContainerView implements AfterViewIni
       )
       .subscribe({
         next: () => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {
-            relativeTo: this.activatedRoute
+          void this.router.navigate(['.'], {
+            relativeTo: this.activatedRoute.parent?.parent
           });
         },
         error: (error: Error) => this.handleError(error, false)

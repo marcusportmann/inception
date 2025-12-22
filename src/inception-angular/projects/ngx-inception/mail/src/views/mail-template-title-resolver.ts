@@ -27,7 +27,7 @@ import { MailService } from '../services/mail.service';
  */
 @Injectable()
 export class MailTemplateTitleResolver {
-  private mailService = inject<MailService>(MailService);
+  private readonly mailService = inject<MailService>(MailService);
 
   /**
    * Resolve the title.

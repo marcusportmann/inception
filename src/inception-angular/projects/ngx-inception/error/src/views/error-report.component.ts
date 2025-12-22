@@ -60,7 +60,7 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
 
   whoControl: FormControl;
 
-  private errorService = inject(ErrorService);
+  private readonly errorService = inject(ErrorService);
 
   constructor() {
     super();
@@ -127,8 +127,8 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@error_error_report_back_navigation:Error Reports`,
-      ['..'],
-      { relativeTo: this.activatedRoute }
+      ['.'],
+      { relativeTo: this.activatedRoute.parent }
     );
   }
 
@@ -144,13 +144,12 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
       )
       .subscribe({
         next: (errorReport: ErrorReport) => this.populateForm(errorReport),
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 
   ok(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
   private populateForm(errorReport: ErrorReport): void {

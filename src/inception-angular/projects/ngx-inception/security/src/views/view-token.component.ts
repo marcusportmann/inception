@@ -40,7 +40,7 @@ export class ViewTokenComponent extends AdminContainerView implements AfterViewI
 
   tokenId: string;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -56,14 +56,13 @@ export class ViewTokenComponent extends AdminContainerView implements AfterViewI
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@security_view_token_back_navigation:Tokens`, ['../..'], {
-      relativeTo: this.activatedRoute
+    return new BackNavigation($localize`:@@security_view_token_back_navigation:Tokens`, ['.'], {
+      relativeTo: this.activatedRoute.parent?.parent
     });
   }
 
   back(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   getTokenTypeName(tokenType: TokenType | undefined): string {
@@ -88,7 +87,7 @@ export class ViewTokenComponent extends AdminContainerView implements AfterViewI
         next: (token: Token) => {
           this.token = token;
         },
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 }

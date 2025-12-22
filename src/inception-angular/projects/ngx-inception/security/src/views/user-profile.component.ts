@@ -58,20 +58,20 @@ export class UserProfileComponent extends AdminContainerView implements AfterVie
 
   usernameControl: FormControl;
 
-  private clipboard = inject(Clipboard);
+  private readonly clipboard = inject(Clipboard);
 
-  private location = inject(Location);
+  private readonly location = inject(Location);
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
-  private sessionService = inject(SessionService);
+  private readonly sessionService = inject(SessionService);
 
   // ↓ Only a boolean for UI enabling, no token exposure
   readonly canCopyToken$: Observable<boolean> = this.sessionService.session$.pipe(
     map((s: Session | null) => !!s?.accessToken)
   );
 
-  private snackBar = inject(MatSnackBar);
+  private readonly snackBar = inject(MatSnackBar);
 
   constructor() {
     super();
@@ -110,9 +110,8 @@ export class UserProfileComponent extends AdminContainerView implements AfterVie
 
   cancel(): void {
     this.location.back();
-    // noinspection JSIgnoredPromiseFromCall
-    // this.router.navigate(['../../..'], {
-    //   relativeTo: this.activatedRoute,
+    // void this.router.navigate(['.'], {
+    //   relativeTo: this.activatedRoute.parent?.parent?.parent,
     //   state: {userDirectoryId: this.userDirectoryId}
     // });
   }

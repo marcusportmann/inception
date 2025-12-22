@@ -34,9 +34,9 @@ export class BreadcrumbsService {
 
   breadcrumbsVisible$: Subject<boolean> = new ReplaySubject<boolean>(1);
 
-  private activatedRoute = inject(ActivatedRoute);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   /**
    * Constructs a new BreadcrumbsService.

@@ -75,9 +75,9 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
 
   readonly title = $localize`:@@scheduler_new_job_title:New Job`;
 
-  private matDialog = inject(MatDialog);
+  private readonly matDialog = inject(MatDialog);
 
-  private schedulerService = inject(SchedulerService);
+  private readonly schedulerService = inject(SchedulerService);
 
   constructor() {
     super();
@@ -108,14 +108,13 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@scheduler_new_job_back_navigation:Jobs`, ['..'], {
-      relativeTo: this.activatedRoute
+    return new BackNavigation($localize`:@@scheduler_new_job_back_navigation:Jobs`, ['.'], {
+      relativeTo: this.activatedRoute.parent
     });
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
   deleteJobParameter(existingJobParameter: JobParameter): void {
@@ -226,8 +225,7 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
       )
       .subscribe({
         next: () => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+          void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
         },
         error: (error: Error) => this.handleError(error, false)
       });

@@ -46,7 +46,7 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
 
   readonly title = $localize`:@@security_edit_tenant_title:Edit Tenant`;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -72,14 +72,13 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@security_edit_tenant_back_navigation:Tenants`,
-      ['../..'],
-      { relativeTo: this.activatedRoute }
+      ['.'],
+      { relativeTo: this.activatedRoute.parent?.parent }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   ngAfterViewInit(): void {
@@ -97,7 +96,7 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
           this.tenant = tenant;
           this.nameControl.setValue(tenant.name);
         },
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 
@@ -118,9 +117,8 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
       )
       .subscribe({
         next: () => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {
-            relativeTo: this.activatedRoute
+          void this.router.navigate(['.'], {
+            relativeTo: this.activatedRoute.parent?.parent
           });
         },
         error: (error: Error) => this.handleError(error, false)

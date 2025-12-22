@@ -34,11 +34,11 @@ import { TestService } from '../../../services/test.service';
   templateUrl: 'error-report.component.html'
 })
 export class ErrorReportComponent {
-  private dialogService = inject(DialogService);
+  private readonly dialogService = inject(DialogService);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
-  private testService = inject(TestService);
+  private readonly testService = inject(TestService);
 
   testErrorReport(): void {
     this.testService
@@ -55,8 +55,7 @@ export class ErrorReportComponent {
             error instanceof InvalidArgumentError ||
             error instanceof ServiceUnavailableError
           ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
+            void this.router.navigateByUrl('/error/send-error-report', {
               state: { error }
             });
           } else {

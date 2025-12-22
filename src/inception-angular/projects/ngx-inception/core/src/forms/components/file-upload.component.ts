@@ -35,7 +35,6 @@ import { Subject } from 'rxjs';
       class="file-upload"
       role="button"
       tabindex="0"
-      (click)="open()"
       (keydown.enter)="handleKeydown($event)"
       (keydown.space)="handleKeydown($event)"
       [class.disabled]="disabled"
@@ -138,7 +137,7 @@ export class FileUploadComponent
 
   private readonly _parentFormGroup = inject(FormGroupDirective, { optional: true });
 
-  private fm = inject(FocusMonitor);
+  private readonly fm = inject(FocusMonitor);
 
   constructor() {
     const defaultErrorStateMatcher = inject(ErrorStateMatcher);

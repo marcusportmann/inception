@@ -70,11 +70,11 @@ export class NewUserDirectoryComponent
 
   userDirectoryTypes: UserDirectoryType[] = [];
 
-  private changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
-  private subscriptions: Subscription = new Subscription();
+  private readonly subscriptions: Subscription = new Subscription();
 
   constructor() {
     super();
@@ -101,14 +101,13 @@ export class NewUserDirectoryComponent
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@security_new_user_directory_back_navigation:User Directories`,
-      ['../..'],
-      { relativeTo: this.activatedRoute }
+      ['.'],
+      { relativeTo: this.activatedRoute.parent }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
   ngAfterViewInit(): void {
@@ -157,8 +156,7 @@ export class NewUserDirectoryComponent
       )
       .subscribe({
         next: () => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+          void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
         },
         error: (error: Error) => this.handleError(error, false)
       });

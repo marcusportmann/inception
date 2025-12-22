@@ -28,7 +28,7 @@ import { SessionService } from '../../session/services/session.service';
 export class CacheService {
   private readonly cache = new Map<string, unknown>();
 
-  private sessionService = inject(SessionService);
+  private readonly sessionService = inject(SessionService);
 
   /**
    * Constructs a new CacheService.

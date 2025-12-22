@@ -15,7 +15,12 @@
  */
 
 import {
-  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  inject,
+  ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
@@ -46,7 +51,8 @@ interface TokenListExtras {
   standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'tokens.component.html',
-  styleUrls: ['tokens.component.css']
+  styleUrls: ['tokens.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TokensComponent extends StatefulListView<TokenListExtras> implements AfterViewInit {
   readonly dataSource: TokenSummaryDataSource;
@@ -73,12 +79,10 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
 
   protected readonly TokenType = TokenType;
 
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -123,8 +127,7 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
   }
 
   newToken(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
@@ -149,8 +152,7 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
   }
 
   reissueToken(tokenId: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['reissue', encodeURIComponent(tokenId)], {
+    void this.router.navigate(['reissue', tokenId], {
       relativeTo: this.activatedRoute
     });
   }
@@ -164,8 +166,7 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
   }
 
   viewToken(tokenId: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(tokenId), 'view'], {
+    void this.router.navigate([tokenId, 'view'], {
       relativeTo: this.activatedRoute
     });
   }

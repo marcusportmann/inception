@@ -60,9 +60,9 @@ import { DialogData } from '../services/dialog-data';
   }
 })
 export class WarningDialogComponent {
-  data = inject<DialogData>(MAT_DIALOG_DATA);
+  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
 
-  private dialogRef = inject<MatDialogRef<WarningDialogComponent>>(MatDialogRef);
+  private readonly dialogRef = inject<MatDialogRef<WarningDialogComponent>>(MatDialogRef);
 
   ok(): void {
     this.dialogRef.close();

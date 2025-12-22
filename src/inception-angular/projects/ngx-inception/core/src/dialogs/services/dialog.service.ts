@@ -31,7 +31,7 @@ import { DialogData } from './dialog-data';
   providedIn: 'root'
 })
 export class DialogService {
-  private matDialog = inject(MatDialog);
+  private readonly matDialog = inject(MatDialog);
 
   /**
    * Constructs a new DialogService.

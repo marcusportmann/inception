@@ -39,9 +39,9 @@ import {
 export class ReportingService {
   static readonly MAX_TEMPLATE_SIZE: number = 10485760;
 
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
 
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
   /**
    * Constructs a new ReportingService.
@@ -76,9 +76,7 @@ export class ReportingService {
   deleteReportDefinition(reportDefinitionId: string): Observable<boolean> {
     return this.httpClient
       .delete<boolean>(
-        `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
-          reportDefinitionId
-        )}`,
+        `${this.config.apiUrlPrefix}/reporting/report-definitions/${reportDefinitionId}`,
         { observe: 'response' }
       )
       .pipe(
@@ -96,9 +94,7 @@ export class ReportingService {
   getReportDefinition(reportDefinitionId: string): Observable<ReportDefinition> {
     return this.httpClient
       .get<ReportDefinition>(
-        `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
-          reportDefinitionId
-        )}`,
+        `${this.config.apiUrlPrefix}/reporting/report-definitions/${reportDefinitionId}`,
         { reportProgress: true }
       )
       .pipe(
@@ -115,9 +111,7 @@ export class ReportingService {
   getReportDefinitionName(reportDefinitionId: string): Observable<string> {
     return this.httpClient
       .get<string>(
-        `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
-          reportDefinitionId
-        )}/name`,
+        `${this.config.apiUrlPrefix}/reporting/report-definitions/${reportDefinitionId}/name`,
         { reportProgress: true }
       )
       .pipe(
@@ -170,9 +164,7 @@ export class ReportingService {
   updateReportDefinition(reportDefinition: ReportDefinition): Observable<boolean> {
     return this.httpClient
       .put<boolean>(
-        `${this.config.apiUrlPrefix}/reporting/report-definitions/${encodeURIComponent(
-          reportDefinition.id
-        )}`,
+        `${this.config.apiUrlPrefix}/reporting/report-definitions/${reportDefinition.id}`,
         reportDefinition,
         { observe: 'response' }
       )

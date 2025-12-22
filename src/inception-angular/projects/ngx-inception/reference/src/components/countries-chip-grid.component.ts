@@ -39,15 +39,14 @@ import { ReferenceService } from '../services/reference.service';
   template: `
     <mat-chip-grid #countriesChipGrid>
       @for (country of countries; track trackByCode(index, country); let index = $index) {
-        <mat-chip-row
-          (removed)="removeCountry(country, index)">
+        <mat-chip-row (removed)="removeCountry(country, index)">
           {{ country.shortName }}
           <button matChipRemove type="button">
             <mat-icon>cancel</mat-icon>
           </button>
         </mat-chip-row>
       }
-    
+
       <input
         #addCountryInput
         matInput
@@ -58,19 +57,18 @@ import { ReferenceService } from '../services/reference.service';
         (input)="addCountryInputChanged($event)"
         (focusin)="onFocusIn($event)"
         (focusout)="onFocusOut($event)" />
-    
+
       <mat-autocomplete
         #addCountryAutocomplete="matAutocomplete"
         (optionSelected)="selectCountry($event)">
         @for (filteredCountry of filteredCountries$ | async; track filteredCountry) {
-          <mat-option
-            [value]="filteredCountry">
+          <mat-option [value]="filteredCountry">
             {{ filteredCountry.shortName }}
           </mat-option>
         }
       </mat-autocomplete>
     </mat-chip-grid>
-    `,
+  `,
   styles: [
     `
       .mat-chip {
@@ -88,9 +86,11 @@ import { ReferenceService } from '../services/reference.service';
 export class CountriesChipGridComponent
   implements MatFormFieldControl<string[]>, ControlValueAccessor, OnInit, OnDestroy
 {
-  private referenceService = inject(ReferenceService);
+  private readonly referenceService = inject(ReferenceService);
+
   ngControl = inject(NgControl, { optional: true, self: true });
-  private changeDetectorRef = inject(ChangeDetectorRef);
+
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   private static nextId = 0;
 

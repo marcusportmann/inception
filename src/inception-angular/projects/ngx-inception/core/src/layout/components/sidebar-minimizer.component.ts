@@ -34,7 +34,7 @@ import { SidebarMinimizerDirective } from '../directives/sidebar-minimizer.direc
   `
 })
 export class SidebarMinimizerComponent implements OnInit {
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   ngOnInit(): void {
     Replace(this.elementRef);

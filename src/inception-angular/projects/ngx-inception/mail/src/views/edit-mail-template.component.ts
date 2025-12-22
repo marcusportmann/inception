@@ -64,7 +64,7 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
 
   readonly title = $localize`:@@mail_edit_mail_template_title:Edit Mail Template`;
 
-  private mailService = inject(MailService);
+  private readonly mailService = inject(MailService);
 
   constructor() {
     super();
@@ -106,14 +106,13 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@mail_edit_mail_template_back_navigation:Mail Templates`,
-      ['../..'],
-      { relativeTo: this.activatedRoute }
+      ['.'],
+      { relativeTo: this.activatedRoute.parent?.parent }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   ngAfterViewInit(): void {
@@ -133,7 +132,7 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
           this.nameControl.setValue(mailTemplate.name);
           this.contentTypeControl.setValue(mailTemplate.contentType);
         },
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 
@@ -176,10 +175,7 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
         )
         .subscribe({
           next: () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['../..'], {
-              relativeTo: this.activatedRoute
-            });
+            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
           },
           error: (error: Error) => this.handleError(error, false)
         });

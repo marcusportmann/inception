@@ -48,7 +48,7 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
 
   readonly title = $localize`:@@codes_new_code_category_title:New Code Category`;
 
-  private codesService = inject(CodesService);
+  private readonly codesService = inject(CodesService);
 
   constructor() {
     super();
@@ -69,14 +69,13 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@codes_new_code_category_back_navigation:Code Categories`,
-      ['..'],
-      { relativeTo: this.activatedRoute }
+      ['.'],
+      { relativeTo: this.activatedRoute.parent }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
   ngAfterViewInit(): void {
@@ -101,7 +100,7 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
           finalize(() => this.spinnerService.hideSpinner())
         )
         .subscribe({
-          next: () => this.router.navigate(['..'], { relativeTo: this.activatedRoute }),
+          next: () => this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent }),
           error: (error: Error) => this.handleError(error, false)
         });
     }

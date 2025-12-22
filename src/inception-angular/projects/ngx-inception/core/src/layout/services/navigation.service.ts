@@ -33,7 +33,7 @@ export class NavigationService {
 
   private navigation: NavigationItem[] = [];
 
-  private sessionService = inject(SessionService);
+  private readonly sessionService = inject(SessionService);
 
   /**
    * Constructs a new NavigationService.

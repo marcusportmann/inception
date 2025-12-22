@@ -32,8 +32,9 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class TestService {
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
-  private httpClient = inject(HttpClient);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
+
+  private readonly httpClient = inject(HttpClient);
 
   /**
    * Constructs a new TestService.

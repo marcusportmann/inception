@@ -15,7 +15,12 @@
  */
 
 import {
-  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  inject,
+  ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -32,7 +37,8 @@ import { TenantDataSource } from '../services/tenant-data-source';
   standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'tenants.component.html',
-  styleUrls: ['tenants.component.css']
+  styleUrls: ['tenants.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TenantsComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: TenantDataSource;
@@ -52,12 +58,10 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
 
   readonly title = $localize`:@@security_tenants_title:Tenants`;
 
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -80,8 +84,7 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
   editTenant(tenantId: string): void {
     this.saveState();
 
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(tenantId), 'edit'], {
+    void this.router.navigate([tenantId, 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
@@ -89,8 +92,7 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
   newTenant(): void {
     this.saveState();
 
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {
@@ -103,8 +105,7 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
   tenantUserDirectories(tenantId: string): void {
     this.saveState();
 
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(tenantId), 'user-directories'], {
+    void this.router.navigate([tenantId, 'user-directories'], {
       relativeTo: this.activatedRoute
     });
   }

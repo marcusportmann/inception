@@ -48,7 +48,7 @@ export class NewConfigComponent extends AdminContainerView {
 
   valueControl: FormControl;
 
-  private configService = inject(ConfigService);
+  private readonly configService = inject(ConfigService);
 
   constructor() {
     super();
@@ -70,14 +70,13 @@ export class NewConfigComponent extends AdminContainerView {
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@config_new_config_back_navigation:Config`, ['..'], {
-      relativeTo: this.activatedRoute
+    return new BackNavigation($localize`:@@config_new_config_back_navigation:Config`, ['.'], {
+      relativeTo: this.activatedRoute.parent
     });
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
   ok(): void {
@@ -99,8 +98,7 @@ export class NewConfigComponent extends AdminContainerView {
         .subscribe({
           next: () => {
             // Navigate back on successful save
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
           },
           error: (error: Error) => this.handleError(error, false)
         });

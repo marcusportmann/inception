@@ -33,7 +33,7 @@ import { Replace } from '../../util/replace';
   `
 })
 export class SidebarFormComponent implements OnInit {
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   ngOnInit(): void {
     Replace(this.elementRef);

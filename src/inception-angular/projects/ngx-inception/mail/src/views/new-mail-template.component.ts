@@ -17,7 +17,8 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  AdminContainerView, BackNavigation, Base64, CoreModule, FileValidator, ValidatedFormDirective
+  AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
+  ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { MailTemplate } from '../services/mail-template';
@@ -32,7 +33,7 @@ import { MailService } from '../services/mail.service';
 @Component({
   selector: 'inception-mail-new-mail-template',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
+  imports: [CoreModule, ValidatedFormDirective, FileUploadComponent],
   templateUrl: 'new-mail-template.component.html',
   styleUrls: ['new-mail-template.component.css']
 })
@@ -61,7 +62,7 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
 
   readonly title = $localize`:@@mail_new_mail_template_title:New Mail Template`;
 
-  private mailService = inject(MailService);
+  private readonly mailService = inject(MailService);
 
   constructor() {
     super();
@@ -88,14 +89,13 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@mail_new_mail_template_back_navigation:Mail Templates`,
-      ['..'],
-      { relativeTo: this.activatedRoute }
+      ['.'],
+      { relativeTo: this.activatedRoute.parent }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
   ngAfterViewInit(): void {
@@ -142,9 +142,8 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
         )
         .subscribe({
           next: () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['..'], {
-              relativeTo: this.activatedRoute
+            void this.router.navigate(['.'], {
+              relativeTo: this.activatedRoute.parent
             });
           },
           error: (error: Error) => this.handleError(error, false)

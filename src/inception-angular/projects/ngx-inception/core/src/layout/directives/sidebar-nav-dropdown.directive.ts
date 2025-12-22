@@ -27,7 +27,7 @@ import { Directive, ElementRef, inject } from '@angular/core';
   standalone: true
 })
 export class SidebarNavDropdownDirective {
-  private elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   toggle(): void {
     this.elementRef.nativeElement.classList.toggle('open');

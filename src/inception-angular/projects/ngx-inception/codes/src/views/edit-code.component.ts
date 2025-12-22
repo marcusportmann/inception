@@ -52,7 +52,7 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
 
   valueControl: FormControl;
 
-  private codesService = inject(CodesService);
+  private readonly codesService = inject(CodesService);
 
   constructor() {
     super();
@@ -88,14 +88,13 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation($localize`:@@codes_edit_code_back_navigation:Codes`, ['../..'], {
-      relativeTo: this.activatedRoute
+    return new BackNavigation($localize`:@@codes_edit_code_back_navigation:Codes`, ['.'], {
+      relativeTo: this.activatedRoute.parent?.parent
     });
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   ngAfterViewInit(): void {
@@ -114,7 +113,7 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
           this.nameControl.setValue(code.name);
           this.valueControl.setValue(code.value);
         },
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 
@@ -133,10 +132,7 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
         )
         .subscribe({
           next: () => {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['../..'], {
-              relativeTo: this.activatedRoute
-            });
+            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
           },
           error: (error: Error) => this.handleError(error, false)
         });

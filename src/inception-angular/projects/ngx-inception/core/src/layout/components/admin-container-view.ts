@@ -15,7 +15,7 @@
  */
 
 import { inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { DialogService } from '../../dialogs/services/dialog.service';
@@ -89,19 +89,26 @@ export abstract class AdminContainerView {
    * This helper should be called by derived admin container views when handling service or UI
    * errors to ensure a consistent user experience.
    *
-   * @param error           The error that occurred.
-   * @param navigateOnClose Whether navigation should be performed after the error dialog is closed.
-   * @param navigationUrl   The URL segment or route to navigate to when
-   *                        {@code navigateOnClose} is {@code true}.
+   * @param error            The error that occurred.
+   * @param navigateOnClose  Whether navigation should be performed after the error dialog is
+   *                         closed.
+   * @param navigateCommands The router navigation commands for the navigation that should be
+   *                         performed after the error dialog is closed.
+   * @param navigateExtras   The router navigation extras for the navigation that should be
+   *                         performed after the error dialog is closed.
    */
-  handleError(error: Error, navigateOnClose: boolean, navigationUrl?: string): void {
+  handleError(
+    error: Error,
+    navigateOnClose: boolean,
+    navigateCommands?: string[],
+    navigateExtras?: NavigationExtras
+  ): void {
     if (
       error instanceof AccessDeniedError ||
       error instanceof InvalidArgumentError ||
       error instanceof ServiceUnavailableError
     ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
+      void this.router.navigateByUrl('/error/send-error-report', {
         state: { error }
       });
     } else {
@@ -110,11 +117,8 @@ export abstract class AdminContainerView {
         .afterClosed()
         .pipe(first())
         .subscribe(() => {
-          if (navigateOnClose && navigationUrl) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate([navigationUrl], {
-              relativeTo: this.activatedRoute
-            });
+          if (navigateOnClose && navigateCommands) {
+            void this.router.navigate(navigateCommands, navigateExtras);
           }
         });
     }

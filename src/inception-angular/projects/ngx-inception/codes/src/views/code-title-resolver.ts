@@ -28,7 +28,7 @@ import { CodesService } from '../services/codes.service';
  */
 @Injectable()
 export class CodeTitleResolver {
-  private codesService = inject<CodesService>(CodesService);
+  private readonly codesService = inject<CodesService>(CodesService);
 
   /**
    * Resolve the title.

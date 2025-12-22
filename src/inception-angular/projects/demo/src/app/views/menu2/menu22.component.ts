@@ -49,13 +49,13 @@ export class Menu22Component implements AfterViewInit {
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  private dataService = inject(DataService);
+  private readonly dataService = inject(DataService);
 
-  private dialogService = inject(DialogService);
+  private readonly dialogService = inject(DialogService);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
-  private spinnerService = inject(SpinnerService);
+  private readonly spinnerService = inject(SpinnerService);
 
   constructor() {
     // Set the data source filter
@@ -108,8 +108,7 @@ export class Menu22Component implements AfterViewInit {
             error instanceof InvalidArgumentError ||
             error instanceof ServiceUnavailableError
           ) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {
+            void this.router.navigateByUrl('/error/send-error-report', {
               state: { error }
             });
           } else {

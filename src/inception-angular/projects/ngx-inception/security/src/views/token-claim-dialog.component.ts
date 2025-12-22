@@ -166,13 +166,10 @@ export class TokenClaimDialogComponent {
 
   valuesControl: FormControl;
 
-  private dialogRef = inject<MatDialogRef<TokenClaimDialogComponent>>(MatDialogRef);
+  private readonly dialogRef = inject<MatDialogRef<TokenClaimDialogComponent>>(MatDialogRef);
 
   /**
    * Constructs a new TokenClaimDialogComponent.
-   *
-   * @param dialogRef The dialog reference.
-   * @param data      The dialog data.
    */
   constructor() {
     const data = inject<TokenClaimDialogData>(MAT_DIALOG_DATA);

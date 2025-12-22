@@ -56,9 +56,9 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   username: string;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
-  private subscriptions: Subscription = new Subscription();
+  private readonly subscriptions: Subscription = new Subscription();
 
   constructor() {
     super();

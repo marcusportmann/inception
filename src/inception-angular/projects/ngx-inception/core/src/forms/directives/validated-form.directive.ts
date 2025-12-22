@@ -28,13 +28,13 @@ import { FormGroupDirective } from '@angular/forms';
   standalone: true
 })
 export class ValidatedFormDirective {
-  private formGroupDirective = inject(FormGroupDirective, {
+  private readonly formGroupDirective = inject(FormGroupDirective, {
     host: true,
     self: true,
     optional: true
   });
 
-  private viewContainerRef = inject(ViewContainerRef);
+  private readonly viewContainerRef = inject(ViewContainerRef);
 
   @HostListener('reset')
   onReset(): void {

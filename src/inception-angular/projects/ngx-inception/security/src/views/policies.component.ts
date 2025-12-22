@@ -15,7 +15,12 @@
  */
 
 import {
-  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  inject,
+  ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -39,7 +44,8 @@ import { SecurityService } from '../services/security.service';
   standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'policies.component.html',
-  styleUrls: ['policies.component.css']
+  styleUrls: ['policies.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoliciesComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: PolicySummaryDataSource;
@@ -61,12 +67,10 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
 
   protected readonly PolicyType = PolicyType;
 
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
   constructor() {
     super();
@@ -89,8 +93,7 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
   }
 
   editPolicy(policyId: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(policyId)], {
+    void this.router.navigate([policyId], {
       relativeTo: this.activatedRoute
     });
   }
@@ -106,8 +109,7 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
   }
 
   newPolicy(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   ngAfterViewInit(): void {

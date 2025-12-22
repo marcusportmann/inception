@@ -50,7 +50,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
 
   readonly title = $localize`:@@codes_edit_code_category_title:Edit Code Category`;
 
-  private codesService = inject(CodesService);
+  private readonly codesService = inject(CodesService);
 
   constructor() {
     super();
@@ -84,16 +84,15 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@codes_edit_code_category_back_navigation:Code Categories`,
-      ['../..'],
+      ['.'],
       {
-        relativeTo: this.activatedRoute
+        relativeTo: this.activatedRoute.parent?.parent
       }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   ngAfterViewInit(): void {
@@ -112,7 +111,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
           this.nameControl.setValue(codeCategory.name);
           this.dataControl.setValue(codeCategory.data);
         },
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 
@@ -131,9 +130,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
         )
         .subscribe({
           next: () =>
-            this.router.navigate(['../..'], {
-              relativeTo: this.activatedRoute
-            }),
+            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent }),
           error: (error: Error) => this.handleError(error, false)
         });
     }

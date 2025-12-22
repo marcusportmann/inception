@@ -46,13 +46,13 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
 
   readonly tenantControl: FormControl<Tenant | string>;
 
-  private activatedRoute = inject(ActivatedRoute);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
   private readonly destroy$ = new Subject<void>();
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
-  private sessionService = inject(SessionService);
+  private readonly sessionService = inject(SessionService);
 
   private tenants: Tenant[] = [];
 
@@ -107,8 +107,8 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
 
           this.sessionService.logout();
 
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
+          void this.router.navigate(['/']);
+
           return;
         }
 
@@ -136,15 +136,13 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
       if (session) {
         session.tenantId = selected.id;
 
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['/']);
+        void this.router.navigate(['/']);
       } else {
         console.error(
           'No active session found when selecting tenant, redirecting to the application root'
         );
 
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['/']);
+        void this.router.navigate(['/']);
       }
     });
   }

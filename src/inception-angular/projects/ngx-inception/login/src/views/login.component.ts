@@ -45,19 +45,19 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
   @ViewChild('usernameInput') usernameInput!: ElementRef<HTMLInputElement>;
 
-  private activatedRoute = inject(ActivatedRoute);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
 
-  private dialogService = inject(DialogService);
+  private readonly dialogService = inject(DialogService);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
-  private sessionService = inject(SessionService);
+  private readonly sessionService = inject(SessionService);
 
-  private spinnerService = inject(SpinnerService);
+  private readonly spinnerService = inject(SpinnerService);
 
   constructor() {
     this.passwordControl = new FormControl<string>(this.config.prepopulatedLoginPassword || '', {
@@ -81,8 +81,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
   }
 
   forgotPassword(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['forgotten-password'], {
+    void this.router.navigate(['forgotten-password'], {
       relativeTo: this.activatedRoute
     });
   }
@@ -126,8 +125,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
       .subscribe(({ session, tenants }) => {
         if (!session) {
           // No session, just go home
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
+          void this.router.navigate(['/']);
           return;
         }
 
@@ -174,13 +172,11 @@ export class LoginComponent implements AfterViewInit, OnInit {
       error instanceof InvalidArgumentError ||
       error instanceof ServiceUnavailableError
     ) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
+      void this.router.navigateByUrl('/error/send-error-report', {
         state: { error }
       });
     } else if (error instanceof PasswordExpiredError && username) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(['expired-password'], {
+      void this.router.navigate(['expired-password'], {
         relativeTo: this.activatedRoute,
         state: { username }
       });
@@ -205,21 +201,18 @@ export class LoginComponent implements AfterViewInit, OnInit {
   private handleTenantSelection(session: Session, tenants: Tenant[]): void {
     if (!tenants || tenants.length === 0) {
       // No tenants – just navigate to root; backend / guards can handle it.
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(['/']);
+      void this.router.navigate(['/']);
       return;
     }
 
     if (tenants.length === 1) {
       session.tenantId = tenants[0].id;
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(['/']);
+      void this.router.navigate(['/']);
       return;
     }
 
     // Multiple tenants – let the user choose
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['select-tenant'], {
+    void this.router.navigate(['select-tenant'], {
       relativeTo: this.activatedRoute,
       state: { tenants }
     });

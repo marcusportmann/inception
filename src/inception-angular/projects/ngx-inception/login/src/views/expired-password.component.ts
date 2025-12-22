@@ -48,15 +48,15 @@ export class ExpiredPasswordComponent implements OnInit {
 
   usernameControl: FormControl;
 
-  private activatedRoute = inject(ActivatedRoute);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
-  private dialogService = inject(DialogService);
+  private readonly dialogService = inject(DialogService);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
-  private spinnerService = inject(SpinnerService);
+  private readonly spinnerService = inject(SpinnerService);
 
   constructor() {
     // Initialize form controls
@@ -81,8 +81,7 @@ export class ExpiredPasswordComponent implements OnInit {
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
   changePassword(): void {
@@ -123,8 +122,7 @@ export class ExpiredPasswordComponent implements OnInit {
           this.usernameControl.setValue(state.username);
         } else {
           // Redirect if no username in state
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+          void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
         }
       });
   }
@@ -136,8 +134,7 @@ export class ExpiredPasswordComponent implements OnInit {
       error instanceof ServiceUnavailableError
     ) {
       // Redirect on critical errors
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigateByUrl('/error/send-error-report', {
+      void this.router.navigateByUrl('/error/send-error-report', {
         state: { error }
       });
     } else {
@@ -156,9 +153,8 @@ export class ExpiredPasswordComponent implements OnInit {
       .afterClosed()
       .pipe(first())
       .subscribe(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['..'], {
-          relativeTo: this.activatedRoute,
+        void this.router.navigate(['.'], {
+          relativeTo: this.activatedRoute.parent,
           state: { username }
         });
       });

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
 import {
   BackNavigation, CoreModule, FilteredPaginatedListView, TableFilterComponent
 } from 'ngx-inception/core';
@@ -32,7 +32,8 @@ import { CodesService } from '../services/codes.service';
   standalone: true,
   templateUrl: 'codes.component.html',
   imports: [CoreModule, TableFilterComponent],
-  styleUrls: ['codes.component.css']
+  styleUrls: ['codes.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CodesComponent extends FilteredPaginatedListView<Code> {
   readonly codeCategoryId: string;
@@ -45,7 +46,7 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
 
   readonly title = $localize`:@@codes_codes_title:Codes`;
 
-  private codesService = inject(CodesService);
+  private readonly codesService = inject(CodesService);
 
   constructor() {
     super();
@@ -61,11 +62,9 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation(
-      $localize`:@@codes_codes_back_navigation:Code Categories`,
-      ['../..'],
-      { relativeTo: this.activatedRoute }
-    );
+    return new BackNavigation($localize`:@@codes_codes_back_navigation:Code Categories`, ['.'], {
+      relativeTo: this.activatedRoute.parent?.parent?.parent
+    });
   }
 
   deleteCode(codeId: string): void {
@@ -76,15 +75,13 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
   }
 
   editCode(codeId: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(codeId), 'edit'], {
+    void this.router.navigate([codeId, 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
 
   newCode(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   protected override createFilterPredicate(): (data: Code, filter: string) => boolean {

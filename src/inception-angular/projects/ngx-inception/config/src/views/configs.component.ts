@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, HostBinding, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
 import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
 
@@ -31,7 +31,8 @@ import { ConfigService } from '../services/config.service';
   standalone: true,
   imports: [CoreModule, TableFilterComponent],
   templateUrl: 'configs.component.html',
-  styleUrls: ['configs.component.css']
+  styleUrls: ['configs.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfigsComponent extends FilteredPaginatedListView<Config> {
   readonly displayedColumns = ['id', 'value', 'actions'] as const;
@@ -42,7 +43,7 @@ export class ConfigsComponent extends FilteredPaginatedListView<Config> {
 
   readonly title = $localize`:@@config_configs_title:Configs`;
 
-  private configService = inject(ConfigService);
+  private readonly configService = inject(ConfigService);
 
   deleteConfig(id: string): void {
     this.confirmAndProcessAction(
@@ -52,15 +53,13 @@ export class ConfigsComponent extends FilteredPaginatedListView<Config> {
   }
 
   editConfig(id: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(id), 'edit'], {
+    void this.router.navigate([id, 'edit'], {
       relativeTo: this.activatedRoute
     });
   }
 
   newConfig(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
   protected override createFilterPredicate(): (data: Config, filter: string) => boolean {

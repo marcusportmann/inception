@@ -191,20 +191,20 @@ export abstract class FilteredPaginatedListView<T>
 
   protected restorePageAfterDataLoaded(): void {
     const state = this.listStateService.get(this.listKey);
-    if (!state || !this.paginator) {
-      return;
+
+    if (state && this.paginator) {
+      const length = this.dataSource.filteredData?.length ?? this.dataSource.data?.length ?? 0;
+      const maxPageIndex = length === 0 ? 0 : Math.floor((length - 1) / this.paginator.pageSize);
+
+      this.paginator.pageIndex = Math.min(state.pageIndex, maxPageIndex);
+
+      // Force MatTableDataSource to recompute the page slice
+      this.dataSource.paginator = this.paginator;
+
+      this.saveState();
     }
 
-    const length = this.dataSource.filteredData?.length ?? this.dataSource.data?.length ?? 0;
-    const maxPageIndex = length === 0 ? 0 : Math.floor((length - 1) / this.paginator.pageSize);
-
-    this.paginator.pageIndex = Math.min(state.pageIndex, maxPageIndex);
-
-    // Force MatTableDataSource to recompute the page slice
-    this.dataSource.paginator = this.paginator;
-
-    this.saveState();
-    this.changeDetectorRef.detectChanges();
+    this.changeDetectorRef.markForCheck();
   }
 
   protected saveState(): void {

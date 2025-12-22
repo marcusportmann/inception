@@ -35,8 +35,9 @@ import { DuplicateJobError, JobNotFoundError } from './scheduler.service.errors'
   providedIn: 'root'
 })
 export class SchedulerService {
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
-  private httpClient = inject(HttpClient);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
+
+  private readonly httpClient = inject(HttpClient);
 
   /**
    * Constructs a new SchedulerService.
@@ -98,7 +99,7 @@ export class SchedulerService {
    */
   deleteJob(jobId: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(`${this.config.apiUrlPrefix}/scheduler/jobs/${encodeURIComponent(jobId)}`, {
+      .delete<boolean>(`${this.config.apiUrlPrefix}/scheduler/jobs/${jobId}`, {
         observe: 'response'
       })
       .pipe(
@@ -116,7 +117,7 @@ export class SchedulerService {
    */
   @ResponseConverter getJob(jobId: string): Observable<Job> {
     return this.httpClient
-      .get<Job>(`${this.config.apiUrlPrefix}/scheduler/jobs/${encodeURIComponent(jobId)}`, {
+      .get<Job>(`${this.config.apiUrlPrefix}/scheduler/jobs/${jobId}`, {
         reportProgress: true
       })
       .pipe(catchError(SchedulerService.handleApiError('Failed to retrieve the job.')));
@@ -131,7 +132,7 @@ export class SchedulerService {
    */
   getJobName(jobId: string): Observable<string> {
     return this.httpClient
-      .get<string>(`${this.config.apiUrlPrefix}/scheduler/jobs/${encodeURIComponent(jobId)}/name`, {
+      .get<string>(`${this.config.apiUrlPrefix}/scheduler/jobs/${jobId}/name`, {
         reportProgress: true
       })
       .pipe(catchError(SchedulerService.handleApiError('Failed to retrieve the job name.')));
@@ -158,7 +159,7 @@ export class SchedulerService {
   updateJob(job: Job): Observable<boolean> {
     return this.httpClient
       .put<boolean>(
-        `${this.config.apiUrlPrefix}/scheduler/jobs/${encodeURIComponent(job.id)}`,
+        `${this.config.apiUrlPrefix}/scheduler/jobs/${job.id}`,
         job,
         { observe: 'response' }
       )

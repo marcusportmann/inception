@@ -27,7 +27,7 @@ import { ReportingService } from '../services/reporting.service';
  */
 @Injectable()
 export class ReportDefinitionTitleResolver {
-  private reportingService = inject<ReportingService>(ReportingService);
+  private readonly reportingService = inject<ReportingService>(ReportingService);
 
   /**
    * Resolve the title.

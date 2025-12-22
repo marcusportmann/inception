@@ -15,14 +15,19 @@
  */
 
 import {
-  AfterViewInit, ChangeDetectorRef, Component, HostBinding, inject, ViewChild
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  inject,
+  ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import {
-  CoreModule, HasAuthorityDirective, Session, SessionService, SortDirection,
-  StatefulListView, TableFilterComponent
+  CoreModule, HasAuthorityDirective, Session, SessionService, SortDirection, StatefulListView,
+  TableFilterComponent
 } from 'ngx-inception/core';
 import { BehaviorSubject, EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { catchError, finalize, first, map, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -46,7 +51,8 @@ interface GroupsListExtras {
   standalone: true,
   imports: [CoreModule, TableFilterComponent, HasAuthorityDirective],
   templateUrl: 'groups.component.html',
-  styleUrls: ['groups.component.css']
+  styleUrls: ['groups.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupsComponent extends StatefulListView<GroupsListExtras> implements AfterViewInit {
   readonly dataSource: GroupDataSource;
@@ -75,14 +81,12 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
   @ViewChild('userDirectorySelect', { static: true })
   userDirectorySelect!: MatSelect;
 
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
   /** Whether this navigation requested a state reset (from the sidebar). */
   private readonly resetStateRequested: boolean;
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
-  private sessionService = inject(SessionService);
+  private readonly sessionService = inject(SessionService);
 
   constructor() {
     super();
@@ -127,8 +131,7 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
 
     this.saveState();
 
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([`${userDirectoryId}/${encodeURIComponent(groupName)}/edit`], {
+    void this.router.navigate([`${userDirectoryId}/${groupName}/edit`], {
       relativeTo: this.activatedRoute
     });
   }
@@ -143,8 +146,7 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
 
     this.listStateService.clear('security.group-members');
 
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([`${userDirectoryId}/${encodeURIComponent(groupName)}/members`], {
+    void this.router.navigate([`${userDirectoryId}/${groupName}/members`], {
       relativeTo: this.activatedRoute
     });
   }
@@ -157,8 +159,7 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
 
     this.saveState();
 
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([`${userDirectoryId}/${encodeURIComponent(groupName)}/roles`], {
+    void this.router.navigate([`${userDirectoryId}/${groupName}/roles`], {
       relativeTo: this.activatedRoute
     });
   }
@@ -171,8 +172,7 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
 
     this.saveState();
 
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([`${userDirectoryId}/new`], {
+    void this.router.navigate([`${userDirectoryId}/new`], {
       relativeTo: this.activatedRoute
     });
   }
@@ -243,6 +243,7 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
     if (!userDirectoryId) {
       this.dataSource.clear();
       this.userDirectoryCapabilities$.next(null);
+      this.changeDetectorRef.markForCheck();
       return;
     }
 
@@ -325,6 +326,8 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
               this.userDirectorySelect.value = selectedId;
             }
           }
+
+          this.changeDetectorRef.markForCheck();
         },
         error: (error: Error) => this.handleError(error, false)
       });

@@ -5,8 +5,8 @@
 @use "sass:meta";
 @use "sass:string";
 
-@use "functions" as *;
-@use "mixins" as *;
+@use "./functions" as *;
+@use "./mixins" as *;
 
 @use "@angular/material" as mat;
 @use "@angular/material/core/typography/typography";
@@ -897,6 +897,7 @@ template {
   display: none !important;
 }
 
+
 //             _ _
 //        __ _| (_) __ _ _ __    ___  ___ ___ ___
 //       / _` | | |/ _` | '_ \  / __|/ __/ __/ __|
@@ -1509,6 +1510,23 @@ admin-root {
   sidebar-nav-item {
     font-size: $sidebar-font-size;
   }
+
+  ng-scrollbar {
+    --scrollbar-size: 10px;
+    --scrollbar-container-offset: 1px;
+
+    --scrollbar-track-thickness: 8px;
+    --scrollbar-track-offset: 1px;
+    --scrollbar-track-color: transparent;
+
+    --scrollbar-thumb-color: rgba(255, 255, 255, 0.35);
+    --scrollbar-thumb-hover-color: rgba(255, 255, 255, 0.55);
+    --scrollbar-thumb-active-color: rgba(255, 255, 255, 0.75);
+
+    .ng-scrollbar-thumb {
+      border-radius: 6px;
+    }
+  }
 }
 
 // noinspection SassScssResolvedByNameOnly
@@ -1580,6 +1598,10 @@ admin-root {
   .sidebar-fixed {
     .admin-header + .admin-body .sidebar {
       height: calc(100vh - #{$admin-header-height});
+
+      ng-scrollbar {
+        height: calc(100vh - #{$admin-header-height});
+      }
     }
 
     .admin-header + .admin-body {
@@ -2340,7 +2362,7 @@ $inception-theme: mat.m2-define-light-theme(
   &.mat-form-field-appearance-fill {
     .mat-mdc-text-field-wrapper {
       // Reduce the padding on the left and right of a text field
-      padding: 0px 4px;
+      padding: 0 4px;
 
       .mat-mdc-form-field-flex {
         .mat-mdc-form-field-text-prefix {
@@ -2382,11 +2404,11 @@ $inception-theme: mat.m2-define-light-theme(
     }
 
     .mat-mdc-form-field-error-wrapper {
-      padding: 0px 8px;
+      padding: 0 8px;
     }
 
     .mat-mdc-form-field-hint-wrapper {
-      padding: 0px 8px;
+      padding: 0 8px;
 
       .mat-mdc-form-field-hint {
         color: rgba(0, 0, 0, 0.54);

@@ -26,7 +26,7 @@ import { takeUntil } from 'rxjs/operators';
   template: `<router-outlet></router-outlet>`
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   // eslint-disable-next-line
   private unsubscribe$: Subject<any> = new Subject();

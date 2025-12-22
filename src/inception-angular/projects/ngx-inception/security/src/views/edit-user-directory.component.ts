@@ -71,11 +71,11 @@ export class EditUserDirectoryComponent
 
   userDirectoryTypes: UserDirectoryType[] = [];
 
-  private changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  private securityService = inject(SecurityService);
+  private readonly securityService = inject(SecurityService);
 
-  private subscriptions: Subscription = new Subscription();
+  private readonly subscriptions: Subscription = new Subscription();
 
   constructor() {
     super();
@@ -111,14 +111,13 @@ export class EditUserDirectoryComponent
   override get backNavigation(): BackNavigation {
     return new BackNavigation(
       $localize`:@@security_edit_user_directory_back_navigation:User Directories`,
-      ['../..'],
-      { relativeTo: this.activatedRoute }
+      ['.'],
+      { relativeTo: this.activatedRoute.parent?.parent }
     );
   }
 
   cancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   ngAfterViewInit(): void {
@@ -141,7 +140,7 @@ export class EditUserDirectoryComponent
           this.nameControl.setValue(userDirectory.name);
           this.userDirectoryTypeControl.setValue(userDirectory.type);
         },
-        error: (error: Error) => this.handleError(error, true, '../..')
+        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 
@@ -173,9 +172,8 @@ export class EditUserDirectoryComponent
       )
       .subscribe({
         next: () => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {
-            relativeTo: this.activatedRoute
+          void this.router.navigate(['.'], {
+            relativeTo: this.activatedRoute.parent?.parent
           });
         },
         error: (error: Error) => this.handleError(error, false)

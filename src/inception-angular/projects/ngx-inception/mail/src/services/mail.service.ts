@@ -43,9 +43,9 @@ import { DuplicateMailTemplateError, MailTemplateNotFoundError } from './mail.se
 export class MailService {
   static readonly MAX_TEMPLATE_SIZE: number = 10485760;
 
-  private config = inject<InceptionConfig>(INCEPTION_CONFIG);
+  private readonly config = inject<InceptionConfig>(INCEPTION_CONFIG);
 
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
   /**
    * Constructs a new MailService.
@@ -97,7 +97,7 @@ export class MailService {
   deleteMailTemplate(mailTemplateId: string): Observable<boolean> {
     return this.httpClient
       .delete<boolean>(
-        `${this.config.apiUrlPrefix}/mail/mail-templates/${encodeURIComponent(mailTemplateId)}`,
+        `${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}`,
         { observe: 'response' }
       )
       .pipe(
@@ -118,7 +118,7 @@ export class MailService {
   getMailTemplate(mailTemplateId: string): Observable<MailTemplate> {
     return this.httpClient
       .get<MailTemplate>(
-        `${this.config.apiUrlPrefix}/mail/mail-templates/${encodeURIComponent(mailTemplateId)}`,
+        `${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}`,
         { reportProgress: true }
       )
       .pipe(
@@ -138,7 +138,7 @@ export class MailService {
   getMailTemplateName(mailTemplateId: string): Observable<string> {
     return this.httpClient
       .get<string>(
-        `${this.config.apiUrlPrefix}/mail/mail-templates/${encodeURIComponent(mailTemplateId)}/name`,
+        `${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}/name`,
         { reportProgress: true }
       )
       .pipe(
@@ -196,7 +196,7 @@ export class MailService {
   updateMailTemplate(mailTemplate: MailTemplate): Observable<boolean> {
     return this.httpClient
       .put<boolean>(
-        `${this.config.apiUrlPrefix}/mail/mail-templates/${encodeURIComponent(mailTemplate.id)}`,
+        `${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplate.id}`,
         mailTemplate,
         { observe: 'response' }
       )
