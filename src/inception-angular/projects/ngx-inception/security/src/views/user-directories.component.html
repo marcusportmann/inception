@@ -26,7 +26,7 @@
     <mat-row *matRowDef="let row; columns: displayedColumns" [attr.aria-disabled]="row.disabled ? 'true' : 'false'"></mat-row>
   </mat-table>
 
-  <mat-paginator [length]="dataSource.total$ | async" [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+  <mat-paginator [length]="dataSource.total$ | async" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-userDirectoryId="userDirectoryId">

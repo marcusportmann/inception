@@ -221,7 +221,7 @@ export abstract class FilteredPaginatedListView<T>
 
     this.listStateService.set(this.listStateKey, {
       pageIndex: this.paginator.pageIndex ?? 0,
-      pageSize: this.paginator.pageSize ?? 10,
+      pageSize: this.paginator.pageSize ?? this.defaultPageSize,
       sortActive: this.sort.active ?? '',
       sortDirection: this.sort.direction,
       filter: this.filterValue ?? ''
@@ -250,8 +250,8 @@ export abstract class FilteredPaginatedListView<T>
   private restoreStateBeforeData(): void {
     // Always start with known defaults (so the template doesn’t need to)
     if (this.paginator) {
-      this.paginator.pageSize = this.defaultPageSize;
       this.paginator.pageIndex = 0;
+      this.paginator.pageSize = this.defaultPageSize;
     }
     if (this.sort) {
       this.sort.active = this.defaultSortActive;
@@ -277,8 +277,10 @@ export abstract class FilteredPaginatedListView<T>
     this.filterValue = state.filter ?? '';
     this.dataSource.filter = (state.filter ?? '').trim().toLowerCase();
 
-    this.paginator.pageSize = state.pageSize ?? this.defaultPageSize;
-    this.paginator.pageIndex = state.pageIndex ?? 0;
+    this.paginator.pageSize =
+      state.pageSize && state.pageSize > 0 ? state.pageSize : this.defaultPageSize;
+
+    this.paginator.pageIndex = Math.max(0, state.pageIndex ?? 0);
 
     this.sort.active = state.sortActive ?? this.defaultSortActive;
     this.sort.direction = state.sortDirection ?? this.defaultSortDirection;

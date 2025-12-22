@@ -54,6 +54,6 @@ export class ListStateService {
   }
 
   set<TExtras = unknown>(key: string, state: ListState<TExtras>): void {
-    this.states.set(key, state as ListState);
+    this.states.set(key, Object.freeze({ ...state }) as ListState);
   }
 }

@@ -11,7 +11,7 @@
     <div class="date-range-container-padding"></div>
     <inception-core-table-filter></inception-core-table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortDisableClear>
 
     <!-- Created Column -->
     <ng-container matColumnDef="created">
@@ -46,7 +46,7 @@
     <mat-row *matRowDef="let row; columns: displayedColumns" [attr.aria-disabled]="row.disabled ? 'true' : 'false'"></mat-row>
   </mat-table>
 
-  <mat-paginator [length]="dataSource.total$ | async" [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+  <mat-paginator [length]="dataSource.total$ | async" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-errorReportId="errorReportId">

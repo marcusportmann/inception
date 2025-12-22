@@ -34,6 +34,8 @@ export abstract class StatefulListView<TExtras = unknown>
   extends AdminContainerView
   implements OnDestroy
 {
+  readonly defaultPageSize = 10;
+
   abstract readonly defaultSortActive: string;
 
   readonly defaultSortDirection: 'asc' | 'desc' = 'asc';
@@ -185,6 +187,7 @@ export abstract class StatefulListView<TExtras = unknown>
 
     if (this.paginator) {
       this.paginator.pageIndex = 0;
+      this.paginator.pageSize = this.defaultPageSize;
     }
 
     if (this.sort) {
@@ -219,8 +222,10 @@ export abstract class StatefulListView<TExtras = unknown>
         this.tableFilter.value = state.filter ?? '';
       }
 
-      this.paginator.pageSize = state.pageSize;
-      this.paginator.pageIndex = state.pageIndex;
+      this.paginator.pageSize =
+        state.pageSize && state.pageSize > 0 ? state.pageSize : this.defaultPageSize;
+
+      this.paginator.pageIndex = Math.max(0, state.pageIndex ?? 0);
 
       this.sort.active = state.sortActive;
       this.sort.direction = state.sortDirection;
@@ -243,7 +248,7 @@ export abstract class StatefulListView<TExtras = unknown>
 
     const state: ListState<TExtras> = {
       pageIndex: this.paginator.pageIndex ?? 0,
-      pageSize: this.paginator.pageSize ?? 10,
+      pageSize: this.paginator.pageSize ?? this.defaultPageSize,
       sortActive: this.sort.active ?? '',
       sortDirection: (this.sort.direction ?? 'asc') as 'asc' | 'desc' | '',
       filter: this.tableFilter?.filter ?? '',
