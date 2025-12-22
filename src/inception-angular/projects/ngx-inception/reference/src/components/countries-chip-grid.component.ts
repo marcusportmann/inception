@@ -16,7 +16,9 @@
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, ElementRef, HostBinding, inject, Input, OnDestroy, OnInit, ViewChild
+} from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipGrid } from '@angular/material/chips';
@@ -86,12 +88,6 @@ import { ReferenceService } from '../services/reference.service';
 export class CountriesChipGridComponent
   implements MatFormFieldControl<string[]>, ControlValueAccessor, OnInit, OnDestroy
 {
-  private readonly referenceService = inject(ReferenceService);
-
-  ngControl = inject(NgControl, { optional: true, self: true });
-
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
   private static nextId = 0;
 
   @ViewChild(MatInput, { static: true }) addCountryInput!: MatInput;
@@ -114,6 +110,8 @@ export class CountriesChipGridComponent
 
   @ViewChild('addCountryInput') inputElementRef!: ElementRef<HTMLInputElement>;
 
+  ngControl = inject(NgControl, { optional: true, self: true });
+
   /** Separator keys for chips (not currently used but kept for completeness). */
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
@@ -128,8 +126,12 @@ export class CountriesChipGridComponent
    */
   private readonly addCountryInputValue$ = new ReplaySubject<string>(1);
 
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   /** Destroy notifier for subscriptions. */
   private readonly destroy$ = new Subject<void>();
+
+  private readonly referenceService = inject(ReferenceService);
 
   constructor() {
     if (this.ngControl != null) {

@@ -236,7 +236,8 @@ export class EditJobComponent extends AdminContainerView implements AfterViewIni
           this.statusControl.setValue(job.status);
           this.jobParameters = job.parameters;
         },
-        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 

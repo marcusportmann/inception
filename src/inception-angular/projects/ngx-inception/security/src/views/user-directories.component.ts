@@ -15,12 +15,7 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  inject,
-  ViewChild
+  AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -49,7 +44,9 @@ import { UserDirectorySummaryDataSource } from '../services/user-directory-summa
 export class UserDirectoriesComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: UserDirectorySummaryDataSource;
 
-  displayedColumns = ['name', 'actions'];
+  readonly defaultSortActive = 'name';
+
+  readonly displayedColumns = ['name', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 

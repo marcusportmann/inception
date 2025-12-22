@@ -15,12 +15,7 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  inject,
-  ViewChild
+  AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
@@ -57,7 +52,9 @@ interface TokenListExtras {
 export class TokensComponent extends StatefulListView<TokenListExtras> implements AfterViewInit {
   readonly dataSource: TokenSummaryDataSource;
 
-  displayedColumns = ['name', 'type', 'status', 'actions'];
+  readonly defaultSortActive = 'name';
+
+  readonly displayedColumns = ['name', 'type', 'status', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 

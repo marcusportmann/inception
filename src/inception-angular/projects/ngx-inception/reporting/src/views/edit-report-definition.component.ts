@@ -17,12 +17,7 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  AdminContainerView,
-  BackNavigation,
-  Base64,
-  CoreModule,
-  FileUploadComponent,
-  FileValidator,
+  AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
   ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
@@ -120,7 +115,8 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
           this.idControl.setValue(reportDefinition.id);
           this.nameControl.setValue(reportDefinition.name);
         },
-        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 

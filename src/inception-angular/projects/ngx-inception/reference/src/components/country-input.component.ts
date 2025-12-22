@@ -15,7 +15,9 @@
  */
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy, OnInit, ViewChild
+} from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldControl } from '@angular/material/form-field';
@@ -53,14 +55,13 @@ import { ReferenceService } from '../services/reference.service';
         (optionSelected)="optionSelected($event)"
         [displayWith]="displayWith">
         @for (filteredOption of filteredOptions$ | async; track filteredOption) {
-          <mat-option
-            [value]="filteredOption">
+          <mat-option [value]="filteredOption">
             {{ filteredOption.shortName }}
           </mat-option>
         }
       </mat-autocomplete>
     </div>
-    `,
+  `,
   providers: [
     {
       provide: MatFormFieldControl,
@@ -71,10 +72,6 @@ import { ReferenceService } from '../services/reference.service';
 export class CountryInputComponent
   implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy
 {
-  private readonly referenceService = inject(ReferenceService);
-  ngControl = inject(NgControl, { optional: true, self: true });
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
   private static _nextId = 0;
 
   /**
@@ -107,6 +104,8 @@ export class CountryInputComponent
    */
   readonly inputValue$ = new ReplaySubject<string>(1);
 
+  ngControl = inject(NgControl, { optional: true, self: true });
+
   /**
    * The observable indicating that the state of the control has changed.
    */
@@ -121,6 +120,10 @@ export class CountryInputComponent
    * The options for the autocomplete.
    */
   private _options: Country[] = [];
+
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
+  private readonly referenceService = inject(ReferenceService);
 
   private readonly subscriptions = new Subscription();
 

@@ -15,12 +15,7 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  inject,
-  ViewChild
+  AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
@@ -52,7 +47,11 @@ import { ErrorService } from '../services/error.service';
 export class ErrorReportsComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: ErrorReportSummaryDataSource;
 
-  displayedColumns = ['created', 'who', 'description', 'actions'];
+  readonly defaultSortActive = 'created';
+
+  override readonly defaultSortDirection = 'desc';
+
+  readonly displayedColumns = ['created', 'who', 'description', 'actions'];
 
   fromDateControl: FormControl<Date | null>;
 

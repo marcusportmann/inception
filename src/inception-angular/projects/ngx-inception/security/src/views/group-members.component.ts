@@ -15,12 +15,7 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  inject,
-  ViewChild
+  AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -51,6 +46,8 @@ import { SecurityService } from '../services/security.service';
 })
 export class GroupMembersComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: GroupMemberDataSource;
+
+  readonly defaultSortActive = 'memberName';
 
   readonly displayedColumns = ['memberName', 'memberType', 'actions'] as const;
 

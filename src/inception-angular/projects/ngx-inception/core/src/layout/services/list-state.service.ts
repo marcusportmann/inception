@@ -17,7 +17,7 @@
 import { Injectable } from '@angular/core';
 
 /**
- * The persisted state for a pageable, sortable list.
+ * The saved state for a pageable, sortable list.
  *
  * This model captures the UI state that should survive navigation, such as the current page,
  * page size, sort field/direction, and an optional text filter. The generic `TExtras` allows each
@@ -40,7 +40,6 @@ export interface ListState<TExtras = unknown> {
 @Injectable({
   providedIn: 'root'
 })
-@Injectable({ providedIn: 'root' })
 export class ListStateService {
   private readonly states = new Map<string, ListState>();
 
@@ -48,11 +47,13 @@ export class ListStateService {
     this.states.delete(key);
   }
 
-  get(key: string): ListState | undefined {
-    return this.states.get(key);
+  get<TExtras = unknown>(key: string): ListState<TExtras> | undefined {
+    const state = this.states.get(key) as ListState<TExtras> | undefined;
+
+    return state ? Object.freeze({ ...state }) : undefined;
   }
 
-  set(key: string, state: ListState): void {
-    this.states.set(key, state);
+  set<TExtras = unknown>(key: string, state: ListState<TExtras>): void {
+    this.states.set(key, state as ListState);
   }
 }

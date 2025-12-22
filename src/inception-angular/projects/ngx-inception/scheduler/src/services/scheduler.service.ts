@@ -158,11 +158,9 @@ export class SchedulerService {
    */
   updateJob(job: Job): Observable<boolean> {
     return this.httpClient
-      .put<boolean>(
-        `${this.config.apiUrlPrefix}/scheduler/jobs/${job.id}`,
-        job,
-        { observe: 'response' }
-      )
+      .put<boolean>(`${this.config.apiUrlPrefix}/scheduler/jobs/${job.id}`, job, {
+        observe: 'response'
+      })
       .pipe(
         map(SchedulerService.isResponse204),
         catchError(SchedulerService.handleApiError('Failed to update the job.'))

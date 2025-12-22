@@ -162,7 +162,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class FilterableTableComponent {
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
-  displayedColumns = ['position', 'name', 'weight', 'symbol'];
+  readonly displayedColumns = ['position', 'name', 'weight', 'symbol'];
 
   applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();

@@ -41,7 +41,7 @@ import { DataService } from '../../services/data.service';
 export class Menu22Component implements AfterViewInit {
   dataSource = new MatTableDataSource<Data>();
 
-  displayedColumns = ['id', 'stringValue', 'dateValue', 'integerValue'];
+  readonly displayedColumns = ['id', 'stringValue', 'dateValue', 'integerValue'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 

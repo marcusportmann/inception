@@ -165,7 +165,7 @@ export class PaginationTableComponent implements AfterViewInit {
     ELEMENT_DATA
   );
 
-  displayedColumns = ['position', 'name', 'weight', 'symbol'];
+  readonly displayedColumns = ['position', 'name', 'weight', 'symbol'];
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 

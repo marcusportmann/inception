@@ -163,7 +163,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class SortableTableComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
-  displayedColumns = ['position', 'name', 'weight', 'symbol'];
+  readonly displayedColumns = ['position', 'name', 'weight', 'symbol'];
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 

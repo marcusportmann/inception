@@ -15,12 +15,7 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  inject,
-  ViewChild
+  AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
@@ -57,7 +52,9 @@ interface GroupsListExtras {
 export class GroupsComponent extends StatefulListView<GroupsListExtras> implements AfterViewInit {
   readonly dataSource: GroupDataSource;
 
-  displayedColumns = ['name', 'actions'];
+  readonly defaultSortActive = 'name';
+
+  readonly displayedColumns = ['name', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 

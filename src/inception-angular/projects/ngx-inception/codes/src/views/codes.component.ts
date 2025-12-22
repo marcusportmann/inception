@@ -38,11 +38,13 @@ import { CodesService } from '../services/codes.service';
 export class CodesComponent extends FilteredPaginatedListView<Code> {
   readonly codeCategoryId: string;
 
+  readonly defaultSortActive = 'id';
+
   readonly displayedColumns = ['id', 'name', 'actions'] as const;
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey: string;
+  readonly listStateKey: string;
 
   readonly title = $localize`:@@codes_codes_title:Codes`;
 
@@ -58,7 +60,7 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
     }
     this.codeCategoryId = codeCategoryId;
 
-    this.listKey = `codes.${encodeURIComponent(this.codeCategoryId)}`;
+    this.listStateKey = `codes.${encodeURIComponent(this.codeCategoryId)}`;
   }
 
   override get backNavigation(): BackNavigation {

@@ -111,7 +111,8 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
           this.valueControl.setValue(config.value);
           this.descriptionControl.setValue(config.description);
         },
-        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 

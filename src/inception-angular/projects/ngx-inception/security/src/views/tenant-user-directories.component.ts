@@ -21,7 +21,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   AdminContainerView, AutocompleteSelectionRequiredDirective, BackNavigation,
-  ConfirmationDialogComponent, CoreModule } from 'ngx-inception/core';
+  ConfirmationDialogComponent, CoreModule
+} from 'ngx-inception/core';
 import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, finalize, first, startWith } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
@@ -53,7 +54,7 @@ export class TenantUserDirectoriesComponent
 
   dataSource = new MatTableDataSource<UserDirectorySummary>([]);
 
-  displayedColumns = ['existingUserDirectoryName', 'actions'];
+  readonly displayedColumns = ['existingUserDirectoryName', 'actions'];
 
   filteredUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<
     UserDirectorySummary[]

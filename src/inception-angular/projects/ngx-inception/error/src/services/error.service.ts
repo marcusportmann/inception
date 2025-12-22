@@ -58,10 +58,9 @@ export class ErrorService {
    */
   @ResponseConverter getErrorReport(errorReportId: string): Observable<ErrorReport> {
     return this.httpClient
-      .get<ErrorReport>(
-        `${this.config.apiUrlPrefix}/error/error-reports/${errorReportId}`,
-        { reportProgress: true }
-      )
+      .get<ErrorReport>(`${this.config.apiUrlPrefix}/error/error-reports/${errorReportId}`, {
+        reportProgress: true
+      })
       .pipe(
         catchError((error) =>
           ErrorService.handleApiError(error, 'Failed to retrieve the error report.')

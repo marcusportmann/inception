@@ -19,7 +19,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {
-  AdminContainerView, BackNavigation, ConfirmationDialogComponent, CoreModule } from 'ngx-inception/core';
+  AdminContainerView, BackNavigation, ConfirmationDialogComponent, CoreModule
+} from 'ngx-inception/core';
 import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { finalize, first } from 'rxjs/operators';
 import { GroupMemberType } from '../services/group-member-type';
@@ -44,7 +45,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   dataSource = new MatTableDataSource<string>([]);
 
-  displayedColumns = ['existingGroupName', 'actions'];
+  readonly displayedColumns = ['existingGroupName', 'actions'];
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 

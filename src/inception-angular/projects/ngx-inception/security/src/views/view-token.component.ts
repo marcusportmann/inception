@@ -87,7 +87,8 @@ export class ViewTokenComponent extends AdminContainerView implements AfterViewI
         next: (token: Token) => {
           this.token = token;
         },
-        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 }

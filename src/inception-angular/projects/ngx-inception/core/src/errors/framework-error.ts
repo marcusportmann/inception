@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { HttpError } from './http-error';
-import { ProblemDetails } from './problem-details';
+import {HttpErrorResponse} from '@angular/common/http';
+import {HttpError} from './http-error';
+import {ProblemDetails} from './problem-details';
 
 /**
  * The base class that all framework error classes should be derived from.

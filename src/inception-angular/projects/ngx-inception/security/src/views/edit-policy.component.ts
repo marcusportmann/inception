@@ -92,11 +92,9 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation(
-      $localize`:@@security_edit_policy_back_navigation:Policies`,
-      ['.'],
-      { relativeTo: this.activatedRoute.parent?.parent }
-    );
+    return new BackNavigation($localize`:@@security_edit_policy_back_navigation:Policies`, ['.'], {
+      relativeTo: this.activatedRoute.parent?.parent
+    });
   }
 
   cancel(): void {
@@ -123,7 +121,8 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
           this.typeControl.setValue(policy.type);
           this.dataControl.setValue(policy.data);
         },
-        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 

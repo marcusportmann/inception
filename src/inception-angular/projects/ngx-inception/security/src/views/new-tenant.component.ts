@@ -17,8 +17,7 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent,
-  ValidatedFormDirective
+  AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';

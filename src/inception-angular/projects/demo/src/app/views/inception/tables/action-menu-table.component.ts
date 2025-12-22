@@ -243,7 +243,7 @@ const USER_DATA: User[] = [
 export class ActionMenuTableComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<User>(USER_DATA);
 
-  displayedColumns = ['name', 'preferredName', 'email', 'actions'];
+  readonly displayedColumns = ['name', 'preferredName', 'email', 'actions'];
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 

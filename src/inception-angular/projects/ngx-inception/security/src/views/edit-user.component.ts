@@ -17,8 +17,7 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent,
-  ValidatedFormDirective
+  AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { combineLatest } from 'rxjs';
 import { finalize, first } from 'rxjs/operators';
@@ -117,14 +116,10 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   }
 
   override get backNavigation(): BackNavigation {
-    return new BackNavigation(
-      $localize`:@@security_edit_user_back_navigation:Users`,
-      ['.'],
-      {
-        relativeTo: this.activatedRoute.parent?.parent,
-        state: { userDirectoryId: this.userDirectoryId }
-      }
-    );
+    return new BackNavigation($localize`:@@security_edit_user_back_navigation:Users`, ['.'], {
+      relativeTo: this.activatedRoute.parent?.parent,
+      state: { userDirectoryId: this.userDirectoryId }
+    });
   }
 
   cancel(): void {

@@ -32,13 +32,18 @@ export abstract class FilteredPaginatedListView<T>
 {
   readonly dataSource = new MatTableDataSource<T>();
 
+  abstract readonly defaultSortActive: string;
+
+  readonly defaultSortDirection: 'asc' | 'desc' = 'asc';
+
   /** Current filter text (drives both the datasource and the UI filter component). */
   filterValue = '';
 
-  /** Unique key for this list (per route / context). */
-  abstract readonly listKey: string;
+  /** Unique key for the state for this list (per route / context). */
+  abstract readonly listStateKey: string;
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
   protected readonly changeDetectorRef = inject(ChangeDetectorRef);
@@ -190,7 +195,7 @@ export abstract class FilteredPaginatedListView<T>
   }
 
   protected restorePageAfterDataLoaded(): void {
-    const state = this.listStateService.get(this.listKey);
+    const state = this.listStateService.get(this.listStateKey);
 
     if (state && this.paginator) {
       const length = this.dataSource.filteredData?.length ?? this.dataSource.data?.length ?? 0;
@@ -212,7 +217,7 @@ export abstract class FilteredPaginatedListView<T>
       return;
     }
 
-    this.listStateService.set(this.listKey, {
+    this.listStateService.set(this.listStateKey, {
       pageIndex: this.paginator.pageIndex ?? 0,
       pageSize: this.paginator.pageSize ?? 10,
       sortActive: this.sort.active ?? '',
@@ -243,7 +248,7 @@ export abstract class FilteredPaginatedListView<T>
   private restoreStateBeforeData(): void {
     // If the navigation asked for a reset, clear the state and use defaults
     if (this.resetStateRequested) {
-      this.listStateService.clear(this.listKey);
+      this.listStateService.clear(this.listStateKey);
 
       this.filterValue = '';
 
@@ -254,13 +259,13 @@ export abstract class FilteredPaginatedListView<T>
         // pageSize stays whatever default you configured in the template
       }
       if (this.sort) {
-        this.sort.active = '';
-        this.sort.direction = '';
+        this.sort.active = this.defaultSortActive;
+        this.sort.direction = this.defaultSortDirection;
       }
       return;
     }
 
-    const state = this.listStateService.get(this.listKey);
+    const state = this.listStateService.get(this.listStateKey);
     if (!state || !this.paginator || !this.sort) {
       return;
     }

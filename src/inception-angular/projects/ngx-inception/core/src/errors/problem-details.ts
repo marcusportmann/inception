@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { ValidationError } from './validation-error';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ValidationError} from './validation-error';
 
 /**
  * The ProblemDetails class holds the information for a Problem Details Object as defined in

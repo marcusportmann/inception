@@ -39,6 +39,8 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
   // noinspection JSUnusedGlobalSymbols
   readonly MailTemplateContentType = MailTemplateContentType;
 
+  readonly defaultSortActive = 'name';
+
   readonly displayedColumns = ['name', 'contentType', 'actions'] as const;
 
   readonly getMailTemplateContentTypeDescription =
@@ -46,7 +48,7 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'mail.mail-templates';
+  readonly listStateKey = 'mail.mail-templates';
 
   readonly title = $localize`:@@mail_mail_templates_title:Mail Templates`;
 

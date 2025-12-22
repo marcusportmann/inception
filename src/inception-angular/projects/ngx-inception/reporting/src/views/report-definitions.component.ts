@@ -35,11 +35,13 @@ import { ReportingService } from '../services/reporting.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReportDefinitionsComponent extends FilteredPaginatedListView<ReportDefinitionSummary> {
+  readonly defaultSortActive = 'name';
+
   readonly displayedColumns = ['name', 'actions'] as const;
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'reporting.report-definitions';
+  readonly listStateKey = 'reporting.report-definitions';
 
   readonly title = $localize`:@@reporting_report_definitions_title:Report Definitions`;
 

@@ -140,7 +140,8 @@ export class EditUserDirectoryComponent
           this.nameControl.setValue(userDirectory.name);
           this.userDirectoryTypeControl.setValue(userDirectory.type);
         },
-        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 

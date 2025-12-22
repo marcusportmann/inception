@@ -15,12 +15,7 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  inject,
-  ViewChild
+  AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -43,7 +38,9 @@ import { TenantDataSource } from '../services/tenant-data-source';
 export class TenantsComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: TenantDataSource;
 
-  displayedColumns = ['name', 'actions'];
+  readonly defaultSortActive = 'name';
+
+  readonly displayedColumns = ['name', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 

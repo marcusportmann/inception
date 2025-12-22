@@ -118,10 +118,9 @@ export class CodesService {
    */
   deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(
-        `${this.config.apiUrlPrefix}/codes/code-categories/${codeCategoryId}`,
-        { observe: 'response' }
-      )
+      .delete<boolean>(`${this.config.apiUrlPrefix}/codes/code-categories/${codeCategoryId}`, {
+        observe: 'response'
+      })
       .pipe(
         map(CodesService.isResponse204),
         catchError((error) =>
@@ -175,10 +174,9 @@ export class CodesService {
    */
   @ResponseConverter getCodeCategory(codeCategoryId: string): Observable<CodeCategory> {
     return this.httpClient
-      .get<CodeCategory>(
-        `${this.config.apiUrlPrefix}/codes/code-categories/${codeCategoryId}`,
-        { reportProgress: true }
-      )
+      .get<CodeCategory>(`${this.config.apiUrlPrefix}/codes/code-categories/${codeCategoryId}`, {
+        reportProgress: true
+      })
       .pipe(
         catchError((error) =>
           CodesService.handleApiError(error, 'Failed to retrieve the code category.')
@@ -195,10 +193,9 @@ export class CodesService {
    */
   getCodeCategoryName(codeCategoryId: string): Observable<string> {
     return this.httpClient
-      .get<string>(
-        `${this.config.apiUrlPrefix}/codes/code-categories/${codeCategoryId}/name`,
-        { reportProgress: true }
-      )
+      .get<string>(`${this.config.apiUrlPrefix}/codes/code-categories/${codeCategoryId}/name`, {
+        reportProgress: true
+      })
       .pipe(
         catchError((error) =>
           CodesService.handleApiError(error, 'Failed to retrieve the code category name.')

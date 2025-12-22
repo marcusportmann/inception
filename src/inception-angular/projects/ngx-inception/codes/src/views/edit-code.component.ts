@@ -113,7 +113,8 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
           this.nameControl.setValue(code.name);
           this.valueControl.setValue(code.value);
         },
-        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 

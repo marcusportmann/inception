@@ -38,6 +38,8 @@ export class JobsComponent extends FilteredPaginatedListView<Job> {
   // noinspection JSUnusedGlobalSymbols
   readonly JobStatus = JobStatus;
 
+  readonly defaultSortActive = 'name';
+
   readonly displayedColumns = [
     'name',
     'status',
@@ -50,7 +52,7 @@ export class JobsComponent extends FilteredPaginatedListView<Job> {
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'scheduler.jobs';
+  readonly listStateKey = 'scheduler.jobs';
 
   readonly title = $localize`:@@scheduler_jobs_title:Jobs`;
 

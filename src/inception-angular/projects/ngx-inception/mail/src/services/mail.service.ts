@@ -17,13 +17,8 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {
-  AccessDeniedError,
-  CommunicationError,
-  INCEPTION_CONFIG,
-  InceptionConfig,
-  InvalidArgumentError,
-  ProblemDetails,
-  ServiceUnavailableError
+  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
+  ProblemDetails, ServiceUnavailableError
 } from 'ngx-inception/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -96,10 +91,9 @@ export class MailService {
    */
   deleteMailTemplate(mailTemplateId: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(
-        `${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}`,
-        { observe: 'response' }
-      )
+      .delete<boolean>(`${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}`, {
+        observe: 'response'
+      })
       .pipe(
         map(MailService.isResponse204),
         catchError((error) =>
@@ -117,10 +111,9 @@ export class MailService {
    */
   getMailTemplate(mailTemplateId: string): Observable<MailTemplate> {
     return this.httpClient
-      .get<MailTemplate>(
-        `${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}`,
-        { reportProgress: true }
-      )
+      .get<MailTemplate>(`${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}`, {
+        reportProgress: true
+      })
       .pipe(
         catchError((error) =>
           MailService.handleApiError(error, 'Failed to retrieve the mail template.')
@@ -137,10 +130,9 @@ export class MailService {
    */
   getMailTemplateName(mailTemplateId: string): Observable<string> {
     return this.httpClient
-      .get<string>(
-        `${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}/name`,
-        { reportProgress: true }
-      )
+      .get<string>(`${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}/name`, {
+        reportProgress: true
+      })
       .pipe(
         catchError((error) =>
           MailService.handleApiError(error, 'Failed to retrieve the mail template name.')

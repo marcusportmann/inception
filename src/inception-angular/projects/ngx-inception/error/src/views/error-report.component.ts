@@ -144,7 +144,8 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
       )
       .subscribe({
         next: (errorReport: ErrorReport) => this.populateForm(errorReport),
-        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 

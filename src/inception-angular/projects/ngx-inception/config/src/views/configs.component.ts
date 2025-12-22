@@ -35,11 +35,13 @@ import { ConfigService } from '../services/config.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfigsComponent extends FilteredPaginatedListView<Config> {
+  readonly defaultSortActive = 'id';
+
   readonly displayedColumns = ['id', 'value', 'actions'] as const;
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'config.configs';
+  readonly listStateKey = 'config.configs';
 
   readonly title = $localize`:@@config_configs_title:Configs`;
 

@@ -132,7 +132,8 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
           this.nameControl.setValue(mailTemplate.name);
           this.contentTypeControl.setValue(mailTemplate.contentType);
         },
-        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 

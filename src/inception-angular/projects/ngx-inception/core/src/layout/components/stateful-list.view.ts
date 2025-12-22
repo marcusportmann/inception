@@ -34,6 +34,10 @@ export abstract class StatefulListView<TExtras = unknown>
   extends AdminContainerView
   implements OnDestroy
 {
+  abstract readonly defaultSortActive: string;
+
+  readonly defaultSortDirection: 'asc' | 'desc' = 'asc';
+
   /** Unique key for persisting list state (must be provided by subclass). */
   abstract readonly listKey: string;
 
@@ -184,8 +188,8 @@ export abstract class StatefulListView<TExtras = unknown>
     }
 
     if (this.sort) {
-      this.sort.active = '';
-      this.sort.direction = 'asc';
+      this.sort.active = this.defaultSortActive;
+      this.sort.direction = this.defaultSortDirection;
     }
 
     this.resetExtrasState();

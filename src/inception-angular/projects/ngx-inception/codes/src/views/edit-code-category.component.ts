@@ -111,7 +111,8 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
           this.nameControl.setValue(codeCategory.name);
           this.dataControl.setValue(codeCategory.data);
         },
-        error: (error: Error) => this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
   }
 

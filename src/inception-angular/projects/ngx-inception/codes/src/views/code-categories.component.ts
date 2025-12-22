@@ -35,11 +35,13 @@ import { CodesService } from '../services/codes.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCategorySummary> {
+  readonly defaultSortActive = 'id';
+
   readonly displayedColumns = ['id', 'name', 'actions'] as const;
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'codes.code-categories';
+  readonly listStateKey = 'codes.code-categories';
 
   readonly title = $localize`:@@codes_code_categories_title:Code Categories`;
 

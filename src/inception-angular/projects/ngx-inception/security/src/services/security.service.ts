@@ -1287,10 +1287,7 @@ export class SecurityService {
 
     return this.httpClient
       .post<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/users/' +
-          username +
-          '/reset-password',
+        this.config.apiUrlPrefix + '/security/users/' + username + '/reset-password',
         null,
         {
           observe: 'response',

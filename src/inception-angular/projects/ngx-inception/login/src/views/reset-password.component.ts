@@ -21,8 +21,8 @@ import {
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
-  AccessDeniedError, CoreModule, DialogService, InformationDialogComponent,
-  InvalidArgumentError, ServiceUnavailableError, SpinnerService, ValidatedFormDirective
+  AccessDeniedError, CoreModule, DialogService, InformationDialogComponent, InvalidArgumentError,
+  ServiceUnavailableError, SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { SecurityService } from 'ngx-inception/security';
 import { catchError, finalize, first, Observable, throwError } from 'rxjs';

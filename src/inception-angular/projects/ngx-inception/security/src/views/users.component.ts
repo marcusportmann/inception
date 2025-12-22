@@ -15,12 +15,7 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  inject,
-  ViewChild
+  AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
@@ -58,7 +53,9 @@ interface UsersListExtras {
 export class UsersComponent extends StatefulListView<UsersListExtras> implements AfterViewInit {
   readonly dataSource: UserDataSource;
 
-  displayedColumns = ['name', 'username', 'actions'];
+  readonly defaultSortActive = 'username';
+
+  readonly displayedColumns = ['name', 'username', 'actions'];
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
