@@ -213,10 +213,30 @@ export abstract class StatefulListView<TExtras = unknown>
    * Restore the persisted list state before the first data load.
    */
   protected restoreStateBeforeData(): void {
-    const state = this.listStateService.get(this.listStateKey) as ListState<TExtras> | undefined;
+    this.restoringState = true;
 
-    if (state && this.paginator && this.sort) {
-      this.restoringState = true;
+    try {
+      // Start from known defaults (so we don't depend on template defaults)
+      if (this.tableFilter) {
+        this.tableFilter.value = '';
+      }
+
+      if (this.paginator) {
+        this.paginator.pageIndex = 0;
+        this.paginator.pageSize = this.defaultPageSize;
+      }
+
+      if (this.sort) {
+        this.sort.active = this.defaultSortActive;
+        this.sort.direction = this.defaultSortDirection;
+      }
+
+      // Restore persisted state (if any)
+      const state = this.listStateService.get<TExtras>(this.listStateKey);
+
+      if (!state || !this.paginator || !this.sort) {
+        return;
+      }
 
       if (this.tableFilter) {
         this.tableFilter.value = state.filter ?? '';
@@ -225,17 +245,16 @@ export abstract class StatefulListView<TExtras = unknown>
       this.paginator.pageSize =
         state.pageSize && state.pageSize > 0 ? state.pageSize : this.defaultPageSize;
 
-      this.paginator.pageIndex = Math.max(0, state.pageIndex ?? 0);
+      this.paginator.pageIndex = Number.isFinite(state.pageIndex) ? Math.trunc(state.pageIndex) : 0;
 
-      this.sort.active = state.sortActive;
-      this.sort.direction = state.sortDirection;
+      this.sort.active = state.sortActive ?? this.defaultSortActive;
+      this.sort.direction = state.sortDirection ?? this.defaultSortDirection;
 
       this.restoreExtrasState(state.extras);
-
+    } finally {
       this.restoringState = false;
+      this.changeDetectorRef.markForCheck();
     }
-
-    this.changeDetectorRef.markForCheck();
   }
 
   /**

@@ -255,6 +255,7 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
             return of(null);
           })
         ),
+
       groups: this.loadGroups(userDirectoryId).pipe(
         catchError((error: Error) => {
           this.handleError(error, false);
@@ -267,10 +268,24 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: ({ userDirectoryCapabilities }) => {
+        next: ({ userDirectoryCapabilities, groups }) => {
           if (userDirectoryCapabilities) {
             this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
           }
+
+          // Sync paginator to what the server actually returned/corrected
+          this.restoringState = true;
+          try {
+            if (groups && this.paginator) {
+              this.paginator.pageIndex = groups.pageIndex;
+              this.paginator.pageSize = groups.pageSize;
+              this.saveState();
+            }
+          } finally {
+            this.restoringState = false;
+          }
+
+          this.changeDetectorRef.markForCheck();
         },
         error: (error: Error) => this.handleError(error, false)
       });

@@ -4,7 +4,7 @@
     <button mat-flat-button color="primary" [hidden]="true" (click)="addMemberToGroup()" i18n="@@security_group_members_component_button_add">Add</button>
     <inception-core-table-filter></inception-core-table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortActive="memberName" matSortDirection="asc" matSortDisableClear>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortDisableClear>
 
     <!-- Member Name Column -->
     <ng-container matColumnDef="memberName">

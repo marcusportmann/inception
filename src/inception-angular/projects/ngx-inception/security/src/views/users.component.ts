@@ -336,6 +336,7 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
             return of(null);
           })
         ),
+
       users: this.loadUsers(userDirectoryId).pipe(
         catchError((error: Error) => {
           this.handleError(error, false);
@@ -348,10 +349,24 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: ({ userDirectoryCapabilities }) => {
+        next: ({ userDirectoryCapabilities, users }) => {
           if (userDirectoryCapabilities) {
             this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
           }
+
+          // Sync paginator to what the server actually returned/corrected
+          this.restoringState = true;
+          try {
+            if (users && this.paginator) {
+              this.paginator.pageIndex = users.pageIndex;
+              this.paginator.pageSize = users.pageSize;
+              this.saveState();
+            }
+          } finally {
+            this.restoringState = false;
+          }
+
+          this.changeDetectorRef.markForCheck();
         },
         error: (error: Error) => this.handleError(error, false)
       });

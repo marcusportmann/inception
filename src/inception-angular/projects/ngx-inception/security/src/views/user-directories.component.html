@@ -3,7 +3,7 @@
     <button mat-flat-button color="primary" (click)="newUserDirectory()" i18n="@@security_user_directories_component_button_new">New</button>
     <inception-core-table-filter></inception-core-table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortDisableClear>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">

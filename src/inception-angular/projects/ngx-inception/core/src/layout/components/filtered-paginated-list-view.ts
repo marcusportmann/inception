@@ -248,43 +248,45 @@ export abstract class FilteredPaginatedListView<T>
   }
 
   private restoreStateBeforeData(): void {
-    // Always start with known defaults (so the template doesn’t need to)
-    if (this.paginator) {
-      this.paginator.pageIndex = 0;
-      this.paginator.pageSize = this.defaultPageSize;
-    }
-    if (this.sort) {
-      this.sort.active = this.defaultSortActive;
-      this.sort.direction = this.defaultSortDirection;
-    }
-    this.filterValue = '';
-    this.dataSource.filter = '';
-
-    // If the navigation asked for a reset, keep defaults and bail
-    if (this.resetStateRequested) {
-      this.listStateService.clear(this.listStateKey);
-      return;
-    }
-
-    // Restore the saved state if present
-    const state = this.listStateService.get(this.listStateKey);
-    if (!state || !this.paginator || !this.sort) {
-      return;
-    }
-
     this.restoringState = true;
+    try {
+      // Defaults
+      if (this.paginator) {
+        this.paginator.pageIndex = 0;
+        this.paginator.pageSize = this.defaultPageSize;
+      }
+      if (this.sort) {
+        this.sort.active = this.defaultSortActive;
+        this.sort.direction = this.defaultSortDirection;
+      }
+      this.filterValue = '';
+      this.dataSource.filter = '';
 
-    this.filterValue = state.filter ?? '';
-    this.dataSource.filter = (state.filter ?? '').trim().toLowerCase();
+      // Reset requested: clear persisted state, keep defaults
+      if (this.resetStateRequested) {
+        this.listStateService.clear(this.listStateKey);
+        return;
+      }
 
-    this.paginator.pageSize =
-      state.pageSize && state.pageSize > 0 ? state.pageSize : this.defaultPageSize;
+      // Restore saved state (if any)
+      const state = this.listStateService.get(this.listStateKey);
+      if (!state || !this.paginator || !this.sort) {
+        return;
+      }
 
-    this.paginator.pageIndex = Math.max(0, state.pageIndex ?? 0);
+      this.filterValue = state.filter ?? '';
+      this.dataSource.filter = (state.filter ?? '').trim().toLowerCase();
 
-    this.sort.active = state.sortActive ?? this.defaultSortActive;
-    this.sort.direction = state.sortDirection ?? this.defaultSortDirection;
+      this.paginator.pageSize =
+        state.pageSize && state.pageSize > 0 ? state.pageSize : this.defaultPageSize;
 
-    this.restoringState = false;
+      this.paginator.pageIndex = Math.max(0, state.pageIndex ?? 0);
+
+      this.sort.active = state.sortActive ?? this.defaultSortActive;
+      this.sort.direction = state.sortDirection ?? this.defaultSortDirection;
+    } finally {
+      this.restoringState = false;
+      this.changeDetectorRef.markForCheck();
+    }
   }
 }
