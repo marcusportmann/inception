@@ -54,7 +54,7 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
 
   readonly defaultSortActive = 'name';
 
-  readonly displayedColumns = ['name', 'type', 'status', 'actions'];
+  readonly displayedColumns = ['name', 'type', 'status', 'actions'] as const;
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 

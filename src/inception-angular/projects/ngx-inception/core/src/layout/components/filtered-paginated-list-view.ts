@@ -32,6 +32,8 @@ export abstract class FilteredPaginatedListView<T>
 {
   readonly dataSource = new MatTableDataSource<T>();
 
+  readonly defaultPageSize = 10;
+
   abstract readonly defaultSortActive: string;
 
   readonly defaultSortDirection: 'asc' | 'desc' = 'asc';
@@ -246,25 +248,25 @@ export abstract class FilteredPaginatedListView<T>
   }
 
   private restoreStateBeforeData(): void {
-    // If the navigation asked for a reset, clear the state and use defaults
+    // Always start with known defaults (so the template doesn’t need to)
+    if (this.paginator) {
+      this.paginator.pageSize = this.defaultPageSize;
+      this.paginator.pageIndex = 0;
+    }
+    if (this.sort) {
+      this.sort.active = this.defaultSortActive;
+      this.sort.direction = this.defaultSortDirection;
+    }
+    this.filterValue = '';
+    this.dataSource.filter = '';
+
+    // If the navigation asked for a reset, keep defaults and bail
     if (this.resetStateRequested) {
       this.listStateService.clear(this.listStateKey);
-
-      this.filterValue = '';
-
-      // Make sure the local UI is in a clean state as well
-      this.dataSource.filter = '';
-      if (this.paginator) {
-        this.paginator.pageIndex = 0;
-        // pageSize stays whatever default you configured in the template
-      }
-      if (this.sort) {
-        this.sort.active = this.defaultSortActive;
-        this.sort.direction = this.defaultSortDirection;
-      }
       return;
     }
 
+    // Restore the saved state if present
     const state = this.listStateService.get(this.listStateKey);
     if (!state || !this.paginator || !this.sort) {
       return;
@@ -273,11 +275,13 @@ export abstract class FilteredPaginatedListView<T>
     this.restoringState = true;
 
     this.filterValue = state.filter ?? '';
-    this.dataSource.filter = state.filter ? state.filter : '';
+    this.dataSource.filter = (state.filter ?? '').trim().toLowerCase();
 
-    this.paginator.pageSize = state.pageSize;
-    this.sort.active = state.sortActive;
-    this.sort.direction = state.sortDirection;
+    this.paginator.pageSize = state.pageSize ?? this.defaultPageSize;
+    this.paginator.pageIndex = state.pageIndex ?? 0;
+
+    this.sort.active = state.sortActive ?? this.defaultSortActive;
+    this.sort.direction = state.sortDirection ?? this.defaultSortDirection;
 
     this.restoringState = false;
   }

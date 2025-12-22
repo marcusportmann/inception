@@ -46,7 +46,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   dataSource = new MatTableDataSource<GroupRole>([]);
 
-  readonly displayedColumns = ['existingRoleName', 'actions'];
+  readonly displayedColumns = ['existingRoleName', 'actions'] as const;
 
   groupName: string;
 

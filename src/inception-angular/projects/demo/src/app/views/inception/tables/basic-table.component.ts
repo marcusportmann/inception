@@ -162,5 +162,5 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class BasicTableComponent {
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
-  readonly displayedColumns = ['position', 'name', 'weight', 'symbol'];
+  readonly displayedColumns = ['position', 'name', 'weight', 'symbol'] as const;
 }

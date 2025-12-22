@@ -45,7 +45,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   dataSource = new MatTableDataSource<string>([]);
 
-  readonly displayedColumns = ['existingGroupName', 'actions'];
+  readonly displayedColumns = ['existingGroupName', 'actions'] as const;
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 

@@ -54,7 +54,7 @@ export class TenantUserDirectoriesComponent
 
   dataSource = new MatTableDataSource<UserDirectorySummary>([]);
 
-  readonly displayedColumns = ['existingUserDirectoryName', 'actions'];
+  readonly displayedColumns = ['existingUserDirectoryName', 'actions'] as const;
 
   filteredUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<
     UserDirectorySummary[]

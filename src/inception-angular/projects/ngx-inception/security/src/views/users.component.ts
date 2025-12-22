@@ -55,7 +55,7 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
 
   readonly defaultSortActive = 'username';
 
-  readonly displayedColumns = ['name', 'username', 'actions'];
+  readonly displayedColumns = ['name', 'username', 'actions'] as const;
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 

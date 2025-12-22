@@ -47,7 +47,7 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
 
   readonly defaultSortActive = 'id';
 
-  readonly displayedColumns = ['id', 'version', 'name', 'type', 'actions'];
+  readonly displayedColumns = ['id', 'version', 'name', 'type', 'actions'] as const;
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 

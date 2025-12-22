@@ -51,7 +51,7 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
 
   override readonly defaultSortDirection = 'desc';
 
-  readonly displayedColumns = ['created', 'who', 'description', 'actions'];
+  readonly displayedColumns = ['created', 'who', 'description', 'actions'] as const;
 
   fromDateControl: FormControl<Date | null>;
 

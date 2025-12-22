@@ -46,7 +46,7 @@ export class UserDirectoriesComponent extends StatefulListView implements AfterV
 
   readonly defaultSortActive = 'name';
 
-  readonly displayedColumns = ['name', 'actions'];
+  readonly displayedColumns = ['name', 'actions'] as const;
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 

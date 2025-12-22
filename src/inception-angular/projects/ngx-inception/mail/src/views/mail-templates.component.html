@@ -32,7 +32,7 @@
     <mat-row *matRowDef="let row; columns: displayedColumns" [attr.aria-disabled]="row.disabled ? 'true' : 'false'"></mat-row>
   </mat-table>
 
-  <mat-paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+  <mat-paginator [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-mailTemplateId="mailTemplateId">
