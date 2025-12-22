@@ -39,7 +39,7 @@ export abstract class StatefulListView<TExtras = unknown>
   readonly defaultSortDirection: 'asc' | 'desc' = 'asc';
 
   /** Unique key for persisting list state (must be provided by subclass). */
-  abstract readonly listKey: string;
+  abstract readonly listStateKey: string;
 
   protected readonly changeDetectorRef = inject(ChangeDetectorRef);
 
@@ -177,7 +177,7 @@ export abstract class StatefulListView<TExtras = unknown>
    */
   protected resetTable(): void {
     this.restoringState = true;
-    this.listStateService.clear(this.listKey);
+    this.listStateService.clear(this.listStateKey);
 
     if (this.tableFilter) {
       this.tableFilter.reset(false);
@@ -210,7 +210,7 @@ export abstract class StatefulListView<TExtras = unknown>
    * Restore the persisted list state before the first data load.
    */
   protected restoreStateBeforeData(): void {
-    const state = this.listStateService.get(this.listKey) as ListState<TExtras> | undefined;
+    const state = this.listStateService.get(this.listStateKey) as ListState<TExtras> | undefined;
 
     if (state && this.paginator && this.sort) {
       this.restoringState = true;
@@ -250,7 +250,7 @@ export abstract class StatefulListView<TExtras = unknown>
       extras: this.getExtrasState()
     };
 
-    this.listStateService.set(this.listKey, state);
+    this.listStateService.set(this.listStateKey, state);
   }
 
   private initializeDataLoaders(

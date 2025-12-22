@@ -39,7 +39,7 @@ export abstract class FilteredPaginatedListView<T>
   /** Current filter text (drives both the datasource and the UI filter component). */
   filterValue = '';
 
-  /** Unique key for the state for this list (per route / context). */
+  /** Unique key for persisting list state (must be provided by subclass). */
   abstract readonly listStateKey: string;
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;

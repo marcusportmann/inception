@@ -51,7 +51,7 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'security.policies';
+  readonly listStateKey = 'security.policies';
 
   @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 

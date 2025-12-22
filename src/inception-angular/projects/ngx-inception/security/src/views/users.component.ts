@@ -59,7 +59,7 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'security.users';
+  readonly listStateKey = 'security.users';
 
   @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 

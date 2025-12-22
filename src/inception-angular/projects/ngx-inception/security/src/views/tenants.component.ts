@@ -44,7 +44,7 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'security.tenants';
+  readonly listStateKey = 'security.tenants';
 
   @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 

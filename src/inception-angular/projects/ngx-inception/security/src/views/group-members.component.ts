@@ -55,7 +55,7 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
 
   @HostBinding('class') readonly hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'security.group-members';
+  readonly listStateKey = 'security.group-members';
 
   @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 

@@ -50,7 +50,7 @@ export class UserDirectoriesComponent extends StatefulListView implements AfterV
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'security.user-directories';
+  readonly listStateKey = 'security.user-directories';
 
   @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 

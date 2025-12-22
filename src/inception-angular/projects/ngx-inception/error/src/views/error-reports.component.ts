@@ -57,7 +57,7 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  readonly listKey = 'error.error-reports';
+  readonly listStateKey = 'error.error-reports';
 
   @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
 
