@@ -23,7 +23,7 @@ import {
   CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
 import { Observable } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { finalize, takeUntil, tap } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
 import { UserDirectorySummaries } from '../services/user-directory-summaries';
 import { UserDirectorySummaryDataSource } from '../services/user-directory-summary-data-source';
@@ -115,7 +115,7 @@ export class UserDirectoriesComponent extends StatefulListView implements AfterV
       )
       .subscribe({
         next: () => {
-          // Load complete
+          // loadUserDirectorySummaries() already updated datasource + synced paginator
         },
         error: (error: Error) => this.handleError(error, false)
       });
@@ -124,18 +124,37 @@ export class UserDirectoriesComponent extends StatefulListView implements AfterV
   private loadUserDirectorySummaries(): Observable<UserDirectorySummaries> {
     const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
 
-    let sortDirection = SortDirection.Descending;
+    const sortDirection =
+      (this.sort?.direction || this.defaultSortDirection) === 'asc'
+        ? SortDirection.Ascending
+        : SortDirection.Descending;
 
-    if (this.sort.active) {
-      sortDirection =
-        this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
-    }
+    return this.dataSource
+      .load(filter, sortDirection, this.paginator.pageIndex, this.paginator.pageSize)
+      .pipe(
+        tap((userDirectorySummaries: UserDirectorySummaries) => {
+          // Sync paginator to what the server actually returned/corrected
+          this.restoringState = true;
+          try {
+            if (userDirectorySummaries && this.paginator) {
+              const pageIndex = userDirectorySummaries.pageIndex;
+              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+                this.paginator.pageIndex = Math.trunc(pageIndex);
+              }
 
-    return this.dataSource.load(
-      filter,
-      sortDirection,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+              const pageSize = userDirectorySummaries.pageSize;
+              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+                this.paginator.pageSize = Math.trunc(pageSize);
+              }
+
+              this.saveState();
+            }
+          } finally {
+            this.restoringState = false;
+          }
+
+          this.changeDetectorRef.markForCheck();
+        })
+      );
   }
 }

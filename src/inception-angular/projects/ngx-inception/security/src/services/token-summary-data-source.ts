@@ -69,6 +69,7 @@ export class TokenSummaryDataSource implements DataSource<TokenSummary> {
    *
    * @param requiredStatus The required token status filter to apply to the token summaries.
    * @param filter         The filter to apply to the token summaries.
+   * @param sortBy         The method used to sort the token summaries e.g., by name.
    * @param sortDirection  The sort direction to apply to the token summaries.
    * @param pageIndex      The page index.
    * @param pageSize       The page size.
@@ -78,6 +79,7 @@ export class TokenSummaryDataSource implements DataSource<TokenSummary> {
   load(
     requiredStatus: TokenStatus,
     filter?: string,
+    sortBy?: TokenSortBy,
     sortDirection?: SortDirection,
     pageIndex?: number,
     pageSize?: number
@@ -85,14 +87,7 @@ export class TokenSummaryDataSource implements DataSource<TokenSummary> {
     this.loadingSubject$.next(true);
 
     return this.securityService
-      .getTokenSummaries(
-        requiredStatus,
-        filter,
-        TokenSortBy.Name,
-        sortDirection,
-        pageIndex,
-        pageSize
-      )
+      .getTokenSummaries(requiredStatus, filter, sortBy, sortDirection, pageIndex, pageSize)
       .pipe(
         tap((tokenSummaries: TokenSummaries) => {
           this.updateData(tokenSummaries);

@@ -67,6 +67,7 @@ export class PolicySummaryDataSource implements DataSource<PolicySummary> {
    * Load the policy summaries.
    *
    * @param filter        The filter to apply to the policy summaries.
+   * @param sortBy         The method used to sort the policy summaries e.g., by name.
    * @param sortDirection The sort direction to apply to the policy summaries.
    * @param pageIndex     The page index.
    * @param pageSize      The page size.
@@ -75,6 +76,7 @@ export class PolicySummaryDataSource implements DataSource<PolicySummary> {
    */
   load(
     filter?: string,
+    sortBy?: PolicySortBy,
     sortDirection?: SortDirection,
     pageIndex?: number,
     pageSize?: number
@@ -82,7 +84,7 @@ export class PolicySummaryDataSource implements DataSource<PolicySummary> {
     this.loadingSubject$.next(true);
 
     return this.securityService
-      .getPolicySummaries(filter, PolicySortBy.Name, sortDirection, pageIndex, pageSize)
+      .getPolicySummaries(filter, sortBy, sortDirection, pageIndex, pageSize)
       .pipe(
         tap((policySummaries: PolicySummaries) => {
           this.updateData(policySummaries);

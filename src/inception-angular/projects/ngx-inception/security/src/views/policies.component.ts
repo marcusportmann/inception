@@ -22,8 +22,9 @@ import { MatSort } from '@angular/material/sort';
 import {
   CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import { PolicySortBy } from '../services/policy-sort-by';
 import { PolicySummaries } from '../services/policy-summaries';
 import { PolicySummaryDataSource } from '../services/policy-summary-data-source';
 import { PolicyType } from '../services/policy-type';
@@ -45,7 +46,7 @@ import { SecurityService } from '../services/security.service';
 export class PoliciesComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: PolicySummaryDataSource;
 
-  readonly defaultSortActive = 'id';
+  readonly defaultSortActive = 'name';
 
   readonly displayedColumns = ['id', 'version', 'name', 'type', 'actions'] as const;
 
@@ -90,6 +91,8 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
   }
 
   editPolicy(policyId: string): void {
+    this.saveState();
+
     void this.router.navigate([policyId], {
       relativeTo: this.activatedRoute
     });
@@ -106,6 +109,8 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
   }
 
   newPolicy(): void {
+    this.saveState();
+
     void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
   }
 
@@ -118,6 +123,7 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
 
   private loadData(): void {
     this.spinnerService.showSpinner();
+
     this.loadPolicySummaries()
       .pipe(
         finalize(() => this.spinnerService.hideSpinner()),
@@ -125,27 +131,59 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
       )
       .subscribe({
         next: () => {
-          // Load complete
+          // loadPolicySummaries() already updated datasource + synced paginator
         },
-        error: (error) => this.handleError(error, false)
+        error: (error: Error) => this.handleError(error, false)
       });
   }
 
   private loadPolicySummaries(): Observable<PolicySummaries> {
     const filterValue = this.tableFilter.filter?.trim().toLowerCase() || '';
 
-    let sortDirection = SortDirection.Descending;
-
-    if (this.sort.active && this.sort.direction) {
-      sortDirection =
-        this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
+    let sortBy: PolicySortBy;
+    switch (this.sort.active) {
+      case 'name':
+        sortBy = PolicySortBy.Name;
+        break;
+      case 'type':
+        sortBy = PolicySortBy.Type;
+        break;
+      default:
+        sortBy = PolicySortBy.Name;
+        break;
     }
 
-    return this.dataSource.load(
-      filterValue,
-      sortDirection,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+    const sortDirection =
+      (this.sort?.direction || this.defaultSortDirection) === 'asc'
+        ? SortDirection.Ascending
+        : SortDirection.Descending;
+
+    return this.dataSource
+      .load(filterValue, sortBy, sortDirection, this.paginator.pageIndex, this.paginator.pageSize)
+      .pipe(
+        tap((policySummaries: PolicySummaries) => {
+          // Sync paginator to what the server actually returned/corrected
+          this.restoringState = true;
+          try {
+            if (policySummaries && this.paginator) {
+              const pageIndex = policySummaries.pageIndex;
+              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+                this.paginator.pageIndex = Math.trunc(pageIndex);
+              }
+
+              const pageSize = policySummaries.pageSize;
+              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+                this.paginator.pageSize = Math.trunc(pageSize);
+              }
+
+              this.saveState();
+            }
+          } finally {
+            this.restoringState = false;
+          }
+
+          this.changeDetectorRef.markForCheck();
+        })
+      );
   }
 }

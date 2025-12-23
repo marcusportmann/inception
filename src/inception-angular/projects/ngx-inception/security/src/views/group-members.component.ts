@@ -22,7 +22,7 @@ import { MatSort } from '@angular/material/sort';
 import {
   BackNavigation, CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 
 import { GroupMember } from '../services/group-member';
@@ -155,7 +155,7 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
       )
       .subscribe({
         next: () => {
-          // Load complete
+          // loadGroupMembers() already updated datasource + synced paginator
         },
         error: (error: Error) => this.handleError(error, false)
       });
@@ -164,20 +164,44 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
   private loadGroupMembers(): Observable<GroupMembers> {
     const filterValue = this.tableFilter.filter?.trim().toLowerCase() || '';
 
-    let sortDirection = SortDirection.Descending;
+    const sortDirection =
+      (this.sort?.direction || this.defaultSortDirection) === 'asc'
+        ? SortDirection.Ascending
+        : SortDirection.Descending;
 
-    if (this.sort.active) {
-      sortDirection =
-        this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
-    }
+    return this.dataSource
+      .load(
+        this.userDirectoryId,
+        this.groupName,
+        filterValue,
+        sortDirection,
+        this.paginator.pageIndex,
+        this.paginator.pageSize
+      )
+      .pipe(
+        tap((groupMembers: GroupMembers) => {
+          // Sync paginator to what the server actually returned/corrected
+          this.restoringState = true;
+          try {
+            if (groupMembers && this.paginator) {
+              const pageIndex = groupMembers.pageIndex;
+              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+                this.paginator.pageIndex = Math.trunc(pageIndex);
+              }
 
-    return this.dataSource.load(
-      this.userDirectoryId,
-      this.groupName,
-      filterValue,
-      sortDirection,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+              const pageSize = groupMembers.pageSize;
+              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+                this.paginator.pageSize = Math.trunc(pageSize);
+              }
+
+              this.saveState();
+            }
+          } finally {
+            this.restoringState = false;
+          }
+
+          this.changeDetectorRef.markForCheck();
+        })
+      );
   }
 }

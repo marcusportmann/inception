@@ -22,7 +22,8 @@ import { MatSort } from '@angular/material/sort';
 import {
   CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { Observable } from 'rxjs';
+import { Tenants } from 'ngx-inception/security';
+import { Observable, tap } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
 import { TenantDataSource } from '../services/tenant-data-source';
@@ -117,23 +118,46 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
       )
       .subscribe({
         next: () => {
-          // Load complete
+          // loadTenants() already updated the datasource + synced paginator
         },
         error: (error: Error) => this.handleError(error, false)
       });
   }
 
-  private loadTenants(): Observable<unknown> {
+  private loadTenants(): Observable<Tenants> {
     const filterValue = this.tableFilter.filter?.trim().toLowerCase() || '';
 
     const sortDirection =
-      this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
+      (this.sort?.direction || this.defaultSortDirection) === 'asc'
+        ? SortDirection.Ascending
+        : SortDirection.Descending;
 
-    return this.dataSource.load(
-      filterValue,
-      sortDirection,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+    return this.dataSource
+      .load(filterValue, sortDirection, this.paginator.pageIndex, this.paginator.pageSize)
+      .pipe(
+        tap((tenants: Tenants) => {
+          // Sync paginator to what the server actually returned/corrected
+          this.restoringState = true;
+          try {
+            if (this.paginator && tenants) {
+              const pageIndex = tenants.pageIndex;
+              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+                this.paginator.pageIndex = Math.trunc(pageIndex);
+              }
+
+              const pageSize = tenants.pageSize;
+              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+                this.paginator.pageSize = Math.trunc(pageSize);
+              }
+
+              this.saveState();
+            }
+          } finally {
+            this.restoringState = false;
+          }
+
+          this.changeDetectorRef.markForCheck();
+        })
+      );
   }
 }

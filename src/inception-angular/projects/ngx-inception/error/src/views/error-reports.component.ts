@@ -24,12 +24,17 @@ import { add, isWithinInterval } from 'date-fns';
 import {
   CoreModule, ISO8601Util, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { ErrorReportSortBy } from '../services/error-report-sort-by';
 import { ErrorReportSummaries } from '../services/error-report-summaries';
 import { ErrorReportSummaryDataSource } from '../services/error-report-summary-data-source';
 import { ErrorService } from '../services/error.service';
+
+interface ErrorReportsExtras {
+  fromDate: string | null; // ISO string
+  toDate: string | null; // ISO string
+}
 
 /**
  * The ErrorReportsComponent class implements the error reports component.
@@ -44,7 +49,10 @@ import { ErrorService } from '../services/error.service';
   styleUrls: ['error-reports.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ErrorReportsComponent extends StatefulListView implements AfterViewInit {
+export class ErrorReportsComponent
+  extends StatefulListView<ErrorReportsExtras>
+  implements AfterViewInit
+{
   readonly dataSource: ErrorReportSummaryDataSource;
 
   readonly defaultSortActive = 'created';
@@ -83,12 +91,14 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
 
     this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
+    const { from, to } = this.getDefaultDateRange();
+
     // Initialize form controls
-    this.fromDateControl = new FormControl<Date | null>(add(new Date(), { months: -1 }), {
+    this.fromDateControl = new FormControl<Date | null>(from, {
       validators: [Validators.required]
     });
 
-    this.toDateControl = new FormControl<Date | null>(new Date(), {
+    this.toDateControl = new FormControl<Date | null>(to, {
       validators: [Validators.required]
     });
 
@@ -133,6 +143,32 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
     });
   }
 
+  protected override getExtrasState(): ErrorReportsExtras {
+    return {
+      fromDate: this.formatDate(this.fromDateControl.value),
+      toDate: this.formatDate(this.toDateControl.value)
+    };
+  }
+
+  protected override resetExtrasState(): void {
+    const { from, to } = this.getDefaultDateRange();
+
+    this.fromDateControl.setValue(from);
+
+    this.toDateControl.setValue(to);
+  }
+
+  protected override restoreExtrasState(extras: ErrorReportsExtras | undefined): void {
+    if (!extras?.fromDate || !extras?.toDate) {
+      this.resetExtrasState();
+      return;
+    }
+
+    this.fromDateControl.setValue(new Date(extras.fromDate));
+
+    this.toDateControl.setValue(new Date(extras.toDate));
+  }
+
   private formatDate(value: Date | string | null): string | null {
     if (!value) {
       return null;
@@ -140,8 +176,15 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
     return typeof value === 'string' ? value : ISO8601Util.toString(value);
   }
 
+  private getDefaultDateRange(): { from: Date; to: Date } {
+    const to = new Date();
+    const from = add(to, { months: -1 });
+    return { from, to };
+  }
+
   private loadData(): void {
     this.spinnerService.showSpinner();
+
     this.loadErrorReportSummaries()
       .pipe(
         finalize(() => this.spinnerService.hideSpinner()),
@@ -158,28 +201,53 @@ export class ErrorReportsComponent extends StatefulListView implements AfterView
   private loadErrorReportSummaries(): Observable<ErrorReportSummaries> {
     const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
 
-    let sortBy = ErrorReportSortBy.Created;
-    let sortDirection = SortDirection.Descending;
+    const sortBy = this.sort?.active === 'who' ? ErrorReportSortBy.Who : ErrorReportSortBy.Created;
 
-    if (this.sort.active && this.sort.direction) {
-      sortBy = this.sort.active === 'who' ? ErrorReportSortBy.Who : ErrorReportSortBy.Created;
-      sortDirection =
-        this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
-    }
+    const sortDirection =
+      (this.sort?.direction || this.defaultSortDirection) === 'asc'
+        ? SortDirection.Ascending
+        : SortDirection.Descending;
 
-    const fromDate =
-      this.formatDate(this.fromDateControl.value) ||
-      ISO8601Util.toString(add(new Date(), { months: -1 }));
-    const toDate = this.formatDate(this.toDateControl.value) || ISO8601Util.toString(new Date());
+    const { from, to } = this.getDefaultDateRange();
 
-    return this.dataSource.load(
-      filter,
-      fromDate,
-      toDate,
-      sortBy,
-      sortDirection,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+    const fromDate = this.formatDate(this.fromDateControl.value) ?? ISO8601Util.toString(from);
+
+    const toDate = this.formatDate(this.toDateControl.value) ?? ISO8601Util.toString(to);
+
+    return this.dataSource
+      .load(
+        filter,
+        fromDate,
+        toDate,
+        sortBy,
+        sortDirection,
+        this.paginator.pageIndex,
+        this.paginator.pageSize
+      )
+      .pipe(
+        tap((errorReportSummaries: ErrorReportSummaries) => {
+          // Sync paginator to what the server actually returned/corrected
+          this.restoringState = true;
+          try {
+            if (errorReportSummaries && this.paginator) {
+              const pageIndex = errorReportSummaries.pageIndex;
+              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+                this.paginator.pageIndex = Math.trunc(pageIndex);
+              }
+
+              const pageSize = errorReportSummaries.pageSize;
+              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+                this.paginator.pageSize = Math.trunc(pageSize);
+              }
+
+              this.saveState();
+            }
+          } finally {
+            this.restoringState = false;
+          }
+
+          this.changeDetectorRef.markForCheck();
+        })
+      );
   }
 }

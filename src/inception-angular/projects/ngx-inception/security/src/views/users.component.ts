@@ -238,6 +238,7 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
   }
 
   private loadUserDirectories(): void {
+    // noinspection DuplicatedCode
     this.sessionService.session$
       .pipe(
         first(),
@@ -290,29 +291,59 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
   private loadUsers(userDirectoryId: string): Observable<Users> {
     const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
 
-    let sortBy: UserSortBy = UserSortBy.Name;
-    let sortDirection = SortDirection.Ascending;
-
-    if (this.sort.active) {
-      if (this.sort.active === 'name') {
-        sortBy = UserSortBy.Name;
-      } else if (this.sort.active === 'preferredName') {
+    let sortBy: UserSortBy;
+    switch (this.sort.active) {
+      case 'username':
+        sortBy = UserSortBy.Username;
+        break;
+      case 'preferredName':
         sortBy = UserSortBy.PreferredName;
-      }
+        break;
+      case 'name':
+      default:
+        sortBy = UserSortBy.Name;
+        break;
     }
 
-    if (this.sort.direction === 'desc') {
-      sortDirection = SortDirection.Descending;
-    }
+    const sortDirection =
+      (this.sort?.direction || this.defaultSortDirection) === 'asc'
+        ? SortDirection.Ascending
+        : SortDirection.Descending;
 
-    return this.dataSource.load(
-      userDirectoryId,
-      filter,
-      sortBy,
-      sortDirection,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+    return this.dataSource
+      .load(
+        userDirectoryId,
+        filter,
+        sortBy,
+        sortDirection,
+        this.paginator.pageIndex,
+        this.paginator.pageSize
+      )
+      .pipe(
+        tap((users) => {
+          // Sync paginator to what the server actually returned/corrected
+          this.restoringState = true;
+          try {
+            if (this.paginator) {
+              const pageIndex = users.pageIndex;
+              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+                this.paginator.pageIndex = Math.trunc(pageIndex);
+              }
+
+              const pageSize = users.pageSize;
+              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+                this.paginator.pageSize = Math.trunc(pageSize);
+              }
+
+              this.saveState();
+            }
+          } finally {
+            this.restoringState = false;
+          }
+
+          this.changeDetectorRef.markForCheck();
+        })
+      );
   }
 
   private loadUsersData(): void {
@@ -337,6 +368,7 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
           })
         ),
 
+      // loadUsers now handles syncing + saving state internally
       users: this.loadUsers(userDirectoryId).pipe(
         catchError((error: Error) => {
           this.handleError(error, false);
@@ -349,23 +381,10 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: ({ userDirectoryCapabilities, users }) => {
+        next: ({ userDirectoryCapabilities }) => {
           if (userDirectoryCapabilities) {
             this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
           }
-
-          // Sync paginator to what the server actually returned/corrected
-          this.restoringState = true;
-          try {
-            if (users && this.paginator) {
-              this.paginator.pageIndex = users.pageIndex;
-              this.paginator.pageSize = users.pageSize;
-              this.saveState();
-            }
-          } finally {
-            this.restoringState = false;
-          }
-
           this.changeDetectorRef.markForCheck();
         },
         error: (error: Error) => this.handleError(error, false)

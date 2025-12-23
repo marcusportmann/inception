@@ -242,10 +242,15 @@ export abstract class StatefulListView<TExtras = unknown>
         this.tableFilter.value = state.filter ?? '';
       }
 
-      this.paginator.pageSize =
-        state.pageSize && state.pageSize > 0 ? state.pageSize : this.defaultPageSize;
+      this.paginator.pageIndex =
+        Number.isFinite(state.pageIndex) && Math.trunc(state.pageIndex) >= 0
+          ? Math.trunc(state.pageIndex)
+          : 0;
 
-      this.paginator.pageIndex = Number.isFinite(state.pageIndex) ? Math.trunc(state.pageIndex) : 0;
+      this.paginator.pageSize =
+        Number.isFinite(state.pageSize) && Math.trunc(state.pageSize) > 0
+          ? Math.trunc(state.pageSize)
+          : this.defaultPageSize;
 
       this.sort.active = state.sortActive ?? this.defaultSortActive;
       this.sort.direction = state.sortDirection ?? this.defaultSortDirection;

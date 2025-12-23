@@ -222,16 +222,45 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
 
   private loadGroups(userDirectoryId: string): Observable<Groups> {
     const filter = this.tableFilter.filter?.trim().toLowerCase() || '';
-    const sortDirection =
-      this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
 
-    return this.dataSource.load(
-      userDirectoryId,
-      filter,
-      sortDirection,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+    const sortDirection =
+      (this.sort?.direction || this.defaultSortDirection) === 'asc'
+        ? SortDirection.Ascending
+        : SortDirection.Descending;
+
+    return this.dataSource
+      .load(
+        userDirectoryId,
+        filter,
+        sortDirection,
+        this.paginator.pageIndex,
+        this.paginator.pageSize
+      )
+      .pipe(
+        tap((groups) => {
+          // Sync paginator to what the server actually returned/corrected
+          this.restoringState = true;
+          try {
+            if (this.paginator) {
+              const pageIndex = groups.pageIndex;
+              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+                this.paginator.pageIndex = Math.trunc(pageIndex);
+              }
+
+              const pageSize = groups.pageSize;
+              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+                this.paginator.pageSize = Math.trunc(pageSize);
+              }
+
+              this.saveState();
+            }
+          } finally {
+            this.restoringState = false;
+          }
+
+          this.changeDetectorRef.markForCheck();
+        })
+      );
   }
 
   private loadGroupsData(): void {
@@ -256,6 +285,7 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
           })
         ),
 
+      // loadGroups now handles syncing + saving state internally
       groups: this.loadGroups(userDirectoryId).pipe(
         catchError((error: Error) => {
           this.handleError(error, false);
@@ -268,23 +298,10 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: ({ userDirectoryCapabilities, groups }) => {
+        next: ({ userDirectoryCapabilities }) => {
           if (userDirectoryCapabilities) {
             this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
           }
-
-          // Sync paginator to what the server actually returned/corrected
-          this.restoringState = true;
-          try {
-            if (groups && this.paginator) {
-              this.paginator.pageIndex = groups.pageIndex;
-              this.paginator.pageSize = groups.pageSize;
-              this.saveState();
-            }
-          } finally {
-            this.restoringState = false;
-          }
-
           this.changeDetectorRef.markForCheck();
         },
         error: (error: Error) => this.handleError(error, false)
@@ -292,6 +309,7 @@ export class GroupsComponent extends StatefulListView<GroupsListExtras> implemen
   }
 
   private loadUserDirectories(): void {
+    // noinspection DuplicatedCode
     this.sessionService.session$
       .pipe(
         first(),

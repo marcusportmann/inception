@@ -23,9 +23,10 @@ import { MatSort } from '@angular/material/sort';
 import {
   CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
+import { TokenSortBy } from '../services/token-sort-by';
 import { TokenStatus } from '../services/token-status';
 import { TokenSummaries } from '../services/token-summaries';
 import { TokenSummary } from '../services/token-summary';
@@ -196,7 +197,7 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
       )
       .subscribe({
         next: () => {
-          // Load complete
+          // loadTokenSummaries() already updated datasource + synced paginator
         },
         error: (error) => this.handleError(error, false)
       });
@@ -205,21 +206,59 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
   private loadTokenSummaries(): Observable<TokenSummaries> {
     const filterValue = this.tableFilter.filter?.trim().toLowerCase() || '';
 
-    let sortDirection = SortDirection.Descending;
-
-    if (this.sort.active && this.sort.direction) {
-      sortDirection =
-        this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
+    let sortBy: TokenSortBy;
+    switch (this.sort.active) {
+      case 'name':
+        sortBy = TokenSortBy.Name;
+        break;
+      case 'type':
+        sortBy = TokenSortBy.Type;
+        break;
+      default:
+        sortBy = TokenSortBy.Name;
+        break;
     }
+
+    const sortDirection =
+      (this.sort?.direction || this.defaultSortDirection) === 'asc'
+        ? SortDirection.Ascending
+        : SortDirection.Descending;
 
     const tokenStatus = (this.tokenStatusSelect?.value as TokenStatus) ?? TokenStatus.Active;
 
-    return this.dataSource.load(
-      tokenStatus,
-      filterValue,
-      sortDirection,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+    return this.dataSource
+      .load(
+        tokenStatus,
+        filterValue,
+        sortBy,
+        sortDirection,
+        this.paginator.pageIndex,
+        this.paginator.pageSize
+      )
+      .pipe(
+        tap((tokenSummaries) => {
+          // Sync paginator to what the server actually returned/corrected
+          this.restoringState = true;
+          try {
+            if (this.paginator) {
+              const pageIndex = tokenSummaries.pageIndex;
+              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+                this.paginator.pageIndex = Math.trunc(pageIndex);
+              }
+
+              const pageSize = tokenSummaries.pageSize;
+              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+                this.paginator.pageSize = Math.trunc(pageSize);
+              }
+
+              this.saveState();
+            }
+          } finally {
+            this.restoringState = false;
+          }
+
+          this.changeDetectorRef.markForCheck();
+        })
+      );
   }
 }
