@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
@@ -36,12 +36,15 @@ import { TenantStatus } from '../services/tenant-status';
   templateUrl: 'new-tenant.component.html',
   styleUrls: ['new-tenant.component.css']
 })
-export class NewTenantComponent extends AdminContainerView implements AfterViewInit {
-  createUserDirectoryControl: FormControl;
+export class NewTenantComponent extends AdminContainerView implements OnInit {
+  readonly createUserDirectoryControl: FormControl<boolean>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
-  newTenantForm: FormGroup;
+  readonly newTenantForm: FormGroup<{
+    createUserDirectory: FormControl<boolean>;
+    name: FormControl<string>;
+  }>;
 
   tenant: Tenant | null = null;
 
@@ -53,8 +56,12 @@ export class NewTenantComponent extends AdminContainerView implements AfterViewI
     super();
 
     // Initialize the form controls
-    this.createUserDirectoryControl = new FormControl(false);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.createUserDirectoryControl = new FormControl<boolean>(false, { nonNullable: true });
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
 
     // Initialize the form
     this.newTenantForm = new FormGroup({
@@ -73,7 +80,7 @@ export class NewTenantComponent extends AdminContainerView implements AfterViewI
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.tenant = new Tenant(uuid(), '', TenantStatus.Active);
   }
 

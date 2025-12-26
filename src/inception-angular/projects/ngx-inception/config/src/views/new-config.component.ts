@@ -36,17 +36,21 @@ import { ConfigService } from '../services/config.service';
   styleUrls: ['new-config.component.css']
 })
 export class NewConfigComponent extends AdminContainerView {
-  config: Config;
+  readonly config: Config;
 
-  descriptionControl: FormControl;
+  readonly descriptionControl: FormControl<string>;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
-  newConfigForm: FormGroup;
+  readonly newConfigForm: FormGroup<{
+    description: FormControl<string>;
+    id: FormControl<string>;
+    value: FormControl<string>;
+  }>;
 
   readonly title = $localize`:@@config_new_config_title:New Config`;
 
-  valueControl: FormControl;
+  readonly valueControl: FormControl<string>;
 
   private readonly configService = inject(ConfigService);
 
@@ -54,9 +58,20 @@ export class NewConfigComponent extends AdminContainerView {
     super();
 
     // Initialize the form controls
-    this.descriptionControl = new FormControl('', [Validators.maxLength(100)]);
-    this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.valueControl = new FormControl('', [Validators.maxLength(4000)]);
+    this.descriptionControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.maxLength(100)]
+    });
+
+    this.idControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.valueControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.maxLength(4000)]
+    });
 
     // Initialize the form
     this.newConfigForm = new FormGroup({

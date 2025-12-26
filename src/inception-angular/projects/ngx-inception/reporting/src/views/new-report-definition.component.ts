@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
@@ -35,16 +35,20 @@ import { ReportingService } from '../services/reporting.service';
   templateUrl: 'new-report-definition.component.html',
   styleUrls: ['new-report-definition.component.css']
 })
-export class NewReportDefinitionComponent extends AdminContainerView implements AfterViewInit {
-  idControl: FormControl;
+export class NewReportDefinitionComponent extends AdminContainerView implements OnInit {
+  readonly idControl: FormControl<string>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
-  newReportDefinitionForm: FormGroup;
+  readonly newReportDefinitionForm: FormGroup<{
+    id: FormControl<string>;
+    name: FormControl<string>;
+    template: FormControl<File[] | null>;
+  }>;
 
   reportDefinition: ReportDefinition | null = null;
 
-  templateControl: FormControl;
+  readonly templateControl: FormControl<File[] | null>;
 
   readonly title = $localize`:@@reporting_new_report_definition_title:New Report Definition`;
 
@@ -54,9 +58,17 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
     super();
 
     // Initialize the form controls
-    this.idControl = new FormControl('', [Validators.required]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.templateControl = new FormControl('', [
+    this.idControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required]
+    });
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.templateControl = new FormControl<File[] | null>(null, [
       Validators.required,
       FileValidator.minSize(1),
       FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)
@@ -82,7 +94,7 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.reportDefinition = new ReportDefinition('', '', '');
   }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -35,16 +35,20 @@ import { CodesService } from '../services/codes.service';
   templateUrl: 'new-code-category.component.html',
   styleUrls: ['new-code-category.component.css']
 })
-export class NewCodeCategoryComponent extends AdminContainerView implements AfterViewInit {
+export class NewCodeCategoryComponent extends AdminContainerView implements OnInit {
   codeCategory: CodeCategory | null = null;
 
-  dataControl: FormControl;
+  readonly dataControl: FormControl<string | null>;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
-  newCodeCategoryForm: FormGroup;
+  readonly newCodeCategoryForm: FormGroup<{
+    data: FormControl<string | null>;
+    id: FormControl<string>;
+    name: FormControl<string>;
+  }>;
 
   readonly title = $localize`:@@codes_new_code_category_title:New Code Category`;
 
@@ -54,9 +58,17 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
     super();
 
     // Initialize form controls
-    this.dataControl = new FormControl('');
-    this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.dataControl = new FormControl<string | null>('');
+
+    this.idControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
 
     // Initialize the form group
     this.newCodeCategoryForm = new FormGroup({
@@ -78,7 +90,7 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     // Initialize a new instance of CodeCategory
     this.codeCategory = new CodeCategory('', '');
   }
@@ -91,13 +103,19 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
       this.codeCategory.name = this.nameControl.value?.trim();
       this.codeCategory.data = data || null;
 
+      this.newCodeCategoryForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.codesService
         .createCodeCategory(this.codeCategory)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner())
+          finalize(() => {
+            this.spinnerService.hideSpinner();
+
+            this.newCodeCategoryForm.enable();
+          })
         )
         .subscribe({
           next: () => this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent }),

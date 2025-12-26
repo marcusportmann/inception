@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -36,22 +36,28 @@ import { SecurityService } from '../services/security.service';
   templateUrl: 'new-policy.component.html',
   styleUrls: ['new-policy.component.css']
 })
-export class NewPolicyComponent extends AdminContainerView implements AfterViewInit {
-  dataControl: FormControl;
+export class NewPolicyComponent extends AdminContainerView implements OnInit {
+  readonly dataControl: FormControl<string>;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
-  newPolicyForm: FormGroup;
+  readonly newPolicyForm: FormGroup<{
+    data: FormControl<string>;
+    id: FormControl<string>;
+    name: FormControl<string>;
+    type: FormControl<PolicyType>;
+    version: FormControl<string>;
+  }>;
 
   policy: Policy | null = null;
 
   readonly title = $localize`:@@security_new_policy_title:New Policy`;
 
-  typeControl: FormControl;
+  readonly typeControl: FormControl<PolicyType>;
 
-  versionControl: FormControl;
+  readonly versionControl: FormControl<string>;
 
   private readonly securityService = inject(SecurityService);
 
@@ -59,11 +65,30 @@ export class NewPolicyComponent extends AdminContainerView implements AfterViewI
     super();
 
     // Initialize the form controls
-    this.dataControl = new FormControl('', [Validators.required]);
-    this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.typeControl = new FormControl('', [Validators.required]);
-    this.versionControl = new FormControl('', [Validators.required, Validators.maxLength(30)]);
+    this.dataControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required]
+    });
+
+    this.idControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.typeControl = new FormControl<PolicyType>(PolicyType.XACMLPolicy, {
+      nonNullable: true,
+      validators: [Validators.required]
+    });
+
+    this.versionControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(30)]
+    });
 
     // Initialize the form
     this.newPolicyForm = new FormGroup({
@@ -85,7 +110,7 @@ export class NewPolicyComponent extends AdminContainerView implements AfterViewI
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.policy = new Policy('', '', '', PolicyType.XACMLPolicy, '');
   }
 

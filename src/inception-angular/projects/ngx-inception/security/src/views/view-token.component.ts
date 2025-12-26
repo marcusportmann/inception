@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AdminContainerView, BackNavigation, CoreModule } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { SecurityService } from '../services/security.service';
@@ -33,12 +33,12 @@ import { TokenType } from '../services/token-type';
   templateUrl: 'view-token.component.html',
   styleUrls: ['view-token.component.css']
 })
-export class ViewTokenComponent extends AdminContainerView implements AfterViewInit {
+export class ViewTokenComponent extends AdminContainerView implements OnInit {
   readonly title = $localize`:@@security_view_token_title:View Token`;
 
   token: Token | null = null;
 
-  tokenId: string;
+  readonly tokenId: string;
 
   private readonly securityService = inject(SecurityService);
 
@@ -47,11 +47,9 @@ export class ViewTokenComponent extends AdminContainerView implements AfterViewI
 
     // Retrieve the route parameters
     const tokenId = this.activatedRoute.snapshot.paramMap.get('tokenId');
-
     if (!tokenId) {
       throw new globalThis.Error('No tokenId route parameter found');
     }
-
     this.tokenId = tokenId;
   }
 
@@ -73,7 +71,7 @@ export class ViewTokenComponent extends AdminContainerView implements AfterViewI
     }
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     // Retrieve the existing token and initialize the form controls
     this.spinnerService.showSpinner();
 

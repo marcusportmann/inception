@@ -48,7 +48,7 @@ export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCateg
   private readonly codesService = inject(CodesService);
 
   codesAdministration(codeCategoryId: string): void {
-    this.listStateService.clear('codes.' + codeCategoryId);
+    this.listStateService.clear(`codes.code-category.${encodeURIComponent(codeCategoryId)}`);
 
     void this.router.navigate([codeCategoryId, 'codes'], {
       relativeTo: this.activatedRoute

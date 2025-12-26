@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -37,22 +37,25 @@ import { UserDirectoryCapabilities } from '../services/user-directory-capabiliti
   templateUrl: 'edit-group.component.html',
   styleUrls: ['edit-group.component.css']
 })
-export class EditGroupComponent extends AdminContainerView implements AfterViewInit {
-  descriptionControl: FormControl;
+export class EditGroupComponent extends AdminContainerView implements OnInit {
+  readonly descriptionControl: FormControl<string>;
 
-  editGroupForm: FormGroup;
+  readonly editGroupForm: FormGroup<{
+    description: FormControl<string>;
+    name: FormControl<string>;
+  }>;
 
   group: Group | null = null;
 
-  groupName: string;
+  readonly groupName: string;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
   readonly title = $localize`:@@security_edit_group_title:Edit Group`;
 
   userDirectoryCapabilities?: UserDirectoryCapabilities;
 
-  userDirectoryId: string;
+  readonly userDirectoryId: string;
 
   private readonly securityService = inject(SecurityService);
 
@@ -61,27 +64,30 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
 
     // Retrieve the route parameters
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
-
     if (!userDirectoryId) {
       throw new globalThis.Error('No userDirectoryId route parameter found');
     }
-
     this.userDirectoryId = userDirectoryId;
 
     const groupName = this.activatedRoute.snapshot.paramMap.get('groupName');
-
     if (!groupName) {
       throw new globalThis.Error('No groupName route parameter found');
     }
-
     this.groupName = groupName;
 
     // Initialize the form controls
-    this.descriptionControl = new FormControl('', [Validators.maxLength(100)]);
-    this.nameControl = new FormControl({
-      value: '',
-      disabled: true
+    this.descriptionControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.maxLength(100)]
     });
+
+    this.nameControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
 
     // Initialize the form
     this.editGroupForm = new FormGroup({
@@ -104,7 +110,7 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
     });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     // Retrieve the existing group and initialize the form fields
     this.spinnerService.showSpinner();
 

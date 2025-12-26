@@ -38,15 +38,20 @@ import { catchError, finalize, first, map } from 'rxjs/operators';
   templateUrl: 'expired-password.component.html'
 })
 export class ExpiredPasswordComponent implements OnInit {
-  confirmNewPasswordControl: FormControl;
+  readonly confirmNewPasswordControl: FormControl<string>;
 
-  expiredPasswordForm: FormGroup;
+  readonly expiredPasswordForm: FormGroup<{
+    confirmNewPassword: FormControl<string>;
+    newPassword: FormControl<string>;
+    password: FormControl<string>;
+    username: FormControl<string>;
+  }>;
 
-  newPasswordControl: FormControl;
+  readonly newPasswordControl: FormControl<string>;
 
-  passwordControl: FormControl;
+  readonly passwordControl: FormControl<string>;
 
-  usernameControl: FormControl;
+  readonly usernameControl: FormControl<string>;
 
   private readonly activatedRoute = inject(ActivatedRoute);
 
@@ -60,16 +65,28 @@ export class ExpiredPasswordComponent implements OnInit {
 
   constructor() {
     // Initialize form controls
-    this.confirmNewPasswordControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
-    this.newPasswordControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.passwordControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.usernameControl = new FormControl({
-      value: '',
-      disabled: true
+    this.confirmNewPasswordControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
     });
+
+    this.newPasswordControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.passwordControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.usernameControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
 
     // Initialize form
     this.expiredPasswordForm = new FormGroup({

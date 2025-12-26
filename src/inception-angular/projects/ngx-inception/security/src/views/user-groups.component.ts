@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject, OnDestroy, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -38,10 +38,10 @@ import { SecurityService } from '../services/security.service';
   templateUrl: 'user-groups.component.html',
   styleUrls: ['user-groups.component.css']
 })
-export class UserGroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+export class UserGroupsComponent extends AdminContainerView implements OnInit, OnDestroy {
   allGroupNames: string[] = [];
 
-  availableGroupNames$: Subject<string[]> = new ReplaySubject<string[]>(1);
+  readonly availableGroupNames$: Subject<string[]> = new ReplaySubject<string[]>(1);
 
   dataSource = new MatTableDataSource<string>([]);
 
@@ -53,9 +53,9 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   readonly title = $localize`:@@security_user_groups_title:User Groups`;
 
-  userDirectoryId: string;
+  readonly userDirectoryId: string;
 
-  username: string;
+  readonly username: string;
 
   private readonly securityService = inject(SecurityService);
 
@@ -66,19 +66,15 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
     // Retrieve the route parameters
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
-
     if (!userDirectoryId) {
       throw new globalThis.Error('No userDirectoryId route parameter found');
     }
-
     this.userDirectoryId = userDirectoryId;
 
     const username = this.activatedRoute.snapshot.paramMap.get('username');
-
     if (!username) {
       throw new globalThis.Error('No username route parameter found');
     }
-
     this.username = username;
   }
 
@@ -141,7 +137,11 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
       });
   }
 
-  ngAfterViewInit(): void {
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
 
     // Retrieve the existing user and initialize the form fields
@@ -160,10 +160,6 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
         },
         error: (error: Error) => this.handleError(error, false)
       });
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 
   removeUserFromGroup(groupName: string): void {

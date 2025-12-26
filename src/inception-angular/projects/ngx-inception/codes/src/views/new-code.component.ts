@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -37,20 +37,24 @@ import { CodesService } from '../services/codes.service';
   templateUrl: 'new-code.component.html',
   styleUrls: ['new-code.component.css']
 })
-export class NewCodeComponent extends AdminContainerView implements AfterViewInit {
+export class NewCodeComponent extends AdminContainerView implements OnInit {
   code: Code | null = null;
 
-  codeCategoryId: string;
+  readonly codeCategoryId: string;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
-  newCodeForm: FormGroup;
+  readonly newCodeForm: FormGroup<{
+    id: FormControl<string>;
+    name: FormControl<string>;
+    value: FormControl<string>;
+  }>;
 
   readonly title = $localize`:@@codes_new_code_title:New Code`;
 
-  valueControl: FormControl;
+  readonly valueControl: FormControl<string>;
 
   private readonly codesService = inject(CodesService);
 
@@ -65,9 +69,20 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
     this.codeCategoryId = codeCategoryId;
 
     // Initialize the form controls
-    this.idControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.valueControl = new FormControl('', [Validators.required]);
+    this.idControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.valueControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required]
+    });
 
     // Initialize the form
     this.newCodeForm = new FormGroup({
@@ -87,7 +102,7 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     // Create the new code instance
     this.code = new Code('', this.codeCategoryId, '', '');
   }
@@ -98,13 +113,19 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
       this.code.name = this.nameControl.value?.trim();
       this.code.value = this.valueControl.value?.trim();
 
+      this.newCodeForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.codesService
         .createCode(this.code)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner())
+          finalize(() => {
+            this.spinnerService.hideSpinner();
+
+            this.newCodeForm.enable();
+          })
         )
         .subscribe({
           next: () => {

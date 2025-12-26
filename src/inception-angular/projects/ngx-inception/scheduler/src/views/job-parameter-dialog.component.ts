@@ -127,11 +127,14 @@ export interface JobParameterDialogData {
   `
 })
 export class JobParameterDialogComponent {
-  jobParameterForm: FormGroup;
+  readonly jobParameterForm: FormGroup<{
+    name: FormControl<string>;
+    value: FormControl<string>;
+  }>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
-  valueControl: FormControl;
+  readonly valueControl: FormControl<string>;
 
   private readonly dialogRef = inject<MatDialogRef<JobParameterDialogComponent>>(MatDialogRef);
 
@@ -142,14 +145,17 @@ export class JobParameterDialogComponent {
     const data = inject<JobParameterDialogData>(MAT_DIALOG_DATA);
 
     // Initialize the form controls
-    this.nameControl = new FormControl(
+    this.nameControl = new FormControl<string>(
       {
         value: data.name,
         disabled: data.readonlyName
       },
-      [Validators.required, Validators.maxLength(100)]
+      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
     );
-    this.valueControl = new FormControl(data.value, [Validators.maxLength(100)]);
+    this.valueControl = new FormControl<string>(data.value, {
+      nonNullable: true,
+      validators: [Validators.maxLength(100)]
+    });
 
     // Initialize the form
     this.jobParameterForm = new FormGroup({

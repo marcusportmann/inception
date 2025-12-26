@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
@@ -40,24 +40,30 @@ import { TokenClaimDialogComponent, TokenClaimDialogData } from './token-claim-d
   templateUrl: 'new-token.component.html',
   styleUrls: ['new-token.component.css']
 })
-export class NewTokenComponent extends AdminContainerView implements AfterViewInit {
-  descriptionControl: FormControl;
+export class NewTokenComponent extends AdminContainerView implements OnInit {
+  readonly descriptionControl: FormControl<string | null>;
 
   existingTokenId: string | null = null;
 
-  expiryDateControl: FormControl;
+  readonly expiryDateControl: FormControl<Date | null>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
-  newTokenForm: FormGroup;
+  readonly newTokenForm: FormGroup<{
+    description: FormControl<string | null>;
+    expiryDate: FormControl<Date | null>;
+    name: FormControl<string>;
+    type: FormControl<TokenType>;
+    validFromDate: FormControl<Date | null>;
+  }>;
 
   readonly title = $localize`:@@security_new_token_title:New Token`;
 
   tokenClaims: TokenClaim[] = [];
 
-  typeControl: FormControl;
+  readonly typeControl: FormControl<TokenType>;
 
-  validFromDateControl: FormControl;
+  readonly validFromDateControl: FormControl<Date | null>;
 
   private readonly matDialog = inject(MatDialog);
 
@@ -70,11 +76,23 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
     this.existingTokenId = this.activatedRoute.snapshot.paramMap.get('existingTokenId');
 
     // Initialize the form controls
-    this.expiryDateControl = new FormControl('');
-    this.descriptionControl = new FormControl('', [Validators.maxLength(200)]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.typeControl = new FormControl('', [Validators.required]);
-    this.validFromDateControl = new FormControl('');
+    this.expiryDateControl = new FormControl<Date | null>(null);
+
+    this.descriptionControl = new FormControl<string | null>(null, {
+      validators: [Validators.maxLength(200)]
+    });
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.typeControl = new FormControl<TokenType>(TokenType.JWT, {
+      nonNullable: true,
+      validators: [Validators.required]
+    });
+
+    this.validFromDateControl = new FormControl<Date | null>(null);
 
     // Initialize the form
     this.newTokenForm = new FormGroup({
@@ -180,7 +198,7 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
       });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     if (this.existingTokenId) {
       // Retrieve the existing token and populate the form fields
       this.spinnerService.showSpinner();
@@ -242,8 +260,6 @@ export class NewTokenComponent extends AdminContainerView implements AfterViewIn
     }
 
     generateTokenRequest.claims = this.tokenClaims;
-
-    console.log('generateTokenRequest = ', generateTokenRequest);
 
     this.spinnerService.showSpinner();
 

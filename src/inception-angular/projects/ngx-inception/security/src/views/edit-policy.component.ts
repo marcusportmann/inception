@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
 import { Policy } from '../services/policy';
+import { PolicyType } from '../services/policy-type';
 import { SecurityService } from '../services/security.service';
 
 /**
@@ -35,24 +36,30 @@ import { SecurityService } from '../services/security.service';
   templateUrl: 'edit-policy.component.html',
   styleUrls: ['edit-policy.component.css']
 })
-export class EditPolicyComponent extends AdminContainerView implements AfterViewInit {
-  dataControl: FormControl;
+export class EditPolicyComponent extends AdminContainerView implements OnInit {
+  readonly dataControl: FormControl<string>;
 
-  editPolicyForm: FormGroup;
+  readonly editPolicyForm: FormGroup<{
+    data: FormControl<string>;
+    id: FormControl<string>;
+    name: FormControl<string>;
+    type: FormControl<PolicyType>;
+    version: FormControl<string>;
+  }>;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
   policy: Policy | null = null;
 
-  policyId: string;
+  readonly policyId: string;
 
   readonly title = $localize`:@@security_edit_policy_title:Edit Policy`;
 
-  typeControl: FormControl;
+  readonly typeControl: FormControl<PolicyType>;
 
-  versionControl: FormControl;
+  readonly versionControl: FormControl<string>;
 
   private readonly securityService = inject(SecurityService);
 
@@ -61,25 +68,39 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
 
     // Retrieve the route parameters
     const policyId = this.activatedRoute.snapshot.paramMap.get('policyId');
-
     if (!policyId) {
       throw new globalThis.Error('No policyId route parameter found');
     }
-
     this.policyId = policyId;
 
     // Initialize the form controls
-    this.dataControl = new FormControl('', [Validators.required]);
-    this.idControl = new FormControl(
+    this.dataControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required]
+    });
+
+    this.idControl = new FormControl<string>(
       {
         value: '',
         disabled: true
       },
-      [Validators.required, Validators.maxLength(100)]
+      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
     );
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.typeControl = new FormControl([], Validators.required);
-    this.versionControl = new FormControl('', [Validators.required, Validators.maxLength(30)]);
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.typeControl = new FormControl<PolicyType>(PolicyType.XACMLPolicy, {
+      nonNullable: true,
+      validators: Validators.required
+    });
+
+    this.versionControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(30)]
+    });
 
     // Initialize the form
     this.editPolicyForm = new FormGroup({
@@ -101,7 +122,7 @@ export class EditPolicyComponent extends AdminContainerView implements AfterView
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     // Retrieve the existing policy and initialize the form controls
     this.spinnerService.showSpinner();
 

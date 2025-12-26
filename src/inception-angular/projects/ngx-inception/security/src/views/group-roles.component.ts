@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject, OnDestroy, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -39,7 +39,7 @@ import { SecurityService } from '../services/security.service';
   templateUrl: 'group-roles.component.html',
   styleUrls: ['group-roles.component.css']
 })
-export class GroupRolesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+export class GroupRolesComponent extends AdminContainerView implements OnInit, OnDestroy {
   allRoles: Role[] = [];
 
   availableRoles$: Subject<Role[]> = new ReplaySubject<Role[]>(1);
@@ -48,7 +48,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   readonly displayedColumns = ['existingRoleName', 'actions'] as const;
 
-  groupName: string;
+  readonly groupName: string;
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
@@ -56,7 +56,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   readonly title = $localize`:@@security_group_roles_title:Group Roles`;
 
-  userDirectoryId: string;
+  readonly userDirectoryId: string;
 
   private readonly securityService = inject(SecurityService);
 
@@ -67,19 +67,15 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
     // Retrieve the route parameters
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
-
     if (!userDirectoryId) {
       throw new globalThis.Error('No userDirectoryId route parameter found');
     }
-
     this.userDirectoryId = userDirectoryId;
 
     const groupName = this.activatedRoute.snapshot.paramMap.get('groupName');
-
     if (!groupName) {
       throw new globalThis.Error('No groupName route parameter found');
     }
-
     this.groupName = groupName;
   }
 
@@ -137,7 +133,11 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
       });
   }
 
-  ngAfterViewInit(): void {
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
 
     // Retrieve the roles and initialize the table
@@ -156,10 +156,6 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
         },
         error: (error: Error) => this.handleError(error, false)
       });
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 
   removeRoleFromGroup(roleCode: string): void {

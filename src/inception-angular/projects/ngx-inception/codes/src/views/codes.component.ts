@@ -60,7 +60,7 @@ export class CodesComponent extends FilteredPaginatedListView<Code> {
     }
     this.codeCategoryId = codeCategoryId;
 
-    this.listStateKey = `codes.${encodeURIComponent(this.codeCategoryId)}`;
+    this.listStateKey = `codes.code-category.${encodeURIComponent(this.codeCategoryId)}`;
   }
 
   override get backNavigation(): BackNavigation {

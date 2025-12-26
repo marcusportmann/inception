@@ -38,15 +38,19 @@ import { ErrorService } from '../services/error.service';
   templateUrl: 'send-error-report.component.html'
 })
 export class SendErrorReportComponent implements OnInit {
-  emailControl: FormControl;
+  readonly emailControl: FormControl<string>;
 
   error: Error | null = null;
 
-  feedbackControl: FormControl;
+  readonly feedbackControl: FormControl<string>;
 
-  messageControl: FormControl;
+  readonly messageControl: FormControl<string>;
 
-  sendErrorReportForm: FormGroup;
+  readonly sendErrorReportForm: FormGroup<{
+    email: FormControl<string>;
+    feedback: FormControl<string>;
+    message: FormControl<string>;
+  }>;
 
   private readonly activatedRoute = inject(ActivatedRoute);
 
@@ -60,9 +64,14 @@ export class SendErrorReportComponent implements OnInit {
 
   constructor() {
     // Initialize form controls
-    this.emailControl = new FormControl('', Validators.email);
-    this.feedbackControl = new FormControl('');
-    this.messageControl = new FormControl('');
+    this.emailControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: Validators.email
+    });
+
+    this.feedbackControl = new FormControl<string>('', { nonNullable: true });
+
+    this.messageControl = new FormControl<string>('', { nonNullable: true });
 
     // Initialize the form group
     this.sendErrorReportForm = new FormGroup({

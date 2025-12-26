@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -35,14 +35,16 @@ import { Tenant } from '../services/tenant';
   templateUrl: 'edit-tenant.component.html',
   styleUrls: ['edit-tenant.component.css']
 })
-export class EditTenantComponent extends AdminContainerView implements AfterViewInit {
-  editTenantForm: FormGroup;
+export class EditTenantComponent extends AdminContainerView implements OnInit {
+  readonly editTenantForm: FormGroup<{
+    name: FormControl<string>;
+  }>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
   tenant: Tenant | null = null;
 
-  tenantId: string;
+  readonly tenantId: string;
 
   readonly title = $localize`:@@security_edit_tenant_title:Edit Tenant`;
 
@@ -53,15 +55,16 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
 
     // Retrieve the route parameters
     const tenantId = this.activatedRoute.snapshot.paramMap.get('tenantId');
-
     if (!tenantId) {
       throw new globalThis.Error('No tenantId route parameter found');
     }
-
     this.tenantId = tenantId;
 
     // Initialize the form controls
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
 
     // Initialize the form
     this.editTenantForm = new FormGroup({
@@ -79,7 +82,7 @@ export class EditTenantComponent extends AdminContainerView implements AfterView
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     // Retrieve the existing tenant and initialize the form fields
     this.spinnerService.showSpinner();
 

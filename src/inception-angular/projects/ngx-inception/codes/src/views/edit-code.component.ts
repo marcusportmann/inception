@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -35,22 +35,26 @@ import { CodesService } from '../services/codes.service';
   templateUrl: 'edit-code.component.html',
   styleUrls: ['edit-code.component.css']
 })
-export class EditCodeComponent extends AdminContainerView implements AfterViewInit {
+export class EditCodeComponent extends AdminContainerView implements OnInit {
   code: Code | null = null;
 
-  codeCategoryId: string;
+  readonly codeCategoryId: string;
 
-  codeId: string;
+  readonly codeId: string;
 
-  editCodeForm: FormGroup;
+  readonly editCodeForm: FormGroup<{
+    id: FormControl<string>;
+    name: FormControl<string>;
+    value: FormControl<string>;
+  }>;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
   readonly title = $localize`:@@codes_edit_code_title:Edit Code`;
 
-  valueControl: FormControl;
+  readonly valueControl: FormControl<string>;
 
   private readonly codesService = inject(CodesService);
 
@@ -60,24 +64,27 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
     // Retrieve and decode route parameters
     const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
     const codeId = this.activatedRoute.snapshot.paramMap.get('codeId');
-
     if (!codeCategoryId || !codeId) {
       throw new globalThis.Error('Required route parameters are missing');
     }
-
     this.codeCategoryId = codeCategoryId;
     this.codeId = codeId;
 
     // Initialize the form controls
-    this.idControl = new FormControl(
-      {
-        value: '',
-        disabled: true
-      },
-      [Validators.required, Validators.maxLength(100)]
+    this.idControl = new FormControl<string>(
+      { value: '', disabled: true },
+      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
     );
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.valueControl = new FormControl('', [Validators.required]);
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.valueControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required]
+    });
 
     // Initialize the form
     this.editCodeForm = new FormGroup({
@@ -97,7 +104,7 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.spinnerService.showSpinner();
 
     this.codesService
@@ -123,13 +130,19 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
       this.code.name = this.nameControl.value;
       this.code.value = this.valueControl.value;
 
+      this.editCodeForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.codesService
         .updateCode(this.code)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner())
+          finalize(() => {
+            this.spinnerService.hideSpinner();
+
+            this.editCodeForm.enable();
+          })
         )
         .subscribe({
           next: () => {

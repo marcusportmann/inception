@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
@@ -35,18 +35,22 @@ import { ReportingService } from '../services/reporting.service';
   templateUrl: 'edit-report-definition.component.html',
   styleUrls: ['edit-report-definition.component.css']
 })
-export class EditReportDefinitionComponent extends AdminContainerView implements AfterViewInit {
-  editReportDefinitionForm: FormGroup;
+export class EditReportDefinitionComponent extends AdminContainerView implements OnInit {
+  readonly editReportDefinitionForm: FormGroup<{
+    id: FormControl<string>;
+    name: FormControl<string>;
+    template: FormControl<File[] | null>;
+  }>;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
   reportDefinition: ReportDefinition | null = null;
 
-  reportDefinitionId: string;
+  readonly reportDefinitionId: string;
 
-  templateControl: FormControl;
+  readonly templateControl: FormControl<File[] | null>;
 
   readonly title = $localize`:@@reporting_edit_report_definition_title:Edit Report Definition`;
 
@@ -57,23 +61,26 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
 
     // Retrieve the route parameters
     const reportDefinitionId = this.activatedRoute.snapshot.paramMap.get('reportDefinitionId');
-
     if (!reportDefinitionId) {
       throw new globalThis.Error('No reportDefinitionId route parameter found');
     }
-
     this.reportDefinitionId = reportDefinitionId;
 
     // Initialize the form controls
-    this.idControl = new FormControl(
+    this.idControl = new FormControl<string>(
       {
         value: '',
         disabled: true
       },
-      [Validators.required, Validators.maxLength(100)]
+      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
     );
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.templateControl = new FormControl('', [
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.templateControl = new FormControl<File[] | null>(null, [
       Validators.required,
       FileValidator.minSize(1),
       FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)
@@ -99,7 +106,7 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     // Retrieve the existing report definition and initialize the form controls
     this.spinnerService.showSpinner();
 
@@ -125,7 +132,7 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
       return;
     }
 
-    const files = this.templateControl.value as File[] | null;
+    const files = this.templateControl.value;
 
     if (!files || !files[0]) {
       console.log('No template file selected for the report definition.');

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
@@ -37,28 +37,33 @@ import { MailService } from '../services/mail.service';
   templateUrl: 'new-mail-template.component.html',
   styleUrls: ['new-mail-template.component.css']
 })
-export class NewMailTemplateComponent extends AdminContainerView implements AfterViewInit {
+export class NewMailTemplateComponent extends AdminContainerView implements OnInit {
   // noinspection JSUnusedGlobalSymbols
-  MailTemplateContentType = MailTemplateContentType;
+  readonly MailTemplateContentType = MailTemplateContentType;
 
-  contentTypeControl: FormControl;
+  readonly contentTypeControl: FormControl<MailTemplateContentType>;
 
-  contentTypes: MailTemplateContentType[] = [
+  readonly contentTypes: MailTemplateContentType[] = [
     MailTemplateContentType.Text,
     MailTemplateContentType.HTML
   ];
 
   getMailTemplateContentTypeDescription = MailService.getMailTemplateContentTypeDescription;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
   mailTemplate: MailTemplate | null = null;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
-  newMailTemplateForm: FormGroup;
+  readonly newMailTemplateForm: FormGroup<{
+    contentType: FormControl<MailTemplateContentType>;
+    id: FormControl<string>;
+    name: FormControl<string>;
+    template: FormControl<File[] | null>;
+  }>;
 
-  templateControl: FormControl;
+  readonly templateControl: FormControl<File[] | null>;
 
   readonly title = $localize`:@@mail_new_mail_template_title:New Mail Template`;
 
@@ -68,10 +73,22 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
     super();
 
     // Initialize the form controls
-    this.contentTypeControl = new FormControl('', [Validators.required]);
-    this.idControl = new FormControl('', [Validators.required]);
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.templateControl = new FormControl('', [
+    this.contentTypeControl = new FormControl<MailTemplateContentType>(
+      MailTemplateContentType.HTML,
+      { nonNullable: true, validators: [Validators.required] }
+    );
+
+    this.idControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required]
+    });
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.templateControl = new FormControl<File[] | null>(null, [
       Validators.required,
       FileValidator.minSize(1),
       FileValidator.maxSize(MailService.MAX_TEMPLATE_SIZE)
@@ -98,7 +115,7 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.mailTemplate = new MailTemplate('', '', MailTemplateContentType.Text, '');
   }
 
@@ -107,7 +124,7 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
       return;
     }
 
-    const files = this.templateControl.value as File[] | null;
+    const files = this.templateControl.value;
 
     if (!files || !files[0]) {
       console.log('No template file selected for the mail template.');

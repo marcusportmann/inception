@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
@@ -36,30 +36,38 @@ import { UserDirectoryCapabilities } from '../services/user-directory-capabiliti
   templateUrl: 'reset-user-password.component.html',
   styleUrls: ['reset-user-password.component.css']
 })
-export class ResetUserPasswordComponent extends AdminContainerView implements AfterViewInit {
-  confirmPasswordControl: FormControl;
+export class ResetUserPasswordComponent extends AdminContainerView implements OnInit {
+  readonly confirmPasswordControl: FormControl<string>;
 
-  expirePasswordControl: FormControl;
+  readonly expirePasswordControl: FormControl<boolean>;
 
-  lockUserControl: FormControl;
+  readonly lockUserControl: FormControl<boolean>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
-  passwordControl: FormControl;
+  readonly passwordControl: FormControl<string>;
 
-  resetPasswordHistoryControl: FormControl;
+  readonly resetPasswordHistoryControl: FormControl<boolean>;
 
-  resetUserPasswordForm: FormGroup;
+  readonly resetUserPasswordForm: FormGroup<{
+    confirmPassword: FormControl<string>;
+    name: FormControl<string>;
+    password: FormControl<string>;
+    resetPasswordHistory?: FormControl<boolean>;
+    username: FormControl<string>;
+    expirePassword?: FormControl<boolean>;
+    lockUser?: FormControl<boolean>;
+  }>;
 
   readonly title = $localize`:@@security_reset_user_password_title:Reset User Password`;
 
   userDirectoryCapabilities: UserDirectoryCapabilities | null = null;
 
-  userDirectoryId: string;
+  readonly userDirectoryId: string;
 
-  username: string;
+  readonly username: string;
 
-  usernameControl: FormControl;
+  readonly usernameControl: FormControl<string>;
 
   private readonly securityService = inject(SecurityService);
 
@@ -68,38 +76,49 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
 
     // Retrieve the route parameters
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
-
     if (!userDirectoryId) {
       throw new globalThis.Error('No userDirectoryId route parameter found');
     }
-
     this.userDirectoryId = userDirectoryId;
 
     const username = this.activatedRoute.snapshot.paramMap.get('username');
-
     if (!username) {
       throw new globalThis.Error('No username route parameter found');
     }
-
     this.username = username;
 
     // Initialize the form controls
-    this.confirmPasswordControl = new FormControl('', [
-      Validators.required,
-      Validators.maxLength(100)
-    ]);
-    this.expirePasswordControl = new FormControl(false);
-    this.nameControl = new FormControl({
-      value: '',
-      disabled: true
+    this.confirmPasswordControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
     });
-    this.lockUserControl = new FormControl(false);
-    this.passwordControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.resetPasswordHistoryControl = new FormControl(false);
-    this.usernameControl = new FormControl({
-      value: '',
-      disabled: true
+
+    this.expirePasswordControl = new FormControl<boolean>(false, { nonNullable: true });
+
+    this.nameControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
+
+    this.lockUserControl = new FormControl<boolean>(false, { nonNullable: true });
+
+    this.passwordControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
     });
+
+    this.resetPasswordHistoryControl = new FormControl<boolean>(false, { nonNullable: true });
+
+    this.usernameControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
 
     // Initialize the form
     this.resetUserPasswordForm = new FormGroup({
@@ -128,7 +147,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
     });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     // Retrieve the existing user and initialize the form fields
     this.spinnerService.showSpinner();
 

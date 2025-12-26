@@ -77,11 +77,9 @@ export class TenantUserDirectoriesComponent
 
     // Retrieve the route parameters
     const tenantId = this.activatedRoute.snapshot.paramMap.get('tenantId');
-
     if (!tenantId) {
       throw new globalThis.Error('No tenantId route parameter found');
     }
-
     this.tenantId = tenantId;
 
     // Initialize the form controls

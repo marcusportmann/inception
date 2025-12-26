@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
@@ -37,30 +37,35 @@ import { MailService } from '../services/mail.service';
   templateUrl: 'edit-mail-template.component.html',
   styleUrls: ['edit-mail-template.component.css']
 })
-export class EditMailTemplateComponent extends AdminContainerView implements AfterViewInit {
+export class EditMailTemplateComponent extends AdminContainerView implements OnInit {
   // noinspection JSUnusedGlobalSymbols
-  MailTemplateContentType = MailTemplateContentType;
+  readonly MailTemplateContentType = MailTemplateContentType;
 
-  contentTypeControl: FormControl;
+  readonly contentTypeControl: FormControl<MailTemplateContentType>;
 
-  contentTypes: MailTemplateContentType[] = [
+  readonly contentTypes: MailTemplateContentType[] = [
     MailTemplateContentType.Text,
     MailTemplateContentType.HTML
   ];
 
-  editMailTemplateForm: FormGroup;
+  readonly editMailTemplateForm: FormGroup<{
+    contentType: FormControl<MailTemplateContentType>;
+    id: FormControl<string>;
+    name: FormControl<string>;
+    template: FormControl<File[] | null>;
+  }>;
 
   getMailTemplateContentTypeDescription = MailService.getMailTemplateContentTypeDescription;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
   mailTemplate: MailTemplate | null = null;
 
-  mailTemplateId: string;
+  readonly mailTemplateId: string;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
-  templateControl: FormControl;
+  readonly templateControl: FormControl<File[] | null>;
 
   readonly title = $localize`:@@mail_edit_mail_template_title:Edit Mail Template`;
 
@@ -71,24 +76,34 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
 
     // Retrieve the route parameters
     const mailTemplateId = this.activatedRoute.snapshot.paramMap.get('mailTemplateId');
-
     if (!mailTemplateId) {
       throw new globalThis.Error('No mailTemplateId route parameter found');
     }
-
     this.mailTemplateId = mailTemplateId;
 
     // Initialize the form controls
-    this.contentTypeControl = new FormControl('', [Validators.required]);
-    this.idControl = new FormControl(
+    this.contentTypeControl = new FormControl<MailTemplateContentType>(
+      MailTemplateContentType.HTML,
+      {
+        nonNullable: true,
+        validators: [Validators.required]
+      }
+    );
+
+    this.idControl = new FormControl<string>(
       {
         value: '',
         disabled: true
       },
-      [Validators.required, Validators.maxLength(100)]
+      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
     );
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.templateControl = new FormControl('', [
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+
+    this.templateControl = new FormControl<File[] | null>(null, [
       Validators.required,
       FileValidator.minSize(1),
       FileValidator.maxSize(MailService.MAX_TEMPLATE_SIZE)
@@ -115,7 +130,7 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     // Retrieve the existing mail template and initialize the form controls
     this.spinnerService.showSpinner();
 
@@ -142,7 +157,7 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
       return;
     }
 
-    const files = this.templateControl.value as File[] | null;
+    const files = this.templateControl.value;
 
     if (!files || !files[0]) {
       console.log('No template file selected for the mail template.');

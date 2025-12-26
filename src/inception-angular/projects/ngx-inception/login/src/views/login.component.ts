@@ -37,7 +37,10 @@ import { catchError, finalize, first, map, Observable, of, switchMap, throwError
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements AfterViewInit, OnInit {
-  readonly loginForm: FormGroup;
+  readonly loginForm: FormGroup<{
+    password: FormControl<string>;
+    username: FormControl<string>;
+  }>;
 
   readonly passwordControl: FormControl<string>;
 

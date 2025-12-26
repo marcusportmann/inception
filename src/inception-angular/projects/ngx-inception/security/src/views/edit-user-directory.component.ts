@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy, ViewChild
-} from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -47,11 +45,13 @@ import { LdapUserDirectoryComponent } from './ldap-user-directory.component';
   templateUrl: 'edit-user-directory.component.html',
   styleUrls: ['edit-user-directory.component.css']
 })
-export class EditUserDirectoryComponent
-  extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
-  editUserDirectoryForm: FormGroup;
+export class EditUserDirectoryComponent extends AdminContainerView implements OnInit, OnDestroy {
+  readonly editUserDirectoryForm: FormGroup<{
+    name: FormControl<string>;
+    userDirectoryType: FormControl<string | null>;
+    internalUserDirectory?: FormControl<UserDirectoryParameter[] | null>;
+    ldapUserDirectory?: FormControl<UserDirectoryParameter[] | null>;
+  }>;
 
   @ViewChild(InternalUserDirectoryComponent)
   internalUserDirectoryComponent?: InternalUserDirectoryComponent;
@@ -59,15 +59,15 @@ export class EditUserDirectoryComponent
   @ViewChild(LdapUserDirectoryComponent)
   ldapUserDirectoryComponent?: LdapUserDirectoryComponent;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
   readonly title = $localize`:@@security_edit_user_directory_title:Edit User Directory`;
 
   userDirectory: UserDirectory | null = null;
 
-  userDirectoryId: string;
+  readonly userDirectoryId: string;
 
-  userDirectoryTypeControl: FormControl;
+  readonly userDirectoryTypeControl: FormControl<string | null>;
 
   userDirectoryTypes: UserDirectoryType[] = [];
 
@@ -82,16 +82,19 @@ export class EditUserDirectoryComponent
 
     // Retrieve the route parameters
     const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
-
     if (!userDirectoryId) {
       throw new globalThis.Error('No userDirectoryId route parameter found');
     }
-
     this.userDirectoryId = userDirectoryId;
 
     // Initialize the form controls
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.userDirectoryTypeControl = new FormControl('', [Validators.required]);
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
+    this.userDirectoryTypeControl = new FormControl<string | null>(null, {
+      validators: [Validators.required]
+    });
 
     // Initialize the form
     this.editUserDirectoryForm = new FormGroup({
@@ -102,9 +105,14 @@ export class EditUserDirectoryComponent
     this.subscriptions.add(
       this.userDirectoryTypeControl.valueChanges
         .pipe(startWith(null), pairwise())
-        .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
-          this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
-        })
+        .subscribe(
+          ([previousUserDirectoryType, currentUserDirectoryType]: [
+            string | null,
+            string | null
+          ]) => {
+            this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
+          }
+        )
     );
   }
 
@@ -120,7 +128,11 @@ export class EditUserDirectoryComponent
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  ngOnInit(): void {
     // Retrieve the user directory types and the existing user directory
     this.spinnerService.showSpinner();
 
@@ -145,17 +157,13 @@ export class EditUserDirectoryComponent
       });
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
-
   ok(): void {
     if (!this.userDirectory || !this.editUserDirectoryForm.valid) {
       return;
     }
 
     this.userDirectory.name = this.nameControl.value;
-    this.userDirectory.type = this.userDirectoryTypeControl.value;
+    this.userDirectory.type = this.userDirectoryTypeControl.value || '';
 
     if (this.internalUserDirectoryComponent) {
       this.userDirectory.parameters = this.internalUserDirectoryComponent.getParameters();
@@ -182,10 +190,10 @@ export class EditUserDirectoryComponent
   }
 
   userDirectoryTypeSelected(
-    previousUserDirectoryType: string,
-    currentUserDirectoryType: string
+    previousUserDirectoryType: string | null,
+    currentUserDirectoryType: string | null
   ): void {
-    // If the user actually changes the type in the UI (after initial load),
+    // If the user actually changes the type in the UI (after the initial load),
     // you may want to clear the parameters.
     if (
       previousUserDirectoryType &&

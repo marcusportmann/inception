@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -36,20 +36,24 @@ import { ConfigService } from '../services/config.service';
   templateUrl: 'edit-config.component.html',
   styleUrls: ['edit-config.component.css']
 })
-export class EditConfigComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+export class EditConfigComponent extends AdminContainerView implements OnInit, OnDestroy {
   config: Config | null = null;
 
-  descriptionControl: FormControl<string | null>;
+  readonly descriptionControl: FormControl<string>;
 
-  editConfigForm: FormGroup;
+  readonly editConfigForm: FormGroup<{
+    description: FormControl<string>;
+    id: FormControl<string>;
+    value: FormControl<string>;
+  }>;
 
-  id: string;
+  readonly id: string;
 
-  idControl: FormControl<string | null>;
+  readonly idControl: FormControl<string>;
 
   readonly title = $localize`:@@config_edit_config_title:Edit Config`;
 
-  valueControl: FormControl<string | null>;
+  readonly valueControl: FormControl<string>;
 
   private readonly configService = inject(ConfigService);
 
@@ -66,15 +70,23 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
     this.id = id;
 
     // Initialize form controls
-    this.descriptionControl = new FormControl('', [Validators.maxLength(100)]);
-    this.idControl = new FormControl(
+    this.descriptionControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.maxLength(100)]
+    });
+
+    this.idControl = new FormControl<string>(
       {
         value: '',
         disabled: true
       },
-      [Validators.required, Validators.maxLength(100)]
+      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
     );
-    this.valueControl = new FormControl('', [Validators.maxLength(4000)]);
+
+    this.valueControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.maxLength(4000)]
+    });
 
     // Initialize the form
     this.editConfigForm = new FormGroup({
@@ -94,7 +106,12 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  ngOnInit(): void {
     // Retrieve the existing config and initialize the form controls
     this.spinnerService.showSpinner();
     this.configService
@@ -114,11 +131,6 @@ export class EditConfigComponent extends AdminContainerView implements AfterView
         error: (error: Error) =>
           this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   ok(): void {

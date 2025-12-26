@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AdminContainerView, BackNavigation, CoreModule } from 'ngx-inception/core';
 import { finalize, first } from 'rxjs/operators';
@@ -33,32 +33,42 @@ import { ErrorService } from '../services/error.service';
   templateUrl: 'error-report.component.html',
   styleUrls: ['error-report.component.css']
 })
-export class ErrorReportComponent extends AdminContainerView implements AfterViewInit {
-  applicationIdControl: FormControl;
+export class ErrorReportComponent extends AdminContainerView implements OnInit {
+  readonly applicationIdControl: FormControl<string>;
 
-  applicationVersionControl: FormControl;
+  readonly applicationVersionControl: FormControl<string>;
 
-  createdControl: FormControl;
+  readonly createdControl: FormControl<Date>;
 
-  descriptionControl: FormControl;
+  readonly descriptionControl: FormControl<string>;
 
-  detailControl: FormControl;
+  readonly detailControl: FormControl<string>;
 
-  deviceIdControl: FormControl;
+  readonly deviceIdControl: FormControl<string>;
 
   errorReport: ErrorReport | null = null;
 
-  errorReportForm: FormGroup;
+  readonly errorReportForm: FormGroup<{
+    applicationId: FormControl<string>;
+    applicationVersion: FormControl<string>;
+    created: FormControl<Date>;
+    description: FormControl<string>;
+    detail: FormControl<string>;
+    deviceId: FormControl<string>;
+    feedback: FormControl<string>;
+    id: FormControl<string>;
+    who: FormControl<string>;
+  }>;
 
-  errorReportId: string;
+  readonly errorReportId: string;
 
-  feedbackControl: FormControl;
+  readonly feedbackControl: FormControl<string>;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
   readonly title = $localize`:@@error_error_report_title:View Error Report`;
 
-  whoControl: FormControl;
+  readonly whoControl: FormControl<string>;
 
   private readonly errorService = inject(ErrorService);
 
@@ -73,42 +83,77 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
     this.errorReportId = errorReportId;
 
     // Initialize form controls
-    this.applicationIdControl = new FormControl({
-      value: '',
-      disabled: true
-    });
-    this.applicationVersionControl = new FormControl({
-      value: '',
-      disabled: true
-    });
-    this.createdControl = new FormControl({
-      value: '',
-      disabled: true
-    });
-    this.descriptionControl = new FormControl({
-      value: '',
-      disabled: true
-    });
-    this.detailControl = new FormControl({
-      value: '',
-      disabled: true
-    });
-    this.deviceIdControl = new FormControl({
-      value: '',
-      disabled: true
-    });
-    this.feedbackControl = new FormControl({
-      value: '',
-      disabled: true
-    });
-    this.idControl = new FormControl({
-      value: '',
-      disabled: true
-    });
-    this.whoControl = new FormControl({
-      value: '',
-      disabled: true
-    });
+    this.applicationIdControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
+
+    this.applicationVersionControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
+
+    this.createdControl = new FormControl<Date>(
+      {
+        value: new Date(),
+        disabled: true
+      },
+      { nonNullable: true }
+    );
+
+    this.descriptionControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
+
+    this.detailControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
+
+    this.deviceIdControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
+
+    this.feedbackControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
+
+    this.idControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
+
+    this.whoControl = new FormControl<string>(
+      {
+        value: '',
+        disabled: true
+      },
+      { nonNullable: true }
+    );
 
     // Initialize the form group
     this.errorReportForm = new FormGroup({
@@ -132,7 +177,7 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
     );
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     // Retrieve the error report and populate form controls
     this.spinnerService.showSpinner();
 
@@ -164,6 +209,6 @@ export class ErrorReportComponent extends AdminContainerView implements AfterVie
     this.deviceIdControl.setValue(errorReport.deviceId || 'No device ID');
     this.feedbackControl.setValue(errorReport.feedback || 'No feedback');
     this.idControl.setValue(errorReport.id);
-    this.whoControl.setValue(errorReport.who);
+    this.whoControl.setValue(errorReport.who || 'No user');
   }
 }

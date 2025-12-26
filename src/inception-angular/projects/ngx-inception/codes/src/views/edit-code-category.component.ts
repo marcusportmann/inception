@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -35,18 +35,22 @@ import { CodesService } from '../services/codes.service';
   templateUrl: 'edit-code-category.component.html',
   styleUrls: ['edit-code-category.component.css']
 })
-export class EditCodeCategoryComponent extends AdminContainerView implements AfterViewInit {
+export class EditCodeCategoryComponent extends AdminContainerView implements OnInit {
   codeCategory: CodeCategory | null = null;
 
-  codeCategoryId: string;
+  readonly codeCategoryId: string;
 
-  dataControl: FormControl;
+  readonly dataControl: FormControl<string | null>;
 
-  editCodeCategoryForm: FormGroup;
+  readonly editCodeCategoryForm: FormGroup<{
+    data: FormControl<string | null>;
+    id: FormControl<string>;
+    name: FormControl<string>;
+  }>;
 
-  idControl: FormControl;
+  readonly idControl: FormControl<string>;
 
-  nameControl: FormControl;
+  readonly nameControl: FormControl<string>;
 
   readonly title = $localize`:@@codes_edit_code_category_title:Edit Code Category`;
 
@@ -63,15 +67,20 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
     this.codeCategoryId = codeCategoryId;
 
     // Initialize form controls
-    this.dataControl = new FormControl('');
-    this.idControl = new FormControl(
+    this.dataControl = new FormControl<string | null>('');
+
+    this.idControl = new FormControl<string>(
       {
         value: '',
         disabled: true
       },
-      [Validators.required, Validators.maxLength(100)]
+      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
     );
-    this.nameControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+
+    this.nameControl = new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.maxLength(100)]
+    });
 
     // Initialize the form group
     this.editCodeCategoryForm = new FormGroup({
@@ -95,7 +104,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
     void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.spinnerService.showSpinner();
 
     this.codesService
@@ -121,13 +130,19 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
       this.codeCategory.name = this.nameControl.value ?? '';
       this.codeCategory.data = this.dataControl.value?.trim() || null;
 
+      this.editCodeCategoryForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.codesService
         .updateCodeCategory(this.codeCategory)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner())
+          finalize(() => {
+            this.spinnerService.hideSpinner();
+
+            this.editCodeCategoryForm.enable();
+          })
         )
         .subscribe({
           next: () =>
