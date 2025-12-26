@@ -82,7 +82,7 @@ Complete the following steps to set up a development environment on MacOS.
    ```
    brew install jenv  
    
-   jenv enable-plugin export  
+   jenv enable-plugin export
    ```
    Add jenv to your shell configuration file (~/.zshrc or ~/.bash_profile):
    ```
