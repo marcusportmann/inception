@@ -134,16 +134,30 @@ export class EditConfigComponent extends AdminContainerView implements OnInit, O
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (this.config && this.editConfigForm.valid) {
       this.config.description = this.descriptionControl.value ?? '';
       this.config.value = this.valueControl.value ?? '';
 
+      this.editConfigForm.disable();
+
       this.spinnerService.showSpinner();
+
       this.configService
         .saveConfig(this.config)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner()),
+          finalize(() => {
+            this.spinnerService.hideSpinner();
+
+            this.editConfigForm.enable();
+          }),
           takeUntil(this.destroy$)
         )
         .subscribe({

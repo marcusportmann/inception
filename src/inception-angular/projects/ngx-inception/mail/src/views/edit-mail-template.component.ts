@@ -153,6 +153,13 @@ export class EditMailTemplateComponent extends AdminContainerView implements OnI
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.mailTemplate || !this.editMailTemplateForm.valid) {
       return;
     }
@@ -181,13 +188,19 @@ export class EditMailTemplateComponent extends AdminContainerView implements OnI
       mailTemplate.contentType = this.contentTypeControl.value;
       mailTemplate.template = base64;
 
+      this.editMailTemplateForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.mailService
         .updateMailTemplate(mailTemplate)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner())
+          finalize(() => {
+            this.spinnerService.hideSpinner();
+
+            this.editMailTemplateForm.enable();
+          })
         )
         .subscribe({
           next: () => {

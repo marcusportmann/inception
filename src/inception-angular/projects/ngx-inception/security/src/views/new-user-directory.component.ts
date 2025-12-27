@@ -142,6 +142,13 @@ export class NewUserDirectoryComponent extends AdminContainerView implements OnI
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.userDirectory || !this.newUserDirectoryForm.valid) {
       return;
     }
@@ -155,13 +162,19 @@ export class NewUserDirectoryComponent extends AdminContainerView implements OnI
       this.userDirectory.parameters = this.ldapUserDirectoryComponent.getParameters();
     }
 
+    this.newUserDirectoryForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
       .createUserDirectory(this.userDirectory)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.newUserDirectoryForm.enable();
+        })
       )
       .subscribe({
         next: () => {

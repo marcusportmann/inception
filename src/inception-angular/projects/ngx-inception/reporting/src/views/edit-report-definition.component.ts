@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
   ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { ReportDefinition } from '../services/report-definition';
-import { ReportingService } from '../services/reporting.service';
+import {finalize, first} from 'rxjs/operators';
+import {ReportDefinition} from '../services/report-definition';
+import {ReportingService} from '../services/reporting.service';
 
 /**
  * The EditReportDefinitionComponent class implements the edit report definition component.
@@ -72,7 +72,10 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
         value: '',
         disabled: true
       },
-      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
+      {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(100)]
+      }
     );
 
     this.nameControl = new FormControl<string>('', {
@@ -98,12 +101,12 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
     return new BackNavigation(
       $localize`:@@reporting_edit_report_definition_back_navigation:Report Definitions`,
       ['.'],
-      { relativeTo: this.activatedRoute.parent?.parent }
+      {relativeTo: this.activatedRoute.parent?.parent}
     );
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
   }
 
   ngOnInit(): void {
@@ -111,26 +114,29 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
     this.spinnerService.showSpinner();
 
     this.reportingService
-      .getReportDefinition(this.reportDefinitionId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (reportDefinition: ReportDefinition) => {
-          this.reportDefinition = reportDefinition;
-          this.idControl.setValue(reportDefinition.id);
-          this.nameControl.setValue(reportDefinition.name);
-        },
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+    .getReportDefinition(this.reportDefinitionId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (reportDefinition: ReportDefinition) => {
+        this.reportDefinition = reportDefinition;
+        this.idControl.setValue(reportDefinition.id);
+        this.nameControl.setValue(reportDefinition.name);
+      },
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 
   ok(): void {
-    if (!this.reportDefinition || !this.editReportDefinitionForm.valid) {
+    if (!this.editReportDefinitionForm.valid) {
+      this.editReportDefinitionForm.markAllAsTouched();
       return;
     }
+
+    if (!this.reportDefinition) return;
 
     const files = this.templateControl.value;
 
@@ -155,20 +161,26 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
       reportDefinition.name = this.nameControl.value;
       reportDefinition.template = base64;
 
+      this.editReportDefinitionForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.reportingService
-        .updateReportDefinition(reportDefinition)
-        .pipe(
-          first(),
-          finalize(() => this.spinnerService.hideSpinner())
-        )
-        .subscribe({
-          next: () => {
-            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
-          },
-          error: (error: Error) => this.handleError(error, false)
-        });
+      .updateReportDefinition(reportDefinition)
+      .pipe(
+        first(),
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.editReportDefinitionForm.enable();
+        })
+      )
+      .subscribe({
+        next: () => {
+          void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
     };
 
     fileReader.readAsArrayBuffer(files[0]);

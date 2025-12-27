@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { Code } from '../services/code';
-import { CodesService } from '../services/codes.service';
+import {finalize, first} from 'rxjs/operators';
+import {Code} from '../services/code';
+import {CodesService} from '../services/codes.service';
 
 /**
  * The EditCodeComponent class implements the edit code component.
@@ -61,7 +61,7 @@ export class EditCodeComponent extends AdminContainerView implements OnInit {
   constructor() {
     super();
 
-    // Retrieve and decode route parameters
+    // Retrieve the route parameters
     const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
     const codeId = this.activatedRoute.snapshot.paramMap.get('codeId');
     if (!codeCategoryId || !codeId) {
@@ -72,8 +72,14 @@ export class EditCodeComponent extends AdminContainerView implements OnInit {
 
     // Initialize the form controls
     this.idControl = new FormControl<string>(
-      { value: '', disabled: true },
-      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
+      {
+        value: '',
+        disabled: true
+      },
+      {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(100)]
+      }
     );
 
     this.nameControl = new FormControl<string>('', {
@@ -101,55 +107,61 @@ export class EditCodeComponent extends AdminContainerView implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
   }
 
   ngOnInit(): void {
     this.spinnerService.showSpinner();
 
     this.codesService
-      .getCode(this.codeCategoryId, this.codeId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (code: Code) => {
-          this.code = code;
-          this.idControl.setValue(code.id);
-          this.nameControl.setValue(code.name);
-          this.valueControl.setValue(code.value);
-        },
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+    .getCode(this.codeCategoryId, this.codeId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (code: Code) => {
+        this.code = code;
+        this.idControl.setValue(code.id);
+        this.nameControl.setValue(code.name);
+        this.valueControl.setValue(code.value);
+      },
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 
   ok(): void {
-    if (this.code && this.editCodeForm.valid) {
-      this.code.name = this.nameControl.value;
-      this.code.value = this.valueControl.value;
-
-      this.editCodeForm.disable();
-
-      this.spinnerService.showSpinner();
-
-      this.codesService
-        .updateCode(this.code)
-        .pipe(
-          first(),
-          finalize(() => {
-            this.spinnerService.hideSpinner();
-
-            this.editCodeForm.enable();
-          })
-        )
-        .subscribe({
-          next: () => {
-            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
-          },
-          error: (error: Error) => this.handleError(error, false)
-        });
+    if (!this.editCodeForm.valid) {
+      this.editCodeForm.markAllAsTouched();
+      return;
     }
+
+    if (!this.code) return;
+
+    this.code.name = this.nameControl.value;
+    this.code.value = this.valueControl.value;
+
+    this.editCodeForm.disable();
+
+    this.spinnerService.showSpinner();
+
+    this.codesService
+    .updateCode(this.code)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
+
+        this.editCodeForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
+
   }
 }

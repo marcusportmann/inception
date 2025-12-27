@@ -96,6 +96,13 @@ export class NewCodeCategoryComponent extends AdminContainerView implements OnIn
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (this.codeCategory && this.newCodeCategoryForm.valid) {
       const data = this.dataControl.value?.trim();
 

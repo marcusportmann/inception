@@ -108,6 +108,13 @@ export class NewCodeComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (this.code && this.newCodeForm.valid) {
       this.code.id = this.idControl.value?.trim();
       this.code.name = this.nameControl.value?.trim();

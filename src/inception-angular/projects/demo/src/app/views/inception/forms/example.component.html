@@ -138,7 +138,7 @@
           <mat-form-field>
             <mat-label>Favorite country</mat-label>
             <inception-reference-country-input [formControl]="favoriteCountryControl" required></inception-reference-country-input>
-            @if (favoriteCountryControl.errors && !favoriteCountryControl.untouched) {
+            @if (favoriteCountryControl.errors && favoriteCountryControl.touched) {
               <mat-error>
                 @if (favoriteCountryControl.errors['required']) {
                   <span>A favorite country is required.</span>
@@ -204,7 +204,7 @@
     </mat-card-content>
     <mat-card-actions align="end">
       <button type="button" mat-flat-button color="link">Cancel</button>
-      <button type="button" mat-flat-button color="primary" [disabled]="!exampleForm.valid">OK</button>
+      <button type="button" mat-flat-button color="primary" [disabled]="exampleForm.disabled || exampleForm.invalid">OK</button>
     </mat-card-actions>
   </mat-card>
 </form>

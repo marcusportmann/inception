@@ -162,6 +162,13 @@ export class EditJobComponent extends JobComponent implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.job || !this.editJobForm.valid) {
       return;
     }
@@ -174,13 +181,19 @@ export class EditJobComponent extends JobComponent implements OnInit {
     this.job.schedulingPattern = this.schedulingPatternControl.value;
     this.job.status = this.statusControl.value;
 
+    this.editJobForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.schedulerService
       .updateJob(this.job)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.editJobForm.enable();
+        })
       )
       .subscribe({
         next: () => {

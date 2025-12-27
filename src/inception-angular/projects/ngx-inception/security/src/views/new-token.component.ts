@@ -231,6 +231,11 @@ export class NewTokenComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
     if (!this.newTokenForm.valid) {
       return;
     }
@@ -261,13 +266,19 @@ export class NewTokenComponent extends AdminContainerView implements OnInit {
 
     generateTokenRequest.claims = this.tokenClaims;
 
+    this.newTokenForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
       .generateToken(generateTokenRequest)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.newTokenForm.enable();
+        })
       )
       .subscribe({
         next: () => {

@@ -118,6 +118,13 @@ export class NewGroupComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.group || !this.newGroupForm.valid) {
       return;
     }
@@ -125,13 +132,19 @@ export class NewGroupComponent extends AdminContainerView implements OnInit {
     this.group.name = this.nameControl.value;
     this.group.description = this.descriptionControl.value;
 
+    this.newGroupForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
       .createGroup(this.group)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.newGroupForm.enable();
+        })
       )
       .subscribe({
         next: () => {

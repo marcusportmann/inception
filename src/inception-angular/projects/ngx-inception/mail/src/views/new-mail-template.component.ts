@@ -120,6 +120,13 @@ export class NewMailTemplateComponent extends AdminContainerView implements OnIn
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.mailTemplate || !this.newMailTemplateForm.valid) {
       return;
     }
@@ -149,13 +156,19 @@ export class NewMailTemplateComponent extends AdminContainerView implements OnIn
       mailTemplate.contentType = this.contentTypeControl.value;
       mailTemplate.template = base64;
 
+      this.newMailTemplateForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.mailService
         .createMailTemplate(mailTemplate)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner())
+          finalize(() => {
+             this.spinnerService.hideSpinner();
+
+             this.newMailTemplateForm.enable();
+          })
         )
         .subscribe({
           next: () => {

@@ -85,11 +85,20 @@ export class NewTenantComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.tenant || !this.newTenantForm.valid) {
       return;
     }
 
     this.tenant.name = this.nameControl.value;
+
+    this.newTenantForm.disable();
 
     this.spinnerService.showSpinner();
 
@@ -97,7 +106,11 @@ export class NewTenantComponent extends AdminContainerView implements OnInit {
       .createTenant(this.tenant, this.createUserDirectoryControl.value)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.newTenantForm.enable();
+        })
       )
       .subscribe({
         next: () => {

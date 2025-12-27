@@ -158,6 +158,13 @@ export class EditUserDirectoryComponent extends AdminContainerView implements On
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.userDirectory || !this.editUserDirectoryForm.valid) {
       return;
     }
@@ -171,13 +178,19 @@ export class EditUserDirectoryComponent extends AdminContainerView implements On
       this.userDirectory.parameters = this.ldapUserDirectoryComponent.getParameters();
     }
 
+    this.editUserDirectoryForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
       .updateUserDirectory(this.userDirectory)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.editUserDirectoryForm.enable();
+        })
       )
       .subscribe({
         next: () => {

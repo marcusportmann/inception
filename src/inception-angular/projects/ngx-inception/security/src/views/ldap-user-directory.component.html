@@ -4,7 +4,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_host">Host</mat-label>
         <input type="text" matInput formControlName="host">
-        @if (hostControl.errors && !hostControl.untouched) {
+        @if (hostControl.errors && hostControl.touched) {
           <mat-error>
             @if (hostControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_host_required">The host is required.</span>
@@ -22,7 +22,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_port">Port</mat-label>
         <input type="text" matInput formControlName="port">
-        @if (portControl.errors && !portControl.untouched) {
+        @if (portControl.errors && portControl.touched) {
           <mat-error>
             @if (portControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_port_required">The port is required.</span>
@@ -40,7 +40,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_use_ssl">Use SSL</mat-label>
         <input type="text" matInput formControlName="useSSL">
-        @if (useSSLControl.errors && !useSSLControl.untouched) {
+        @if (useSSLControl.errors && useSSLControl.touched) {
           <mat-error>
             @if (useSSLControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_use_ssl_required">Select whether to use SSL.</span>
@@ -58,7 +58,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_bind_dn">Bind DN</mat-label>
         <input type="text" matInput formControlName="bindDN">
-        @if (bindDNControl.errors && !bindDNControl.untouched) {
+        @if (bindDNControl.errors && bindDNControl.touched) {
           <mat-error>
             @if (bindDNControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_bind_dn_required">The bind DN is required.</span>
@@ -76,7 +76,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_bind_password">Bind Password</mat-label>
         <input type="text" matInput formControlName="bindPassword">
-        @if (bindPasswordControl.errors && !bindPasswordControl.untouched) {
+        @if (bindPasswordControl.errors && bindPasswordControl.touched) {
           <mat-error>
             @if (bindPasswordControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_bind_password_required">The bind password is required.</span>
@@ -94,7 +94,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_base_dn">Base DN</mat-label>
         <input type="text" matInput formControlName="baseDN">
-        @if (baseDNControl.errors && !baseDNControl.untouched) {
+        @if (baseDNControl.errors && baseDNControl.touched) {
           <mat-error>
             @if (baseDNControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_base_dn_required">The base DN is required.</span>
@@ -112,7 +112,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_user_base_dn">User Base DN</mat-label>
         <input type="text" matInput formControlName="userBaseDN">
-        @if (userBaseDNControl.errors && !userBaseDNControl.untouched) {
+        @if (userBaseDNControl.errors && userBaseDNControl.touched) {
           <mat-error>
             @if (userBaseDNControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_base_dn_required">The user base DN is required.</span>
@@ -130,7 +130,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_group_base_dn">Group Base DN</mat-label>
         <input type="text" matInput formControlName="groupBaseDN">
-        @if (groupBaseDNControl.errors && !groupBaseDNControl.untouched) {
+        @if (groupBaseDNControl.errors && groupBaseDNControl.touched) {
           <mat-error>
             @if (groupBaseDNControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_base_dn_required">The group base DN is required.</span>
@@ -148,7 +148,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_user_object_class">User Object Class</mat-label>
         <input type="text" matInput formControlName="userObjectClass">
-        @if (userObjectClassControl.errors && !userObjectClassControl.untouched) {
+        @if (userObjectClassControl.errors && userObjectClassControl.touched) {
           <mat-error>
             @if (userObjectClassControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_object_class_required">The user object class is required.</span>
@@ -166,7 +166,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_user_username_attribute">User Username Attribute</mat-label>
         <input type="text" matInput formControlName="userUsernameAttribute">
-        @if (userUsernameAttributeControl.errors && !userUsernameAttributeControl.untouched) {
+        @if (userUsernameAttributeControl.errors && userUsernameAttributeControl.touched) {
           <mat-error>
             @if (userUsernameAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_username_attribute_required">The user username attribute is required.</span>
@@ -184,7 +184,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_user_name_attribute">User Name Attribute</mat-label>
         <input type="text" matInput formControlName="userNameAttribute">
-        @if (userNameAttributeControl.errors && !userNameAttributeControl.untouched) {
+        @if (userNameAttributeControl.errors && userNameAttributeControl.touched) {
           <mat-error>
             @if (userNameAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_name_attribute_required">The user name attribute is required.</span>
@@ -202,7 +202,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_user_preferred_name_attribute">User Preferred Name Attribute</mat-label>
         <input type="text" matInput formControlName="userPreferredNameAttribute">
-        @if (userPreferredNameAttributeControl.errors && !userPreferredNameAttributeControl.untouched) {
+        @if (userPreferredNameAttributeControl.errors && userPreferredNameAttributeControl.touched) {
           <mat-error>
             @if (userPreferredNameAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_preferred_name_attribute_required">The user preferred name attribute is required.</span>
@@ -220,7 +220,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_user_phone_number_attribute">User Phone Number Attribute</mat-label>
         <input type="text" matInput formControlName="userPhoneNumberAttribute">
-        @if (userPhoneNumberAttributeControl.errors && !userPhoneNumberAttributeControl.untouched) {
+        @if (userPhoneNumberAttributeControl.errors && userPhoneNumberAttributeControl.touched) {
           <mat-error>
             @if (userPhoneNumberAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_phone_number_attribute_required">The user phone number attribute is required.</span>
@@ -238,7 +238,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_user_mobile_number_attribute">User Mobile Number Attribute</mat-label>
         <input type="text" matInput formControlName="userMobileNumberAttribute">
-        @if (userMobileNumberAttributeControl.errors && !userMobileNumberAttributeControl.untouched) {
+        @if (userMobileNumberAttributeControl.errors && userMobileNumberAttributeControl.touched) {
           <mat-error>
             @if (userMobileNumberAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_mobile_number_attribute_required">The user mobile number attribute is required.</span>
@@ -256,7 +256,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_user_email_attribute">User Email Attribute</mat-label>
         <input type="text" matInput formControlName="userEmailAttribute">
-        @if (userEmailAttributeControl.errors && !userEmailAttributeControl.untouched) {
+        @if (userEmailAttributeControl.errors && userEmailAttributeControl.touched) {
           <mat-error>
             @if (userEmailAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_user_email_attribute_required">The user email attribute is required.</span>
@@ -274,7 +274,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_group_object_class">Group Object Class</mat-label>
         <input type="text" matInput formControlName="groupObjectClass">
-        @if (groupObjectClassControl.errors && !groupObjectClassControl.untouched) {
+        @if (groupObjectClassControl.errors && groupObjectClassControl.touched) {
           <mat-error>
             @if (groupObjectClassControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_object_class_required">The group object class is required.</span>
@@ -292,7 +292,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_group_name_attribute">Group Name Attribute</mat-label>
         <input type="text" matInput formControlName="groupNameAttribute">
-        @if (groupNameAttributeControl.errors && !groupNameAttributeControl.untouched) {
+        @if (groupNameAttributeControl.errors && groupNameAttributeControl.touched) {
           <mat-error>
             @if (groupNameAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_name_attribute_required">The group name attribute is required.</span>
@@ -310,7 +310,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_group_name_prefix_filter">Group Name Prefix Filter</mat-label>
         <input type="text" matInput formControlName="groupNamePrefixFilter">
-        @if (groupNamePrefixFilterControl.errors && !groupNamePrefixFilterControl.untouched) {
+        @if (groupNamePrefixFilterControl.errors && groupNamePrefixFilterControl.touched) {
           <mat-error>
             @if (groupNamePrefixFilterControl.errors['maxlength']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_name_prefix_filter_maxlength">Group name prefix filter must not exceed 100 characters.</span>
@@ -325,7 +325,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_group_member_attribute">Group Member Attribute</mat-label>
         <input type="text" matInput formControlName="groupMemberAttribute">
-        @if (groupMemberAttributeControl.errors && !groupMemberAttributeControl.untouched) {
+        @if (groupMemberAttributeControl.errors && groupMemberAttributeControl.touched) {
           <mat-error>
             @if (groupMemberAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_member_attribute_required">The group member attribute is required.</span>
@@ -343,7 +343,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_group_description_attribute">Group Description Attribute</mat-label>
         <input type="text" matInput formControlName="groupDescriptionAttribute">
-        @if (groupDescriptionAttributeControl.errors && !groupDescriptionAttributeControl.untouched) {
+        @if (groupDescriptionAttributeControl.errors && groupDescriptionAttributeControl.touched) {
           <mat-error>
             @if (groupDescriptionAttributeControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_group_description_attribute_required">The group description attribute is required.</span>
@@ -361,7 +361,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_max_filtered_users">Max Filtered Users</mat-label>
         <input type="text" matInput formControlName="maxFilteredUsers">
-        @if (maxFilteredUsersControl.errors && !maxFilteredUsersControl.untouched) {
+        @if (maxFilteredUsersControl.errors && maxFilteredUsersControl.touched) {
           <mat-error>
             @if (maxFilteredUsersControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_max_filtered_users_required">The max filtered users is required.</span>
@@ -379,7 +379,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_max_filtered_groups">Max Filtered Groups</mat-label>
         <input type="text" matInput formControlName="maxFilteredGroups">
-        @if (maxFilteredGroupsControl.errors && !maxFilteredGroupsControl.untouched) {
+        @if (maxFilteredGroupsControl.errors && maxFilteredGroupsControl.touched) {
           <mat-error>
             @if (maxFilteredGroupsControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_max_filtered_groups_required">The max filtered groups is required.</span>
@@ -397,7 +397,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_max_filtered_group_members">Max Filtered Group Members</mat-label>
         <input type="text" matInput formControlName="maxFilteredGroupMembers">
-        @if (maxFilteredGroupMembersControl.errors && !maxFilteredGroupMembersControl.untouched) {
+        @if (maxFilteredGroupMembersControl.errors && maxFilteredGroupMembersControl.touched) {
           <mat-error>
             @if (maxFilteredGroupMembersControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_max_filtered_group_members_required">The max filtered group members is required.</span>
@@ -415,7 +415,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_supports_admin_change_password">Supports Admin Change Password</mat-label>
         <input type="text" matInput formControlName="supportsAdminChangePassword">
-        @if (supportsAdminChangePasswordControl.errors && !supportsAdminChangePasswordControl.untouched) {
+        @if (supportsAdminChangePasswordControl.errors && supportsAdminChangePasswordControl.touched) {
           <mat-error>
             @if (supportsAdminChangePasswordControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_admin_change_password_required">A true or false value is required.</span>
@@ -433,7 +433,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_supports_change_password">Supports Change Password</mat-label>
         <input type="text" matInput formControlName="supportsChangePassword">
-        @if (supportsChangePasswordControl.errors && !supportsChangePasswordControl.untouched) {
+        @if (supportsChangePasswordControl.errors && supportsChangePasswordControl.touched) {
           <mat-error>
             @if (supportsChangePasswordControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_change_password_required">A true or false value is required.</span>
@@ -451,7 +451,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_supports_group_administration">Supports Group Administration</mat-label>
         <input type="text" matInput formControlName="supportsGroupAdministration">
-        @if (supportsGroupAdministrationControl.errors && !supportsGroupAdministrationControl.untouched) {
+        @if (supportsGroupAdministrationControl.errors && supportsGroupAdministrationControl.touched) {
           <mat-error>
             @if (supportsGroupAdministrationControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_group_administration_required">The supports group administration is required.</span>
@@ -470,7 +470,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_support_group_member_administration">Supports Group Member Administration</mat-label>
         <input type="text" matInput formControlName="supportsGroupMemberAdministration">
-        @if (supportsGroupMemberAdministrationControl.errors && !supportsGroupMemberAdministrationControl.untouched) {
+        @if (supportsGroupMemberAdministrationControl.errors && supportsGroupMemberAdministrationControl.touched) {
           <mat-error>
             @if (supportsGroupMemberAdministrationControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_support_group_member_administration_required">A true or false value is required.</span>
@@ -488,7 +488,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_supports_user_administration">Supports User Administration</mat-label>
         <input type="text" matInput formControlName="supportsUserAdministration">
-        @if (supportsUserAdministrationControl.errors && !supportsUserAdministrationControl.untouched) {
+        @if (supportsUserAdministrationControl.errors && supportsUserAdministrationControl.touched) {
           <mat-error>
             @if (supportsUserAdministrationControl.errors['required']) {
               <span i18n="@@security_ldap_user_directory_component_error_supports_user_administration_required">A true or false value is required.</span>

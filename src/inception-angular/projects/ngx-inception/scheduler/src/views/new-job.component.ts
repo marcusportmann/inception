@@ -127,6 +127,13 @@ export class NewJobComponent extends JobComponent implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.job || !this.newJobForm.valid) {
       return;
     }
@@ -139,13 +146,19 @@ export class NewJobComponent extends JobComponent implements OnInit {
     this.job.schedulingPattern = this.schedulingPatternControl.value;
     this.job.status = this.statusControl.value;
 
+    this.newJobForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.schedulerService
       .createJob(this.job)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.newJobForm.enable();
+        })
       )
       .subscribe({
         next: () => {

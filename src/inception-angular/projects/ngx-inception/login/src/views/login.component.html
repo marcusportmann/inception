@@ -14,7 +14,7 @@
               <mat-form-field>
                 <mat-label i18n="@@login_login_component_label_username">Username</mat-label>
                 <input type="text" matInput formControlName="username" #usernameInput>
-                @if (usernameControl.errors && !usernameControl.untouched) {
+                @if (usernameControl.errors && usernameControl.touched) {
                   <mat-error>
                     @if (usernameControl.errors['required']) {
                       <span i18n="@@login_login_component_error_username_required">A username is required.</span>
@@ -32,7 +32,7 @@
               <mat-form-field>
                 <mat-label i18n="@@login_login_component_label_password">Password</mat-label>
                 <input type="password" matInput formControlName="password">
-                @if (passwordControl.errors && !passwordControl.untouched) {
+                @if (passwordControl.errors && passwordControl.touched) {
                   <mat-error>
                     @if (passwordControl.errors['required']) {
                       <span i18n="@@login_login_component_error_password_required">A password is required.</span>
@@ -50,7 +50,7 @@
           @if (isForgottenPasswordEnabled()) {
             <button type="button" mat-flat-button color="link" (click)="forgotPassword()" i18n="@@login_login_component_button_forgot_password">Forgot password?</button>
           }
-          <button type="submit" mat-flat-button color="primary" [disabled]="!loginForm.valid" i18n="@@login_login_component_button_login">Login</button>
+          <button type="submit" mat-flat-button color="primary" [disabled]="loginForm.disabled || loginForm.invalid" i18n="@@login_login_component_button_login">Login</button>
         </mat-card-actions>
       </mat-card>
     </form>

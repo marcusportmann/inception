@@ -191,6 +191,13 @@ export class UserProfileComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.user || !this.userProfileForm.valid) {
       return;
     }

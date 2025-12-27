@@ -186,6 +186,11 @@ export class ResetUserPasswordComponent extends AdminContainerView implements On
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
     if (!this.resetUserPasswordForm.valid) {
       return;
     }
@@ -210,6 +215,8 @@ export class ResetUserPasswordComponent extends AdminContainerView implements On
       ? this.resetPasswordHistoryControl.value
       : false;
 
+    this.resetUserPasswordForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
@@ -223,7 +230,11 @@ export class ResetUserPasswordComponent extends AdminContainerView implements On
       )
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.resetUserPasswordForm.enable();
+        })
       )
       .subscribe({
         next: () => {

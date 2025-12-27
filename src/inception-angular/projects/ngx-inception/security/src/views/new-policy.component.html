@@ -6,7 +6,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_policy_component_label_id">ID</mat-label>
             <input type="text" matInput formControlName="id">
-            @if (idControl.errors && !idControl.untouched) {
+            @if (idControl.errors && idControl.touched) {
               <mat-error>
                 @if (idControl.errors['required']) {
                   <span i18n="@@security_new_policy_component_error_id_required">An ID is required.</span>
@@ -24,7 +24,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_policy_component_label_version">Version</mat-label>
             <input type="text" matInput formControlName="version">
-            @if (versionControl.errors && !versionControl.untouched) {
+            @if (versionControl.errors && versionControl.touched) {
               <mat-error>
                 @if (versionControl.errors['required']) {
                   <span i18n="@@security_new_policy_component_error_version_required">A version is required.</span>
@@ -42,7 +42,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_policy_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name">
-            @if (nameControl.errors && !nameControl.untouched) {
+            @if (nameControl.errors && nameControl.touched) {
               <mat-error>
                 @if (nameControl.errors['required']) {
                   <span i18n="@@security_new_policy_component_error_name_required">A name is required.</span>
@@ -63,7 +63,7 @@
               <mat-option value="xacml_policy">XACML Policy</mat-option>
               <mat-option value="xacml_policy_set">XACML Policy Set</mat-option>
             </mat-select>
-            @if (typeControl.errors && !typeControl.untouched) {
+            @if (typeControl.errors && typeControl.touched) {
               <mat-error>
                 @if (typeControl.errors['required']) {
                   <span>A type is required.</span>
@@ -78,7 +78,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_policy_component_label_data">Data</mat-label>
             <textarea matInput formControlName="data" cdkTextareaAutosize cdkAutosizeMinRows="10" cdkAutosizeMaxRows="10"></textarea>
-            @if (dataControl.errors && !dataControl.untouched) {
+            @if (dataControl.errors && dataControl.touched) {
               <mat-error>
                 @if (dataControl.errors['required']) {
                   <span>Policy data is required.</span>
@@ -91,7 +91,7 @@
     </mat-card-content>
     <mat-card-actions align="end">
       <button type="button" mat-flat-button color="link" (click)="cancel()" i18n="@@security_new_policy_component_button_cancel">Cancel</button>
-      <button type="button" mat-flat-button color="primary" [disabled]="!newPolicyForm.valid" (click)="ok()" i18n="@@security_new_policy_component_button_ok">OK</button>
+      <button type="button" mat-flat-button color="primary" [disabled]="newPolicyForm.disabled || newPolicyForm.invalid" (click)="ok()" i18n="@@security_new_policy_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>
 </form>

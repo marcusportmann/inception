@@ -99,6 +99,13 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.reportDefinition || !this.newReportDefinitionForm.valid) {
       return;
     }
@@ -127,13 +134,19 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
       reportDefinition.name = this.nameControl.value;
       reportDefinition.template = base64;
 
+      this.newReportDefinitionForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.reportingService
         .createReportDefinition(reportDefinition)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner())
+          finalize(() => {
+            this.spinnerService.hideSpinner();
+
+            this.newReportDefinitionForm.enable();
+          })
         )
         .subscribe({
           next: () => {

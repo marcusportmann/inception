@@ -81,13 +81,19 @@ export class ForgottenPasswordComponent {
 
     const resetPasswordUrl = this.buildResetPasswordUrl();
 
+    this.forgottenPasswordForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
       .initiatePasswordReset(username, resetPasswordUrl)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner()),
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.forgottenPasswordForm.enable();
+        }),
         catchError((error: Error) => this.handleError(error))
       )
       .subscribe(() => this.showSuccessDialog());

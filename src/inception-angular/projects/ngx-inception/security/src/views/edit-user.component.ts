@@ -190,6 +190,13 @@ export class EditUserComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.user || !this.editUserForm.valid) {
       return;
     }
@@ -204,13 +211,19 @@ export class EditUserComponent extends AdminContainerView implements OnInit {
       (this.editUserForm.get('expirePassword')?.value as boolean | undefined) ?? false;
     const lockUser = (this.editUserForm.get('lockUser')?.value as boolean | undefined) ?? false;
 
+    this.editUserForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
       .updateUser(this.user, expirePassword, lockUser)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.editUserForm.enable();
+        })
       )
       .subscribe({
         next: () => {

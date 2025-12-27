@@ -194,6 +194,13 @@ export class NewUserComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.user || !this.newUserForm.valid) {
       return;
     }
@@ -219,13 +226,19 @@ export class NewUserComponent extends AdminContainerView implements OnInit {
       ? this.userLockedControl.value
       : false;
 
+    this.newUserForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
       .createUser(this.user, expiredPassword, userLocked)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.newUserForm.enable();
+        })
       )
       .subscribe({
         next: () => {

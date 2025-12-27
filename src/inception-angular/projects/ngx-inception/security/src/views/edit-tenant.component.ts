@@ -103,11 +103,20 @@ export class EditTenantComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.tenant || !this.editTenantForm.valid) {
       return;
     }
 
     this.tenant.name = this.nameControl.value;
+
+    this.editTenantForm.disable();
 
     this.spinnerService.showSpinner();
 
@@ -115,7 +124,11 @@ export class EditTenantComponent extends AdminContainerView implements OnInit {
       .updateTenant(this.tenant)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.editTenantForm.enable();
+        })
       )
       .subscribe({
         next: () => {

@@ -148,6 +148,13 @@ export class EditPolicyComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.policy || !this.editPolicyForm.valid) {
       return;
     }
@@ -157,13 +164,19 @@ export class EditPolicyComponent extends AdminContainerView implements OnInit {
     this.policy.type = this.typeControl.value;
     this.policy.data = this.dataControl.value;
 
+    this.editPolicyForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
       .updatePolicy(this.policy)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.editPolicyForm.enable();
+        })
       )
       .subscribe({
         next: () => {

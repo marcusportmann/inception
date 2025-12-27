@@ -6,7 +6,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_user_component_label_username">Username</mat-label>
             <input type="text" matInput formControlName="username">
-            @if (usernameControl.errors && !usernameControl.untouched) {
+            @if (usernameControl.errors && usernameControl.touched) {
               <mat-error>
                 @if (usernameControl.errors['required']) {
                   <span i18n="@@security_new_user_component_error_username_required">A username is required.</span>
@@ -24,7 +24,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_user_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name">
-            @if (nameControl.errors && !nameControl.untouched) {
+            @if (nameControl.errors && nameControl.touched) {
               <mat-error>
                 @if (nameControl.errors['required']) {
                   <span i18n="@@security_new_user_component_error_name_required">A name is required.</span>
@@ -40,7 +40,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_user_component_label_preferred_name">Preferred Name</mat-label>
             <input type="text" matInput formControlName="preferredName">
-            @if (preferredNameControl.errors && !preferredNameControl.untouched) {
+            @if (preferredNameControl.errors && preferredNameControl.touched) {
               <mat-error>
                 @if (preferredNameControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_preferred_name_maxlength">Preferred name must not exceed 100 characters.</span>
@@ -55,7 +55,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_user_component_label_email">Email</mat-label>
             <input type="text" matInput formControlName="email">
-            @if (emailControl.errors && !emailControl.untouched) {
+            @if (emailControl.errors && emailControl.touched) {
               <mat-error>
                 @if (emailControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_email_maxlength">Email must not exceed 100 characters.</span>
@@ -73,7 +73,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_user_component_label_phone_number">Phone Number</mat-label>
             <input type="text" matInput formControlName="phoneNumber">
-            @if (phoneNumberControl.errors && !phoneNumberControl.untouched) {
+            @if (phoneNumberControl.errors && phoneNumberControl.touched) {
               <mat-error>
                 @if (phoneNumberControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_phone_number_maxlength">Phone number must not exceed 100 characters.</span>
@@ -86,7 +86,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_user_component_label_mobile_number">Mobile Number</mat-label>
             <input type="text" matInput formControlName="mobileNumber">
-            @if (mobileNumberControl.errors && !mobileNumberControl.untouched) {
+            @if (mobileNumberControl.errors && mobileNumberControl.touched) {
               <mat-error>
                 @if (mobileNumberControl.errors['maxlength']) {
                   <span i18n="@@security_new_user_component_error_mobile_number_maxlength">Mobile number must not exceed 100 characters.</span>
@@ -104,7 +104,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_user_component_label_password">Password</mat-label>
             <input type="password" matInput formControlName="password">
-            @if (passwordControl.errors && !passwordControl.untouched) {
+            @if (passwordControl.errors && passwordControl.touched) {
               <mat-error>
                 @if (passwordControl.errors['required']) {
                   <span i18n="@@security_new_user_component_error_password_required">A password is required.</span>
@@ -120,7 +120,7 @@
           <mat-form-field>
             <mat-label i18n="@@security_new_user_component_label_confirm_password">Confirm Password</mat-label>
             <input type="password" matInput formControlName="confirmPassword">
-            @if (confirmPasswordControl.errors && !confirmPasswordControl.untouched) {
+            @if (confirmPasswordControl.errors && confirmPasswordControl.touched) {
               <mat-error>
                 @if (confirmPasswordControl.errors['required']) {
                   <span i18n="@@security_new_user_component_error_confirm_password_required">A password is required.</span>
@@ -151,7 +151,7 @@
     </mat-card-content>
     <mat-card-actions align="end">
       <button type="button" mat-flat-button color="link" (click)="cancel()" i18n="@@security_new_user_component_button_cancel">Cancel</button>
-      <button type="button" mat-flat-button color="primary" [disabled]="!newUserForm.valid" (click)="ok()" i18n="@@security_new_user_component_button_ok">OK</button>
+      <button type="button" mat-flat-button color="primary" [disabled]="newUserForm.disabled || newUserForm.invalid" (click)="ok()" i18n="@@security_new_user_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>
 </form>

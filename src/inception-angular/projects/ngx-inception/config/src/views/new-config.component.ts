@@ -95,20 +95,30 @@ export class NewConfigComponent extends AdminContainerView {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
     if (this.newConfigForm.valid) {
       // Assign form values to the config object
       this.config.description = this.descriptionControl.value ?? '';
       this.config.id = this.idControl.value ?? '';
       this.config.value = this.valueControl.value ?? '';
 
-      // Show spinner while saving config
+      this.newConfigForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.configService
         .saveConfig(this.config)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner())
+          finalize(() => {
+            this.spinnerService.hideSpinner();
+
+            this.newConfigForm.enable();
+          })
         )
         .subscribe({
           next: () => {

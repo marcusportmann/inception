@@ -105,6 +105,8 @@ export class LoginComponent implements AfterViewInit, OnInit {
       password: string;
     };
 
+    this.loginForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.sessionService
@@ -122,7 +124,11 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
           return this.getTenantsForSession(session).pipe(map((tenants) => ({ session, tenants })));
         }),
-        finalize(() => this.spinnerService.hideSpinner()),
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.loginForm.enable();
+        }),
         catchError((error: Error) => this.handleError(error, username))
       )
       .subscribe(({ session, tenants }) => {

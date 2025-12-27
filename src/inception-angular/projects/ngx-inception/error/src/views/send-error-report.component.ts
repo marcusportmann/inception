@@ -102,13 +102,19 @@ export class SendErrorReportComponent implements OnInit {
 
   sendErrorReport(): void {
     if (this.sendErrorReportForm.valid && this.error) {
+      this.sendErrorReportForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.errorService
         .sendErrorReport(this.error, this.emailControl.value, this.feedbackControl.value)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner()),
+          finalize(() => {
+            this.spinnerService.hideSpinner();
+
+            this.sendErrorReportForm.enable();
+          }),
           catchError((error) => this.handleError(error))
         )
         .subscribe(() => {

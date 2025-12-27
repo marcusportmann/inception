@@ -113,13 +113,19 @@ export class ExpiredPasswordComponent implements OnInit {
         return;
       }
 
+      this.expiredPasswordForm.disable();
+
       this.spinnerService.showSpinner();
 
       this.securityService
         .changePassword(username, password, newPassword)
         .pipe(
           first(),
-          finalize(() => this.spinnerService.hideSpinner()),
+          finalize(() => {
+            this.spinnerService.hideSpinner();
+
+            this.expiredPasswordForm.enable();
+          }),
           catchError((error) => this.handleError(error))
         )
         .subscribe(() => {

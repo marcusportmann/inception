@@ -6,7 +6,7 @@
           <mat-form-field>
             <mat-label>Countries</mat-label>
             <inception-reference-countries-chip-grid [formControl]="countriesControl" required></inception-reference-countries-chip-grid>
-            @if (countriesControl.errors && !countriesControl.untouched) {
+            @if (countriesControl.errors && countriesControl.touched) {
               <mat-error>
                 @if (countriesControl.errors['required']) {
                   <span>One or more countries must be selected.</span>
@@ -21,7 +21,7 @@
           <mat-form-field>
             <mat-label>Country</mat-label>
             <inception-reference-country-input [formControl]="countryControl" required></inception-reference-country-input>
-            @if (countryControl.errors && !countryControl.untouched) {
+            @if (countryControl.errors && countryControl.touched) {
               <mat-error>
                 @if (countryControl.errors['required']) {
                   <span>A country is required.</span>
@@ -36,7 +36,7 @@
           <mat-form-field>
             <mat-label>Language</mat-label>
             <inception-reference-language-input [formControl]="languageControl" required></inception-reference-language-input>
-            @if (languageControl.errors && !languageControl.untouched) {
+            @if (languageControl.errors && languageControl.touched) {
               <mat-error>
                 @if (languageControl.errors['required']) {
                   <span>A language is required.</span>
@@ -51,7 +51,7 @@
           <mat-form-field>
             <mat-label>Region</mat-label>
             <inception-reference-region-input [country]="'ZA'" [formControl]="regionControl" required></inception-reference-region-input>
-            @if (regionControl.errors && !regionControl.untouched) {
+            @if (regionControl.errors && regionControl.touched) {
               <mat-error>
                 @if (regionControl.errors['required']) {
                   <span>A region is required.</span>
@@ -66,7 +66,7 @@
           <mat-form-field>
             <mat-label>Time Zone</mat-label>
             <inception-reference-time-zone-input [formControl]="timeZoneControl" required></inception-reference-time-zone-input>
-            @if (timeZoneControl.errors && !timeZoneControl.untouched) {
+            @if (timeZoneControl.errors && timeZoneControl.touched) {
               <mat-error>
                 @if (timeZoneControl.errors['required']) {
                   <span>A time zone is required.</span>

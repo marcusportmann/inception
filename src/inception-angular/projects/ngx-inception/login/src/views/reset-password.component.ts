@@ -126,13 +126,19 @@ export class ResetPasswordComponent implements OnInit {
 
     const { username, newPassword } = this.resetPasswordForm.getRawValue();
 
+    this.resetPasswordForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
       .resetPassword(username, newPassword, this.securityCode)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner()),
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.resetPasswordForm.enable();
+        }),
         catchError((error: Error) => this.handleError(error))
       )
       .subscribe(() => this.showSuccessDialog(username));

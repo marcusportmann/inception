@@ -4,7 +4,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_max_password_attempts">Max Password Attempts</mat-label>
         <input type="text" matInput formControlName="maxPasswordAttempts">
-        @if (maxPasswordAttemptsControl.errors && !maxPasswordAttemptsControl.untouched) {
+        @if (maxPasswordAttemptsControl.errors && maxPasswordAttemptsControl.touched) {
           <mat-error>
             @if (maxPasswordAttemptsControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_max_password_attempts_required">The maximum number of password attempts is required.</span>
@@ -22,7 +22,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_password_expiry_months">Password Expiry Months</mat-label>
         <input type="text" matInput formControlName="passwordExpiryMonths">
-        @if (passwordExpiryMonthsControl.errors && !passwordExpiryMonthsControl.untouched) {
+        @if (passwordExpiryMonthsControl.errors && passwordExpiryMonthsControl.touched) {
           <mat-error>
             @if (passwordExpiryMonthsControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_password_expiry_months_required">The number of months before a password expires is required.</span>
@@ -40,7 +40,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_password_history_months">Password History Months</mat-label>
         <input type="text" matInput formControlName="passwordHistoryMonths">
-        @if (passwordHistoryMonthsControl.errors && !passwordHistoryMonthsControl.untouched) {
+        @if (passwordHistoryMonthsControl.errors && passwordHistoryMonthsControl.touched) {
           <mat-error>
             @if (passwordHistoryMonthsControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_password_history_months_required">The number of months before a password can be reused is required.</span>
@@ -58,7 +58,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_max_filtered_users">Max Filtered Users</mat-label>
         <input type="text" matInput formControlName="maxFilteredUsers">
-        @if (maxFilteredUsersControl.errors && !maxFilteredUsersControl.untouched) {
+        @if (maxFilteredUsersControl.errors && maxFilteredUsersControl.touched) {
           <mat-error>
             @if (maxFilteredUsersControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_max_filtered_users_required">The maximum number of filtered users is required.</span>
@@ -76,7 +76,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_max_filtered_groups">Max Filtered Groups</mat-label>
         <input type="text" matInput formControlName="maxFilteredGroups">
-        @if (maxFilteredGroupsControl.errors && !maxFilteredGroupsControl.untouched) {
+        @if (maxFilteredGroupsControl.errors && maxFilteredGroupsControl.touched) {
           <mat-error>
             @if (maxFilteredGroupsControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_max_filtered_groups_required">The maximum number of filtered groups is required.</span>
@@ -94,7 +94,7 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_max_filtered_group_members">Max Filtered Group Members</mat-label>
         <input type="text" matInput formControlName="maxFilteredGroupMembers">
-        @if (maxFilteredGroupMembersControl.errors && !maxFilteredGroupMembersControl.untouched) {
+        @if (maxFilteredGroupMembersControl.errors && maxFilteredGroupMembersControl.touched) {
           <mat-error>
             @if (maxFilteredGroupMembersControl.errors['required']) {
               <span i18n="@@security_internal_user_directory_component_error_max_filtered_group_members_required">The maximum number of filtered group members is required.</span>

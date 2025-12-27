@@ -126,6 +126,13 @@ export class EditCodeCategoryComponent extends AdminContainerView implements OnI
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (this.codeCategory && this.editCodeCategoryForm.valid) {
       this.codeCategory.name = this.nameControl.value ?? '';
       this.codeCategory.data = this.dataControl.value?.trim() || null;

@@ -135,11 +135,20 @@ export class EditGroupComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
+    if (!this.xxxForm.valid) {
+      this.xxxForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.xxx) return;
+
     if (!this.group || !this.editGroupForm.valid) {
       return;
     }
 
     this.group.description = this.descriptionControl.value;
+
+    this.editGroupForm.disable();
 
     this.spinnerService.showSpinner();
 
@@ -147,7 +156,11 @@ export class EditGroupComponent extends AdminContainerView implements OnInit {
       .updateGroup(this.group)
       .pipe(
         first(),
-        finalize(() => this.spinnerService.hideSpinner())
+        finalize(() => {
+          this.spinnerService.hideSpinner();
+
+          this.editGroupForm.enable();
+        })
       )
       .subscribe({
         next: () => {
