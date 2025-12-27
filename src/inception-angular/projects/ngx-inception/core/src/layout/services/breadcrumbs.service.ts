@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { inject, Injectable } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { render } from 'es6-template-string';
-import { ReplaySubject, Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { Breadcrumb } from './breadcrumb';
+import {inject, Injectable} from '@angular/core';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {render} from 'es6-template-string';
+import {ReplaySubject, Subject} from 'rxjs';
+import {filter} from 'rxjs/operators';
+import {Breadcrumb} from './breadcrumb';
 
 /**
  * The Breadcrumbs Service implementation.

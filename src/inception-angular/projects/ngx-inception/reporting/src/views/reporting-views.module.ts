@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
-import { EditReportDefinitionTitleResolver } from './edit-report-definition-title-resolver';
-import { EditReportDefinitionComponent } from './edit-report-definition.component';
-import { NewReportDefinitionTitleResolver } from './new-report-definition-title-resolver';
-import { NewReportDefinitionComponent } from './new-report-definition.component';
-import { ReportDefinitionTitleResolver } from './report-definition-title-resolver';
-import { ReportDefinitionsTitleResolver } from './report-definitions-title-resolver';
-import { ReportDefinitionsComponent } from './report-definitions.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
+import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
+import {EditReportDefinitionTitleResolver} from './edit-report-definition-title-resolver';
+import {EditReportDefinitionComponent} from './edit-report-definition.component';
+import {NewReportDefinitionTitleResolver} from './new-report-definition-title-resolver';
+import {NewReportDefinitionComponent} from './new-report-definition.component';
+import {ReportDefinitionTitleResolver} from './report-definition-title-resolver';
+import {ReportDefinitionsTitleResolver} from './report-definitions-title-resolver';
+import {ReportDefinitionsComponent} from './report-definitions.component';
 
 const routes: Routes = [
   {
@@ -118,4 +118,5 @@ const routes: Routes = [
     ReportDefinitionTitleResolver
   ]
 })
-export class ReportingViewsModule {}
+export class ReportingViewsModule {
+}

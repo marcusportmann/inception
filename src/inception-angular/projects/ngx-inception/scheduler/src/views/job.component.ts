@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {
   AdminContainerView,
   BackNavigation,
   CoreModule,
   ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { Job } from '../services/job';
-import { JobParameter } from '../services/job-parameter';
-import { JobStatus } from '../services/job-status';
-import { SchedulerService } from '../services/scheduler.service';
+import {finalize, first} from 'rxjs/operators';
+import {Job} from '../services/job';
+import {JobParameter} from '../services/job-parameter';
+import {JobStatus} from '../services/job-status';
+import {SchedulerService} from '../services/scheduler.service';
 import {
   JobParameterDialogComponent,
   JobParameterDialogData
@@ -85,18 +85,18 @@ export abstract class JobComponent extends AdminContainerView {
     );
 
     dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe((jobParameter: JobParameter | undefined) => {
-        if (jobParameter) {
-          for (const aJobParameter of this.jobParameters) {
-            if (aJobParameter.name === jobParameter.name) {
-              aJobParameter.value = jobParameter.value;
-              return;
-            }
+    .afterClosed()
+    .pipe(first())
+    .subscribe((jobParameter: JobParameter | undefined) => {
+      if (jobParameter) {
+        for (const aJobParameter of this.jobParameters) {
+          if (aJobParameter.name === jobParameter.name) {
+            aJobParameter.value = jobParameter.value;
+            return;
           }
         }
-      });
+      }
+    });
   }
 
   newJobParameter(): void {
@@ -115,30 +115,30 @@ export abstract class JobComponent extends AdminContainerView {
     );
 
     dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe((jobParameter: JobParameter | undefined) => {
-        if (jobParameter) {
-          for (const aJobParameter of this.jobParameters) {
-            if (aJobParameter.name === jobParameter.name) {
-              this.dialogService.showErrorDialog(new Error('The job parameter already exists.'));
+    .afterClosed()
+    .pipe(first())
+    .subscribe((jobParameter: JobParameter | undefined) => {
+      if (jobParameter) {
+        for (const aJobParameter of this.jobParameters) {
+          if (aJobParameter.name === jobParameter.name) {
+            this.dialogService.showErrorDialog(new Error('The job parameter already exists.'));
 
-              return;
-            }
+            return;
           }
-
-          this.jobParameters.push(jobParameter);
-
-          this.jobParameters.sort((a: JobParameter, b: JobParameter) => {
-            if ((a.name ? a.name.toLowerCase() : '') < (b.name ? b.name.toLowerCase() : '')) {
-              return -1;
-            }
-            if ((a.name ? a.name.toLowerCase() : '') > (b.name ? b.name.toLowerCase() : '')) {
-              return 1;
-            }
-            return 0;
-          });
         }
-      });
+
+        this.jobParameters.push(jobParameter);
+
+        this.jobParameters.sort((a: JobParameter, b: JobParameter) => {
+          if ((a.name ? a.name.toLowerCase() : '') < (b.name ? b.name.toLowerCase() : '')) {
+            return -1;
+          }
+          if ((a.name ? a.name.toLowerCase() : '') > (b.name ? b.name.toLowerCase() : '')) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+    });
   }
 }

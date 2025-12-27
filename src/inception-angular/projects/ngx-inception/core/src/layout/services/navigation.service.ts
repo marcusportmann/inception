@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { inject, Injectable } from '@angular/core';
-import { ReplaySubject, Subject } from 'rxjs';
-import { Session } from '../../session/services/session';
-import { SessionService } from '../../session/services/session.service';
-import { NavigationItem } from './navigation-item';
+import {inject, Injectable} from '@angular/core';
+import {ReplaySubject, Subject} from 'rxjs';
+import {Session} from '../../session/services/session';
+import {SessionService} from '../../session/services/session.service';
+import {NavigationItem} from './navigation-item';
 
 /**
  * The Navigation Service implementation.

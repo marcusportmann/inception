@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, inject} from '@angular/core';
+import {Router} from '@angular/router';
 import {
   AccessDeniedError, CoreModule, DialogService, InvalidArgumentError, ServiceUnavailableError
 } from 'ngx-inception/core';
-import { first } from 'rxjs/operators';
-import { TestService } from '../../../services/test.service';
+import {first} from 'rxjs/operators';
+import {TestService} from '../../../services/test.service';
 
 /**
  * The ErrorReportComponent class implements the error report component.
@@ -42,33 +42,33 @@ export class ErrorReportComponent {
 
   testErrorReport(): void {
     this.testService
-      .testExceptionHandling()
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          /* empty */
-        },
-        error: (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            void this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService
-              .showErrorDialog(error)
-              .afterClosed()
-              .pipe(first())
-              .subscribe(() => {
-                /* empty */
-              });
-          }
+    .testExceptionHandling()
+    .pipe(first())
+    .subscribe({
+      next: () => {
+        /* empty */
+      },
+      error: (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if (
+          error instanceof AccessDeniedError ||
+          error instanceof InvalidArgumentError ||
+          error instanceof ServiceUnavailableError
+        ) {
+          void this.router.navigateByUrl('/error/send-error-report', {
+            state: {error}
+          });
+        } else {
+          this.dialogService
+          .showErrorDialog(error)
+          .afterClosed()
+          .pipe(first())
+          .subscribe(() => {
+            /* empty */
+          });
         }
-        // complete: () => { /* optional */ }
-      });
+      }
+      // complete: () => { /* optional */ }
+    });
   }
 }

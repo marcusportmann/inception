@@ -14,50 +14,50 @@
  * limitations under the License.
  */
 
-import { ObserversModule } from '@angular/cdk/observers';
-import { CommonModule, formatDate, HashLocationStrategy, LocationStrategy } from '@angular/common';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { inject, Injectable, Injector, ModuleWithProviders, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatChipsModule } from '@angular/material/chips';
-import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterModule } from '@angular/router';
-import { CacheService } from './cache/services/cache.service';
-import { DialogService } from './dialogs/services/dialog.service';
-import { INCEPTION_CONFIG, InceptionConfig } from './inception-config';
-import { setInceptionInjector } from './inception-injector';
-import { BreadcrumbsService } from './layout/services/breadcrumbs.service';
-import { NavigationService } from './layout/services/navigation.service';
-import { SpinnerService } from './layout/services/spinner.service';
-import { TitleBarService } from './layout/services/title-bar.service';
-import { CanActivateFunctionGuard } from './routing/can-activate-function-guard';
-import { DisabledFunctionGuard } from './routing/disabled-function-guard';
-import { SessionInterceptor } from './session/services/session.interceptor';
-import { SessionService } from './session/services/session.service';
+import {ObserversModule} from '@angular/cdk/observers';
+import {CommonModule, formatDate, HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {inject, Injectable, Injector, ModuleWithProviders, NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatChipsModule} from '@angular/material/chips';
+import {DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from '@angular/material/form-field';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSliderModule} from '@angular/material/slider';
+import {MatSortModule} from '@angular/material/sort';
+import {MatTableModule} from '@angular/material/table';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {RouterModule} from '@angular/router';
+import {CacheService} from './cache/services/cache.service';
+import {DialogService} from './dialogs/services/dialog.service';
+import {INCEPTION_CONFIG, InceptionConfig} from './inception-config';
+import {setInceptionInjector} from './inception-injector';
+import {BreadcrumbsService} from './layout/services/breadcrumbs.service';
+import {NavigationService} from './layout/services/navigation.service';
+import {SpinnerService} from './layout/services/spinner.service';
+import {TitleBarService} from './layout/services/title-bar.service';
+import {CanActivateFunctionGuard} from './routing/can-activate-function-guard';
+import {DisabledFunctionGuard} from './routing/disabled-function-guard';
+import {SessionInterceptor} from './session/services/session.interceptor';
+import {SessionService} from './session/services/session.service';
 
 export const INCEPTION_DATE_FORMATS = {
   parse: {
@@ -215,7 +215,7 @@ export class CoreModule {
         },
         {
           provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-          useValue: { appearance: 'fill' }
+          useValue: {appearance: 'fill'}
         },
         {
           provide: HTTP_INTERCEPTORS,

@@ -17,19 +17,19 @@
 import {
   AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { add, isWithinInterval } from 'date-fns';
+import {FormControl, Validators} from '@angular/forms';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {add, isWithinInterval} from 'date-fns';
 import {
   CoreModule, ISO8601Util, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { Observable, tap } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
-import { ErrorReportSortBy } from '../services/error-report-sort-by';
-import { ErrorReportSummaries } from '../services/error-report-summaries';
-import { ErrorReportSummaryDataSource } from '../services/error-report-summary-data-source';
-import { ErrorService } from '../services/error.service';
+import {Observable, tap} from 'rxjs';
+import {finalize, takeUntil} from 'rxjs/operators';
+import {ErrorReportSortBy} from '../services/error-report-sort-by';
+import {ErrorReportSummaries} from '../services/error-report-summaries';
+import {ErrorReportSummaryDataSource} from '../services/error-report-summary-data-source';
+import {ErrorService} from '../services/error.service';
 
 interface ErrorReportsExtras {
   fromDate: string | null; // ISO string
@@ -51,8 +51,7 @@ interface ErrorReportsExtras {
 })
 export class ErrorReportsComponent
   extends StatefulListView<ErrorReportsExtras>
-  implements AfterViewInit
-{
+  implements AfterViewInit {
   readonly dataSource: ErrorReportSummaryDataSource;
 
   readonly defaultSortActive = 'created';
@@ -67,11 +66,11 @@ export class ErrorReportsComponent
 
   readonly listStateKey = 'error.error-reports';
 
-  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) override paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) override sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, { static: true })
+  @ViewChild(TableFilterComponent, {static: true})
   override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@error_error_reports_title:Error Reports`;
@@ -91,7 +90,10 @@ export class ErrorReportsComponent
 
     this.resetStateRequested = !!nav?.extras.state?.['resetState'];
 
-    const { from, to } = this.getDefaultDateRange();
+    const {
+      from,
+      to
+    } = this.getDefaultDateRange();
 
     // Initialize form controls
     this.fromDateControl = new FormControl<Date | null>(from, {
@@ -118,7 +120,7 @@ export class ErrorReportsComponent
       return false;
     }
 
-    const minAllowed = add(new Date(), { years: -1 });
+    const minAllowed = add(new Date(), {years: -1});
     const maxAllowed = new Date();
 
     const fromValue = this.fromDateControl?.value as Date | null;
@@ -151,7 +153,10 @@ export class ErrorReportsComponent
   }
 
   protected override resetExtrasState(): void {
-    const { from, to } = this.getDefaultDateRange();
+    const {
+      from,
+      to
+    } = this.getDefaultDateRange();
 
     this.fromDateControl.setValue(from);
 
@@ -178,24 +183,27 @@ export class ErrorReportsComponent
 
   private getDefaultDateRange(): { from: Date; to: Date } {
     const to = new Date();
-    const from = add(to, { months: -1 });
-    return { from, to };
+    const from = add(to, {months: -1});
+    return {
+      from,
+      to
+    };
   }
 
   private loadData(): void {
     this.spinnerService.showSpinner();
 
     this.loadErrorReportSummaries()
-      .pipe(
-        finalize(() => this.spinnerService.hideSpinner()),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: () => {
-          // Load complete
-        },
-        error: (error) => this.handleError(error, false)
-      });
+    .pipe(
+      finalize(() => this.spinnerService.hideSpinner()),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: () => {
+        // Load complete
+      },
+      error: (error) => this.handleError(error, false)
+    });
   }
 
   private loadErrorReportSummaries(): Observable<ErrorReportSummaries> {
@@ -208,46 +216,49 @@ export class ErrorReportsComponent
         ? SortDirection.Ascending
         : SortDirection.Descending;
 
-    const { from, to } = this.getDefaultDateRange();
+    const {
+      from,
+      to
+    } = this.getDefaultDateRange();
 
     const fromDate = this.formatDate(this.fromDateControl.value) ?? ISO8601Util.toString(from);
 
     const toDate = this.formatDate(this.toDateControl.value) ?? ISO8601Util.toString(to);
 
     return this.dataSource
-      .load(
-        filter,
-        fromDate,
-        toDate,
-        sortBy,
-        sortDirection,
-        this.paginator.pageIndex,
-        this.paginator.pageSize
-      )
-      .pipe(
-        tap((errorReportSummaries: ErrorReportSummaries) => {
-          // Sync paginator to what the server actually returned/corrected
-          this.restoringState = true;
-          try {
-            if (errorReportSummaries && this.paginator) {
-              const pageIndex = errorReportSummaries.pageIndex;
-              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
-                this.paginator.pageIndex = Math.trunc(pageIndex);
-              }
-
-              const pageSize = errorReportSummaries.pageSize;
-              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
-                this.paginator.pageSize = Math.trunc(pageSize);
-              }
-
-              this.saveState();
+    .load(
+      filter,
+      fromDate,
+      toDate,
+      sortBy,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    )
+    .pipe(
+      tap((errorReportSummaries: ErrorReportSummaries) => {
+        // Sync paginator to what the server actually returned/corrected
+        this.restoringState = true;
+        try {
+          if (errorReportSummaries && this.paginator) {
+            const pageIndex = errorReportSummaries.pageIndex;
+            if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+              this.paginator.pageIndex = Math.trunc(pageIndex);
             }
-          } finally {
-            this.restoringState = false;
-          }
 
-          this.changeDetectorRef.markForCheck();
-        })
-      );
+            const pageSize = errorReportSummaries.pageSize;
+            if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+              this.paginator.pageSize = Math.trunc(pageSize);
+            }
+
+            this.saveState();
+          }
+        } finally {
+          this.restoringState = false;
+        }
+
+        this.changeDetectorRef.markForCheck();
+      })
+    );
   }
 }

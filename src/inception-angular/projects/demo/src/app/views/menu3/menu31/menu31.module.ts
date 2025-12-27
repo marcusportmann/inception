@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { CoreModule } from 'ngx-inception/core';
-import { Menu311Component } from './menu311.component';
-import { Menu312Component } from './menu312.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {CoreModule} from 'ngx-inception/core';
+import {Menu311Component} from './menu311.component';
+import {Menu312Component} from './menu312.component';
 
 const routes: Routes = [
   {
@@ -61,4 +61,5 @@ const routes: Routes = [
     CoreModule
   ]
 })
-export class Menu31Module {}
+export class Menu31Module {
+}

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { MatCard, MatCardContent } from '@angular/material/card';
+import {Component} from '@angular/core';
+import {MatCard, MatCardContent} from '@angular/material/card';
 
 /**
  * The Menu312Component class implements the menu 3.1.2 component.
@@ -28,8 +28,9 @@ import { MatCard, MatCardContent } from '@angular/material/card';
   imports: [MatCardContent, MatCard],
   template: `
     <mat-card class="flex-grow-1">
-      <mat-card-content> Menu 3.1.2 </mat-card-content>
+      <mat-card-content> Menu 3.1.2</mat-card-content>
     </mat-card>
   `
 })
-export class Menu312Component {}
+export class Menu312Component {
+}

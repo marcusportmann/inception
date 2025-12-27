@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { FrameworkError } from './framework-error';
+import {HttpErrorResponse} from '@angular/common/http';
+import {FrameworkError} from './framework-error';
 
 /**
  * The AccessDeniedError class holds the information for an access denied error.

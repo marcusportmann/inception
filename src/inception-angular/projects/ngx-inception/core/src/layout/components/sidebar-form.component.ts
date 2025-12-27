@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, inject, OnInit } from '@angular/core';
-import { Replace } from '../../util/replace';
+import {Component, ElementRef, inject, OnInit} from '@angular/core';
+import {Replace} from '../../util/replace';
 
 /**
  * The SidebarFormComponent class implements the sidebar form component.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 /**
  * The saved state for a pageable, sortable list.
@@ -50,10 +50,10 @@ export class ListStateService {
   get<TExtras = unknown>(key: string): ListState<TExtras> | undefined {
     const state = this.states.get(key) as ListState<TExtras> | undefined;
 
-    return state ? Object.freeze({ ...state }) : undefined;
+    return state ? Object.freeze({...state}) : undefined;
   }
 
   set<TExtras = unknown>(key: string, state: ListState<TExtras>): void {
-    this.states.set(key, Object.freeze({ ...state }) as ListState);
+    this.states.set(key, Object.freeze({...state}) as ListState);
   }
 }

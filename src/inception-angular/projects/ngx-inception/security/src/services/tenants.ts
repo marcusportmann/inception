@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { SortDirection } from 'ngx-inception/core';
-import { Tenant } from './tenant';
+import {SortDirection} from 'ngx-inception/core';
+import {Tenant} from './tenant';
 
 /**
  * The Tenants class holds the results of a request to retrieve a list of tenants.

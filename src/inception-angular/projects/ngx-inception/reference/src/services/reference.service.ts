@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { inject, Injectable, LOCALE_ID } from '@angular/core';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {inject, Injectable, LOCALE_ID} from '@angular/core';
 import {
   AccessDeniedError, CacheService, CommunicationError, INCEPTION_CONFIG, InceptionConfig,
   ServiceUnavailableError
 } from 'ngx-inception/core';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { Country } from './country';
-import { Language } from './language';
-import { Region } from './region';
-import { TimeZone } from './time-zone';
+import {Observable, of, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {Country} from './country';
+import {Language} from './language';
+import {Region} from './region';
+import {TimeZone} from './time-zone';
 
 /**
  * The Reference Service implementation.
@@ -112,24 +112,24 @@ export class ReferenceService {
     const params = new HttpParams().set('localeId', this.localeId);
 
     return this.httpClient
-      .get<T[]>(this.config.apiUrlPrefix + endpoint, {
-        params,
-        reportProgress: true
-      })
-      .pipe(
-        map((items: T[]) => {
-          const dataMap = new Map<string, T>();
+    .get<T[]>(this.config.apiUrlPrefix + endpoint, {
+      params,
+      reportProgress: true
+    })
+    .pipe(
+      map((items: T[]) => {
+        const dataMap = new Map<string, T>();
 
-          for (const item of items) {
-            dataMap.set(keyGetter(item), item);
-          }
+        for (const item of items) {
+          dataMap.set(keyGetter(item), item);
+        }
 
-          this.cacheService.set(cacheKey, dataMap);
+        this.cacheService.set(cacheKey, dataMap);
 
-          return dataMap;
-        }),
-        catchError(this.handleApiError(`Failed to retrieve the ${cacheKey}.`))
-      );
+        return dataMap;
+      }),
+      catchError(this.handleApiError(`Failed to retrieve the ${cacheKey}.`))
+    );
   }
 
   private handleApiError(defaultMessage: string) {

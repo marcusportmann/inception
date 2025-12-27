@@ -1,6 +1,6 @@
 // This file is required by karma.conf.js and loads recursively all the .spec and framework files
 
-import { getTestBed } from '@angular/core/testing';
+import {getTestBed} from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
@@ -20,7 +20,7 @@ declare const require: {
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting(), {
-  teardown: { destroyAfterEach: true }
+  teardown: {destroyAfterEach: true}
 });
 
 // Then we find all the tests.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Directive, HostListener } from '@angular/core';
+import {Directive, HostListener} from '@angular/core';
 
 /**
  * The AppMobileSidebarTogglerDirective class implements the app mobile sidebar toggler directive.

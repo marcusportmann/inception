@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
 @NgModule({
   imports: []
 })
-export class InceptionModule {}
+export class InceptionModule {
+}

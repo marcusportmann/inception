@@ -37,7 +37,7 @@
       </div>
     </mat-card-content>
     <mat-card-actions align="end">
-      <button type="button" mat-flat-button color="link" (click)="cancel()" i18n="@@codes_edit_code_category_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button color="link" [disabled]="editCodeCategoryForm.disabled" (click)="cancel()" i18n="@@codes_edit_code_category_component_button_cancel">Cancel</button>
       <button type="button" mat-flat-button color="primary" [disabled]="editCodeCategoryForm.disabled || editCodeCategoryForm.invalid" (click)="ok()" i18n="@@codes_edit_code_category_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>

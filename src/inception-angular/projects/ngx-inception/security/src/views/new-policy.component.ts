@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { Policy } from '../services/policy';
-import { PolicyType } from '../services/policy-type';
-import { SecurityService } from '../services/security.service';
+import {finalize, first} from 'rxjs/operators';
+import {Policy} from '../services/policy';
+import {PolicyType} from '../services/policy-type';
+import {SecurityService} from '../services/security.service';
 
 /**
  * The NewPolicyComponent class implements the new policy component.
@@ -107,7 +107,7 @@ export class NewPolicyComponent extends AdminContainerView implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   ngOnInit(): void {
@@ -115,16 +115,12 @@ export class NewPolicyComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.newPolicyForm.valid) {
+      this.newPolicyForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.policy || !this.newPolicyForm.valid) {
-      return;
-    }
+    if (!this.policy) return;
 
     this.policy.id = this.idControl.value;
     this.policy.version = this.versionControl.value;
@@ -137,20 +133,20 @@ export class NewPolicyComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .createPolicy(this.policy)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .createPolicy(this.policy)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.newPolicyForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.newPolicyForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

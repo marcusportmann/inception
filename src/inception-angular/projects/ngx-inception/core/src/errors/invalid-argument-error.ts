@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { FrameworkError } from './framework-error';
-import { HttpError } from './http-error';
-import { ProblemDetails } from './problem-details';
+import {HttpErrorResponse} from '@angular/common/http';
+import {FrameworkError} from './framework-error';
+import {HttpError} from './http-error';
+import {ProblemDetails} from './problem-details';
 
 /**
  * The InvalidArgumentError class holds the information for an invalid argument error.

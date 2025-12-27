@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {NavigationEnd, Router} from '@angular/router';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-body',
   // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
-  template: `<router-outlet></router-outlet>`
+  template: `
+    <router-outlet></router-outlet>`
 })
 export class AppComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

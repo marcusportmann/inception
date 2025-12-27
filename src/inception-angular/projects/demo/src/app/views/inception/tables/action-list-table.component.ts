@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { CoreModule, TableFilterComponent } from 'ngx-inception/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {CoreModule, TableFilterComponent} from 'ngx-inception/core';
 
 export interface User {
   email: string;
@@ -251,9 +251,9 @@ export class ActionListTableComponent implements AfterViewInit {
 
   readonly displayedColumns = ['name', 'preferredName', 'email', 'actions'] as const;
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
   applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();

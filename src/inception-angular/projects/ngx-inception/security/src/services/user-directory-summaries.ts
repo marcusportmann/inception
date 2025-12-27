@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { SortDirection } from 'ngx-inception/core';
-import { UserDirectorySummary } from './user-directory-summary';
+import {SortDirection} from 'ngx-inception/core';
+import {UserDirectorySummary} from './user-directory-summary';
 
 /**
  * The UserDirectorySummaries class holds the results of a request to retrieve a list of user

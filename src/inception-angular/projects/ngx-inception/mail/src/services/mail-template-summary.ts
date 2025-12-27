@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { MailTemplateContentType } from './mail-template-content-type';
+import {MailTemplateContentType} from './mail-template-content-type';
 
 /**
  * The MailTemplateSummary class holds the summary information for a mail template.

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { CoreModule, TableFilterComponent } from 'ngx-inception/core';
+import {Component} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {CoreModule, TableFilterComponent} from 'ngx-inception/core';
 
 export interface PeriodicElement {
   name: string;

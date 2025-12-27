@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { SortDirection } from 'ngx-inception/core';
-import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
-import { SecurityService } from './security.service';
-import { Tenant } from './tenant';
-import { Tenants } from './tenants';
+import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {SortDirection} from 'ngx-inception/core';
+import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
+import {catchError, finalize} from 'rxjs/operators';
+import {SecurityService} from './security.service';
+import {Tenant} from './tenant';
+import {Tenants} from './tenants';
 
 /**
  * The TenantDataSource class implements the tenant data source.
@@ -31,12 +31,15 @@ export class TenantDataSource implements DataSource<Tenant> {
   private dataSubject$ = new BehaviorSubject<Tenant[]>([]);
 
   private loadingSubject$ = new BehaviorSubject<boolean>(false);
+
   loading$ = this.loadingSubject$.asObservable();
 
   private totalSubject$ = new BehaviorSubject<number>(0);
+
   total$ = this.totalSubject$.asObservable();
 
-  constructor(private securityService: SecurityService) {}
+  constructor(private securityService: SecurityService) {
+  }
 
   /**
    * Clear the data source.

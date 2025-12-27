@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Directive, HostListener, inject, ViewContainerRef } from '@angular/core';
-import { FormGroupDirective } from '@angular/forms';
+import {Directive, HostListener, inject, ViewContainerRef} from '@angular/core';
+import {FormGroupDirective} from '@angular/forms';
 
 /**
  * The ValidatedFormDirective class implements the validated form directive.

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { AsyncPipe, NgClass } from '@angular/common';
+import {AsyncPipe, NgClass} from '@angular/common';
 import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Input, OnDestroy,
   OnInit
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { Replace } from '../../util/replace';
-import { Breadcrumb } from '../services/breadcrumb';
-import { BreadcrumbsService } from '../services/breadcrumbs.service';
+import {RouterLink} from '@angular/router';
+import {Observable, Subscription} from 'rxjs';
+import {Replace} from '../../util/replace';
+import {Breadcrumb} from '../services/breadcrumb';
+import {BreadcrumbsService} from '../services/breadcrumbs.service';
 
 /**
  * The BreadcrumbsComponent class implements the breadcrumbs component.

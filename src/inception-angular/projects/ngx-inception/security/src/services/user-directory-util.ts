@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { UserDirectory } from './user-directory';
-import { UserDirectoryParameter } from './user-directory-parameter';
+import {UserDirectory} from './user-directory';
+import {UserDirectoryParameter} from './user-directory-parameter';
 
 /**
  * The UserDirectoryUtil class provides utility functions that are useful when working with

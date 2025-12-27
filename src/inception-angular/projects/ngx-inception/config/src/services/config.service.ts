@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
   ProblemDetails, ServiceUnavailableError
 } from 'ngx-inception/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { Config } from './config';
-import { ConfigNotFoundError } from './config.service.errors';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {Config} from './config';
+import {ConfigNotFoundError} from './config.service.errors';
 
 /**
  * The Config Service implementation.
@@ -54,13 +54,13 @@ export class ConfigService {
    */
   deleteConfig(id: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(`${this.config.apiUrlPrefix}/config/configs/${id}`, {
-        observe: 'response'
-      })
-      .pipe(
-        map(ConfigService.isResponse204),
-        catchError((error) => ConfigService.handleApiError(error, 'Failed to delete the config.'))
-      );
+    .delete<boolean>(`${this.config.apiUrlPrefix}/config/configs/${id}`, {
+      observe: 'response'
+    })
+    .pipe(
+      map(ConfigService.isResponse204),
+      catchError((error) => ConfigService.handleApiError(error, 'Failed to delete the config.'))
+    );
   }
 
   /**
@@ -72,12 +72,12 @@ export class ConfigService {
    */
   getConfig(id: string): Observable<Config> {
     return this.httpClient
-      .get<Config>(`${this.config.apiUrlPrefix}/config/configs/${id}`, {
-        reportProgress: true
-      })
-      .pipe(
-        catchError((error) => ConfigService.handleApiError(error, 'Failed to retrieve the config.'))
-      );
+    .get<Config>(`${this.config.apiUrlPrefix}/config/configs/${id}`, {
+      reportProgress: true
+    })
+    .pipe(
+      catchError((error) => ConfigService.handleApiError(error, 'Failed to retrieve the config.'))
+    );
   }
 
   /**
@@ -89,14 +89,14 @@ export class ConfigService {
    */
   getConfigValue(id: string): Observable<string> {
     return this.httpClient
-      .get<string>(`${this.config.apiUrlPrefix}/config/configs/${id}/value`, {
-        reportProgress: true
-      })
-      .pipe(
-        catchError((error) =>
-          ConfigService.handleApiError(error, 'Failed to retrieve the config value.')
-        )
-      );
+    .get<string>(`${this.config.apiUrlPrefix}/config/configs/${id}/value`, {
+      reportProgress: true
+    })
+    .pipe(
+      catchError((error) =>
+        ConfigService.handleApiError(error, 'Failed to retrieve the config value.')
+      )
+    );
   }
 
   /**
@@ -106,12 +106,12 @@ export class ConfigService {
    */
   getConfigs(): Observable<Config[]> {
     return this.httpClient
-      .get<Config[]>(`${this.config.apiUrlPrefix}/config/configs`, { reportProgress: true })
-      .pipe(
-        catchError((error) =>
-          ConfigService.handleApiError(error, 'Failed to retrieve the configs.')
-        )
-      );
+    .get<Config[]>(`${this.config.apiUrlPrefix}/config/configs`, {reportProgress: true})
+    .pipe(
+      catchError((error) =>
+        ConfigService.handleApiError(error, 'Failed to retrieve the configs.')
+      )
+    );
   }
 
   /**
@@ -123,13 +123,13 @@ export class ConfigService {
    */
   saveConfig(config: Config): Observable<boolean> {
     return this.httpClient
-      .post<boolean>(`${this.config.apiUrlPrefix}/config/configs`, config, {
-        observe: 'response'
-      })
-      .pipe(
-        map(ConfigService.isResponse204),
-        catchError((error) => ConfigService.handleApiError(error, 'Failed to save the config.'))
-      );
+    .post<boolean>(`${this.config.apiUrlPrefix}/config/configs`, config, {
+      observe: 'response'
+    })
+    .pipe(
+      map(ConfigService.isResponse204),
+      catchError((error) => ConfigService.handleApiError(error, 'Failed to save the config.'))
+    );
   }
 
   private static handleApiError(

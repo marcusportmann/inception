@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
+import {HttpErrorResponse} from '@angular/common/http';
+import {FrameworkError, HttpError, ProblemDetails} from 'ngx-inception/core';
 
 /**
  * The AuthenticationFailedError class holds the information for an authentication failed error.

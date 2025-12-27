@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { Policy } from '../services/policy';
-import { PolicyType } from '../services/policy-type';
-import { SecurityService } from '../services/security.service';
+import {finalize, first} from 'rxjs/operators';
+import {Policy} from '../services/policy';
+import {PolicyType} from '../services/policy-type';
+import {SecurityService} from '../services/security.service';
 
 /**
  * The EditPolicyComponent class implements the edit policy component.
@@ -84,7 +84,10 @@ export class EditPolicyComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
+      {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(100)]
+      }
     );
 
     this.nameControl = new FormControl<string>('', {
@@ -119,7 +122,7 @@ export class EditPolicyComponent extends AdminContainerView implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
   }
 
   ngOnInit(): void {
@@ -127,37 +130,33 @@ export class EditPolicyComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getPolicy(this.policyId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (policy: Policy) => {
-          this.policy = policy;
+    .getPolicy(this.policyId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (policy: Policy) => {
+        this.policy = policy;
 
-          this.idControl.setValue(policy.id);
-          this.versionControl.setValue(policy.version);
-          this.nameControl.setValue(policy.name);
-          this.typeControl.setValue(policy.type);
-          this.dataControl.setValue(policy.data);
-        },
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+        this.idControl.setValue(policy.id);
+        this.versionControl.setValue(policy.version);
+        this.nameControl.setValue(policy.name);
+        this.typeControl.setValue(policy.type);
+        this.dataControl.setValue(policy.data);
+      },
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.editPolicyForm.valid) {
+      this.editPolicyForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.policy || !this.editPolicyForm.valid) {
-      return;
-    }
+    if (!this.policy) return;
 
     this.policy.version = this.versionControl.value;
     this.policy.name = this.nameControl.value;
@@ -169,22 +168,22 @@ export class EditPolicyComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .updatePolicy(this.policy)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .updatePolicy(this.policy)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.editPolicyForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], {
-            relativeTo: this.activatedRoute.parent?.parent
-          });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.editPolicyForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {
+          relativeTo: this.activatedRoute.parent?.parent
+        });
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

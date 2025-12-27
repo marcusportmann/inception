@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { Group } from '../services/group';
-import { SecurityService } from '../services/security.service';
-import { UserDirectoryCapabilities } from '../services/user-directory-capabilities';
+import {finalize, first} from 'rxjs/operators';
+import {Group} from '../services/group';
+import {SecurityService} from '../services/security.service';
+import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
 
 /**
  * The NewGroupComponent class implements the new group component.
@@ -87,14 +87,14 @@ export class NewGroupComponent extends AdminContainerView implements OnInit {
   override get backNavigation(): BackNavigation {
     return new BackNavigation($localize`:@@security_new_group_back_navigation:Groups`, ['.'], {
       relativeTo: this.activatedRoute.parent,
-      state: { userDirectoryId: this.userDirectoryId }
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   cancel(): void {
     void this.router.navigate(['.'], {
       relativeTo: this.activatedRoute.parent,
-      state: { userDirectoryId: this.userDirectoryId }
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
@@ -103,31 +103,27 @@ export class NewGroupComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getUserDirectoryCapabilities(this.userDirectoryId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (userDirectoryCapabilities: UserDirectoryCapabilities) => {
-          this.userDirectoryCapabilities = userDirectoryCapabilities;
-          this.group = new Group(this.userDirectoryId, '', '');
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .getUserDirectoryCapabilities(this.userDirectoryId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (userDirectoryCapabilities: UserDirectoryCapabilities) => {
+        this.userDirectoryCapabilities = userDirectoryCapabilities;
+        this.group = new Group(this.userDirectoryId, '', '');
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.newGroupForm.valid) {
+      this.newGroupForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.group || !this.newGroupForm.valid) {
-      return;
-    }
+    if (!this.group) return;
 
     this.group.name = this.nameControl.value;
     this.group.description = this.descriptionControl.value;
@@ -137,23 +133,23 @@ export class NewGroupComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .createGroup(this.group)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .createGroup(this.group)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.newGroupForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], {
-            relativeTo: this.activatedRoute.parent,
-            state: { userDirectoryId: this.userDirectoryId }
-          });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.newGroupForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {
+          relativeTo: this.activatedRoute.parent,
+          state: {userDirectoryId: this.userDirectoryId}
+        });
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

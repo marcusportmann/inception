@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, inject, Input, OnInit } from '@angular/core';
-import { Replace } from '../../util/replace';
+import {Component, ElementRef, inject, Input, OnInit} from '@angular/core';
+import {Replace} from '../../util/replace';
 
 /**
  * The AdminFooterComponent class implements the admin footer component.

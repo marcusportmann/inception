@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BackNavigation, CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { Job } from '../services/job';
-import { JobStatus } from '../services/job-status';
-import { SchedulerService } from '../services/scheduler.service';
-import { JobComponent } from './job.component';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {BackNavigation, CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
+import {finalize, first} from 'rxjs/operators';
+import {Job} from '../services/job';
+import {JobStatus} from '../services/job-status';
+import {SchedulerService} from '../services/scheduler.service';
+import {JobComponent} from './job.component';
 
 /**
  * The NewJobComponent class implements the new job component.
@@ -119,7 +119,7 @@ export class NewJobComponent extends JobComponent implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   ngOnInit(): void {
@@ -127,16 +127,12 @@ export class NewJobComponent extends JobComponent implements OnInit {
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.newJobForm.valid) {
+      this.newJobForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.job || !this.newJobForm.valid) {
-      return;
-    }
+    if (!this.job) return;
 
     this.job.enabled = this.enabledControl.value;
     this.job.id = this.idControl.value;
@@ -151,20 +147,20 @@ export class NewJobComponent extends JobComponent implements OnInit {
     this.spinnerService.showSpinner();
 
     this.schedulerService
-      .createJob(this.job)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .createJob(this.job)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.newJobForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.newJobForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

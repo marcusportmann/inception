@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { CoreModule } from 'ngx-inception/core';
+import {Component} from '@angular/core';
+import {CoreModule} from 'ngx-inception/core';
 
 /**
  * The ProgressComponent class implements the progress component.

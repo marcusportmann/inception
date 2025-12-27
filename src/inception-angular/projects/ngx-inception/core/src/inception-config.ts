@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { InjectionToken } from '@angular/core';
+import {InjectionToken} from '@angular/core';
 
 /**
  * The InceptionConfig interface defines the config that can be passed to the InceptionModule

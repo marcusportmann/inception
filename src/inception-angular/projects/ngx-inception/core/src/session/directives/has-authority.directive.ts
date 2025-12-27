@@ -17,9 +17,9 @@
 import {
   Directive, inject, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef
 } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Session } from '../services/session';
-import { SessionService } from '../services/session.service';
+import {Subscription} from 'rxjs';
+import {Session} from '../services/session';
+import {SessionService} from '../services/session.service';
 
 /**
  * Structural directive that conditionally renders its host template when the current user has at
@@ -88,16 +88,16 @@ export class HasAuthorityDirective implements OnInit, OnDestroy {
 
     if (Array.isArray(value)) {
       return value
-        .filter((v) => !!v)
-        .map((v) => v.trim())
-        .filter((v) => v.length > 0);
+      .filter((v) => !!v)
+      .map((v) => v.trim())
+      .filter((v) => v.length > 0);
     }
 
     // Support comma-separated strings
     return value
-      .split(',')
-      .map((v) => v.trim())
-      .filter((v) => v.length > 0);
+    .split(',')
+    .map((v) => v.trim())
+    .filter((v) => v.length > 0);
   }
 
   private show(): void {

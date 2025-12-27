@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { AsyncPipe } from '@angular/common';
-import { Component, ElementRef, inject, Input, OnInit } from '@angular/core';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { INCEPTION_CONFIG, InceptionConfig } from '../../inception-config';
-import { Session } from '../../session/services/session';
-import { SessionService } from '../../session/services/session.service';
-import { Replace } from '../../util/replace';
-import { SidebarTogglerDirective } from '../directives/sidebar-toggler.directive';
+import {AsyncPipe} from '@angular/common';
+import {Component, ElementRef, inject, Input, OnInit} from '@angular/core';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
+import {Session} from '../../session/services/session';
+import {SessionService} from '../../session/services/session.service';
+import {Replace} from '../../util/replace';
+import {SidebarTogglerDirective} from '../directives/sidebar-toggler.directive';
 
 /**
  * The AdminHeaderComponent class implements the admin header component.
@@ -68,7 +68,7 @@ import { SidebarTogglerDirective } from '../directives/sidebar-toggler.directive
             <a class="nav-link" (click)="login()">
               <span class="login-icon"></span>
               <span class="login d-md-down-none" i18n="@@admin_header_component_link_login"
-                >Login</span
+              >Login</span
               >
             </a>
           </li>

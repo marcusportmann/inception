@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { ReplaySubject, Subject } from 'rxjs';
-import { BackNavigation } from '../components/back-navigation';
+import {Injectable} from '@angular/core';
+import {ReplaySubject, Subject} from 'rxjs';
+import {BackNavigation} from '../components/back-navigation';
 
 /**
  * The Title Bar Service implementation.

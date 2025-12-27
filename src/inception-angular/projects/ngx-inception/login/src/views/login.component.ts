@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   AccessDeniedError, CoreModule, DialogService, INCEPTION_CONFIG, InceptionConfig,
   InvalidArgumentError, PasswordExpiredError, ServiceUnavailableError, Session, SessionService,
   SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { SecurityService, Tenant, Tenants } from 'ngx-inception/security';
-import { catchError, finalize, first, map, Observable, of, switchMap, throwError } from 'rxjs';
+import {SecurityService, Tenant, Tenants} from 'ngx-inception/security';
+import {catchError, finalize, first, map, Observable, of, switchMap, throwError} from 'rxjs';
 
 /**
  * The LoginComponent class implements the login component.
@@ -100,7 +100,10 @@ export class LoginComponent implements AfterViewInit, OnInit {
       return;
     }
 
-    const { username, password } = this.loginForm.getRawValue() as {
+    const {
+      username,
+      password
+    } = this.loginForm.getRawValue() as {
       username: string;
       password: string;
     };
@@ -110,36 +113,42 @@ export class LoginComponent implements AfterViewInit, OnInit {
     this.spinnerService.showSpinner();
 
     this.sessionService
-      .login(username, password)
-      .pipe(
-        first(),
-        // Once logged in, resolve the tenant list for this session
-        switchMap((session: Session | null) => {
-          if (!session) {
-            return of<{ session: Session | null; tenants: Tenant[] }>({
-              session: null,
-              tenants: []
-            });
-          }
-
-          return this.getTenantsForSession(session).pipe(map((tenants) => ({ session, tenants })));
-        }),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
-
-          this.loginForm.enable();
-        }),
-        catchError((error: Error) => this.handleError(error, username))
-      )
-      .subscribe(({ session, tenants }) => {
+    .login(username, password)
+    .pipe(
+      first(),
+      // Once logged in, resolve the tenant list for this session
+      switchMap((session: Session | null) => {
         if (!session) {
-          // No session, just go home
-          void this.router.navigate(['/']);
-          return;
+          return of<{ session: Session | null; tenants: Tenant[] }>({
+            session: null,
+            tenants: []
+          });
         }
 
-        this.handleTenantSelection(session, tenants);
-      });
+        return this.getTenantsForSession(session).pipe(map((tenants) => ({
+          session,
+          tenants
+        })));
+      }),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
+
+        this.loginForm.enable();
+      }),
+      catchError((error: Error) => this.handleError(error, username))
+    )
+    .subscribe(({
+                  session,
+                  tenants
+                }) => {
+      if (!session) {
+        // No session, just go home
+        void this.router.navigate(['/']);
+        return;
+      }
+
+      this.handleTenantSelection(session, tenants);
+    });
   }
 
   ngAfterViewInit(): void {
@@ -151,15 +160,15 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-      .pipe(
-        first(),
-        map(() => window.history.state)
-      )
-      .subscribe((state) => {
-        if (state && state.username) {
-          this.usernameControl.setValue(state.username);
-        }
-      });
+    .pipe(
+      first(),
+      map(() => window.history.state)
+    )
+    .subscribe((state) => {
+      if (state && state.username) {
+        this.usernameControl.setValue(state.username);
+      }
+    });
   }
 
   /**
@@ -182,23 +191,23 @@ export class LoginComponent implements AfterViewInit, OnInit {
       error instanceof ServiceUnavailableError
     ) {
       void this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
+        state: {error}
       });
     } else if (error instanceof PasswordExpiredError && username) {
       void this.router.navigate(['expired-password'], {
         relativeTo: this.activatedRoute,
-        state: { username }
+        state: {username}
       });
     } else {
       this.dialogService
-        .showErrorDialog(error)
-        .afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          setTimeout(() => {
-            this.usernameInput.nativeElement.focus();
-          });
+      .showErrorDialog(error)
+      .afterClosed()
+      .pipe(first())
+      .subscribe(() => {
+        setTimeout(() => {
+          this.usernameInput.nativeElement.focus();
         });
+      });
     }
 
     return throwError(() => error);
@@ -223,7 +232,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
     // Multiple tenants – let the user choose
     void this.router.navigate(['select-tenant'], {
       relativeTo: this.activatedRoute,
-      state: { tenants }
+      state: {tenants}
     });
   }
 }

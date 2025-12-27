@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { AdminContainerView, BackNavigation, CoreModule } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { Token } from '../services/token';
-import { TokenType } from '../services/token-type';
+import {Component, inject, OnInit} from '@angular/core';
+import {AdminContainerView, BackNavigation, CoreModule} from 'ngx-inception/core';
+import {finalize, first} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {Token} from '../services/token';
+import {TokenType} from '../services/token-type';
 
 /**
  * The ViewTokenComponent class implements the view token component.
@@ -60,7 +60,7 @@ export class ViewTokenComponent extends AdminContainerView implements OnInit {
   }
 
   back(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
   }
 
   getTokenTypeName(tokenType: TokenType | undefined): string {
@@ -76,17 +76,17 @@ export class ViewTokenComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getToken(this.tokenId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (token: Token) => {
-          this.token = token;
-        },
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+    .getToken(this.tokenId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (token: Token) => {
+        this.token = token;
+      },
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 }

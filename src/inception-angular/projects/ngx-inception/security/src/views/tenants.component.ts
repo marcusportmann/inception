@@ -17,16 +17,16 @@
 import {
   AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {
   CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { Tenants } from 'ngx-inception/security';
-import { Observable, tap } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { TenantDataSource } from '../services/tenant-data-source';
+import {Observable, tap} from 'rxjs';
+import {finalize, takeUntil} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {Tenants} from '../services/tenants';
+import {TenantDataSource} from '../services/tenant-data-source';
 
 @Component({
   selector: 'inception-security-tenants',
@@ -47,11 +47,11 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
 
   readonly listStateKey = 'security.tenants';
 
-  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) override paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) override sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, { static: true })
+  @ViewChild(TableFilterComponent, {static: true})
   override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_tenants_title:Tenants`;
@@ -90,7 +90,7 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
   newTenant(): void {
     this.saveState();
 
-    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
@@ -112,16 +112,16 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
     this.spinnerService.showSpinner();
 
     this.loadTenants()
-      .pipe(
-        finalize(() => this.spinnerService.hideSpinner()),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: () => {
-          // loadTenants() already updated the datasource + synced paginator
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .pipe(
+      finalize(() => this.spinnerService.hideSpinner()),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: () => {
+        // loadTenants() already updated the datasource + synced paginator
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   private loadTenants(): Observable<Tenants> {
@@ -133,31 +133,31 @@ export class TenantsComponent extends StatefulListView implements AfterViewInit 
         : SortDirection.Descending;
 
     return this.dataSource
-      .load(filterValue, sortDirection, this.paginator.pageIndex, this.paginator.pageSize)
-      .pipe(
-        tap((tenants: Tenants) => {
-          // Sync paginator to what the server actually returned/corrected
-          this.restoringState = true;
-          try {
-            if (this.paginator && tenants) {
-              const pageIndex = tenants.pageIndex;
-              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
-                this.paginator.pageIndex = Math.trunc(pageIndex);
-              }
-
-              const pageSize = tenants.pageSize;
-              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
-                this.paginator.pageSize = Math.trunc(pageSize);
-              }
-
-              this.saveState();
+    .load(filterValue, sortDirection, this.paginator.pageIndex, this.paginator.pageSize)
+    .pipe(
+      tap((tenants: Tenants) => {
+        // Sync paginator to what the server actually returned/corrected
+        this.restoringState = true;
+        try {
+          if (this.paginator && tenants) {
+            const pageIndex = tenants.pageIndex;
+            if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+              this.paginator.pageIndex = Math.trunc(pageIndex);
             }
-          } finally {
-            this.restoringState = false;
-          }
 
-          this.changeDetectorRef.markForCheck();
-        })
-      );
+            const pageSize = tenants.pageSize;
+            if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+              this.paginator.pageSize = Math.trunc(pageSize);
+            }
+
+            this.saveState();
+          }
+        } finally {
+          this.restoringState = false;
+        }
+
+        this.changeDetectorRef.markForCheck();
+      })
+    );
   }
 }

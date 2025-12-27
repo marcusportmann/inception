@@ -44,7 +44,7 @@ export class FrameworkError extends globalThis.Error {
     // Passing ErrorOptions is safe in modern runtimes; older runtimes simply ignore extra args.
     super(
       message,
-      cause !== undefined ? { cause: FrameworkError.normalizeCause(cause) } : undefined
+      cause !== undefined ? {cause: FrameworkError.normalizeCause(cause)} : undefined
     );
 
     this.name = new.target.name; // e.g. "AccessDeniedError"

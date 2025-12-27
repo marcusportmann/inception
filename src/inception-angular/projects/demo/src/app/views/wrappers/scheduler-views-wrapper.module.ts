@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
-import { SchedulerViewsModule } from 'ngx-inception/scheduler';
+import {NgModule} from '@angular/core';
+import {SchedulerViewsModule} from 'ngx-inception/scheduler';
 
 @NgModule({
   imports: [SchedulerViewsModule]
 })
-export class SchedulerViewsWrapperModule {}
+export class SchedulerViewsWrapperModule {
+}

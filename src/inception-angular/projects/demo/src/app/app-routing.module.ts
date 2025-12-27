@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
 import {
   AdminContainerComponent, CanActivateFunctionGuard, NotFoundComponent, SimpleContainerComponent
 } from 'ngx-inception/core';
 
-import { UserProfileComponent } from 'ngx-inception/security';
-import { AdministrationTitleResolver } from './views/administration/administration-title-resolver';
+import {UserProfileComponent} from 'ngx-inception/security';
+import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
 
 export const routes: Routes = [
   {
@@ -125,9 +125,10 @@ export const routes: Routes = [
   // Tracing should only be enabled for DEBUG purposes
   imports: [
     // Angular modules
-    RouterModule.forRoot(routes, { enableTracing: false })
+    RouterModule.forRoot(routes, {enableTracing: false})
   ],
   exports: [RouterModule],
   providers: [AdministrationTitleResolver]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

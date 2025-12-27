@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { CodeCategory } from '../services/code-category';
-import { CodesService } from '../services/codes.service';
+import {finalize, first} from 'rxjs/operators';
+import {CodeCategory} from '../services/code-category';
+import {CodesService} from '../services/codes.service';
 
 /**
  * The EditCodeCategoryComponent class implements the edit code category component.
@@ -74,7 +74,10 @@ export class EditCodeCategoryComponent extends AdminContainerView implements OnI
         value: '',
         disabled: true
       },
-      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
+      {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(100)]
+      }
     );
 
     this.nameControl = new FormControl<string>('', {
@@ -101,61 +104,60 @@ export class EditCodeCategoryComponent extends AdminContainerView implements OnI
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
   }
 
   ngOnInit(): void {
     this.spinnerService.showSpinner();
 
     this.codesService
-      .getCodeCategory(this.codeCategoryId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (codeCategory: CodeCategory) => {
-          this.codeCategory = codeCategory;
-          this.idControl.setValue(codeCategory.id);
-          this.nameControl.setValue(codeCategory.name);
-          this.dataControl.setValue(codeCategory.data);
-        },
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+    .getCodeCategory(this.codeCategoryId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (codeCategory: CodeCategory) => {
+        this.codeCategory = codeCategory;
+        this.idControl.setValue(codeCategory.id);
+        this.nameControl.setValue(codeCategory.name);
+        this.dataControl.setValue(codeCategory.data);
+      },
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.editCodeCategoryForm.valid) {
+      this.editCodeCategoryForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
+    if (!this.codeCategory) return;
 
-    if (this.codeCategory && this.editCodeCategoryForm.valid) {
-      this.codeCategory.name = this.nameControl.value ?? '';
-      this.codeCategory.data = this.dataControl.value?.trim() || null;
+    this.codeCategory.name = this.nameControl.value ?? '';
+    this.codeCategory.data = this.dataControl.value?.trim() || null;
 
-      this.editCodeCategoryForm.disable();
+    this.editCodeCategoryForm.disable();
 
-      this.spinnerService.showSpinner();
+    this.spinnerService.showSpinner();
 
-      this.codesService
-        .updateCodeCategory(this.codeCategory)
-        .pipe(
-          first(),
-          finalize(() => {
-            this.spinnerService.hideSpinner();
+    this.codesService
+    .updateCodeCategory(this.codeCategory)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-            this.editCodeCategoryForm.enable();
-          })
-        )
-        .subscribe({
-          next: () =>
-            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent }),
-          error: (error: Error) => this.handleError(error, false)
-        });
-    }
+        this.editCodeCategoryForm.enable();
+      })
+    )
+    .subscribe({
+      next: () =>
+        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent}),
+      error: (error: Error) => this.handleError(error, false)
+    });
+
   }
 }

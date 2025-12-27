@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
+import {HttpErrorResponse} from '@angular/common/http';
+import {FrameworkError, HttpError, ProblemDetails} from 'ngx-inception/core';
 
 /**
  * The ErrorReportNotFoundError class holds the information for an error report not found error.

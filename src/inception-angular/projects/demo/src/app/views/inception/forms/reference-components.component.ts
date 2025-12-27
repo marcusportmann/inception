@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
+import {Component, inject} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
 import {
   CountriesChipGridComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent,
   TimeZoneInputComponent

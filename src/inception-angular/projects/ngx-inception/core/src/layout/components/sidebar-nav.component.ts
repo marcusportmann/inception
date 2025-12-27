@@ -17,11 +17,11 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, OnDestroy, OnInit
 } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { NavigationItem } from '../services/navigation-item';
-import { NavigationService } from '../services/navigation.service';
-import { SidebarNavItemComponent } from './sidebar-nav-item.component';
+import {NavigationEnd, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {NavigationItem} from '../services/navigation-item';
+import {NavigationService} from '../services/navigation.service';
+import {SidebarNavItemComponent} from './sidebar-nav-item.component';
 
 /**
  * The SidebarNavComponent class implements the sidebar nav component.
@@ -32,11 +32,12 @@ import { SidebarNavItemComponent } from './sidebar-nav-item.component';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-nav',
   standalone: true,
-  template: ` <ul class="nav">
-    @for (navItem of navItems; track navItem) {
-      <sidebar-nav-item [navItem]="navItem"></sidebar-nav-item>
-    }
-  </ul>`,
+  template: `
+    <ul class="nav">
+      @for (navItem of navItems; track navItem) {
+        <sidebar-nav-item [navItem]="navItem"></sidebar-nav-item>
+      }
+    </ul>`,
   imports: [SidebarNavItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

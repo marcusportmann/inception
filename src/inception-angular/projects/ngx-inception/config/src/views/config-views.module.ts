@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
-import { ConfigTitleResolver } from './config-title-resolver';
-import { ConfigsTitleResolver } from './configs-title-resolver';
-import { ConfigsComponent } from './configs.component';
-import { EditConfigTitleResolver } from './edit-config-title-resolver';
-import { EditConfigComponent } from './edit-config.component';
-import { NewConfigTitleResolver } from './new-config-title-resolver';
-import { NewConfigComponent } from './new-config.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
+import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
+import {ConfigTitleResolver} from './config-title-resolver';
+import {ConfigsTitleResolver} from './configs-title-resolver';
+import {ConfigsComponent} from './configs.component';
+import {EditConfigTitleResolver} from './edit-config-title-resolver';
+import {EditConfigComponent} from './edit-config.component';
+import {NewConfigTitleResolver} from './new-config-title-resolver';
+import {NewConfigComponent} from './new-config.component';
 
 const routes: Routes = [
   {
@@ -95,4 +95,5 @@ const routes: Routes = [
     NewConfigTitleResolver
   ]
 })
-export class ConfigViewsModule {}
+export class ConfigViewsModule {
+}

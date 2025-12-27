@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Component, inject } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DialogData } from '../services/dialog-data';
+import {Component, inject} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {DialogData} from '../services/dialog-data';
 
 /**
  * The WarningDialogComponent class implements the warning dialog component.

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
-import { SchedulerService } from '../services/scheduler.service';
+import {inject, Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {Observable} from 'rxjs';
+import {SchedulerService} from '../services/scheduler.service';
 
 /**
  * The JobTitleResolver class provides the route data resolver that resolves the

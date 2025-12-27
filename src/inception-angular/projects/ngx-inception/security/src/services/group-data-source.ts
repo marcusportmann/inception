@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { SortDirection } from 'ngx-inception/core';
-import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
-import { Group } from './group';
-import { Groups } from './groups';
-import { SecurityService } from './security.service';
+import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {SortDirection} from 'ngx-inception/core';
+import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
+import {catchError, finalize} from 'rxjs/operators';
+import {Group} from './group';
+import {Groups} from './groups';
+import {SecurityService} from './security.service';
 
 /**
  * The GroupDataSource class implements the group data source.
@@ -38,7 +38,8 @@ export class GroupDataSource implements DataSource<Group> {
 
   total$ = this.totalSubject$.asObservable();
 
-  constructor(private securityService: SecurityService) {}
+  constructor(private securityService: SecurityService) {
+  }
 
   /**
    * Clear the data source.
@@ -83,14 +84,14 @@ export class GroupDataSource implements DataSource<Group> {
     this.loadingSubject$.next(true);
 
     return this.securityService
-      .getGroups(userDirectoryId, filter, sortDirection, pageIndex, pageSize)
-      .pipe(
-        tap((groups: Groups) => {
-          this.updateData(groups);
-        }),
-        catchError((error: Error) => this.handleError(error)),
-        finalize(() => this.loadingSubject$.next(false))
-      );
+    .getGroups(userDirectoryId, filter, sortDirection, pageIndex, pageSize)
+    .pipe(
+      tap((groups: Groups) => {
+        this.updateData(groups);
+      }),
+      catchError((error: Error) => this.handleError(error)),
+      finalize(() => this.loadingSubject$.next(false))
+    );
   }
 
   /**

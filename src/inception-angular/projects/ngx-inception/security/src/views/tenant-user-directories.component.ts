@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject, OnDestroy, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {AfterViewInit, Component, inject, OnDestroy, ViewChild} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 import {
   AdminContainerView, AutocompleteSelectionRequiredDirective, BackNavigation,
   ConfirmationDialogComponent, CoreModule
 } from 'ngx-inception/core';
-import { ReplaySubject, Subject, Subscription } from 'rxjs';
-import { debounceTime, finalize, first, startWith } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { UserDirectorySummaries } from '../services/user-directory-summaries';
-import { UserDirectorySummary } from '../services/user-directory-summary';
+import {ReplaySubject, Subject, Subscription} from 'rxjs';
+import {debounceTime, finalize, first, startWith} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {UserDirectorySummaries} from '../services/user-directory-summaries';
+import {UserDirectorySummary} from '../services/user-directory-summary';
 
 /**
  * The TenantUserDirectoriesComponent class implements the tenant user directories
@@ -44,8 +44,7 @@ import { UserDirectorySummary } from '../services/user-directory-summary';
 })
 export class TenantUserDirectoriesComponent
   extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+  implements AfterViewInit, OnDestroy {
   allUserDirectories: UserDirectorySummary[] = [];
 
   availableUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<
@@ -62,7 +61,7 @@ export class TenantUserDirectoriesComponent
 
   newUserDirectoryControl: FormControl;
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   tenantId: string;
 
@@ -111,18 +110,18 @@ export class TenantUserDirectoriesComponent
     this.spinnerService.showSpinner();
 
     this.securityService
-      .addUserDirectoryToTenant(this.tenantId, userDirectoryId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: () => {
-          this.loadUserDirectoriesForTenant();
-          this.newUserDirectoryControl.setValue('');
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .addUserDirectoryToTenant(this.tenantId, userDirectoryId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: () => {
+        this.loadUserDirectoriesForTenant();
+        this.newUserDirectoryControl.setValue('');
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   applyFilter(filterValue: string): void {
@@ -152,35 +151,35 @@ export class TenantUserDirectoriesComponent
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getUserDirectorySummariesForTenant(this.tenantId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (userDirectorySummaries: UserDirectorySummary[]) => {
-          this.dataSource.data = userDirectorySummaries;
+    .getUserDirectorySummariesForTenant(this.tenantId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (userDirectorySummaries: UserDirectorySummary[]) => {
+        this.dataSource.data = userDirectorySummaries;
 
-          const availableUserDirectories =
-            TenantUserDirectoriesComponent.calculateAvailableUserDirectories(
-              this.allUserDirectories,
-              this.dataSource.data
-            );
-
-          this.subscriptions.add(
-            this.newUserDirectoryControl.valueChanges
-              .pipe(startWith(''), debounceTime(500))
-              .subscribe((value) => {
-                this.filteredUserDirectories$.next(
-                  this.filterUserDirectories(availableUserDirectories, value)
-                );
-              })
+        const availableUserDirectories =
+          TenantUserDirectoriesComponent.calculateAvailableUserDirectories(
+            this.allUserDirectories,
+            this.dataSource.data
           );
 
-          this.availableUserDirectories$.next(availableUserDirectories);
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.subscriptions.add(
+          this.newUserDirectoryControl.valueChanges
+          .pipe(startWith(''), debounceTime(500))
+          .subscribe((value) => {
+            this.filteredUserDirectories$.next(
+              this.filterUserDirectories(availableUserDirectories, value)
+            );
+          })
+        );
+
+        this.availableUserDirectories$.next(availableUserDirectories);
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ngAfterViewInit(): void {
@@ -190,18 +189,18 @@ export class TenantUserDirectoriesComponent
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getUserDirectorySummaries()
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (userDirectorySummaries: UserDirectorySummaries) => {
-          this.allUserDirectories = userDirectorySummaries.userDirectorySummaries;
-          this.loadUserDirectoriesForTenant();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .getUserDirectorySummaries()
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (userDirectorySummaries: UserDirectorySummaries) => {
+        this.allUserDirectories = userDirectorySummaries.userDirectorySummaries;
+        this.loadUserDirectoriesForTenant();
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ngOnDestroy(): void {
@@ -215,31 +214,31 @@ export class TenantUserDirectoriesComponent
       });
 
     dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe({
-        next: (confirmation: boolean | undefined) => {
-          if (confirmation !== true) {
-            return;
-          }
-
-          this.spinnerService.showSpinner();
-
-          this.securityService
-            .removeUserDirectoryFromTenant(this.tenantId, userDirectoryId)
-            .pipe(
-              first(),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe({
-              next: () => {
-                this.loadUserDirectoriesForTenant();
-                this.newUserDirectoryControl.setValue('');
-              },
-              error: (error: Error) => this.handleError(error, false)
-            });
+    .afterClosed()
+    .pipe(first())
+    .subscribe({
+      next: (confirmation: boolean | undefined) => {
+        if (confirmation !== true) {
+          return;
         }
-      });
+
+        this.spinnerService.showSpinner();
+
+        this.securityService
+        .removeUserDirectoryFromTenant(this.tenantId, userDirectoryId)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe({
+          next: () => {
+            this.loadUserDirectoriesForTenant();
+            this.newUserDirectoryControl.setValue('');
+          },
+          error: (error: Error) => this.handleError(error, false)
+        });
+      }
+    });
   }
 
   private static calculateAvailableUserDirectories(

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { Component, inject } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {Component, inject} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 /**
  * The ConfirmationDialogData interface defines the data displayed by a confirmation dialog.

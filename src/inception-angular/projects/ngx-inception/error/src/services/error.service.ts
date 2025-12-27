@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
   ProblemDetails, ResponseConverter, ServiceUnavailableError, SortDirection
 } from 'ngx-inception/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { v4 as uuid } from 'uuid';
-import { ErrorReport } from './error-report';
-import { ErrorReportSortBy } from './error-report-sort-by';
-import { ErrorReportSummaries } from './error-report-summaries';
-import { ErrorReportNotFoundError } from './error.service.errors';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {v4 as uuid} from 'uuid';
+import {ErrorReport} from './error-report';
+import {ErrorReportSortBy} from './error-report-sort-by';
+import {ErrorReportSummaries} from './error-report-summaries';
+import {ErrorReportNotFoundError} from './error.service.errors';
 
 /**
  * The Error Service implementation that provides the capability to capture and process application
@@ -58,14 +58,14 @@ export class ErrorService {
    */
   @ResponseConverter getErrorReport(errorReportId: string): Observable<ErrorReport> {
     return this.httpClient
-      .get<ErrorReport>(`${this.config.apiUrlPrefix}/error/error-reports/${errorReportId}`, {
-        reportProgress: true
-      })
-      .pipe(
-        catchError((error) =>
-          ErrorService.handleApiError(error, 'Failed to retrieve the error report.')
-        )
-      );
+    .get<ErrorReport>(`${this.config.apiUrlPrefix}/error/error-reports/${errorReportId}`, {
+      reportProgress: true
+    })
+    .pipe(
+      catchError((error) =>
+        ErrorService.handleApiError(error, 'Failed to retrieve the error report.')
+      )
+    );
   }
 
   /**
@@ -124,15 +124,15 @@ export class ErrorService {
     }
 
     return this.httpClient
-      .get<ErrorReportSummaries>(`${this.config.apiUrlPrefix}/error/error-report-summaries`, {
-        params,
-        reportProgress: true
-      })
-      .pipe(
-        catchError((error) =>
-          ErrorService.handleApiError(error, 'Failed to retrieve the error report summaries.')
-        )
-      );
+    .get<ErrorReportSummaries>(`${this.config.apiUrlPrefix}/error/error-report-summaries`, {
+      params,
+      reportProgress: true
+    })
+    .pipe(
+      catchError((error) =>
+        ErrorService.handleApiError(error, 'Failed to retrieve the error report summaries.')
+      )
+    );
   }
 
   /**
@@ -170,13 +170,13 @@ export class ErrorService {
     );
 
     return this.httpClient
-      .post<boolean>(`${this.config.apiUrlPrefix}/error/error-reports`, errorReport, {
-        observe: 'response'
-      })
-      .pipe(
-        map(ErrorService.isResponse204),
-        catchError((err) => ErrorService.handleApiError(err, 'Failed to send the error report.'))
-      );
+    .post<boolean>(`${this.config.apiUrlPrefix}/error/error-reports`, errorReport, {
+      observe: 'response'
+    })
+    .pipe(
+      map(ErrorService.isResponse204),
+      catchError((err) => ErrorService.handleApiError(err, 'Failed to send the error report.'))
+    );
   }
 
   private static handleApiError(

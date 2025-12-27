@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { CoreModule } from 'ngx-inception/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {CoreModule} from 'ngx-inception/core';
 
 export interface PeriodicElement {
   name: string;
@@ -167,7 +167,7 @@ export class PaginationTableComponent implements AfterViewInit {
 
   readonly displayedColumns = ['position', 'name', 'weight', 'symbol'] as const;
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

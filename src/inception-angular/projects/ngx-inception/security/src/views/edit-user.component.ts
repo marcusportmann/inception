@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { combineLatest } from 'rxjs';
-import { finalize, first } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { User } from '../services/user';
-import { UserDirectoryCapabilities } from '../services/user-directory-capabilities';
+import {combineLatest} from 'rxjs';
+import {finalize, first} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {User} from '../services/user';
+import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
 
 /**
  * The EditUserComponent class implements the edit user component.
@@ -125,7 +125,7 @@ export class EditUserComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     // Initialize the form
@@ -142,14 +142,14 @@ export class EditUserComponent extends AdminContainerView implements OnInit {
   override get backNavigation(): BackNavigation {
     return new BackNavigation($localize`:@@security_edit_user_back_navigation:Users`, ['.'], {
       relativeTo: this.activatedRoute.parent?.parent,
-      state: { userDirectoryId: this.userDirectoryId }
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   cancel(): void {
     void this.router.navigate(['.'], {
       relativeTo: this.activatedRoute.parent?.parent,
-      state: { userDirectoryId: this.userDirectoryId }
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
@@ -161,45 +161,41 @@ export class EditUserComponent extends AdminContainerView implements OnInit {
       this.securityService.getUserDirectoryCapabilities(this.userDirectoryId),
       this.securityService.getUser(this.userDirectoryId, this.username)
     ])
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: ([userDirectoryCapabilities, user]: [UserDirectoryCapabilities, User]) => {
-          this.userDirectoryCapabilities = userDirectoryCapabilities;
-          this.user = user;
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: ([userDirectoryCapabilities, user]: [UserDirectoryCapabilities, User]) => {
+        this.userDirectoryCapabilities = userDirectoryCapabilities;
+        this.user = user;
 
-          this.emailControl.setValue(user.email);
-          this.nameControl.setValue(user.name);
-          this.preferredNameControl.setValue(user.preferredName);
-          this.mobileNumberControl.setValue(user.mobileNumber);
-          this.phoneNumberControl.setValue(user.phoneNumber);
-          this.usernameControl.setValue(user.username);
+        this.emailControl.setValue(user.email);
+        this.nameControl.setValue(user.name);
+        this.preferredNameControl.setValue(user.preferredName);
+        this.mobileNumberControl.setValue(user.mobileNumber);
+        this.phoneNumberControl.setValue(user.phoneNumber);
+        this.usernameControl.setValue(user.username);
 
-          if (userDirectoryCapabilities.supportsPasswordExpiry) {
-            this.editUserForm.addControl('expirePassword', new FormControl(false));
-          }
+        if (userDirectoryCapabilities.supportsPasswordExpiry) {
+          this.editUserForm.addControl('expirePassword', new FormControl(false));
+        }
 
-          if (userDirectoryCapabilities.supportsUserLocks) {
-            this.editUserForm.addControl('lockUser', new FormControl(false));
-          }
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        if (userDirectoryCapabilities.supportsUserLocks) {
+          this.editUserForm.addControl('lockUser', new FormControl(false));
+        }
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.editUserForm.valid) {
+      this.editUserForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.user || !this.editUserForm.valid) {
-      return;
-    }
+    if (!this.user) return;
 
     this.user.name = this.nameControl.value;
     this.user.preferredName = this.preferredNameControl.value;
@@ -216,23 +212,23 @@ export class EditUserComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .updateUser(this.user, expirePassword, lockUser)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .updateUser(this.user, expirePassword, lockUser)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.editUserForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], {
-            relativeTo: this.activatedRoute.parent?.parent,
-            state: { userDirectoryId: this.userDirectoryId }
-          });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.editUserForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {
+          relativeTo: this.activatedRoute.parent?.parent,
+          state: {userDirectoryId: this.userDirectoryId}
+        });
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

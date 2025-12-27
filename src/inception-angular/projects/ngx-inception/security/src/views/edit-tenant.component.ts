@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { Tenant } from '../services/tenant';
+import {finalize, first} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {Tenant} from '../services/tenant';
 
 /**
  * The EditTenantComponent class implements the edit tenant component.
@@ -79,7 +79,7 @@ export class EditTenantComponent extends AdminContainerView implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
   }
 
   ngOnInit(): void {
@@ -87,32 +87,28 @@ export class EditTenantComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getTenant(this.tenantId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (tenant: Tenant) => {
-          this.tenant = tenant;
-          this.nameControl.setValue(tenant.name);
-        },
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+    .getTenant(this.tenantId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (tenant: Tenant) => {
+        this.tenant = tenant;
+        this.nameControl.setValue(tenant.name);
+      },
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.editTenantForm.valid) {
+      this.editTenantForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.tenant || !this.editTenantForm.valid) {
-      return;
-    }
+    if (!this.tenant) return;
 
     this.tenant.name = this.nameControl.value;
 
@@ -121,22 +117,22 @@ export class EditTenantComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .updateTenant(this.tenant)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .updateTenant(this.tenant)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.editTenantForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], {
-            relativeTo: this.activatedRoute.parent?.parent
-          });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.editTenantForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {
+          relativeTo: this.activatedRoute.parent?.parent
+        });
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

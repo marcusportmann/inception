@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { CoreModule } from 'ngx-inception/core';
-import { ButtonsComponent } from './buttons.component';
-import { CardsComponent } from './cards.component';
-import { DialogsComponent } from './dialogs.component';
-import { ErrorReportComponent } from './error-report.component';
-import { ExpansionPanelsComponent } from './expansion-panels.component';
-import { GridListComponent } from './grid-list.component';
-import { ListsComponent } from './lists.component';
-import { ProgressComponent } from './progress.component';
-import { SwitchesComponent } from './switches.component';
-import { TabsComponent } from './tabs.component';
-import { TooltipsComponent } from './tooltips.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
+import {CoreModule} from 'ngx-inception/core';
+import {ButtonsComponent} from './buttons.component';
+import {CardsComponent} from './cards.component';
+import {DialogsComponent} from './dialogs.component';
+import {ErrorReportComponent} from './error-report.component';
+import {ExpansionPanelsComponent} from './expansion-panels.component';
+import {GridListComponent} from './grid-list.component';
+import {ListsComponent} from './lists.component';
+import {ProgressComponent} from './progress.component';
+import {SwitchesComponent} from './switches.component';
+import {TabsComponent} from './tabs.component';
+import {TooltipsComponent} from './tooltips.component';
 
 const routes: Routes = [
   {
@@ -138,4 +138,5 @@ const routes: Routes = [
     CoreModule
   ]
 })
-export class ComponentsModule {}
+export class ComponentsModule {
+}

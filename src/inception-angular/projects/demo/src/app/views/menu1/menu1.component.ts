@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { Component, inject } from '@angular/core';
-import { CoreModule } from 'ngx-inception/core';
-import { first } from 'rxjs/operators';
-import { Data } from '../../services/data';
-import { DataService } from '../../services/data.service';
+import {Component, inject} from '@angular/core';
+import {CoreModule} from 'ngx-inception/core';
+import {first} from 'rxjs/operators';
+import {Data} from '../../services/data';
+import {DataService} from '../../services/data.service';
 
 /**
  * The Menu1Component class implements the menu 1 component.
@@ -31,7 +31,7 @@ import { DataService } from '../../services/data.service';
   imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
-      <mat-card-content> Menu 1 </mat-card-content>
+      <mat-card-content> Menu 1</mat-card-content>
     </mat-card>
   `
 })
@@ -40,12 +40,12 @@ export class Menu1Component {
 
   clickMe(): void {
     this.dataService
-      .getData()
-      .pipe(first())
-      .subscribe((data: Data) => {
-        console.log('data = ', data);
+    .getData()
+    .pipe(first())
+    .subscribe((data: Data) => {
+      console.log('data = ', data);
 
-        this.dataService.validateData(data).pipe(first()).subscribe();
-      });
+      this.dataService.validateData(data).pipe(first()).subscribe();
+    });
   }
 }

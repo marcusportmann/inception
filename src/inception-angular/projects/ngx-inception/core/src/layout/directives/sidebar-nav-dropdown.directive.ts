@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Directive, ElementRef, inject } from '@angular/core';
+import {Directive, ElementRef, inject} from '@angular/core';
 
 /**
  * The SidebarNavDropdownDirective class implements the sidebar nav dropdown directive.

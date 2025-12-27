@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, inject } from '@angular/core';
+import {Component, ElementRef, inject} from '@angular/core';
 
 /**
  * The SpinnerComponent class implements the spinner component.
@@ -25,7 +25,8 @@ import { Component, ElementRef, inject } from '@angular/core';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'spinner',
   standalone: true,
-  template: ` <div class="spinner spinner-oval"></div>`,
+  template: `
+    <div class="spinner spinner-oval"></div>`,
   styles: [
     `
       .spinner {

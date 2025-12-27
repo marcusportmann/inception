@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
   ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { ReportDefinition } from '../services/report-definition';
-import { ReportingService } from '../services/reporting.service';
+import {finalize, first} from 'rxjs/operators';
+import {ReportDefinition} from '../services/report-definition';
+import {ReportingService} from '../services/reporting.service';
 
 /**
  * The NewReportDefinitionComponent class implements the new report definition component.
@@ -86,12 +86,12 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
     return new BackNavigation(
       $localize`:@@reporting_new_report_definition_back_navigation:Report Definitions`,
       ['.'],
-      { relativeTo: this.activatedRoute.parent }
+      {relativeTo: this.activatedRoute.parent}
     );
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   ngOnInit(): void {
@@ -99,16 +99,12 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.newReportDefinitionForm.valid) {
+      this.newReportDefinitionForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.reportDefinition || !this.newReportDefinitionForm.valid) {
-      return;
-    }
+    if (!this.reportDefinition) return;
 
     const files = this.templateControl.value as File[] | null;
 
@@ -139,23 +135,23 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
       this.spinnerService.showSpinner();
 
       this.reportingService
-        .createReportDefinition(reportDefinition)
-        .pipe(
-          first(),
-          finalize(() => {
-            this.spinnerService.hideSpinner();
+      .createReportDefinition(reportDefinition)
+      .pipe(
+        first(),
+        finalize(() => {
+          this.spinnerService.hideSpinner();
 
-            this.newReportDefinitionForm.enable();
-          })
-        )
-        .subscribe({
-          next: () => {
-            void this.router.navigate(['.'], {
-              relativeTo: this.activatedRoute.parent
-            });
-          },
-          error: (error: Error) => this.handleError(error, false)
-        });
+          this.newReportDefinitionForm.enable();
+        })
+      )
+      .subscribe({
+        next: () => {
+          void this.router.navigate(['.'], {
+            relativeTo: this.activatedRoute.parent
+          });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
     };
 
     fileReader.readAsArrayBuffer(files[0]);

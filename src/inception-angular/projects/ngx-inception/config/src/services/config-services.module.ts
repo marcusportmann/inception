@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { ConfigService } from './config.service';
+import {CommonModule} from '@angular/common';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {ConfigService} from './config.service';
 
 /**
  * The ConfigServicesModule class implements the Inception Config Service Module.

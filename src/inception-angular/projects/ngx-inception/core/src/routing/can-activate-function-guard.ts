@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
-import { Session } from '../session/services/session';
-import { SessionService } from '../session/services/session.service';
+import {inject, Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {first, map} from 'rxjs/operators';
+import {Session} from '../session/services/session';
+import {SessionService} from '../session/services/session.service';
 
 /**
  * The CanActivateFunctionGuard class implements the routing guard that restricts access to a route

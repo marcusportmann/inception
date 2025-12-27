@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { inject, Injectable } from '@angular/core';
-import { SessionService } from '../../session/services/session.service';
+import {inject, Injectable} from '@angular/core';
+import {SessionService} from '../../session/services/session.service';
 
 /**
  * The Cache Service implementation.
@@ -55,7 +55,8 @@ export class CacheService {
    *
    * @param key The key identifying the cached value.
    *
-   * @return True if an element in the cache existed and has been removed, or false if the element does not exist.
+   * @return True if an element in the cache existed and has been removed, or false if the element
+   *   does not exist.
    */
   delete(key: string): boolean {
     return this.cache.delete(key);

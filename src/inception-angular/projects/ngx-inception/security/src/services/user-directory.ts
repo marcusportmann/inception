@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { UserDirectoryParameter } from './user-directory-parameter';
+import {UserDirectoryParameter} from './user-directory-parameter';
 
 /**
  * The UserDirectory class holds the information for a user directory.

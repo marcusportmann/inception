@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { SchedulerService } from './scheduler.service';
+import {CommonModule} from '@angular/common';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {SchedulerService} from './scheduler.service';
 
 /**
  * The SchedulerServicesModule class implements the Inception Scheduler Services Module.

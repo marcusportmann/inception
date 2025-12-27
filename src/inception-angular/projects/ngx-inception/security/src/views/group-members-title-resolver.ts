@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {Observable, of} from 'rxjs';
 
 /**
  * The GroupMembersTitleResolver class provides the route data resolver that resolves the

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BackNavigation, CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { Job } from '../services/job';
-import { JobStatus } from '../services/job-status';
-import { SchedulerService } from '../services/scheduler.service';
-import { JobComponent } from './job.component';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {BackNavigation, CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
+import {finalize, first} from 'rxjs/operators';
+import {Job} from '../services/job';
+import {JobStatus} from '../services/job-status';
+import {SchedulerService} from '../services/scheduler.service';
+import {JobComponent} from './job.component';
 
 /**
  * The EditJobComponent class implements the edit job component.
@@ -85,7 +85,10 @@ export class EditJobComponent extends JobComponent implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true, validators: [Validators.required] }
+      {
+        nonNullable: true,
+        validators: [Validators.required]
+      }
     );
 
     this.jobClassControl = new FormControl<string>('', {
@@ -132,7 +135,7 @@ export class EditJobComponent extends JobComponent implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
   }
 
   ngOnInit(): void {
@@ -140,38 +143,34 @@ export class EditJobComponent extends JobComponent implements OnInit {
     this.spinnerService.showSpinner();
 
     this.schedulerService
-      .getJob(this.jobId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (job: Job) => {
-          this.job = job;
-          this.enabledControl.setValue(job.enabled);
-          this.idControl.setValue(job.id);
-          this.jobClassControl.setValue(job.jobClass);
-          this.nameControl.setValue(job.name);
-          this.schedulingPatternControl.setValue(job.schedulingPattern);
-          this.statusControl.setValue(job.status);
-          this.jobParameters = job.parameters;
-        },
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+    .getJob(this.jobId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (job: Job) => {
+        this.job = job;
+        this.enabledControl.setValue(job.enabled);
+        this.idControl.setValue(job.id);
+        this.jobClassControl.setValue(job.jobClass);
+        this.nameControl.setValue(job.name);
+        this.schedulingPatternControl.setValue(job.schedulingPattern);
+        this.statusControl.setValue(job.status);
+        this.jobParameters = job.parameters;
+      },
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.editJobForm.valid) {
+      this.editJobForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.job || !this.editJobForm.valid) {
-      return;
-    }
+    if (!this.job) return;
 
     this.job.enabled = this.enabledControl.value;
     this.job.id = this.idControl.value;
@@ -186,22 +185,22 @@ export class EditJobComponent extends JobComponent implements OnInit {
     this.spinnerService.showSpinner();
 
     this.schedulerService
-      .updateJob(this.job)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .updateJob(this.job)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.editJobForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], {
-            relativeTo: this.activatedRoute.parent?.parent
-          });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.editJobForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {
+          relativeTo: this.activatedRoute.parent?.parent
+        });
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

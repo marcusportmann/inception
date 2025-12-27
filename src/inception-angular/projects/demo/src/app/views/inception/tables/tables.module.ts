@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { CoreModule } from 'ngx-inception/core';
-import { ActionListTableComponent } from './action-list-table.component';
-import { ActionMenuTableComponent } from './action-menu-table.component';
-import { BasicTableComponent } from './basic-table.component';
-import { FilterableTableComponent } from './filterable-table.component';
-import { PaginationTableComponent } from './pagination-table.component';
-import { SortableTableComponent } from './sortable-table.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
+import {CoreModule} from 'ngx-inception/core';
+import {ActionListTableComponent} from './action-list-table.component';
+import {ActionMenuTableComponent} from './action-menu-table.component';
+import {BasicTableComponent} from './basic-table.component';
+import {FilterableTableComponent} from './filterable-table.component';
+import {PaginationTableComponent} from './pagination-table.component';
+import {SortableTableComponent} from './sortable-table.component';
 
 const routes: Routes = [
   {
@@ -94,4 +94,5 @@ const routes: Routes = [
   ],
   providers: []
 })
-export class TablesModule {}
+export class TablesModule {
+}

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { SortDirection } from 'ngx-inception/core';
-import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
-import { PolicySortBy } from './policy-sort-by';
-import { PolicySummaries } from './policy-summaries';
-import { PolicySummary } from './policy-summary';
-import { SecurityService } from './security.service';
+import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {SortDirection} from 'ngx-inception/core';
+import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
+import {catchError, finalize} from 'rxjs/operators';
+import {PolicySortBy} from './policy-sort-by';
+import {PolicySummaries} from './policy-summaries';
+import {PolicySummary} from './policy-summary';
+import {SecurityService} from './security.service';
 
 /**
  * The PolicySummaryDataSource class implements the policy summary data source.
@@ -39,7 +39,8 @@ export class PolicySummaryDataSource implements DataSource<PolicySummary> {
 
   total$ = this.totalSubject$.asObservable();
 
-  constructor(private securityService: SecurityService) {}
+  constructor(private securityService: SecurityService) {
+  }
 
   /**
    * Clear the data source.
@@ -84,14 +85,14 @@ export class PolicySummaryDataSource implements DataSource<PolicySummary> {
     this.loadingSubject$.next(true);
 
     return this.securityService
-      .getPolicySummaries(filter, sortBy, sortDirection, pageIndex, pageSize)
-      .pipe(
-        tap((policySummaries: PolicySummaries) => {
-          this.updateData(policySummaries);
-        }),
-        catchError((error: Error) => this.handleError(error)),
-        finalize(() => this.loadingSubject$.next(false))
-      );
+    .getPolicySummaries(filter, sortBy, sortDirection, pageIndex, pageSize)
+    .pipe(
+      tap((policySummaries: PolicySummaries) => {
+        this.updateData(policySummaries);
+      }),
+      catchError((error: Error) => this.handleError(error)),
+      finalize(() => this.loadingSubject$.next(false))
+    );
   }
 
   /**

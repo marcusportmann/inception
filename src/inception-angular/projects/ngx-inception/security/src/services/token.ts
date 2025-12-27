@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { TokenClaim } from './token-claim';
-import { TokenType } from './token-type';
+import {TokenClaim} from './token-claim';
+import {TokenType} from './token-type';
 
 /**
  * The Token class holds the information for a token.

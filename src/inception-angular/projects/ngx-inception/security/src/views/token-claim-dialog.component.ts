@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
-import { TokenClaim } from '../services/token-claim';
+import {Component, inject} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
+import {TokenClaim} from '../services/token-claim';
 
 /**
  * The TokenClaimDialogData interface defines the data displayed by a token claim dialog.
@@ -70,7 +70,7 @@ export interface TokenClaimDialogData {
               <mat-label i18n="@@security_token_claim_dialog_component_label_name">
                 Name
               </mat-label>
-              <input type="text" matInput formControlName="name" required="true" />
+              <input type="text" matInput formControlName="name" required="true"/>
               @if (nameControl.errors && !nameControl.untouched) {
                 <mat-error>
                   @if (nameControl.errors['required']) {
@@ -94,7 +94,7 @@ export interface TokenClaimDialogData {
               <mat-label i18n="@@security_token_claim_dialog_component_label_value">
                 Value
               </mat-label>
-              <input type="text" matInput formControlName="value" />
+              <input type="text" matInput formControlName="value"/>
               @if (valueControl.errors && !valueControl.untouched) {
                 <mat-error>
                   @if (valueControl.errors['maxlength']) {

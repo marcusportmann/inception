@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { combineLatest, Subscription } from 'rxjs';
-import { finalize, first, pairwise, startWith } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { UserDirectory } from '../services/user-directory';
-import { UserDirectoryParameter } from '../services/user-directory-parameter';
-import { UserDirectoryType } from '../services/user-directory-type';
-import { InternalUserDirectoryComponent } from './internal-user-directory.component';
-import { LdapUserDirectoryComponent } from './ldap-user-directory.component';
+import {combineLatest, Subscription} from 'rxjs';
+import {finalize, first, pairwise, startWith} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {UserDirectory} from '../services/user-directory';
+import {UserDirectoryParameter} from '../services/user-directory-parameter';
+import {UserDirectoryType} from '../services/user-directory-type';
+import {InternalUserDirectoryComponent} from './internal-user-directory.component';
+import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
 
 /**
  * The EditUserDirectoryComponent class implements the edit user directory component.
@@ -104,15 +104,15 @@ export class EditUserDirectoryComponent extends AdminContainerView implements On
 
     this.subscriptions.add(
       this.userDirectoryTypeControl.valueChanges
-        .pipe(startWith(null), pairwise())
-        .subscribe(
-          ([previousUserDirectoryType, currentUserDirectoryType]: [
+      .pipe(startWith(null), pairwise())
+      .subscribe(
+        ([previousUserDirectoryType, currentUserDirectoryType]: [
             string | null,
             string | null
-          ]) => {
-            this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
-          }
-        )
+        ]) => {
+          this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
+        }
+      )
     );
   }
 
@@ -120,12 +120,12 @@ export class EditUserDirectoryComponent extends AdminContainerView implements On
     return new BackNavigation(
       $localize`:@@security_edit_user_directory_back_navigation:User Directories`,
       ['.'],
-      { relativeTo: this.activatedRoute.parent?.parent }
+      {relativeTo: this.activatedRoute.parent?.parent}
     );
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
   }
 
   ngOnDestroy(): void {
@@ -140,34 +140,30 @@ export class EditUserDirectoryComponent extends AdminContainerView implements On
       this.securityService.getUserDirectoryTypes(),
       this.securityService.getUserDirectory(this.userDirectoryId)
     ])
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: ([userDirectoryTypes, userDirectory]: [UserDirectoryType[], UserDirectory]) => {
-          this.userDirectoryTypes = userDirectoryTypes;
-          this.userDirectory = userDirectory;
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: ([userDirectoryTypes, userDirectory]: [UserDirectoryType[], UserDirectory]) => {
+        this.userDirectoryTypes = userDirectoryTypes;
+        this.userDirectory = userDirectory;
 
-          this.nameControl.setValue(userDirectory.name);
-          this.userDirectoryTypeControl.setValue(userDirectory.type);
-        },
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+        this.nameControl.setValue(userDirectory.name);
+        this.userDirectoryTypeControl.setValue(userDirectory.type);
+      },
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.editUserDirectoryForm.valid) {
+      this.editUserDirectoryForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.userDirectory || !this.editUserDirectoryForm.valid) {
-      return;
-    }
+    if (!this.userDirectory) return;
 
     this.userDirectory.name = this.nameControl.value;
     this.userDirectory.type = this.userDirectoryTypeControl.value || '';
@@ -183,23 +179,23 @@ export class EditUserDirectoryComponent extends AdminContainerView implements On
     this.spinnerService.showSpinner();
 
     this.securityService
-      .updateUserDirectory(this.userDirectory)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .updateUserDirectory(this.userDirectory)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.editUserDirectoryForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], {
-            relativeTo: this.activatedRoute.parent?.parent
-          });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.editUserDirectoryForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {
+          relativeTo: this.activatedRoute.parent?.parent
+        });
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   userDirectoryTypeSelected(

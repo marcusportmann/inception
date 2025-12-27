@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { PasswordChangeReason } from './password-change-reason';
+import {PasswordChangeReason} from './password-change-reason';
 
 /**
  * The PasswordChange class holds the information for a password change.

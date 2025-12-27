@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   AutocompleteSelectionRequiredDirective, CoreModule, Session, SessionService,
   ValidatedFormDirective
 } from 'ngx-inception/core';
-import { Tenant } from 'ngx-inception/security';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { debounceTime, first, map, startWith, takeUntil } from 'rxjs/operators';
+import {Tenant} from 'ngx-inception/security';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {debounceTime, first, map, startWith, takeUntil} from 'rxjs/operators';
 
 /**
  * The SelectTenantComponent class implements the select tenant component.
@@ -93,30 +93,30 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-      .pipe(
-        first(),
-        map(() => window.history.state)
-      )
-      .subscribe((state) => {
-        const tenants: Tenant[] | undefined = state?.tenants;
+    .pipe(
+      first(),
+      map(() => window.history.state)
+    )
+    .subscribe((state) => {
+      const tenants: Tenant[] | undefined = state?.tenants;
 
-        if (!tenants || !Array.isArray(tenants) || tenants.length === 0) {
-          console.error(
-            'No tenants found, invalidating session and redirecting to the application root'
-          );
+      if (!tenants || !Array.isArray(tenants) || tenants.length === 0) {
+        console.error(
+          'No tenants found, invalidating session and redirecting to the application root'
+        );
 
-          this.sessionService.logout();
+        this.sessionService.logout();
 
-          void this.router.navigate(['/']);
+        void this.router.navigate(['/']);
 
-          return;
-        }
+        return;
+      }
 
-        this.tenants = tenants;
-        this.filteredTenants$.next(this.tenants);
+      this.tenants = tenants;
+      this.filteredTenants$.next(this.tenants);
 
-        this.setupTenantFiltering();
-      });
+      this.setupTenantFiltering();
+    });
   }
 
   ok(): void {
@@ -168,10 +168,10 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
 
   private setupTenantFiltering(): void {
     this.tenantControl.valueChanges
-      .pipe(startWith('' as Tenant | string), debounceTime(200), takeUntil(this.destroy$))
-      .subscribe((value) => {
-        const filtered = this.filterTenants(this.tenants, value);
-        this.filteredTenants$.next(filtered);
-      });
+    .pipe(startWith('' as Tenant | string), debounceTime(200), takeUntil(this.destroy$))
+    .subscribe((value) => {
+      const filtered = this.filterTenants(this.tenants, value);
+      this.filteredTenants$.next(filtered);
+    });
   }
 }

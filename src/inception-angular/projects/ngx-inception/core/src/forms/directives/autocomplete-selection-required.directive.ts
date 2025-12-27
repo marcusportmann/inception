@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Directive, inject, Input, OnDestroy } from '@angular/core';
-import { NgControl } from '@angular/forms';
-import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
-import { MatOptionSelectionChange } from '@angular/material/core';
-import { Subscription } from 'rxjs';
+import {AfterViewInit, Directive, inject, Input, OnDestroy} from '@angular/core';
+import {NgControl} from '@angular/forms';
+import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import {MatOptionSelectionChange} from '@angular/material/core';
+import {Subscription} from 'rxjs';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
@@ -29,7 +29,10 @@ export class AutocompleteSelectionRequiredDirective implements AfterViewInit, On
   @Input()
   matAutocomplete: MatAutocomplete | undefined;
 
-  private readonly autoCompleteTrigger = inject(MatAutocompleteTrigger, { host: true, self: true });
+  private readonly autoCompleteTrigger = inject(MatAutocompleteTrigger, {
+    host: true,
+    self: true
+  });
 
   private readonly ngControl = inject(NgControl);
 
@@ -42,8 +45,8 @@ export class AutocompleteSelectionRequiredDirective implements AfterViewInit, On
         (_next: MatOptionSelectionChange | null) => {
           if (this.matAutocomplete) {
             const selected = this.matAutocomplete.options
-              .map((option) => option.value)
-              .find((option) => option === this.ngControl.value);
+            .map((option) => option.value)
+            .find((option) => option === this.ngControl.value);
 
             if (selected == null) {
               if (this.ngControl.control && !!this.ngControl.control.value) {

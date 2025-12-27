@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { CodeCategoriesTitleResolver } from 'ngx-inception/codes';
-import { ConfigsTitleResolver } from 'ngx-inception/config';
-import { ErrorReportsTitleResolver } from 'ngx-inception/error';
-import { MailTitleResolver } from 'ngx-inception/mail';
-import { ReportingTitleResolver } from 'ngx-inception/reporting';
-import { SchedulerTitleResolver } from 'ngx-inception/scheduler';
-import { SecurityTitleResolver } from 'ngx-inception/security';
-import { AdministrationTitleResolver } from './administration-title-resolver';
-import { AdministrationComponent } from './administration.component';
-import { SystemTitleResolver } from './system-title-resolver';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {CodeCategoriesTitleResolver} from 'ngx-inception/codes';
+import {ConfigsTitleResolver} from 'ngx-inception/config';
+import {ErrorReportsTitleResolver} from 'ngx-inception/error';
+import {MailTitleResolver} from 'ngx-inception/mail';
+import {ReportingTitleResolver} from 'ngx-inception/reporting';
+import {SchedulerTitleResolver} from 'ngx-inception/scheduler';
+import {SecurityTitleResolver} from 'ngx-inception/security';
+import {AdministrationTitleResolver} from './administration-title-resolver';
+import {AdministrationComponent} from './administration.component';
+import {SystemTitleResolver} from './system-title-resolver';
 
 const routes: Routes = [
   {
@@ -133,4 +133,5 @@ const routes: Routes = [
     SystemTitleResolver
   ]
 })
-export class AdministrationModule {}
+export class AdministrationModule {
+}

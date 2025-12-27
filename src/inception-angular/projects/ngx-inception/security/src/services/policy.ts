@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { PolicyType } from './policy-type';
+import {PolicyType} from './policy-type';
 
 /**
  * The Policy class holds the information for a policy.

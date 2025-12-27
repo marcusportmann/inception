@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { SortDirection } from 'ngx-inception/core';
-import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
-import { SecurityService } from './security.service';
-import { UserDirectorySummaries } from './user-directory-summaries';
-import { UserDirectorySummary } from './user-directory-summary';
+import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {SortDirection} from 'ngx-inception/core';
+import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
+import {catchError, finalize} from 'rxjs/operators';
+import {SecurityService} from './security.service';
+import {UserDirectorySummaries} from './user-directory-summaries';
+import {UserDirectorySummary} from './user-directory-summary';
 
 /**
  * The UserDirectorySummaryDataSource class implements the token summary data source.
@@ -38,7 +38,8 @@ export class UserDirectorySummaryDataSource implements DataSource<UserDirectoryS
 
   total$ = this.totalSubject$.asObservable();
 
-  constructor(private securityService: SecurityService) {}
+  constructor(private securityService: SecurityService) {
+  }
 
   /**
    * Clear the data source.
@@ -81,14 +82,14 @@ export class UserDirectorySummaryDataSource implements DataSource<UserDirectoryS
     this.loadingSubject$.next(true);
 
     return this.securityService
-      .getUserDirectorySummaries(filter, sortDirection, pageIndex, pageSize)
-      .pipe(
-        tap((userDirectorySummaries: UserDirectorySummaries) => {
-          this.updateData(userDirectorySummaries);
-        }),
-        catchError((error: Error) => this.handleError(error)),
-        finalize(() => this.loadingSubject$.next(false))
-      );
+    .getUserDirectorySummaries(filter, sortDirection, pageIndex, pageSize)
+    .pipe(
+      tap((userDirectorySummaries: UserDirectorySummaries) => {
+        this.updateData(userDirectorySummaries);
+      }),
+      catchError((error: Error) => this.handleError(error)),
+      finalize(() => this.loadingSubject$.next(false))
+    );
   }
 
   /**

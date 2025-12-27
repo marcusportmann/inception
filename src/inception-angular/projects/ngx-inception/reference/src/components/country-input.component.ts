@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
   ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatFormFieldControl } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { AutocompleteSelectionRequiredDirective, CoreModule } from 'ngx-inception/core';
-import { BehaviorSubject, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { debounceTime, first } from 'rxjs/operators';
-import { Country } from '../services/country';
-import { ReferenceService } from '../services/reference.service';
+import {ControlValueAccessor, NgControl} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatFormFieldControl} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {AutocompleteSelectionRequiredDirective, CoreModule} from 'ngx-inception/core';
+import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
+import {debounceTime, first} from 'rxjs/operators';
+import {Country} from '../services/country';
+import {ReferenceService} from '../services/reference.service';
 
 /**
  * The CountryInputComponent class implements the country input component.
@@ -48,7 +48,7 @@ import { ReferenceService } from '../services/reference.service';
         [matAutocompleteConnectedTo]="origin"
         (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
-        (focusout)="onFocusOut($event)" />
+        (focusout)="onFocusOut($event)"/>
       <mat-autocomplete
         #countryAutocomplete="matAutocomplete"
         (closed)="onClosed()"
@@ -70,8 +70,7 @@ import { ReferenceService } from '../services/reference.service';
   ]
 })
 export class CountryInputComponent
-  implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy
-{
+  implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy {
   private static _nextId = 0;
 
   /**
@@ -97,14 +96,17 @@ export class CountryInputComponent
   /**
    * The country input.
    */
-  @ViewChild(MatInput, { static: true }) input!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /**
    * The observable providing access to the value for the country input as it changes.
    */
   readonly inputValue$ = new ReplaySubject<string>(1);
 
-  ngControl = inject(NgControl, { optional: true, self: true });
+  ngControl = inject(NgControl, {
+    optional: true,
+    self: true
+  });
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -272,23 +274,23 @@ export class CountryInputComponent
     }
 
     this.referenceService
-      .getCountries()
-      .pipe(first())
-      .subscribe((countries: Map<string, Country>) => {
-        this._options = Array.from(countries.values());
-        this.filteredOptions$.next(this._options);
+    .getCountries()
+    .pipe(first())
+    .subscribe((countries: Map<string, Country>) => {
+      this._options = Array.from(countries.values());
+      this.filteredOptions$.next(this._options);
 
-        if (this.value) {
-          const option = this._options.find((o) => o.code === this.value);
-          if (option) {
-            this.input.value = option.name;
-            return;
-          }
-
-          // The value is invalid, so clear it
-          this.value = null;
+      if (this.value) {
+        const option = this._options.find((o) => o.code === this.value);
+        if (option) {
+          this.input.value = option.name;
+          return;
         }
-      });
+
+        // The value is invalid, so clear it
+        this.value = null;
+      }
+    });
 
     this.subscriptions.add(
       this.inputValue$.pipe(debounceTime(250)).subscribe((value: string) => {

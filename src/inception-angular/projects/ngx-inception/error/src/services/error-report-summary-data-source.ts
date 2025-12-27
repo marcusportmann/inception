@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { SortDirection } from 'ngx-inception/core';
-import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
-import { ErrorReportSortBy } from './error-report-sort-by';
-import { ErrorReportSummaries } from './error-report-summaries';
-import { ErrorReportSummary } from './error-report-summary';
-import { ErrorService } from './error.service';
+import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {SortDirection} from 'ngx-inception/core';
+import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
+import {catchError, finalize} from 'rxjs/operators';
+import {ErrorReportSortBy} from './error-report-sort-by';
+import {ErrorReportSummaries} from './error-report-summaries';
+import {ErrorReportSummary} from './error-report-summary';
+import {ErrorService} from './error.service';
 
 /**
  * The ErrorReportSummaryDataSource class implements the error report summary data source.
@@ -37,7 +37,8 @@ export class ErrorReportSummaryDataSource implements DataSource<ErrorReportSumma
 
   total$ = this.totalSubject$.asObservable();
 
-  constructor(private errorService: ErrorService) {}
+  constructor(private errorService: ErrorService) {
+  }
 
   /**
    * Clear the data source.
@@ -89,14 +90,14 @@ export class ErrorReportSummaryDataSource implements DataSource<ErrorReportSumma
     this.loadingSubject$.next(true);
 
     return this.errorService
-      .getErrorReportSummaries(filter, fromDate, toDate, sortBy, sortDirection, pageIndex, pageSize)
-      .pipe(
-        tap((errorReportSummaries: ErrorReportSummaries) => {
-          this.updateData(errorReportSummaries);
-        }),
-        catchError((error: Error) => this.handleError(error)),
-        finalize(() => this.loadingSubject$.next(false))
-      );
+    .getErrorReportSummaries(filter, fromDate, toDate, sortBy, sortDirection, pageIndex, pageSize)
+    .pipe(
+      tap((errorReportSummaries: ErrorReportSummaries) => {
+        this.updateData(errorReportSummaries);
+      }),
+      catchError((error: Error) => this.handleError(error)),
+      finalize(() => this.loadingSubject$.next(false))
+    );
   }
 
   /**

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
   ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { MailTemplate } from '../services/mail-template';
-import { MailTemplateContentType } from '../services/mail-template-content-type';
-import { MailService } from '../services/mail.service';
+import {finalize, first} from 'rxjs/operators';
+import {MailTemplate} from '../services/mail-template';
+import {MailTemplateContentType} from '../services/mail-template-content-type';
+import {MailService} from '../services/mail.service';
 
 /**
  * The EditMailTemplateComponent class implements the edit mail template component.
@@ -95,7 +95,10 @@ export class EditMailTemplateComponent extends AdminContainerView implements OnI
         value: '',
         disabled: true
       },
-      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
+      {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(100)]
+      }
     );
 
     this.nameControl = new FormControl<string>('', {
@@ -122,12 +125,12 @@ export class EditMailTemplateComponent extends AdminContainerView implements OnI
     return new BackNavigation(
       $localize`:@@mail_edit_mail_template_back_navigation:Mail Templates`,
       ['.'],
-      { relativeTo: this.activatedRoute.parent?.parent }
+      {relativeTo: this.activatedRoute.parent?.parent}
     );
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
   }
 
   ngOnInit(): void {
@@ -135,34 +138,30 @@ export class EditMailTemplateComponent extends AdminContainerView implements OnI
     this.spinnerService.showSpinner();
 
     this.mailService
-      .getMailTemplate(this.mailTemplateId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (mailTemplate: MailTemplate) => {
-          this.mailTemplate = mailTemplate;
-          this.idControl.setValue(mailTemplate.id);
-          this.nameControl.setValue(mailTemplate.name);
-          this.contentTypeControl.setValue(mailTemplate.contentType);
-        },
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+    .getMailTemplate(this.mailTemplateId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (mailTemplate: MailTemplate) => {
+        this.mailTemplate = mailTemplate;
+        this.idControl.setValue(mailTemplate.id);
+        this.nameControl.setValue(mailTemplate.name);
+        this.contentTypeControl.setValue(mailTemplate.contentType);
+      },
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.editMailTemplateForm.valid) {
+      this.editMailTemplateForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.mailTemplate || !this.editMailTemplateForm.valid) {
-      return;
-    }
+    if (!this.mailTemplate) return;
 
     const files = this.templateControl.value;
 
@@ -193,21 +192,21 @@ export class EditMailTemplateComponent extends AdminContainerView implements OnI
       this.spinnerService.showSpinner();
 
       this.mailService
-        .updateMailTemplate(mailTemplate)
-        .pipe(
-          first(),
-          finalize(() => {
-            this.spinnerService.hideSpinner();
+      .updateMailTemplate(mailTemplate)
+      .pipe(
+        first(),
+        finalize(() => {
+          this.spinnerService.hideSpinner();
 
-            this.editMailTemplateForm.enable();
-          })
-        )
-        .subscribe({
-          next: () => {
-            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
-          },
-          error: (error: Error) => this.handleError(error, false)
-        });
+          this.editMailTemplateForm.enable();
+        })
+      )
+      .subscribe({
+        next: () => {
+          void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
     };
 
     fileReader.readAsArrayBuffer(files[0]);

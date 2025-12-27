@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ReportingService } from '../services/reporting.service';
+import {inject, Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {Observable} from 'rxjs';
+import {ReportingService} from '../services/reporting.service';
 
 /**
  * The ReportDefinitionTitleResolver class provides the route data resolver that resolves the

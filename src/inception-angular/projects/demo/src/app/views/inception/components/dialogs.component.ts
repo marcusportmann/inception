@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Component, inject } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ConfirmationDialogComponent, CoreModule, DialogService } from 'ngx-inception/core';
-import { first } from 'rxjs/operators';
+import {Component, inject} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+import {ConfirmationDialogComponent, CoreModule, DialogService} from 'ngx-inception/core';
+import {first} from 'rxjs/operators';
 
 /**
  * The DialogsComponent class implements the dialogs component.
@@ -41,12 +41,12 @@ export class DialogsComponent {
 
     // noinspection JSUnusedLocalSymbols
     dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        void confirmation;
-        /* empty */
-      });
+    .afterClosed()
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      void confirmation;
+      /* empty */
+    });
   }
 
   error(): void {

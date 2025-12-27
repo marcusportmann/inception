@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { CoreModule } from 'ngx-inception/core';
-import { ReferenceComponentsModule } from 'ngx-inception/reference';
-import { ExampleComponent } from './example.component';
-import { ReferenceComponentsComponent } from './reference-components.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {ReactiveFormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
+import {CoreModule} from 'ngx-inception/core';
+import {ReferenceComponentsModule} from 'ngx-inception/reference';
+import {ExampleComponent} from './example.component';
+import {ReferenceComponentsComponent} from './reference-components.component';
 
 const routes: Routes = [
   {
@@ -60,4 +60,5 @@ const routes: Routes = [
   ],
   providers: []
 })
-export class FormsModule {}
+export class FormsModule {
+}

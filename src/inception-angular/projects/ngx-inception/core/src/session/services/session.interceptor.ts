@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
-import { SessionService } from './session.service';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {switchMap, take} from 'rxjs/operators';
+import {SessionService} from './session.service';
 
 /**
  * The SessionInterceptor class implements an Angular HTTP interceptor, which injects the OAuth2

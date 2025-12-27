@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { SortDirection } from 'ngx-inception/core';
-import { Group } from './group';
+import {SortDirection} from 'ngx-inception/core';
+import {Group} from './group';
 
 /**
  * The Groups class holds the results of a request to retrieve a list of groups.

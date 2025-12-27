@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { AsyncPipe } from '@angular/common';
-import { Component, ElementRef, inject, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Replace } from '../../util/replace';
-import { TitleBarService } from '../services/title-bar.service';
-import { BackNavigation } from './back-navigation';
+import {AsyncPipe} from '@angular/common';
+import {Component, ElementRef, inject, Input, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {Replace} from '../../util/replace';
+import {TitleBarService} from '../services/title-bar.service';
+import {BackNavigation} from './back-navigation';
 
 /**
  * The TitleBarComponent class implements the title bar component.

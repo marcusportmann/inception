@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { inject } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
-import { DialogService } from '../../dialogs/services/dialog.service';
-import { AccessDeniedError, InvalidArgumentError, ServiceUnavailableError } from '../../errors';
-import { SpinnerService } from '../services/spinner.service';
-import { BackNavigation } from './back-navigation';
+import {inject} from '@angular/core';
+import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {first} from 'rxjs/operators';
+import {DialogService} from '../../dialogs/services/dialog.service';
+import {AccessDeniedError, InvalidArgumentError, ServiceUnavailableError} from '../../errors';
+import {SpinnerService} from '../services/spinner.service';
+import {BackNavigation} from './back-navigation';
 
 /**
  * The AdminContainerView class provides the abstract base class that all admin container view
@@ -109,18 +109,18 @@ export abstract class AdminContainerView {
       error instanceof ServiceUnavailableError
     ) {
       void this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
+        state: {error}
       });
     } else {
       this.dialogService
-        .showErrorDialog(error)
-        .afterClosed()
-        .pipe(first())
-        .subscribe(() => {
-          if (navigateOnClose && navigateCommands) {
-            void this.router.navigate(navigateCommands, navigateExtras);
-          }
-        });
+      .showErrorDialog(error)
+      .afterClosed()
+      .pipe(first())
+      .subscribe(() => {
+        if (navigateOnClose && navigateCommands) {
+          void this.router.navigate(navigateCommands, navigateExtras);
+        }
+      });
     }
   }
 }

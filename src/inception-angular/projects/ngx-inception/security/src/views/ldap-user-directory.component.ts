@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { Component, forwardRef } from '@angular/core';
+import {Component, forwardRef} from '@angular/core';
 import {
   AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
   ValidationErrors, Validator, Validators
 } from '@angular/forms';
-import { CoreModule } from 'ngx-inception/core';
-import { UserDirectoryParameter } from '../services/user-directory-parameter';
-import { UserDirectoryUtil } from '../services/user-directory-util';
+import {CoreModule} from 'ngx-inception/core';
+import {UserDirectoryParameter} from '../services/user-directory-parameter';
+import {UserDirectoryUtil} from '../services/user-directory-util';
 
 @Component({
   selector: 'inception-security-ldap-user-directory',
@@ -44,33 +44,61 @@ import { UserDirectoryUtil } from '../services/user-directory-util';
 })
 export class LdapUserDirectoryComponent implements ControlValueAccessor, Validator {
   baseDNControl: FormControl;
+
   bindDNControl: FormControl;
+
   bindPasswordControl: FormControl;
+
   groupBaseDNControl: FormControl;
+
   groupDescriptionAttributeControl: FormControl;
+
   groupMemberAttributeControl: FormControl;
+
   groupNameAttributeControl: FormControl;
+
   groupNamePrefixFilterControl: FormControl;
+
   groupObjectClassControl: FormControl;
+
   hostControl: FormControl;
+
   ldapUserDirectoryForm: FormGroup;
+
   maxFilteredGroupMembersControl: FormControl;
+
   maxFilteredGroupsControl: FormControl;
+
   maxFilteredUsersControl: FormControl;
+
   portControl: FormControl;
+
   supportsAdminChangePasswordControl: FormControl;
+
   supportsChangePasswordControl: FormControl;
+
   supportsGroupAdministrationControl: FormControl;
+
   supportsGroupMemberAdministrationControl: FormControl;
+
   supportsUserAdministrationControl: FormControl;
+
   useSSLControl: FormControl;
+
   userBaseDNControl: FormControl;
+
   userEmailAttributeControl: FormControl;
+
   userMobileNumberAttributeControl: FormControl;
+
   userNameAttributeControl: FormControl;
+
   userObjectClassControl: FormControl;
+
   userPhoneNumberAttributeControl: FormControl;
+
   userPreferredNameAttributeControl: FormControl;
+
   userUsernameAttributeControl: FormControl;
 
   constructor() {
@@ -503,11 +531,11 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
     return this.ldapUserDirectoryForm.valid
       ? null
       : {
-          invalidForm: {
-            valid: false,
-            message: 'ldapUserDirectoryForm fields are invalid'
-          }
-        };
+        invalidForm: {
+          valid: false,
+          message: 'ldapUserDirectoryForm fields are invalid'
+        }
+      };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

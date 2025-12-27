@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Directive, HostListener } from '@angular/core';
+import {Directive, HostListener} from '@angular/core';
 
 /**
  * The SidebarOffCanvasCloseDirective class implements the sidebar off canvas close directive.

@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, inject} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   AccessDeniedError, CoreModule, DialogService, InformationDialogComponent, InvalidArgumentError,
   ServiceUnavailableError, SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { SecurityService } from 'ngx-inception/security';
-import { Observable, throwError } from 'rxjs';
-import { catchError, finalize, first } from 'rxjs/operators';
+import {SecurityService} from 'ngx-inception/security';
+import {Observable, throwError} from 'rxjs';
+import {catchError, finalize, first} from 'rxjs/operators';
 
 /**
  * The ForgottenPasswordComponent class implements the forgotten password component.
@@ -68,7 +68,7 @@ export class ForgottenPasswordComponent {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   resetPassword(): void {
@@ -77,7 +77,7 @@ export class ForgottenPasswordComponent {
       return;
     }
 
-    const { username } = this.forgottenPasswordForm.getRawValue();
+    const {username} = this.forgottenPasswordForm.getRawValue();
 
     const resetPasswordUrl = this.buildResetPasswordUrl();
 
@@ -86,17 +86,17 @@ export class ForgottenPasswordComponent {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .initiatePasswordReset(username, resetPasswordUrl)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .initiatePasswordReset(username, resetPasswordUrl)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.forgottenPasswordForm.enable();
-        }),
-        catchError((error: Error) => this.handleError(error))
-      )
-      .subscribe(() => this.showSuccessDialog());
+        this.forgottenPasswordForm.enable();
+      }),
+      catchError((error: Error) => this.handleError(error))
+    )
+    .subscribe(() => this.showSuccessDialog());
   }
 
   /**
@@ -116,7 +116,7 @@ export class ForgottenPasswordComponent {
     ) {
       // Redirect to the error report page
       void this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
+        state: {error}
       });
     } else {
       // Show the error dialog and keep the user on this screen
@@ -133,11 +133,11 @@ export class ForgottenPasswordComponent {
       });
 
     dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe(() => {
-        // Navigate back after the dialog is closed
-        void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
-      });
+    .afterClosed()
+    .pipe(first())
+    .subscribe(() => {
+      // Navigate back after the dialog is closed
+      void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
+    });
   }
 }

@@ -17,19 +17,19 @@
 import {
   AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {
   BackNavigation, CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { Observable, tap } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
+import {Observable, tap} from 'rxjs';
+import {finalize, takeUntil} from 'rxjs/operators';
 
-import { GroupMember } from '../services/group-member';
-import { GroupMemberDataSource } from '../services/group-member-data-source';
-import { GroupMemberType } from '../services/group-member-type';
-import { GroupMembers } from '../services/group-members';
-import { SecurityService } from '../services/security.service';
+import {GroupMember} from '../services/group-member';
+import {GroupMemberDataSource} from '../services/group-member-data-source';
+import {GroupMemberType} from '../services/group-member-type';
+import {GroupMembers} from '../services/group-members';
+import {SecurityService} from '../services/security.service';
 
 /**
  * The GroupMembersComponent class implements the Group Members component.
@@ -57,11 +57,11 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
 
   readonly listStateKey = 'security.group-members';
 
-  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) override paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) override sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, { static: true })
+  @ViewChild(TableFilterComponent, {static: true})
   override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_group_members_title:Group Members`;
@@ -103,7 +103,7 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
       ['../../..'],
       {
         relativeTo: this.activatedRoute,
-        state: { userDirectoryId: this.userDirectoryId }
+        state: {userDirectoryId: this.userDirectoryId}
       }
     );
   }
@@ -149,16 +149,16 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
     this.spinnerService.showSpinner();
 
     this.loadGroupMembers()
-      .pipe(
-        finalize(() => this.spinnerService.hideSpinner()),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: () => {
-          // loadGroupMembers() already updated datasource + synced paginator
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .pipe(
+      finalize(() => this.spinnerService.hideSpinner()),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: () => {
+        // loadGroupMembers() already updated datasource + synced paginator
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   private loadGroupMembers(): Observable<GroupMembers> {
@@ -170,38 +170,38 @@ export class GroupMembersComponent extends StatefulListView implements AfterView
         : SortDirection.Descending;
 
     return this.dataSource
-      .load(
-        this.userDirectoryId,
-        this.groupName,
-        filterValue,
-        sortDirection,
-        this.paginator.pageIndex,
-        this.paginator.pageSize
-      )
-      .pipe(
-        tap((groupMembers: GroupMembers) => {
-          // Sync paginator to what the server actually returned/corrected
-          this.restoringState = true;
-          try {
-            if (groupMembers && this.paginator) {
-              const pageIndex = groupMembers.pageIndex;
-              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
-                this.paginator.pageIndex = Math.trunc(pageIndex);
-              }
-
-              const pageSize = groupMembers.pageSize;
-              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
-                this.paginator.pageSize = Math.trunc(pageSize);
-              }
-
-              this.saveState();
+    .load(
+      this.userDirectoryId,
+      this.groupName,
+      filterValue,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    )
+    .pipe(
+      tap((groupMembers: GroupMembers) => {
+        // Sync paginator to what the server actually returned/corrected
+        this.restoringState = true;
+        try {
+          if (groupMembers && this.paginator) {
+            const pageIndex = groupMembers.pageIndex;
+            if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+              this.paginator.pageIndex = Math.trunc(pageIndex);
             }
-          } finally {
-            this.restoringState = false;
-          }
 
-          this.changeDetectorRef.markForCheck();
-        })
-      );
+            const pageSize = groupMembers.pageSize;
+            if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+              this.paginator.pageSize = Math.trunc(pageSize);
+            }
+
+            this.saveState();
+          }
+        } finally {
+          this.restoringState = false;
+        }
+
+        this.changeDetectorRef.markForCheck();
+      })
+    );
   }
 }

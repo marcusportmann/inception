@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'inception-ngx-inception',
@@ -22,4 +22,5 @@ import { Component } from '@angular/core';
   template: ``,
   styles: []
 })
-export class NgxInceptionComponent {}
+export class NgxInceptionComponent {
+}

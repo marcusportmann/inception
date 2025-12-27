@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
-import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
-import { Observable } from 'rxjs';
+import {ChangeDetectionStrategy, Component, HostBinding, inject} from '@angular/core';
+import {CoreModule, FilteredPaginatedListView, TableFilterComponent} from 'ngx-inception/core';
+import {Observable} from 'rxjs';
 
-import { MailTemplateContentType } from '../services/mail-template-content-type';
-import { MailTemplateSummary } from '../services/mail-template-summary';
-import { MailService } from '../services/mail.service';
+import {MailTemplateContentType} from '../services/mail-template-content-type';
+import {MailTemplateSummary} from '../services/mail-template-summary';
+import {MailService} from '../services/mail.service';
 
 /**
  * The MailTemplatesComponent class implements the Mail Templates component.
@@ -68,7 +68,7 @@ export class MailTemplatesComponent extends FilteredPaginatedListView<MailTempla
   }
 
   newMailTemplate(): void {
-    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
 
   protected override createFilterPredicate(): (

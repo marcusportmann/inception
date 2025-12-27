@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { AdminContainerView, BackNavigation, CoreModule } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { ErrorReport } from '../services/error-report';
-import { ErrorService } from '../services/error.service';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {AdminContainerView, BackNavigation, CoreModule} from 'ngx-inception/core';
+import {finalize, first} from 'rxjs/operators';
+import {ErrorReport} from '../services/error-report';
+import {ErrorService} from '../services/error.service';
 
 /**
  * The ErrorReportComponent class implements the error report component.
@@ -88,7 +88,7 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     this.applicationVersionControl = new FormControl<string>(
@@ -96,7 +96,7 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     this.createdControl = new FormControl<Date>(
@@ -104,7 +104,7 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
         value: new Date(),
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     this.descriptionControl = new FormControl<string>(
@@ -112,7 +112,7 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     this.detailControl = new FormControl<string>(
@@ -120,7 +120,7 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     this.deviceIdControl = new FormControl<string>(
@@ -128,7 +128,7 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     this.feedbackControl = new FormControl<string>(
@@ -136,7 +136,7 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     this.idControl = new FormControl<string>(
@@ -144,7 +144,7 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     this.whoControl = new FormControl<string>(
@@ -152,7 +152,7 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     // Initialize the form group
@@ -173,7 +173,7 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
     return new BackNavigation(
       $localize`:@@error_error_report_back_navigation:Error Reports`,
       ['.'],
-      { relativeTo: this.activatedRoute.parent }
+      {relativeTo: this.activatedRoute.parent}
     );
   }
 
@@ -182,20 +182,20 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.errorService
-      .getErrorReport(this.errorReportId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (errorReport: ErrorReport) => this.populateForm(errorReport),
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+    .getErrorReport(this.errorReportId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (errorReport: ErrorReport) => this.populateForm(errorReport),
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 
   ok(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   private populateForm(errorReport: ErrorReport): void {

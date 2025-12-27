@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { ChangeDetectorRef, Directive, inject, OnDestroy, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import {ChangeDetectorRef, Directive, inject, OnDestroy, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 
-import { EMPTY, merge, Observable, Subject } from 'rxjs';
+import {EMPTY, merge, Observable, Subject} from 'rxjs';
 import {
   catchError, debounceTime, filter, finalize, first, switchMap, takeUntil
 } from 'rxjs/operators';
-import { TableFilterComponent } from '../../forms/components/table-filter.component';
-import { ListState, ListStateService } from '../services/list-state.service';
-import { AdminContainerView } from './admin-container-view';
+import {TableFilterComponent} from '../../forms/components/table-filter.component';
+import {ListState, ListStateService} from '../services/list-state.service';
+import {AdminContainerView} from './admin-container-view';
 
 /**
  * Base view for list screens with persisted state (page, sort, filter, extras).
@@ -32,8 +32,7 @@ import { AdminContainerView } from './admin-container-view';
 @Directive()
 export abstract class StatefulListView<TExtras = unknown>
   extends AdminContainerView
-  implements OnDestroy
-{
+  implements OnDestroy {
   readonly defaultPageSize = 10;
 
   abstract readonly defaultSortActive: string;
@@ -50,16 +49,16 @@ export abstract class StatefulListView<TExtras = unknown>
 
   protected readonly listStateService = inject(ListStateService);
 
-  @ViewChild(MatPaginator, { static: true })
+  @ViewChild(MatPaginator, {static: true})
   protected paginator!: MatPaginator;
 
   /** Guard to ignore events while restoring state. */
   protected restoringState = false;
 
-  @ViewChild(MatSort, { static: true })
+  @ViewChild(MatSort, {static: true})
   protected sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, { static: true })
+  @ViewChild(TableFilterComponent, {static: true})
   protected tableFilter!: TableFilterComponent;
 
   ngOnDestroy(): void {
@@ -84,34 +83,34 @@ export abstract class StatefulListView<TExtras = unknown>
     });
 
     dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((confirmed: boolean | undefined) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
+    .afterClosed()
+    .pipe(
+      first(),
+      filter((confirmed: boolean | undefined) => confirmed === true),
+      switchMap(() => {
+        this.spinnerService.showSpinner();
 
-          return actionFn().pipe(
-            catchError((error: Error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            switchMap(() =>
-              reloadFn().pipe(
-                catchError((error: Error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            ),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        error: (error: Error) => this.handleError(error, false)
-      });
+        return actionFn().pipe(
+          catchError((error: Error) => {
+            this.handleError(error, false);
+            return EMPTY;
+          }),
+          switchMap(() =>
+            reloadFn().pipe(
+              catchError((error: Error) => {
+                this.handleError(error, false);
+                return EMPTY;
+              })
+            )
+          ),
+          finalize(() => this.spinnerService.hideSpinner())
+        );
+      }),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   /**
@@ -291,24 +290,27 @@ export abstract class StatefulListView<TExtras = unknown>
   ): void {
     // Sort change: reset to the first page and save state
     this.sort.sortChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.onStateChangingEvent(true));
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(() => this.onStateChangingEvent(true));
 
     // Text filter change: reset to the first page and save state
     this.tableFilter.changed
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.onStateChangingEvent(true));
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(() => this.onStateChangingEvent(true));
 
     // Pagination change: save state only
     this.paginator.page
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.onStateChangingEvent(false));
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(() => this.onStateChangingEvent(false));
 
     // Extra triggers (e.g. tokenStatusSelect.selectionChange)
-    extraStateChangingTriggers.forEach(({ observable, resetPage }) => {
+    extraStateChangingTriggers.forEach(({
+                                          observable,
+                                          resetPage
+                                        }) => {
       observable
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => this.onStateChangingEvent(resetPage));
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.onStateChangingEvent(resetPage));
     });
 
     // Any of sort / extras / text filter / page changing reloads data
@@ -320,12 +322,12 @@ export abstract class StatefulListView<TExtras = unknown>
     ];
 
     merge(...reloadTriggers)
-      .pipe(debounceTime(200), takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.restoringState) {
-          return;
-        }
-        loadDataFn();
-      });
+    .pipe(debounceTime(200), takeUntil(this.destroy$))
+    .subscribe(() => {
+      if (this.restoringState) {
+        return;
+      }
+      loadDataFn();
+    });
   }
 }

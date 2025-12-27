@@ -17,18 +17,18 @@
 import {
   AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {
   CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { Observable, tap } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
-import { PolicySortBy } from '../services/policy-sort-by';
-import { PolicySummaries } from '../services/policy-summaries';
-import { PolicySummaryDataSource } from '../services/policy-summary-data-source';
-import { PolicyType } from '../services/policy-type';
-import { SecurityService } from '../services/security.service';
+import {Observable, tap} from 'rxjs';
+import {finalize, takeUntil} from 'rxjs/operators';
+import {PolicySortBy} from '../services/policy-sort-by';
+import {PolicySummaries} from '../services/policy-summaries';
+import {PolicySummaryDataSource} from '../services/policy-summary-data-source';
+import {PolicyType} from '../services/policy-type';
+import {SecurityService} from '../services/security.service';
 
 /**
  * The PoliciesComponent class implements the Policies component.
@@ -54,11 +54,11 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
 
   readonly listStateKey = 'security.policies';
 
-  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) override paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) override sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, { static: true })
+  @ViewChild(TableFilterComponent, {static: true})
   override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_policies_title:Policies`;
@@ -111,7 +111,7 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
   newPolicy(): void {
     this.saveState();
 
-    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
@@ -125,16 +125,16 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
     this.spinnerService.showSpinner();
 
     this.loadPolicySummaries()
-      .pipe(
-        finalize(() => this.spinnerService.hideSpinner()),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: () => {
-          // loadPolicySummaries() already updated datasource + synced paginator
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .pipe(
+      finalize(() => this.spinnerService.hideSpinner()),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: () => {
+        // loadPolicySummaries() already updated datasource + synced paginator
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   private loadPolicySummaries(): Observable<PolicySummaries> {
@@ -159,31 +159,31 @@ export class PoliciesComponent extends StatefulListView implements AfterViewInit
         : SortDirection.Descending;
 
     return this.dataSource
-      .load(filterValue, sortBy, sortDirection, this.paginator.pageIndex, this.paginator.pageSize)
-      .pipe(
-        tap((policySummaries: PolicySummaries) => {
-          // Sync paginator to what the server actually returned/corrected
-          this.restoringState = true;
-          try {
-            if (policySummaries && this.paginator) {
-              const pageIndex = policySummaries.pageIndex;
-              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
-                this.paginator.pageIndex = Math.trunc(pageIndex);
-              }
-
-              const pageSize = policySummaries.pageSize;
-              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
-                this.paginator.pageSize = Math.trunc(pageSize);
-              }
-
-              this.saveState();
+    .load(filterValue, sortBy, sortDirection, this.paginator.pageIndex, this.paginator.pageSize)
+    .pipe(
+      tap((policySummaries: PolicySummaries) => {
+        // Sync paginator to what the server actually returned/corrected
+        this.restoringState = true;
+        try {
+          if (policySummaries && this.paginator) {
+            const pageIndex = policySummaries.pageIndex;
+            if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+              this.paginator.pageIndex = Math.trunc(pageIndex);
             }
-          } finally {
-            this.restoringState = false;
-          }
 
-          this.changeDetectorRef.markForCheck();
-        })
-      );
+            const pageSize = policySummaries.pageSize;
+            if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+              this.paginator.pageSize = Math.trunc(pageSize);
+            }
+
+            this.saveState();
+          }
+        } finally {
+          this.restoringState = false;
+        }
+
+        this.changeDetectorRef.markForCheck();
+      })
+    );
   }
 }

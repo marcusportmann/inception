@@ -14,67 +14,67 @@
  * limitations under the License.
  */
 
-import { ClipboardModule } from '@angular/cdk/clipboard';
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterModule, Routes } from '@angular/router';
-import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
-import { EditGroupTitleResolver } from './edit-group-title-resolver';
-import { EditGroupComponent } from './edit-group.component';
-import { EditPolicyTitleResolver } from './edit-policy-title-resolver';
-import { EditPolicyComponent } from './edit-policy.component';
-import { EditTenantTitleResolver } from './edit-tenant-title-resolver';
-import { EditTenantComponent } from './edit-tenant.component';
-import { EditUserDirectoryTitleResolver } from './edit-user-directory-title-resolver';
-import { EditUserDirectoryComponent } from './edit-user-directory.component';
-import { EditUserTitleResolver } from './edit-user-title-resolver';
-import { EditUserComponent } from './edit-user.component';
-import { GroupMembersTitleResolver } from './group-members-title-resolver';
-import { GroupMembersComponent } from './group-members.component';
-import { GroupRolesTitleResolver } from './group-roles-title-resolver';
-import { GroupRolesComponent } from './group-roles.component';
-import { GroupTitleResolver } from './group-title-resolver';
-import { GroupsTitleResolver } from './groups-title-resolver';
-import { GroupsComponent } from './groups.component';
-import { NewGroupTitleResolver } from './new-group-title-resolver';
-import { NewGroupComponent } from './new-group.component';
-import { NewPolicyTitleResolver } from './new-policy-title-resolver';
-import { NewPolicyComponent } from './new-policy.component';
-import { NewTenantTitleResolver } from './new-tenant-title-resolver';
-import { NewTenantComponent } from './new-tenant.component';
-import { NewTokenTitleResolver } from './new-token-title-resolver';
-import { NewTokenComponent } from './new-token.component';
-import { NewUserDirectoryTitleResolver } from './new-user-directory-title-resolver';
-import { NewUserDirectoryComponent } from './new-user-directory.component';
-import { NewUserTitleResolver } from './new-user-title-resolver';
-import { NewUserComponent } from './new-user.component';
-import { PoliciesTitleResolver } from './policies-title-resolver';
-import { PoliciesComponent } from './policies.component';
-import { PolicyTitleResolver } from './policy-title-resolver';
-import { ResetUserPasswordTitleResolver } from './reset-user-password-title-resolver';
-import { ResetUserPasswordComponent } from './reset-user-password.component';
-import { SecurityOverviewTitleResolver } from './security-overview-title-resolver';
-import { SecurityOverviewComponent } from './security-overview.component';
-import { TenantTitleResolver } from './tenant-title-resolver';
-import { TenantUserDirectoriesTitleResolver } from './tenant-user-directories-title-resolver';
-import { TenantUserDirectoriesComponent } from './tenant-user-directories.component';
-import { TenantsTitleResolver } from './tenants-title-resolver';
-import { TenantsComponent } from './tenants.component';
-import { TokenTitleResolver } from './token-title-resolver';
-import { TokensTitleResolver } from './tokens-title-resolver';
-import { TokensComponent } from './tokens.component';
-import { UserDirectoriesTitleResolver } from './user-directories-title-resolver';
-import { UserDirectoriesComponent } from './user-directories.component';
-import { UserDirectoryTitleResolver } from './user-directory-title-resolver';
-import { UserGroupsTitleResolver } from './user-groups-title-resolver';
-import { UserGroupsComponent } from './user-groups.component';
-import { UserTitleResolver } from './user-title-resolver';
-import { UsersTitleResolver } from './users-title-resolver';
-import { UsersComponent } from './users.component';
-import { ViewTokenTitleResolver } from './view-token-title-resolver';
-import { ViewTokenComponent } from './view-token.component';
+import {ClipboardModule} from '@angular/cdk/clipboard';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {RouterModule, Routes} from '@angular/router';
+import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
+import {EditGroupTitleResolver} from './edit-group-title-resolver';
+import {EditGroupComponent} from './edit-group.component';
+import {EditPolicyTitleResolver} from './edit-policy-title-resolver';
+import {EditPolicyComponent} from './edit-policy.component';
+import {EditTenantTitleResolver} from './edit-tenant-title-resolver';
+import {EditTenantComponent} from './edit-tenant.component';
+import {EditUserDirectoryTitleResolver} from './edit-user-directory-title-resolver';
+import {EditUserDirectoryComponent} from './edit-user-directory.component';
+import {EditUserTitleResolver} from './edit-user-title-resolver';
+import {EditUserComponent} from './edit-user.component';
+import {GroupMembersTitleResolver} from './group-members-title-resolver';
+import {GroupMembersComponent} from './group-members.component';
+import {GroupRolesTitleResolver} from './group-roles-title-resolver';
+import {GroupRolesComponent} from './group-roles.component';
+import {GroupTitleResolver} from './group-title-resolver';
+import {GroupsTitleResolver} from './groups-title-resolver';
+import {GroupsComponent} from './groups.component';
+import {NewGroupTitleResolver} from './new-group-title-resolver';
+import {NewGroupComponent} from './new-group.component';
+import {NewPolicyTitleResolver} from './new-policy-title-resolver';
+import {NewPolicyComponent} from './new-policy.component';
+import {NewTenantTitleResolver} from './new-tenant-title-resolver';
+import {NewTenantComponent} from './new-tenant.component';
+import {NewTokenTitleResolver} from './new-token-title-resolver';
+import {NewTokenComponent} from './new-token.component';
+import {NewUserDirectoryTitleResolver} from './new-user-directory-title-resolver';
+import {NewUserDirectoryComponent} from './new-user-directory.component';
+import {NewUserTitleResolver} from './new-user-title-resolver';
+import {NewUserComponent} from './new-user.component';
+import {PoliciesTitleResolver} from './policies-title-resolver';
+import {PoliciesComponent} from './policies.component';
+import {PolicyTitleResolver} from './policy-title-resolver';
+import {ResetUserPasswordTitleResolver} from './reset-user-password-title-resolver';
+import {ResetUserPasswordComponent} from './reset-user-password.component';
+import {SecurityOverviewTitleResolver} from './security-overview-title-resolver';
+import {SecurityOverviewComponent} from './security-overview.component';
+import {TenantTitleResolver} from './tenant-title-resolver';
+import {TenantUserDirectoriesTitleResolver} from './tenant-user-directories-title-resolver';
+import {TenantUserDirectoriesComponent} from './tenant-user-directories.component';
+import {TenantsTitleResolver} from './tenants-title-resolver';
+import {TenantsComponent} from './tenants.component';
+import {TokenTitleResolver} from './token-title-resolver';
+import {TokensTitleResolver} from './tokens-title-resolver';
+import {TokensComponent} from './tokens.component';
+import {UserDirectoriesTitleResolver} from './user-directories-title-resolver';
+import {UserDirectoriesComponent} from './user-directories.component';
+import {UserDirectoryTitleResolver} from './user-directory-title-resolver';
+import {UserGroupsTitleResolver} from './user-groups-title-resolver';
+import {UserGroupsComponent} from './user-groups.component';
+import {UserTitleResolver} from './user-title-resolver';
+import {UsersTitleResolver} from './users-title-resolver';
+import {UsersComponent} from './users.component';
+import {ViewTokenTitleResolver} from './view-token-title-resolver';
+import {ViewTokenComponent} from './view-token.component';
 
 const routes: Routes = [
   {
@@ -592,4 +592,5 @@ const routes: Routes = [
     ViewTokenTitleResolver
   ]
 })
-export class SecurityViewsModule {}
+export class SecurityViewsModule {
+}

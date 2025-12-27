@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { combineLatest } from 'rxjs';
-import { finalize, first } from 'rxjs/operators';
-import { Group } from '../services/group';
-import { SecurityService } from '../services/security.service';
-import { UserDirectoryCapabilities } from '../services/user-directory-capabilities';
+import {combineLatest} from 'rxjs';
+import {finalize, first} from 'rxjs/operators';
+import {Group} from '../services/group';
+import {SecurityService} from '../services/security.service';
+import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
 
 /**
  * The EditGroupComponent class implements the edit group component.
@@ -86,7 +86,7 @@ export class EditGroupComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     // Initialize the form
@@ -99,14 +99,14 @@ export class EditGroupComponent extends AdminContainerView implements OnInit {
   override get backNavigation(): BackNavigation {
     return new BackNavigation($localize`:@@security_edit_group_back_navigation:Groups`, ['.'], {
       relativeTo: this.activatedRoute.parent?.parent,
-      state: { userDirectoryId: this.userDirectoryId }
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   cancel(): void {
     void this.router.navigate(['.'], {
       relativeTo: this.activatedRoute.parent?.parent,
-      state: { userDirectoryId: this.userDirectoryId }
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
@@ -118,33 +118,29 @@ export class EditGroupComponent extends AdminContainerView implements OnInit {
       this.securityService.getUserDirectoryCapabilities(this.userDirectoryId),
       this.securityService.getGroup(this.userDirectoryId, this.groupName)
     ])
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: ([userDirectoryCapabilities, group]: [UserDirectoryCapabilities, Group]) => {
-          this.userDirectoryCapabilities = userDirectoryCapabilities;
-          this.group = group;
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: ([userDirectoryCapabilities, group]: [UserDirectoryCapabilities, Group]) => {
+        this.userDirectoryCapabilities = userDirectoryCapabilities;
+        this.group = group;
 
-          this.descriptionControl.setValue(group.description);
-          this.nameControl.setValue(group.name);
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.descriptionControl.setValue(group.description);
+        this.nameControl.setValue(group.name);
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.editGroupForm.valid) {
+      this.editGroupForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.group || !this.editGroupForm.valid) {
-      return;
-    }
+    if (!this.group) return;
 
     this.group.description = this.descriptionControl.value;
 
@@ -153,23 +149,23 @@ export class EditGroupComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .updateGroup(this.group)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .updateGroup(this.group)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.editGroupForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], {
-            relativeTo: this.activatedRoute.parent?.parent,
-            state: { userDirectoryId: this.userDirectoryId }
-          });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.editGroupForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {
+          relativeTo: this.activatedRoute.parent?.parent,
+          state: {userDirectoryId: this.userDirectoryId}
+        });
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy,
   OnInit, ViewChild
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatFormFieldControl } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { AutocompleteSelectionRequiredDirective, CoreModule } from 'ngx-inception/core';
-import { BehaviorSubject, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { debounceTime, first } from 'rxjs/operators';
-import { Language } from '../services/language';
-import { ReferenceService } from '../services/reference.service';
+import {ControlValueAccessor, NgControl} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatFormFieldControl} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {AutocompleteSelectionRequiredDirective, CoreModule} from 'ngx-inception/core';
+import {BehaviorSubject, ReplaySubject, Subject, Subscription} from 'rxjs';
+import {debounceTime, first} from 'rxjs/operators';
+import {Language} from '../services/language';
+import {ReferenceService} from '../services/reference.service';
 
 /**
  * The LanguageInputComponent class implements the language input component.
@@ -51,7 +51,7 @@ import { ReferenceService } from '../services/reference.service';
         [matAutocompleteConnectedTo]="origin"
         (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
-        (focusout)="onFocusOut($event)" />
+        (focusout)="onFocusOut($event)"/>
       <mat-autocomplete
         #languageAutocomplete="matAutocomplete"
         (closed)="onClosed()"
@@ -73,8 +73,7 @@ import { ReferenceService } from '../services/reference.service';
   ]
 })
 export class LanguageInputComponent
-  implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy
-{
+  implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy {
   private static _nextId = 0;
 
   /**
@@ -100,9 +99,12 @@ export class LanguageInputComponent
   /**
    * The language input.
    */
-  @ViewChild(MatInput, { static: true }) input!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
-  readonly ngControl = inject(NgControl, { optional: true, self: true });
+  readonly ngControl = inject(NgControl, {
+    optional: true,
+    self: true
+  });
 
   /**
    * The observable indicating that the state of the control has changed.
@@ -275,29 +277,29 @@ export class LanguageInputComponent
   ngOnInit(): void {
     // Load languages
     const languagesSub = this.referenceService
-      .getLanguages()
-      .pipe(first())
-      .subscribe((languages: Map<string, Language>) => {
-        this._options = Array.from(languages.values());
+    .getLanguages()
+    .pipe(first())
+    .subscribe((languages: Map<string, Language>) => {
+      this._options = Array.from(languages.values());
 
-        this.filteredOptions$.next(this._options);
+      this.filteredOptions$.next(this._options);
 
-        // If a value has already been set, confirm it's valid and update the input display.
-        if (this.value) {
-          const match = this._options.find((o) => o.code === this.value);
+      // If a value has already been set, confirm it's valid and update the input display.
+      if (this.value) {
+        const match = this._options.find((o) => o.code === this.value);
 
-          if (match) {
-            if (this.input) {
-              this.input.value = match.name;
-            }
-          } else {
-            // Invalid value; clear it
-            this.value = null;
+        if (match) {
+          if (this.input) {
+            this.input.value = match.name;
           }
+        } else {
+          // Invalid value; clear it
+          this.value = null;
         }
+      }
 
-        this.cdr.markForCheck();
-      });
+      this.cdr.markForCheck();
+    });
 
     this.subscriptions.add(languagesSub);
 

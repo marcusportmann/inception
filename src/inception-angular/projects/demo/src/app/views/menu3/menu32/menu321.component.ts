@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, inject } from '@angular/core';
-import { CoreModule, TitleBarService } from 'ngx-inception/core';
+import {AfterViewInit, Component, inject} from '@angular/core';
+import {CoreModule, TitleBarService} from 'ngx-inception/core';
 
 /**
  * The Menu321Component class implements the menu 3.2.1 component.
@@ -28,7 +28,7 @@ import { CoreModule, TitleBarService } from 'ngx-inception/core';
   imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
-      <mat-card-content> Menu 3.2.1 </mat-card-content>
+      <mat-card-content> Menu 3.2.1</mat-card-content>
     </mat-card>
   `
 })

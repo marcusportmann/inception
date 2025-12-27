@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
+import {HttpErrorResponse} from '@angular/common/http';
+import {FrameworkError, HttpError, ProblemDetails} from 'ngx-inception/core';
 
 /**
  * The ConfigNotFoundError class holds the information for a config not found error.

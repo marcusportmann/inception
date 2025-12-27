@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {Component, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 import {
   AdminContainerView, BackNavigation, ConfirmationDialogComponent, CoreModule
 } from 'ngx-inception/core';
-import { ReplaySubject, Subject, Subscription } from 'rxjs';
-import { finalize, first } from 'rxjs/operators';
-import { GroupRole } from '../services/group-role';
-import { Role } from '../services/role';
-import { SecurityService } from '../services/security.service';
+import {ReplaySubject, Subject, Subscription} from 'rxjs';
+import {finalize, first} from 'rxjs/operators';
+import {GroupRole} from '../services/group-role';
+import {Role} from '../services/role';
+import {SecurityService} from '../services/security.service';
 
 /**
  * The GroupRolesComponent class implements the group roles component.
@@ -50,7 +50,7 @@ export class GroupRolesComponent extends AdminContainerView implements OnInit, O
 
   readonly groupName: string;
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   selectedRole: Role | null = null;
 
@@ -85,7 +85,7 @@ export class GroupRolesComponent extends AdminContainerView implements OnInit, O
       ['../../..'],
       {
         relativeTo: this.activatedRoute,
-        state: { userDirectoryId: this.userDirectoryId }
+        state: {userDirectoryId: this.userDirectoryId}
       }
     );
   }
@@ -98,39 +98,39 @@ export class GroupRolesComponent extends AdminContainerView implements OnInit, O
     this.spinnerService.showSpinner();
 
     this.securityService
-      .addRoleToGroup(this.userDirectoryId, this.groupName, this.selectedRole.code)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: () => {
-          this.loadRolesForGroup();
-          this.selectedRole = null;
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .addRoleToGroup(this.userDirectoryId, this.groupName, this.selectedRole.code)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: () => {
+        this.loadRolesForGroup();
+        this.selectedRole = null;
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   loadRolesForGroup(): void {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getRolesForGroup(this.userDirectoryId, this.groupName)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (groupRoles: GroupRole[]) => {
-          this.dataSource.data = groupRoles;
+    .getRolesForGroup(this.userDirectoryId, this.groupName)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (groupRoles: GroupRole[]) => {
+        this.dataSource.data = groupRoles;
 
-          this.availableRoles$.next(
-            GroupRolesComponent.calculateAvailableRoles(this.allRoles, this.dataSource.data)
-          );
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.availableRoles$.next(
+          GroupRolesComponent.calculateAvailableRoles(this.allRoles, this.dataSource.data)
+        );
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ngOnDestroy(): void {
@@ -144,18 +144,18 @@ export class GroupRolesComponent extends AdminContainerView implements OnInit, O
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getRoles()
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (roles: Role[]) => {
-          this.allRoles = roles;
-          this.loadRolesForGroup();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .getRoles()
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (roles: Role[]) => {
+        this.allRoles = roles;
+        this.loadRolesForGroup();
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   removeRoleFromGroup(roleCode: string): void {
@@ -165,31 +165,31 @@ export class GroupRolesComponent extends AdminContainerView implements OnInit, O
       });
 
     dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe({
-        next: (confirmation: boolean | undefined) => {
-          if (confirmation !== true) {
-            return;
-          }
-
-          this.spinnerService.showSpinner();
-
-          this.securityService
-            .removeRoleFromGroup(this.userDirectoryId, this.groupName, roleCode)
-            .pipe(
-              first(),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe({
-              next: () => {
-                this.loadRolesForGroup();
-                this.selectedRole = null;
-              },
-              error: (error: Error) => this.handleError(error, false)
-            });
+    .afterClosed()
+    .pipe(first())
+    .subscribe({
+      next: (confirmation: boolean | undefined) => {
+        if (confirmation !== true) {
+          return;
         }
-      });
+
+        this.spinnerService.showSpinner();
+
+        this.securityService
+        .removeRoleFromGroup(this.userDirectoryId, this.groupName, roleCode)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe({
+          next: () => {
+            this.loadRolesForGroup();
+            this.selectedRole = null;
+          },
+          error: (error: Error) => this.handleError(error, false)
+        });
+      }
+    });
   }
 
   roleCodeToName(roleCode: string): string {

@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
   ProblemDetails, ServiceUnavailableError
 } from 'ngx-inception/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { MailTemplate } from './mail-template';
-import { MailTemplateContentType } from './mail-template-content-type';
-import { MailTemplateSummary } from './mail-template-summary';
-import { DuplicateMailTemplateError, MailTemplateNotFoundError } from './mail.service.errors';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {MailTemplate} from './mail-template';
+import {MailTemplateContentType} from './mail-template-content-type';
+import {MailTemplateSummary} from './mail-template-summary';
+import {DuplicateMailTemplateError, MailTemplateNotFoundError} from './mail.service.errors';
 
 /**
  * The Mail Service implementation.
@@ -71,15 +71,15 @@ export class MailService {
    */
   createMailTemplate(mailTemplate: MailTemplate): Observable<boolean> {
     return this.httpClient
-      .post<boolean>(`${this.config.apiUrlPrefix}/mail/mail-templates`, mailTemplate, {
-        observe: 'response'
-      })
-      .pipe(
-        map(MailService.isResponse204),
-        catchError((error) =>
-          MailService.handleApiError(error, 'Failed to create the mail template.')
-        )
-      );
+    .post<boolean>(`${this.config.apiUrlPrefix}/mail/mail-templates`, mailTemplate, {
+      observe: 'response'
+    })
+    .pipe(
+      map(MailService.isResponse204),
+      catchError((error) =>
+        MailService.handleApiError(error, 'Failed to create the mail template.')
+      )
+    );
   }
 
   /**
@@ -91,15 +91,15 @@ export class MailService {
    */
   deleteMailTemplate(mailTemplateId: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(`${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}`, {
-        observe: 'response'
-      })
-      .pipe(
-        map(MailService.isResponse204),
-        catchError((error) =>
-          MailService.handleApiError(error, 'Failed to delete the mail template.')
-        )
-      );
+    .delete<boolean>(`${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}`, {
+      observe: 'response'
+    })
+    .pipe(
+      map(MailService.isResponse204),
+      catchError((error) =>
+        MailService.handleApiError(error, 'Failed to delete the mail template.')
+      )
+    );
   }
 
   /**
@@ -111,14 +111,14 @@ export class MailService {
    */
   getMailTemplate(mailTemplateId: string): Observable<MailTemplate> {
     return this.httpClient
-      .get<MailTemplate>(`${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}`, {
-        reportProgress: true
-      })
-      .pipe(
-        catchError((error) =>
-          MailService.handleApiError(error, 'Failed to retrieve the mail template.')
-        )
-      );
+    .get<MailTemplate>(`${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}`, {
+      reportProgress: true
+    })
+    .pipe(
+      catchError((error) =>
+        MailService.handleApiError(error, 'Failed to retrieve the mail template.')
+      )
+    );
   }
 
   /**
@@ -130,14 +130,14 @@ export class MailService {
    */
   getMailTemplateName(mailTemplateId: string): Observable<string> {
     return this.httpClient
-      .get<string>(`${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}/name`, {
-        reportProgress: true
-      })
-      .pipe(
-        catchError((error) =>
-          MailService.handleApiError(error, 'Failed to retrieve the mail template name.')
-        )
-      );
+    .get<string>(`${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplateId}/name`, {
+      reportProgress: true
+    })
+    .pipe(
+      catchError((error) =>
+        MailService.handleApiError(error, 'Failed to retrieve the mail template name.')
+      )
+    );
   }
 
   /**
@@ -147,17 +147,17 @@ export class MailService {
    */
   getMailTemplateSummaries(): Observable<MailTemplateSummary[]> {
     return this.httpClient
-      .get<
-        MailTemplateSummary[]
-      >(`${this.config.apiUrlPrefix}/mail/mail-template-summaries`, { reportProgress: true })
-      .pipe(
-        catchError((error) =>
-          MailService.handleApiError(
-            error,
-            'Failed to retrieve the summaries for the mail templates.'
-          )
+    .get<
+      MailTemplateSummary[]
+    >(`${this.config.apiUrlPrefix}/mail/mail-template-summaries`, {reportProgress: true})
+    .pipe(
+      catchError((error) =>
+        MailService.handleApiError(
+          error,
+          'Failed to retrieve the summaries for the mail templates.'
         )
-      );
+      )
+    );
   }
 
   /**
@@ -168,14 +168,14 @@ export class MailService {
   // noinspection JSUnusedGlobalSymbols
   getMailTemplates(): Observable<MailTemplate[]> {
     return this.httpClient
-      .get<
-        MailTemplate[]
-      >(`${this.config.apiUrlPrefix}/mail/mail-templates`, { reportProgress: true })
-      .pipe(
-        catchError((error) =>
-          MailService.handleApiError(error, 'Failed to retrieve the mail templates.')
-        )
-      );
+    .get<
+      MailTemplate[]
+    >(`${this.config.apiUrlPrefix}/mail/mail-templates`, {reportProgress: true})
+    .pipe(
+      catchError((error) =>
+        MailService.handleApiError(error, 'Failed to retrieve the mail templates.')
+      )
+    );
   }
 
   /**
@@ -187,17 +187,17 @@ export class MailService {
    */
   updateMailTemplate(mailTemplate: MailTemplate): Observable<boolean> {
     return this.httpClient
-      .put<boolean>(
-        `${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplate.id}`,
-        mailTemplate,
-        { observe: 'response' }
+    .put<boolean>(
+      `${this.config.apiUrlPrefix}/mail/mail-templates/${mailTemplate.id}`,
+      mailTemplate,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(MailService.isResponse204),
+      catchError((error) =>
+        MailService.handleApiError(error, 'Failed to update the mail template.')
       )
-      .pipe(
-        map(MailService.isResponse204),
-        catchError((error) =>
-          MailService.handleApiError(error, 'Failed to update the mail template.')
-        )
-      );
+    );
   }
 
   private static handleApiError(

@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { CoreModule } from 'ngx-inception/core';
-import { ExpiredPasswordTitleResolver } from './expired-password-title-resolver';
-import { ExpiredPasswordComponent } from './expired-password.component';
-import { ForgottenPasswordTitleResolver } from './forgotten-password-title-resolver';
-import { ForgottenPasswordComponent } from './forgotten-password.component';
-import { LoginTitleResolver } from './login-title-resolver';
-import { LoginComponent } from './login.component';
-import { ResetPasswordTitleResolver } from './reset-password-title-resolver';
-import { ResetPasswordComponent } from './reset-password.component';
-import { SelectTenantTitleResolver } from './select-tenant-title-resolver';
-import { SelectTenantComponent } from './select-tenant.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
+import {CoreModule} from 'ngx-inception/core';
+import {ExpiredPasswordTitleResolver} from './expired-password-title-resolver';
+import {ExpiredPasswordComponent} from './expired-password.component';
+import {ForgottenPasswordTitleResolver} from './forgotten-password-title-resolver';
+import {ForgottenPasswordComponent} from './forgotten-password.component';
+import {LoginTitleResolver} from './login-title-resolver';
+import {LoginComponent} from './login.component';
+import {ResetPasswordTitleResolver} from './reset-password-title-resolver';
+import {ResetPasswordComponent} from './reset-password.component';
+import {SelectTenantTitleResolver} from './select-tenant-title-resolver';
+import {SelectTenantComponent} from './select-tenant.component';
 
 const routes: Routes = [
   {
@@ -93,4 +93,5 @@ const routes: Routes = [
     SelectTenantTitleResolver
   ]
 })
-export class LoginViewsModule {}
+export class LoginViewsModule {
+}

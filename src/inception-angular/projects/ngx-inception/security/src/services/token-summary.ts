@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { TokenStatus } from './token-status';
-import { TokenType } from './token-type';
+import {TokenStatus} from './token-status';
+import {TokenType} from './token-type';
 
 /**
  * The TokenSummary class holds the summary information for a token.

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { NgOptimizedImage } from '@angular/common';
-import { Component } from '@angular/core';
-import { CoreModule } from 'ngx-inception/core';
+import {NgOptimizedImage} from '@angular/common';
+import {Component} from '@angular/core';
+import {CoreModule} from 'ngx-inception/core';
 
 interface Folder {
   name: string;

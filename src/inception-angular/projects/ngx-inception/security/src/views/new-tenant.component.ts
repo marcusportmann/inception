@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { v4 as uuid } from 'uuid';
-import { SecurityService } from '../services/security.service';
-import { Tenant } from '../services/tenant';
-import { TenantStatus } from '../services/tenant-status';
+import {finalize, first} from 'rxjs/operators';
+import {v4 as uuid} from 'uuid';
+import {SecurityService} from '../services/security.service';
+import {Tenant} from '../services/tenant';
+import {TenantStatus} from '../services/tenant-status';
 
 /**
  * The NewTenantComponent class implements the new tenant component.
@@ -56,7 +56,7 @@ export class NewTenantComponent extends AdminContainerView implements OnInit {
     super();
 
     // Initialize the form controls
-    this.createUserDirectoryControl = new FormControl<boolean>(false, { nonNullable: true });
+    this.createUserDirectoryControl = new FormControl<boolean>(false, {nonNullable: true});
 
     this.nameControl = new FormControl<string>('', {
       nonNullable: true,
@@ -77,7 +77,7 @@ export class NewTenantComponent extends AdminContainerView implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   ngOnInit(): void {
@@ -85,16 +85,12 @@ export class NewTenantComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.newTenantForm.valid) {
+      this.newTenantForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.tenant || !this.newTenantForm.valid) {
-      return;
-    }
+    if (!this.tenant) return;
 
     this.tenant.name = this.nameControl.value;
 
@@ -103,20 +99,20 @@ export class NewTenantComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .createTenant(this.tenant, this.createUserDirectoryControl.value)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .createTenant(this.tenant, this.createUserDirectoryControl.value)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.newTenantForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.newTenantForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

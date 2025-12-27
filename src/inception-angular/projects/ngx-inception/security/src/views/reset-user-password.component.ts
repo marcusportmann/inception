@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { combineLatest } from 'rxjs';
-import { finalize, first } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { User } from '../services/user';
-import { UserDirectoryCapabilities } from '../services/user-directory-capabilities';
+import {combineLatest} from 'rxjs';
+import {finalize, first} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {User} from '../services/user';
+import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
 
 /**
  * The ResetUserPasswordComponent class implements the reset user password component.
@@ -93,31 +93,31 @@ export class ResetUserPasswordComponent extends AdminContainerView implements On
       validators: [Validators.required, Validators.maxLength(100)]
     });
 
-    this.expirePasswordControl = new FormControl<boolean>(false, { nonNullable: true });
+    this.expirePasswordControl = new FormControl<boolean>(false, {nonNullable: true});
 
     this.nameControl = new FormControl<string>(
       {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
-    this.lockUserControl = new FormControl<boolean>(false, { nonNullable: true });
+    this.lockUserControl = new FormControl<boolean>(false, {nonNullable: true});
 
     this.passwordControl = new FormControl<string>('', {
       nonNullable: true,
       validators: [Validators.required, Validators.maxLength(100)]
     });
 
-    this.resetPasswordHistoryControl = new FormControl<boolean>(false, { nonNullable: true });
+    this.resetPasswordHistoryControl = new FormControl<boolean>(false, {nonNullable: true});
 
     this.usernameControl = new FormControl<string>(
       {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     // Initialize the form
@@ -135,7 +135,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements On
       ['.'],
       {
         relativeTo: this.activatedRoute.parent?.parent,
-        state: { userDirectoryId: this.userDirectoryId }
+        state: {userDirectoryId: this.userDirectoryId}
       }
     );
   }
@@ -143,7 +143,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements On
   cancel(): void {
     void this.router.navigate(['.'], {
       relativeTo: this.activatedRoute.parent?.parent,
-      state: { userDirectoryId: this.userDirectoryId }
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
@@ -155,43 +155,39 @@ export class ResetUserPasswordComponent extends AdminContainerView implements On
       this.securityService.getUserDirectoryCapabilities(this.userDirectoryId),
       this.securityService.getUser(this.userDirectoryId, this.username)
     ])
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: ([userDirectoryCapabilities, user]: [UserDirectoryCapabilities, User]) => {
-          this.userDirectoryCapabilities = userDirectoryCapabilities;
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: ([userDirectoryCapabilities, user]: [UserDirectoryCapabilities, User]) => {
+        this.userDirectoryCapabilities = userDirectoryCapabilities;
 
-          this.nameControl.setValue(user.name);
-          this.usernameControl.setValue(user.username);
+        this.nameControl.setValue(user.name);
+        this.usernameControl.setValue(user.username);
 
-          if (this.userDirectoryCapabilities.supportsPasswordExpiry) {
-            this.resetUserPasswordForm.addControl('expirePassword', this.expirePasswordControl);
-          }
+        if (this.userDirectoryCapabilities.supportsPasswordExpiry) {
+          this.resetUserPasswordForm.addControl('expirePassword', this.expirePasswordControl);
+        }
 
-          if (this.userDirectoryCapabilities.supportsUserLocks) {
-            this.resetUserPasswordForm.addControl('lockUser', this.lockUserControl);
-          }
+        if (this.userDirectoryCapabilities.supportsUserLocks) {
+          this.resetUserPasswordForm.addControl('lockUser', this.lockUserControl);
+        }
 
-          if (this.userDirectoryCapabilities.supportsPasswordHistory) {
-            this.resetUserPasswordForm.addControl(
-              'resetPasswordHistory',
-              this.resetPasswordHistoryControl
-            );
-          }
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        if (this.userDirectoryCapabilities.supportsPasswordHistory) {
+          this.resetUserPasswordForm.addControl(
+            'resetPasswordHistory',
+            this.resetPasswordHistoryControl
+          );
+        }
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
-      return;
-    }
-
     if (!this.resetUserPasswordForm.valid) {
+      this.resetUserPasswordForm.markAllAsTouched();
       return;
     }
 
@@ -220,30 +216,30 @@ export class ResetUserPasswordComponent extends AdminContainerView implements On
     this.spinnerService.showSpinner();
 
     this.securityService
-      .adminChangePassword(
-        this.userDirectoryId,
-        this.username,
-        password,
-        expirePassword,
-        lockUser,
-        resetPasswordHistory
-      )
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .adminChangePassword(
+      this.userDirectoryId,
+      this.username,
+      password,
+      expirePassword,
+      lockUser,
+      resetPasswordHistory
+    )
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.resetUserPasswordForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], {
-            relativeTo: this.activatedRoute.parent?.parent,
-            state: { userDirectoryId: this.userDirectoryId }
-          });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.resetUserPasswordForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {
+          relativeTo: this.activatedRoute.parent?.parent,
+          state: {userDirectoryId: this.userDirectoryId}
+        });
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

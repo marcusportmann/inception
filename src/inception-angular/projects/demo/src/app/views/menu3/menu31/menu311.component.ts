@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { AdminContainerView, CoreModule } from 'ngx-inception/core';
-import { Observable } from 'rxjs';
+import {Component} from '@angular/core';
+import {AdminContainerView, CoreModule} from 'ngx-inception/core';
+import {Observable} from 'rxjs';
 
 /**
  * The Menu311Component class implements the menu 3.1.1 component.
@@ -29,7 +29,7 @@ import { Observable } from 'rxjs';
   imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
-      <mat-card-content> Menu 3.1.1 </mat-card-content>
+      <mat-card-content> Menu 3.1.1</mat-card-content>
     </mat-card>
   `
 })

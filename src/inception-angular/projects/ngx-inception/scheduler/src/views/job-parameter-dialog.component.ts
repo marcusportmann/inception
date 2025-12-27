@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
-import { JobParameter } from '../services/job-parameter';
+import {Component, inject} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
+import {JobParameter} from '../services/job-parameter';
 
 /**
  * The JobParameterDialogData interface defines the data displayed by a job parameter dialog.
@@ -64,7 +64,7 @@ export interface JobParameterDialogData {
               <mat-label i18n="@@scheduler_job_parameter_dialog_component_label_name">
                 Name
               </mat-label>
-              <input type="text" matInput formControlName="name" required="true" />
+              <input type="text" matInput formControlName="name" required="true"/>
               @if (nameControl.errors && !nameControl.untouched) {
                 <mat-error>
                   @if (nameControl.errors['required']) {
@@ -88,7 +88,7 @@ export interface JobParameterDialogData {
               <mat-label i18n="@@scheduler_job_parameter_dialog_component_label_value">
                 Value
               </mat-label>
-              <input type="text" matInput formControlName="value" />
+              <input type="text" matInput formControlName="value"/>
               @if (valueControl.errors && !valueControl.untouched) {
                 <mat-error>
                   @if (valueControl.errors['maxlength']) {
@@ -150,7 +150,10 @@ export class JobParameterDialogComponent {
         value: data.name,
         disabled: data.readonlyName
       },
-      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
+      {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(100)]
+      }
     );
     this.valueControl = new FormControl<string>(data.value, {
       nonNullable: true,

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { SortDirection } from 'ngx-inception/core';
-import { TokenSortBy } from './token-sort-by';
-import { TokenSummary } from './token-summary';
+import {SortDirection} from 'ngx-inception/core';
+import {TokenSortBy} from './token-sort-by';
+import {TokenSummary} from './token-summary';
 
 /**
  * The TokenSummaries class holds the results of a request to retrieve a list of token summaries.

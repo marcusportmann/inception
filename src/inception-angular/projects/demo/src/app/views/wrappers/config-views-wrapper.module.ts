@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
-import { ConfigViewsModule } from 'ngx-inception/config';
+import {NgModule} from '@angular/core';
+import {ConfigViewsModule} from 'ngx-inception/config';
 
 @NgModule({
   imports: [ConfigViewsModule]
 })
-export class ConfigViewsWrapperModule {}
+export class ConfigViewsWrapperModule {
+}

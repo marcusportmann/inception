@@ -17,10 +17,10 @@
 import {
   Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
-import { MatIconButton } from '@angular/material/button';
-import { MatInput } from '@angular/material/input';
-import { fromEvent, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import {MatIconButton} from '@angular/material/button';
+import {MatInput} from '@angular/material/input';
+import {fromEvent, Subscription} from 'rxjs';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 @Component({
   selector: 'inception-core-table-filter',
@@ -36,7 +36,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
         matInput
         #tableFilterInput
         placeholder="Search..."
-        autocomplete="off" />
+        autocomplete="off"/>
       @if (filter) {
         <button class="table-filter-reset" mat-icon-button (click)="reset(true)">
           <i class="fa fa-times"></i>
@@ -92,7 +92,7 @@ export class TableFilterComponent implements OnInit, OnDestroy {
 
   filter = '';
 
-  @ViewChild('tableFilterInput', { static: true })
+  @ViewChild('tableFilterInput', {static: true})
   tableFilterInput!: ElementRef<HTMLInputElement>;
 
   private tableFilterInputSubscription?: Subscription;
@@ -116,11 +116,11 @@ export class TableFilterComponent implements OnInit, OnDestroy {
       this.tableFilterInput.nativeElement,
       'keyup'
     )
-      .pipe(debounceTime(250), distinctUntilChanged())
-      .subscribe(() => {
-        this.filter = this.tableFilterInput.nativeElement.value;
-        this.changed.emit(this.filter);
-      });
+    .pipe(debounceTime(250), distinctUntilChanged())
+    .subscribe(() => {
+      this.filter = this.tableFilterInput.nativeElement.value;
+      this.changed.emit(this.filter);
+    });
 
     this.syncInput();
   }

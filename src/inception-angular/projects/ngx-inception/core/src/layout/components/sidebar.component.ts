@@ -17,9 +17,9 @@
 import {
   ChangeDetectionStrategy, Component, inject, Input, OnDestroy, OnInit
 } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { SidebarService } from '../services/sidebar.service';
-import { SIDEBAR_CSS_CLASSES } from './sidebar-css-classes';
+import {Subscription} from 'rxjs';
+import {SidebarService} from '../services/sidebar.service';
+import {SIDEBAR_CSS_CLASSES} from './sidebar-css-classes';
 
 /**
  * The SidebarComponent class implements the sidebar component.
@@ -30,7 +30,8 @@ import { SIDEBAR_CSS_CLASSES } from './sidebar-css-classes';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar',
   standalone: true,
-  template: ` <ng-content></ng-content>`,
+  template: `
+    <ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarComponent implements OnInit, OnDestroy {

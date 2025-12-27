@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { FrameworkError, HttpError, ProblemDetails } from 'ngx-inception/core';
+import {HttpErrorResponse} from '@angular/common/http';
+import {FrameworkError, HttpError, ProblemDetails} from 'ngx-inception/core';
 
 /**
  * The CodeCategoryNotFoundError class holds the information for a code category not found error.

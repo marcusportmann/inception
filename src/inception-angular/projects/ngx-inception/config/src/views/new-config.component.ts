@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { Config } from '../services/config';
-import { ConfigService } from '../services/config.service';
+import {finalize, first} from 'rxjs/operators';
+import {Config} from '../services/config';
+import {ConfigService} from '../services/config.service';
 
 /**
  * The NewConfigComponent class implements the new config component.
@@ -91,42 +91,41 @@ export class NewConfigComponent extends AdminContainerView {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.newConfigForm.valid) {
+      this.newConfigForm.markAllAsTouched();
       return;
     }
 
-    if (this.newConfigForm.valid) {
-      // Assign form values to the config object
-      this.config.description = this.descriptionControl.value ?? '';
-      this.config.id = this.idControl.value ?? '';
-      this.config.value = this.valueControl.value ?? '';
+    // Assign form values to the config object
+    this.config.description = this.descriptionControl.value ?? '';
+    this.config.id = this.idControl.value ?? '';
+    this.config.value = this.valueControl.value ?? '';
 
-      this.newConfigForm.disable();
+    this.newConfigForm.disable();
 
-      this.spinnerService.showSpinner();
+    this.spinnerService.showSpinner();
 
-      this.configService
-        .saveConfig(this.config)
-        .pipe(
-          first(),
-          finalize(() => {
-            this.spinnerService.hideSpinner();
+    this.configService
+    .saveConfig(this.config)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-            this.newConfigForm.enable();
-          })
-        )
-        .subscribe({
-          next: () => {
-            // Navigate back on successful save
-            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
-          },
-          error: (error: Error) => this.handleError(error, false)
-        });
-    }
+        this.newConfigForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        // Navigate back on successful save
+        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
+
   }
 }

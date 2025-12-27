@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
-import { SecurityService } from '../services/security.service';
+import {inject, Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {Observable} from 'rxjs';
+import {SecurityService} from '../services/security.service';
 
 /**
  * The PolicyTitleResolver class provides the route data resolver that resolves the

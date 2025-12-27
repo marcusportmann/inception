@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { BehaviorSubject, Observable, of, Subject, throwError, timer } from 'rxjs';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import {JwtHelperService} from '@auth0/angular-jwt';
+import {BehaviorSubject, Observable, of, Subject, throwError, timer} from 'rxjs';
+import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {
   AccessDeniedError, CommunicationError, InvalidArgumentError, ServiceUnavailableError
 } from '../../errors';
-import { INCEPTION_CONFIG, InceptionConfig } from '../../inception-config';
-import { Session } from './session';
-import { LoginError, PasswordExpiredError, UserLockedError } from './session.service.errors';
-import { TokenResponse } from './token-response';
+import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
+import {Session} from './session';
+import {LoginError, PasswordExpiredError, UserLockedError} from './session.service.errors';
+import {TokenResponse} from './token-response';
 
 /**
  * The Session Service implementation.
@@ -53,12 +53,12 @@ export class SessionService {
 
     // Start the session refresher
     timer(0, 10000)
-      .pipe(switchMap(() => this.refreshSession()))
-      .subscribe((refreshedSession: Session | null) => {
-        if (refreshedSession) {
-          console.log('Successfully refreshed session: ', refreshedSession);
-        }
-      });
+    .pipe(switchMap(() => this.refreshSession()))
+    .subscribe((refreshedSession: Session | null) => {
+      if (refreshedSession) {
+        console.log('Successfully refreshed session: ', refreshedSession);
+      }
+    });
   }
 
   /**
@@ -73,61 +73,61 @@ export class SessionService {
     // TODO: REMOVE HARD CODED SCOPE AND CLIENT ID -- MARCUS
 
     const body = new HttpParams()
-      .set('grant_type', 'password')
-      .set('username', username)
-      .set('password', password);
+    .set('grant_type', 'password')
+    .set('username', username)
+    .set('password', password);
     // .set('scope', 'demo')
     // .set('client_id', 'demo');
 
     const options = {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     };
 
     return this.httpClient
-      .post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
-      .pipe(
-        mergeMap((tokenResponse: TokenResponse) => {
-          this.session$.next(
-            SessionService.createSessionFromAccessToken(
-              tokenResponse.access_token,
-              tokenResponse.refresh_token
-            )
-          );
+    .post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
+    .pipe(
+      mergeMap((tokenResponse: TokenResponse) => {
+        this.session$.next(
+          SessionService.createSessionFromAccessToken(
+            tokenResponse.access_token,
+            tokenResponse.refresh_token
+          )
+        );
 
-          return this.session$;
-        }),
-        catchError((httpErrorResponse: HttpErrorResponse) => {
-          if (httpErrorResponse.status === 400) {
-            if (
-              httpErrorResponse.error &&
-              httpErrorResponse.error.error === 'invalid_grant' &&
-              httpErrorResponse.error.error_description
+        return this.session$;
+      }),
+      catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (httpErrorResponse.status === 400) {
+          if (
+            httpErrorResponse.error &&
+            httpErrorResponse.error.error === 'invalid_grant' &&
+            httpErrorResponse.error.error_description
+          ) {
+            if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
+              return throwError(() => new LoginError(httpErrorResponse));
+            } else if (httpErrorResponse.error.error_description.includes('User locked')) {
+              return throwError(() => new UserLockedError(httpErrorResponse));
+            } else if (
+              httpErrorResponse.error.error_description.includes('Credentials expired')
             ) {
-              if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
-                return throwError(() => new LoginError(httpErrorResponse));
-              } else if (httpErrorResponse.error.error_description.includes('User locked')) {
-                return throwError(() => new UserLockedError(httpErrorResponse));
-              } else if (
-                httpErrorResponse.error.error_description.includes('Credentials expired')
-              ) {
-                return throwError(() => new PasswordExpiredError(httpErrorResponse));
-              }
+              return throwError(() => new PasswordExpiredError(httpErrorResponse));
             }
-
-            return throwError(() => new LoginError(httpErrorResponse));
-          } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-            return throwError(() => new AccessDeniedError(httpErrorResponse));
-          } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-            return throwError(() => new CommunicationError(httpErrorResponse));
-          } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
-            return throwError(() => new InvalidArgumentError(httpErrorResponse));
           }
 
-          return throwError(
-            () => new ServiceUnavailableError('Failed to login', httpErrorResponse)
-          );
-        })
-      );
+          return throwError(() => new LoginError(httpErrorResponse));
+        } else if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(() => new AccessDeniedError(httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(() => new CommunicationError(httpErrorResponse));
+        } else if (InvalidArgumentError.isInvalidArgumentError(httpErrorResponse)) {
+          return throwError(() => new InvalidArgumentError(httpErrorResponse));
+        }
+
+        return throwError(
+          () => new ServiceUnavailableError('Failed to login', httpErrorResponse)
+        );
+      })
+    );
   }
 
   /**
@@ -176,8 +176,8 @@ export class SessionService {
           if (currentSession.accessTokenExpiry && currentSession.refreshToken) {
             if (Date.now() > currentSession.accessTokenExpiry.getTime() - 30000) {
               const body = new HttpParams()
-                .set('grant_type', 'refresh_token')
-                .set('refresh_token', currentSession.refreshToken);
+              .set('grant_type', 'refresh_token')
+              .set('refresh_token', currentSession.refreshToken);
 
               const options = {
                 headers: {
@@ -186,34 +186,34 @@ export class SessionService {
               };
 
               return this.httpClient
-                .post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
-                .pipe(
-                  map((tokenResponse: TokenResponse) => {
-                    const refreshedSession: Session = SessionService.createSessionFromAccessToken(
-                      tokenResponse.access_token,
-                      tokenResponse.refresh_token
-                        ? tokenResponse.refresh_token
-                        : currentSession.refreshToken
-                    );
+              .post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
+              .pipe(
+                map((tokenResponse: TokenResponse) => {
+                  const refreshedSession: Session = SessionService.createSessionFromAccessToken(
+                    tokenResponse.access_token,
+                    tokenResponse.refresh_token
+                      ? tokenResponse.refresh_token
+                      : currentSession.refreshToken
+                  );
 
-                    refreshedSession.tenantId = selectedTenantId;
+                  refreshedSession.tenantId = selectedTenantId;
 
-                    this.session$.next(refreshedSession);
+                  this.session$.next(refreshedSession);
 
-                    return refreshedSession;
-                  }),
-                  catchError((httpErrorResponse: HttpErrorResponse) => {
-                    console.log('Failed to refresh the user session.', httpErrorResponse);
+                  return refreshedSession;
+                }),
+                catchError((httpErrorResponse: HttpErrorResponse) => {
+                  console.log('Failed to refresh the user session.', httpErrorResponse);
 
-                    if (httpErrorResponse.status === 400 || httpErrorResponse.status === 401) {
-                      this.session$.next(null);
+                  if (httpErrorResponse.status === 400 || httpErrorResponse.status === 401) {
+                    this.session$.next(null);
 
-                      // void this.router.navigate(['/']);
-                    }
+                    // void this.router.navigate(['/']);
+                  }
 
-                    return of(null);
-                  })
-                );
+                  return of(null);
+                })
+              );
             }
           }
         }

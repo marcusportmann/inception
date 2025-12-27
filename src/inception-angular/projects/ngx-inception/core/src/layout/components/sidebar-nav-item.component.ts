@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {NgClass, NgTemplateOutlet} from '@angular/common';
+import {ChangeDetectionStrategy, Component, inject, Input} from '@angular/core';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {
   SidebarNavDropdownTogglerDirective
 } from '../directives/sidebar-nav-dropdown-toggler.directive';
-import { SidebarNavDropdownDirective } from '../directives/sidebar-nav-dropdown.directive';
-import { NavigationItem } from '../services/navigation-item';
+import {SidebarNavDropdownDirective} from '../directives/sidebar-nav-dropdown.directive';
+import {NavigationItem} from '../services/navigation-item';
 
 /**
  * The SidebarNavItemComponent class implements the sidebar nav item component.
@@ -57,7 +57,7 @@ import { NavigationItem } from '../services/navigation-item';
             </a>
             <ul class="nav-dropdown-items">
               @for (child of item.children; track child) {
-                <sidebar-nav-item [navItem]="child"> </sidebar-nav-item>
+                <sidebar-nav-item [navItem]="child"></sidebar-nav-item>
               }
             </ul>
           </div>
@@ -87,7 +87,7 @@ import { NavigationItem } from '../services/navigation-item';
         </li>
       }
       <!-- Simple link (internal / external) -->
-      <!-- Shared icon / text / badge template -->
+        <!-- Shared icon / text / badge template -->
       <ng-template #navContent let-item>
         @if (item.icon) {
           <i class="nav-icon {{ item.icon }}"></i>

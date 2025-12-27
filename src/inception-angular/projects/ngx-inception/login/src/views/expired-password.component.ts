@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   AccessDeniedError, CoreModule, DialogService, InformationDialogComponent, InvalidArgumentError,
   ServiceUnavailableError, SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { SecurityService } from 'ngx-inception/security';
-import { Observable, throwError } from 'rxjs';
-import { catchError, finalize, first, map } from 'rxjs/operators';
+import {SecurityService} from 'ngx-inception/security';
+import {Observable, throwError} from 'rxjs';
+import {catchError, finalize, first, map} from 'rxjs/operators';
 
 /**
  * The ExpiredPasswordComponent class implements the expired password component.
@@ -85,7 +85,7 @@ export class ExpiredPasswordComponent implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     // Initialize form
@@ -98,7 +98,7 @@ export class ExpiredPasswordComponent implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   changePassword(): void {
@@ -118,36 +118,36 @@ export class ExpiredPasswordComponent implements OnInit {
       this.spinnerService.showSpinner();
 
       this.securityService
-        .changePassword(username, password, newPassword)
-        .pipe(
-          first(),
-          finalize(() => {
-            this.spinnerService.hideSpinner();
+      .changePassword(username, password, newPassword)
+      .pipe(
+        first(),
+        finalize(() => {
+          this.spinnerService.hideSpinner();
 
-            this.expiredPasswordForm.enable();
-          }),
-          catchError((error) => this.handleError(error))
-        )
-        .subscribe(() => {
-          this.showSuccessDialog(username);
-        });
+          this.expiredPasswordForm.enable();
+        }),
+        catchError((error) => this.handleError(error))
+      )
+      .subscribe(() => {
+        this.showSuccessDialog(username);
+      });
     }
   }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-      .pipe(
-        first(),
-        map(() => window.history.state)
-      )
-      .subscribe((state) => {
-        if (state.username) {
-          this.usernameControl.setValue(state.username);
-        } else {
-          // Redirect if no username in state
-          void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
-        }
-      });
+    .pipe(
+      first(),
+      map(() => window.history.state)
+    )
+    .subscribe((state) => {
+      if (state.username) {
+        this.usernameControl.setValue(state.username);
+      } else {
+        // Redirect if no username in state
+        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
+      }
+    });
   }
 
   private handleError(error: Error): Observable<never> {
@@ -158,7 +158,7 @@ export class ExpiredPasswordComponent implements OnInit {
     ) {
       // Redirect on critical errors
       void this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
+        state: {error}
       });
     } else {
       this.dialogService.showErrorDialog(error);
@@ -173,13 +173,13 @@ export class ExpiredPasswordComponent implements OnInit {
       });
 
     dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe(() => {
-        void this.router.navigate(['.'], {
-          relativeTo: this.activatedRoute.parent,
-          state: { username }
-        });
+    .afterClosed()
+    .pipe(first())
+    .subscribe(() => {
+      void this.router.navigate(['.'], {
+        relativeTo: this.activatedRoute.parent,
+        state: {username}
       });
+    });
   }
 }

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { CoreModule } from 'ngx-inception/core';
+import {Component} from '@angular/core';
+import {CoreModule} from 'ngx-inception/core';
 
 /**
  * The Menu21Component class implements the menu 2.1 component.
@@ -28,8 +28,9 @@ import { CoreModule } from 'ngx-inception/core';
   imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
-      <mat-card-content> Menu 2.1 </mat-card-content>
+      <mat-card-content> Menu 2.1</mat-card-content>
     </mat-card>
   `
 })
-export class Menu21Component {}
+export class Menu21Component {
+}

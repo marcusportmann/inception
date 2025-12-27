@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Directive, HostListener, inject } from '@angular/core';
-import { SidebarNavDropdownDirective } from './sidebar-nav-dropdown.directive';
+import {Directive, HostListener, inject} from '@angular/core';
+import {SidebarNavDropdownDirective} from './sidebar-nav-dropdown.directive';
 
 /**
  * The SidebarNavDropdownTogglerDirective class implements the sidebar nav dropdown toggle

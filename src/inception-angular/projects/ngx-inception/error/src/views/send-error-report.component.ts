@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   CoreModule, DialogService, InformationDialogComponent, ProblemDetails, SpinnerService,
   ValidatedFormDirective
 } from 'ngx-inception/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, finalize, first, map } from 'rxjs/operators';
-import { ErrorService } from '../services/error.service';
+import {Observable, throwError} from 'rxjs';
+import {catchError, finalize, first, map} from 'rxjs/operators';
+import {ErrorService} from '../services/error.service';
 
 /**
  * The SendErrorReportComponent class implements the send error report component.
@@ -69,9 +69,9 @@ export class SendErrorReportComponent implements OnInit {
       validators: Validators.email
     });
 
-    this.feedbackControl = new FormControl<string>('', { nonNullable: true });
+    this.feedbackControl = new FormControl<string>('', {nonNullable: true});
 
-    this.messageControl = new FormControl<string>('', { nonNullable: true });
+    this.messageControl = new FormControl<string>('', {nonNullable: true});
 
     // Initialize the form group
     this.sendErrorReportForm = new FormGroup({
@@ -83,21 +83,21 @@ export class SendErrorReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-      .pipe(
-        first(),
-        map(() => window.history.state)
-      )
-      .subscribe((state) => {
-        if (state.error) {
-          this.error = state.error;
-          this.messageControl.setValue(state.error.message);
-          this.logErrorDetails(this.error!);
-        } else {
-          console.log('No error found, redirecting to the application root');
+    .pipe(
+      first(),
+      map(() => window.history.state)
+    )
+    .subscribe((state) => {
+      if (state.error) {
+        this.error = state.error;
+        this.messageControl.setValue(state.error.message);
+        this.logErrorDetails(this.error!);
+      } else {
+        console.log('No error found, redirecting to the application root');
 
-          void this.router.navigate(['/']);
-        }
-      });
+        void this.router.navigate(['/']);
+      }
+    });
   }
 
   sendErrorReport(): void {
@@ -107,29 +107,29 @@ export class SendErrorReportComponent implements OnInit {
       this.spinnerService.showSpinner();
 
       this.errorService
-        .sendErrorReport(this.error, this.emailControl.value, this.feedbackControl.value)
-        .pipe(
-          first(),
-          finalize(() => {
-            this.spinnerService.hideSpinner();
+      .sendErrorReport(this.error, this.emailControl.value, this.feedbackControl.value)
+      .pipe(
+        first(),
+        finalize(() => {
+          this.spinnerService.hideSpinner();
 
-            this.sendErrorReportForm.enable();
-          }),
-          catchError((error) => this.handleError(error))
-        )
+          this.sendErrorReportForm.enable();
+        }),
+        catchError((error) => this.handleError(error))
+      )
+      .subscribe(() => {
+        const dialogRef: MatDialogRef<InformationDialogComponent, boolean> =
+          this.dialogService.showInformationDialog({
+            message: 'Your error report was submitted.'
+          });
+
+        dialogRef
+        .afterClosed()
+        .pipe(first())
         .subscribe(() => {
-          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> =
-            this.dialogService.showInformationDialog({
-              message: 'Your error report was submitted.'
-            });
-
-          dialogRef
-            .afterClosed()
-            .pipe(first())
-            .subscribe(() => {
-              void this.router.navigate(['/']);
-            });
+          void this.router.navigate(['/']);
         });
+      });
     }
   }
 

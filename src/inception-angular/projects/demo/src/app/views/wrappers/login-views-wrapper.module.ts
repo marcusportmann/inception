@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
-import { LoginViewsModule } from 'ngx-inception/login';
+import {NgModule} from '@angular/core';
+import {LoginViewsModule} from 'ngx-inception/login';
 
 @NgModule({
   imports: [LoginViewsModule]
 })
-export class LoginViewsWrapperModule {}
+export class LoginViewsWrapperModule {
+}

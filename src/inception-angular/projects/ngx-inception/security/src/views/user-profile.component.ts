@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { Clipboard } from '@angular/cdk/clipboard';
-import { Location } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {Clipboard} from '@angular/cdk/clipboard';
+import {Location} from '@angular/common';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {
   AdminContainerView, CoreModule, Session, SessionService, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { EMPTY, Observable } from 'rxjs';
-import { finalize, first, map, switchMap } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { User } from '../services/user';
+import {EMPTY, Observable} from 'rxjs';
+import {finalize, first, map, switchMap} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {User} from '../services/user';
 
 /**
  * The UserProfileComponent class implements the user profile component.
@@ -112,7 +112,7 @@ export class UserProfileComponent extends AdminContainerView implements OnInit {
         value: '',
         disabled: true
       },
-      { nonNullable: true }
+      {nonNullable: true}
     );
 
     // Initialize the form
@@ -142,7 +142,7 @@ export class UserProfileComponent extends AdminContainerView implements OnInit {
         this.snackBar.open(
           $localize`:@@security_user_profile_component_snackbar_no_token:No active session — nothing to copy.`,
           undefined,
-          { duration: 3000 }
+          {duration: 3000}
         );
         return;
       }
@@ -150,10 +150,12 @@ export class UserProfileComponent extends AdminContainerView implements OnInit {
       const ok = this.clipboard.copy(token);
       this.snackBar.open(
         ok
-          ? $localize`:@@security_user_profile_component_snackbar_copied:Access token copied to clipboard.`
-          : $localize`:@@security_user_profile_component_snackbar_copy_failed:Failed to copy access token.`,
+          ?
+          $localize`:@@security_user_profile_component_snackbar_copied:Access token copied to clipboard.`
+          :
+          $localize`:@@security_user_profile_component_snackbar_copy_failed:Failed to copy access token.`,
         undefined,
-        { duration: 2500 }
+        {duration: 2500}
       );
     });
   }
@@ -162,45 +164,41 @@ export class UserProfileComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.sessionService.session$
-      .pipe(
-        first(),
-        switchMap((session: Session | null) => {
-          if (!session) {
-            this.spinnerService.hideSpinner();
-            return EMPTY;
-          }
+    .pipe(
+      first(),
+      switchMap((session: Session | null) => {
+        if (!session) {
+          this.spinnerService.hideSpinner();
+          return EMPTY;
+        }
 
-          return this.securityService
-            .getUser(session.userDirectoryId, session.username)
-            .pipe(finalize(() => this.spinnerService.hideSpinner()));
-        })
-      )
-      .subscribe({
-        next: (user: User) => {
-          this.user = user;
+        return this.securityService
+        .getUser(session.userDirectoryId, session.username)
+        .pipe(finalize(() => this.spinnerService.hideSpinner()));
+      })
+    )
+    .subscribe({
+      next: (user: User) => {
+        this.user = user;
 
-          this.emailControl.setValue(user.email);
-          this.nameControl.setValue(user.name);
-          this.preferredNameControl.setValue(user.preferredName);
-          this.mobileNumberControl.setValue(user.mobileNumber);
-          this.phoneNumberControl.setValue(user.phoneNumber);
-          this.usernameControl.setValue(user.username);
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.emailControl.setValue(user.email);
+        this.nameControl.setValue(user.name);
+        this.preferredNameControl.setValue(user.preferredName);
+        this.mobileNumberControl.setValue(user.mobileNumber);
+        this.phoneNumberControl.setValue(user.phoneNumber);
+        this.usernameControl.setValue(user.username);
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.userProfileForm.valid) {
+      this.userProfileForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.user || !this.userProfileForm.valid) {
-      return;
-    }
+    if (!this.user) return;
 
     this.user.name = this.nameControl.value;
     this.user.preferredName = this.preferredNameControl.value;
@@ -208,19 +206,25 @@ export class UserProfileComponent extends AdminContainerView implements OnInit {
     this.user.phoneNumber = this.phoneNumberControl.value;
     this.user.email = this.emailControl.value;
 
+    this.userProfileForm.disable();
+
     this.spinnerService.showSpinner();
 
     this.securityService
-      .updateUser(this.user, false, false)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: () => {
-          this.location.back();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .updateUser(this.user, false, false)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
+
+        this.userProfileForm.enable()
+      })
+    )
+    .subscribe({
+      next: () => {
+        this.location.back();
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

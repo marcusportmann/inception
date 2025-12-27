@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-import { Component, DOCUMENT, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterOutlet } from '@angular/router';
-import { NgScrollbarModule } from 'ngx-scrollbar';
+import {Component, DOCUMENT, inject, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, ActivatedRouteSnapshot, Router, RouterOutlet} from '@angular/router';
+import {NgScrollbarModule} from 'ngx-scrollbar';
 
-import { Observable, Subscription } from 'rxjs';
-import { INCEPTION_CONFIG, InceptionConfig } from '../../inception-config';
-import { Session } from '../../session/services/session';
-import { SessionService } from '../../session/services/session.service';
-import { BreadcrumbsService } from '../services/breadcrumbs.service';
-import { SidebarService } from '../services/sidebar.service';
-import { SpinnerService } from '../services/spinner.service';
-import { TitleBarService } from '../services/title-bar.service';
+import {Observable, Subscription} from 'rxjs';
+import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
+import {Session} from '../../session/services/session';
+import {SessionService} from '../../session/services/session.service';
+import {BreadcrumbsService} from '../services/breadcrumbs.service';
+import {SidebarService} from '../services/sidebar.service';
+import {SpinnerService} from '../services/spinner.service';
+import {TitleBarService} from '../services/title-bar.service';
 
-import { AdminContainerView } from './admin-container-view';
-import { AdminFooterComponent } from './admin-footer.component';
-import { AdminHeaderComponent } from './admin-header.component';
-import { BreadcrumbsComponent } from './breadcrumbs.component';
-import { SidebarMinimizerComponent } from './sidebar-minimizer.component';
-import { SidebarNavComponent } from './sidebar-nav.component';
-import { SidebarComponent } from './sidebar.component';
-import { TitleBarComponent } from './title-bar.component';
+import {AdminContainerView} from './admin-container-view';
+import {AdminFooterComponent} from './admin-footer.component';
+import {AdminHeaderComponent} from './admin-header.component';
+import {BreadcrumbsComponent} from './breadcrumbs.component';
+import {SidebarMinimizerComponent} from './sidebar-minimizer.component';
+import {SidebarNavComponent} from './sidebar-nav.component';
+import {SidebarComponent} from './sidebar.component';
+import {TitleBarComponent} from './title-bar.component';
 
 /**
  * The AdminContainerComponent class implements the admin container component.

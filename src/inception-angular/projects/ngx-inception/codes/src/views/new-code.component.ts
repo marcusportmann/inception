@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 
-import { Code } from '../services/code';
+import {Code} from '../services/code';
 
-import { CodesService } from '../services/codes.service';
+import {CodesService} from '../services/codes.service';
 
 /**
  * The NewCodeComponent class implements the new code component.
@@ -99,7 +99,7 @@ export class NewCodeComponent extends AdminContainerView implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   ngOnInit(): void {
@@ -108,38 +108,37 @@ export class NewCodeComponent extends AdminContainerView implements OnInit {
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.newCodeForm.valid) {
+      this.newCodeForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
+    if (!this.code) return;
 
-    if (this.code && this.newCodeForm.valid) {
-      this.code.id = this.idControl.value?.trim();
-      this.code.name = this.nameControl.value?.trim();
-      this.code.value = this.valueControl.value?.trim();
+    this.code.id = this.idControl.value?.trim();
+    this.code.name = this.nameControl.value?.trim();
+    this.code.value = this.valueControl.value?.trim();
 
-      this.newCodeForm.disable();
+    this.newCodeForm.disable();
 
-      this.spinnerService.showSpinner();
+    this.spinnerService.showSpinner();
 
-      this.codesService
-        .createCode(this.code)
-        .pipe(
-          first(),
-          finalize(() => {
-            this.spinnerService.hideSpinner();
+    this.codesService
+    .createCode(this.code)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-            this.newCodeForm.enable();
-          })
-        )
-        .subscribe({
-          next: () => {
-            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
-          },
-          error: (error: Error) => this.handleError(error, false)
-        });
-    }
+        this.newCodeForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
+
   }
 }

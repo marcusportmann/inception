@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Directive, HostListener } from '@angular/core';
+import {Directive, HostListener} from '@angular/core';
 
 /**
  * The SidebarMinimizerDirective class implements the sidebar minimizer directive.

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
 
-import { RouterModule, Routes } from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 
 const routes: Routes = [
   {
@@ -61,4 +61,5 @@ const routes: Routes = [
   imports: [CommonModule, RouterModule.forChild(routes)],
   declarations: []
 })
-export class InceptionModule {}
+export class InceptionModule {
+}

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { Directive, HostListener, Input } from '@angular/core';
-import { toggleClasses } from '../../util/toggle-classes';
-import { SIDEBAR_CSS_CLASSES } from '../components/sidebar-css-classes';
+import {Directive, HostListener, Input} from '@angular/core';
+import {toggleClasses} from '../../util/toggle-classes';
+import {SIDEBAR_CSS_CLASSES} from '../components/sidebar-css-classes';
 
 /**
  * Toggles the sidebar visibility based on an optional breakpoint.

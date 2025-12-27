@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { ErrorService } from './error.service';
+import {CommonModule} from '@angular/common';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {ErrorService} from './error.service';
 
 /**
  * The ErrorServicesModule class implements the Inception Error Services Module.

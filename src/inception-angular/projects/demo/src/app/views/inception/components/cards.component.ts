@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { CoreModule } from 'ngx-inception/core';
+import {Component} from '@angular/core';
+import {CoreModule} from 'ngx-inception/core';
 
 /**
  * The CardsComponent class implements the cards component.
@@ -28,4 +28,5 @@ import { CoreModule } from 'ngx-inception/core';
   imports: [CoreModule],
   templateUrl: 'cards.component.html'
 })
-export class CardsComponent {}
+export class CardsComponent {
+}

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { User } from '../services/user';
-import { UserDirectoryCapabilities } from '../services/user-directory-capabilities';
-import { UserStatus } from '../services/user-status';
+import {finalize, first} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {User} from '../services/user';
+import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
+import {UserStatus} from '../services/user-status';
 
 /**
  * The NewUserComponent class implements the new user component.
@@ -104,7 +104,7 @@ export class NewUserComponent extends AdminContainerView implements OnInit {
       )
     ]);
 
-    this.expiredPasswordControl = new FormControl<boolean>(false, { nonNullable: true });
+    this.expiredPasswordControl = new FormControl<boolean>(false, {nonNullable: true});
 
     this.nameControl = new FormControl<string>('', {
       nonNullable: true,
@@ -131,7 +131,7 @@ export class NewUserComponent extends AdminContainerView implements OnInit {
 
     this.phoneNumberControl = new FormControl<string | null>(null, [Validators.maxLength(100)]);
 
-    this.userLockedControl = new FormControl<boolean>(false, { nonNullable: true });
+    this.userLockedControl = new FormControl<boolean>(false, {nonNullable: true});
 
     this.usernameControl = new FormControl<string>('', {
       nonNullable: true,
@@ -154,14 +154,14 @@ export class NewUserComponent extends AdminContainerView implements OnInit {
   override get backNavigation(): BackNavigation {
     return new BackNavigation($localize`:@@security_new_user_back_navigation:Users`, ['.'], {
       relativeTo: this.activatedRoute.parent,
-      state: { userDirectoryId: this.userDirectoryId }
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   cancel(): void {
     void this.router.navigate(['.'], {
       relativeTo: this.activatedRoute.parent,
-      state: { userDirectoryId: this.userDirectoryId }
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
@@ -170,40 +170,36 @@ export class NewUserComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getUserDirectoryCapabilities(this.userDirectoryId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (userDirectoryCapabilities: UserDirectoryCapabilities) => {
-          this.userDirectoryCapabilities = userDirectoryCapabilities;
+    .getUserDirectoryCapabilities(this.userDirectoryId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (userDirectoryCapabilities: UserDirectoryCapabilities) => {
+        this.userDirectoryCapabilities = userDirectoryCapabilities;
 
-          this.user = new User(this.userDirectoryId, '', '', '', '', '', '', UserStatus.Active, '');
+        this.user = new User(this.userDirectoryId, '', '', '', '', '', '', UserStatus.Active, '');
 
-          if (this.userDirectoryCapabilities.supportsPasswordExpiry) {
-            this.newUserForm.addControl('expiredPassword', this.expiredPasswordControl);
-          }
+        if (this.userDirectoryCapabilities.supportsPasswordExpiry) {
+          this.newUserForm.addControl('expiredPassword', this.expiredPasswordControl);
+        }
 
-          if (this.userDirectoryCapabilities.supportsUserLocks) {
-            this.newUserForm.addControl('userLocked', this.userLockedControl);
-          }
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        if (this.userDirectoryCapabilities.supportsUserLocks) {
+          this.newUserForm.addControl('userLocked', this.userLockedControl);
+        }
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.newUserForm.valid) {
+      this.newUserForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.user || !this.newUserForm.valid) {
-      return;
-    }
+    if (!this.user) return;
 
     // Check that the password and confirmation password match
     if (this.passwordControl.value !== this.confirmPasswordControl.value) {
@@ -231,23 +227,23 @@ export class NewUserComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .createUser(this.user, expiredPassword, userLocked)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .createUser(this.user, expiredPassword, userLocked)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.newUserForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], {
-            relativeTo: this.activatedRoute.parent,
-            state: { userDirectoryId: this.userDirectoryId }
-          });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.newUserForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {
+          relativeTo: this.activatedRoute.parent,
+          state: {userDirectoryId: this.userDirectoryId}
+        });
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }

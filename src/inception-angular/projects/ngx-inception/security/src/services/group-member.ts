@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { GroupMemberType } from './group-member-type';
+import {GroupMemberType} from './group-member-type';
 
 /**
  * The GroupMember class holds the information for a group member.

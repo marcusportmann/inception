@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, HostBinding, inject, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import {AfterViewInit, Component, HostBinding, inject, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {Router} from '@angular/router';
 import {
   AccessDeniedError, CoreModule, DialogService, InvalidArgumentError, ServiceUnavailableError,
   SpinnerService, TableFilterComponent
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { Data } from '../../services/data';
-import { DataService } from '../../services/data.service';
+import {finalize, first} from 'rxjs/operators';
+import {Data} from '../../services/data';
+import {DataService} from '../../services/data.service';
 
 /**
  * The Menu22Component class implements the menu 2.2 component.
@@ -45,9 +45,9 @@ export class Menu22Component implements AfterViewInit {
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
   private readonly dataService = inject(DataService);
 
@@ -71,51 +71,51 @@ export class Menu22Component implements AfterViewInit {
 
   clickMe(): void {
     this.dataService
-      .getData()
-      .pipe(first())
-      .subscribe({
-        next: (data: Data) => {
-          console.log('data = ', data);
+    .getData()
+    .pipe(first())
+    .subscribe({
+      next: (data: Data) => {
+        console.log('data = ', data);
 
-          // No handlers here, so the empty subscribe() is fine
-          this.dataService.validateData(data).pipe(first()).subscribe();
-        }
-        // You can optionally add error / complete here if needed:
-        // error: (err) => { ... },
-        // complete: () => { ... }
-      });
+        // No handlers here, so the empty subscribe() is fine
+        this.dataService.validateData(data).pipe(first()).subscribe();
+      }
+      // You can optionally add error / complete here if needed:
+      // error: (err) => { ... },
+      // complete: () => { ... }
+    });
   }
 
   loadData(): void {
     this.spinnerService.showSpinner();
 
     this.dataService
-      .getAllData()
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (data: Data[]) => {
-          console.log('data = ', data);
+    .getAllData()
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (data: Data[]) => {
+        console.log('data = ', data);
 
-          this.dataSource.data = data;
-        },
-        error: (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if (
-            error instanceof AccessDeniedError ||
-            error instanceof InvalidArgumentError ||
-            error instanceof ServiceUnavailableError
-          ) {
-            void this.router.navigateByUrl('/error/send-error-report', {
-              state: { error }
-            });
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
+        this.dataSource.data = data;
+      },
+      error: (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if (
+          error instanceof AccessDeniedError ||
+          error instanceof InvalidArgumentError ||
+          error instanceof ServiceUnavailableError
+        ) {
+          void this.router.navigateByUrl('/error/send-error-report', {
+            state: {error}
+          });
+        } else {
+          this.dialogService.showErrorDialog(error);
         }
-      });
+      }
+    });
   }
 
   ngAfterViewInit(): void {

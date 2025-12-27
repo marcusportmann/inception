@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { CoreModule } from 'ngx-inception/core';
+import {Component} from '@angular/core';
+import {CoreModule} from 'ngx-inception/core';
 
 /**
  * The AdministrationComponent class implements the administration component.
@@ -28,4 +28,5 @@ import { CoreModule } from 'ngx-inception/core';
   imports: [CoreModule],
   template: `Administration`
 })
-export class AdministrationComponent {}
+export class AdministrationComponent {
+}

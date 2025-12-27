@@ -71,7 +71,7 @@
       </div>
     </mat-card-content>
     <mat-card-actions align="end">
-      <button type="button" mat-flat-button color="link" (click)="cancel()" i18n="@@mail_edit_mail_template_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button color="link" [disabled]="editMailTemplateForm.disabled" (click)="cancel()" i18n="@@mail_edit_mail_template_component_button_cancel">Cancel</button>
       <button type="button" mat-flat-button color="primary" [disabled]="editMailTemplateForm.disabled || editMailTemplateForm.invalid" (click)="ok()" i18n="@@mail_edit_mail_template_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>

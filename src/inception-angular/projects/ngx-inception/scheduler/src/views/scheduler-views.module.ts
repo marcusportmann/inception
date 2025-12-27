@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
-import { EditJobTitleResolver } from './edit-job-title-resolver';
-import { EditJobComponent } from './edit-job.component';
-import { JobTitleResolver } from './job-title-resolver';
-import { JobsTitleResolver } from './jobs-title-resolver';
-import { JobsComponent } from './jobs.component';
-import { NewJobTitleResolver } from './new-job-title-resolver';
-import { NewJobComponent } from './new-job.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
+import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
+import {EditJobTitleResolver} from './edit-job-title-resolver';
+import {EditJobComponent} from './edit-job.component';
+import {JobTitleResolver} from './job-title-resolver';
+import {JobsTitleResolver} from './jobs-title-resolver';
+import {JobsComponent} from './jobs.component';
+import {NewJobTitleResolver} from './new-job-title-resolver';
+import {NewJobComponent} from './new-job.component';
 
 const routes: Routes = [
   {
@@ -116,4 +116,5 @@ const routes: Routes = [
     NewJobTitleResolver
   ]
 })
-export class SchedulerViewsModule {}
+export class SchedulerViewsModule {
+}

@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
 import {
   AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
   ProblemDetails, ResponseConverter, ServiceUnavailableError, SortDirection
 } from 'ngx-inception/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { GenerateTokenRequest } from './generate-token-request';
-import { Group } from './group';
-import { GroupMember } from './group-member';
-import { GroupMemberType } from './group-member-type';
-import { GroupMembers } from './group-members';
-import { GroupRole } from './group-role';
-import { Groups } from './groups';
-import { PasswordChange } from './password-change';
-import { PasswordChangeReason } from './password-change-reason';
-import { Policy } from './policy';
-import { PolicySortBy } from './policy-sort-by';
-import { PolicySummaries } from './policy-summaries';
-import { Role } from './role';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {GenerateTokenRequest} from './generate-token-request';
+import {Group} from './group';
+import {GroupMember} from './group-member';
+import {GroupMemberType} from './group-member-type';
+import {GroupMembers} from './group-members';
+import {GroupRole} from './group-role';
+import {Groups} from './groups';
+import {PasswordChange} from './password-change';
+import {PasswordChangeReason} from './password-change-reason';
+import {Policy} from './policy';
+import {PolicySortBy} from './policy-sort-by';
+import {PolicySummaries} from './policy-summaries';
+import {Role} from './role';
 import {
   AuthenticationFailedError, DuplicateGroupError, DuplicatePolicyError, DuplicateTenantError,
   DuplicateUserDirectoryError, DuplicateUserError, ExistingGroupMembersError, ExistingGroupsError,
@@ -43,21 +43,21 @@ import {
   PolicyNotFoundError, RoleNotFoundError, TenantNotFoundError, TenantUserDirectoryNotFoundError,
   TokenNotFoundError, UserDirectoryNotFoundError, UserLockedError, UserNotFoundError
 } from './security.service.errors';
-import { Tenant } from './tenant';
-import { TenantUserDirectory } from './tenant-user-directory';
-import { Tenants } from './tenants';
-import { Token } from './token';
-import { TokenSortBy } from './token-sort-by';
-import { TokenStatus } from './token-status';
-import { TokenSummaries } from './token-summaries';
-import { User } from './user';
-import { UserDirectory } from './user-directory';
-import { UserDirectoryCapabilities } from './user-directory-capabilities';
-import { UserDirectorySummaries } from './user-directory-summaries';
-import { UserDirectorySummary } from './user-directory-summary';
-import { UserDirectoryType } from './user-directory-type';
-import { UserSortBy } from './user-sort-by';
-import { Users } from './users';
+import {Tenant} from './tenant';
+import {TenantUserDirectory} from './tenant-user-directory';
+import {Tenants} from './tenants';
+import {Token} from './token';
+import {TokenSortBy} from './token-sort-by';
+import {TokenStatus} from './token-status';
+import {TokenSummaries} from './token-summaries';
+import {User} from './user';
+import {UserDirectory} from './user-directory';
+import {UserDirectoryCapabilities} from './user-directory-capabilities';
+import {UserDirectorySummaries} from './user-directory-summaries';
+import {UserDirectorySummary} from './user-directory-summary';
+import {UserDirectoryType} from './user-directory-type';
+import {UserSortBy} from './user-sort-by';
+import {Users} from './users';
 
 /**
  * The Security Service implementation.
@@ -98,20 +98,20 @@ export class SecurityService {
     const groupMember = new GroupMember(userDirectoryId, groupName, memberType, memberName);
 
     return this.httpClient
-      .post<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/groups/' +
-          groupName +
-          '/members',
-        groupMember,
-        { observe: 'response' }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to add the group member to the group.'))
-      );
+    .post<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/groups/' +
+      groupName +
+      '/members',
+      groupMember,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to add the group member to the group.'))
+    );
   }
 
   /**
@@ -131,20 +131,20 @@ export class SecurityService {
     const groupRole = new GroupRole(userDirectoryId, groupName, roleCode);
 
     return this.httpClient
-      .post<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/groups/' +
-          groupName +
-          '/roles',
-        groupRole,
-        { observe: 'response' }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to add the role to the group.'))
-      );
+    .post<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/groups/' +
+      groupName +
+      '/roles',
+      groupRole,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to add the role to the group.'))
+    );
   }
 
   /**
@@ -160,17 +160,17 @@ export class SecurityService {
     const tenantUserDirectory = new TenantUserDirectory(tenantId, userDirectoryId);
 
     return this.httpClient
-      .post<boolean>(
-        this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/user-directories',
-        tenantUserDirectory,
-        { observe: 'response' }
+    .post<boolean>(
+      this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/user-directories',
+      tenantUserDirectory,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(
+        SecurityService.handleApiError('Failed to add the user directory to the tenant.')
       )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(
-          SecurityService.handleApiError('Failed to add the user directory to the tenant.')
-        )
-      );
+    );
   }
 
   /**
@@ -204,26 +204,26 @@ export class SecurityService {
     );
 
     return this.httpClient
-      .put<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/users/' +
-          username +
-          '/password',
-        passwordChange,
-        {
-          observe: 'response'
-        }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(
-          SecurityService.handleApiError(
-            'Failed to administratively change the password for the user.'
-          )
+    .put<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/users/' +
+      username +
+      '/password',
+      passwordChange,
+      {
+        observe: 'response'
+      }
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(
+        SecurityService.handleApiError(
+          'Failed to administratively change the password for the user.'
         )
-      );
+      )
+    );
   }
 
   /**
@@ -239,17 +239,17 @@ export class SecurityService {
     const passwordChange = new PasswordChange(PasswordChangeReason.User, newPassword, password);
 
     return this.httpClient
-      .put<boolean>(
-        this.config.apiUrlPrefix + '/security/users/' + username + '/password',
-        passwordChange,
-        {
-          observe: 'response'
-        }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to change the password for the user.'))
-      );
+    .put<boolean>(
+      this.config.apiUrlPrefix + '/security/users/' + username + '/password',
+      passwordChange,
+      {
+        observe: 'response'
+      }
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to change the password for the user.'))
+    );
   }
 
   /**
@@ -261,20 +261,20 @@ export class SecurityService {
    */
   createGroup(group: Group): Observable<boolean> {
     return this.httpClient
-      .post<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          group.userDirectoryId +
-          '/groups',
-        group,
-        {
-          observe: 'response'
-        }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to create the group.'))
-      );
+    .post<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      group.userDirectoryId +
+      '/groups',
+      group,
+      {
+        observe: 'response'
+      }
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to create the group.'))
+    );
   }
 
   /**
@@ -288,14 +288,14 @@ export class SecurityService {
     const httpParams = new HttpParams();
 
     return this.httpClient
-      .post<boolean>(this.config.apiUrlPrefix + '/security/policies', policy, {
-        params: httpParams,
-        observe: 'response'
-      })
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to create the policy.'))
-      );
+    .post<boolean>(this.config.apiUrlPrefix + '/security/policies', policy, {
+      params: httpParams,
+      observe: 'response'
+    })
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to create the policy.'))
+    );
   }
 
   /**
@@ -315,14 +315,14 @@ export class SecurityService {
     );
 
     return this.httpClient
-      .post<boolean>(this.config.apiUrlPrefix + '/security/tenants', tenant, {
-        params: httpParams,
-        observe: 'response'
-      })
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to create the tenant.'))
-      );
+    .post<boolean>(this.config.apiUrlPrefix + '/security/tenants', tenant, {
+      params: httpParams,
+      observe: 'response'
+    })
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to create the tenant.'))
+    );
   }
 
   /**
@@ -346,18 +346,18 @@ export class SecurityService {
     );
 
     return this.httpClient
-      .post<boolean>(
-        this.config.apiUrlPrefix + '/security/user-directories/' + user.userDirectoryId + '/users',
-        user,
-        {
-          params: httpParams,
-          observe: 'response'
-        }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to create the user.'))
-      );
+    .post<boolean>(
+      this.config.apiUrlPrefix + '/security/user-directories/' + user.userDirectoryId + '/users',
+      user,
+      {
+        params: httpParams,
+        observe: 'response'
+      }
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to create the user.'))
+    );
   }
 
   /**
@@ -369,13 +369,13 @@ export class SecurityService {
    */
   createUserDirectory(userDirectory: UserDirectory): Observable<boolean> {
     return this.httpClient
-      .post<boolean>(this.config.apiUrlPrefix + '/security/user-directories', userDirectory, {
-        observe: 'response'
-      })
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to create the user directory.'))
-      );
+    .post<boolean>(this.config.apiUrlPrefix + '/security/user-directories', userDirectory, {
+      observe: 'response'
+    })
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to create the user directory.'))
+    );
   }
 
   /**
@@ -388,18 +388,18 @@ export class SecurityService {
    */
   deleteGroup(userDirectoryId: string, groupName: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/groups/' +
-          groupName,
-        { observe: 'response' }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to delete the group.'))
-      );
+    .delete<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/groups/' +
+      groupName,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the group.'))
+    );
   }
 
   /**
@@ -411,13 +411,13 @@ export class SecurityService {
    */
   deletePolicy(policyId: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(this.config.apiUrlPrefix + '/security/policies/' + policyId, {
-        observe: 'response'
-      })
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to delete the policy.'))
-      );
+    .delete<boolean>(this.config.apiUrlPrefix + '/security/policies/' + policyId, {
+      observe: 'response'
+    })
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the policy.'))
+    );
   }
 
   /**
@@ -429,13 +429,13 @@ export class SecurityService {
    */
   deleteTenant(tenantId: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(this.config.apiUrlPrefix + '/security/tenants/' + tenantId, {
-        observe: 'response'
-      })
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to delete the tenant.'))
-      );
+    .delete<boolean>(this.config.apiUrlPrefix + '/security/tenants/' + tenantId, {
+      observe: 'response'
+    })
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the tenant.'))
+    );
   }
 
   /**
@@ -447,13 +447,13 @@ export class SecurityService {
    */
   deleteToken(tokenId: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(this.config.apiUrlPrefix + '/security/tokens/' + tokenId, {
-        observe: 'response'
-      })
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to delete the token.'))
-      );
+    .delete<boolean>(this.config.apiUrlPrefix + '/security/tokens/' + tokenId, {
+      observe: 'response'
+    })
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the token.'))
+    );
   }
 
   /**
@@ -466,18 +466,18 @@ export class SecurityService {
    */
   deleteUser(userDirectoryId: string, username: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/users/' +
-          username,
-        { observe: 'response' }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to delete the user.'))
-      );
+    .delete<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/users/' +
+      username,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the user.'))
+    );
   }
 
   /**
@@ -489,13 +489,13 @@ export class SecurityService {
    */
   deleteUserDirectory(userDirectoryId: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId, {
-        observe: 'response'
-      })
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to delete the user directory.'))
-      );
+    .delete<boolean>(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId, {
+      observe: 'response'
+    })
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to delete the user directory.'))
+    );
   }
 
   /**
@@ -507,8 +507,8 @@ export class SecurityService {
    */
   generateToken(generateTokenRequest: GenerateTokenRequest): Observable<Token> {
     return this.httpClient
-      .post<Token>(this.config.apiUrlPrefix + '/security/generate-token', generateTokenRequest)
-      .pipe(catchError(SecurityService.handleApiError('Failed to generate the token.')));
+    .post<Token>(this.config.apiUrlPrefix + '/security/generate-token', generateTokenRequest)
+    .pipe(catchError(SecurityService.handleApiError('Failed to generate the token.')));
   }
 
   /**
@@ -521,15 +521,15 @@ export class SecurityService {
    */
   getGroup(userDirectoryId: string, groupName: string): Observable<Group> {
     return this.httpClient
-      .get<Group>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/groups/' +
-          groupName,
-        { reportProgress: true }
-      )
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the group.')));
+    .get<Group>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/groups/' +
+      groupName,
+      {reportProgress: true}
+    )
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the group.')));
   }
 
   /**
@@ -541,13 +541,13 @@ export class SecurityService {
    */
   getGroupNames(userDirectoryId: string): Observable<string[]> {
     return this.httpClient
-      .get<string[]>(
-        this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/group-names',
-        {
-          reportProgress: true
-        }
-      )
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the group names.')));
+    .get<string[]>(
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/group-names',
+      {
+        reportProgress: true
+      }
+    )
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the group names.')));
   }
 
   /**
@@ -560,14 +560,15 @@ export class SecurityService {
    */
   getGroupNamesForUser(userDirectoryId: string, username: string): Observable<string[]> {
     return this.httpClient
-      .get<
-        string[]
-      >(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' + username + '/group-names', { reportProgress: true })
-      .pipe(
-        catchError(
-          SecurityService.handleApiError('Failed to retrieve the group names for the user.')
-        )
-      );
+    .get<
+      string[]
+    >(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users/' + username + '/group-names',
+      {reportProgress: true})
+    .pipe(
+      catchError(
+        SecurityService.handleApiError('Failed to retrieve the group names for the user.')
+      )
+    );
   }
 
   /**
@@ -607,14 +608,14 @@ export class SecurityService {
     }
 
     return this.httpClient
-      .get<Groups>(
-        this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups',
-        {
-          params,
-          reportProgress: true
-        }
-      )
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the groups.')));
+    .get<Groups>(
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/groups',
+      {
+        params,
+        reportProgress: true
+      }
+    )
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the groups.')));
   }
 
   /**
@@ -656,21 +657,21 @@ export class SecurityService {
     }
 
     return this.httpClient
-      .get<GroupMembers>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/groups/' +
-          groupName +
-          '/members',
-        {
-          params,
-          reportProgress: true
-        }
-      )
-      .pipe(
-        catchError(SecurityService.handleApiError('Failed to retrieve the members for the group.'))
-      );
+    .get<GroupMembers>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/groups/' +
+      groupName +
+      '/members',
+      {
+        params,
+        reportProgress: true
+      }
+    )
+    .pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the members for the group.'))
+    );
   }
 
   /**
@@ -680,10 +681,10 @@ export class SecurityService {
    */
   getPolicies(): Observable<Policy[]> {
     return this.httpClient
-      .get<Policy[]>(this.config.apiUrlPrefix + '/security/policies', {
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the policies.')));
+    .get<Policy[]>(this.config.apiUrlPrefix + '/security/policies', {
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the policies.')));
   }
 
   /**
@@ -695,10 +696,10 @@ export class SecurityService {
    */
   getPolicy(policyId: string): Observable<Policy> {
     return this.httpClient
-      .get<Policy>(this.config.apiUrlPrefix + '/security/policies/' + policyId, {
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the policy.')));
+    .get<Policy>(this.config.apiUrlPrefix + '/security/policies/' + policyId, {
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the policy.')));
   }
 
   /**
@@ -710,10 +711,10 @@ export class SecurityService {
    */
   getPolicyName(policyId: string): Observable<string> {
     return this.httpClient
-      .get<string>(this.config.apiUrlPrefix + '/security/policies/' + policyId + '/name', {
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the policy name.')));
+    .get<string>(this.config.apiUrlPrefix + '/security/policies/' + policyId + '/name', {
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the policy name.')));
   }
 
   /**
@@ -757,11 +758,11 @@ export class SecurityService {
     }
 
     return this.httpClient
-      .get<PolicySummaries>(this.config.apiUrlPrefix + '/security/policy-summaries', {
-        params,
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the policy summaries.')));
+    .get<PolicySummaries>(this.config.apiUrlPrefix + '/security/policy-summaries', {
+      params,
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the policy summaries.')));
   }
 
   /**
@@ -774,22 +775,22 @@ export class SecurityService {
    */
   getRoleCodesForGroup(userDirectoryId: string, groupName: string): Observable<string[]> {
     return this.httpClient
-      .get<string[]>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/groups/' +
-          groupName +
-          '/role-codes',
-        {
-          reportProgress: true
-        }
+    .get<string[]>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/groups/' +
+      groupName +
+      '/role-codes',
+      {
+        reportProgress: true
+      }
+    )
+    .pipe(
+      catchError(
+        SecurityService.handleApiError('Failed to retrieve the role codes for the group.')
       )
-      .pipe(
-        catchError(
-          SecurityService.handleApiError('Failed to retrieve the role codes for the group.')
-        )
-      );
+    );
   }
 
   /**
@@ -799,10 +800,10 @@ export class SecurityService {
    */
   getRoles(): Observable<Role[]> {
     return this.httpClient
-      .get<Role[]>(this.config.apiUrlPrefix + '/security/roles', {
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the roles.')));
+    .get<Role[]>(this.config.apiUrlPrefix + '/security/roles', {
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the roles.')));
   }
 
   /**
@@ -815,20 +816,20 @@ export class SecurityService {
    */
   getRolesForGroup(userDirectoryId: string, groupName: string): Observable<GroupRole[]> {
     return this.httpClient
-      .get<GroupRole[]>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/groups/' +
-          groupName +
-          '/roles',
-        {
-          reportProgress: true
-        }
-      )
-      .pipe(
-        catchError(SecurityService.handleApiError('Failed to retrieve the roles for the group.'))
-      );
+    .get<GroupRole[]>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/groups/' +
+      groupName +
+      '/roles',
+      {
+        reportProgress: true
+      }
+    )
+    .pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the roles for the group.'))
+    );
   }
 
   /**
@@ -840,10 +841,10 @@ export class SecurityService {
    */
   getTenant(tenantId: string): Observable<Tenant> {
     return this.httpClient
-      .get<Tenant>(this.config.apiUrlPrefix + '/security/tenants/' + tenantId, {
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the tenant.')));
+    .get<Tenant>(this.config.apiUrlPrefix + '/security/tenants/' + tenantId, {
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the tenant.')));
   }
 
   /**
@@ -855,10 +856,10 @@ export class SecurityService {
    */
   getTenantName(tenantId: string): Observable<string> {
     return this.httpClient
-      .get<string>(this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/name', {
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the tenant name.')));
+    .get<string>(this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/name', {
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the tenant name.')));
   }
 
   /**
@@ -896,11 +897,11 @@ export class SecurityService {
     }
 
     return this.httpClient
-      .get<Tenants>(this.config.apiUrlPrefix + '/security/tenants', {
-        params,
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the tenants.')));
+    .get<Tenants>(this.config.apiUrlPrefix + '/security/tenants', {
+      params,
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the tenants.')));
   }
 
   /**
@@ -912,16 +913,17 @@ export class SecurityService {
    */
   getTenantsForUserDirectory(userDirectoryId: string): Observable<Tenant[]> {
     return this.httpClient
-      .get<
-        Tenant[]
-      >(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/tenants', { reportProgress: true })
-      .pipe(
-        catchError(
-          SecurityService.handleApiError(
-            'Failed to retrieve the tenants associated with the user directory.'
-          )
+    .get<
+      Tenant[]
+    >(this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/tenants',
+      {reportProgress: true})
+    .pipe(
+      catchError(
+        SecurityService.handleApiError(
+          'Failed to retrieve the tenants associated with the user directory.'
         )
-      );
+      )
+    );
   }
 
   /**
@@ -933,10 +935,10 @@ export class SecurityService {
    */
   getToken(tokenId: string): Observable<Token> {
     return this.httpClient
-      .get<Token>(this.config.apiUrlPrefix + '/security/tokens/' + tokenId, {
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the token.')));
+    .get<Token>(this.config.apiUrlPrefix + '/security/tokens/' + tokenId, {
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the token.')));
   }
 
   /**
@@ -948,10 +950,10 @@ export class SecurityService {
    */
   getTokenName(tokenId: string): Observable<string> {
     return this.httpClient
-      .get<string>(this.config.apiUrlPrefix + '/security/tokens/' + tokenId + '/name', {
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the token name.')));
+    .get<string>(this.config.apiUrlPrefix + '/security/tokens/' + tokenId + '/name', {
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the token name.')));
   }
 
   /**
@@ -1001,11 +1003,11 @@ export class SecurityService {
     }
 
     return this.httpClient
-      .get<TokenSummaries>(this.config.apiUrlPrefix + '/security/token-summaries', {
-        params,
-        reportProgress: true
-      })
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the token summaries.')));
+    .get<TokenSummaries>(this.config.apiUrlPrefix + '/security/token-summaries', {
+      params,
+      reportProgress: true
+    })
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the token summaries.')));
   }
 
   /**
@@ -1018,15 +1020,15 @@ export class SecurityService {
    */
   @ResponseConverter getUser(userDirectoryId: string, username: string): Observable<User> {
     return this.httpClient
-      .get<User>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/users/' +
-          username,
-        { reportProgress: true }
-      )
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the user.')));
+    .get<User>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/users/' +
+      username,
+      {reportProgress: true}
+    )
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the user.')));
   }
 
   /**
@@ -1038,11 +1040,11 @@ export class SecurityService {
    */
   getUserDirectory(userDirectoryId: string): Observable<UserDirectory> {
     return this.httpClient
-      .get<UserDirectory>(
-        this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId,
-        { reportProgress: true }
-      )
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the user directory.')));
+    .get<UserDirectory>(
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId,
+      {reportProgress: true}
+    )
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the user directory.')));
   }
 
   /**
@@ -1054,20 +1056,20 @@ export class SecurityService {
    */
   getUserDirectoryCapabilities(userDirectoryId: string): Observable<UserDirectoryCapabilities> {
     return this.httpClient
-      .get<UserDirectoryCapabilities>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/capabilities',
-        { reportProgress: true }
-      )
-      .pipe(
-        catchError(
-          SecurityService.handleApiError(
-            'Failed to retrieve the capabilities for the user directory.'
-          )
+    .get<UserDirectoryCapabilities>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/capabilities',
+      {reportProgress: true}
+    )
+    .pipe(
+      catchError(
+        SecurityService.handleApiError(
+          'Failed to retrieve the capabilities for the user directory.'
         )
-      );
+      )
+    );
   }
 
   /**
@@ -1079,13 +1081,13 @@ export class SecurityService {
    */
   getUserDirectoryName(userDirectoryId: string): Observable<string> {
     return this.httpClient
-      .get<string>(
-        this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/name',
-        { reportProgress: true }
-      )
-      .pipe(
-        catchError(SecurityService.handleApiError('Failed to retrieve the user directory name.'))
-      );
+    .get<string>(
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/name',
+      {reportProgress: true}
+    )
+    .pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the user directory name.'))
+    );
   }
 
   /**
@@ -1123,18 +1125,18 @@ export class SecurityService {
     }
 
     return this.httpClient
-      .get<UserDirectorySummaries>(
-        this.config.apiUrlPrefix + '/security/user-directory-summaries',
-        {
-          params,
-          reportProgress: true
-        }
+    .get<UserDirectorySummaries>(
+      this.config.apiUrlPrefix + '/security/user-directory-summaries',
+      {
+        params,
+        reportProgress: true
+      }
+    )
+    .pipe(
+      catchError(
+        SecurityService.handleApiError('Failed to retrieve the user directory summaries.')
       )
-      .pipe(
-        catchError(
-          SecurityService.handleApiError('Failed to retrieve the user directory summaries.')
-        )
-      );
+    );
   }
 
   /**
@@ -1146,16 +1148,17 @@ export class SecurityService {
    */
   getUserDirectorySummariesForTenant(tenantId: string): Observable<UserDirectorySummary[]> {
     return this.httpClient
-      .get<
-        UserDirectorySummary[]
-      >(this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/user-directory-summaries', { reportProgress: true })
-      .pipe(
-        catchError(
-          SecurityService.handleApiError(
-            'Failed to retrieve the summaries for the user directories associated with the tenant.'
-          )
+    .get<
+      UserDirectorySummary[]
+    >(this.config.apiUrlPrefix + '/security/tenants/' + tenantId + '/user-directory-summaries',
+      {reportProgress: true})
+    .pipe(
+      catchError(
+        SecurityService.handleApiError(
+          'Failed to retrieve the summaries for the user directories associated with the tenant.'
         )
-      );
+      )
+    );
   }
 
   /**
@@ -1167,20 +1170,20 @@ export class SecurityService {
    */
   getUserDirectoryTypeForUserDirectory(userDirectoryId: string): Observable<UserDirectoryType> {
     return this.httpClient
-      .get<UserDirectoryType>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/user-directory-type',
-        { reportProgress: true }
-      )
-      .pipe(
-        catchError(
-          SecurityService.handleApiError(
-            'Failed to retrieve the user directory type for the user directory.'
-          )
+    .get<UserDirectoryType>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/user-directory-type',
+      {reportProgress: true}
+    )
+    .pipe(
+      catchError(
+        SecurityService.handleApiError(
+          'Failed to retrieve the user directory type for the user directory.'
         )
-      );
+      )
+    );
   }
 
   /**
@@ -1190,12 +1193,12 @@ export class SecurityService {
    */
   getUserDirectoryTypes(): Observable<UserDirectoryType[]> {
     return this.httpClient
-      .get<
-        UserDirectoryType[]
-      >(this.config.apiUrlPrefix + '/security/user-directory-types', { reportProgress: true })
-      .pipe(
-        catchError(SecurityService.handleApiError('Failed to retrieve the user directory types.'))
-      );
+    .get<
+      UserDirectoryType[]
+    >(this.config.apiUrlPrefix + '/security/user-directory-types', {reportProgress: true})
+    .pipe(
+      catchError(SecurityService.handleApiError('Failed to retrieve the user directory types.'))
+    );
   }
 
   /**
@@ -1208,16 +1211,16 @@ export class SecurityService {
    */
   getUserName(userDirectoryId: string, username: string): Observable<string> {
     return this.httpClient
-      .get<string>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/users/' +
-          username +
-          '/name',
-        { reportProgress: true }
-      )
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the name of the user.')));
+    .get<string>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/users/' +
+      username +
+      '/name',
+      {reportProgress: true}
+    )
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the name of the user.')));
   }
 
   /**
@@ -1263,14 +1266,14 @@ export class SecurityService {
     }
 
     return this.httpClient
-      .get<Users>(
-        this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users',
-        {
-          params,
-          reportProgress: true
-        }
-      )
-      .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the users.')));
+    .get<Users>(
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectoryId + '/users',
+      {
+        params,
+        reportProgress: true
+      }
+    )
+    .pipe(catchError(SecurityService.handleApiError('Failed to retrieve the users.')));
   }
 
   /**
@@ -1286,18 +1289,18 @@ export class SecurityService {
     params = params.append('resetPasswordUrl', resetPasswordUrl);
 
     return this.httpClient
-      .post<boolean>(
-        this.config.apiUrlPrefix + '/security/users/' + username + '/reset-password',
-        null,
-        {
-          observe: 'response',
-          params
-        }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to initiate the password reset.'))
-      );
+    .post<boolean>(
+      this.config.apiUrlPrefix + '/security/users/' + username + '/reset-password',
+      null,
+      {
+        observe: 'response',
+        params
+      }
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to initiate the password reset.'))
+    );
   }
 
   /**
@@ -1309,15 +1312,15 @@ export class SecurityService {
    */
   reinstateToken(tokenId: string): Observable<boolean> {
     return this.httpClient
-      .post<boolean>(
-        this.config.apiUrlPrefix + '/security/tokens/' + tokenId + '/reinstate',
-        null,
-        { observe: 'response' }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to reinstate the token.'))
-      );
+    .post<boolean>(
+      this.config.apiUrlPrefix + '/security/tokens/' + tokenId + '/reinstate',
+      null,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to reinstate the token.'))
+    );
   }
 
   /**
@@ -1337,24 +1340,24 @@ export class SecurityService {
     memberName: string
   ): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/groups/' +
-          groupName +
-          '/members/' +
-          memberType +
-          '/' +
-          memberName,
-        { observe: 'response' }
+    .delete<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/groups/' +
+      groupName +
+      '/members/' +
+      memberType +
+      '/' +
+      memberName,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(
+        SecurityService.handleApiError('Failed to remove the group member from the group.')
       )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(
-          SecurityService.handleApiError('Failed to remove the group member from the group.')
-        )
-      );
+    );
   }
 
   /**
@@ -1372,20 +1375,20 @@ export class SecurityService {
     roleCode: string
   ): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          userDirectoryId +
-          '/groups/' +
-          groupName +
-          '/roles/' +
-          roleCode,
-        { observe: 'response' }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to remove the role from the group.'))
-      );
+    .delete<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      userDirectoryId +
+      '/groups/' +
+      groupName +
+      '/roles/' +
+      roleCode,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to remove the role from the group.'))
+    );
   }
 
   /**
@@ -1399,20 +1402,20 @@ export class SecurityService {
    */
   removeUserDirectoryFromTenant(tenantId: string, userDirectoryId: string): Observable<boolean> {
     return this.httpClient
-      .delete<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/tenants/' +
-          tenantId +
-          '/user-directories/' +
-          userDirectoryId,
-        { observe: 'response' }
+    .delete<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/tenants/' +
+      tenantId +
+      '/user-directories/' +
+      userDirectoryId,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(
+        SecurityService.handleApiError('Failed to remove the user directory from the tenant.')
       )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(
-          SecurityService.handleApiError('Failed to remove the user directory from the tenant.')
-        )
-      );
+    );
   }
 
   /**
@@ -1433,17 +1436,17 @@ export class SecurityService {
     );
 
     return this.httpClient
-      .put<boolean>(
-        this.config.apiUrlPrefix + '/security/users/' + username + '/password',
-        passwordChange,
-        {
-          observe: 'response'
-        }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to reset the password for the user.'))
-      );
+    .put<boolean>(
+      this.config.apiUrlPrefix + '/security/users/' + username + '/password',
+      passwordChange,
+      {
+        observe: 'response'
+      }
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to reset the password for the user.'))
+    );
   }
 
   /**
@@ -1455,13 +1458,13 @@ export class SecurityService {
    */
   revokeToken(tokenId: string): Observable<boolean> {
     return this.httpClient
-      .post<boolean>(this.config.apiUrlPrefix + '/security/tokens/' + tokenId + '/revoke', null, {
-        observe: 'response'
-      })
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to revoke the token.'))
-      );
+    .post<boolean>(this.config.apiUrlPrefix + '/security/tokens/' + tokenId + '/revoke', null, {
+      observe: 'response'
+    })
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to revoke the token.'))
+    );
   }
 
   /**
@@ -1473,21 +1476,21 @@ export class SecurityService {
    */
   updateGroup(group: Group): Observable<boolean> {
     return this.httpClient
-      .put<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          group.userDirectoryId +
-          '/groups/' +
-          group.name,
-        group,
-        {
-          observe: 'response'
-        }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to update the group.'))
-      );
+    .put<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      group.userDirectoryId +
+      '/groups/' +
+      group.name,
+      group,
+      {
+        observe: 'response'
+      }
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to update the group.'))
+    );
   }
 
   /**
@@ -1499,13 +1502,13 @@ export class SecurityService {
    */
   updatePolicy(policy: Policy): Observable<boolean> {
     return this.httpClient
-      .put<boolean>(this.config.apiUrlPrefix + '/security/policies/' + policy.id, policy, {
-        observe: 'response'
-      })
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to update the policy.'))
-      );
+    .put<boolean>(this.config.apiUrlPrefix + '/security/policies/' + policy.id, policy, {
+      observe: 'response'
+    })
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to update the policy.'))
+    );
   }
 
   /**
@@ -1517,13 +1520,13 @@ export class SecurityService {
    */
   updateTenant(tenant: Tenant): Observable<boolean> {
     return this.httpClient
-      .put<boolean>(this.config.apiUrlPrefix + '/security/tenants/' + tenant.id, tenant, {
-        observe: 'response'
-      })
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to update the tenant.'))
-      );
+    .put<boolean>(this.config.apiUrlPrefix + '/security/tenants/' + tenant.id, tenant, {
+      observe: 'response'
+    })
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to update the tenant.'))
+    );
   }
 
   /**
@@ -1547,22 +1550,22 @@ export class SecurityService {
     );
 
     return this.httpClient
-      .put<boolean>(
-        this.config.apiUrlPrefix +
-          '/security/user-directories/' +
-          user.userDirectoryId +
-          '/users/' +
-          user.username,
-        user,
-        {
-          params: httpParams,
-          observe: 'response'
-        }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to update the user.'))
-      );
+    .put<boolean>(
+      this.config.apiUrlPrefix +
+      '/security/user-directories/' +
+      user.userDirectoryId +
+      '/users/' +
+      user.username,
+      user,
+      {
+        params: httpParams,
+        observe: 'response'
+      }
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to update the user.'))
+    );
   }
 
   /**
@@ -1574,15 +1577,15 @@ export class SecurityService {
    */
   updateUserDirectory(userDirectory: UserDirectory): Observable<boolean> {
     return this.httpClient
-      .put<boolean>(
-        this.config.apiUrlPrefix + '/security/user-directories/' + userDirectory.id,
-        userDirectory,
-        { observe: 'response' }
-      )
-      .pipe(
-        map(SecurityService.isResponse204),
-        catchError(SecurityService.handleApiError('Failed to update the user directory.'))
-      );
+    .put<boolean>(
+      this.config.apiUrlPrefix + '/security/user-directories/' + userDirectory.id,
+      userDirectory,
+      {observe: 'response'}
+    )
+    .pipe(
+      map(SecurityService.isResponse204),
+      catchError(SecurityService.handleApiError('Failed to update the user directory.'))
+    );
   }
 
   private static handleApiError(defaultMessage: string) {

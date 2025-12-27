@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { Subscription } from 'rxjs';
-import { debounceTime, finalize, first, pairwise, startWith } from 'rxjs/operators';
-import { v4 as uuid } from 'uuid';
-import { SecurityService } from '../services/security.service';
-import { UserDirectory } from '../services/user-directory';
-import { UserDirectoryParameter } from '../services/user-directory-parameter';
-import { UserDirectoryType } from '../services/user-directory-type';
-import { InternalUserDirectoryComponent } from './internal-user-directory.component';
-import { LdapUserDirectoryComponent } from './ldap-user-directory.component';
+import {Subscription} from 'rxjs';
+import {debounceTime, finalize, first, pairwise, startWith} from 'rxjs/operators';
+import {v4 as uuid} from 'uuid';
+import {SecurityService} from '../services/security.service';
+import {UserDirectory} from '../services/user-directory';
+import {UserDirectoryParameter} from '../services/user-directory-parameter';
+import {UserDirectoryType} from '../services/user-directory-type';
+import {InternalUserDirectoryComponent} from './internal-user-directory.component';
+import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
 
 /**
  * The NewUserDirectoryComponent class implements the new user directory component.
@@ -95,15 +95,15 @@ export class NewUserDirectoryComponent extends AdminContainerView implements OnI
 
     this.subscriptions.add(
       this.userDirectoryTypeControl.valueChanges
-        .pipe(startWith(null), debounceTime(500), pairwise())
-        .subscribe(
-          ([previousUserDirectoryType, currentUserDirectoryType]: [
+      .pipe(startWith(null), debounceTime(500), pairwise())
+      .subscribe(
+        ([previousUserDirectoryType, currentUserDirectoryType]: [
             string | null,
             string | null
-          ]) => {
-            this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
-          }
-        )
+        ]) => {
+          this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
+        }
+      )
     );
   }
 
@@ -111,12 +111,12 @@ export class NewUserDirectoryComponent extends AdminContainerView implements OnI
     return new BackNavigation(
       $localize`:@@security_new_user_directory_back_navigation:User Directories`,
       ['.'],
-      { relativeTo: this.activatedRoute.parent }
+      {relativeTo: this.activatedRoute.parent}
     );
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   ngOnDestroy(): void {
@@ -127,31 +127,27 @@ export class NewUserDirectoryComponent extends AdminContainerView implements OnI
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getUserDirectoryTypes()
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (userDirectoryTypes: UserDirectoryType[]) => {
-          this.userDirectoryTypes = userDirectoryTypes;
-          this.userDirectory = new UserDirectory(uuid(), '', '', []);
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .getUserDirectoryTypes()
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (userDirectoryTypes: UserDirectoryType[]) => {
+        this.userDirectoryTypes = userDirectoryTypes;
+        this.userDirectory = new UserDirectory(uuid(), '', '', []);
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.newUserDirectoryForm.valid) {
+      this.newUserDirectoryForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
-
-    if (!this.userDirectory || !this.newUserDirectoryForm.valid) {
-      return;
-    }
+    if (!this.userDirectory) return;
 
     this.userDirectory.name = this.nameControl.value;
     this.userDirectory.type = this.userDirectoryTypeControl.value || '';
@@ -167,21 +163,21 @@ export class NewUserDirectoryComponent extends AdminContainerView implements OnI
     this.spinnerService.showSpinner();
 
     this.securityService
-      .createUserDirectory(this.userDirectory)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .createUserDirectory(this.userDirectory)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.newUserDirectoryForm.enable();
-        })
-      )
-      .subscribe({
-        next: () => {
-          void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.newUserDirectoryForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   userDirectoryTypeSelected(
@@ -201,12 +197,12 @@ export class NewUserDirectoryComponent extends AdminContainerView implements OnI
     if (currentUserDirectoryType === 'InternalUserDirectory') {
       this.newUserDirectoryForm.addControl(
         'internalUserDirectory',
-        new FormControl<UserDirectoryParameter[] | null>(null, { nonNullable: false })
+        new FormControl<UserDirectoryParameter[] | null>(null, {nonNullable: false})
       );
     } else if (currentUserDirectoryType === 'LDAPUserDirectory') {
       this.newUserDirectoryForm.addControl(
         'ldapUserDirectory',
-        new FormControl<UserDirectoryParameter[] | null>(null, { nonNullable: false })
+        new FormControl<UserDirectoryParameter[] | null>(null, {nonNullable: false})
       );
     }
 

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, inject, OnInit } from '@angular/core';
-import { Replace } from '../../util/replace';
-import { BrandMinimizerDirective } from '../directives/brand-minimizer.directive';
-import { SidebarMinimizerDirective } from '../directives/sidebar-minimizer.directive';
+import {Component, ElementRef, inject, OnInit} from '@angular/core';
+import {Replace} from '../../util/replace';
+import {BrandMinimizerDirective} from '../directives/brand-minimizer.directive';
+import {SidebarMinimizerDirective} from '../directives/sidebar-minimizer.directive';
 
 /**
  * The SidebarMinimizerComponent class implements the sidebar minimizer component.

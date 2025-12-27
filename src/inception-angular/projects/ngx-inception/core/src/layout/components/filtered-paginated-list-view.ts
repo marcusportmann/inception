@@ -17,19 +17,18 @@
 import {
   AfterViewInit, ChangeDetectorRef, Directive, inject, OnDestroy, ViewChild
 } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { EMPTY, Observable, Subject } from 'rxjs';
-import { catchError, filter, finalize, first, switchMap, takeUntil } from 'rxjs/operators';
-import { ListStateService } from '../services/list-state.service';
-import { AdminContainerView } from './admin-container-view';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {EMPTY, Observable, Subject} from 'rxjs';
+import {catchError, filter, finalize, first, switchMap, takeUntil} from 'rxjs/operators';
+import {ListStateService} from '../services/list-state.service';
+import {AdminContainerView} from './admin-container-view';
 
 @Directive()
 export abstract class FilteredPaginatedListView<T>
   extends AdminContainerView
-  implements AfterViewInit, OnDestroy
-{
+  implements AfterViewInit, OnDestroy {
   readonly dataSource = new MatTableDataSource<T>();
 
   readonly defaultPageSize = 10;
@@ -44,9 +43,9 @@ export abstract class FilteredPaginatedListView<T>
   /** Unique key for persisting list state (must be provided by subclass). */
   abstract readonly listStateKey: string;
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
   protected readonly changeDetectorRef = inject(ChangeDetectorRef);
 
@@ -115,7 +114,8 @@ export abstract class FilteredPaginatedListView<T>
    * {@link handleError}, and the global spinner is shown and hidden automatically.
    *
    * @param confirmationMessage - Localized message displayed in the confirmation dialog.
-   * @param actionFn - Function that performs the side effect (e.g., delete or update) and returns an observable.
+   * @param actionFn - Function that performs the side effect (e.g., delete or update) and returns
+   *   an observable.
    */
   protected confirmAndProcessAction(
     confirmationMessage: string,
@@ -126,38 +126,38 @@ export abstract class FilteredPaginatedListView<T>
     });
 
     dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((confirmed: boolean | undefined) => confirmed === true),
-        switchMap(() => {
-          this.spinnerService.showSpinner();
+    .afterClosed()
+    .pipe(
+      first(),
+      filter((confirmed: boolean | undefined) => confirmed === true),
+      switchMap(() => {
+        this.spinnerService.showSpinner();
 
-          return actionFn().pipe(
-            catchError((error: Error) => {
-              this.handleError(error, false);
-              return EMPTY;
-            }),
-            switchMap(() =>
-              this.fetchData().pipe(
-                catchError((error: Error) => {
-                  this.handleError(error, false);
-                  return EMPTY;
-                })
-              )
-            ),
-            finalize(() => this.spinnerService.hideSpinner())
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (items: T[]) => {
-          this.dataSource.data = items;
-          this.restorePageAfterDataLoaded();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        return actionFn().pipe(
+          catchError((error: Error) => {
+            this.handleError(error, false);
+            return EMPTY;
+          }),
+          switchMap(() =>
+            this.fetchData().pipe(
+              catchError((error: Error) => {
+                this.handleError(error, false);
+                return EMPTY;
+              })
+            )
+          ),
+          finalize(() => this.spinnerService.hideSpinner())
+        );
+      }),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: (items: T[]) => {
+        this.dataSource.data = items;
+        this.restorePageAfterDataLoaded();
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   /**
@@ -167,8 +167,8 @@ export abstract class FilteredPaginatedListView<T>
     // Default: match JSON string
     return (data: T, filter: string): boolean =>
       JSON.stringify(data ?? {})
-        .toLowerCase()
-        .includes((filter ?? '').toLowerCase());
+      .toLowerCase()
+      .includes((filter ?? '').toLowerCase());
   }
 
   /**
@@ -183,17 +183,17 @@ export abstract class FilteredPaginatedListView<T>
     this.spinnerService.showSpinner();
 
     this.fetchData()
-      .pipe(
-        finalize(() => this.spinnerService.hideSpinner()),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (items: T[]) => {
-          this.dataSource.data = items;
-          this.restorePageAfterDataLoaded();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .pipe(
+      finalize(() => this.spinnerService.hideSpinner()),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: (items: T[]) => {
+        this.dataSource.data = items;
+        this.restorePageAfterDataLoaded();
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   protected restorePageAfterDataLoaded(): void {

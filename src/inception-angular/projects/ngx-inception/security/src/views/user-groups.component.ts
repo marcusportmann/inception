@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {Component, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 import {
   AdminContainerView, BackNavigation, ConfirmationDialogComponent, CoreModule
 } from 'ngx-inception/core';
-import { ReplaySubject, Subject, Subscription } from 'rxjs';
-import { finalize, first } from 'rxjs/operators';
-import { GroupMemberType } from '../services/group-member-type';
-import { SecurityService } from '../services/security.service';
+import {ReplaySubject, Subject, Subscription} from 'rxjs';
+import {finalize, first} from 'rxjs/operators';
+import {GroupMemberType} from '../services/group-member-type';
+import {SecurityService} from '../services/security.service';
 
 /**
  * The UserGroupsComponent class implements the user groups component.
@@ -47,7 +47,7 @@ export class UserGroupsComponent extends AdminContainerView implements OnInit, O
 
   readonly displayedColumns = ['existingGroupName', 'actions'] as const;
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   selectedGroupName = '';
 
@@ -84,7 +84,7 @@ export class UserGroupsComponent extends AdminContainerView implements OnInit, O
       ['../../..'],
       {
         relativeTo: this.activatedRoute,
-        state: { userDirectoryId: this.userDirectoryId }
+        state: {userDirectoryId: this.userDirectoryId}
       }
     );
   }
@@ -97,44 +97,44 @@ export class UserGroupsComponent extends AdminContainerView implements OnInit, O
     this.spinnerService.showSpinner();
 
     this.securityService
-      .addMemberToGroup(
-        this.userDirectoryId,
-        this.selectedGroupName,
-        GroupMemberType.User,
-        this.username
-      )
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: () => {
-          this.loadGroupNamesForUser();
-          this.selectedGroupName = '';
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .addMemberToGroup(
+      this.userDirectoryId,
+      this.selectedGroupName,
+      GroupMemberType.User,
+      this.username
+    )
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: () => {
+        this.loadGroupNamesForUser();
+        this.selectedGroupName = '';
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   loadGroupNamesForUser(): void {
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getGroupNamesForUser(this.userDirectoryId, this.username)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (groupNamesForUser: string[]) => {
-          this.dataSource.data = groupNamesForUser;
+    .getGroupNamesForUser(this.userDirectoryId, this.username)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (groupNamesForUser: string[]) => {
+        this.dataSource.data = groupNamesForUser;
 
-          this.availableGroupNames$.next(
-            this.calculateAvailableGroupNames(this.allGroupNames, this.dataSource.data)
-          );
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.availableGroupNames$.next(
+          this.calculateAvailableGroupNames(this.allGroupNames, this.dataSource.data)
+        );
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   ngOnDestroy(): void {
@@ -148,18 +148,18 @@ export class UserGroupsComponent extends AdminContainerView implements OnInit, O
     this.spinnerService.showSpinner();
 
     this.securityService
-      .getGroupNames(this.userDirectoryId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (groupNames: string[]) => {
-          this.allGroupNames = groupNames;
-          this.loadGroupNamesForUser();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .getGroupNames(this.userDirectoryId)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner())
+    )
+    .subscribe({
+      next: (groupNames: string[]) => {
+        this.allGroupNames = groupNames;
+        this.loadGroupNamesForUser();
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   removeUserFromGroup(groupName: string): void {
@@ -169,36 +169,36 @@ export class UserGroupsComponent extends AdminContainerView implements OnInit, O
       });
 
     dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe({
-        next: (confirmation: boolean | undefined) => {
-          if (confirmation !== true) {
-            return;
-          }
-
-          this.spinnerService.showSpinner();
-
-          this.securityService
-            .removeMemberFromGroup(
-              this.userDirectoryId,
-              groupName,
-              GroupMemberType.User,
-              this.username
-            )
-            .pipe(
-              first(),
-              finalize(() => this.spinnerService.hideSpinner())
-            )
-            .subscribe({
-              next: () => {
-                this.loadGroupNamesForUser();
-                this.selectedGroupName = '';
-              },
-              error: (error: Error) => this.handleError(error, false)
-            });
+    .afterClosed()
+    .pipe(first())
+    .subscribe({
+      next: (confirmation: boolean | undefined) => {
+        if (confirmation !== true) {
+          return;
         }
-      });
+
+        this.spinnerService.showSpinner();
+
+        this.securityService
+        .removeMemberFromGroup(
+          this.userDirectoryId,
+          groupName,
+          GroupMemberType.User,
+          this.username
+        )
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe({
+          next: () => {
+            this.loadGroupNamesForUser();
+            this.selectedGroupName = '';
+          },
+          error: (error: Error) => this.handleError(error, false)
+        });
+      }
+    });
   }
 
   private calculateAvailableGroupNames(

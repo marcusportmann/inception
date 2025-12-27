@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 
 /**
  * The FileValidator class.

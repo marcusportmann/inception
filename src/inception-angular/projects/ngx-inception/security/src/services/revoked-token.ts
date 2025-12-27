@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { TokenType } from './token-type';
+import {TokenType} from './token-type';
 
 /**
  * The RevokedToken class holds the information for a revoked token.

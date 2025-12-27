@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { Subject } from 'rxjs';
-import { finalize, first, takeUntil } from 'rxjs/operators';
-import { Config } from '../services/config';
-import { ConfigService } from '../services/config.service';
+import {Subject} from 'rxjs';
+import {finalize, first, takeUntil} from 'rxjs/operators';
+import {Config} from '../services/config';
+import {ConfigService} from '../services/config.service';
 
 /**
  * The EditConfigComponent class implements the edit config component.
@@ -80,7 +80,10 @@ export class EditConfigComponent extends AdminContainerView implements OnInit, O
         value: '',
         disabled: true
       },
-      { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }
+      {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(100)]
+      }
     );
 
     this.valueControl = new FormControl<string>('', {
@@ -103,7 +106,7 @@ export class EditConfigComponent extends AdminContainerView implements OnInit, O
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
   }
 
   ngOnDestroy(): void {
@@ -115,57 +118,56 @@ export class EditConfigComponent extends AdminContainerView implements OnInit, O
     // Retrieve the existing config and initialize the form controls
     this.spinnerService.showSpinner();
     this.configService
-      .getConfig(this.id)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner()),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (config: Config) => {
-          this.config = config;
-          this.idControl.setValue(config.id);
-          this.valueControl.setValue(config.value);
-          this.descriptionControl.setValue(config.description);
-        },
-        error: (error: Error) =>
-          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
-      });
+    .getConfig(this.id)
+    .pipe(
+      first(),
+      finalize(() => this.spinnerService.hideSpinner()),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: (config: Config) => {
+        this.config = config;
+        this.idControl.setValue(config.id);
+        this.valueControl.setValue(config.value);
+        this.descriptionControl.setValue(config.description);
+      },
+      error: (error: Error) =>
+        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
+    });
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.editConfigForm.valid) {
+      this.editConfigForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
+    if (!this.config) return;
 
-    if (this.config && this.editConfigForm.valid) {
-      this.config.description = this.descriptionControl.value ?? '';
-      this.config.value = this.valueControl.value ?? '';
+    this.config.description = this.descriptionControl.value ?? '';
+    this.config.value = this.valueControl.value ?? '';
 
-      this.editConfigForm.disable();
+    this.editConfigForm.disable();
 
-      this.spinnerService.showSpinner();
+    this.spinnerService.showSpinner();
 
-      this.configService
-        .saveConfig(this.config)
-        .pipe(
-          first(),
-          finalize(() => {
-            this.spinnerService.hideSpinner();
+    this.configService
+    .saveConfig(this.config)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-            this.editConfigForm.enable();
-          }),
-          takeUntil(this.destroy$)
-        )
-        .subscribe({
-          next: () => {
-            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
-          },
-          error: (error: Error) => this.handleError(error, false)
-        });
-    }
+        this.editConfigForm.enable();
+      }),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: () => {
+        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
+
   }
 }

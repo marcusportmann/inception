@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { Component, forwardRef } from '@angular/core';
+import {Component, forwardRef} from '@angular/core';
 import {
   AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
   ValidationErrors, Validator, Validators
 } from '@angular/forms';
-import { CoreModule } from 'ngx-inception/core';
-import { UserDirectoryParameter } from '../services/user-directory-parameter';
-import { UserDirectoryUtil } from '../services/user-directory-util';
+import {CoreModule} from 'ngx-inception/core';
+import {UserDirectoryParameter} from '../services/user-directory-parameter';
+import {UserDirectoryUtil} from '../services/user-directory-util';
 
 @Component({
   selector: 'inception-security-internal-user-directory',
@@ -46,10 +46,15 @@ export class InternalUserDirectoryComponent implements ControlValueAccessor, Val
   internalUserDirectoryForm: FormGroup;
 
   maxFilteredGroupMembersControl: FormControl;
+
   maxFilteredGroupsControl: FormControl;
+
   maxFilteredUsersControl: FormControl;
+
   maxPasswordAttemptsControl: FormControl;
+
   passwordExpiryMonthsControl: FormControl;
+
   passwordHistoryMonthsControl: FormControl;
 
   // ---- ControlValueAccessor callbacks ----
@@ -212,11 +217,11 @@ export class InternalUserDirectoryComponent implements ControlValueAccessor, Val
     return this.internalUserDirectoryForm.valid
       ? null
       : {
-          invalidForm: {
-            valid: false,
-            message: 'internalUserDirectoryForm fields are invalid'
-          }
-        };
+        invalidForm: {
+          valid: false,
+          message: 'internalUserDirectoryForm fields are invalid'
+        }
+      };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

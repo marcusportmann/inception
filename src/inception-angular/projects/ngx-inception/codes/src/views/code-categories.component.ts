@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
-import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
-import { Observable } from 'rxjs';
+import {ChangeDetectionStrategy, Component, HostBinding, inject} from '@angular/core';
+import {CoreModule, FilteredPaginatedListView, TableFilterComponent} from 'ngx-inception/core';
+import {Observable} from 'rxjs';
 
-import { CodeCategorySummary } from '../services/code-category-summary';
-import { CodesService } from '../services/codes.service';
+import {CodeCategorySummary} from '../services/code-category-summary';
+import {CodesService} from '../services/codes.service';
 
 /**
  * The CodeCategoriesComponent class implements the Code Categories component.
@@ -69,7 +69,7 @@ export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCateg
   }
 
   newCodeCategory(): void {
-    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
 
   protected override createFilterPredicate(): (

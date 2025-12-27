@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { SortDirection } from 'ngx-inception/core';
-import { ErrorReportSortBy } from './error-report-sort-by';
-import { ErrorReportSummary } from './error-report-summary';
+import {SortDirection} from 'ngx-inception/core';
+import {ErrorReportSortBy} from './error-report-sort-by';
+import {ErrorReportSummary} from './error-report-summary';
 
 /**
  * The ErrorReportSummaries class holds the results of a request to retrieve a list of error report

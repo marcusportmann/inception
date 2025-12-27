@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { SortDirection } from 'ngx-inception/core';
-import { PolicySortBy } from './policy-sort-by';
-import { PolicySummary } from './policy-summary';
+import {SortDirection} from 'ngx-inception/core';
+import {PolicySortBy} from './policy-sort-by';
+import {PolicySummary} from './policy-summary';
 
 /**
  * The PolicySummaries class holds the results of a request to retrieve a list of policy summaries.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { TenantStatus } from './tenant-status';
+import {TenantStatus} from './tenant-status';
 
 /**
  * The Tenant class holds the information for a tenant.

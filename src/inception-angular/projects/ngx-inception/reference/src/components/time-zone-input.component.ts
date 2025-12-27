@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
   ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatFormFieldControl } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { AutocompleteSelectionRequiredDirective, CoreModule } from 'ngx-inception/core';
-import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, first, takeUntil } from 'rxjs/operators';
-import { ReferenceService } from '../services/reference.service';
-import { TimeZone } from '../services/time-zone';
+import {ControlValueAccessor, NgControl} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatFormFieldControl} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {AutocompleteSelectionRequiredDirective, CoreModule} from 'ngx-inception/core';
+import {BehaviorSubject, ReplaySubject, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, first, takeUntil} from 'rxjs/operators';
+import {ReferenceService} from '../services/reference.service';
+import {TimeZone} from '../services/time-zone';
 
 /**
  * The TimeZoneInputComponent class implements the time zone input component.
@@ -48,7 +48,7 @@ import { TimeZone } from '../services/time-zone';
         [matAutocompleteConnectedTo]="origin"
         (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
-        (focusout)="onFocusOut($event)" />
+        (focusout)="onFocusOut($event)"/>
       <mat-autocomplete
         #timeZoneAutocomplete="matAutocomplete"
         (closed)="onClosed()"
@@ -70,8 +70,7 @@ import { TimeZone } from '../services/time-zone';
   ]
 })
 export class TimeZoneInputComponent
-  implements MatFormFieldControl<string | null>, ControlValueAccessor, OnInit, OnDestroy
-{
+  implements MatFormFieldControl<string | null>, ControlValueAccessor, OnInit, OnDestroy {
   private static _nextId = 0;
 
   /** Name for the control type. */
@@ -90,9 +89,12 @@ export class TimeZoneInputComponent
   @HostBinding() id = `time-zone-input-${TimeZoneInputComponent._nextId++}`;
 
   /** The input. */
-  @ViewChild(MatInput, { static: true }) input!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
-  readonly ngControl = inject(NgControl, { optional: true, self: true });
+  readonly ngControl = inject(NgControl, {
+    optional: true,
+    self: true
+  });
 
   /** The observable indicating that the state of the control has changed. */
   readonly stateChanges = new Subject<void>();
@@ -127,6 +129,7 @@ export class TimeZoneInputComponent
   get disabled(): boolean {
     return this._disabled;
   }
+
   set disabled(value: boolean) {
     const coerced = coerceBooleanProperty(value);
     if (coerced === this._disabled) {
@@ -149,6 +152,7 @@ export class TimeZoneInputComponent
   get placeholder(): string {
     return this._placeholder;
   }
+
   set placeholder(placeholder: string) {
     if (placeholder === this._placeholder) {
       return;
@@ -172,6 +176,7 @@ export class TimeZoneInputComponent
   get required(): boolean {
     return this._required;
   }
+
   set required(req: unknown) {
     const coerced = coerceBooleanProperty(req);
     if (coerced === this._required) {
@@ -273,28 +278,28 @@ export class TimeZoneInputComponent
 
     // Load time zones.
     this.referenceService
-      .getTimeZones()
-      .pipe(first())
-      .subscribe((timeZones: Map<string, TimeZone>) => {
-        this._options = Array.from(timeZones.values());
-        this.filteredOptions$.next(this._options);
+    .getTimeZones()
+    .pipe(first())
+    .subscribe((timeZones: Map<string, TimeZone>) => {
+      this._options = Array.from(timeZones.values());
+      this.filteredOptions$.next(this._options);
 
-        // If a value has already been set, confirm it is valid.
-        if (this.value) {
-          const option = this._options.find((o) => o.id === this.value);
-          if (option) {
-            this.input.value = option.id;
-          } else {
-            // The value is invalid, so clear it
-            this.value = null;
-          }
+      // If a value has already been set, confirm it is valid.
+      if (this.value) {
+        const option = this._options.find((o) => o.id === this.value);
+        if (option) {
+          this.input.value = option.id;
+        } else {
+          // The value is invalid, so clear it
+          this.value = null;
         }
-      });
+      }
+    });
 
     // React to the user typing into the input
     this.inputValue$
-      .pipe(debounceTime(250), distinctUntilChanged(), takeUntil(this.destroy$))
-      .subscribe((value) => this.handleUserInput(value));
+    .pipe(debounceTime(250), distinctUntilChanged(), takeUntil(this.destroy$))
+    .subscribe((value) => this.handleUserInput(value));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

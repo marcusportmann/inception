@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { JobParameter } from './job-parameter';
-import { JobStatus } from './job-status';
+import {JobParameter} from './job-parameter';
+import {JobStatus} from './job-status';
 
 /**
  * The Job class holds the information for a job.

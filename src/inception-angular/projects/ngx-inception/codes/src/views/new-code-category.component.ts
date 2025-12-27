@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { finalize, first } from 'rxjs/operators';
-import { CodeCategory } from '../services/code-category';
-import { CodesService } from '../services/codes.service';
+import {finalize, first} from 'rxjs/operators';
+import {CodeCategory} from '../services/code-category';
+import {CodesService} from '../services/codes.service';
 
 /**
  * The NewCodeCategoryComponent class implements the new code category component.
@@ -82,12 +82,12 @@ export class NewCodeCategoryComponent extends AdminContainerView implements OnIn
     return new BackNavigation(
       $localize`:@@codes_new_code_category_back_navigation:Code Categories`,
       ['.'],
-      { relativeTo: this.activatedRoute.parent }
+      {relativeTo: this.activatedRoute.parent}
     );
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   ngOnInit(): void {
@@ -96,38 +96,37 @@ export class NewCodeCategoryComponent extends AdminContainerView implements OnIn
   }
 
   ok(): void {
-    if (!this.xxxForm.valid) {
-      this.xxxForm.markAllAsTouched();
+    if (!this.newCodeCategoryForm.valid) {
+      this.newCodeCategoryForm.markAllAsTouched();
       return;
     }
 
-    if (!this.xxx) return;
+    if (!this.codeCategory) return;
 
-    if (this.codeCategory && this.newCodeCategoryForm.valid) {
-      const data = this.dataControl.value?.trim();
+    const data = this.dataControl.value?.trim();
 
-      this.codeCategory.id = this.idControl.value?.trim();
-      this.codeCategory.name = this.nameControl.value?.trim();
-      this.codeCategory.data = data || null;
+    this.codeCategory.id = this.idControl.value?.trim();
+    this.codeCategory.name = this.nameControl.value?.trim();
+    this.codeCategory.data = data || null;
 
-      this.newCodeCategoryForm.disable();
+    this.newCodeCategoryForm.disable();
 
-      this.spinnerService.showSpinner();
+    this.spinnerService.showSpinner();
 
-      this.codesService
-        .createCodeCategory(this.codeCategory)
-        .pipe(
-          first(),
-          finalize(() => {
-            this.spinnerService.hideSpinner();
+    this.codesService
+    .createCodeCategory(this.codeCategory)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-            this.newCodeCategoryForm.enable();
-          })
-        )
-        .subscribe({
-          next: () => this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent }),
-          error: (error: Error) => this.handleError(error, false)
-        });
-    }
+        this.newCodeCategoryForm.enable();
+      })
+    )
+    .subscribe({
+      next: () => this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent}),
+      error: (error: Error) => this.handleError(error, false)
+    });
+
   }
 }

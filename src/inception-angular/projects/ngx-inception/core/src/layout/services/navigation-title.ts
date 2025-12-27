@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NavigationItem } from './navigation-item';
+import {NavigationItem} from './navigation-item';
 
 /**
  * The NavigationTitle class holds the information for a navigation title.

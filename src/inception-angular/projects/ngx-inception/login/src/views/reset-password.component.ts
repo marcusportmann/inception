@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {
   AbstractControl, FormControl, FormGroup, ValidationErrors, Validators
 } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import {MatDialogRef} from '@angular/material/dialog';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {
   AccessDeniedError, CoreModule, DialogService, InformationDialogComponent, InvalidArgumentError,
   ServiceUnavailableError, SpinnerService, ValidatedFormDirective
 } from 'ngx-inception/core';
-import { SecurityService } from 'ngx-inception/security';
-import { catchError, finalize, first, Observable, throwError } from 'rxjs';
+import {SecurityService} from 'ngx-inception/security';
+import {catchError, finalize, first, Observable, throwError} from 'rxjs';
 
 /**
  * The ResetPasswordComponent class implements the reset password component.
@@ -75,8 +75,11 @@ export class ResetPasswordComponent implements OnInit {
     });
 
     this.usernameControl = new FormControl<string>(
-      { value: '', disabled: true },
-      { nonNullable: true }
+      {
+        value: '',
+        disabled: true
+      },
+      {nonNullable: true}
     );
 
     this.resetPasswordForm = new FormGroup(
@@ -85,12 +88,12 @@ export class ResetPasswordComponent implements OnInit {
         newPassword: this.newPasswordControl,
         confirmNewPassword: this.confirmNewPasswordControl
       },
-      { validators: ResetPasswordComponent.passwordsMatchValidator }
+      {validators: ResetPasswordComponent.passwordsMatchValidator}
     );
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
   }
 
   ngOnInit(): void {
@@ -100,16 +103,16 @@ export class ResetPasswordComponent implements OnInit {
 
       if (!username || !securityCode) {
         this.dialogService
-          .showErrorDialog(
-            new Error(
-              'The password reset link is invalid or has expired. Please request a new reset link.'
-            )
+        .showErrorDialog(
+          new Error(
+            'The password reset link is invalid or has expired. Please request a new reset link.'
           )
-          .afterClosed()
-          .pipe(first())
-          .subscribe(() => {
-            void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
-          });
+        )
+        .afterClosed()
+        .pipe(first())
+        .subscribe(() => {
+          void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
+        });
         return;
       }
 
@@ -124,24 +127,27 @@ export class ResetPasswordComponent implements OnInit {
       return;
     }
 
-    const { username, newPassword } = this.resetPasswordForm.getRawValue();
+    const {
+      username,
+      newPassword
+    } = this.resetPasswordForm.getRawValue();
 
     this.resetPasswordForm.disable();
 
     this.spinnerService.showSpinner();
 
     this.securityService
-      .resetPassword(username, newPassword, this.securityCode)
-      .pipe(
-        first(),
-        finalize(() => {
-          this.spinnerService.hideSpinner();
+    .resetPassword(username, newPassword, this.securityCode)
+    .pipe(
+      first(),
+      finalize(() => {
+        this.spinnerService.hideSpinner();
 
-          this.resetPasswordForm.enable();
-        }),
-        catchError((error: Error) => this.handleError(error))
-      )
-      .subscribe(() => this.showSuccessDialog(username));
+        this.resetPasswordForm.enable();
+      }),
+      catchError((error: Error) => this.handleError(error))
+    )
+    .subscribe(() => this.showSuccessDialog(username));
   }
 
   private static passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -152,7 +158,7 @@ export class ResetPasswordComponent implements OnInit {
       return null;
     }
 
-    return newPassword === confirmNewPassword ? null : { passwordsMismatch: true };
+    return newPassword === confirmNewPassword ? null : {passwordsMismatch: true};
   }
 
   private handleError(error: Error): Observable<never> {
@@ -162,7 +168,7 @@ export class ResetPasswordComponent implements OnInit {
       error instanceof ServiceUnavailableError
     ) {
       void this.router.navigateByUrl('/error/send-error-report', {
-        state: { error }
+        state: {error}
       });
     } else {
       this.dialogService.showErrorDialog(error);
@@ -178,13 +184,13 @@ export class ResetPasswordComponent implements OnInit {
       });
 
     dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe(() => {
-        void this.router.navigate(['.'], {
-          relativeTo: this.activatedRoute.parent,
-          state: { username }
-        });
+    .afterClosed()
+    .pipe(first())
+    .subscribe(() => {
+      void this.router.navigate(['.'], {
+        relativeTo: this.activatedRoute.parent,
+        state: {username}
       });
+    });
   }
 }

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { CoreModule } from 'ngx-inception/core';
+import {Component} from '@angular/core';
+import {CoreModule} from 'ngx-inception/core';
 
 /**
  * The TabsComponent class implements the tabs component.
@@ -28,4 +28,5 @@ import { CoreModule } from 'ngx-inception/core';
   imports: [CoreModule],
   templateUrl: 'tabs.component.html'
 })
-export class TabsComponent {}
+export class TabsComponent {
+}

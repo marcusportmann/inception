@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { CoreModule } from 'ngx-inception/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {CoreModule} from 'ngx-inception/core';
 
 export interface PeriodicElement {
   name: string;
@@ -165,7 +165,7 @@ export class SortableTableComponent implements AfterViewInit {
 
   readonly displayedColumns = ['position', 'name', 'weight', 'symbol'] as const;
 
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;

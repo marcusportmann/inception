@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
-import { CodeCategoriesTitleResolver } from './code-categories-title-resolver';
-import { CodeCategoriesComponent } from './code-categories.component';
-import { CodeCategoryTitleResolver } from './code-category-title-resolver';
-import { CodeTitleResolver } from './code-title-resolver';
-import { CodesTitleResolver } from './codes-title-resolver';
-import { CodesComponent } from './codes.component';
-import { EditCodeCategoryTitleResolver } from './edit-code-category-title-resolver';
-import { EditCodeCategoryComponent } from './edit-code-category.component';
-import { EditCodeTitleResolver } from './edit-code-title-resolver';
-import { EditCodeComponent } from './edit-code.component';
-import { NewCodeCategoryTitleResolver } from './new-code-category-title-resolver';
-import { NewCodeCategoryComponent } from './new-code-category.component';
-import { NewCodeTitleResolver } from './new-code-title-resolver';
-import { NewCodeComponent } from './new-code.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
+import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
+import {CodeCategoriesTitleResolver} from './code-categories-title-resolver';
+import {CodeCategoriesComponent} from './code-categories.component';
+import {CodeCategoryTitleResolver} from './code-category-title-resolver';
+import {CodeTitleResolver} from './code-title-resolver';
+import {CodesTitleResolver} from './codes-title-resolver';
+import {CodesComponent} from './codes.component';
+import {EditCodeCategoryTitleResolver} from './edit-code-category-title-resolver';
+import {EditCodeCategoryComponent} from './edit-code-category.component';
+import {EditCodeTitleResolver} from './edit-code-title-resolver';
+import {EditCodeComponent} from './edit-code.component';
+import {NewCodeCategoryTitleResolver} from './new-code-category-title-resolver';
+import {NewCodeCategoryComponent} from './new-code-category.component';
+import {NewCodeTitleResolver} from './new-code-title-resolver';
+import {NewCodeComponent} from './new-code.component';
 
 const routes: Routes = [
   {
@@ -163,4 +163,5 @@ const routes: Routes = [
     NewCodeTitleResolver
   ]
 })
-export class CodesViewsModule {}
+export class CodesViewsModule {
+}

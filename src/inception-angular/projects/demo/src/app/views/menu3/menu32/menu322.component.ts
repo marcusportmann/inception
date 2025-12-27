@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { AdminContainerView, BackNavigation, CoreModule } from 'ngx-inception/core';
+import {Component} from '@angular/core';
+import {AdminContainerView, BackNavigation, CoreModule} from 'ngx-inception/core';
 
 /**
  * The Menu322Component class implements the menu 3.2.2 component.
@@ -28,7 +28,7 @@ import { AdminContainerView, BackNavigation, CoreModule } from 'ngx-inception/co
   imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
-      <mat-card-content> Menu 3.2.2 </mat-card-content>
+      <mat-card-content> Menu 3.2.2</mat-card-content>
     </mat-card>
   `
 })
@@ -52,7 +52,7 @@ export class Menu322Component extends AdminContainerView {
     return new BackNavigation(
       $localize`:@@demo_menu322_back_navigation:Menu 3.2.1`,
       ['../menu321'],
-      { relativeTo: this.activatedRoute }
+      {relativeTo: this.activatedRoute}
     );
   }
 }

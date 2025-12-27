@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { SecurityService } from './security.service';
+import {CommonModule} from '@angular/common';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {SecurityService} from './security.service';
 
 /**
  * The SecurityServicesModule class implements the Inception Security Services Module.

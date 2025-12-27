@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { FocusMonitor } from '@angular/cdk/a11y';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import {FocusMonitor} from '@angular/cdk/a11y';
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
   ChangeDetectionStrategy, Component, DoCheck, ElementRef, HostBinding, inject, Input, OnDestroy,
   ViewChild
@@ -23,9 +23,9 @@ import {
 import {
   AbstractControl, ControlValueAccessor, FormGroupDirective, NgControl, NgForm
 } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { MatFormFieldControl } from '@angular/material/form-field';
-import { Subject } from 'rxjs';
+import {ErrorStateMatcher} from '@angular/material/core';
+import {MatFormFieldControl} from '@angular/material/form-field';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'inception-core-file-upload',
@@ -48,7 +48,7 @@ import { Subject } from 'rxjs';
       [attr.accept]="accept || null"
       [attr.multiple]="multiple ? '' : null"
       (change)="onFileSelected($event)"
-      hidden />
+      hidden/>
   `,
   styles: [
     `
@@ -87,8 +87,7 @@ import { Subject } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileUploadComponent
-  implements MatFormFieldControl<File[]>, ControlValueAccessor, OnDestroy, DoCheck
-{
+  implements MatFormFieldControl<File[]>, ControlValueAccessor, OnDestroy, DoCheck {
   /** Static counter for unique id */
   private static nextId = 0;
 
@@ -116,10 +115,13 @@ export class FileUploadComponent
   @HostBinding('attr.id')
   id = `file-upload-${FileUploadComponent.nextId++}`;
 
-  @ViewChild('input', { static: true })
+  @ViewChild('input', {static: true})
   inputRef!: ElementRef<HTMLInputElement>;
 
-  ngControl = inject(NgControl, { optional: true, self: true });
+  ngControl = inject(NgControl, {
+    optional: true,
+    self: true
+  });
 
   /** Placeholder shown when no files are selected */
   @Input() placeholder = '';
@@ -133,9 +135,9 @@ export class FileUploadComponent
 
   private _files: File[] | null = null;
 
-  private readonly _parentForm = inject(NgForm, { optional: true });
+  private readonly _parentForm = inject(NgForm, {optional: true});
 
-  private readonly _parentFormGroup = inject(FormGroupDirective, { optional: true });
+  private readonly _parentFormGroup = inject(FormGroupDirective, {optional: true});
 
   private readonly fm = inject(FocusMonitor);
 
@@ -354,6 +356,7 @@ export class FileUploadComponent
   private _onChange: (files: File[] | null) => void = () => {
     /* empty */
   };
+
   private _onTouched: () => void = () => {
     /* empty */
   };

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { SortDirection } from 'ngx-inception/core';
-import { GroupMember } from './group-member';
+import {SortDirection} from 'ngx-inception/core';
+import {GroupMember} from './group-member';
 
 /**
  * The GroupMembers class holds the results of a request to retrieve a list of group members.

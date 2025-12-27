@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
-import { EditMailTemplateTitleResolver } from './edit-mail-template-title-resolver';
-import { EditMailTemplateComponent } from './edit-mail-template.component';
-import { MailTemplateTitleResolver } from './mail-template-title-resolver';
-import { MailTemplatesTitleResolver } from './mail-templates-title-resolver';
-import { MailTemplatesComponent } from './mail-templates.component';
-import { NewMailTemplateTitleResolver } from './new-mail-template-title-resolver';
-import { NewMailTemplateComponent } from './new-mail-template.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
+import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
+import {EditMailTemplateTitleResolver} from './edit-mail-template-title-resolver';
+import {EditMailTemplateComponent} from './edit-mail-template.component';
+import {MailTemplateTitleResolver} from './mail-template-title-resolver';
+import {MailTemplatesTitleResolver} from './mail-templates-title-resolver';
+import {MailTemplatesComponent} from './mail-templates.component';
+import {NewMailTemplateTitleResolver} from './new-mail-template-title-resolver';
+import {NewMailTemplateComponent} from './new-mail-template.component';
 
 const routes: Routes = [
   {
@@ -117,4 +117,5 @@ const routes: Routes = [
     NewMailTemplateTitleResolver
   ]
 })
-export class MailViewsModule {}
+export class MailViewsModule {
+}

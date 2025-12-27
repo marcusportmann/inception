@@ -17,21 +17,21 @@
 import {
   AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSelect } from '@angular/material/select';
-import { MatSort } from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSelect} from '@angular/material/select';
+import {MatSort} from '@angular/material/sort';
 import {
   CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import { Observable, tap } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { TokenSortBy } from '../services/token-sort-by';
-import { TokenStatus } from '../services/token-status';
-import { TokenSummaries } from '../services/token-summaries';
-import { TokenSummary } from '../services/token-summary';
-import { TokenSummaryDataSource } from '../services/token-summary-data-source';
-import { TokenType } from '../services/token-type';
+import {Observable, tap} from 'rxjs';
+import {finalize, takeUntil} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {TokenSortBy} from '../services/token-sort-by';
+import {TokenStatus} from '../services/token-status';
+import {TokenSummaries} from '../services/token-summaries';
+import {TokenSummary} from '../services/token-summary';
+import {TokenSummaryDataSource} from '../services/token-summary-data-source';
+import {TokenType} from '../services/token-type';
 
 interface TokenListExtras {
   tokenStatus: TokenStatus;
@@ -61,16 +61,16 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
 
   readonly listStateKey = 'security.tokens';
 
-  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) override paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) override sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, { static: true })
+  @ViewChild(TableFilterComponent, {static: true})
   override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_tokens_title:Tokens`;
 
-  @ViewChild('tokenStatusSelect', { static: true })
+  @ViewChild('tokenStatusSelect', {static: true})
   tokenStatusSelect!: MatSelect;
 
   protected readonly TokenStatus = TokenStatus;
@@ -125,7 +125,7 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
   }
 
   newToken(): void {
-    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
@@ -191,16 +191,16 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
   private loadData(): void {
     this.spinnerService.showSpinner();
     this.loadTokenSummaries()
-      .pipe(
-        finalize(() => this.spinnerService.hideSpinner()),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: () => {
-          // loadTokenSummaries() already updated datasource + synced paginator
-        },
-        error: (error) => this.handleError(error, false)
-      });
+    .pipe(
+      finalize(() => this.spinnerService.hideSpinner()),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: () => {
+        // loadTokenSummaries() already updated datasource + synced paginator
+      },
+      error: (error) => this.handleError(error, false)
+    });
   }
 
   private loadTokenSummaries(): Observable<TokenSummaries> {
@@ -227,38 +227,38 @@ export class TokensComponent extends StatefulListView<TokenListExtras> implement
     const tokenStatus = (this.tokenStatusSelect?.value as TokenStatus) ?? TokenStatus.Active;
 
     return this.dataSource
-      .load(
-        tokenStatus,
-        filterValue,
-        sortBy,
-        sortDirection,
-        this.paginator.pageIndex,
-        this.paginator.pageSize
-      )
-      .pipe(
-        tap((tokenSummaries) => {
-          // Sync paginator to what the server actually returned/corrected
-          this.restoringState = true;
-          try {
-            if (this.paginator) {
-              const pageIndex = tokenSummaries.pageIndex;
-              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
-                this.paginator.pageIndex = Math.trunc(pageIndex);
-              }
-
-              const pageSize = tokenSummaries.pageSize;
-              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
-                this.paginator.pageSize = Math.trunc(pageSize);
-              }
-
-              this.saveState();
+    .load(
+      tokenStatus,
+      filterValue,
+      sortBy,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    )
+    .pipe(
+      tap((tokenSummaries) => {
+        // Sync paginator to what the server actually returned/corrected
+        this.restoringState = true;
+        try {
+          if (this.paginator) {
+            const pageIndex = tokenSummaries.pageIndex;
+            if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+              this.paginator.pageIndex = Math.trunc(pageIndex);
             }
-          } finally {
-            this.restoringState = false;
-          }
 
-          this.changeDetectorRef.markForCheck();
-        })
-      );
+            const pageSize = tokenSummaries.pageSize;
+            if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+              this.paginator.pageSize = Math.trunc(pageSize);
+            }
+
+            this.saveState();
+          }
+        } finally {
+          this.restoringState = false;
+        }
+
+        this.changeDetectorRef.markForCheck();
+      })
+    );
   }
 }

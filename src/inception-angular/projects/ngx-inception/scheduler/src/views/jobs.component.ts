@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
-import { CoreModule, FilteredPaginatedListView, TableFilterComponent } from 'ngx-inception/core';
-import { Observable } from 'rxjs';
-import { Job } from '../services/job';
-import { JobStatus } from '../services/job-status';
-import { SchedulerService } from '../services/scheduler.service';
+import {ChangeDetectionStrategy, Component, HostBinding, inject} from '@angular/core';
+import {CoreModule, FilteredPaginatedListView, TableFilterComponent} from 'ngx-inception/core';
+import {Observable} from 'rxjs';
+import {Job} from '../services/job';
+import {JobStatus} from '../services/job-status';
+import {SchedulerService} from '../services/scheduler.service';
 
 /**
  * The JobsComponent class implements the Jobs component.
@@ -72,7 +72,7 @@ export class JobsComponent extends FilteredPaginatedListView<Job> {
   }
 
   newJob(): void {
-    void this.router.navigate(['new'], { relativeTo: this.activatedRoute });
+    void this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
 
   protected override createFilterPredicate(): (data: Job, filter: string) => boolean {

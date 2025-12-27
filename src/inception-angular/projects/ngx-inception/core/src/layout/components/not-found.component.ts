@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 /**
  * The NotFoundComponent class implements the not found component.
@@ -43,4 +43,5 @@ import { Component } from '@angular/core';
     </div>
   `
 })
-export class NotFoundComponent {}
+export class NotFoundComponent {
+}

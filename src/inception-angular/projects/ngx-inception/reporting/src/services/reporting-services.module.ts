@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { ReportingService } from './reporting.service';
+import {CommonModule} from '@angular/common';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {ReportingService} from './reporting.service';
 
 /**
  * The ReportingServicesModule class implements the Inception Reporting Services Module.

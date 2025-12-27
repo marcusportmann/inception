@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
 import {
   CoreModule, InceptionAppModule, InceptionConfig, NavigationBadge, NavigationItem, NavigationTitle
 } from 'ngx-inception/core';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
 
 const ngxInceptionConfig: InceptionConfig = {
   // Application Information

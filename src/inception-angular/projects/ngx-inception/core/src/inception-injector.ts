@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injector } from '@angular/core';
+import {Injector} from '@angular/core';
 
 /**
  * The Angular injector that allows singletons to be retrieved by the Inception framework.

@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-import { Component, inject, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CoreModule, GroupFormFieldComponent, ValidatedFormDirective } from 'ngx-inception/core';
-import { Country, CountryInputComponent } from 'ngx-inception/reference';
-import { Subscription } from 'rxjs';
+import {Component, inject, OnDestroy} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {CoreModule, GroupFormFieldComponent, ValidatedFormDirective} from 'ngx-inception/core';
+import {Country, CountryInputComponent} from 'ngx-inception/reference';
+import {Subscription} from 'rxjs';
 
 /**
  * The Title class holds title information for the example form component.
  */
 class Title {
   name: string;
+
   value: string;
 
   constructor(name: string, value: string) {

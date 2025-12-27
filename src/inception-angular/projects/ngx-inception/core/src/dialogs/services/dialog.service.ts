@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { inject, Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '../components/confirmation-dialog.component';
-import { ErrorDialogComponent } from '../components/error-dialog.component';
-import { InformationDialogComponent } from '../components/information-dialog.component';
-import { WarningDialogComponent } from '../components/warning-dialog.component';
-import { DialogData } from './dialog-data';
+import {inject, Injectable} from '@angular/core';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {ConfirmationDialogComponent} from '../components/confirmation-dialog.component';
+import {ErrorDialogComponent} from '../components/error-dialog.component';
+import {InformationDialogComponent} from '../components/information-dialog.component';
+import {WarningDialogComponent} from '../components/warning-dialog.component';
+import {DialogData} from './dialog-data';
 
 /**
  * The service that provides the ability to show different standard dialogs.
@@ -68,7 +68,7 @@ export class DialogService {
     return this.matDialog.open(ErrorDialogComponent, {
       panelClass: 'error-dialog',
       restoreFocus: false,
-      data: { error }
+      data: {error}
     });
   }
 

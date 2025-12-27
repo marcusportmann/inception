@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-import { Directionality } from '@angular/cdk/bidi';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { CdkObserveContent } from '@angular/cdk/observers';
-import { Platform } from '@angular/cdk/platform';
-import { NgTemplateOutlet } from '@angular/common';
+import {Directionality} from '@angular/cdk/bidi';
+import {BooleanInput, coerceBooleanProperty} from '@angular/cdk/coercion';
+import {CdkObserveContent} from '@angular/cdk/observers';
+import {Platform} from '@angular/cdk/platform';
+import {NgTemplateOutlet} from '@angular/common';
 import {
   AfterContentChecked, AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
   ContentChild, ContentChildren, ElementRef, inject, InjectionToken, Input, NgZone, OnDestroy,
   QueryList, ViewChild, ViewEncapsulation
 } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
+import {MatCheckbox} from '@angular/material/checkbox';
 import {
   FloatLabelType, getMatFormFieldDuplicatedHintError, MAT_ERROR, MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MAT_PREFIX, MAT_SUFFIX, MatError, MatFormFieldAppearance, MatFormFieldDefaultOptions,
   MatFormFieldModule, MatHint, MatLabel, MatPrefix, MatSuffix
 } from '@angular/material/form-field';
-import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
-import { merge, startWith, Subject, takeUntil } from 'rxjs';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {merge, startWith, Subject, takeUntil} from 'rxjs';
 import {
   GroupFormFieldNotchedOutlineComponent
 } from './group-form-field-notched-outline.component';
@@ -85,18 +85,18 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
 export class GroupFormFieldComponent implements AfterContentInit, AfterContentChecked, OnDestroy {
   static ngAcceptInputType_hideRequiredMarker: BooleanInput;
 
-  @ContentChildren(MatCheckbox, { descendants: true })
+  @ContentChildren(MatCheckbox, {descendants: true})
   _checkboxChildren!: QueryList<MatCheckbox>;
 
-  @ViewChild('connectionContainer', { static: true })
+  @ViewChild('connectionContainer', {static: true})
   _connectionContainerRef!: ElementRef<HTMLElement>;
 
   _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  @ContentChildren(MAT_ERROR, { descendants: true })
+  @ContentChildren(MAT_ERROR, {descendants: true})
   _errorChildren!: QueryList<MatError>;
 
-  @ContentChildren(MatHint, { descendants: true })
+  @ContentChildren(MatHint, {descendants: true})
   _hintChildren!: QueryList<MatHint>;
 
   /** Unique id for the hint label. */
@@ -104,20 +104,20 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
 
   @ContentChild(MatLabel) _labelChildNonStatic?: MatLabel;
 
-  @ContentChild(MatLabel, { static: true }) _labelChildStatic!: MatLabel;
+  @ContentChild(MatLabel, {static: true}) _labelChildStatic!: MatLabel;
 
   /** Unique id for the internal form field label. */
   readonly _labelId = `group-form-field-label-${nextUniqueId++}`;
 
-  @ContentChildren(MAT_PREFIX, { descendants: true })
+  @ContentChildren(MAT_PREFIX, {descendants: true})
   _prefixChildren!: QueryList<MatPrefix>;
 
   @ContentChild(MatRadioGroup) _radioGroupChildNonStatic?: MatRadioGroup;
 
-  @ContentChild(MatRadioGroup, { static: true })
+  @ContentChild(MatRadioGroup, {static: true})
   _radioGroupChildStatic!: MatRadioGroup;
 
-  @ContentChildren(MAT_SUFFIX, { descendants: true })
+  @ContentChildren(MAT_SUFFIX, {descendants: true})
   _suffixChildren!: QueryList<MatSuffix>;
 
   @Input() color: 'primary' | 'accent' | 'warn' = 'primary';
@@ -126,13 +126,13 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
 
   private readonly _defaults = inject<MatFormFieldDefaultOptions | null>(
     MAT_FORM_FIELD_DEFAULT_OPTIONS,
-    { optional: true }
+    {optional: true}
   );
 
   /** Emits when the component is being destroyed. */
   private readonly _destroyed = new Subject<void>();
 
-  private readonly _dir = inject(Directionality, { optional: true });
+  private readonly _dir = inject(Directionality, {optional: true});
 
   @ViewChild('label') private _label!: ElementRef<HTMLElement>;
 
@@ -206,6 +206,7 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
   get hintLabel(): string {
     return this._hintLabel;
   }
+
   set hintLabel(value: string) {
     this._hintLabel = value;
     this._processHints();
@@ -360,22 +361,22 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
     // Run outside Angular to avoid infinite loops if `zone-patch-rxjs` is included.
     this._ngZone.runOutsideAngular(() => {
       this._ngZone.onStable
-        .asObservable()
-        .pipe(takeUntil(this._destroyed))
-        .subscribe(() => {
-          if (this._outlineGapCalculationNeededOnStable) {
-            this._updateOutlineGap();
-          }
-        });
+      .asObservable()
+      .pipe(takeUntil(this._destroyed))
+      .subscribe(() => {
+        if (this._outlineGapCalculationNeededOnStable) {
+          this._updateOutlineGap();
+        }
+      });
     });
 
     // Run change detection and update the outline if the suffix or prefix changes.
     merge(this._prefixChildren.changes, this._suffixChildren.changes)
-      .pipe(takeUntil(this._destroyed))
-      .subscribe(() => {
-        this._outlineGapCalculationNeededOnStable = true;
-        this._changeDetectorRef.markForCheck();
-      });
+    .pipe(takeUntil(this._destroyed))
+    .subscribe(() => {
+      this._outlineGapCalculationNeededOnStable = true;
+      this._changeDetectorRef.markForCheck();
+    });
 
     // Re-validate when the number of hints changes.
     this._hintChildren.changes.pipe(startWith(null), takeUntil(this._destroyed)).subscribe(() => {

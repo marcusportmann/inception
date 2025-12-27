@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, inject, OnInit } from '@angular/core';
-import { Replace } from '../../util/replace';
+import {Component, ElementRef, inject, OnInit} from '@angular/core';
+import {Replace} from '../../util/replace';
 
 /**
  * The SidebarFooterComponent class implements the sidebar footer component.
@@ -26,9 +26,10 @@ import { Replace } from '../../util/replace';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-footer',
   standalone: true,
-  template: ` <div class="sidebar-footer">
-    <ng-content></ng-content>
-  </div>`
+  template: `
+    <div class="sidebar-footer">
+      <ng-content></ng-content>
+    </div>`
 })
 export class SidebarFooterComponent implements OnInit {
   private readonly elementRef = inject(ElementRef);

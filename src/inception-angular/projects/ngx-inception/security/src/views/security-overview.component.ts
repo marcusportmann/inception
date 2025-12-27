@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { AdminContainerView, CoreModule } from 'ngx-inception/core';
+import {Component} from '@angular/core';
+import {AdminContainerView, CoreModule} from 'ngx-inception/core';
 
 /**
  * The SecurityOverviewComponent class implements the security overview component.

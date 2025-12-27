@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
 
 /**
  * The SimpleContainerComponent class implements the simple container component.
@@ -29,4 +29,5 @@ import { RouterOutlet } from '@angular/router';
   imports: [RouterOutlet],
   template: '<router-outlet></router-outlet>'
 })
-export class SimpleContainerComponent {}
+export class SimpleContainerComponent {
+}

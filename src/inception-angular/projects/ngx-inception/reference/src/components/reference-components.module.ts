@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { ReferenceServicesModule } from '../services/reference-services.module';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {ReferenceServicesModule} from '../services/reference-services.module';
 
 @NgModule({
   imports: [
@@ -37,4 +37,5 @@ import { ReferenceServicesModule } from '../services/reference-services.module';
     MatIconModule
   ]
 })
-export class ReferenceComponentsModule {}
+export class ReferenceComponentsModule {
+}

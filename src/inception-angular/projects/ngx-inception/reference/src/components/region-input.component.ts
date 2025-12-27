@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy,
   OnInit, ViewChild
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatFormFieldControl } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { AutocompleteSelectionRequiredDirective, CoreModule } from 'ngx-inception/core';
-import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
+import {ControlValueAccessor, NgControl} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatFormFieldControl} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {AutocompleteSelectionRequiredDirective, CoreModule} from 'ngx-inception/core';
+import {BehaviorSubject, ReplaySubject, Subject} from 'rxjs';
 import {
   debounceTime, distinctUntilChanged, first, map, switchMap, takeUntil
 } from 'rxjs/operators';
-import { ReferenceService } from '../services/reference.service';
-import { Region } from '../services/region';
+import {ReferenceService} from '../services/reference.service';
+import {Region} from '../services/region';
 
 /**
  * The RegionInputComponent class implements the region input component.
@@ -51,7 +51,7 @@ import { Region } from '../services/region';
         [matAutocompleteConnectedTo]="origin"
         (input)="inputChanged($event)"
         (focusin)="onFocusIn($event)"
-        (focusout)="onFocusOut($event)" />
+        (focusout)="onFocusOut($event)"/>
       <mat-autocomplete
         #regionAutocomplete="matAutocomplete"
         (closed)="onClosed()"
@@ -74,8 +74,7 @@ import { Region } from '../services/region';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegionInputComponent
-  implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy
-{
+  implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy {
   private static _nextId = 0;
 
   /** The name for the control type. */
@@ -94,12 +93,15 @@ export class RegionInputComponent
   @HostBinding() id = `region-input-${RegionInputComponent._nextId++}`;
 
   /** The input. */
-  @ViewChild(MatInput, { static: true }) input!: MatInput;
+  @ViewChild(MatInput, {static: true}) input!: MatInput;
 
   /** The observable providing access to the value for the region input as it changes. */
   readonly inputValue$ = new ReplaySubject<string>(1);
 
-  readonly ngControl = inject(NgControl, { optional: true, self: true });
+  readonly ngControl = inject(NgControl, {
+    optional: true,
+    self: true
+  });
 
   /** The observable indicating that the state of the control has changed. */
   readonly stateChanges = new Subject<void>();
@@ -280,57 +282,57 @@ export class RegionInputComponent
 
     // Load & filter regions when the country changes.
     this.country$
-      .pipe(
-        distinctUntilChanged(),
-        switchMap((country) =>
-          this.referenceService.getRegions().pipe(
-            first(),
-            map((regions: Map<string, Region>) => {
-              const options: Region[] = [];
-              for (const region of regions.values()) {
-                if (!country || region.country === country) {
-                  options.push(region);
-                }
+    .pipe(
+      distinctUntilChanged(),
+      switchMap((country) =>
+        this.referenceService.getRegions().pipe(
+          first(),
+          map((regions: Map<string, Region>) => {
+            const options: Region[] = [];
+            for (const region of regions.values()) {
+              if (!country || region.country === country) {
+                options.push(region);
               }
-              return options;
-            })
-          )
-        ),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((options: Region[]) => {
-        this._options = options;
-        this.filteredOptions$.next(options);
-        this.syncValueWithOptions();
-        this.stateChanges.next();
-        this.changeDetectorRef.markForCheck();
-      });
+            }
+            return options;
+          })
+        )
+      ),
+      takeUntil(this.destroy$)
+    )
+    .subscribe((options: Region[]) => {
+      this._options = options;
+      this.filteredOptions$.next(options);
+      this.syncValueWithOptions();
+      this.stateChanges.next();
+      this.changeDetectorRef.markForCheck();
+    });
 
     // Filter options as the user types.
     this.inputValue$
-      .pipe(debounceTime(250), takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (this._value) {
-          this._value = null;
-          this.onChange(this._value);
-          this.touched = true;
-        }
+    .pipe(debounceTime(250), takeUntil(this.destroy$))
+    .subscribe((value: string) => {
+      if (this._value) {
+        this._value = null;
+        this.onChange(this._value);
+        this.touched = true;
+      }
 
-        const filter = value.toLowerCase().trim();
-        let filteredOptions = this._options.filter((option) =>
-          option.name.toLowerCase().includes(filter)
-        );
+      const filter = value.toLowerCase().trim();
+      let filteredOptions = this._options.filter((option) =>
+        option.name.toLowerCase().includes(filter)
+      );
 
-        // No filtered options -> clear input and show all, forcing the user to refine.
-        if (filteredOptions.length === 0) {
-          this.input.value = '';
-          filteredOptions = this._options;
-        }
+      // No filtered options -> clear input and show all, forcing the user to refine.
+      if (filteredOptions.length === 0) {
+        this.input.value = '';
+        filteredOptions = this._options;
+      }
 
-        this.filteredOptions$.next(filteredOptions);
-        this.stateChanges.next();
-        this.changeDetectorRef.markForCheck();
-      });
+      this.filteredOptions$.next(filteredOptions);
+      this.stateChanges.next();
+      this.changeDetectorRef.markForCheck();
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

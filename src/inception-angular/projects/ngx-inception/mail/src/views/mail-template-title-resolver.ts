@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
-import { MailService } from '../services/mail.service';
+import {inject, Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {Observable} from 'rxjs';
+import {MailService} from '../services/mail.service';
 
 /**
  * The MailTemplateTitleResolver class provides the route data resolver that resolves the

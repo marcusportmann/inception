@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { SortDirection } from 'ngx-inception/core';
-import { User } from './user';
-import { UserSortBy } from './user-sort-by';
+import {SortDirection} from 'ngx-inception/core';
+import {User} from './user';
+import {UserSortBy} from './user-sort-by';
 
 /**
  * The Users class holds the results of a request to retrieve a list of users.

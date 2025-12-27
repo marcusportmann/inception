@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
-import { CanActivateFunctionGuard, CoreModule } from 'ngx-inception/core';
-import { ErrorReportTitleResolver } from './error-report-title-resolver';
-import { ErrorReportComponent } from './error-report.component';
-import { ErrorReportsTitleResolver } from './error-reports-title-resolver';
-import { ErrorReportsComponent } from './error-reports.component';
-import { SendErrorReportComponent } from './send-error-report.component';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
+import {CanActivateFunctionGuard, CoreModule} from 'ngx-inception/core';
+import {ErrorReportTitleResolver} from './error-report-title-resolver';
+import {ErrorReportComponent} from './error-report.component';
+import {ErrorReportsTitleResolver} from './error-reports-title-resolver';
+import {ErrorReportsComponent} from './error-reports.component';
+import {SendErrorReportComponent} from './send-error-report.component';
 
 const routes: Routes = [
   {
@@ -82,4 +82,5 @@ const routes: Routes = [
     ErrorReportTitleResolver
   ]
 })
-export class ErrorViewsModule {}
+export class ErrorViewsModule {
+}

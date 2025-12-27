@@ -17,21 +17,21 @@
 import {
   AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
 } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
-import { MatSort } from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
+import {MatSort} from '@angular/material/sort';
 import {
   CoreModule, HasAuthorityDirective, Session, SessionService, SortDirection, StatefulListView,
   TableFilterComponent
 } from 'ngx-inception/core';
-import { BehaviorSubject, EMPTY, forkJoin, Observable, of } from 'rxjs';
-import { catchError, finalize, first, map, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { SecurityService } from '../services/security.service';
-import { UserDataSource } from '../services/user-data-source';
-import { UserDirectoryCapabilities } from '../services/user-directory-capabilities';
-import { UserDirectorySummary } from '../services/user-directory-summary';
-import { UserSortBy } from '../services/user-sort-by';
-import { Users } from '../services/users';
+import {BehaviorSubject, EMPTY, forkJoin, Observable, of} from 'rxjs';
+import {catchError, finalize, first, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {UserDataSource} from '../services/user-data-source';
+import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
+import {UserDirectorySummary} from '../services/user-directory-summary';
+import {UserSortBy} from '../services/user-sort-by';
+import {Users} from '../services/users';
 
 interface UsersListExtras {
   userDirectoryId: string | null;
@@ -61,11 +61,11 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
 
   readonly listStateKey = 'security.users';
 
-  @ViewChild(MatPaginator, { static: true }) override paginator!: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) override paginator!: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) override sort!: MatSort;
+  @ViewChild(MatSort, {static: true}) override sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, { static: true })
+  @ViewChild(TableFilterComponent, {static: true})
   override tableFilter!: TableFilterComponent;
 
   readonly title = $localize`:@@security_users_title:Users`;
@@ -76,7 +76,7 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
 
   userDirectoryId$ = new BehaviorSubject<string | null>(null);
 
-  @ViewChild('userDirectorySelect', { static: true })
+  @ViewChild('userDirectorySelect', {static: true})
   userDirectorySelect!: MatSelect;
 
   /** Whether this navigation requested a state reset (from the sidebar). */
@@ -193,7 +193,7 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
 
     void this.router.navigate(
       [userDirectoryId + '/' + encodeURIComponent(username) + '/reset-user-password'],
-      { relativeTo: this.activatedRoute }
+      {relativeTo: this.activatedRoute}
     );
   }
 
@@ -240,52 +240,52 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
   private loadUserDirectories(): void {
     // noinspection DuplicatedCode
     this.sessionService.session$
-      .pipe(
-        first(),
-        switchMap((session: Session | null) => {
-          if (session?.tenantId) {
-            this.spinnerService.showSpinner();
+    .pipe(
+      first(),
+      switchMap((session: Session | null) => {
+        if (session?.tenantId) {
+          this.spinnerService.showSpinner();
 
-            return this.securityService
-              .getUserDirectorySummariesForTenant(session.tenantId)
-              .pipe(finalize(() => this.spinnerService.hideSpinner()));
-          }
+          return this.securityService
+          .getUserDirectorySummariesForTenant(session.tenantId)
+          .pipe(finalize(() => this.spinnerService.hideSpinner()));
+        }
 
-          return of([] as UserDirectorySummary[]);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (userDirectories: UserDirectorySummary[]) => {
-          this.userDirectories = userDirectories;
+        return of([] as UserDirectorySummary[]);
+      }),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: (userDirectories: UserDirectorySummary[]) => {
+        this.userDirectories = userDirectories;
 
-          let selectedId = this.userDirectoryId$.value;
+        let selectedId = this.userDirectoryId$.value;
 
-          // If no selection from the restored state, infer one
-          if (!selectedId) {
-            if (userDirectories.length === 1) {
-              selectedId = userDirectories[0].id;
-            } else {
-              const state = window.history.state as { userDirectoryId?: string };
-              const fromNav = state?.userDirectoryId;
+        // If no selection from the restored state, infer one
+        if (!selectedId) {
+          if (userDirectories.length === 1) {
+            selectedId = userDirectories[0].id;
+          } else {
+            const state = window.history.state as { userDirectoryId?: string };
+            const fromNav = state?.userDirectoryId;
 
-              if (fromNav && userDirectories.some((ud) => ud.id === fromNav)) {
-                selectedId = fromNav;
-              }
+            if (fromNav && userDirectories.some((ud) => ud.id === fromNav)) {
+              selectedId = fromNav;
             }
           }
+        }
 
-          if (selectedId && userDirectories.some((ud) => ud.id === selectedId)) {
-            this.userDirectoryId$.next(selectedId);
-            if (this.userDirectorySelect) {
-              this.userDirectorySelect.value = selectedId;
-            }
+        if (selectedId && userDirectories.some((ud) => ud.id === selectedId)) {
+          this.userDirectoryId$.next(selectedId);
+          if (this.userDirectorySelect) {
+            this.userDirectorySelect.value = selectedId;
           }
+        }
 
-          this.changeDetectorRef.markForCheck();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+        this.changeDetectorRef.markForCheck();
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 
   private loadUsers(userDirectoryId: string): Observable<Users> {
@@ -311,39 +311,39 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
         : SortDirection.Descending;
 
     return this.dataSource
-      .load(
-        userDirectoryId,
-        filter,
-        sortBy,
-        sortDirection,
-        this.paginator.pageIndex,
-        this.paginator.pageSize
-      )
-      .pipe(
-        tap((users) => {
-          // Sync paginator to what the server actually returned/corrected
-          this.restoringState = true;
-          try {
-            if (this.paginator) {
-              const pageIndex = users.pageIndex;
-              if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
-                this.paginator.pageIndex = Math.trunc(pageIndex);
-              }
-
-              const pageSize = users.pageSize;
-              if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
-                this.paginator.pageSize = Math.trunc(pageSize);
-              }
-
-              this.saveState();
+    .load(
+      userDirectoryId,
+      filter,
+      sortBy,
+      sortDirection,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    )
+    .pipe(
+      tap((users) => {
+        // Sync paginator to what the server actually returned/corrected
+        this.restoringState = true;
+        try {
+          if (this.paginator) {
+            const pageIndex = users.pageIndex;
+            if (Number.isFinite(pageIndex) && Math.trunc(pageIndex) >= 0) {
+              this.paginator.pageIndex = Math.trunc(pageIndex);
             }
-          } finally {
-            this.restoringState = false;
-          }
 
-          this.changeDetectorRef.markForCheck();
-        })
-      );
+            const pageSize = users.pageSize;
+            if (Number.isFinite(pageSize) && Math.trunc(pageSize) > 0) {
+              this.paginator.pageSize = Math.trunc(pageSize);
+            }
+
+            this.saveState();
+          }
+        } finally {
+          this.restoringState = false;
+        }
+
+        this.changeDetectorRef.markForCheck();
+      })
+    );
   }
 
   private loadUsersData(): void {
@@ -360,13 +360,13 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
 
     forkJoin({
       userDirectoryCapabilities: this.securityService
-        .getUserDirectoryCapabilities(userDirectoryId)
-        .pipe(
-          catchError((error: Error) => {
-            this.handleError(error, false);
-            return of(null);
-          })
-        ),
+      .getUserDirectoryCapabilities(userDirectoryId)
+      .pipe(
+        catchError((error: Error) => {
+          this.handleError(error, false);
+          return of(null);
+        })
+      ),
 
       // loadUsers now handles syncing + saving state internally
       users: this.loadUsers(userDirectoryId).pipe(
@@ -376,18 +376,18 @@ export class UsersComponent extends StatefulListView<UsersListExtras> implements
         })
       )
     })
-      .pipe(
-        finalize(() => this.spinnerService.hideSpinner()),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: ({ userDirectoryCapabilities }) => {
-          if (userDirectoryCapabilities) {
-            this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
-          }
-          this.changeDetectorRef.markForCheck();
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+    .pipe(
+      finalize(() => this.spinnerService.hideSpinner()),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: ({userDirectoryCapabilities}) => {
+        if (userDirectoryCapabilities) {
+          this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
+        }
+        this.changeDetectorRef.markForCheck();
+      },
+      error: (error: Error) => this.handleError(error, false)
+    });
   }
 }
