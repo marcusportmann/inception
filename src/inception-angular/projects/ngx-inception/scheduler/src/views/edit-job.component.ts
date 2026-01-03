@@ -28,6 +28,7 @@ import {JobComponent} from './job.component';
  *
  * @author Marcus Portmann
  */
+// noinspection DuplicatedCode
 @Component({
   selector: 'inception-scheduler-edit-job',
   imports: [CoreModule, ValidatedFormDirective],

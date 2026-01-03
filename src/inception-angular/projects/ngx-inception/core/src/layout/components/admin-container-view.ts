@@ -16,8 +16,7 @@
 
 import {inject} from '@angular/core';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {firstValueFrom, Observable} from 'rxjs';
 import {DialogService} from '../../dialogs/services/dialog.service';
 import {AccessDeniedError, InvalidArgumentError, ServiceUnavailableError} from '../../errors';
 import {SpinnerService} from '../services/spinner.service';
@@ -80,47 +79,38 @@ export abstract class AdminContainerView {
    * {@link ServiceUnavailableError}, the user is navigated to the
    * `/error/send-error-report` route and the error is passed via navigation state.
    *
-   *  For all other errors an error dialog is displayed using the {@link DialogService}.
-   *  Once the dialog is closed:
-   *  - if `navigateOnClose` is `true`, the user is navigated to the route specified
-   *    by `navigationUrl`, relative to the current {@link ActivatedRoute};
+   * For all other errors an error dialog is displayed using the {@link DialogService}. Once the
+   * dialog is closed:
+   *  - if `navigateOnClose` is `true`, the user is navigated using `navigateCommands`, relative to
+   *    the current {@link ActivatedRoute} (via `navigateExtras` if provided);
    *  - if `navigateOnClose` is `false`, no additional navigation occurs.
-   *
-   * This helper should be called by derived admin container views when handling service or UI
-   * errors to ensure a consistent user experience.
    *
    * @param error            The error that occurred.
    * @param navigateOnClose  Whether navigation should be performed after the error dialog is
    *                         closed.
-   * @param navigateCommands The router navigation commands for the navigation that should be
-   *                         performed after the error dialog is closed.
-   * @param navigateExtras   The router navigation extras for the navigation that should be
-   *                         performed after the error dialog is closed.
+   * @param navigateCommands The router navigation commands for the navigation after the dialog.
+   * @param navigateExtras   The router navigation extras for the navigation after the dialog.
    */
-  handleError(
+  async handleError(
     error: Error,
     navigateOnClose: boolean,
     navigateCommands?: string[],
     navigateExtras?: NavigationExtras
-  ): void {
+  ): Promise<void> {
     if (
       error instanceof AccessDeniedError ||
       error instanceof InvalidArgumentError ||
       error instanceof ServiceUnavailableError
     ) {
-      void this.router.navigateByUrl('/error/send-error-report', {
-        state: {error}
-      });
-    } else {
-      this.dialogService
-      .showErrorDialog(error)
-      .afterClosed()
-      .pipe(first())
-      .subscribe(() => {
-        if (navigateOnClose && navigateCommands) {
-          void this.router.navigate(navigateCommands, navigateExtras);
-        }
-      });
+      await this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      return;
+    }
+
+    // Await dialog close instead of manually subscribing.
+    await firstValueFrom(this.dialogService.showErrorDialog(error).afterClosed());
+
+    if (navigateOnClose && navigateCommands) {
+      await this.router.navigate(navigateCommands, navigateExtras);
     }
   }
 }

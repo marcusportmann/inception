@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {inject} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {
-  AdminContainerView,
-  BackNavigation,
-  CoreModule,
-  ValidatedFormDirective
-} from 'ngx-inception/core';
-import {finalize, first} from 'rxjs/operators';
-import {Job} from '../services/job';
+import {AdminContainerView} from 'ngx-inception/core';
+import {first} from 'rxjs/operators';
 import {JobParameter} from '../services/job-parameter';
 import {JobStatus} from '../services/job-status';
 import {SchedulerService} from '../services/scheduler.service';
 import {
-  JobParameterDialogComponent,
-  JobParameterDialogData
+  JobParameterDialogComponent, JobParameterDialogData
 } from './job-parameter-dialog.component';
 
 /**
- * The JobComponent class.
+ * The JobsComponent class provides common scheduler job UI behavior for job-related
+ * views/components.
+ *
+ * It exposes the available {@link JobStatus} values and their user-friendly descriptions, and
+ * manages the collection of {@link JobParameter}s for a job (add, edit, and delete).
+ * Job parameters are edited via the {@link JobParameterDialogComponent}.
+ *
+ * Concrete components (e.g. NewJobComponent and EditJobComponent) extend this class to reuse the
+ * shared parameter management and status helper functionality.
  *
  * @author Marcus Portmann
  */

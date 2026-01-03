@@ -1600,7 +1600,7 @@ admin-root {
       height: calc(100vh - #{$admin-header-height});
 
       ng-scrollbar {
-        height: calc(100vh - #{$admin-header-height});
+        height: calc(100vh - #{$admin-header-height} - #{$sidebar-minimizer-height});
       }
     }
 
@@ -3281,6 +3281,10 @@ textarea.mat-mdc-input-element {
 
   // Minimized Sidebar
   .sidebar-minimized {
+    ng-scrollbar {
+      overflow: visible !important;
+    }
+
     .sidebar {
       z-index: $zindex-sticky - 1;
 

@@ -15,11 +15,10 @@
  */
 
 import {
-  ChangeDetectionStrategy, Component, inject, Input, OnDestroy, OnInit
+  booleanAttribute, ChangeDetectionStrategy, Component, inject, Input, OnChanges, OnDestroy, OnInit,
+  SimpleChanges
 } from '@angular/core';
-import {Subscription} from 'rxjs';
 import {SidebarService} from '../services/sidebar.service';
-import {SIDEBAR_CSS_CLASSES} from './sidebar-css-classes';
 
 /**
  * The SidebarComponent class implements the sidebar component.
@@ -34,76 +33,40 @@ import {SIDEBAR_CSS_CLASSES} from './sidebar-css-classes';
     <ng-content></ng-content>`,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SidebarComponent implements OnInit, OnDestroy {
-  // TODO: Confirm if we can default these properties to false -- MARCUS
-  @Input() compact?: boolean;
+export class SidebarComponent implements OnInit, OnChanges, OnDestroy {
+  @Input({transform: booleanAttribute}) compact = false;
 
   @Input() display?: string;
 
-  @Input() fixed?: boolean;
+  @Input({transform: booleanAttribute}) fixed = false;
 
-  @Input() minimized?: boolean;
+  @Input({transform: booleanAttribute}) minimized = false;
 
-  @Input() offCanvas?: boolean;
+  @Input({transform: booleanAttribute}) offCanvas = false;
 
-  readonly sidebar = true;
+  private readonly _sidebarService = inject(SidebarService);
 
-  private sidebarMinimizedSubscription?: Subscription;
-
-  private readonly sidebarService = inject(SidebarService);
+  ngOnChanges(changes: SimpleChanges): void {
+    void changes;
+    this._pushConfig();
+  }
 
   ngOnDestroy(): void {
-    if (this.sidebarMinimizedSubscription) {
-      this.sidebarMinimizedSubscription.unsubscribe();
-    }
+    // Optional. In a single-sidebar app this is fine; if you ever mount/unmount,
+    // this prevents body class leaks.
+    this._sidebarService.reset();
   }
 
   ngOnInit(): void {
-    const bodySelector = document.querySelector('body');
+    this._pushConfig();
+  }
 
-    this.sidebarMinimizedSubscription = this.sidebarService.sidebarMinimized$.subscribe(
-      (sidebarMinimized: boolean) => {
-        if (sidebarMinimized) {
-          if (bodySelector) {
-            bodySelector.classList.add('admin-brand-minimized');
-            bodySelector.classList.add('sidebar-minimized');
-          }
-        } else {
-          if (bodySelector) {
-            bodySelector.classList.remove('admin-brand-minimized');
-            bodySelector.classList.remove('sidebar-minimized');
-          }
-        }
-      }
-    );
-
-    if (bodySelector) {
-      if (this.display) {
-        let cssClass;
-
-        if (this.display) {
-          cssClass = `sidebar-${this.display}-show`;
-        } else {
-          cssClass = SIDEBAR_CSS_CLASSES[0];
-        }
-        bodySelector.classList.add(cssClass);
-      }
-
-      if (this.compact) {
-        bodySelector.classList.add('sidebar-compact');
-      }
-
-      if (this.fixed) {
-        bodySelector.classList.add('sidebar-fixed');
-      }
-
-      if (this.minimized) {
-        bodySelector.classList.add('sidebar-minimized');
-      }
-
-      if (this.offCanvas) {
-        bodySelector.classList.add('sidebar-off-canvas');
-      }
-    }
+  private _pushConfig(): void {
+    this._sidebarService.configure({
+      compact: this.compact,
+      display: this.display,
+      fixed: this.fixed,
+      offCanvas: this.offCanvas
+    });
   }
 }

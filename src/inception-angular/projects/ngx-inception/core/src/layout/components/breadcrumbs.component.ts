@@ -16,8 +16,8 @@
 
 import {AsyncPipe, NgClass} from '@angular/common';
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Input, OnDestroy,
-  OnInit
+  booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject,
+  Input, OnDestroy, OnInit
 } from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';
@@ -58,7 +58,7 @@ import {BreadcrumbsService} from '../services/breadcrumbs.service';
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
   breadcrumbs: Observable<Breadcrumb[]>;
 
-  @Input() fixed = false;
+  @Input({transform: booleanAttribute}) fixed = false;
 
   visible = false;
 

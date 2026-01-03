@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener, Input} from '@angular/core';
-import {toggleClasses} from '../../util/toggle-classes';
-import {SIDEBAR_CSS_CLASSES} from '../components/sidebar-css-classes';
+import {Directive, HostListener, inject, Input} from '@angular/core';
+import {SidebarService} from '../services/sidebar.service';
 
 /**
  * Toggles the sidebar visibility based on an optional breakpoint.
+ *
+ * @author Marcus Portmann
  */
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
@@ -27,19 +28,13 @@ import {SIDEBAR_CSS_CLASSES} from '../components/sidebar-css-classes';
   standalone: true
 })
 export class SidebarTogglerDirective {
-  /**
-   * Optional breakpoint to control which sidebar variant to toggle.
-   * Example: "sm", "md", "lg" → "sidebar-sm-show", etc.
-   */
   @Input() sidebarToggler?: string;
+
+  private readonly _sidebarService = inject(SidebarService);
 
   @HostListener('click', ['$event'])
   onClick(event: MouseEvent): void {
     event.preventDefault();
-
-    const breakpoint = this.sidebarToggler?.trim();
-    const cssClass = breakpoint ? `sidebar-${breakpoint}-show` : SIDEBAR_CSS_CLASSES[0];
-
-    toggleClasses(cssClass, SIDEBAR_CSS_CLASSES);
+    this._sidebarService.toggleShow(this.sidebarToggler);
   }
 }

@@ -62,7 +62,7 @@ export class FrameworkError extends globalThis.Error {
     }
   }
 
-  private static normalizeCause(cause: unknown): unknown {
+  protected static normalizeCause(cause: unknown): unknown {
     if (cause instanceof HttpErrorResponse) {
       if (ProblemDetails.isProblemDetails(cause)) {
         return new ProblemDetails(cause);
@@ -94,7 +94,7 @@ export class FrameworkError extends globalThis.Error {
     return cause;
   }
 
-  private static statusTextFromCode(status: number): string {
+  protected static statusTextFromCode(status: number): string {
     switch (status) {
       case 400:
         return 'Bad Request';

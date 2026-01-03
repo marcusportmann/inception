@@ -15,7 +15,7 @@
  */
 
 import {AsyncPipe} from '@angular/common';
-import {Component, ElementRef, inject, Input, OnInit} from '@angular/core';
+import {booleanAttribute, Component, ElementRef, inject, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {Replace} from '../../util/replace';
@@ -50,7 +50,7 @@ import {BackNavigation} from './back-navigation';
   `
 })
 export class TitleBarComponent implements OnInit {
-  @Input() fixed = false;
+  @Input({transform: booleanAttribute}) fixed = false;
 
   private readonly elementRef = inject(ElementRef);
 

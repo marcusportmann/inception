@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {ReplaySubject, Subject} from 'rxjs';
+import {Observable, ReplaySubject} from 'rxjs';
 import {BackNavigation} from '../components/back-navigation';
 
 /**
@@ -27,21 +27,24 @@ import {BackNavigation} from '../components/back-navigation';
   providedIn: 'root'
 })
 export class TitleBarService {
-  /**
-   * The back navigation.
-   */
-  backNavigation$: Subject<BackNavigation | null> = new ReplaySubject<BackNavigation | null>(1);
+  private readonly _backNavigationSubject = new ReplaySubject<BackNavigation | null>(1);
+
+  private readonly _titleSubject = new ReplaySubject<string | null>(1);
 
   /**
-   * The title.
+   * Observable that emits the current back navigation configuration.
+   * Exposed as read-only to prevent external callers from emitting values.
    */
-  title$: Subject<string | null> = new ReplaySubject<string | null>(1);
+  get backNavigation$(): Observable<BackNavigation | null> {
+    return this._backNavigationSubject.asObservable();
+  }
 
   /**
-   * Constructs a new TitleBarService.
+   * Observable that emits the current title.
+   * Exposed as read-only to prevent external callers from emitting values.
    */
-  constructor() {
-    console.log('Initializing the Title Bar Service');
+  get title$(): Observable<string | null> {
+    return this._titleSubject.asObservable();
   }
 
   /**
@@ -50,7 +53,7 @@ export class TitleBarService {
    * @param backNavigation the back navigation
    */
   setBackNavigation(backNavigation: BackNavigation | null): void {
-    this.backNavigation$.next(backNavigation);
+    this._backNavigationSubject.next(backNavigation);
   }
 
   /**
@@ -59,6 +62,6 @@ export class TitleBarService {
    * @param title the title
    */
   setTitle(title: string | null): void {
-    this.title$.next(title);
+    this._titleSubject.next(title);
   }
 }

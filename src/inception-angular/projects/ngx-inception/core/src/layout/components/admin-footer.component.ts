@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, inject, Input, OnInit} from '@angular/core';
+import {booleanAttribute, Component, ElementRef, inject, Input, OnInit} from '@angular/core';
 import {Replace} from '../../util/replace';
 
 /**
@@ -33,7 +33,7 @@ import {Replace} from '../../util/replace';
   `
 })
 export class AdminFooterComponent implements OnInit {
-  @Input() fixed = false;
+  @Input({transform: booleanAttribute}) fixed = false;
 
   private readonly elementRef = inject(ElementRef);
 

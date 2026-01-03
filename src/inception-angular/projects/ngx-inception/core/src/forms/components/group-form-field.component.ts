@@ -21,9 +21,10 @@ import {Platform} from '@angular/cdk/platform';
 import {NgTemplateOutlet} from '@angular/common';
 import {
   AfterContentChecked, AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
-  ContentChild, ContentChildren, ElementRef, inject, InjectionToken, Input, NgZone, OnDestroy,
+  ContentChild, ContentChildren, DestroyRef, ElementRef, inject, InjectionToken, Input, NgZone,
   QueryList, ViewChild, ViewEncapsulation
 } from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {
   FloatLabelType, getMatFormFieldDuplicatedHintError, MAT_ERROR, MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -31,14 +32,14 @@ import {
   MatFormFieldModule, MatHint, MatLabel, MatPrefix, MatSuffix
 } from '@angular/material/form-field';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import {merge, startWith, Subject, takeUntil} from 'rxjs';
-import {
-  GroupFormFieldNotchedOutlineComponent
-} from './group-form-field-notched-outline.component';
+import {merge, startWith} from 'rxjs';
+import {GroupFormFieldNotchedOutlineComponent} from './group-form-field-notched-outline.component';
 
 let nextUniqueId = 0;
 const floatingLabelScale = 0.75;
 const outlineGapPadding = 5;
+
+type OutlineGapState = 'none' | 'immediate' | 'onStable';
 
 /**
  * Injection token that can be used to inject instances of `GroupFormFieldComponent`.
@@ -53,11 +54,7 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
   selector: 'inception-core-group-form-field',
   standalone: true,
   imports: [
-    CdkObserveContent,
-    GroupFormFieldNotchedOutlineComponent,
-    MatFormFieldModule,
-    NgTemplateOutlet
-  ],
+    CdkObserveContent, GroupFormFieldNotchedOutlineComponent, MatFormFieldModule, NgTemplateOutlet],
   exportAs: 'groupFormField',
   templateUrl: 'group-form-field.component.html',
   styleUrls: ['group-form-field.component.scss'],
@@ -67,8 +64,7 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
     {
       provide: GROUP_FORM_FIELD_COMPONENT,
       useExisting: GroupFormFieldComponent
-    }
-  ],
+    }],
   host: {
     class:
       'group-form-field mat-mdc-form-field mat-mdc-form-field-type-mat-input mat-form-field-hide-placeholder',
@@ -82,7 +78,7 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
     '[class.mat-warn]': 'color === "warn"'
   }
 })
-export class GroupFormFieldComponent implements AfterContentInit, AfterContentChecked, OnDestroy {
+export class GroupFormFieldComponent implements AfterContentInit, AfterContentChecked {
   static ngAcceptInputType_hideRequiredMarker: BooleanInput;
 
   @ContentChildren(MatCheckbox, {descendants: true})
@@ -90,8 +86,6 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
 
   @ViewChild('connectionContainer', {static: true})
   _connectionContainerRef!: ElementRef<HTMLElement>;
-
-  _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
   @ContentChildren(MAT_ERROR, {descendants: true})
   _errorChildren!: QueryList<MatError>;
@@ -125,26 +119,26 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
   private readonly _changeDetectorRef = inject(ChangeDetectorRef);
 
   private readonly _defaults = inject<MatFormFieldDefaultOptions | null>(
-    MAT_FORM_FIELD_DEFAULT_OPTIONS,
-    {optional: true}
-  );
+    MAT_FORM_FIELD_DEFAULT_OPTIONS, {
+      optional: true
+    });
 
-  /** Emits when the component is being destroyed. */
-  private readonly _destroyed = new Subject<void>();
+  private readonly _destroyRef = inject(DestroyRef);
 
   private readonly _dir = inject(Directionality, {optional: true});
 
-  @ViewChild('label') private _label!: ElementRef<HTMLElement>;
+  private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  @ViewChild('label') private _label?: ElementRef<HTMLElement>;
 
   private readonly _ngZone = inject(NgZone);
 
-  /**
-   * Whether the outline gap needs to be calculated immediately on the next change detection run.
-   */
-  private _outlineGapCalculationNeededImmediately = false;
+  private _outlineGapEls: HTMLElement[] = [];
 
-  /** Whether the outline gap needs to be calculated next time the zone has stabilized. */
-  private _outlineGapCalculationNeededOnStable = false;
+  private _outlineGapState: OutlineGapState = 'none';
+
+  /** Cached outline elements (queried once). */
+  private _outlineStartEls: HTMLElement[] = [];
 
   private readonly _platform = inject(Platform);
 
@@ -162,11 +156,10 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
 
   set appearance(value: MatFormFieldAppearance) {
     const oldValue = this._appearance;
+    this._appearance = value ?? this._defaults?.appearance ?? 'outline';
 
-    this._appearance = value ?? this._defaults?.appearance ?? ('outline' as MatFormFieldAppearance);
-
-    if (this._appearance === 'outline' && oldValue !== value) {
-      this._outlineGapCalculationNeededOnStable = true;
+    if (this._appearance === 'outline' && oldValue !== this._appearance) {
+      this._requestOutlineGapUpdate('onStable');
     }
   }
 
@@ -181,8 +174,9 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
   }
 
   set floatLabel(value: FloatLabelType) {
-    if (value !== this._floatLabel) {
-      this._floatLabel = value ?? this._getDefaultFloatLabelState();
+    const next = value ?? this._getDefaultFloatLabelState();
+    if (next !== this._floatLabel) {
+      this._floatLabel = next;
       this._changeDetectorRef.markForCheck();
     }
   }
@@ -278,129 +272,66 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
   }
 
   /**
-   * Updates the width and position of the gap in the outline. Only relevant for the outline
-   * appearance.
-   */
-  _updateOutlineGap(): void {
-    const labelEl = this._label?.nativeElement ?? null;
-
-    if (
-      this.appearance !== 'outline' ||
-      !labelEl ||
-      !labelEl.children.length ||
-      !labelEl.textContent?.trim()
-    ) {
-      return;
-    }
-
-    if (!this._platform.isBrowser) {
-      // getBoundingClientRect isn't available on the server.
-      return;
-    }
-
-    if (!this._isAttachedToDOM()) {
-      this._outlineGapCalculationNeededImmediately = true;
-      return;
-    }
-
-    let startWidth = 0;
-    let gapWidth = 0;
-
-    const container = this._connectionContainerRef.nativeElement;
-    const startEls = container.querySelectorAll<HTMLElement>('.mat-form-field-outline-start');
-    const gapEls = container.querySelectorAll<HTMLElement>('.mat-form-field-outline-gap');
-
-    if (labelEl.children.length) {
-      const containerRect = container.getBoundingClientRect();
-
-      // If the container is invisible we can't calculate the outline gap yet.
-      if (containerRect.width === 0 && containerRect.height === 0) {
-        this._outlineGapCalculationNeededOnStable = true;
-        this._outlineGapCalculationNeededImmediately = false;
-        return;
-      }
-
-      const containerStart = this._getStartEnd(containerRect);
-      const labelStart = this._getStartEnd(labelEl.children[0].getBoundingClientRect());
-
-      let labelWidth = 0;
-      for (const child of Array.from(labelEl.children)) {
-        labelWidth += (child as HTMLElement).offsetWidth;
-      }
-
-      startWidth = Math.abs(labelStart - containerStart) - outlineGapPadding;
-      gapWidth = labelWidth > 0 ? labelWidth * floatingLabelScale + outlineGapPadding * 2 : 0;
-    }
-
-    startEls.forEach((item) => (item.style.width = `${startWidth}px`));
-    gapEls.forEach((item) => (item.style.width = `${gapWidth}px`));
-
-    this._outlineGapCalculationNeededOnStable =
-      this._outlineGapCalculationNeededImmediately = false;
-  }
-
-  /**
    * Gets an ElementRef for the element that an overlay attached to the form-field should be
    * positioned relative to.
    */
   getConnectedOverlayOrigin(): ElementRef<HTMLElement> {
-    return this._connectionContainerRef || this._elementRef;
+    return this._connectionContainerRef?.nativeElement ? this._connectionContainerRef :
+      this._elementRef;
   }
 
   ngAfterContentChecked(): void {
     this._validateControlChildren();
 
-    if (this._outlineGapCalculationNeededImmediately) {
-      this._updateOutlineGap();
+    if (this._outlineGapState === 'immediate') {
+      this._runOutlineGapUpdate();
     }
   }
 
   ngAfterContentInit(): void {
     this._validateControlChildren();
+    this._cacheOutlineEls();
 
     // Run outside Angular to avoid infinite loops if `zone-patch-rxjs` is included.
     this._ngZone.runOutsideAngular(() => {
       this._ngZone.onStable
       .asObservable()
-      .pipe(takeUntil(this._destroyed))
+      .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
-        if (this._outlineGapCalculationNeededOnStable) {
-          this._updateOutlineGap();
+        if (this._outlineGapState === 'onStable') {
+          this._runOutlineGapUpdate();
         }
       });
     });
 
     // Run change detection and update the outline if the suffix or prefix changes.
     merge(this._prefixChildren.changes, this._suffixChildren.changes)
-    .pipe(takeUntil(this._destroyed))
+    .pipe(takeUntilDestroyed(this._destroyRef))
     .subscribe(() => {
-      this._outlineGapCalculationNeededOnStable = true;
+      this._requestOutlineGapUpdate('onStable');
       this._changeDetectorRef.markForCheck();
     });
 
     // Re-validate when the number of hints changes.
-    this._hintChildren.changes.pipe(startWith(null), takeUntil(this._destroyed)).subscribe(() => {
+    this._hintChildren.changes
+    .pipe(startWith(null), takeUntilDestroyed(this._destroyRef))
+    .subscribe(() => {
       this._processHints();
       this._changeDetectorRef.markForCheck();
     });
 
     // Update when the number of errors changes.
-    this._errorChildren.changes.pipe(startWith(null), takeUntil(this._destroyed)).subscribe(() => {
+    this._errorChildren.changes
+    .pipe(startWith(null), takeUntilDestroyed(this._destroyRef))
+    .subscribe(() => {
       // this._syncDescribedByIds();
       this._changeDetectorRef.markForCheck();
     });
 
-    if (this._dir) {
-      this._dir.change.pipe(takeUntil(this._destroyed)).subscribe(() => {
-        if (typeof requestAnimationFrame === 'function') {
-          this._ngZone.runOutsideAngular(() => {
-            requestAnimationFrame(() => this._updateOutlineGap());
-          });
-        } else {
-          this._updateOutlineGap();
-        }
-      });
-    }
+    this._dir?.change.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(() => {
+      this._requestOutlineGapUpdate('onStable');
+      this._changeDetectorRef.markForCheck();
+    });
 
     if (this._labelChild) {
       if (this._radioGroupChild) {
@@ -415,18 +346,29 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
     }
   }
 
-  ngOnDestroy(): void {
-    this._destroyed.next();
-    this._destroyed.complete();
+  /** Called from the template when label content changes. */
+  onLabelContentChanged(): void {
+    this._requestOutlineGapUpdate('onStable');
+    this._changeDetectorRef.markForCheck();
+  }
+
+  private _cacheOutlineEls(): void {
+    const container = this._connectionContainerRef.nativeElement;
+    this._outlineStartEls = Array.from(
+      container.querySelectorAll<HTMLElement>('.mat-form-field-outline-start')
+    );
+    this._outlineGapEls = Array.from(
+      container.querySelectorAll<HTMLElement>('.mat-form-field-outline-gap')
+    );
   }
 
   /** Gets the default float label state. */
   private _getDefaultFloatLabelState(): FloatLabelType {
-    return this._defaults?.floatLabel ?? ('auto' as FloatLabelType);
+    return this._defaults?.floatLabel ?? 'auto';
   }
 
   /** Gets the start/end coordinate of the rect considering the current directionality. */
-  private _getStartEnd(rect: ClientRect | DOMRect): number {
+  private _getStartEnd(rect: DOMRectReadOnly): number {
     return this._dir?.value === 'rtl' ? rect.right : rect.left;
   }
 
@@ -447,6 +389,86 @@ export class GroupFormFieldComponent implements AfterContentInit, AfterContentCh
   /** Does any extra processing that is required when handling the hints. */
   private _processHints(): void {
     this._validateHints();
+  }
+
+  private _requestOutlineGapUpdate(state: Exclude<OutlineGapState, 'none'>): void {
+    // Prefer immediate over onStable if both are requested.
+    if (this._outlineGapState === 'immediate') return;
+    this._outlineGapState = state;
+  }
+
+  private _runOutlineGapUpdate(): void {
+    if (!this._platform.isBrowser) {
+      this._outlineGapState = 'none';
+      return;
+    }
+
+    if (typeof requestAnimationFrame === 'function') {
+      this._ngZone.runOutsideAngular(() => requestAnimationFrame(() => this._updateOutlineGap()));
+    } else {
+      this._updateOutlineGap();
+    }
+  }
+
+  /**
+   * Updates the width and position of the gap in the outline. Only relevant for the outline
+   * appearance.
+   */
+  private _updateOutlineGap(): void {
+    const labelEl = this._label?.nativeElement ?? null;
+
+    if (
+      this.appearance !== 'outline' ||
+      !labelEl ||
+      !labelEl.children.length ||
+      !labelEl.textContent?.trim() ||
+      !this._platform.isBrowser
+    ) {
+      this._outlineGapState = 'none';
+      return;
+    }
+
+    if (!this._isAttachedToDOM()) {
+      this._requestOutlineGapUpdate('immediate');
+      return;
+    }
+
+    const container = this._connectionContainerRef.nativeElement;
+
+    // Ensure cached nodes exist (in case DOM changed unexpectedly).
+    if (!this._outlineStartEls.length || !this._outlineGapEls.length) {
+      this._cacheOutlineEls();
+    }
+
+    // === READ PHASE (layout reads) ===
+    const containerRect = container.getBoundingClientRect();
+
+    // If the container is invisible we can't calculate the outline gap yet.
+    if (containerRect.width === 0 && containerRect.height === 0) {
+      this._requestOutlineGapUpdate('onStable');
+      return;
+    }
+
+    const firstLabelChild = labelEl.children[0] as HTMLElement;
+    const firstLabelChildRect = firstLabelChild.getBoundingClientRect();
+
+    const containerStart = this._getStartEnd(containerRect);
+    const labelStart = this._getStartEnd(firstLabelChildRect);
+
+    // Prefer a single measurement over iterating child offsetWidth (less layout thrash).
+    const labelWidth = labelEl.getBoundingClientRect().width;
+
+    const startWidth = Math.max(0, Math.abs(labelStart - containerStart) - outlineGapPadding);
+    const gapWidth = labelWidth > 0 ? labelWidth * floatingLabelScale + outlineGapPadding * 2 : 0;
+
+    // === WRITE PHASE (DOM writes) ===
+    const startWidthPx = `${startWidth}px`;
+    const gapWidthPx = `${gapWidth}px`;
+
+    for (const el of this._outlineStartEls) el.style.width = startWidthPx;
+    for (const el of this._outlineGapEls) el.style.width = gapWidthPx;
+
+    this._outlineGapState = 'none';
   }
 
   /** Throws an error if there are no valid child controls for the group form field. */

@@ -14,8 +14,8 @@
   read if it comes before the control in the DOM.
   -->
   @if (_hasLabel()) {
-    <label matFormFieldFloatingLabel
-      (cdkObserveContent)="_updateOutlineGap()"
+    <label
+      (cdkObserveContent)="onLabelContentChanged()"
       [cdkObserveContentDisabled]="!_hasOutline()"
       [id]="_labelId"
       [attr.for]="_controlId()"

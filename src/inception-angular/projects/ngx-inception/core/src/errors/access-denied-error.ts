@@ -50,7 +50,7 @@ export class AccessDeniedError extends FrameworkError {
     );
 
     this.status = httpErrorResponse.status;
-    this.statusText = httpErrorResponse.statusText;
+    this.statusText = FrameworkError.statusTextFromCode(httpErrorResponse.status);
 
     if (httpErrorResponse.url) {
       this.url = httpErrorResponse.url;

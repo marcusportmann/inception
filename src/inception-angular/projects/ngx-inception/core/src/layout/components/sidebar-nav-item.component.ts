@@ -16,12 +16,13 @@
 
 import {NgClass, NgTemplateOutlet} from '@angular/common';
 import {ChangeDetectionStrategy, Component, inject, Input} from '@angular/core';
-import {Router, RouterLink, RouterLinkActive} from '@angular/router';
+import {IsActiveMatchOptions, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {
   SidebarNavDropdownTogglerDirective
 } from '../directives/sidebar-nav-dropdown-toggler.directive';
 import {SidebarNavDropdownDirective} from '../directives/sidebar-nav-dropdown.directive';
 import {NavigationItem} from '../services/navigation-item';
+import {SidebarService} from '../services/sidebar.service';
 
 /**
  * The SidebarNavItemComponent class implements the sidebar nav item component.
@@ -32,28 +33,35 @@ import {NavigationItem} from '../services/navigation-item';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-nav-item',
   standalone: true,
+  imports: [
+    SidebarNavDropdownDirective,
+    SidebarNavDropdownTogglerDirective,
+    NgClass,
+    RouterLink,
+    RouterLinkActive,
+    NgTemplateOutlet
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: ['.nav-dropdown-toggle { cursor: pointer; }'],
   template: `
     @if (navItem; as item) {
-      <!-- Divider -->
       @if (item.divider) {
         <li class="nav-divider"></li>
       }
-      <!-- Title -->
+
       @if (!item.divider && item.title) {
-        <li class="nav-title">
-          {{ item.name }}
-        </li>
+        <li class="nav-title">{{ item.name }}</li>
       }
-      <!-- Dropdown -->
+
       @if (!item.divider && !item.title && item.children.length > 0) {
         <li
           [ngClass]="['nav-item', 'nav-dropdown', item.cssClass || '']"
-          [class.open]="isActive()"
+          [class.open]="isActive(item)"
           sidebarNavDropdown>
           <div class="sidebar-nav-dropdown">
             <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
-              <ng-container *ngTemplateOutlet="navContent; context: { $implicit: item }">
-              </ng-container>
+              <ng-container
+                *ngTemplateOutlet="navContent; context: { $implicit: item }"></ng-container>
             </a>
             <ul class="nav-dropdown-items">
               @for (child of item.children; track child) {
@@ -62,32 +70,29 @@ import {NavigationItem} from '../services/navigation-item';
             </ul>
           </div>
         </li>
-      } @else {
+      } @else if (!item.divider && !item.title) {
         <li [ngClass]="['nav-item', item.cssClass || '']">
-          <!-- Internal route -->
-          @if (!isExternalLink) {
+          @if (!isExternalLink(item)) {
             <a
               [ngClass]="['nav-link', item.variant ? 'nav-link-' + item.variant : '']"
               [routerLink]="[item.url]"
               [state]="{ resetState: true }"
               routerLinkActive="active"
               (click)="hideMobile()">
-              <ng-container *ngTemplateOutlet="navContent; context: { $implicit: item }">
-              </ng-container>
+              <ng-container
+                *ngTemplateOutlet="navContent; context: { $implicit: item }"></ng-container>
             </a>
           } @else {
             <a
               [ngClass]="['nav-link', item.variant ? 'nav-link-' + item.variant : '']"
               [href]="item.url">
-              <ng-container *ngTemplateOutlet="navContent; context: { $implicit: item }">
-              </ng-container>
+              <ng-container
+                *ngTemplateOutlet="navContent; context: { $implicit: item }"></ng-container>
             </a>
           }
-          <!-- External link -->
         </li>
       }
-      <!-- Simple link (internal / external) -->
-        <!-- Shared icon / text / badge template -->
+
       <ng-template #navContent let-item>
         @if (item.icon) {
           <i class="nav-icon {{ item.icon }}"></i>
@@ -100,35 +105,47 @@ import {NavigationItem} from '../services/navigation-item';
         }
       </ng-template>
     }
-  `,
-  styles: ['.nav-dropdown-toggle { cursor: pointer; }'],
-  imports: [
-    SidebarNavDropdownDirective,
-    SidebarNavDropdownTogglerDirective,
-    NgClass,
-    RouterLink,
-    RouterLinkActive,
-    NgTemplateOutlet
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `
 })
 export class SidebarNavItemComponent {
   @Input() navItem?: NavigationItem;
 
-  private readonly router = inject(Router);
+  private readonly _matchOptions: IsActiveMatchOptions = {
+    paths: 'subset',
+    queryParams: 'subset',
+    fragment: 'ignored',
+    matrixParams: 'ignored'
+  };
 
-  get isExternalLink(): boolean {
-    const url = this.navItem?.url ?? '';
-    // Handles http and https, case-insensitive
+  private readonly _router = inject(Router);
+
+  private readonly _sidebarService = inject(SidebarService);
+
+  hideMobile(): void {
+    this._sidebarService.hideMobile();
+  }
+
+  /** Dropdown open state: active if its own url is active OR any child is active. */
+  isActive(item: NavigationItem): boolean {
+    const own = this._isUrlActive(item.url);
+    if (own) return true;
+
+    if (item.children?.length) {
+      return item.children.some((c) => this.isActive(c));
+    }
+
+    return false;
+  }
+
+  isExternalLink(item: NavigationItem): boolean {
+    const url = item.url ?? '';
     return /^https?:\/\//i.test(url);
   }
 
-  hideMobile(): void {
-    document.body.classList.remove('sidebar-show');
-  }
+  private _isUrlActive(url?: string): boolean {
+    if (!url) return false;
+    if (/^https?:\/\//i.test(url)) return false; // external doesn't participate
 
-  isActive(): boolean {
-    const url = this.navItem?.url;
-    return !!url && this.router.isActive(url, false);
+    return this._router.isActive(this._router.parseUrl(url), this._matchOptions);
   }
 }

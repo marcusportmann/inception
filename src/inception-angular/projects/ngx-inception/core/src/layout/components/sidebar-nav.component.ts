@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, OnDestroy, OnInit
-} from '@angular/core';
+import {AsyncPipe} from '@angular/common';
+import {ChangeDetectionStrategy, Component, HostBinding, inject} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
-import {Subscription} from 'rxjs';
+import {combineLatest} from 'rxjs';
+import {filter, map, startWith} from 'rxjs/operators';
 import {NavigationItem} from '../services/navigation-item';
 import {NavigationService} from '../services/navigation.service';
 import {SidebarNavItemComponent} from './sidebar-nav-item.component';
@@ -32,63 +32,31 @@ import {SidebarNavItemComponent} from './sidebar-nav-item.component';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-nav',
   standalone: true,
+  imports: [SidebarNavItemComponent, AsyncPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ul class="nav">
-      @for (navItem of navItems; track navItem) {
+      @for (navItem of navItems$ | async; track navItem) {
         <sidebar-nav-item [navItem]="navItem"></sidebar-nav-item>
       }
-    </ul>`,
-  imports: [SidebarNavItemComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    </ul>
+  `
 })
-export class SidebarNavComponent implements OnInit, OnDestroy {
-  navItems: NavigationItem[];
-
+export class SidebarNavComponent {
   @HostBinding('attr.role') role = 'nav';
 
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  @HostBinding('class.sidebar-nav') sidebarNav = true;
 
-  private readonly navigationService = inject(NavigationService);
+  private readonly _navigationService = inject(NavigationService);
 
-  private readonly router = inject(Router);
+  private readonly _router = inject(Router);
 
-  private routerEventSubscription?: Subscription;
-
-  private userNavigationSubscription?: Subscription;
-
-  /**
-   * Constructs a new SidebarNavComponent.
-   */
-  constructor() {
-    this.navItems = new Array<NavigationItem>();
-  }
-
-  ngOnDestroy(): void {
-    if (this.userNavigationSubscription) {
-      this.userNavigationSubscription.unsubscribe();
-    }
-
-    if (this.routerEventSubscription) {
-      this.routerEventSubscription.unsubscribe();
-    }
-  }
-
-  ngOnInit(): void {
-    this.userNavigationSubscription = this.navigationService.userNavigation$.subscribe(
-      (navigation: NavigationItem[]) => {
-        this.navItems = navigation;
-        this.changeDetectorRef.detectChanges();
-      }
-    );
-
-    this.routerEventSubscription = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.changeDetectorRef.detectChanges();
-      }
-    });
-  }
-
-  @HostBinding('class.sidebar-nav') sidebarNav() {
-    return true;
-  }
+  // Emits on nav tree changes OR navigation end so dropdown "open" states refresh
+  readonly navItems$ = combineLatest([
+    this._navigationService.userNavigation$,
+    this._router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      startWith(null)
+    )
+  ]).pipe(map(([items]) => items as NavigationItem[]));
 }

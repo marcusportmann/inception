@@ -47,7 +47,7 @@ export class CommunicationError extends FrameworkError {
     super('A communication error occurred.');
 
     this.status = httpErrorResponse.status;
-    this.statusText = httpErrorResponse.statusText;
+    this.statusText = FrameworkError.statusTextFromCode(httpErrorResponse.status);
 
     if (httpErrorResponse.url) {
       this.url = httpErrorResponse.url;

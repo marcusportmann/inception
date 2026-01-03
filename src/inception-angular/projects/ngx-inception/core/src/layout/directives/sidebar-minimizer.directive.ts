@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener} from '@angular/core';
+import {Directive, HostListener, inject} from '@angular/core';
+import {SidebarService} from '../services/sidebar.service';
 
 /**
  * The SidebarMinimizerDirective class implements the sidebar minimizer directive.
@@ -27,14 +28,11 @@ import {Directive, HostListener} from '@angular/core';
   standalone: true
 })
 export class SidebarMinimizerDirective {
-  // eslint-disable-next-line
-  @HostListener('click', ['$event']) toggleOpen($event: any): void {
-    $event.preventDefault();
+  private readonly _sidebarService = inject(SidebarService);
 
-    const bodySelector = document.querySelector('body');
-
-    if (bodySelector) {
-      bodySelector.classList.toggle('sidebar-minimized');
-    }
+  @HostListener('click', ['$event'])
+  onClick(event: MouseEvent): void {
+    event.preventDefault();
+    this._sidebarService.toggleMinimized();
   }
 }

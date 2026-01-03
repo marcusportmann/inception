@@ -64,6 +64,7 @@ import {Users} from './users';
  *
  * @author Marcus Portmann
  */
+// noinspection DuplicatedCode
 @Injectable({
   providedIn: 'root'
 })
