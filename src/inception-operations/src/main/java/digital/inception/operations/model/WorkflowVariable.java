@@ -51,12 +51,12 @@ import java.util.UUID;
  */
 @Schema(description = "A workflow variable")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "name", "value"})
+@JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "WorkflowVariable", namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowVariable",
     namespace = "https://inception.digital/operations",
-    propOrder = {"type", "name", "value"})
+    propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_variables")
@@ -76,16 +76,6 @@ public class WorkflowVariable implements Serializable {
   @Id
   @Column(name = "name", length = 100, nullable = false)
   private String name;
-
-  /** The variable type for the workflow variable. */
-  @Schema(
-      description = "The variable type for the workflow variable",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
-  @NotNull
-  @Column(name = "type", nullable = false)
-  private VariableType type;
 
   /**
    * The value for the workflow variable.
@@ -114,13 +104,11 @@ public class WorkflowVariable implements Serializable {
    * Constructs a new {@code WorkflowVariable}.
    *
    * @param name the name of the workflow variable
-   * @param type the variable type for the workflow variable
    * @param value the value for the workflow variable
    * @param workflowId the ID for the workflow the workflow variable is associated with
    */
-  public WorkflowVariable(String name, VariableType type, String value, UUID workflowId) {
+  public WorkflowVariable(String name, String value, UUID workflowId) {
     this.name = name;
-    this.type = type;
     this.value = value;
     this.workflowId = workflowId;
   }
@@ -135,7 +123,6 @@ public class WorkflowVariable implements Serializable {
    * @param value the string value for the workflow variable
    */
   public WorkflowVariable(String name, String value) {
-    this.type = VariableType.STRING;
     this.name = name;
     this.value = value;
   }
@@ -147,7 +134,6 @@ public class WorkflowVariable implements Serializable {
    * @param booleanValue the boolean value for the workflow variable
    */
   public WorkflowVariable(String name, boolean booleanValue) {
-    this.type = VariableType.BOOLEAN;
     this.name = name;
     this.value = Boolean.toString(booleanValue);
   }
@@ -159,7 +145,6 @@ public class WorkflowVariable implements Serializable {
    * @param doubleValue the double value for the workflow variable
    */
   public WorkflowVariable(String name, double doubleValue) {
-    this.type = VariableType.DOUBLE;
     this.name = name;
     this.value = Double.toString(doubleValue);
   }
@@ -171,7 +156,6 @@ public class WorkflowVariable implements Serializable {
    * @param dateValue the date value for the workflow variable
    */
   public WorkflowVariable(String name, LocalDate dateValue) {
-    this.type = VariableType.DATE;
     this.name = name;
     this.value = dateValue.toString();
   }
@@ -183,7 +167,6 @@ public class WorkflowVariable implements Serializable {
    * @param decimalValue the decimal value for the workflow variable
    */
   public WorkflowVariable(String name, BigDecimal decimalValue) {
-    this.type = VariableType.DECIMAL;
     this.name = name;
     this.value = decimalValue.toString();
   }
@@ -195,7 +178,6 @@ public class WorkflowVariable implements Serializable {
    * @param integerValue the integer value for the workflow variable
    */
   public WorkflowVariable(String name, Integer integerValue) {
-    this.type = VariableType.INTEGER;
     this.name = name;
     this.value = integerValue.toString();
   }
@@ -206,7 +188,7 @@ public class WorkflowVariable implements Serializable {
    * @return the cloned workflow variable
    */
   public WorkflowVariable cloneWorkflowVariable() {
-    return new WorkflowVariable(name, type, value, workflowId);
+    return new WorkflowVariable(name, value, workflowId);
   }
 
   /**
@@ -245,15 +227,6 @@ public class WorkflowVariable implements Serializable {
   }
 
   /**
-   * Returns the variable type for the workflow variable.
-   *
-   * @return the variable type for the workflow variable
-   */
-  public VariableType getType() {
-    return type;
-  }
-
-  /**
    * Returns the value for the workflow variable.
    *
    * @return the value for the workflow variable
@@ -281,15 +254,6 @@ public class WorkflowVariable implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * Sets the variable type for the workflow variable.
-   *
-   * @param type the variable type for the workflow variable
-   */
-  public void setType(VariableType type) {
-    this.type = type;
   }
 
   /**
