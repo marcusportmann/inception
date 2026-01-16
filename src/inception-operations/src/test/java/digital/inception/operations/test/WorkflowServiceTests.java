@@ -68,6 +68,7 @@ import digital.inception.operations.model.UnsuspendWorkflowStepRequest;
 import digital.inception.operations.model.UpdateWorkflowNoteRequest;
 import digital.inception.operations.model.UpdateWorkflowRequest;
 import digital.inception.operations.model.VariableSearchCriteria;
+import digital.inception.operations.model.VariableType;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.WaiveWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
@@ -428,7 +429,8 @@ public class WorkflowServiceTests {
             null));
 
     workflowDefinition.addVariableDefinition(
-        new WorkflowVariableDefinition("testVariable", true, "Test Variable Description"));
+        new WorkflowVariableDefinition(
+            "testVariable", VariableType.STRING, true, "Test Variable Description"));
 
     String processDefinitionKey = UUID.randomUUID().toString();
 
@@ -1322,7 +1324,8 @@ public class WorkflowServiceTests {
             null));
 
     tenantWorkflowDefinition.addVariableDefinition(
-        new WorkflowVariableDefinition("testVariable", true, "Test Variable Description"));
+        new WorkflowVariableDefinition(
+            "testVariable", VariableType.STRING, true, "Test Variable Description"));
 
     tenantWorkflowDefinition.addDocumentDefinition(
         tenantDocumentDefinition.getId(), true, false, true, false);

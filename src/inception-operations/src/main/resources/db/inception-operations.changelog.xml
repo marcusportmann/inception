@@ -592,6 +592,9 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the workflow variable">
         <constraints primaryKey="true" nullable="false"/>
       </column>
+      <column name="type" type="nvarchar(50)" remarks="The code for the variable type for the workflow variable">
+        <constraints nullable="false"/>
+      </column>
       <column name="required" type="boolean"
         remarks="Is the workflow variable required">
         <constraints nullable="false"/>

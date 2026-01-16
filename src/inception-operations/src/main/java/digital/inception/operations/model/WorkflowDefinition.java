@@ -893,6 +893,21 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns the workflow variable definition with the specified name for the workflow definition.
+   *
+   * @param name the name of the workflow variable definition
+   * @return an Optional containing the workflow variable definition with the specified name for the
+   *     workflow definition or an empty Optional if the workflow variable definition could not be
+   *     found
+   */
+  public Optional<WorkflowVariableDefinition> getVariableDefinition(String name) {
+    return variableDefinitions.stream()
+        .filter(
+            variableDefinition -> StringUtil.equalsIgnoreCase(variableDefinition.getName(), name))
+        .findFirst();
+  }
+
+  /**
    * Returns the workflow variable definitions for the workflow definition.
    *
    * @return the workflow variable definitions for the workflow definition

@@ -48,14 +48,14 @@ import java.io.Serializable;
  */
 @Schema(description = "A workflow variable definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"name", "required", "description"})
+@JsonPropertyOrder({"name", "type", "required", "description"})
 @XmlRootElement(
     name = "WorkflowVariableDefinition",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowVariableDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"name", "required", "description"})
+    propOrder = {"name", "type", "required", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_variable_definitions")
@@ -110,6 +110,27 @@ public class WorkflowVariableDefinition implements Serializable {
   @Column(name = "required", nullable = false)
   private Boolean required;
 
+  /** The variable type for the workflow variable. */
+  @Schema(
+      description = "The code for the variable type for the workflow variable",
+      requiredMode = Schema.RequiredMode.REQUIRED,
+      allowableValues = {
+        "boolean",
+        "date",
+        "date_time",
+        "decimal",
+        "double",
+        "integer",
+        "json",
+        "long",
+        "string"
+      })
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
+  @NotNull
+  @Column(name = "type", nullable = false)
+  private VariableType type;
+
   /** Constructs a new {@code WorkflowVariableDefinition}. */
   public WorkflowVariableDefinition() {}
 
@@ -117,11 +138,14 @@ public class WorkflowVariableDefinition implements Serializable {
    * Constructs a new {@code WorkflowVariableDefinition}.
    *
    * @param name the name of the workflow variable
+   * @param type the variable type for the workflow variable
    * @param required is the workflow variable required
    * @param description the description for the workflow variable
    */
-  public WorkflowVariableDefinition(String name, boolean required, String description) {
+  public WorkflowVariableDefinition(
+      String name, VariableType type, boolean required, String description) {
     this.name = name;
+    this.type = type;
     this.required = required;
     this.description = description;
   }
@@ -172,6 +196,15 @@ public class WorkflowVariableDefinition implements Serializable {
   }
 
   /**
+   * Returns the variable type for the workflow variable.
+   *
+   * @return the variable type for the workflow variable
+   */
+  public VariableType getType() {
+    return type;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -217,6 +250,15 @@ public class WorkflowVariableDefinition implements Serializable {
    */
   public void setRequired(Boolean required) {
     this.required = required;
+  }
+
+  /**
+   * Set the variable type for the workflow variable.
+   *
+   * @param type the variable type for the workflow variable
+   */
+  public void setType(VariableType type) {
+    this.type = type;
   }
 
   /**
