@@ -140,6 +140,7 @@ public class DocumentAttributeDefinition implements Serializable {
         "decimal",
         "double",
         "integer",
+        "json",
         "long",
         "string"
       })

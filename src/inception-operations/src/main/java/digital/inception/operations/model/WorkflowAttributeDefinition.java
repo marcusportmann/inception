@@ -150,6 +150,7 @@ public class WorkflowAttributeDefinition implements Serializable {
         "decimal",
         "double",
         "integer",
+        "json",
         "long",
         "string"
       })

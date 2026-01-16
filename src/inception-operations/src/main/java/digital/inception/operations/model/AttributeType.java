@@ -57,6 +57,10 @@ public enum AttributeType implements CodeEnum {
   @XmlEnumValue("Integer")
   INTEGER("integer", "Integer"),
 
+  /** JSON. */
+  @XmlEnumValue("JSON")
+  JSON("json", "JSON"),
+
   /** Long. */
   @XmlEnumValue("Long")
   LONG("long", "Long"),

@@ -690,6 +690,21 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns the workflow attribute definition with the specified name for the workflow definition.
+   *
+   * @param name the name of the workflow attribute definition
+   * @return an Optional containing the workflow attribute definition with the specified name for
+   *     the workflow definition or an empty Optional if the workflow attribute definition could not
+   *     be found
+   */
+  public Optional<WorkflowAttributeDefinition> getAttributeDefinition(String name) {
+    return attributeDefinitions.stream()
+        .filter(
+            attributeDefinition -> StringUtil.equalsIgnoreCase(attributeDefinition.getName(), name))
+        .findFirst();
+  }
+
+  /**
    * Returns the workflow attribute definitions for the workflow definition.
    *
    * @return the workflow attribute definitions for the workflow definition
