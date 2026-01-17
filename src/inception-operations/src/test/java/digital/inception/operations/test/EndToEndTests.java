@@ -68,6 +68,7 @@ import digital.inception.operations.model.ResetWorkflowDocumentRequest;
 import digital.inception.operations.model.SearchWorkflowsRequest;
 import digital.inception.operations.model.UpdateInteractionNoteRequest;
 import digital.inception.operations.model.VariableSearchCriteria;
+import digital.inception.operations.model.VariableType;
 import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
@@ -86,6 +87,7 @@ import digital.inception.operations.model.WorkflowStepDefinition;
 import digital.inception.operations.model.WorkflowStepStatus;
 import digital.inception.operations.model.WorkflowSummaries;
 import digital.inception.operations.model.WorkflowVariable;
+import digital.inception.operations.model.WorkflowVariableDefinition;
 import digital.inception.operations.service.BackgroundInteractionSourceSynchronizer;
 import digital.inception.operations.service.DocumentService;
 import digital.inception.operations.service.InteractionService;
@@ -385,6 +387,10 @@ public class EndToEndTests {
             List.of("test_workflow_step_2"),
             null,
             null));
+
+    workflowDefinition.addVariableDefinition(
+        new WorkflowVariableDefinition(
+            "testVariable", VariableType.STRING, false, "Test Variable"));
 
     workflowDefinition.addAttribute(
         new WorkflowDefinitionAttribute("processDefinitionKey", UUID.randomUUID().toString()));

@@ -213,25 +213,29 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
     }
 
     try {
-      if (!workflowDefinition.getVariableDefinitions().isEmpty()) {
-        // Create a Set of valid variable names for O(1) lookup
-        Set<String> validVariableNames =
-            workflowDefinition.getVariableDefinitions().stream()
-                .map(WorkflowVariableDefinition::getName)
-                .map(String::toLowerCase)
-                .collect(Collectors.toSet());
+      if (workflowDefinition.getVariableDefinitions().isEmpty()) {
+        throw new InvalidArgumentException(
+            parameter,
+            "the workflow variable (" + workflowVariables.getFirst().getName() + ") is invalid");
+      }
 
-        // Find the first invalid variable using Stream API
-        Optional<String> invalidVariableName =
-            workflowVariables.stream()
-                .map(WorkflowVariable::getName)
-                .filter(name -> !validVariableNames.contains(name.toLowerCase()))
-                .findFirst();
+      // Create a Set of valid variable names for O(1) lookup
+      Set<String> validVariableNames =
+          workflowDefinition.getVariableDefinitions().stream()
+              .map(WorkflowVariableDefinition::getName)
+              .map(String::toLowerCase)
+              .collect(Collectors.toSet());
 
-        if (invalidVariableName.isPresent()) {
-          throw new InvalidArgumentException(
-              parameter, "the workflow variable (" + invalidVariableName.get() + ") is invalid");
-        }
+      // Find the first invalid variable using Stream API
+      Optional<String> invalidVariableName =
+          workflowVariables.stream()
+              .map(WorkflowVariable::getName)
+              .filter(name -> !validVariableNames.contains(name.toLowerCase()))
+              .findFirst();
+
+      if (invalidVariableName.isPresent()) {
+        throw new InvalidArgumentException(
+            parameter, "the workflow variable (" + invalidVariableName.get() + ") is invalid");
       }
 
     } catch (InvalidArgumentException e) {
