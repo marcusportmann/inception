@@ -51,20 +51,10 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
 
 /** Container for form controls that applies Material Design styling and behavior. */
 @Component({
-  selector: 'inception-core-group-form-field',
-  standalone: true,
-  imports: [
-    CdkObserveContent, GroupFormFieldNotchedOutlineComponent, MatFormFieldModule, NgTemplateOutlet],
-  exportAs: 'groupFormField',
-  templateUrl: 'group-form-field.component.html',
-  styleUrls: ['group-form-field.component.scss'],
-  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: GROUP_FORM_FIELD_COMPONENT,
-      useExisting: GroupFormFieldComponent
-    }],
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'groupFormField',
   host: {
     class:
       'group-form-field mat-mdc-form-field mat-mdc-form-field-type-mat-input mat-form-field-hide-placeholder',
@@ -76,7 +66,18 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
     '[class.mat-primary]': 'color !== "accent" && color !== "warn"',
     '[class.mat-accent]': 'color === "accent"',
     '[class.mat-warn]': 'color === "warn"'
-  }
+  },
+  imports: [
+    CdkObserveContent, GroupFormFieldNotchedOutlineComponent, MatFormFieldModule, NgTemplateOutlet],
+  providers: [
+    {
+      provide: GROUP_FORM_FIELD_COMPONENT,
+      useExisting: GroupFormFieldComponent
+    }],
+  selector: 'inception-core-group-form-field',
+  standalone: true,
+  styleUrls: ['group-form-field.component.scss'],
+  templateUrl: 'group-form-field.component.html'
 })
 export class GroupFormFieldComponent implements AfterContentInit, AfterContentChecked {
   static ngAcceptInputType_hideRequiredMarker: BooleanInput;

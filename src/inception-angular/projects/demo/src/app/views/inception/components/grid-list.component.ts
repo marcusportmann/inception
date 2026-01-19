@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CoreModule} from 'ngx-inception/core';
 
 /** Shape of a grid tile */
@@ -31,9 +31,10 @@ interface Tile {
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-grid-list',
   standalone: true,
-  imports: [CoreModule],
   templateUrl: 'grid-list.component.html'
 })
 export class GridListComponent {

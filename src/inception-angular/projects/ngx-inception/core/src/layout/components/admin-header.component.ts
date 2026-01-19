@@ -33,14 +33,14 @@ import {SidebarTogglerDirective} from '../directives/sidebar-toggler.directive';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'admin-header',
-  standalone: true,
-  imports: [SidebarTogglerDirective, MatMenuTrigger, MatMenu, MatMenuItem, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.admin-header-fixed]': 'fixed'
   },
+  imports: [SidebarTogglerDirective, MatMenuTrigger, MatMenu, MatMenuItem, RouterLink],
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'admin-header',
+  standalone: true,
   template: `
     <header class="admin-header">
       <a

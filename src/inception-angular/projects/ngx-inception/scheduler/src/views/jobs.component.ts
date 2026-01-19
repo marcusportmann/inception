@@ -27,12 +27,12 @@ import {SchedulerService} from '../services/scheduler.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-scheduler-jobs',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'jobs.component.html',
   styleUrls: ['jobs.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'jobs.component.html'
 })
 export class JobsComponent extends FilteredPaginatedListView<Job> {
   // noinspection JSUnusedGlobalSymbols

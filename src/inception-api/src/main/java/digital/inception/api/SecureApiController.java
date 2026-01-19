@@ -143,6 +143,7 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
    * @param prefix the authority prefix
    * @return the {@code UUID} value portion of the authorities with the specified prefix
    */
+  @SuppressWarnings("SameParameterValue")
   protected List<UUID> getUUIDValuesForAuthoritiesWithPrefix(
       Authentication authentication, String prefix) {
     var values = new ArrayList<UUID>();
@@ -217,6 +218,7 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
    * @return {@code true} if the user associated with the authenticated request has access to the
    *     tenant or {@code false} otherwise
    */
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
   protected boolean hasAccessToTenant(UUID tenantId) {
     if (isSecurityEnabled) {
       if (tenantId == null) {

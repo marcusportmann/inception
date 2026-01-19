@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 /**
  * The NotFoundComponent class implements the not found component.
@@ -22,6 +22,7 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'not-found',
   standalone: true,

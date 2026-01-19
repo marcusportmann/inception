@@ -30,9 +30,7 @@ import {SidebarService} from '../services/sidebar.service';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'sidebar-nav-item',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     SidebarNavDropdownDirective,
     SidebarNavDropdownTogglerDirective,
@@ -41,7 +39,9 @@ import {SidebarService} from '../services/sidebar.service';
     RouterLinkActive,
     NgTemplateOutlet
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'sidebar-nav-item',
+  standalone: true,
   styles: ['.nav-dropdown-toggle { cursor: pointer; }'],
   template: `
     @if (navItem; as item) {
@@ -127,7 +127,7 @@ export class SidebarNavItemComponent {
 
   /** Dropdown open state: active if its own url is active OR any child is active. */
   isActive(item: NavigationItem): boolean {
-    const own = this._isUrlActive(item.url);
+    const own = this.isUrlActive(item.url);
     if (own) return true;
 
     if (item.children?.length) {
@@ -142,7 +142,7 @@ export class SidebarNavItemComponent {
     return /^https?:\/\//i.test(url);
   }
 
-  private _isUrlActive(url?: string): boolean {
+  private isUrlActive(url?: string): boolean {
     if (!url) return false;
     if (/^https?:\/\//i.test(url)) return false; // external doesn't participate
 

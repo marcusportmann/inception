@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AdminContainerView, CoreModule} from 'ngx-inception/core';
 import {Observable} from 'rxjs';
 
@@ -24,9 +24,10 @@ import {Observable} from 'rxjs';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-menu311',
   standalone: true,
-  imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content> Menu 3.1.1</mat-card-content>

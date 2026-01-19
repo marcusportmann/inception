@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -32,9 +32,10 @@ import {catchError, finalize, first} from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-login-forgotten-password',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'forgotten-password.component.html'
 })
 export class ForgottenPasswordComponent {

@@ -25,10 +25,7 @@ import {CodesService} from './codes.service';
  * @author Marcus Portmann
  */
 @NgModule({
-  declarations: [],
-  exports: [],
   imports: [
-    // Angular modules
     CommonModule
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())]

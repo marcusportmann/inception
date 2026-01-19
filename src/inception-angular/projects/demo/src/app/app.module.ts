@@ -48,10 +48,8 @@ const ngxInceptionConfig: InceptionConfig = {
 };
 
 @NgModule({
-  declarations: [AppComponent],
   exports: [CoreModule],
-  imports: [AppRoutingModule, BrowserModule, CoreModule.forRoot(ngxInceptionConfig)],
-  bootstrap: [AppComponent]
+  imports: [AppComponent, AppRoutingModule, BrowserModule, CoreModule.forRoot(ngxInceptionConfig)]
 })
 export class AppModule extends InceptionAppModule {
   constructor() {

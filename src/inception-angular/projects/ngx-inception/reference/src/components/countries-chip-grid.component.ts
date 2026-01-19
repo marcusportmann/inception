@@ -17,6 +17,7 @@
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef, Component, ElementRef, HostBinding, inject, Input, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
@@ -36,8 +37,9 @@ import {ReferenceService} from '../services/reference.service';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-reference-countries-chip-grid',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule],
+  selector: 'inception-reference-countries-chip-grid',
   template: `
     <mat-chip-grid #countriesChipGrid>
       @for (country of countries; track trackByCode(index, country); let index = $index) {

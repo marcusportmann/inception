@@ -43,12 +43,12 @@ interface UsersListExtras {
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-security-users',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, TableFilterComponent, HasAuthorityDirective],
+  selector: 'inception-security-users',
   standalone: true,
-  templateUrl: 'users.component.html',
   styleUrls: ['users.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'users.component.html'
 })
 export class UsersComponent extends StatefulListView<UsersListExtras> implements AfterViewInit {
   readonly dataSource: UserDataSource;

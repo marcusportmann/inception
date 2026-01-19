@@ -25,7 +25,7 @@ import {MailService} from '../services/mail.service';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MailTemplateTitleResolver {
   private readonly mailService = inject<MailService>(MailService);
 

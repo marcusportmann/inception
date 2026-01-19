@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -30,11 +30,12 @@ import {SecurityService} from '../services/security.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-security-new-policy',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
-  templateUrl: 'new-policy.component.html',
-  styleUrls: ['new-policy.component.css']
+  styleUrls: ['new-policy.component.css'],
+  templateUrl: 'new-policy.component.html'
 })
 export class NewPolicyComponent extends AdminContainerView implements OnInit {
   readonly dataControl: FormControl<string>;

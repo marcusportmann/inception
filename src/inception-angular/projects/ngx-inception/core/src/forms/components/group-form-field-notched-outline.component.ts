@@ -1,4 +1,4 @@
-  /*
+/*
  * Copyright Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,10 +26,9 @@ import {
  * inputs to toggle the notch state and width.
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'div[groupFormFieldNotchedOutline]',
-  standalone: true,
-  templateUrl: './group-form-field-notched-outline.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
   // @angular-eslint/no-host-metadata-property
   host: {
     class: 'mdc-notched-outline',
@@ -37,8 +36,10 @@ import {
     // through a host binding to ensure that the notched-outline renders correctly on the server.
     '[class.mdc-notched-outline--notched]': 'groupFormFieldNotchedOutlineOpen'
   },
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'div[groupFormFieldNotchedOutline]',
+  standalone: true,
+  templateUrl: './group-form-field-notched-outline.component.html'
 })
 export class GroupFormFieldNotchedOutlineComponent implements AfterViewInit {
   /** Whether the notch should be opened. */

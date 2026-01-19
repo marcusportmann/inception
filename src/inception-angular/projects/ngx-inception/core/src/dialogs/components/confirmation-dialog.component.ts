@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
@@ -36,9 +36,13 @@ export interface ConfirmationDialogData {
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'confirmation-dialog'
+  },
+  imports: [MatButton],
   selector: 'inception-core-confirmation-dialog',
   standalone: true,
-  imports: [MatButton],
   template: `
     <div class="header">
       <i class="far fa-3x fa-question-circle"></i>
@@ -50,6 +54,7 @@ export interface ConfirmationDialogData {
     </div>
     <div class="button">
       <button
+        type="button"
         mat-flat-button
         color="primary"
         (click)="no()"
@@ -58,6 +63,7 @@ export interface ConfirmationDialogData {
         No
       </button>
       <button
+        type="button"
         mat-flat-button
         color="primary"
         (click)="yes()"
@@ -66,10 +72,7 @@ export interface ConfirmationDialogData {
         Yes
       </button>
     </div>
-  `,
-  host: {
-    class: 'confirmation-dialog'
-  }
+  `
 })
 export class ConfirmationDialogComponent {
   private readonly data = inject<ConfirmationDialogData>(MAT_DIALOG_DATA);

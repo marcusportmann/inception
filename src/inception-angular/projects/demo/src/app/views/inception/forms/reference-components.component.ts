@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
@@ -29,8 +29,7 @@ import {
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'app-reference-components',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CoreModule,
     CountriesChipGridComponent,
@@ -40,6 +39,8 @@ import {
     TimeZoneInputComponent,
     ValidatedFormDirective
   ],
+  selector: 'app-reference-components',
+  standalone: true,
   templateUrl: 'reference-components.component.html'
 })
 export class ReferenceComponentsComponent {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, inject} from '@angular/core';
 
 /**
  * The SpinnerComponent class implements the spinner component.
@@ -22,11 +22,10 @@ import {Component, ElementRef, inject} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'spinner',
   standalone: true,
-  template: `
-    <div class="spinner spinner-oval"></div>`,
   styles: [
     `
       .spinner {
@@ -47,7 +46,9 @@ import {Component, ElementRef, inject} from '@angular/core';
         background-image: url("data:image/svg+xml,%3Csvg width='38' height='38' viewBox='0 0 38 38' xmlns='http://www.w3.org/2000/svg' stroke='%23fff'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg transform='translate(1 1)' stroke-width='2'%3E%3Ccircle stroke-opacity='.5' cx='18' cy='18' r='18'/%3E%3Cpath d='M36 18c0-9.94-8.06-18-18-18'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 18 18' to='360 18 18' dur='1s' repeatCount='indefinite'/%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       }
     `
-  ]
+  ],
+  template: `
+    <div class="spinner spinner-oval"></div>`
 })
 export class SpinnerComponent {
   private readonly elementRef = inject(ElementRef);

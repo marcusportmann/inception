@@ -42,12 +42,12 @@ interface ErrorReportsExtras {
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-error-error-reports',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'error-reports.component.html',
   styleUrls: ['error-reports.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'error-reports.component.html'
 })
 export class ErrorReportsComponent
   extends StatefulListView<ErrorReportsExtras>

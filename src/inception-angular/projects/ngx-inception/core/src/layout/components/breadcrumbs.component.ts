@@ -31,6 +31,8 @@ import {BreadcrumbsService} from '../services/breadcrumbs.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [AsyncPipe, NgClass, RouterLink],
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'breadcrumbs',
   standalone: true,
@@ -51,9 +53,7 @@ import {BreadcrumbsService} from '../services/breadcrumbs.service';
         }
       </ol>
     }
-  `,
-  imports: [AsyncPipe, NgClass, RouterLink],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
   breadcrumbs: Observable<Breadcrumb[]>;

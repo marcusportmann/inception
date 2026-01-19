@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -30,11 +30,12 @@ import {ConfigService} from '../services/config.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-config-edit-config',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
-  templateUrl: 'edit-config.component.html',
-  styleUrls: ['edit-config.component.css']
+  styleUrls: ['edit-config.component.css'],
+  templateUrl: 'edit-config.component.html'
 })
 export class EditConfigComponent extends AdminContainerView implements OnInit, OnDestroy {
   config: Config | null = null;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogData} from '../services/dialog-data';
@@ -25,9 +25,14 @@ import {DialogData} from '../services/dialog-data';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'information-dialog',
+    '(document:keydown.enter)': 'onEnter($event)'
+  },
+  imports: [MatButton],
   selector: 'inception-core-information-dialog',
   standalone: true,
-  imports: [MatButton],
   template: `
     <div class="header">
       <i class="fas fa-3x fa-exclamation-circle"></i>
@@ -39,11 +44,12 @@ import {DialogData} from '../services/dialog-data';
     </div>
     <div class="button">
       @if (data.buttonText) {
-        <button mat-flat-button (click)="ok()" tabindex="-1">
+        <button type="button" mat-flat-button (click)="ok()" tabindex="-1">
           {{ data.buttonText }}
         </button>
       } @else {
         <button
+          type="button"
           mat-flat-button
           color="primary"
           (click)="ok()"
@@ -53,11 +59,7 @@ import {DialogData} from '../services/dialog-data';
         </button>
       }
     </div>
-  `,
-  host: {
-    class: 'information-dialog',
-    '(document:keydown.enter)': 'onEnter($event)'
-  }
+  `
 })
 export class InformationDialogComponent {
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);

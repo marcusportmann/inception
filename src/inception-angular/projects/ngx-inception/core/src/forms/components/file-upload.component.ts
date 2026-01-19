@@ -28,28 +28,15 @@ import {MatFormFieldControl} from '@angular/material/form-field';
 import {Subject} from 'rxjs';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: MatFormFieldControl,
+      useExisting: FileUploadComponent
+    }
+  ],
   selector: 'inception-core-file-upload',
   standalone: true,
-  template: `
-    <div
-      class="file-upload"
-      role="button"
-      tabindex="0"
-      (keydown.enter)="handleKeydown($event)"
-      (keydown.space)="handleKeydown($event)"
-      [class.disabled]="disabled"
-      [class.mat-form-field-should-float]="shouldLabelFloat">
-      <span class="filename">{{ fileNames || placeholder }}</span>
-    </div>
-
-    <input
-      #input
-      type="file"
-      [attr.accept]="accept || null"
-      [attr.multiple]="multiple ? '' : null"
-      (change)="onFileSelected($event)"
-      hidden/>
-  `,
   styles: [
     `
       :host {
@@ -78,13 +65,26 @@ import {Subject} from 'rxjs';
       }
     `
   ],
-  providers: [
-    {
-      provide: MatFormFieldControl,
-      useExisting: FileUploadComponent
-    }
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  template: `
+    <div
+      class="file-upload"
+      role="button"
+      tabindex="0"
+      (keydown.enter)="handleKeydown($event)"
+      (keydown.space)="handleKeydown($event)"
+      [class.disabled]="disabled"
+      [class.mat-form-field-should-float]="shouldLabelFloat">
+      <span class="filename">{{ fileNames || placeholder }}</span>
+    </div>
+
+    <input
+      #input
+      type="file"
+      [attr.accept]="accept || null"
+      [attr.multiple]="multiple ? '' : null"
+      (change)="onFileSelected($event)"
+      hidden/>
+  `
 })
 export class FileUploadComponent
   implements MatFormFieldControl<File[]>, ControlValueAccessor, OnDestroy, DoCheck {

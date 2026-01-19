@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -29,11 +29,12 @@ import {Tenant} from '../services/tenant';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-security-edit-tenant',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
-  templateUrl: 'edit-tenant.component.html',
-  styleUrls: ['edit-tenant.component.css']
+  styleUrls: ['edit-tenant.component.css'],
+  templateUrl: 'edit-tenant.component.html'
 })
 export class EditTenantComponent extends AdminContainerView implements OnInit {
   readonly editTenantForm: FormGroup<{

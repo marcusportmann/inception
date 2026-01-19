@@ -16,7 +16,7 @@
 
 import {Clipboard} from '@angular/cdk/clipboard';
 import {Location} from '@angular/common';
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {
@@ -33,11 +33,12 @@ import {User} from '../services/user';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-security-user-profile',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
-  templateUrl: 'user-profile.component.html',
-  styleUrls: ['user-profile.component.css']
+  styleUrls: ['user-profile.component.css'],
+  templateUrl: 'user-profile.component.html'
 })
 export class UserProfileComponent extends AdminContainerView implements OnInit {
   readonly emailControl: FormControl<string | null>;

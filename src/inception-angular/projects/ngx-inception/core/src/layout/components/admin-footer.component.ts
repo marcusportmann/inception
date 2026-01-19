@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import {booleanAttribute, Component, ElementRef, inject, Input, OnInit} from '@angular/core';
+import {
+  booleanAttribute, ChangeDetectionStrategy, Component, ElementRef, inject, Input, OnInit
+} from '@angular/core';
 import {Replace} from '../../util/replace';
 
 /**
@@ -23,6 +25,7 @@ import {Replace} from '../../util/replace';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'admin-footer',
   standalone: true,

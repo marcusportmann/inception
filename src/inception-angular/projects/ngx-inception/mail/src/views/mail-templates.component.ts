@@ -28,12 +28,12 @@ import {MailService} from '../services/mail.service';
  * @author Marcus
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-mail-mail-templates',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'mail-templates.component.html',
   styleUrls: ['mail-templates.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'mail-templates.component.html'
 })
 export class MailTemplatesComponent extends FilteredPaginatedListView<MailTemplateSummary> {
   // noinspection JSUnusedGlobalSymbols

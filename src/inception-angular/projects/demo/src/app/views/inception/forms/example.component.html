@@ -39,7 +39,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label>Name</mat-label>
-            <input type="text" matInput formControlName="name" required autofocus>
+            <input type="text" matInput formControlName="name" required>
             <mat-hint>The name.</mat-hint>
             @if (exampleForm.controls['name'].errors && !exampleForm.controls['name'].untouched) {
               <mat-error>

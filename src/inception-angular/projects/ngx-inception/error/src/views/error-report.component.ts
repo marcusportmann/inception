@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {AdminContainerView, BackNavigation, CoreModule} from 'ngx-inception/core';
 import {finalize, first} from 'rxjs/operators';
@@ -27,11 +27,12 @@ import {ErrorService} from '../services/error.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'inception-error-error-report',
   standalone: true,
-  imports: [CoreModule],
-  templateUrl: 'error-report.component.html',
-  styleUrls: ['error-report.component.css']
+  styleUrls: ['error-report.component.css'],
+  templateUrl: 'error-report.component.html'
 })
 export class ErrorReportComponent extends AdminContainerView implements OnInit {
   readonly applicationIdControl: FormControl<string>;

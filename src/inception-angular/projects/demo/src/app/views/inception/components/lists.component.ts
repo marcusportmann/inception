@@ -15,7 +15,7 @@
  */
 
 import {NgOptimizedImage} from '@angular/common';
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CoreModule} from 'ngx-inception/core';
 
 interface Folder {
@@ -41,9 +41,10 @@ interface Planet {
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, NgOptimizedImage],
   selector: 'app-lists',
   standalone: true,
-  imports: [CoreModule, NgOptimizedImage],
   templateUrl: 'lists.component.html'
 })
 export class ListsComponent {

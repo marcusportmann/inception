@@ -25,16 +25,16 @@ import {
 import {Observable, tap} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
 import {SecurityService} from '../services/security.service';
-import {Tenants} from '../services/tenants';
 import {TenantDataSource} from '../services/tenant-data-source';
+import {Tenants} from '../services/tenants';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-security-tenants',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'tenants.component.html',
   styleUrls: ['tenants.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'tenants.component.html'
 })
 export class TenantsComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: TenantDataSource;

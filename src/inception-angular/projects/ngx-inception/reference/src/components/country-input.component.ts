@@ -16,7 +16,8 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy, OnInit, ViewChild
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy,
+  OnInit, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -34,8 +35,15 @@ import {ReferenceService} from '../services/reference.service';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-reference-country-input',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, AutocompleteSelectionRequiredDirective],
+  providers: [
+    {
+      provide: MatFormFieldControl,
+      useExisting: CountryInputComponent
+    }
+  ],
+  selector: 'inception-reference-country-input',
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
@@ -61,13 +69,7 @@ import {ReferenceService} from '../services/reference.service';
         }
       </mat-autocomplete>
     </div>
-  `,
-  providers: [
-    {
-      provide: MatFormFieldControl,
-      useExisting: CountryInputComponent
-    }
-  ]
+  `
 })
 export class CountryInputComponent
   implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy {

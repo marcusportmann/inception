@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import {filter} from 'rxjs/operators';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    RouterOutlet
+  ],
   selector: 'app-body',
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false,
+  standalone: true,
   template: `
     <router-outlet></router-outlet>`
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private readonly router = inject(Router);
 
-  // eslint-disable-next-line
-  private unsubscribe$: Subject<any> = new Subject();
-
-  ngOnDestroy(): void {
-    this.unsubscribe$.complete();
-  }
-
   ngOnInit(): void {
-    this.router.events.pipe(takeUntil(this.unsubscribe$)).subscribe((evt) => {
-      if (!(evt instanceof NavigationEnd)) {
-        return;
-      }
+    this.router.events
+    .pipe(
+      filter((evt): evt is NavigationEnd => evt instanceof NavigationEnd),
+      takeUntilDestroyed(this.destroyRef),
+    )
+    .subscribe(() => {
       window.scrollTo(0, 0);
     });
   }

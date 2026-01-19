@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {BackNavigation, CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
 import {finalize, first} from 'rxjs/operators';
@@ -30,10 +30,11 @@ import {JobComponent} from './job.component';
  */
 // noinspection DuplicatedCode
 @Component({
-  selector: 'inception-scheduler-edit-job',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, ValidatedFormDirective],
-  templateUrl: 'edit-job.component.html',
-  styleUrls: ['edit-job.component.css']
+  selector: 'inception-scheduler-edit-job',
+  styleUrls: ['edit-job.component.css'],
+  templateUrl: 'edit-job.component.html'
 })
 export class EditJobComponent extends JobComponent implements OnInit {
   readonly editJobForm: FormGroup<{

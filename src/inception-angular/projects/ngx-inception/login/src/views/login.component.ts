@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, ViewChild
+} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -31,9 +33,10 @@ import {catchError, finalize, first, map, Observable, of, switchMap, throwError}
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-login-login',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements AfterViewInit, OnInit {

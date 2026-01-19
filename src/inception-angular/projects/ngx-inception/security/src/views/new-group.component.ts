@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -30,11 +30,12 @@ import {UserDirectoryCapabilities} from '../services/user-directory-capabilities
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-security-new-group',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
-  templateUrl: 'new-group.component.html',
-  styleUrls: ['new-group.component.css']
+  styleUrls: ['new-group.component.css'],
+  templateUrl: 'new-group.component.html'
 })
 export class NewGroupComponent extends AdminContainerView implements OnInit {
   readonly descriptionControl: FormControl<string>;

@@ -11,7 +11,7 @@
         }
       </mat-autocomplete>
     </mat-form-field>
-    <button mat-flat-button color="primary" [disabled]="!isUserDirectorySelected()" (click)="addUserDirectoryToTenant()" i18n="@@security_tenant_user_directories_component_button_add">Add</button>
+    <button type="button" mat-flat-button color="primary" [disabled]="!isUserDirectorySelected()" (click)="addUserDirectoryToTenant()" i18n="@@security_tenant_user_directories_component_button_add">Add</button>
   </div>
 
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;">
@@ -26,7 +26,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-mdc-one-action-cell" *matHeaderCellDef>Actions</mat-header-cell>
       <mat-cell class="mat-mdc-one-action-cell" *matCellDef="let userDirectorySummary">
-        <button mat-icon-button (click)="removeUserDirectoryFromTenant(userDirectorySummary.id)">
+        <button type="button" mat-icon-button (click)="removeUserDirectoryFromTenant(userDirectorySummary.id)">
           <i class="far fa-trash-alt"></i>
         </button>
       </mat-cell>

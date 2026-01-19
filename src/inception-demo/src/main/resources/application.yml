@@ -152,7 +152,7 @@ inception:
           #location: classpath:META-INF/jwt-key.pub
       revoked-tokens:
         enabled: true
-        endpoint: http://localhost:8080/api/security/revoked-tokens
+        endpoint: http://127.0.0.1:8080/api/security/revoked-tokens
     xacml-policy-decision-point:
       enabled: true
       rule-debugging-enabled: true
@@ -210,12 +210,8 @@ logging:
 management:
   endpoint:
     health:
-      mongo:
-        enabled: false
       probes:
         enabled: true
-    metrics:
-      enabled: true
   endpoints:
     web:
       exposure:
@@ -246,5 +242,14 @@ management:
 #      url: jdbc:sqlserver://192.168.185.130:1433;databaseName=Demo;user=Demo;password=Password1
 #      min-pool-size: 5
 #      max-pool-size: 10
+
+
+  spring:
+    security:
+      debug: true
+
+  logging:
+    level:
+      org.springframework.security: TRACE
 
 

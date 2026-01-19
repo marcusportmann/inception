@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {CoreModule} from 'ngx-inception/core';
 
@@ -154,9 +154,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-basic-table',
   standalone: true,
-  imports: [CoreModule],
   templateUrl: 'basic-table.component.html'
 })
 export class BasicTableComponent {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -240,11 +240,12 @@ const USER_DATA: User[] = [
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'app-action-list-table',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'action-list-table.component.html',
-  styleUrls: ['action-list-table.component.css']
+  styleUrls: ['action-list-table.component.css'],
+  templateUrl: 'action-list-table.component.html'
 })
 export class ActionListTableComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<User>(USER_DATA);

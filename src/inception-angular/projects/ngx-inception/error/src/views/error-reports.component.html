@@ -35,7 +35,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-mdc-one-action-cell" *matHeaderCellDef i18n="@@error_error_reports_component_table_header_actions">Actions</mat-header-cell>
       <mat-cell class="mat-mdc-one-action-cell" *matCellDef="let row">
-        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{errorReportId: row.id}">
+        <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{errorReportId: row.id}">
           <i class="fas fa-ellipsis-v"></i>
         </button>
       </mat-cell>
@@ -50,7 +50,7 @@
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-errorReportId="errorReportId">
-      <button mat-menu-item (click)="viewErrorReport(errorReportId)">
+      <button type="button" (click)="viewErrorReport(errorReportId)">
         <i class="fas fa-eye"></i>
         <span i18n="@@error_error_reports_component_menu_item_view">View</span>
       </button>

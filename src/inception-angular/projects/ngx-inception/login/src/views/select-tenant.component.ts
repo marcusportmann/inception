@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -31,9 +31,10 @@ import {debounceTime, first, map, startWith, takeUntil} from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective, AutocompleteSelectionRequiredDirective],
   selector: 'inception-login-select-tenant',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective, AutocompleteSelectionRequiredDirective],
   templateUrl: 'select-tenant.component.html'
 })
 export class SelectTenantComponent implements OnInit, OnDestroy {

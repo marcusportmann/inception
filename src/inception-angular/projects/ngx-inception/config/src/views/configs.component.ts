@@ -27,12 +27,12 @@ import {ConfigService} from '../services/config.service';
  * @author Marcus
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-config-configs',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'configs.component.html',
   styleUrls: ['configs.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'configs.component.html'
 })
 export class ConfigsComponent extends FilteredPaginatedListView<Config> {
   readonly defaultSortActive = 'id';

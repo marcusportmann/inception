@@ -27,7 +27,7 @@ import {SessionService} from '../session/services/session.service';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class CanActivateFunctionGuard {
   private readonly router = inject(Router);
 

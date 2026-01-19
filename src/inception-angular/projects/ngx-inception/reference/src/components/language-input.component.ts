@@ -35,9 +35,9 @@ import {ReferenceService} from '../services/reference.service';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-reference-language-input',
-  imports: [CoreModule, AutocompleteSelectionRequiredDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, AutocompleteSelectionRequiredDirective],
+  selector: 'inception-reference-language-input',
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input

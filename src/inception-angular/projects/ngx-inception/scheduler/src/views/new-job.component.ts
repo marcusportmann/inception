@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {BackNavigation, CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
 import {finalize, first} from 'rxjs/operators';
@@ -30,10 +30,11 @@ import {JobComponent} from './job.component';
  */
 // noinspection DuplicatedCode
 @Component({
-  selector: 'inception-scheduler-new-job',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, ValidatedFormDirective],
-  templateUrl: 'new-job.component.html',
-  styleUrls: ['new-job.component.css']
+  selector: 'inception-scheduler-new-job',
+  styleUrls: ['new-job.component.css'],
+  templateUrl: 'new-job.component.html'
 })
 export class NewJobComponent extends JobComponent implements OnInit {
   readonly enabledControl: FormControl<boolean>;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
@@ -48,8 +48,9 @@ export interface JobParameterDialogData {
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-scheduler-job-parameter-dialog',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, ValidatedFormDirective],
+  selector: 'inception-scheduler-job-parameter-dialog',
   template: `
     <div class="mat-mdc-dialog-title"><span>Job Parameter</span></div>
     <div class="mat-mdc-dialog-content">

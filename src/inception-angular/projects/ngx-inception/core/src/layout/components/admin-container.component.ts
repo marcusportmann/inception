@@ -16,13 +16,14 @@
 
 import {isPlatformBrowser} from '@angular/common';
 import {
-  ChangeDetectionStrategy, Component, DestroyRef, DOCUMENT, inject, NgZone, OnDestroy, OnInit,
-  PLATFORM_ID
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, DOCUMENT, inject, NgZone,
+  OnDestroy, OnInit, PLATFORM_ID
 } from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {ActivatedRoute, ActivatedRouteSnapshot, Router, RouterOutlet} from '@angular/router';
 import {NgScrollbarModule} from 'ngx-scrollbar';
-import {distinctUntilChanged, filter, map, take} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {distinctUntilChanged, filter, map, take, takeUntil} from 'rxjs/operators';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 import {SessionService} from '../../session/services/session.service';
 import {SidebarMinimizerDirective} from '../directives/sidebar-minimizer.directive';
@@ -45,9 +46,7 @@ import {TitleBarComponent} from './title-bar.component';
  * @author Marcus Portmann
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'admin-container',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AdminHeaderComponent,
     RouterOutlet,
@@ -59,7 +58,9 @@ import {TitleBarComponent} from './title-bar.component';
     BreadcrumbsComponent,
     SidebarMinimizerDirective
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'admin-container',
+  standalone: true,
   template: `
     <admin-header fixed sidebarToggler="lg"></admin-header>
 
@@ -68,7 +69,7 @@ import {TitleBarComponent} from './title-bar.component';
         <ng-scrollbar appearance="compact" orientation="vertical" visibility="hover">
           <sidebar-nav></sidebar-nav>
         </ng-scrollbar>
-        <button class="sidebar-minimizer" type="button" sidebarMinimizer></button>
+        <button type="button" class="sidebar-minimizer" sidebarMinimizer>&nbsp;</button>
       </sidebar>
 
       <main class="main">
@@ -84,42 +85,54 @@ import {TitleBarComponent} from './title-bar.component';
     </div>
 
     <admin-footer [fixed]="false">
-      <span>2026 &copy; <span class="copyright-name"></span></span>
+      <span>{{ currentYear }} &copy; <span class="copyright-name"></span></span>
     </admin-footer>
   `
 })
 export class AdminContainerComponent implements OnInit, OnDestroy {
+  readonly currentYear = new Date().getFullYear();
+
   sidebarMinimized = true;
 
   private readonly _activatedRoute = inject(ActivatedRoute);
 
   private readonly _breadcrumbsService = inject(BreadcrumbsService);
 
+  private readonly _changeDetectorRef = inject(ChangeDetectorRef);
+
   private readonly _config = inject<InceptionConfig>(INCEPTION_CONFIG);
 
-  private readonly _destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly _document = inject<Document>(DOCUMENT);
+  private readonly document = inject<Document>(DOCUMENT);
 
-  private _mutationObserver?: MutationObserver;
+  private mutationObserver?: MutationObserver;
 
-  private readonly _ngZone = inject(NgZone);
+  private readonly ngZone = inject(NgZone);
 
-  private readonly _platformId = inject(PLATFORM_ID);
+  private readonly platformId = inject(PLATFORM_ID);
 
-  private readonly _router = inject(Router);
+  /**
+   * Cancels any per-activation streams (e.g. title observables) when the routed component changes.
+   */
+  private readonly routeActivationStop$ = new Subject<void>();
 
-  private readonly _sessionService = inject(SessionService);
+  private readonly router = inject(Router);
 
-  private readonly _sidebarService = inject(SidebarService);
+  private readonly sessionService = inject(SessionService);
 
-  private readonly _spinnerService = inject(SpinnerService);
+  private readonly sidebarService = inject(SidebarService);
 
-  private readonly _titleBarService = inject(TitleBarService);
+  private readonly spinnerService = inject(SpinnerService);
+
+  private readonly titleBarService = inject(TitleBarService);
 
   ngOnDestroy(): void {
-    this._mutationObserver?.disconnect();
-    this._mutationObserver = undefined;
+    this.routeActivationStop$.next();
+    this.routeActivationStop$.complete();
+
+    this.mutationObserver?.disconnect();
+    this.mutationObserver = undefined;
   }
 
   ngOnInit(): void {
@@ -133,22 +146,23 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
    * @param component The activated child component.
    */
   routerOutletActivate(component: unknown): void {
-    // Stop any previous "title observable" subscription chain by resetting title/back nav first.
-    // (We also cancel via takeUntilDestroyed using a per-activation observable below.)
+    // Stop any previous per-activation subscription chain immediately.
+    this.routeActivationStop$.next();
+
     let usedViewTitle = false;
 
     if (component instanceof AdminContainerView) {
       // Sidebar minimized preference
       const sidebarMinimized = component.sidebarMinimized;
       if (sidebarMinimized != null) {
-        this._sidebarService.setSidebarMinimized(sidebarMinimized);
+        this.sidebarService.setSidebarMinimized(sidebarMinimized);
       }
 
       // Breadcrumb visibility
       this._breadcrumbsService.setBreadcrumbsVisible(component.breadcrumbsVisible);
 
       // Back navigation
-      this._titleBarService.setBackNavigation(component.backNavigation);
+      this.titleBarService.setBackNavigation(component.backNavigation);
 
       // Title: string or Observable<string>
       const title = component.title;
@@ -156,19 +170,21 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
         usedViewTitle = true;
 
         if (typeof title === 'string') {
-          this._titleBarService.setTitle(title);
+          this.titleBarService.setTitle(title);
         } else {
-          // Subscribe safely; auto-cleaned when component is destroyed OR when a new route
-          // activates (because routerOutletDeactivate clears title/back nav).
           title
-          .pipe(takeUntilDestroyed(this._destroyRef))
-          .subscribe((newTitle: string) => this._titleBarService.setTitle(newTitle));
+          .pipe(
+            // Stop when this routed component deactivates OR container destroys.
+            takeUntil(this.routeActivationStop$),
+            takeUntilDestroyed(this.destroyRef)
+          )
+          .subscribe((newTitle: string) => this.titleBarService.setTitle(newTitle));
         }
       }
     } else {
-      // Default for non AdminContainerView children
+      // Defaults for non AdminContainerView children
       this._breadcrumbsService.setBreadcrumbsVisible(true);
-      this._titleBarService.setBackNavigation(null);
+      this.titleBarService.setBackNavigation(null);
     }
 
     if (!usedViewTitle) {
@@ -183,51 +199,56 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   routerOutletDeactivate(_component: unknown): void {
+    // Cancel any per-activation streams for the deactivated route.
+    this.routeActivationStop$.next();
+
     // Clear the back navigation and title
-    this._titleBarService.setBackNavigation(null);
-    this._titleBarService.setTitle(null);
+    this.titleBarService.setBackNavigation(null);
+    this.titleBarService.setTitle(null);
   }
 
   private _initSessionLifecycleHandling(): void {
     // Navigate away exactly once when the session becomes null.
-    this._sessionService.session$
+    this.sessionService.session$
     .pipe(
       map((session) => !!session),
       distinctUntilChanged(),
       filter((loggedIn) => !loggedIn),
-      take(1),
-      takeUntilDestroyed(this._destroyRef)
+      take(1)
     )
     .subscribe(() => {
-      this._spinnerService.hideSpinner();
-      void this._router.navigate([this._config.logoutRedirectUri ?? '/']);
+      this.spinnerService.hideSpinner();
+      void this.router.navigate([this._config.logoutRedirectUri ?? '/']);
     });
   }
 
   private _initSidebarMinimizedTracking(): void {
-    if (!isPlatformBrowser(this._platformId)) {
+    if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
     // Initial sidebar state
-    this.sidebarMinimized = this._document.body.classList.contains('sidebar-minimized');
+    this.sidebarMinimized = this.document.body.classList.contains('sidebar-minimized');
 
     // Observe body class changes for sidebar minimization (legacy integration).
     // Run outside Angular and only re-enter when the value changes.
-    this._ngZone.runOutsideAngular(() => {
+    this.ngZone.runOutsideAngular(() => {
       let lastValue = this.sidebarMinimized;
 
-      this._mutationObserver = new MutationObserver(() => {
-        const nextValue = this._document.body.classList.contains('sidebar-minimized');
+      this.mutationObserver = new MutationObserver(() => {
+        const nextValue = this.document.body.classList.contains('sidebar-minimized');
         if (nextValue === lastValue) return;
 
         lastValue = nextValue;
-        this._ngZone.run(() => {
+        this.ngZone.run(() => {
           this.sidebarMinimized = nextValue;
+
+          // OnPush safety: ensure template updates reliably.
+          this._changeDetectorRef.markForCheck();
         });
       });
 
-      this._mutationObserver.observe(this._document.body, {
+      this.mutationObserver.observe(this.document.body, {
         attributes: true,
         attributeFilter: ['class']
       });
@@ -246,7 +267,7 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
 
     const titleFromRoute = route?.data?.['title'] as string | undefined;
     if (titleFromRoute) {
-      this._titleBarService.setTitle(titleFromRoute);
+      this.titleBarService.setTitle(titleFromRoute);
     }
   }
 }

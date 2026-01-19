@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnDestroy} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {CoreModule, GroupFormFieldComponent, ValidatedFormDirective} from 'ngx-inception/core';
 import {Country, CountryInputComponent} from 'ngx-inception/reference';
@@ -56,9 +56,10 @@ interface ExampleForm {
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective, CountryInputComponent, GroupFormFieldComponent],
   selector: 'app-forms',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective, CountryInputComponent, GroupFormFieldComponent],
   templateUrl: 'example.component.html'
 })
 export class ExampleComponent implements OnDestroy {

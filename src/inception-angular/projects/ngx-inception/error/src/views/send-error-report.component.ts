@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -32,9 +32,10 @@ import {ErrorService} from '../services/error.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-error-send-error-report',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'send-error-report.component.html'
 })
 export class SendErrorReportComponent implements OnInit {

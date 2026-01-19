@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, HostBinding, inject, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, inject, ViewChild
+} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -33,9 +35,10 @@ import {DataService} from '../../services/data.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'app-menu22',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
   templateUrl: 'menu22.component.html'
 })
 export class Menu22Component implements AfterViewInit {

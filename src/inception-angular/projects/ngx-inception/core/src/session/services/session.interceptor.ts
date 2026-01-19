@@ -27,7 +27,7 @@ import {SessionService} from './session.service';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class SessionInterceptor implements HttpInterceptor {
   private static readonly DEFAULT_TENANT_ID = '00000000-0000-0000-0000-000000000000';
 

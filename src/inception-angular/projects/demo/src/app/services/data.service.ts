@@ -17,13 +17,8 @@
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {inject, Injectable} from '@angular/core';
 import {
-  AccessDeniedError,
-  CommunicationError,
-  INCEPTION_CONFIG,
-  InceptionConfig,
-  InvalidArgumentError,
-  ResponseConverter,
-  ServiceUnavailableError
+  AccessDeniedError, CommunicationError, INCEPTION_CONFIG, InceptionConfig, InvalidArgumentError,
+  ResponseConverter, ServiceUnavailableError
 } from 'ngx-inception/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';

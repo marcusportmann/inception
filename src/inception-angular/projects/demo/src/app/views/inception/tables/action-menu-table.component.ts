@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -234,11 +234,12 @@ const USER_DATA: User[] = [
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'app-action-menu-table',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'action-menu-table.component.html',
-  styleUrls: ['action-menu-table.component.css']
+  styleUrls: ['action-menu-table.component.css'],
+  templateUrl: 'action-menu-table.component.html'
 })
 export class ActionMenuTableComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<User>(USER_DATA);

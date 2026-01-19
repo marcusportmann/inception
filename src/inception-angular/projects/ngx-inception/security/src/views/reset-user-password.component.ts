@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
@@ -31,10 +31,11 @@ import {UserDirectoryCapabilities} from '../services/user-directory-capabilities
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-security-reset-user-password',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, ValidatedFormDirective, GroupFormFieldComponent],
-  templateUrl: 'reset-user-password.component.html',
-  styleUrls: ['reset-user-password.component.css']
+  selector: 'inception-security-reset-user-password',
+  styleUrls: ['reset-user-password.component.css'],
+  templateUrl: 'reset-user-password.component.html'
 })
 export class ResetUserPasswordComponent extends AdminContainerView implements OnInit {
   readonly confirmPasswordControl: FormControl<string>;

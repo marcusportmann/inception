@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, forwardRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {
   AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
   ValidationErrors, Validator, Validators
@@ -24,23 +24,24 @@ import {UserDirectoryParameter} from '../services/user-directory-parameter';
 import {UserDirectoryUtil} from '../services/user-directory-util';
 
 @Component({
-  selector: 'inception-security-ldap-user-directory',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule],
-  templateUrl: 'ldap-user-directory.component.html',
-  styleUrls: ['ldap-user-directory.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => LdapUserDirectoryComponent),
+      useExisting: LdapUserDirectoryComponent,
       multi: true
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => LdapUserDirectoryComponent),
+      useExisting: LdapUserDirectoryComponent,
       multi: true
     }
-  ]
+  ],
+  selector: 'inception-security-ldap-user-directory',
+  standalone: true,
+  styleUrls: ['ldap-user-directory.component.css'],
+  templateUrl: 'ldap-user-directory.component.html'
 })
 export class LdapUserDirectoryComponent implements ControlValueAccessor, Validator {
   baseDNControl: FormControl;

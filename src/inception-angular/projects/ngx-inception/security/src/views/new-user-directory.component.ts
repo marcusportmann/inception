@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild
+} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -35,16 +37,17 @@ import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-security-new-user-directory',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CoreModule,
     ValidatedFormDirective,
     InternalUserDirectoryComponent,
     LdapUserDirectoryComponent
   ],
-  templateUrl: 'new-user-directory.component.html',
-  styleUrls: ['new-user-directory.component.css']
+  selector: 'inception-security-new-user-directory',
+  standalone: true,
+  styleUrls: ['new-user-directory.component.css'],
+  templateUrl: 'new-user-directory.component.html'
 })
 export class NewUserDirectoryComponent extends AdminContainerView implements OnInit, OnDestroy {
   @ViewChild(InternalUserDirectoryComponent)

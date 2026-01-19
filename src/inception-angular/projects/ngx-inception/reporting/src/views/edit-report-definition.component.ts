@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
@@ -30,10 +30,11 @@ import {ReportingService} from '../services/reporting.service';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-reporting-edit-report-definition',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, ValidatedFormDirective, FileUploadComponent],
-  templateUrl: 'edit-report-definition.component.html',
-  styleUrls: ['edit-report-definition.component.css']
+  selector: 'inception-reporting-edit-report-definition',
+  styleUrls: ['edit-report-definition.component.css'],
+  templateUrl: 'edit-report-definition.component.html'
 })
 export class EditReportDefinitionComponent extends AdminContainerView implements OnInit {
   readonly editReportDefinitionForm: FormGroup<{

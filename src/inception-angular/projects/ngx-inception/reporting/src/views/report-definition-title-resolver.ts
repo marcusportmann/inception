@@ -25,7 +25,7 @@ import {ReportingService} from '../services/reporting.service';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ReportDefinitionTitleResolver {
   private readonly reportingService = inject<ReportingService>(ReportingService);
 

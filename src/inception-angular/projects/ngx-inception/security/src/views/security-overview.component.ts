@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AdminContainerView, CoreModule} from 'ngx-inception/core';
 
 /**
@@ -23,9 +23,10 @@ import {AdminContainerView, CoreModule} from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'inception-security-security-overview',
   standalone: true,
-  imports: [CoreModule],
   template: `Security Overview`
 })
 export class SecurityOverviewComponent extends AdminContainerView {

@@ -15,7 +15,8 @@
  */
 
 import {
-  Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
+  ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output,
+  ViewChild
 } from '@angular/core';
 import {MatIconButton} from '@angular/material/button';
 import {MatInput} from '@angular/material/input';
@@ -23,27 +24,10 @@ import {fromEvent, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatIconButton, MatInput],
   selector: 'inception-core-table-filter',
   standalone: true,
-  imports: [MatIconButton, MatInput],
-  template: `
-    <div class="table-filter-container">
-      <div class="table-filter-icon">
-        <i class="fa fa-search"></i>
-      </div>
-      <input
-        class="table-filter-input"
-        matInput
-        #tableFilterInput
-        placeholder="Search..."
-        autocomplete="off"/>
-      @if (filter) {
-        <button class="table-filter-reset" mat-icon-button (click)="reset(true)">
-          <i class="fa fa-times"></i>
-        </button>
-      }
-    </div>
-  `,
   styles: [
     `
       .table-filter-container {
@@ -84,7 +68,25 @@ import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
         border: none !important;
       }
     `
-  ]
+  ],
+  template: `
+    <div class="table-filter-container">
+      <div class="table-filter-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <input
+        class="table-filter-input"
+        matInput
+        #tableFilterInput
+        placeholder="Search..."
+        autocomplete="off"/>
+      @if (filter) {
+        <button type="button" class="table-filter-reset" mat-icon-button (click)="reset(true)">
+          <i class="fa fa-times"></i>
+        </button>
+      }
+    </div>
+  `
 })
 export class TableFilterComponent implements OnInit, OnDestroy {
   /** Emitted when the user changes the filter (or clicks reset with emitEvent=true). */

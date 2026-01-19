@@ -15,7 +15,9 @@
  */
 
 import {AsyncPipe} from '@angular/common';
-import {booleanAttribute, Component, ElementRef, inject, Input, OnInit} from '@angular/core';
+import {
+  booleanAttribute, ChangeDetectionStrategy, Component, ElementRef, inject, Input, OnInit
+} from '@angular/core';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {Replace} from '../../util/replace';
@@ -28,17 +30,19 @@ import {BackNavigation} from './back-navigation';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [AsyncPipe],
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'title-bar',
   standalone: true,
-  imports: [AsyncPipe],
   template: `
     @if (title | async; as title) {
       <div class="title-bar">
         @if (backNavigation | async; as backNavigation) {
-          <div class="back" (click)="navigateBack(backNavigation)">
-            <span class="fa fa-chevron-left"></span> {{ backNavigation.title }}
-          </div>
+          <button type="button" class="back" (click)="navigateBack(backNavigation)">
+            <span class="fa fa-chevron-left" aria-hidden="true"></span>
+            {{ backNavigation.title }}
+          </button>
         }
         <div class="title">{{ title }}</div>
       </div>

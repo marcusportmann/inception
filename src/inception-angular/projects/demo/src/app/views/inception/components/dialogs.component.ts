@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ConfirmationDialogComponent, CoreModule, DialogService} from 'ngx-inception/core';
 import {first} from 'rxjs/operators';
@@ -25,9 +25,10 @@ import {first} from 'rxjs/operators';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-dialogs',
   standalone: true,
-  imports: [CoreModule],
   templateUrl: 'dialogs.component.html'
 })
 export class DialogsComponent {

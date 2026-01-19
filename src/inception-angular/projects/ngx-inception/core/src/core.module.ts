@@ -85,7 +85,7 @@ export const INCEPTION_DATE_FORMATS = {
   }
 };
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class InceptionDateAdapter extends NativeDateAdapter {
   // eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
   override format(date: Date, displayFormat: Object): string {
@@ -146,8 +146,10 @@ export class InceptionDateAdapter extends NativeDateAdapter {
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+
     // CDK Modules
     ObserversModule,
+
     // Angular Material Modules
     MatAutocompleteModule,
     MatButtonModule,
@@ -174,6 +176,7 @@ export class InceptionDateAdapter extends NativeDateAdapter {
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule
+
     // Third-Party Modules
     // ChartsModule,
   ],

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, Base64, CoreModule, FileUploadComponent, FileValidator,
@@ -31,11 +31,12 @@ import {MailService} from '../services/mail.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective, FileUploadComponent],
   selector: 'inception-mail-new-mail-template',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective, FileUploadComponent],
-  templateUrl: 'new-mail-template.component.html',
-  styleUrls: ['new-mail-template.component.css']
+  styleUrls: ['new-mail-template.component.css'],
+  templateUrl: 'new-mail-template.component.html'
 })
 export class NewMailTemplateComponent extends AdminContainerView implements OnInit {
   // noinspection JSUnusedGlobalSymbols

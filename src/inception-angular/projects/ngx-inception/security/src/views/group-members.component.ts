@@ -37,12 +37,12 @@ import {SecurityService} from '../services/security.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-security-group-members',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'group-members.component.html',
   styleUrls: ['group-members.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'group-members.component.html'
 })
 export class GroupMembersComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: GroupMemberDataSource;

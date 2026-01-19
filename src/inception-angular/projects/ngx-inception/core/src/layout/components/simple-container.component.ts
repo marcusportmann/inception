@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 
 /**
@@ -23,10 +23,11 @@ import {RouterOutlet} from '@angular/router';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterOutlet],
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'simple-container',
   standalone: true,
-  imports: [RouterOutlet],
   template: '<router-outlet></router-outlet>'
 })
 export class SimpleContainerComponent {

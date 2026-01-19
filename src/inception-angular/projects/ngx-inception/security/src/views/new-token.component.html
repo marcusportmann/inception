@@ -85,7 +85,7 @@
           <div class="mat-mdc-nested-table-header">
             <span class="mat-subtitle-1 mb-0 mt-2">Claims</span>
             <div class="mat-mdc-two-actions-cell">
-              <button mat-icon-button (click)="newTokenClaim()">
+              <button type="button" mat-icon-button (click)="newTokenClaim()">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -105,10 +105,10 @@
                   {{(claim.value !== null && claim.value!==undefined && claim.value.length > 0) ? claim.value : claim.values.join(',')}}
                 </td>
                 <td class="mat-mdc-nested-cell mat-mdc-two-actions-cell">
-                  <button mat-icon-button (click)="editTokenClaim(claim)">
+                  <button type="button" mat-icon-button (click)="editTokenClaim(claim)">
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button mat-icon-button (click)="deleteTokenClaim(claim)">
+                  <button type="button" mat-icon-button (click)="deleteTokenClaim(claim)">
                     <i class="far fa-trash-alt"></i>
                   </button>
                 </td>

@@ -43,12 +43,12 @@ interface TokenListExtras {
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-security-tokens',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'tokens.component.html',
   styleUrls: ['tokens.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'tokens.component.html'
 })
 export class TokensComponent extends StatefulListView<TokenListExtras> implements AfterViewInit {
   readonly dataSource: TokenSummaryDataSource;

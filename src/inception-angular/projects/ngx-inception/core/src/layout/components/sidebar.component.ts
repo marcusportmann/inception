@@ -26,12 +26,12 @@ import {SidebarService} from '../services/sidebar.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar',
   standalone: true,
   template: `
-    <ng-content></ng-content>`,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    <ng-content></ng-content>`
 })
 export class SidebarComponent implements OnInit, OnChanges, OnDestroy {
   @Input({transform: booleanAttribute}) compact = false;

@@ -25,7 +25,7 @@ import {SchedulerService} from '../services/scheduler.service';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class JobTitleResolver {
   private readonly schedulerService = inject<SchedulerService>(SchedulerService);
 

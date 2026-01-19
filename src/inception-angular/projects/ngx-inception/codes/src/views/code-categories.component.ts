@@ -27,12 +27,12 @@ import {CodesService} from '../services/codes.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-codes-code-categories',
   standalone: true,
-  templateUrl: 'code-categories.component.html',
-  imports: [CoreModule, TableFilterComponent],
   styleUrls: ['code-categories.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'code-categories.component.html'
 })
 export class CodeCategoriesComponent extends FilteredPaginatedListView<CodeCategorySummary> {
   readonly defaultSortActive = 'id';

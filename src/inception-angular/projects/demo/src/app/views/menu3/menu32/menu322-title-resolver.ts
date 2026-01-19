@@ -23,7 +23,7 @@ import {Observable, of} from 'rxjs';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class Menu322TitleResolver {
   /**
    * Resolve the title.

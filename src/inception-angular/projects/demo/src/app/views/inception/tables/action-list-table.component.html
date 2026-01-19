@@ -1,6 +1,6 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="mat-mdc-table-header">
-    <button mat-flat-button color="primary">New User</button>
+    <button type="button" mat-flat-button color="primary">New User</button>
     <inception-core-table-filter (changed)="applyFilter($event)"></inception-core-table-filter>
   </div>
   <mat-table [dataSource]="dataSource" style="min-height: 462px;" matSort>
@@ -28,13 +28,13 @@
       <mat-header-cell class="mat-mdc-three-actions-cell" *matHeaderCellDef>Actions</mat-header-cell>
       <mat-cell class="mat-mdc-three-actions-cell" *matCellDef="let row">
         <span>
-        <button mat-icon-button>
+        <button type="button" mat-icon-button>
           <i class="fas fa-user-edit"></i>
         </button>
-        <button mat-icon-button>
+        <button type="button" mat-icon-button>
           <i class="fas fa-users"></i>
         </button>
-        <button mat-icon-button>
+        <button type="button" mat-icon-button>
           <i class="fas fa-user-times"></i>
         </button>
         </span>

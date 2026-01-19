@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CoreModule} from 'ngx-inception/core';
 
 /**
@@ -23,9 +23,10 @@ import {CoreModule} from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-expansion-panels',
   standalone: true,
-  imports: [CoreModule],
   templateUrl: 'expansion-panels.component.html'
 })
 export class ExpansionPanelsComponent {

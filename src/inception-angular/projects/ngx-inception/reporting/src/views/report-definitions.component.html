@@ -1,6 +1,6 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="mat-mdc-table-header">
-    <button mat-flat-button color="primary" (click)="newReportDefinition()" i18n="@@reporting_report_definitions_component_button_new">New</button>
+    <button type="button" mat-flat-button color="primary" (click)="newReportDefinition()" i18n="@@reporting_report_definitions_component_button_new">New</button>
     <inception-core-table-filter [value]="filterValue" (changed)="applyFilter($event)"></inception-core-table-filter>
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortDisableClear>
@@ -15,7 +15,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-mdc-one-action-cell" *matHeaderCellDef i18n="@@reporting_report_definitions_component_table_header_actions">Actions</mat-header-cell>
       <mat-cell class="mat-mdc-one-action-cell" *matCellDef="let row">
-        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{reportDefinitionId: row.id}">
+        <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{reportDefinitionId: row.id}">
           <i class="fas fa-ellipsis-v"></i>
         </button>
       </mat-cell>
@@ -30,11 +30,11 @@
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-reportDefinitionId="reportDefinitionId">
-      <button mat-menu-item (click)="editReportDefinition(reportDefinitionId)">
+      <button type="button" mat-menu-item (click)="editReportDefinition(reportDefinitionId)">
         <i class="fas fa-edit"></i>
         <span i18n="@@reporting_report_definitions_component_menu_item_edit">Edit</span>
       </button>
-      <button mat-menu-item (click)="deleteReportDefinition(reportDefinitionId)">
+      <button type="button" mat-menu-item (click)="deleteReportDefinition(reportDefinitionId)">
         <i class="far fa-trash-alt"></i>
         <span i18n="@@reporting_report_definitions_component_menu_item_delete">Delete</span>
       </button>

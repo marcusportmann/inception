@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AdminContainerView, BackNavigation, CoreModule} from 'ngx-inception/core';
 
 /**
@@ -23,9 +23,10 @@ import {AdminContainerView, BackNavigation, CoreModule} from 'ngx-inception/core
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-menu322',
   standalone: true,
-  imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content> Menu 3.2.2</mat-card-content>

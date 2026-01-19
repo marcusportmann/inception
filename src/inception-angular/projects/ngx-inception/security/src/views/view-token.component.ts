@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {AdminContainerView, BackNavigation, CoreModule} from 'ngx-inception/core';
 import {finalize, first} from 'rxjs/operators';
 import {SecurityService} from '../services/security.service';
@@ -27,11 +27,12 @@ import {TokenType} from '../services/token-type';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'inception-security-view-token',
   standalone: true,
-  imports: [CoreModule],
-  templateUrl: 'view-token.component.html',
-  styleUrls: ['view-token.component.css']
+  styleUrls: ['view-token.component.css'],
+  templateUrl: 'view-token.component.html'
 })
 export class ViewTokenComponent extends AdminContainerView implements OnInit {
   readonly title = $localize`:@@security_view_token_title:View Token`;

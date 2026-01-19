@@ -5,7 +5,7 @@
         <div class="col-sm">
           <mat-form-field>
             <mat-label i18n="@@codes_new_code_component_label_id">ID</mat-label>
-            <input type="text" matInput formControlName="id" autofocus>
+            <input type="text" matInput formControlName="id">
             @if (idControl.errors && idControl.touched) {
               <mat-error>
                 @if (idControl.errors['required']) {

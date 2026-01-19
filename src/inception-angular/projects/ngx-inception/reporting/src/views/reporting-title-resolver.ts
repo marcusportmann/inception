@@ -24,7 +24,7 @@ import {Observable, of} from 'rxjs';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ReportingTitleResolver {
   /**
    * Resolve the title.

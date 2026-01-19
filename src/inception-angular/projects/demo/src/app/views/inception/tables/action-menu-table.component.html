@@ -1,6 +1,6 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="mat-mdc-table-header">
-    <button mat-flat-button color="primary">New User</button>
+    <button type="button" mat-flat-button color="primary">New User</button>
     <inception-core-table-filter (changed)="applyFilter($event)"></inception-core-table-filter>
   </div>
   <mat-table [dataSource]="dataSource" style="min-height: 462px;" matSort>
@@ -27,7 +27,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-mdc-one-action-cell" *matHeaderCellDef>Actions</mat-header-cell>
       <mat-cell class="mat-mdc-one-action-cell" *matCellDef="let row">
-        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{id: row.id}">
+        <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{id: row.id}">
           <i class="fas fa-ellipsis-v"></i>
         </button>
       </mat-cell>
@@ -42,15 +42,15 @@
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu">
     <ng-template matMenuContent let-id="id">
-      <button mat-menu-item (click)="editUser(id)">
+      <button type="button" mat-menu-item (click)="editUser(id)">
         <i class="fas fa-user-edit"></i>
         <span>Edit</span>
       </button>
-      <button mat-menu-item (click)="manageUserGroups(id)">
+      <button type="button" mat-menu-item (click)="manageUserGroups(id)">
         <i class="fas fa-users"></i>
         <span>Groups</span>
       </button>
-      <button mat-menu-item (click)="deleteUser(id)">
+      <button type="button" mat-menu-item (click)="deleteUser(id)">
         <i class="fas fa-user-times"></i>
         <span>Delete</span>
       </button>

@@ -36,12 +36,12 @@ import {SecurityService} from '../services/security.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-security-policies',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'policies.component.html',
   styleUrls: ['policies.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'policies.component.html'
 })
 export class PoliciesComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: PolicySummaryDataSource;

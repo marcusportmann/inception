@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {CoreModule} from 'ngx-inception/core';
@@ -155,9 +155,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-sortable-table',
   standalone: true,
-  imports: [CoreModule],
   templateUrl: 'sortable-table.component.html'
 })
 export class SortableTableComponent implements AfterViewInit {

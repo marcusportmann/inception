@@ -117,7 +117,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    // Angular modules
     CommonModule,
     RouterModule.forChild(routes)
   ],

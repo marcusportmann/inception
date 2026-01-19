@@ -12,7 +12,7 @@
     </mat-form-field>
   </div>
   <div class="mat-mdc-table-header">
-    <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration']" mat-flat-button color="primary" [disabled]="(enableNewButton$ | async) === false" (click)="newGroup()" i18n="@@security_groups_component_button_new">New</button>
+    <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration']" mat-flat-button color="primary" [disabled]="(enableNewButton$ | async) === false" (click)="newGroup()" i18n="@@security_groups_component_button_new">New</button>
     <inception-core-table-filter></inception-core-table-filter>
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 462px;" matSort matSortDisableClear>
@@ -27,7 +27,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-mdc-one-action-cell" *matHeaderCellDef i18n="@@security_groups_component_table_header_actions" [hidden]="(enableActionsMenu$ | async) === false">Actions</mat-header-cell>
       <mat-cell class="mat-mdc-one-action-cell" *matCellDef="let row" [hidden]="(enableActionsMenu$ | async) === false">
-        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{groupName: row.name}">
+        <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{groupName: row.name}">
           <i class="fas fa-ellipsis-v"></i>
         </button>
       </mat-cell>
@@ -42,19 +42,19 @@
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-groupName="groupName">
-      <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.GroupAdministration']" mat-menu-item (click)="editGroup(groupName)">
+      <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.GroupAdministration']" mat-menu-item (click)="editGroup(groupName)">
         <i class="fas fa-edit"></i>
         <span i18n="@@security_groups_component_menu_item_edit">Edit</span>
       </button>
-      <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.GroupAdministration']" mat-menu-item (click)="groupMembers(groupName)">
+      <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.GroupAdministration']" mat-menu-item (click)="groupMembers(groupName)">
         <i class="fas fa-users"></i>
         <span i18n="@@security_groups_component_menu_item_group_members">Group Members</span>
       </button>
-      <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.GroupAdministration']" mat-menu-item (click)="groupRoles(groupName)">
+      <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.GroupAdministration']" mat-menu-item (click)="groupRoles(groupName)">
         <i class="fas fa-user-tag"></i>
         <span i18n="@@security_groups_component_menu_item_group_roles">Roles</span>
       </button>
-      <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.GroupAdministration']" mat-menu-item (click)="deleteGroup(groupName)">
+      <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.GroupAdministration']" mat-menu-item (click)="deleteGroup(groupName)">
         <i class="far fa-trash-alt"></i>
         <span i18n="@@security_groups_component_menu_item_delete">Delete</span>
       </button>

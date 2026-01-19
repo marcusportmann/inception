@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -29,11 +29,12 @@ import {CodesService} from '../services/codes.service';
  * @author Marcus
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-codes-edit-code-category',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
-  templateUrl: 'edit-code-category.component.html',
-  styleUrls: ['edit-code-category.component.css']
+  styleUrls: ['edit-code-category.component.css'],
+  templateUrl: 'edit-code-category.component.html'
 })
 export class EditCodeCategoryComponent extends AdminContainerView implements OnInit {
   codeCategory: CodeCategory | null = null;

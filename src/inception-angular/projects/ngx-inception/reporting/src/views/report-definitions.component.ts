@@ -27,12 +27,12 @@ import {ReportingService} from '../services/reporting.service';
  * @author Marcus
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-reporting-report-definitions',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'report-definitions.component.html',
   styleUrls: ['report-definitions.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'report-definitions.component.html'
 })
 export class ReportDefinitionsComponent extends FilteredPaginatedListView<ReportDefinitionSummary> {
   readonly defaultSortActive = 'name';

@@ -25,10 +25,7 @@ import {MailService} from './mail.service';
  * @author Marcus Portmann
  */
 @NgModule({
-  declarations: [],
-  exports: [],
   imports: [
-    // Angular modules
     CommonModule
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())]

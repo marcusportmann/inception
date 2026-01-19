@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {Router} from '@angular/router';
 import {
   AccessDeniedError, CoreModule, DialogService, InvalidArgumentError, ServiceUnavailableError
@@ -28,9 +28,10 @@ import {TestService} from '../../../services/test.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-error-report',
   standalone: true,
-  imports: [CoreModule],
   templateUrl: 'error-report.component.html'
 })
 export class ErrorReportComponent {

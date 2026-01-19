@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatCard, MatCardContent} from '@angular/material/card';
 
 /**
@@ -23,9 +23,10 @@ import {MatCard, MatCardContent} from '@angular/material/card';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatCardContent, MatCard],
   selector: 'app-menu312',
   standalone: true,
-  imports: [MatCardContent, MatCard],
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content> Menu 3.1.2</mat-card-content>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {
@@ -34,11 +34,12 @@ import {TokenClaimDialogComponent, TokenClaimDialogData} from './token-claim-dia
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-security-new-token',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
-  templateUrl: 'new-token.component.html',
-  styleUrls: ['new-token.component.css']
+  styleUrls: ['new-token.component.css'],
+  templateUrl: 'new-token.component.html'
 })
 export class NewTokenComponent extends AdminContainerView implements OnInit {
   readonly descriptionControl: FormControl<string | null>;

@@ -25,9 +25,7 @@ import {MatFormFieldControl} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {AutocompleteSelectionRequiredDirective, CoreModule} from 'ngx-inception/core';
 import {BehaviorSubject, ReplaySubject, Subject} from 'rxjs';
-import {
-  debounceTime, distinctUntilChanged, first, map, switchMap, takeUntil
-} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, first, map, switchMap, takeUntil} from 'rxjs/operators';
 import {ReferenceService} from '../services/reference.service';
 import {Region} from '../services/region';
 
@@ -37,8 +35,9 @@ import {Region} from '../services/region';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-reference-region-input',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, AutocompleteSelectionRequiredDirective],
+  selector: 'inception-reference-region-input',
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
@@ -70,8 +69,7 @@ import {Region} from '../services/region';
       provide: MatFormFieldControl,
       useExisting: RegionInputComponent
     }
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  ]
 })
 export class RegionInputComponent
   implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy {

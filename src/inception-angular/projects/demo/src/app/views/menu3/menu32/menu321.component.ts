@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, inject} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {CoreModule, TitleBarService} from 'ngx-inception/core';
 
 /**
@@ -23,9 +23,10 @@ import {CoreModule, TitleBarService} from 'ngx-inception/core';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-menu321',
   standalone: true,
-  imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content> Menu 3.2.1</mat-card-content>

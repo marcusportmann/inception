@@ -28,12 +28,12 @@ import {CodesService} from '../services/codes.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-codes-codes',
   standalone: true,
-  templateUrl: 'codes.component.html',
-  imports: [CoreModule, TableFilterComponent],
   styleUrls: ['codes.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'codes.component.html'
 })
 export class CodesComponent extends FilteredPaginatedListView<Code> {
   readonly codeCategoryId: string;

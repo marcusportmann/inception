@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
@@ -31,10 +31,11 @@ import {TenantStatus} from '../services/tenant-status';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-security-new-tenant',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, ValidatedFormDirective, GroupFormFieldComponent],
-  templateUrl: 'new-tenant.component.html',
-  styleUrls: ['new-tenant.component.css']
+  selector: 'inception-security-new-tenant',
+  styleUrls: ['new-tenant.component.css'],
+  templateUrl: 'new-tenant.component.html'
 })
 export class NewTenantComponent extends AdminContainerView implements OnInit {
   readonly createUserDirectoryControl: FormControl<boolean>;

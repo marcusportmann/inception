@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
@@ -53,9 +53,10 @@ export interface TokenClaimDialogData {
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-security-token-claim-dialog',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
   template: `
     <div class="mat-mdc-dialog-title"><span>Token Claim</span></div>
     <div class="mat-mdc-dialog-content">

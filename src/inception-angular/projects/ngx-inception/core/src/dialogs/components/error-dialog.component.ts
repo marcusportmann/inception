@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
@@ -36,9 +36,14 @@ export interface ErrorDialogData {
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'error-dialog',
+    '(document:keydown.enter)': 'onEnter($event)'
+  },
+  imports: [MatButton],
   selector: 'inception-core-error-dialog',
   standalone: true,
-  imports: [MatButton],
   template: `
     <div class="header">
       <i class="far fa-3x fa-times-circle"></i>
@@ -50,6 +55,7 @@ export interface ErrorDialogData {
     </div>
     <div class="button">
       <button
+        type="button"
         mat-flat-button
         color="warn"
         (click)="ok()"
@@ -58,11 +64,7 @@ export interface ErrorDialogData {
         OK
       </button>
     </div>
-  `,
-  host: {
-    class: 'error-dialog',
-    '(document:keydown.enter)': 'onEnter($event)'
-  }
+  `
 })
 export class ErrorDialogComponent {
   private readonly data = inject<ErrorDialogData>(MAT_DIALOG_DATA);

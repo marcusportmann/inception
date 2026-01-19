@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {CoreModule} from 'ngx-inception/core';
@@ -155,9 +155,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-pagination-table',
   standalone: true,
-  imports: [CoreModule],
   templateUrl: 'pagination-table.component.html'
 })
 export class PaginationTableComponent implements AfterViewInit {

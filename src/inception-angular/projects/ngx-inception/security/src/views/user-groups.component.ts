@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, ViewChild
+} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
@@ -32,11 +34,12 @@ import {SecurityService} from '../services/security.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'inception-security-user-groups',
   standalone: true,
-  imports: [CoreModule],
-  templateUrl: 'user-groups.component.html',
-  styleUrls: ['user-groups.component.css']
+  styleUrls: ['user-groups.component.css'],
+  templateUrl: 'user-groups.component.html'
 })
 export class UserGroupsComponent extends AdminContainerView implements OnInit, OnDestroy {
   allGroupNames: string[] = [];

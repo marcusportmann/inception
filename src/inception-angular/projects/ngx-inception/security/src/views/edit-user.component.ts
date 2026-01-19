@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
@@ -31,10 +31,11 @@ import {UserDirectoryCapabilities} from '../services/user-directory-capabilities
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-security-edit-user',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, ValidatedFormDirective, GroupFormFieldComponent],
-  templateUrl: 'edit-user.component.html',
-  styleUrls: ['edit-user.component.css']
+  selector: 'inception-security-edit-user',
+  styleUrls: ['edit-user.component.css'],
+  templateUrl: 'edit-user.component.html'
 })
 export class EditUserComponent extends AdminContainerView implements OnInit {
   readonly editUserForm: FormGroup<{

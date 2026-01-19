@@ -26,7 +26,7 @@ import {CodesService} from '../services/codes.service';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class CodeTitleResolver {
   private readonly codesService = inject<CodesService>(CodesService);
 

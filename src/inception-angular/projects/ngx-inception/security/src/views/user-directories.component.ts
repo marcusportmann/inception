@@ -34,12 +34,12 @@ import {UserDirectorySummaryDataSource} from '../services/user-directory-summary
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent],
   selector: 'inception-security-user-directories',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent],
-  templateUrl: 'user-directories.component.html',
   styleUrls: ['user-directories.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'user-directories.component.html'
 })
 export class UserDirectoriesComponent extends StatefulListView implements AfterViewInit {
   readonly dataSource: UserDirectorySummaryDataSource;

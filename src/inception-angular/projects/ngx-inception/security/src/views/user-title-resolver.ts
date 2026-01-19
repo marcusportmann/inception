@@ -25,7 +25,7 @@ import {SecurityService} from '../services/security.service';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UserTitleResolver {
   private readonly securityService = inject<SecurityService>(SecurityService);
 

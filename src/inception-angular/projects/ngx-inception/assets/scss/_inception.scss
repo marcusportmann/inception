@@ -1429,6 +1429,10 @@ admin-root {
       cursor: pointer;
 
       .back {
+        background: none;
+        border: 0;
+        text-align: left;
+        cursor: pointer;
         padding-left: 10px;
       }
     }
@@ -2369,9 +2373,7 @@ $inception-theme: mat.m2-define-light-theme(
         }
 
         .mat-mdc-form-field-infix {
-          padding-top: 28px;
-          padding-bottom: 6px;
-
+          
           .mat-mdc-floating-label {
             &:not(.mdc-floating-label--float-above) {
               transform: translateY(-20%);
@@ -2384,6 +2386,8 @@ $inception-theme: mat.m2-define-light-theme(
 
           .mat-mdc-input-element {
           }
+
+
         }
 
         .mat-mdc-form-field-icon-suffix {

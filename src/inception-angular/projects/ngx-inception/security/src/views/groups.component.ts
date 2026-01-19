@@ -42,12 +42,12 @@ interface GroupsListExtras {
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, TableFilterComponent, HasAuthorityDirective],
   selector: 'inception-security-groups',
   standalone: true,
-  imports: [CoreModule, TableFilterComponent, HasAuthorityDirective],
-  templateUrl: 'groups.component.html',
   styleUrls: ['groups.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'groups.component.html'
 })
 export class GroupsComponent extends StatefulListView<GroupsListExtras> implements AfterViewInit {
   readonly dataSource: GroupDataSource;

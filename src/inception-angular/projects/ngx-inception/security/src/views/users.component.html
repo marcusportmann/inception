@@ -12,7 +12,7 @@
     </mat-form-field>
   </div>
   <div class="mat-mdc-table-header">
-    <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-flat-button color="primary" [disabled]="(enableNewButton$ | async) === false" (click)="newUser()" i18n="@@security_users_component_button_new">New</button>
+    <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-flat-button color="primary" [disabled]="(enableNewButton$ | async) === false" (click)="newUser()" i18n="@@security_users_component_button_new">New</button>
     <div></div>
     <inception-core-table-filter></inception-core-table-filter>
   </div>
@@ -35,7 +35,7 @@
       <mat-header-cell class="mat-mdc-one-action-cell" *matHeaderCellDef i18n="@@security_users_component_table_header_actions" [hidden]="(enableActionsMenu$ | async) === false">Actions</mat-header-cell>
       <mat-cell class="mat-mdc-one-action-cell" *matCellDef="let row" [hidden]="(enableActionsMenu$ | async) === false">
         <ng-container>
-          <button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{username: row.username}" mat-icon-button>
+          <button type="button" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{username: row.username}" mat-icon-button>
             <i class="fas fa-ellipsis-v"></i>
           </button>
         </ng-container>
@@ -53,25 +53,25 @@
     <ng-template matMenuContent let-username="username">
       @if (userDirectoryCapabilities$ | async; as userDirectoryCapabilities) {
         @if (userDirectoryCapabilities.supportsUserAdministration) {
-          <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-menu-item (click)="editUser(username)">
+          <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-menu-item (click)="editUser(username)">
             <i class="fas fa-edit"></i>
             <span i18n="@@security_users_component_menu_item_edit">Edit</span>
           </button>
         }
         @if (userDirectoryCapabilities.supportsGroupAdministration) {
-          <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-menu-item (click)="userGroups(username)">
+          <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-menu-item (click)="userGroups(username)">
             <i class="fas fa-users"></i>
             <span i18n="@@security_users_component_menu_item_groups">Groups</span>
           </button>
         }
         @if (userDirectoryCapabilities.supportsAdminChangePassword) {
-          <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.ResetUserPassword']" mat-menu-item (click)="resetUserPassword(username)">
+          <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.ResetUserPassword']" mat-menu-item (click)="resetUserPassword(username)">
             <i class="fas fa-unlock-alt"></i>
             <span i18n="@@security_users_component_menu_item_reset_user_password">Reset User Password</span>
           </button>
         }
         @if (userDirectoryCapabilities.supportsUserAdministration) {
-          <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-menu-item (click)="deleteUser(username)">
+          <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-menu-item (click)="deleteUser(username)">
             <i class="far fa-trash-alt"></i>
             <span i18n="@@security_users_component_menu_item_delete">Delete</span>
           </button>

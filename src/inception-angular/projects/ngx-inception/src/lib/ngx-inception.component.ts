@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'inception-ngx-inception',
   standalone: true,
-  template: ``,
-  styles: []
+  template: ``
 })
 export class NgxInceptionComponent {
 }

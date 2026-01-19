@@ -117,7 +117,7 @@
           <div class="mat-mdc-nested-table-header">
             <span class="mat-subtitle-1 mb-0 mt-2">Parameters</span>
             <div class="mat-mdc-two-actions-cell">
-              <button mat-icon-button (click)="newJobParameter()">
+              <button type="button" mat-icon-button (click)="newJobParameter()">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -137,10 +137,10 @@
                   {{jobParameter.value}}
                 </td>
                 <td class="mat-mdc-nested-cell mat-mdc-two-actions-cell">
-                  <button mat-icon-button (click)="editJobParameter(jobParameter)">
+                  <button type="button" mat-icon-button (click)="editJobParameter(jobParameter)">
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button mat-icon-button (click)="deleteJobParameter(jobParameter)">
+                  <button type="button" mat-icon-button (click)="deleteJobParameter(jobParameter)">
                     <i class="far fa-trash-alt"></i>
                   </button>
                 </td>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, GroupFormFieldComponent, ValidatedFormDirective
@@ -31,11 +31,12 @@ import {UserStatus} from '../services/user-status';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective, GroupFormFieldComponent],
   selector: 'inception-security-new-user',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective, GroupFormFieldComponent],
-  templateUrl: 'new-user.component.html',
-  styleUrls: ['new-user.component.css']
+  styleUrls: ['new-user.component.css'],
+  templateUrl: 'new-user.component.html'
 })
 export class NewUserComponent extends AdminContainerView implements OnInit {
   readonly confirmPasswordControl: FormControl<string>;

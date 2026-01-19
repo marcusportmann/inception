@@ -16,6 +16,7 @@
 
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
@@ -34,8 +35,15 @@ import {TimeZone} from '../services/time-zone';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-reference-time-zone-input',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, AutocompleteSelectionRequiredDirective],
+  providers: [
+    {
+      provide: MatFormFieldControl,
+      useExisting: TimeZoneInputComponent
+    }
+  ],
+  selector: 'inception-reference-time-zone-input',
   template: `
     <div matAutocompleteOrigin #origin="matAutocompleteOrigin">
       <input
@@ -61,13 +69,7 @@ import {TimeZone} from '../services/time-zone';
         }
       </mat-autocomplete>
     </div>
-  `,
-  providers: [
-    {
-      provide: MatFormFieldControl,
-      useExisting: TimeZoneInputComponent
-    }
-  ]
+  `
 })
 export class TimeZoneInputComponent
   implements MatFormFieldControl<string | null>, ControlValueAccessor, OnInit, OnDestroy {

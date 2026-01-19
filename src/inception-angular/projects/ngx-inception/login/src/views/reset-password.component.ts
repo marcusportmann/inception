@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {
   AbstractControl, FormControl, FormGroup, ValidationErrors, Validators
 } from '@angular/forms';
@@ -33,9 +33,10 @@ import {catchError, finalize, first, Observable, throwError} from 'rxjs';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-login-reset-password',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
   templateUrl: 'reset-password.component.html'
 })
 export class ResetPasswordComponent implements OnInit {

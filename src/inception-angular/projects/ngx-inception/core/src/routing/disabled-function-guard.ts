@@ -23,7 +23,7 @@ import {ActivatedRouteSnapshot} from '@angular/router';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class DisabledFunctionGuard {
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): boolean {
     void activatedRouteSnapshot;

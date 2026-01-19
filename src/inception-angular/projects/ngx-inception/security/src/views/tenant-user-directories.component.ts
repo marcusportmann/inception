@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, inject, OnDestroy, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy, ViewChild
+} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
@@ -36,11 +38,12 @@ import {UserDirectorySummary} from '../services/user-directory-summary';
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'inception-security-tenant-user-directories',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CoreModule, AutocompleteSelectionRequiredDirective],
+  selector: 'inception-security-tenant-user-directories',
   standalone: true,
-  templateUrl: 'tenant-user-directories.component.html',
-  styleUrls: ['tenant-user-directories.component.css']
+  styleUrls: ['tenant-user-directories.component.css'],
+  templateUrl: 'tenant-user-directories.component.html'
 })
 export class TenantUserDirectoriesComponent
   extends AdminContainerView

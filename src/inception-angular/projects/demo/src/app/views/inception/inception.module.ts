@@ -58,8 +58,7 @@ const routes: Routes = [
  * @author Marcus Portmann
  */
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes)],
-  declarations: []
+  imports: [CommonModule, RouterModule.forChild(routes)]
 })
 export class InceptionModule {
 }

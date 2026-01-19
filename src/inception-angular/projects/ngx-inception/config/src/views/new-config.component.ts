@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   AdminContainerView, BackNavigation, CoreModule, ValidatedFormDirective
@@ -29,11 +29,12 @@ import {ConfigService} from '../services/config.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule, ValidatedFormDirective],
   selector: 'inception-config-new-config',
   standalone: true,
-  imports: [CoreModule, ValidatedFormDirective],
-  templateUrl: 'new-config.component.html',
-  styleUrls: ['new-config.component.css']
+  styleUrls: ['new-config.component.css'],
+  templateUrl: 'new-config.component.html'
 })
 export class NewConfigComponent extends AdminContainerView {
   readonly config: Config;

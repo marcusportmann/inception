@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {CoreModule} from 'ngx-inception/core';
 import {first} from 'rxjs/operators';
 import {Data} from '../../services/data';
@@ -26,9 +26,10 @@ import {DataService} from '../../services/data.service';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CoreModule],
   selector: 'app-menu1',
   standalone: true,
-  imports: [CoreModule],
   template: `
     <mat-card class="flex-grow-1">
       <mat-card-content> Menu 1</mat-card-content>

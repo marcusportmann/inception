@@ -29,11 +29,11 @@ import {SidebarNavItemComponent} from './sidebar-nav-item.component';
  * @author Marcus Portmann
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SidebarNavItemComponent, AsyncPipe],
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-nav',
   standalone: true,
-  imports: [SidebarNavItemComponent, AsyncPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ul class="nav">
       @for (navItem of navItems$ | async; track navItem) {
