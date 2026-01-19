@@ -18,27 +18,7 @@
   <changeSet id="demo-operations-data-1.0.0" author="Marcus Portmann">
     <comment>demo-operations-data-1.0.0</comment>
 
-    <insert tableName="operations_external_reference_types">
-      <column name="code" value="test_document_external_reference_code"/>
-      <column name="object_type" value="document"/>
-      <column name="name" value="Test Document External Reference"/>
-      <column name="description" value="Test Document External Reference Description"/>
-    </insert>
-
-    <insert tableName="operations_external_reference_types">
-      <column name="code" value="test_workflow_external_reference_code"/>
-      <column name="object_type" value="workflow"/>
-      <column name="name" value="Test Workflow External Reference"/>
-      <column name="description" value="Test Workflow External Description"/>
-    </insert>
-
     <rollback>
-      <delete tableName="operations_external_reference_types">
-        <where>code = 'test_workflow_external_reference_code'</where>
-      </delete>
-      <delete tableName="operations_external_reference_types">
-        <where>code = 'test_document_external_reference_code'</where>
-      </delete>
     </rollback>
   </changeSet>
 </databaseChangeLog>

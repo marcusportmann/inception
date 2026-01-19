@@ -26,10 +26,10 @@ body:json {
     ],
     "attributeDefinitions": [
       {
-        "name": "testWorkflowAttributeName",
+        "name": "testWorkflowAttribute",
         "type": "string",
         "label": "Test Workflow Attribute",
-        "description": "Test Workflow Attribute Description",
+        "description": "The description for the test workflow attribute",
         "required": true
       }    
     ],
@@ -42,6 +42,9 @@ body:json {
         "internal": false,
         "validityPeriod": "P3M"
       }
+    ],
+    "requiredExternalReferenceTypes": [
+      "test_workflow_external_reference_code"
     ],
     "stepDefinitions": [
       {
@@ -64,7 +67,15 @@ body:json {
       }
     ],  
     "validationSchemaType": "json",
-    "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}"
+    "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}",
+    "variableDefinitions": [
+      {
+        "name": "testWorkflowVariable",
+        "type": "string",
+        "description": "The description for the test workflow variable",
+        "required": false
+      }    
+    ]
   }
 }
 

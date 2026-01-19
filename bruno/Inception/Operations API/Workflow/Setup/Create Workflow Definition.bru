@@ -1,7 +1,7 @@
 meta {
   name: Create Workflow Definition
   type: http
-  seq: 9
+  seq: 8
 }
 
 post {
@@ -30,7 +30,7 @@ body:json {
         "name": "testWorkflowAttribute",
         "type": "string",
         "label": "Test Workflow Attribute",
-        "description": "Test Workflow Attribute Description",
+        "description": "The description for the test workflow attribute",
         "required": true
       }    
     ],
@@ -52,7 +52,7 @@ body:json {
       }
     ],
     "requiredExternalReferenceTypes": [
-      "test_external_reference_type"
+      "test_workflow_external_reference"
     ],
     "stepDefinitions": [
       {
@@ -94,16 +94,16 @@ body:json {
       "start_form",
       "work_form"
     ],
-    "variables": [
-      {
-        "name": "testVariable",
-        "type": "string",
-        "description": "The description for the test variable",
-        "required": false
-      }
-    ],
     "validationSchemaType": "json",
-    "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}"
+    "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}",
+    "variableDefinitions": [
+      {
+        "name": "testWorkflowVariable",
+        "type": "string",
+        "description": "The description for the test workflow variable",
+        "required": false
+      }    
+    ]
   }
 }
 

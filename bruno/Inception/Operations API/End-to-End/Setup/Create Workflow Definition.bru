@@ -1,7 +1,7 @@
 meta {
   name: Create Workflow Definition
   type: http
-  seq: 11
+  seq: 10
 }
 
 post {
@@ -31,7 +31,7 @@ body:json {
         "name": "testWorkflowAttribute",
         "type": "string",
         "label": "Test Workflow Attribute",
-        "description": "Test Workflow Attribute Description",
+        "description": "The description for the test workflow attribute",
         "required": true
       }    
     ],
@@ -86,7 +86,15 @@ body:json {
       "work_form"
     ],
     "validationSchemaType": "json",
-    "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}"
+    "validationSchema": "{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Person\",\"type\":\"object\",\"required\":[\"name\",\"dateOfBirth\"],\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"dateOfBirth\":{\"type\":\"string\",\"format\":\"date\"}},\"additionalProperties\":false}",
+    "variableDefinitions": [
+      {
+        "name": "testWorkflowVariable",
+        "type": "string",
+        "description": "Test Workflow Variable Description",
+        "required": true
+      }    
+    ]
   }
 }
 
