@@ -1,0 +1,24 @@
+meta {
+  name: Delete Document External Reference Type
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{baseURL}}/api/operations/reference/external-reference-types/{{externalReferenceTypeCode}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  externalReferenceTypeCode: test_document_external_reference
+}
+
+assert {
+  res.status: eq 204
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
