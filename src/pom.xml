@@ -109,7 +109,7 @@
     <commons-beanutils.version>1.11.0</commons-beanutils.version>
     <commons-io.version>2.21.0</commons-io.version>
     <!-- NOTE: Version of Apache CXF compatible with jaxb-xew-plugin -->
-    <cxf.version>4.0.2</cxf.version>
+    <cxf.version>4.0.5</cxf.version>
     <de.bwaldvogel.mongo-java-server.version>1.47.0</de.bwaldvogel.mongo-java-server.version>
     <de.flapdoodle.embed.mongo.version>4.22.0</de.flapdoodle.embed.mongo.version>
     <easymock.version>5.6.0</easymock.version>
