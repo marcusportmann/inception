@@ -21,6 +21,10 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-feature</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-json</artifactId>
     </dependency>
     <dependency>

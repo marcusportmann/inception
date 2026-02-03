@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.9</version>
+    <version>3.5.10</version>
   </parent>
 
   <repositories>
@@ -565,6 +565,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-feature</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-flowable</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
@@ -802,7 +807,8 @@
     <module>inception-error-ws</module>
     <module>inception-executor</module>
     <module>inception-executor-api</module>
-    <module>inception-executor-ws</module>
+    <module>inception-feature</module>
+    <module>inception-executor</module>
     <!-- <module>inception-flowable</module> -->
     <module>inception-jpa</module>
     <module>inception-jta</module>
