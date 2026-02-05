@@ -20,6 +20,7 @@ import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
 import digital.inception.operations.exception.DuplicateInteractionException;
 import digital.inception.operations.exception.DuplicateInteractionNoteException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
@@ -198,7 +199,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
   void createInteraction(
       @Parameter(
               name = "Tenant-ID",
@@ -215,6 +216,93 @@ public interface InteractionApiController {
           @RequestBody
           Interaction interaction)
       throws InvalidArgumentException, DuplicateInteractionException, ServiceUnavailableException;
+
+  /**
+   * Create the interaction attachment.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @param interactionAttachment the interaction attachment
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DuplicateInteractionAttachmentException if the interaction attachment already exists
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws ServiceUnavailableException if the interaction attachment could not be created
+   */
+  @Operation(
+      summary = "Create the interaction attachment",
+      description = "Create the interaction attachment")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The interaction attachment was created"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "An interaction attachment with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interactions/{interactionId}/attachments",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
+  void createInteractionAttachment(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "interactionId",
+              description = "The ID for the interaction",
+              required = true)
+          @PathVariable
+          UUID interactionId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The interaction attachment to create",
+              required = true)
+          @RequestBody
+          InteractionAttachment interactionAttachment)
+      throws InvalidArgumentException,
+          DuplicateInteractionAttachmentException,
+          InteractionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Create the interaction note.
@@ -1466,7 +1554,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   InteractionSummaries searchInteractions(
       @Parameter(
               name = "Tenant-ID",
@@ -1611,7 +1699,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
   void updateInteraction(
       @Parameter(
               name = "Tenant-ID",
@@ -1634,6 +1722,93 @@ public interface InteractionApiController {
           @RequestBody
           Interaction interaction)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
+
+  /**
+   * Update the interaction attachment.
+   *
+   * @param tenantId the ID for the tenant
+   * @param interactionId the ID for the interaction
+   * @param interactionAttachmentId the ID for the interaction attachment
+   * @param interactionAttachment the interaction attachment
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionNotFoundException if the interaction could not be found
+   * @throws InteractionAttachmentNotFoundException if the interaction attachment could not be found
+   * @throws ServiceUnavailableException if the interaction could not be updated
+   */
+  @Operation(
+      summary = "Update the interaction attachment",
+      description = "Update the interaction attachment")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The interaction attachment was updated"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction or interaction attachment could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/interactions/{interactionId}/attachments/{interactionAttachmentId}",
+      method = RequestMethod.PUT,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
+  void updateInteractionAttachment(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "interactionId",
+              description = "The ID for the interaction",
+              required = true)
+          @PathVariable
+          UUID interactionId,
+      @Parameter(
+              name = "interactionAttachmentId",
+              description = "The ID for the interaction attachment",
+              required = true)
+          @PathVariable
+          UUID interactionAttachmentId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The interaction attachment to update",
+              required = true)
+          @RequestBody
+          InteractionAttachment interactionAttachment)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          InteractionAttachmentNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Update the interaction note.

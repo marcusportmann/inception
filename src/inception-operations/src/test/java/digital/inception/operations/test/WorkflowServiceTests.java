@@ -183,10 +183,12 @@ public class WorkflowServiceTests {
             "Test Workflow Definition",
             "Test Workflow Definition Description",
             "dummy",
+            false,
             null,
             null,
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"),
+            null,
             null,
             null,
             null,
@@ -322,6 +324,7 @@ public class WorkflowServiceTests {
                     "Test Document Attribute Value",
                     "Test Document Attribute Description",
                     true,
+                    null,
                     null)));
 
     documentService.createDocumentDefinition(documentDefinition);
@@ -365,6 +368,7 @@ public class WorkflowServiceTests {
             "Test JSON Workflow Definition",
             "Test JSON Workflow Definition Description",
             "dummy",
+            false,
             "Test JSON Workflow (${testWorkflowAttribute})",
             null,
             ValidationSchemaType.JSON,
@@ -377,7 +381,9 @@ public class WorkflowServiceTests {
                     "Test Workflow Attribute",
                     "Test Workflow Attribute Description",
                     true,
-                    null)),
+                    null,
+                    "Default Value")),
+            null,
             null,
             null,
             null,
@@ -832,7 +838,8 @@ public class WorkflowServiceTests {
 
     // Create a workflow note for the workflow
     CreateWorkflowNoteRequest createWorkflowNoteRequest =
-        new CreateWorkflowNoteRequest(workflow.getId(), "This is the workflow note content.");
+        new CreateWorkflowNoteRequest(
+            workflow.getId(), "test_workflow_step_1", "This is the workflow note content.");
 
     WorkflowNote workflowNote =
         workflowService.createWorkflowNote(
@@ -1204,6 +1211,7 @@ public class WorkflowServiceTests {
             "Test Shared Workflow Definition",
             "Test Shared Workflow Definition Description",
             workflowEngine.getId(),
+            false,
             "Test Shared Workflow (${testWorkflowAttribute})",
             null,
             ValidationSchemaType.JSON,
@@ -1216,7 +1224,9 @@ public class WorkflowServiceTests {
                     "Test Workflow Attribute",
                     "Test Workflow Attribute Description",
                     true,
+                    null,
                     null)),
+            null,
             null,
             null,
             null,
@@ -1252,6 +1262,7 @@ public class WorkflowServiceTests {
             "Test Tenant Workflow Definition",
             "Test Tenant Workflow Definition Description",
             workflowEngine.getId(),
+            false,
             "Test Tenant Workflow (${testWorkflowAttribute})",
             null,
             ValidationSchemaType.JSON,
@@ -1264,7 +1275,9 @@ public class WorkflowServiceTests {
                     "Test Workflow Attribute",
                     "Test Workflow Attribute Description",
                     true,
+                    null,
                     null)),
+            null,
             null,
             null,
             null,
@@ -1282,6 +1295,7 @@ public class WorkflowServiceTests {
             "Another Test Workflow Attribute",
             "Another Test Workflow Attribute Description",
             true,
+            null,
             null));
 
     tenantWorkflowDefinition.addStepDefinition(
@@ -1503,6 +1517,10 @@ public class WorkflowServiceTests {
       WorkflowAttributeDefinition workflowAttributeDefinition1,
       WorkflowAttributeDefinition workflowAttributeDefinition2) {
     assertEquals(
+        workflowAttributeDefinition1.getDefaultValue(),
+        workflowAttributeDefinition2.getDefaultValue(),
+        "The default value values for the workflow attribute definitions do not match");
+    assertEquals(
         workflowAttributeDefinition1.getDescription(),
         workflowAttributeDefinition2.getDescription(),
         "The description values for the workflow attribute definitions do not match");
@@ -1610,6 +1628,10 @@ public class WorkflowServiceTests {
         workflowDefinition1.getEngineId(),
         workflowDefinition2.getEngineId(),
         "The workflow engine ID values for the workflow definitions do not match");
+    assertEquals(
+        workflowDefinition1.getExternalReferenceRequired(),
+        workflowDefinition2.getExternalReferenceRequired(),
+        "The external reference required values for the workflow definitions do not match");
     assertEquals(
         workflowDefinition1.getId(),
         workflowDefinition2.getId(),
@@ -1736,6 +1758,44 @@ public class WorkflowServiceTests {
                         }
                       });
             });
+
+    if ((workflowDefinition1.getOptionalExternalReferenceTypes() == null)
+        && (workflowDefinition2.getOptionalExternalReferenceTypes() != null)) {
+      fail("The optional external reference types for both workflow definitions are not null");
+    }
+
+    if (workflowDefinition1.getOptionalExternalReferenceTypes() != null) {
+      if (workflowDefinition2.getOptionalExternalReferenceTypes() == null) {
+        fail("The optional external reference types for the workflow definition is null");
+      }
+
+      assertEquals(
+          workflowDefinition1.getOptionalExternalReferenceTypes().size(),
+          workflowDefinition2.getOptionalExternalReferenceTypes().size(),
+          "The number of optional external reference types for the workflow definitions do not match");
+      workflowDefinition1
+          .getOptionalExternalReferenceTypes()
+          .forEach(
+              optionalExternalReferenceType1 -> {
+                boolean foundOptionalExternalReferenceType =
+                    workflowDefinition2.getOptionalExternalReferenceTypes().stream()
+                        .anyMatch(
+                            optionalExternalReferenceType2 ->
+                                Objects.equals(
+                                    optionalExternalReferenceType1,
+                                    optionalExternalReferenceType2));
+                if (!foundOptionalExternalReferenceType) {
+                  fail(
+                      "Failed to find the optional external reference type ("
+                          + optionalExternalReferenceType1
+                          + ") for the workflow definition ("
+                          + workflowDefinition1.getId()
+                          + ") version ("
+                          + workflowDefinition1.getVersion()
+                          + ")");
+                }
+              });
+    }
 
     assertEquals(
         workflowDefinition1.getPermissions().size(),
@@ -1951,6 +2011,10 @@ public class WorkflowServiceTests {
         workflowNote1.getCreatedBy(),
         workflowNote2.getCreatedBy(),
         "The created by values for the workflow notes do not match");
+    assertEquals(
+        workflowNote1.getStep(),
+        workflowNote2.getStep(),
+        "The step values for the workflow notes do not match");
     assertEquals(
         workflowNote1.getUpdated(),
         workflowNote2.getUpdated(),

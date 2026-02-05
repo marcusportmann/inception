@@ -138,15 +138,15 @@ public class DocumentTemplate implements Serializable {
   @Column(name = "description", length = 500)
   private String description;
 
-  /** The base-64 encoded SHA-256 hash of the data for the document template. */
+  /** The hex-encoded SHA-256 hash of the data for the document template. */
   @Schema(
-      description = "The base-64 encoded SHA-256 hash of the data for the document template",
+      description = "The hex-encoded SHA-256 hash of the data for the document template",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Hash", required = true)
   @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "hash", length = 50, nullable = false)
+  @Size(min = 1, max = 64)
+  @Column(name = "hash", length = 64, nullable = false)
   private String hash;
 
   /** The ID for the document template. */
@@ -270,9 +270,9 @@ public class DocumentTemplate implements Serializable {
   }
 
   /**
-   * Returns the base-64 encoded SHA-256 hash of the data for the document template.
+   * Returns the hex-encoded SHA-256 hash of the data for the document template.
    *
-   * @return the base-64 encoded SHA-256 hash of the data for the document template
+   * @return the hex-encoded SHA-256 hash of the data for the document template
    */
   public String getHash() {
     return hash;
@@ -380,9 +380,9 @@ public class DocumentTemplate implements Serializable {
   }
 
   /**
-   * Sets the base-64 encoded SHA-256 hash of the data for the document template.
+   * Sets the hex-encoded SHA-256 hash of the data for the document template.
    *
-   * @param hash the base-64 encoded SHA-256 hash of the data for the document template
+   * @param hash the hex-encoded SHA-256 hash of the data for the document template
    */
   public void setHash(String hash) {
     this.hash = hash;

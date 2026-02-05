@@ -260,6 +260,7 @@ public class EndToEndTests {
             "Test Document Attribute Value",
             "Test Document Attribute Description",
             true,
+            null,
             null);
 
     DocumentDefinition documentDefinition =
@@ -323,10 +324,12 @@ public class EndToEndTests {
             "Test JSON Workflow Definition",
             "Test JSON Workflow Definition Description",
             "dummy",
+            false,
             "Test JSON Workflow",
             null,
             ValidationSchemaType.JSON,
             ResourceUtil.getStringClasspathResource("TestData.schema.json"),
+            null,
             null,
             null,
             null,
@@ -343,7 +346,8 @@ public class EndToEndTests {
             "Test Workflow Attribute",
             "Test Workflow Attribute Description",
             true,
-            "(?i).*value.*"));
+            "(?i).*value.*",
+            null));
 
     workflowDefinition.addDocumentDefinition(documentDefinition.getId(), true, false, true, false);
     workflowDefinition.addDocumentDefinition(

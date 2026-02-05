@@ -74,6 +74,7 @@ import org.springframework.util.StringUtils;
   "nameTemplate",
   "timeToComplete",
   "attributes",
+  "optionalExternalReferenceTypes",
   "requiredExternalReferenceTypes",
   "supportedWorkflowFormTypes",
   "attributeDefinitions",
@@ -99,6 +100,7 @@ import org.springframework.util.StringUtils;
       "nameTemplate",
       "timeToComplete",
       "attributes",
+      "optionalExternalReferenceTypes",
       "requiredExternalReferenceTypes",
       "supportedWorkflowFormTypes",
       "attributeDefinitions",
@@ -288,6 +290,20 @@ public class WorkflowDefinition implements Serializable {
   @Column(name = "engine_id", length = 50, nullable = false)
   private String engineId;
 
+  /**
+   * Is at least one external reference required for workflows associated with the workflow
+   * definition?
+   */
+  @Schema(
+      description =
+          "Is at least one external reference required for workflows associated with the workflow definition",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ExternalReferenceRequired", required = true)
+  @NotNull
+  @Column(name = "external_reference_required", nullable = false)
+  private Boolean externalReferenceRequired;
+
   /** The ID for the workflow definition. */
   @Schema(
       description = "The ID for the workflow definition",
@@ -323,6 +339,18 @@ public class WorkflowDefinition implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "name_template", length = 100)
   private String nameTemplate;
+
+  /** The codes for the optional external reference types for the workflow definition. */
+  @Schema(
+      description =
+          "The codes for the optional external reference types for the workflow definition")
+  @JsonProperty
+  @XmlElementWrapper(name = "OptionalExternalReferenceTypes")
+  @XmlElement(name = "OptionalExternalReferenceType")
+  @Size(max = 10)
+  @Convert(converter = StringListAttributeConverter.class)
+  @Column(name = "optional_external_reference_types", length = 510)
+  private List<String> optionalExternalReferenceTypes;
 
   /** The codes for the required external reference types for the workflow definition. */
   @Schema(
@@ -406,6 +434,8 @@ public class WorkflowDefinition implements Serializable {
    * @param name the name of the workflow definition
    * @param description the description for the workflow definition
    * @param engineId the ID for the workflow engine the workflow definition is associated with
+   * @param externalReferenceRequired is at least one external reference required for workflows
+   *     associated with the workflow definition
    * @param nameTemplate the template string used to generate the names of workflows associated with
    *     the workflow definition
    * @param timeToComplete the ISO-8601 duration format amount of time to complete a workflow
@@ -417,6 +447,8 @@ public class WorkflowDefinition implements Serializable {
    * @param documentDefinitions the document definitions associated with the workflow definition
    * @param stepDefinitions the workflow step definitions for the workflow definition
    * @param variableDefinitions the workflow variable definitions for the workflow definition
+   * @param optionalExternalReferenceTypes the codes for the optional external reference types for
+   *     the workflow definition
    * @param requiredExternalReferenceTypes the codes for the required external reference types for
    *     the workflow definition
    * @param supportedWorkflowFormTypes the supported workflow form types for the workflow definition
@@ -430,6 +462,7 @@ public class WorkflowDefinition implements Serializable {
       String name,
       String description,
       String engineId,
+      boolean externalReferenceRequired,
       String nameTemplate,
       String timeToComplete,
       ValidationSchemaType validationSchemaType,
@@ -439,6 +472,7 @@ public class WorkflowDefinition implements Serializable {
       List<WorkflowDefinitionDocumentDefinition> documentDefinitions,
       List<WorkflowStepDefinition> stepDefinitions,
       List<WorkflowVariableDefinition> variableDefinitions,
+      List<String> optionalExternalReferenceTypes,
       List<String> requiredExternalReferenceTypes,
       List<WorkflowFormType> supportedWorkflowFormTypes,
       List<WorkflowDefinitionPermission> permissions) {
@@ -449,6 +483,7 @@ public class WorkflowDefinition implements Serializable {
     this.name = name;
     this.description = description;
     this.engineId = engineId;
+    this.externalReferenceRequired = externalReferenceRequired;
     this.nameTemplate = nameTemplate;
     this.timeToComplete = timeToComplete;
 
@@ -495,6 +530,7 @@ public class WorkflowDefinition implements Serializable {
       this.variableDefinitions.addAll(variableDefinitions);
     }
 
+    this.optionalExternalReferenceTypes = optionalExternalReferenceTypes;
     this.requiredExternalReferenceTypes = requiredExternalReferenceTypes;
 
     this.supportedWorkflowFormTypes = supportedWorkflowFormTypes;
@@ -790,6 +826,17 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Returns whether at least one external reference is required for workflows associated with the
+   * workflow definition.
+   *
+   * @return {@code true} if at least one external reference is required for workflows associated
+   *     with the workflow definition or {@code false} otherwise
+   */
+  public Boolean getExternalReferenceRequired() {
+    return externalReferenceRequired;
+  }
+
+  /**
    * Returns the ID for the workflow definition.
    *
    * @return the ID for the workflow definition
@@ -816,6 +863,15 @@ public class WorkflowDefinition implements Serializable {
    */
   public String getNameTemplate() {
     return nameTemplate;
+  }
+
+  /**
+   * Returns the codes for the optional external reference types for the workflow definition.
+   *
+   * @return the codes for the optional external reference types for the workflow definition
+   */
+  public List<String> getOptionalExternalReferenceTypes() {
+    return optionalExternalReferenceTypes;
   }
 
   /**
@@ -1082,6 +1138,17 @@ public class WorkflowDefinition implements Serializable {
   }
 
   /**
+   * Set whether at least one external reference is required for workflows associated with the
+   * workflow definition.
+   *
+   * @param externalReferenceRequired {@code true} if at least one external reference is required
+   *     for workflows associated with the workflow definition or {@code false} otherwise
+   */
+  public void setExternalReferenceRequired(Boolean externalReferenceRequired) {
+    this.externalReferenceRequired = externalReferenceRequired;
+  }
+
+  /**
    * Sets the ID for the workflow definition.
    *
    * @param id the ID for the workflow definition
@@ -1108,6 +1175,16 @@ public class WorkflowDefinition implements Serializable {
    */
   public void setNameTemplate(String nameTemplate) {
     this.nameTemplate = nameTemplate;
+  }
+
+  /**
+   * Set the codes for the optional external reference types for the workflow definition.
+   *
+   * @param optionalExternalReferenceTypes the codes for the optional external reference types for
+   *     the workflow definition
+   */
+  public void setOptionalExternalReferenceTypes(List<String> optionalExternalReferenceTypes) {
+    this.optionalExternalReferenceTypes = optionalExternalReferenceTypes;
   }
 
   /**

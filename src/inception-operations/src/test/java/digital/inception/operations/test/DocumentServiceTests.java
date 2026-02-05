@@ -217,7 +217,8 @@ public class DocumentServiceTests {
                     "Test Document Attribute",
                     "Test Document Attribute Description",
                     true,
-                    "(?i).*value.*")));
+                    "(?i).*value.*",
+                    "Default Value")));
 
     documentService.createDocumentDefinition(sharedDocumentDefinition);
 
@@ -621,6 +622,10 @@ public class DocumentServiceTests {
   private void compareDocumentAttributeDefinitions(
       DocumentAttributeDefinition documentAttributeDefinition1,
       DocumentAttributeDefinition documentAttributeDefinition2) {
+    assertEquals(
+        documentAttributeDefinition1.getDefaultValue(),
+        documentAttributeDefinition2.getDefaultValue(),
+        "The default value values for the document attribute definitions do not match");
     assertEquals(
         documentAttributeDefinition1.getDescription(),
         documentAttributeDefinition2.getDescription(),

@@ -192,12 +192,12 @@ public class Document implements Serializable {
   @Column(name = "file_type", nullable = false)
   private FileType fileType;
 
-  /** The base-64 encoded SHA-256 hash of the data for the document. */
-  @Schema(description = "The base-64 encoded SHA-256 hash of the data for the document")
+  /** The hex-encoded SHA-256 hash of the data for the document. */
+  @Schema(description = "The hex-encoded SHA-256 hash of the data for the document")
   @JsonProperty
   @XmlElement(name = "Hash")
-  @Size(min = 1, max = 50)
-  @Column(name = "hash", length = 50, nullable = false)
+  @Size(min = 1, max = 64)
+  @Column(name = "hash", length = 64, nullable = false)
   private String hash;
 
   /** The ID for the document. */
@@ -411,9 +411,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Returns the base-64 encoded SHA-256 hash of the data for the document.
+   * Returns the hex-encoded SHA-256 hash of the data for the document.
    *
-   * @return the base-64 encoded SHA-256 hash of the data for the document
+   * @return the hex-encoded SHA-256 hash of the data for the document
    */
   public String getHash() {
     return hash;
@@ -561,9 +561,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Sets the base-64 encoded SHA-256 hash of the data for the document.
+   * Sets the hex-encoded SHA-256 hash of the data for the document.
    *
-   * @param hash the base-64 encoded SHA-256 hash of the data for the document
+   * @param hash the hex-encoded SHA-256 hash of the data for the document
    */
   public void setHash(String hash) {
     this.hash = hash;

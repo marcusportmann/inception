@@ -39,6 +39,7 @@ import digital.inception.operations.model.CreateDocumentRequest;
 import digital.inception.operations.model.CreateDocumentTemplateRequest;
 import digital.inception.operations.model.Document;
 import digital.inception.operations.model.DocumentAttribute;
+import digital.inception.operations.model.DocumentAttributeDefinition;
 import digital.inception.operations.model.DocumentDefinition;
 import digital.inception.operations.model.DocumentDefinitionCategory;
 import digital.inception.operations.model.DocumentExternalReference;
@@ -71,7 +72,7 @@ import jakarta.persistence.criteria.Predicate;
 import java.security.MessageDigest;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Base64;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -173,9 +174,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-      digest.update(data);
-
-      return Base64.getEncoder().encodeToString(digest.digest());
+      return HexFormat.of().formatHex(digest.digest(data));
     } catch (Throwable e) {
       throw new RuntimeException("Failed to calculate the hash for the data", e);
     }
@@ -248,21 +247,45 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         document.setExternalReferences(createDocumentRequest.getExternalReferences());
       }
 
-      if (createDocumentRequest.getAttributes() != null) {
-        // Validate the allowed document attributes
-        validationService.validateAllowedDocumentAttributes(
-            "createDocumentRequest.attributes",
-            documentDefinition,
-            createDocumentRequest.getAttributes());
-
-        // Validate the required document attributes
-        validationService.validateRequiredDocumentAttributes(
-            "createDocumentRequest.attributes",
-            documentDefinition,
-            createDocumentRequest.getAttributes());
-
-        document.setAttributes(createDocumentRequest.getAttributes());
+      if (createDocumentRequest.getAttributes() == null) {
+        createDocumentRequest.setAttributes(new ArrayList<>());
       }
+
+      // Apply default attribute values, if required
+      for (DocumentAttributeDefinition documentAttributeDefinition :
+          documentDefinition.getAttributeDefinitions()) {
+        if (documentAttributeDefinition.getDefaultValue() != null) {
+          Optional<DocumentAttribute> documentAttributeOptional =
+              createDocumentRequest.getAttribute(documentAttributeDefinition.getName());
+
+          if (documentAttributeOptional.isEmpty()) {
+            createDocumentRequest.addAttribute(
+                new DocumentAttribute(
+                    documentAttributeDefinition.getName(),
+                    documentAttributeDefinition.getDefaultValue()));
+          } else {
+            DocumentAttribute documentAttribute = documentAttributeOptional.get();
+
+            if (!StringUtils.hasText(documentAttribute.getValue())) {
+              documentAttribute.setValue(documentAttributeDefinition.getDefaultValue());
+            }
+          }
+        }
+      }
+
+      // Validate the allowed document attributes
+      validationService.validateAllowedDocumentAttributes(
+          "createDocumentRequest.attributes",
+          documentDefinition,
+          createDocumentRequest.getAttributes());
+
+      // Validate the required document attributes
+      validationService.validateRequiredDocumentAttributes(
+          "createDocumentRequest.attributes",
+          documentDefinition,
+          createDocumentRequest.getAttributes());
+
+      document.setAttributes(createDocumentRequest.getAttributes());
 
       document.setCreated(OffsetDateTime.now());
       document.setCreatedBy(createdBy);

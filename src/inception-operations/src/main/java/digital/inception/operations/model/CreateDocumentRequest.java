@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.file.FileType;
+import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -38,6 +39,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -157,6 +159,32 @@ public class CreateDocumentRequest implements Serializable {
 
   /** Constructs a new {@code CreateDocumentRequest}. */
   public CreateDocumentRequest() {}
+
+  /**
+   * Add the document attribute for the document.
+   *
+   * @param attribute the document attribute
+   */
+  public void addAttribute(DocumentAttribute attribute) {
+    attributes.removeIf(
+        existingAttribute ->
+            StringUtil.equalsIgnoreCase(existingAttribute.getName(), attribute.getName()));
+
+    attributes.add(attribute);
+  }
+
+  /**
+   * Retrieve the attribute with the specified name for the document.
+   *
+   * @param name the name of the attribute
+   * @return an Optional containing the attribute with the specified name for the document or an
+   *     empty Optional if the attribute could not be found
+   */
+  public Optional<DocumentAttribute> getAttribute(String name) {
+    return attributes.stream()
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getName(), name))
+        .findFirst();
+  }
 
   /**
    * Returns the attributes for the document.

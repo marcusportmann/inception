@@ -52,6 +52,7 @@ import java.util.UUID;
   "id",
   "tenantId",
   "workflowId",
+  "step",
   "content",
   "created",
   "createdBy",
@@ -66,6 +67,7 @@ import java.util.UUID;
       "id",
       "tenantId",
       "workflowId",
+      "step",
       "content",
       "created",
       "createdBy",
@@ -123,6 +125,15 @@ public class WorkflowNote implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
+  /** The code for the workflow step the workflow note is associated with. */
+  @Schema(
+      description = "The code for the workflow step the workflow note is associated with")
+  @JsonProperty
+  @XmlElement(name = "Step")
+  @Size(min = 1, max = 50)
+  @Column(name = "step", length = 50)
+  private String step;
+
   /** The ID for the tenant the workflow note is associated with. */
   @Schema(
       description = "The ID for the tenant the workflow note is associated with",
@@ -168,15 +179,17 @@ public class WorkflowNote implements Serializable {
    *
    * @param tenantId the ID for the tenant the workflow note is associated with
    * @param workflowId the ID for the workflow the workflow note is associated with
+   * @param step the code for the workflow step the workflow note is associated with
    * @param content the content for the workflow note
    * @param created the date and time the workflow note was created
    * @param createdBy the person or system that created the workflow note
    */
   public WorkflowNote(
-      UUID tenantId, UUID workflowId, String content, OffsetDateTime created, String createdBy) {
+      UUID tenantId, UUID workflowId, String step, String content, OffsetDateTime created, String createdBy) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
     this.workflowId = workflowId;
+    this.step = step;
     this.content = content;
     this.created = created;
     this.createdBy = createdBy;
@@ -241,6 +254,15 @@ public class WorkflowNote implements Serializable {
    */
   public UUID getId() {
     return id;
+  }
+
+  /**
+   * Returns the code for the workflow step the workflow note is associated with.
+   *
+   * @return the code for the workflow step the workflow note is associated with
+   */
+  public String getStep() {
+    return step;
   }
 
   /**
@@ -323,6 +345,15 @@ public class WorkflowNote implements Serializable {
    */
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Set the code for the workflow step the workflow note is associated with.
+   *
+   * @param step the code for the workflow step the workflow note is associated with
+   */
+  public void setStep(String step) {
+    this.step = step;
   }
 
   /**

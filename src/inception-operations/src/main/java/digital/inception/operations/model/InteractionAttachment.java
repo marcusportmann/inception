@@ -99,15 +99,15 @@ public class InteractionAttachment implements Serializable {
   @Column(name = "file_type", nullable = false)
   private FileType fileType;
 
-  /** The base-64 encoded SHA-256 hash of the data for the interaction attachment. */
+  /** The hex-encoded SHA-256 hash of the data for the interaction attachment. */
   @Schema(
-      description = "The base-64 encoded SHA-256 hash of the data for the interaction attachment",
+      description = "The hex-encoded SHA-256 hash of the data for the interaction attachment",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Hash", required = true)
   @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "hash", length = 50, nullable = false)
+  @Size(min = 1, max = 64)
+  @Column(name = "hash", length = 64, nullable = false)
   private String hash;
 
   /** The ID for the interaction attachment. */
@@ -185,7 +185,7 @@ public class InteractionAttachment implements Serializable {
    * @param sourceReference the interaction source specific reference for the interaction attachment
    * @param fileType the file type for the interaction attachment
    * @param name the name of the interaction attachment
-   * @param hash the base-64 encoded SHA-256 hash of the data for the interaction attachment
+   * @param hash the hex-encoded SHA-256 hash of the data for the interaction attachment
    * @param data the data for the interaction attachment
    */
   public InteractionAttachment(
@@ -219,7 +219,7 @@ public class InteractionAttachment implements Serializable {
    * @param sourceId the ID for the interaction source the interaction attachment is associated with
    * @param fileType the file type for the interaction attachment
    * @param name the name of the interaction attachment
-   * @param hash the base-64 encoded SHA-256 hash of the data for the interaction attachment
+   * @param hash the hex-encoded SHA-256 hash of the data for the interaction attachment
    * @param data the data for the interaction attachment
    */
   public InteractionAttachment(
@@ -285,9 +285,9 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Returns the base-64 encoded SHA-256 hash of the data for the interaction attachment.
+   * Returns the hex-encoded SHA-256 hash of the data for the interaction attachment.
    *
-   * @return the base-64 encoded SHA-256 hash of the data for the interaction attachment
+   * @return the hex-encoded SHA-256 hash of the data for the interaction attachment
    */
   public String getHash() {
     return hash;
@@ -367,9 +367,9 @@ public class InteractionAttachment implements Serializable {
   }
 
   /**
-   * Sets the base-64 encoded SHA-256 hash of the data for the interaction attachment.
+   * Sets the hex-encoded SHA-256 hash of the data for the interaction attachment.
    *
-   * @param hash the base-64 encoded SHA-256 hash of the data for the interaction attachment
+   * @param hash the hex-encoded SHA-256 hash of the data for the interaction attachment
    */
   public void setHash(String hash) {
     this.hash = hash;

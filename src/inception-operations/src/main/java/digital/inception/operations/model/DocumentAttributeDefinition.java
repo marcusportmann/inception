@@ -47,14 +47,14 @@ import java.io.Serializable;
  */
 @Schema(description = "A document attribute definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"name", "type", "label", "description", "required", "pattern"})
+@JsonPropertyOrder({"name", "type", "label", "description", "required", "pattern", "defaultValue"})
 @XmlRootElement(
     name = "DocumentAttributeDefinition",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "DocumentAttributeDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"name", "type", "label", "description", "required", "pattern"})
+    propOrder = {"name", "type", "label", "description", "required", "pattern", "defaultValue"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_document_attribute_definitions")
@@ -63,6 +63,18 @@ import java.io.Serializable;
 public class DocumentAttributeDefinition implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /**
+   * The default value for a document attribute associated with the document attribute definition.
+   */
+  @Schema(
+      description =
+          "The default value for a document attribute associated with the document attribute definition")
+  @JsonProperty
+  @XmlElement(name = "DefaultValue")
+  @Size(min = 1, max = 1000)
+  @Column(name = "default_value", length = 1000)
+  private String defaultValue;
 
   /** The ID for the document definition the document attribute definition is associated with. */
   @Schema(hidden = true)
@@ -163,6 +175,7 @@ public class DocumentAttributeDefinition implements Serializable {
    * @param required is the document attribute required
    * @param pattern the regular expression pattern used to validate the value for a document
    *     attribute associated with the document attribute definition
+   * @param defaultValue the default value for a document attribute associated with the document
    */
   public DocumentAttributeDefinition(
       String name,
@@ -170,13 +183,15 @@ public class DocumentAttributeDefinition implements Serializable {
       String label,
       String description,
       boolean required,
-      String pattern) {
+      String pattern,
+      String defaultValue) {
     this.name = name;
     this.type = type;
     this.label = label;
     this.description = description;
     this.required = required;
     this.pattern = pattern;
+    this.defaultValue = defaultValue;
   }
 
   /**
@@ -203,6 +218,17 @@ public class DocumentAttributeDefinition implements Serializable {
 
     return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
         && StringUtil.equalsIgnoreCase(name, other.name);
+  }
+
+  /**
+   * Returns the default value for a document attribute associated with the document attribute
+   * definition.
+   *
+   * @return the default value for a document attribute associated with the document attribute
+   *     definition
+   */
+  public String getDefaultValue() {
+    return defaultValue;
   }
 
   /**
@@ -270,6 +296,17 @@ public class DocumentAttributeDefinition implements Serializable {
    */
   public boolean isRequired() {
     return required;
+  }
+
+  /**
+   * Set the default value for a document attribute associated with the document attribute
+   * definition.
+   *
+   * @param defaultValue the default value for a document attribute associated with the document
+   *     attribute definition
+   */
+  public void setDefaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
   }
 
   /**

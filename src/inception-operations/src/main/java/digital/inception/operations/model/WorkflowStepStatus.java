@@ -55,7 +55,19 @@ public enum WorkflowStepStatus implements CodeEnum {
 
   /** Failed. */
   @XmlEnumValue("Failed")
-  FAILED("failed", "Failed");
+  FAILED("failed", "Failed"),
+
+  /** Awaiting Required Information. */
+  @XmlEnumValue("AwaitingRequiredInformation")
+  AWAITING_REQUIRED_INFORMATION("awaiting_required_information", "Awaiting Required Information"),
+
+  /** Awaiting Internal Feedback. */
+  @XmlEnumValue("AwaitingInternalFeedback")
+  AWAITING_INTERNAL_FEEDBACK("awaiting_internal_feedback", "Awaiting Internal Feedback"),
+
+  /** Awaiting External Feedback. */
+  @XmlEnumValue("AwaitingExternalFeedback")
+  AWAITING_EXTERNAL_FEEDBACK("awaiting_external_feedback", "Awaiting External Feedback");
 
   private final String code;
 

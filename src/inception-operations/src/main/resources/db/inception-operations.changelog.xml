@@ -158,8 +158,8 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the document template">
         <constraints nullable="false"/>
       </column>
-      <column name="hash" type="nvarchar(50)"
-        remarks="The base-64 encoded SHA-256 hash of the data for the document template">
+      <column name="hash" type="nvarchar(64)"
+        remarks="The hex-encoded SHA-256 hash of the data for the document template">
         <constraints nullable="false"/>
       </column>
       <column name="description" type="nvarchar(500)" remarks="The description for the document template"/>
@@ -270,6 +270,7 @@
         <constraints nullable="false"/>
       </column>
       <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate the value for a document attribute associated with the document attribute definition"/>
+      <column name="default_value" type="nvarchar(1000)" remarks="The default value for a document attribute associated with the document attribute definition"/>
     </createTable>
     <addForeignKeyConstraint
       constraintName="operations_document_attribute_definitions_document_definition_fk"
@@ -394,9 +395,14 @@
         remarks="The ID for the workflow engine the workflow definition is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="external_reference_required" type="boolean" remarks="Is at least one external reference required for workflows associated with the workflow definition">
+        <constraints nullable="false"/>
+      </column>
       <column name="name_template" type="nvarchar(100)" remarks="The template string used to generate the names of workflows associated with the workflow definition"/>
       <column name="time_to_complete" type="nvarchar(50)"
         remarks="The ISO-8601 duration format amount of time to complete a workflow associated with the workflow definition"/>
+      <column name="optional_external_reference_types" type="nvarchar(510)"
+        remarks="The comma-delimited list of codes for the optional external reference types for the workflow definition"/>
       <column name="required_external_reference_types" type="nvarchar(510)"
         remarks="The comma-delimited list of codes for the required external reference types for the workflow definition"/>
       <column name="supported_workflow_form_types" type="nvarchar(510)"
@@ -514,6 +520,7 @@
         <constraints nullable="false"/>
       </column>
       <column name="pattern" type="nvarchar(1000)" remarks="The regular expression pattern used to validate the value for a workflow attribute associated with the workflow attribute definition"/>
+      <column name="default_value" type="nvarchar(1000)" remarks="The default value for a workflow attribute associated with the workflow attribute definition"/>
     </createTable>
     <addForeignKeyConstraint
       constraintName="operations_workflow_attribute_definitions_workflow_definition_fk"
@@ -794,6 +801,7 @@
         remarks="The ID for the workflow the workflow note is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="step" type="nvarchar(50)" remarks="The code for the workflow step the workflow note is associated with"/>
       <column name="content" type="nvarchar(2000)" remarks="The content for the workflow note">
         <constraints nullable="false"/>
       </column>
@@ -894,8 +902,8 @@
       <column name="name" type="nvarchar(200)" remarks="The name of the document">
         <constraints nullable="false"/>
       </column>
-      <column name="hash" type="nvarchar(50)"
-        remarks="The base-64 encoded SHA-256 hash of the data for the document">
+      <column name="hash" type="nvarchar(64)"
+        remarks="The hex-encoded SHA-256 hash of the data for the document">
         <constraints nullable="false"/>
       </column>
       <column name="source_document_id" type="uuid"
@@ -1307,8 +1315,8 @@
       <column name="name" type="nvarchar(200)" remarks="The name of the interaction attachment">
         <constraints nullable="false"/>
       </column>
-      <column name="hash" type="nvarchar(50)"
-        remarks="The base-64 encoded SHA-256 hash of the data for the interaction attachment">
+      <column name="hash" type="nvarchar(64)"
+        remarks="The hex-encoded SHA-256 hash of the data for the interaction attachment">
         <constraints nullable="false"/>
       </column>
       <column name="data" type="${blob_type}"

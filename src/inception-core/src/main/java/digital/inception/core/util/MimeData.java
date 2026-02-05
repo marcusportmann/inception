@@ -20,7 +20,7 @@ import jakarta.activation.MimeType;
 import java.io.Serial;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import java.util.Base64;
+import java.util.HexFormat;
 import org.springframework.util.StringUtils;
 
 /**
@@ -34,7 +34,7 @@ public final class MimeData implements java.io.Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** The cached base-64 encoded SHA-256 hash of the data. */
+  /** The cached hex-encoded SHA-256 hash of the data. */
   private transient String cachedHash;
 
   /** The data. */
@@ -145,15 +145,16 @@ public final class MimeData implements java.io.Serializable {
   }
 
   /**
-   * Retrieve the base-64 encoded SHA-256 hash of the data.
+   * Retrieve the hex-encoded SHA-256 hash of the data.
    *
-   * @return the base-64 encoded SHA-256 hash of the data
+   * @return the hex-encoded SHA-256 hash of the data
    */
   public synchronized String getHash() {
     if (cachedHash == null) {
       try {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        cachedHash = Base64.getEncoder().encodeToString(digest.digest(data));
+
+        cachedHash = HexFormat.of().formatHex(digest.digest(data));
       } catch (Throwable e) {
         throw new RuntimeException("Failed to calculate the SHA-256 hash of the data", e);
       }

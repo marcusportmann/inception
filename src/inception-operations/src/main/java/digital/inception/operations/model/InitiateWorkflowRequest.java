@@ -19,6 +19,7 @@ package digital.inception.operations.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -32,6 +33,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -156,6 +158,20 @@ public class InitiateWorkflowRequest implements Serializable {
   @XmlElement(name = "PendWorkflow")
   private boolean pendWorkflow;
 
+  /**
+   * Add the workflow attribute for the workflow.
+   *
+   * @param attribute the workflow attribute
+   */
+  public void addAttribute(WorkflowAttribute attribute) {
+    attributes.removeIf(
+        existingAttribute ->
+            StringUtil.equalsIgnoreCase(
+                existingAttribute.getName(), attribute.getName()));
+
+    attributes.add(attribute);
+  }
+
   /** The variables for the workflow. */
   @Schema(description = "The variables for the workflow")
   @JsonProperty
@@ -205,6 +221,19 @@ public class InitiateWorkflowRequest implements Serializable {
     this.interactionLinks = interactionLinks;
     this.variables = variables;
     this.data = data;
+  }
+
+  /**
+   * Retrieve the attribute with the specified name for the workflow.
+   *
+   * @param name the name of the attribute
+   * @return an Optional containing the attribute with the specified name for the workflow or an
+   *     empty Optional if the attribute could not be found
+   */
+  public Optional<WorkflowAttribute> getAttribute(String name) {
+    return attributes.stream()
+        .filter(attribute -> StringUtil.equalsIgnoreCase(attribute.getName(), name))
+        .findFirst();
   }
 
   /**

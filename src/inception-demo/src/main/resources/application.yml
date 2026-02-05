@@ -223,6 +223,8 @@ management:
   health:
     mail:
       enabled: false
+    mongo:
+      enabled: false
   metrics:
     enable:
       all: true

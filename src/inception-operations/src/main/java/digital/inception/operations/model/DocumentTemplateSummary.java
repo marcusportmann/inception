@@ -120,14 +120,14 @@ public class DocumentTemplateSummary implements Serializable {
   @Size(min = 1, max = 500)
   private String description;
 
-  /** The base-64 encoded SHA-256 hash of the data for the document template. */
+  /** The hex-encoded SHA-256 hash of the data for the document template. */
   @Schema(
-      description = "The base-64 encoded SHA-256 hash of the data for the document template",
+      description = "The hex-encoded SHA-256 hash of the data for the document template",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Hash", required = true)
   @NotNull
-  @Size(min = 1, max = 50)
+  @Size(min = 1, max = 64)
   private String hash;
 
   /** The ID for the document template. */
@@ -185,7 +185,7 @@ public class DocumentTemplateSummary implements Serializable {
    * @param tenantId the ID for the tenant the document template is specific to
    * @param name the name of the document template
    * @param description the description for the document template
-   * @param hash the base-64 encoded SHA-256 hash of the data for the document template
+   * @param hash the hex-encoded SHA-256 hash of the data for the document template
    * @param created the date and time the document template was created
    * @param createdBy the person or system that created the document template
    * @param updated the date and time the document template was last updated
@@ -276,9 +276,9 @@ public class DocumentTemplateSummary implements Serializable {
   }
 
   /**
-   * Returns the base-64 encoded SHA-256 hash of the data for the document template.
+   * Returns the hex-encoded SHA-256 hash of the data for the document template.
    *
-   * @return the base-64 encoded SHA-256 hash of the data for the document template
+   * @return the hex-encoded SHA-256 hash of the data for the document template
    */
   public String getHash() {
     return hash;

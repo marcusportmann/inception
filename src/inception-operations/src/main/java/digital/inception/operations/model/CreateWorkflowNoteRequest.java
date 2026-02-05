@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -62,6 +63,14 @@ public class CreateWorkflowNoteRequest implements Serializable {
   @Size(min = 1, max = 2000)
   private String content;
 
+  /** The code for the workflow step the workflow note is associated with. */
+  @Schema(description = "The code for the workflow step the workflow note is associated with")
+  @JsonProperty
+  @XmlElement(name = "Step")
+  @Size(min = 1, max = 50)
+  @Column(name = "step", length = 50)
+  private String step;
+
   /** The ID for the workflow the workflow note is associated with. */
   @Schema(
       description = "The ID for the workflow the workflow note is associated with",
@@ -78,10 +87,12 @@ public class CreateWorkflowNoteRequest implements Serializable {
    * Constructs a new {@code CreateWorkflowNoteRequest}.
    *
    * @param workflowId the ID for the workflow the workflow note is associated with
+   * @param step the code for the workflow step the workflow note is associated with
    * @param content the content for the workflow note
    */
-  public CreateWorkflowNoteRequest(UUID workflowId, String content) {
+  public CreateWorkflowNoteRequest(UUID workflowId, String step, String content) {
     this.workflowId = workflowId;
+    this.step = step;
     this.content = content;
   }
 
@@ -92,6 +103,15 @@ public class CreateWorkflowNoteRequest implements Serializable {
    */
   public String getContent() {
     return content;
+  }
+
+  /**
+   * Returns the code for the workflow step the workflow note is associated with.
+   *
+   * @return the code for the workflow step the workflow note is associated with
+   */
+  public String getStep() {
+    return step;
   }
 
   /**
@@ -110,6 +130,15 @@ public class CreateWorkflowNoteRequest implements Serializable {
    */
   public void setContent(String content) {
     this.content = content;
+  }
+
+  /**
+   * Set the code for the workflow step the workflow note is associated with.
+   *
+   * @param step the code for the workflow step the workflow note is associated with
+   */
+  public void setStep(String step) {
+    this.step = step;
   }
 
   /**

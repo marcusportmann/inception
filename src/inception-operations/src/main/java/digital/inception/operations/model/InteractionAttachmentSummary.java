@@ -89,15 +89,15 @@ public class InteractionAttachmentSummary implements Serializable {
   @Column(name = "file_type", nullable = false)
   private FileType fileType;
 
-  /** The base-64 encoded SHA-256 hash of the data for the interaction attachment. */
+  /** The hex-encoded SHA-256 hash of the data for the interaction attachment. */
   @Schema(
-      description = "The base-64 encoded SHA-256 hash of the data for the interaction attachment",
+      description = "The hex-encoded SHA-256 hash of the data for the interaction attachment",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Hash", required = true)
   @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "hash", length = 50, nullable = false)
+  @Size(min = 1, max = 64)
+  @Column(name = "hash", length = 64, nullable = false)
   private String hash;
 
   /** The ID for the interaction attachment. */
@@ -199,9 +199,9 @@ public class InteractionAttachmentSummary implements Serializable {
   }
 
   /**
-   * Returns the base-64 encoded SHA-256 hash of the data for the interaction attachment.
+   * Returns the hex-encoded SHA-256 hash of the data for the interaction attachment.
    *
-   * @return the base-64 encoded SHA-256 hash of the data for the interaction attachment
+   * @return the hex-encoded SHA-256 hash of the data for the interaction attachment
    */
   public String getHash() {
     return hash;

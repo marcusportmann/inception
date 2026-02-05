@@ -42,6 +42,10 @@ public enum InteractionPermissionType implements CodeEnum {
   @XmlEnumValue("CreateInteraction")
   CREATE_INTERACTION("create_interaction", "Create Interaction"),
 
+  /** Create Interaction Attachment. */
+  @XmlEnumValue("CreateInteractionAttachment")
+  CREATE_INTERACTION_ATTACHMENT("create_interaction_attachment", "Create Interaction Attachment"),
+
   /** Create Interaction Note. */
   @XmlEnumValue("CreateInteractionNote")
   CREATE_INTERACTION_NOTE("create_interaction_note", "Create Interaction Note"),
@@ -69,6 +73,10 @@ public enum InteractionPermissionType implements CodeEnum {
   /** Update Interaction. */
   @XmlEnumValue("UpdateInteraction")
   UPDATE_INTERACTION("update_interaction", "Update Interaction"),
+
+  /** Update Interaction Attachment. */
+  @XmlEnumValue("UpdateInteractionAttachment")
+  UPDATE_INTERACTION_ATTACHMENT("update_interaction_attachment", "Update Interaction Attachment"),
 
   /** Update Interaction Note. */
   @XmlEnumValue("UpdateInteractionNote")

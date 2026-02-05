@@ -83,6 +83,7 @@ import digital.inception.operations.model.VerifyWorkflowDocumentRequest;
 import digital.inception.operations.model.WaiveWorkflowDocumentRequest;
 import digital.inception.operations.model.Workflow;
 import digital.inception.operations.model.WorkflowAttribute;
+import digital.inception.operations.model.WorkflowAttributeDefinition;
 import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowDefinitionAttribute;
 import digital.inception.operations.model.WorkflowDefinitionCategory;
@@ -533,6 +534,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           new WorkflowNote(
               tenantId,
               createWorkflowNoteRequest.getWorkflowId(),
+              createWorkflowNoteRequest.getStep(),
               createWorkflowNoteRequest.getContent(),
               OffsetDateTime.now(),
               createdBy);
@@ -2294,19 +2296,43 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             initiateWorkflowRequest.getExternalReferences());
       }
 
-      if (initiateWorkflowRequest.getAttributes() != null) {
-        // Validate the allowed workflow attributes
-        validationService.validateAllowedWorkflowAttributes(
-            "initiateWorkflowRequest.attributes",
-            workflowDefinition,
-            initiateWorkflowRequest.getAttributes());
-
-        // Validate the required workflow attributes
-        validationService.validateRequiredWorkflowAttributes(
-            "initiateWorkflowRequest.attributes",
-            workflowDefinition,
-            initiateWorkflowRequest.getAttributes());
+      if (initiateWorkflowRequest.getAttributes() == null) {
+        initiateWorkflowRequest.setAttributes(new ArrayList<>());
       }
+
+      // Apply default attribute values, if required
+      for (WorkflowAttributeDefinition workflowAttributeDefinition :
+          workflowDefinition.getAttributeDefinitions()) {
+        if (workflowAttributeDefinition.getDefaultValue() != null) {
+          Optional<WorkflowAttribute> workflowAttributeOptional =
+              initiateWorkflowRequest.getAttribute(workflowAttributeDefinition.getName());
+
+          if (workflowAttributeOptional.isEmpty()) {
+            initiateWorkflowRequest.addAttribute(
+                new WorkflowAttribute(
+                    workflowAttributeDefinition.getName(),
+                    workflowAttributeDefinition.getDefaultValue()));
+          } else {
+            WorkflowAttribute workflowAttribute = workflowAttributeOptional.get();
+
+            if (!StringUtils.hasText(workflowAttribute.getValue())) {
+              workflowAttribute.setValue(workflowAttributeDefinition.getDefaultValue());
+            }
+          }
+        }
+      }
+
+      // Validate the allowed workflow attributes
+      validationService.validateAllowedWorkflowAttributes(
+          "initiateWorkflowRequest.attributes",
+          workflowDefinition,
+          initiateWorkflowRequest.getAttributes());
+
+      // Validate the required workflow attributes
+      validationService.validateRequiredWorkflowAttributes(
+          "initiateWorkflowRequest.attributes",
+          workflowDefinition,
+          initiateWorkflowRequest.getAttributes());
 
       if (initiateWorkflowRequest.getVariables() != null) {
         // Validate the allowed workflow variables

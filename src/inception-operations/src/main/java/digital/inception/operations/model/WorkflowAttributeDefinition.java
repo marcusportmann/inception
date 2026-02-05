@@ -47,14 +47,14 @@ import java.io.Serializable;
  */
 @Schema(description = "A workflow attribute definition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"name", "type", "label", "description", "required", "pattern"})
+@JsonPropertyOrder({"name", "type", "label", "description", "required", "pattern", "defaultValue"})
 @XmlRootElement(
     name = "WorkflowAttributeDefinition",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "WorkflowAttributeDefinition",
     namespace = "https://inception.digital/operations",
-    propOrder = {"name", "type", "label", "description", "required", "pattern"})
+    propOrder = {"name", "type", "label", "description", "required", "pattern", "defaultValue"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "operations_workflow_attribute_definitions")
@@ -63,6 +63,18 @@ import java.io.Serializable;
 public class WorkflowAttributeDefinition implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /**
+   * The default value for a workflow attribute associated with the workflow attribute definition.
+   */
+  @Schema(
+      description =
+          "The default value for a workflow attribute associated with the workflow attribute definition")
+  @JsonProperty
+  @XmlElement(name = "DefaultValue")
+  @Size(min = 1, max = 1000)
+  @Column(name = "default_value", length = 1000)
+  private String defaultValue;
 
   /** The ID for the workflow definition the workflow attribute definition is associated with. */
   @Schema(hidden = true)
@@ -173,6 +185,7 @@ public class WorkflowAttributeDefinition implements Serializable {
    * @param required is the workflow attribute required
    * @param pattern the regular expression pattern used to validate the value for a workflow
    *     attribute associated with the workflow attribute definition
+   * @param defaultValue the default value for a workflow attribute associated with the workflow
    */
   public WorkflowAttributeDefinition(
       String name,
@@ -180,13 +193,15 @@ public class WorkflowAttributeDefinition implements Serializable {
       String label,
       String description,
       boolean required,
-      String pattern) {
+      String pattern,
+      String defaultValue) {
     this.name = name;
     this.type = type;
     this.label = label;
     this.description = description;
     this.required = required;
     this.pattern = pattern;
+    this.defaultValue = defaultValue;
   }
 
   /**
@@ -214,6 +229,17 @@ public class WorkflowAttributeDefinition implements Serializable {
     return StringUtil.equalsIgnoreCase(definitionId, other.definitionId)
         && definitionVersion == other.definitionVersion
         && StringUtil.equalsIgnoreCase(name, other.name);
+  }
+
+  /**
+   * Returns the default value for a workflow attribute associated with the workflow attribute
+   * definition.
+   *
+   * @return the default value for a workflow attribute associated with the workflow attribute
+   *     definition
+   */
+  public String getDefaultValue() {
+    return defaultValue;
   }
 
   /**
@@ -282,6 +308,17 @@ public class WorkflowAttributeDefinition implements Serializable {
    */
   public boolean isRequired() {
     return required;
+  }
+
+  /**
+   * Set the default value for a workflow attribute associated with the workflow attribute
+   * definition.
+   *
+   * @param defaultValue the default value for a workflow attribute associated with the workflow
+   *     attribute definition
+   */
+  public void setDefaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
   }
 
   /**

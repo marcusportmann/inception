@@ -21,6 +21,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
+import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
 import digital.inception.operations.exception.DuplicateInteractionException;
 import digital.inception.operations.exception.DuplicateInteractionNoteException;
 import digital.inception.operations.exception.DuplicateInteractionSourceException;
@@ -128,12 +129,47 @@ public class InteractionApiControllerImpl extends SecureApiController
     if ((!hasAccessToFunction("Operations.OperationsAdministration"))
         && (!hasAccessToFunction("Operations.InteractionAdministration"))
         && (!hasInteractionSourcePermission(
-            tenantId, interaction.getSourceId(), InteractionPermissionType.ASSIGN_INTERACTION))) {
+            tenantId, interaction.getSourceId(), InteractionPermissionType.CREATE_INTERACTION))) {
       throw new AccessDeniedException(
           "Access denied to the interaction source (" + interaction.getSourceId() + ")");
     }
 
     interactionService.createInteraction(tenantId, interaction);
+  }
+
+  @Override
+  public void createInteractionAttachment(
+      UUID tenantId, UUID interactionId, InteractionAttachment interactionAttachment)
+      throws InvalidArgumentException,
+          DuplicateInteractionAttachmentException,
+          InteractionNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(tenantId, interactionId);
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId,
+            interactionSourceId,
+            InteractionPermissionType.CREATE_INTERACTION_ATTACHMENT))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
+    }
+
+    interactionService.createInteractionAttachment(tenantId, interactionAttachment);
   }
 
   @Override
@@ -642,6 +678,52 @@ public class InteractionApiControllerImpl extends SecureApiController
     }
 
     interactionService.updateInteraction(tenantId, interaction);
+  }
+
+  @Override
+  public void updateInteractionAttachment(
+      UUID tenantId,
+      UUID interactionId,
+      UUID interactionAttachmentId,
+      InteractionAttachment interactionAttachment)
+      throws InvalidArgumentException,
+          InteractionNotFoundException,
+          InteractionAttachmentNotFoundException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    if (interactionId == null) {
+      throw new InvalidArgumentException("interactionId");
+    }
+
+    if (interactionAttachmentId == null) {
+      throw new InvalidArgumentException("interactionAttachmentId");
+    }
+
+    if (!Objects.equals(interactionAttachment.getInteractionId(), interactionId)) {
+      throw new InvalidArgumentException("interactionAttachment.interactionId");
+    }
+
+    UUID interactionSourceId =
+        interactionService.getInteractionSourceIdForInteraction(tenantId, interactionId);
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasInteractionSourcePermission(
+            tenantId,
+            interactionSourceId,
+            InteractionPermissionType.UPDATE_INTERACTION_ATTACHMENT))) {
+      throw new AccessDeniedException(
+          "Access denied to the interaction source (" + interactionSourceId + ")");
+    }
+
+    interactionService.updateInteractionAttachment(tenantId, interactionAttachment);
   }
 
   @Override
