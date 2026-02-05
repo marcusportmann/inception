@@ -28,6 +28,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -94,17 +95,14 @@ public class CsrfController {
         @ApiResponse(responseCode = "503", description = "Service unavailable")
       })
   @GetMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  public Map<String, String> token(HttpServletRequest request) {
+  public ResponseEntity<Map<String, String>> token(HttpServletRequest request) {
     if (!tokensIssuedRateLimitBucket.tryConsume(1)) {
-      // Let your global exception handler render application/problem+json
       throw new ResponseStatusException(
           HttpStatus.TOO_MANY_REQUESTS, "Cannot issue CSRF token. Rate limit exceeded.");
     }
 
     CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
     if (csrf == null) {
-      // Typically indicates Spring Security did not attach a token for this request
       throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "No CSRF token available");
     }
 
@@ -112,6 +110,7 @@ public class CsrfController {
     body.put("token", csrf.getToken());
     body.put("headerName", csrf.getHeaderName());
     body.put("parameterName", csrf.getParameterName());
-    return body;
+
+    return ResponseEntity.ok(body);
   }
 }

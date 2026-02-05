@@ -588,7 +588,7 @@ public class InteractionServiceTests {
         retrievedInteractionAttachment.getFileType(),
         "Invalid value for the \"data\" interaction attachment property");
     assertEquals(
-        "7216ZhR4cFO/xjdEaY4ubHUiXtKmqzuDiQtxfNtvZDk=",
+        "ef6d7a6614787053bfc63744698e2e6c75225ed2a6ab3b83890b717cdb6f6439",
         retrievedInteractionAttachment.getHash(),
         "Invalid value for the \"hash\" interaction attachment property");
     assertEquals(

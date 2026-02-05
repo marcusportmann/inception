@@ -807,8 +807,8 @@
     <module>inception-error-ws</module>
     <module>inception-executor</module>
     <module>inception-executor-api</module>
+    <module>inception-executor-ws</module>
     <module>inception-feature</module>
-    <module>inception-executor</module>
     <!-- <module>inception-flowable</module> -->
     <module>inception-jpa</module>
     <module>inception-jta</module>

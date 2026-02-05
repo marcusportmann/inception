@@ -44,6 +44,6 @@ public class MimeDataTests {
 
     String hash = mimeData.getHash();
 
-    assertEquals("tQ7lUmHxUH1UunnEQoiv4TkjEdCRooh8s+Y6ILqwD+8=", hash);
+    assertEquals("b50ee55261f1507d54ba79c44288afe1392311d091a2887cb3e63a20bab00fef", hash);
   }
 }
