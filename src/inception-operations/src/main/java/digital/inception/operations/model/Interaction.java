@@ -30,6 +30,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -152,6 +153,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
   @XmlElement(name = "Content", required = true)
   @NotNull
   @Size(min = 1, max = 10485760)
+  @Lob
   @Column(name = "content", length = 10485760, nullable = false)
   private String content;
 
