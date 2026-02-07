@@ -22,11 +22,11 @@ import {MatSort} from '@angular/material/sort';
 import {
   CoreModule, SortDirection, StatefulListView, TableFilterComponent
 } from 'ngx-inception/core';
-import {Observable, tap} from 'rxjs';
-import {finalize, takeUntil} from 'rxjs/operators';
-import {SecurityService} from '../services/security.service';
-import {TenantDataSource} from '../services/tenant-data-source';
-import {Tenants} from '../services/tenants';
+import { Tenants } from '../services/tenants';
+import { Observable, tap } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
+import { SecurityService } from '../services/security.service';
+import { TenantDataSource } from '../services/tenant-data-source';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
