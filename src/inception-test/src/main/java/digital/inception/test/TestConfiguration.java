@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.CoreConfiguration;
 import digital.inception.core.jdbc.DataSourceConfiguration;
 import digital.inception.core.jdbc.DataSourceUtil;
+import digital.inception.core.jdbc.IdGenerator;
 import digital.inception.jpa.JpaUtil;
 import digital.inception.json.InceptionModule;
 import digital.inception.r2dbc.ConnectionFactoryConfiguration;
@@ -46,6 +47,7 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
@@ -67,6 +69,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -304,6 +307,21 @@ public class TestConfiguration {
   @Bean
   public CacheManager cacheManager() {
     return new ConcurrentMapCacheManager();
+  }
+
+  /**
+   * Returns the ID generator for the application database.
+   *
+   * @param platformTransactionManager the Spring platform transaction manage
+   * @param applicationDataSource the application data source
+   * @return the ID generator for the application database
+   */
+  @Bean
+  @ConditionalOnBean(PlatformTransactionManager.class)
+  public IdGenerator idGenerator(
+      PlatformTransactionManager platformTransactionManager,
+      @Qualifier("applicationDataSource") DataSource applicationDataSource) {
+    return new IdGenerator(platformTransactionManager, applicationDataSource);
   }
 
   /**
