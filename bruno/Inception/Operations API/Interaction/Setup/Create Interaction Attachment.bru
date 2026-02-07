@@ -1,0 +1,39 @@
+meta {
+  name: Create Interaction Attachment
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseURL}}/api/operations/interactions/{{interactionId}}/attachments
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "{{interactionAttachmentId}}",
+    "interactionId": "{{interactionId}}",
+    "sourceId": "{{interactionSourceId}}",
+    "name": "test.txt",
+    "fileType": "text",
+    "data": "VGhpcyBpcyBzb21lIHRlc3QgdGV4dC4=",
+    "hash": "287f3957de935974501777deece225e62cb1ddeb05fffb90ac99ef10025d79b8"
+  }
+  
+}
+
+vars:pre-request {
+  interactionId: 22222222-2222-2222-2222-222222222222
+  interactionSourceId: 11111111-1111-1111-1111-111111111111
+  interactionAttachmentId: 33333333-3333-3333-3333-333333333333
+}
+
+assert {
+  res.status: eq 204
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
