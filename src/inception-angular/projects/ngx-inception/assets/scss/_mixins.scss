@@ -228,25 +228,38 @@
   $breakpoint-names: map.keys($breakpoints)
 ) {
   $idx: list.index($breakpoint-names, $name);
-  @return if(
-    $idx != null and $idx < list.length($breakpoint-names),
-    list.nth($breakpoint-names, $idx + 1),
-    null
-  );
+
+  @if $idx != null and $idx < list.length($breakpoint-names) {
+    @return list.nth($breakpoint-names, $idx + 1);
+  }
+
+  @return null;
 }
 
 @function breakpoint-min($name, $breakpoints) {
   $min: map.get($breakpoints, $name);
-  @return if($min != 0, $min, null);
+  @if $min != 0 {
+    @return $min;
+  }
+  @return null;
 }
 
 @function breakpoint-max($name, $breakpoints) {
   $next: breakpoint-next($name, $breakpoints);
-  @return if($next, breakpoint-min($next, $breakpoints) - 0.02, null);
+
+  @if $next {
+    @return breakpoint-min($next, $breakpoints) - 0.02;
+  }
+
+  @return null;
 }
 
 @function breakpoint-infix($name, $breakpoints) {
-  @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
+  @if breakpoint-min($name, $breakpoints) == null {
+    @return "";
+  }
+
+  @return "-#{$name}";
 }
 
 @mixin media-breakpoint-up($name, $breakpoints) {
@@ -512,7 +525,12 @@
 
 @mixin make-col-offset($size, $columns) {
   $pct: math.div($size, $columns);
-  margin-left: if($pct == 0, 0, math.percentage($pct));
+
+  @if $pct == 0 {
+    margin-left: 0;
+  } @else {
+    margin-left: math.percentage($pct);
+  }
 }
 
 @mixin row-cols($count) {

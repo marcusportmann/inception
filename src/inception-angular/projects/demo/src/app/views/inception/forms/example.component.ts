@@ -87,7 +87,7 @@ export class ExampleComponent implements OnDestroy {
 
   titleControl: FormControl<string | null>;
 
-  titles: Title[] = [new Title('Mr', 'Mr'), new Title('Mrs', 'Mrs'), new Title('Ms', 'Ms')];
+  titles: Title[] = [new Title('Mr', 'Mr'), new Title('Mrs', 'Mrs'), new Title('Ms', 'Ms'), new Title('Mgjpy', 'Mgjpy')];
 
   private readonly formBuilder = inject(FormBuilder);
 

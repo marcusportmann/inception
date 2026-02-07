@@ -1,15 +1,13 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="add-user-to-group-container">
-    <span class="mat-header-label" i18n="@@security_user_groups_component_new_group">New Group :</span>
-    <mat-form-field class="mat-mdc-form-field-slim">
-      <mat-select [(ngModel)]="selectedGroupName" i18n-placeholder="@@security_user_groups_component_placeholder_select_a_group" placeholder="Select a group">
-        @for (availableGroupName of availableGroupNames$ | async; track availableGroupName) {
-          <mat-option [value]="availableGroupName">
-            {{availableGroupName}}
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+    <span class="header-label" i18n="@@security_user_groups_component_new_group">New Group :</span>
+    <mat-select [(ngModel)]="selectedGroupName" i18n-placeholder="@@security_user_groups_component_placeholder_select_a_group" placeholder="Select a group">
+      @for (availableGroupName of availableGroupNames$ | async; track availableGroupName) {
+        <mat-option [value]="availableGroupName">
+          {{availableGroupName}}
+        </mat-option>
+      }
+    </mat-select>
     <button type="button" mat-flat-button color="primary" [disabled]="!selectedGroupName" (click)="addUserToGroup()" i18n="@@security_user_groups_component_button_add">Add</button>
   </div>
 

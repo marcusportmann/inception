@@ -58,11 +58,10 @@ export const GROUP_FORM_FIELD_COMPONENT = new InjectionToken<GroupFormFieldCompo
   host: {
     class:
       'group-form-field mat-mdc-form-field mat-mdc-form-field-type-mat-input mat-form-field-hide-placeholder',
-    '[class.mat-form-field-appearance-fill]': 'appearance === "fill"',
-    '[class.mat-form-field-appearance-outline]': 'appearance === "outline"',
+    '[class.mat-form-field-appearance-fill]': '!_hasOutline()',
+    '[class.mat-form-field-appearance-outline]': '_hasOutline()',
     '[class.mat-form-field-invalid]': '_hasError()',
     '[class.mat-form-field-disabled]': '_isDisabled()',
-    '[class.mat-focused]': '_isFocused()',
     '[class.mat-primary]': 'color !== "accent" && color !== "warn"',
     '[class.mat-accent]': 'color === "accent"',
     '[class.mat-warn]': 'color === "warn"'

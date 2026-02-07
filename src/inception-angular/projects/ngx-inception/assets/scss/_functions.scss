@@ -65,19 +65,18 @@ $escaped-characters: (
   @if $value2 == null {
     @return $value1;
   }
-  @if meta.type-of($value1) ==
-    "number" and
-    meta.type-of($value2) ==
-    "number" and
-    comparable($value1, $value2)
-  {
+
+  @if meta.type-of($value1) == "number" and
+      meta.type-of($value2) == "number" and
+      comparable($value1, $value2) {
     @return $value1 + $value2;
   }
-  @return if(
-    $return-calc,
-    calc(#{$value1} + #{$value2}),
-    $value1 + " + " + $value2
-  );
+
+  @if $return-calc {
+    @return calc(#{$value1} + #{$value2});
+  }
+
+  @return $value1 + " + " + $value2;
 }
 
 /// Subtracts two values, using calc() if necessary.
@@ -94,22 +93,22 @@ $escaped-characters: (
   @if $value2 == null {
     @return $value1;
   }
-  @if meta.type-of($value1) ==
-    "number" and
-    meta.type-of($value2) ==
-    "number" and
-    comparable($value1, $value2)
-  {
+
+  @if meta.type-of($value1) == "number" and
+      meta.type-of($value2) == "number" and
+      comparable($value1, $value2) {
     @return $value1 - $value2;
   }
+
   @if meta.type-of($value2) != "number" {
     $value2: "(" + $value2 + ")";
   }
-  @return if(
-    $return-calc,
-    calc(#{$value1} - #{$value2}),
-    $value1 + " - " + $value2
-  );
+
+  @if $return-calc {
+    @return calc(#{$value1} - #{$value2});
+  }
+
+  @return $value1 + " - " + $value2;
 }
 
 /// Divides two values with optional precision.
@@ -118,9 +117,14 @@ $escaped-characters: (
 /// @param $precision Decimal precision (default: 10)
 /// @return Result with correct unit
 @function divide($dividend, $divisor, $precision: 10) {
-  $sign: if($dividend * $divisor >= 0, 1, -1);
+  $sign: 1;
+  @if $dividend * $divisor < 0 {
+    $sign: -1;
+  }
+
   $dividend: math.abs($dividend);
   $divisor: math.abs($divisor);
+
   @if $dividend == 0 {
     @return 0;
   }

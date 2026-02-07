@@ -1,15 +1,13 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="select-user-directory-container" [hidden]="userDirectories.length < 2">
-    <span class="mat-header-label" i18n="@@security_users_component_user_directory">User Directory :</span>
-    <mat-form-field class="mat-mdc-form-field-slim">
-      <mat-select #userDirectorySelect i18n-placeholder="@@security_users_component_placeholder_select_a_user_directory" placeholder="Select a user directory">
-        @for (userDirectory of userDirectories; track userDirectory) {
-          <mat-option [value]="userDirectory.id">
-            {{userDirectory.name}}
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+    <span class="header-label" i18n="@@security_users_component_user_directory">User Directory :</span>
+    <mat-select #userDirectorySelect i18n-placeholder="@@security_users_component_placeholder_select_a_user_directory" placeholder="Select a user directory">
+      @for (userDirectory of userDirectories; track userDirectory) {
+        <mat-option [value]="userDirectory.id">
+          {{userDirectory.name}}
+        </mat-option>
+      }
+    </mat-select>
   </div>
   <div class="mat-mdc-table-header">
     <button type="button" *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration', 'FUNCTION_Security.UserAdministration']" mat-flat-button color="primary" [disabled]="(enableNewButton$ | async) === false" (click)="newUser()" i18n="@@security_users_component_button_new">New</button>
