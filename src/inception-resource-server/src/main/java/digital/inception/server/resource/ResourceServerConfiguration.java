@@ -467,12 +467,13 @@ public class ResourceServerConfiguration implements InitializingBean {
           authorizeRequests
               .requestMatchers(
                   pathPatternRequestMatcherBuilder.matcher("/"),
+                  pathPatternRequestMatcherBuilder.matcher("/assets/**"),
                   pathPatternRequestMatcherBuilder.matcher("/webjars/**"),
                   // Explicit permit for media directory (required by libraries like Bootstrap,
                   // FontAwesome, etc.)
                   pathPatternRequestMatcherBuilder.matcher("/media/**"),
                   new RegexRequestMatcher(
-                      "^/(?:[^/]+/)*[^/]+\\.(?:js|css|html|png|jpg|svg|ico|woff|woff2|ttf|eot|otf)$",
+                      "^/(?:[^/]+/)*[^/]+\\.(?:mjs|js|css|map|html|png|jpg|svg|ico|woff|woff2|ttf|eot|otf)$",
                       null))
               .permitAll();
 
