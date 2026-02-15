@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -125,6 +126,7 @@ public class ErrorReport implements Serializable {
   @Schema(description = "The base-64 encoded data associated with the error report")
   @JsonProperty
   @XmlElement(name = "Data")
+  @Lob
   @Column(name = "data")
   private String data;
 
@@ -142,6 +144,7 @@ public class ErrorReport implements Serializable {
   @JsonProperty
   @XmlElement(name = "Detail")
   @Size(max = 1024000)
+  @Lob
   @Column(name = "detail")
   private String detail;
 

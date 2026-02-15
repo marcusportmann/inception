@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -64,6 +65,7 @@ public class FormDefinition implements Serializable {
   @XmlElement(name = "Data", required = true)
   @NotBlank
   @Size(max = 41943040)
+  @Lob
   @Column(name = "data", length = 41943040, nullable = false)
   private String data;
 

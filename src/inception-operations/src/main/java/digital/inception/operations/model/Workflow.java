@@ -31,6 +31,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
@@ -239,6 +240,7 @@ public class Workflow implements Serializable {
   @JsonProperty
   @XmlElement(name = "Data")
   @Size(max = 10485760)
+  @Lob
   @Column(name = "data", length = 10485760)
   private String data;
 

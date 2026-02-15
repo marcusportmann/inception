@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -77,6 +78,7 @@ public class TaskEvent implements Serializable {
   @JsonProperty
   @XmlElement(name = "TaskData")
   @Size(min = 1, max = 10485760)
+  @Lob
   @Column(name = "task_data")
   private String taskData;
 

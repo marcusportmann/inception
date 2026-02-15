@@ -30,6 +30,7 @@ import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -167,6 +168,7 @@ public class UserDirectory implements Serializable {
   @JsonIgnore
   @XmlTransient
   @Access(AccessType.PROPERTY)
+  @Lob
   @Column(name = "configuration", length = 16384, nullable = false)
   public String getConfiguration() {
     StringBuilder buffer = new StringBuilder();

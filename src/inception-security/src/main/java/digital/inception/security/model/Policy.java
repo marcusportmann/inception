@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -68,6 +69,7 @@ public class Policy implements Serializable {
   @XmlElement(name = "Data", required = true)
   @NotBlank
   @Size(max = 10485760)
+  @Lob
   @Column(name = "data", nullable = false)
   private String data;
 

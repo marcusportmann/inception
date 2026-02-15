@@ -28,6 +28,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -105,6 +106,7 @@ public class Token implements Serializable {
   @XmlElement(name = "Data", required = true)
   @NotBlank
   @Size(max = 32768)
+  @Lob
   @Column(name = "data", length = 32768, nullable = false)
   private String data;
 

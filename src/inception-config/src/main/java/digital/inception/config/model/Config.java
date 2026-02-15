@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -83,6 +84,7 @@ public class Config implements Serializable {
   @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(max = 16384)
+  @Lob
   @Column(name = "value", length = 16384, nullable = false)
   private String value;
 
