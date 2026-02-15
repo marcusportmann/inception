@@ -168,8 +168,8 @@ public class Education implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "QualificationType", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "qualification_type", length = 50, nullable = false)
   private String qualificationType;
 

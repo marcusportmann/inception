@@ -24,27 +24,31 @@ import org.springframework.context.annotation.Conditional;
  * feature value resolved from the application {@code Environment}.
  *
  * <h2>Supported targets</h2>
+ *
  * This annotation may be placed on:
+ *
  * <ul>
- *   <li>{@code @Configuration} classes or any {@code @Component} type ({@link ElementType#TYPE})</li>
- *   <li>{@code @Bean} methods and other annotated factory methods ({@link ElementType#METHOD})</li>
+ *   <li>{@code @Configuration} classes or any {@code @Component} type ({@link ElementType#TYPE})
+ *   <li>{@code @Bean} methods and other annotated factory methods ({@link ElementType#METHOD})
  * </ul>
  *
  * <h2>Lookup strategy (hybrid)</h2>
+ *
  * The associated {@link FeatureEnabledCondition} evaluates a feature key using the following
  * precedence order:
  *
  * <ol>
- *   <li><b>Application-scoped</b> property: {@code <spring.application.name>.features.<key>}</li>
- *   <li><b>Top-level</b> property: {@code features.<key>}</li>
- *   <li>If neither property exists, the outcome is controlled by {@link #matchIfMissing()}.</li>
+ *   <li><b>Application-scoped</b> property: {@code <spring.application.name>.features.<key>}
+ *   <li><b>Top-level</b> property: {@code features.<key>}
+ *   <li>If neither property exists, the outcome is controlled by {@link #matchIfMissing()}.
  * </ol>
  *
- * <p>The application name used for the application-scoped prefix is obtained from
- * {@code spring.application.name}. Implementations typically fall back to a default name (for example
+ * <p>The application name used for the application-scoped prefix is obtained from {@code
+ * spring.application.name}. Implementations typically fall back to a default name (for example
  * {@code "application"}) if the property is missing.
  *
  * <h2>Example</h2>
+ *
  * <pre>{@code
  * // application.yml
  * spring:
@@ -66,11 +70,10 @@ import org.springframework.context.annotation.Conditional;
  * }
  * }</pre>
  *
- * <p>In the example above, the bean will be created because the application-scoped override
- * {@code inception-demo.features.pdf-export=true} takes precedence over the top-level default.
+ * <p>In the example above, the bean will be created because the application-scoped override {@code
+ * inception-demo.features.pdf-export=true} takes precedence over the top-level default.
  *
  * @see FeatureEnabledCondition
- *
  * @author Marcus Portmann
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
@@ -82,9 +85,9 @@ public @interface ConditionalOnFeatureEnabled {
   /**
    * The expected boolean value for this condition to match.
    *
-   * <p>By default, the condition matches when the resolved feature value is {@code true}.
-   * Setting this to {@code false} inverts the condition, causing it to match when the feature is
-   * explicitly disabled.
+   * <p>By default, the condition matches when the resolved feature value is {@code true}. Setting
+   * this to {@code false} inverts the condition, causing it to match when the feature is explicitly
+   * disabled.
    *
    * @return {@code true} to match when enabled; {@code false} to match when disabled
    */
@@ -108,9 +111,10 @@ public @interface ConditionalOnFeatureEnabled {
    * The feature key to evaluate.
    *
    * <p>The key is resolved as a boolean from the {@code Environment} using the hybrid precedence:
+   *
    * <ol>
-   *   <li>{@code <spring.application.name>.features.<key>}</li>
-   *   <li>{@code features.<key>}</li>
+   *   <li>{@code <spring.application.name>.features.<key>}
+   *   <li>{@code features.<key>}
    * </ol>
    *
    * <p>Callers must provide the key only (for example {@code "pdf-export"}); do not include the

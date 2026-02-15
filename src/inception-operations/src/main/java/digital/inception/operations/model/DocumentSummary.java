@@ -25,6 +25,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -72,8 +73,8 @@ public class DocumentSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "DefinitionId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "definition_id", length = 50, nullable = false)
   private String definitionId;
 
@@ -100,8 +101,8 @@ public class DocumentSummary implements Serializable {
   @Schema(description = "The name of the document", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 200)
+  @NotBlank
+  @Size(max = 200)
   @Column(name = "name", length = 200, nullable = false)
   private String name;
 

@@ -113,8 +113,8 @@ public class TaskType implements Serializable {
   @Schema(description = "The code for the task type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Id
   @Column(name = "code", length = 50, nullable = false)
   private String code;
@@ -168,8 +168,8 @@ public class TaskType implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "ExecutorClass", required = true)
-  @NotNull
-  @Size(min = 1, max = 1000)
+  @NotBlank
+  @Size(max = 1000)
   @Column(name = "executor_class", length = 1000, nullable = false)
   private String executorClass;
 

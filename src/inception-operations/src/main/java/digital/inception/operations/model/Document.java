@@ -178,8 +178,8 @@ public class Document implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "DefinitionId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "definition_id", length = 50, nullable = false)
   private String definitionId;
 
@@ -214,8 +214,8 @@ public class Document implements Serializable {
   @Schema(description = "The name of the document", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 200)
+  @NotBlank
+  @Size(max = 200)
   @Column(name = "name", length = 200, nullable = false)
   private String name;
 

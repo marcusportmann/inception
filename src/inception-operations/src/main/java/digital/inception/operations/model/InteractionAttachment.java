@@ -25,6 +25,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -105,8 +106,8 @@ public class InteractionAttachment implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Hash", required = true)
-  @NotNull
-  @Size(min = 1, max = 64)
+  @NotBlank
+  @Size(max = 64)
   @Column(name = "hash", length = 64, nullable = false)
   private String hash;
 
@@ -137,8 +138,8 @@ public class InteractionAttachment implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 200)
+  @NotBlank
+  @Size(max = 200)
   @Column(name = "name", length = 200, nullable = false)
   private String name;
 

@@ -248,8 +248,8 @@ public class Workflow implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "DefinitionId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "definition_id", length = 50, nullable = false)
   private String definitionId;
 

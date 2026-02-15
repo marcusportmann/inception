@@ -78,8 +78,8 @@ public class RevokedToken implements Serializable {
   @Schema(description = "The ID for the token", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String id;
 
   /** The date and time the token was issued. */

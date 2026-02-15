@@ -64,8 +64,8 @@ public class ExternalReferenceType implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Id
   @Column(name = "code", length = 50, nullable = false)
   private String code;

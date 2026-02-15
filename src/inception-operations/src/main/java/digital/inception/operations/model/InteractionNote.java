@@ -87,8 +87,8 @@ public class InteractionNote implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Content", required = true)
-  @NotNull
-  @Size(min = 1, max = 2000)
+  @NotBlank
+  @Size(max = 2000)
   @Column(name = "content", length = 2000, nullable = false)
   private String content;
 

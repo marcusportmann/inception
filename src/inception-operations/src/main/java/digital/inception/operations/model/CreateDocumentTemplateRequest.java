@@ -61,8 +61,8 @@ public class CreateDocumentTemplateRequest implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "CategoryId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String categoryId;
 
   /** The data for the document template. */
@@ -88,8 +88,8 @@ public class CreateDocumentTemplateRequest implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String id;
 
   /** The name of the document template. */

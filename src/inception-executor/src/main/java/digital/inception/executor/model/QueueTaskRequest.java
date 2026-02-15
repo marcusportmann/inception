@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -65,8 +65,8 @@ public class QueueTaskRequest implements Serializable {
   @Schema(description = "The task data", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Data", required = true)
-  @NotNull
-  @Size(min = 1, max = 10485760)
+  @NotBlank
+  @Size(max = 10485760)
   private String data;
 
   /** The date and time the task should be executed. */
@@ -94,8 +94,8 @@ public class QueueTaskRequest implements Serializable {
   @Schema(description = "The code for the task type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String type;
 
   /** Constructs a new {@code QueueTaskRequest}. */

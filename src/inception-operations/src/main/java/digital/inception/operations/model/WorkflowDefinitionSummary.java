@@ -148,8 +148,8 @@ public class WorkflowDefinitionSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "CategoryId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "category_id", length = 50, nullable = false)
   private String categoryId;
 
@@ -159,8 +159,8 @@ public class WorkflowDefinitionSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "EngineId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "engine_id", length = 50, nullable = false)
   private String engineId;
 
@@ -170,8 +170,8 @@ public class WorkflowDefinitionSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Id
   @Column(name = "id", length = 50, nullable = false)
   private String id;

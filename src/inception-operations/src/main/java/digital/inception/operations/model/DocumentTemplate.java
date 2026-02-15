@@ -92,8 +92,8 @@ public class DocumentTemplate implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "CategoryId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "category_id", length = 50, nullable = false)
   private String categoryId;
 
@@ -145,8 +145,8 @@ public class DocumentTemplate implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Hash", required = true)
-  @NotNull
-  @Size(min = 1, max = 64)
+  @NotBlank
+  @Size(max = 64)
   @Column(name = "hash", length = 64, nullable = false)
   private String hash;
 
@@ -156,8 +156,8 @@ public class DocumentTemplate implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Id
   @Column(name = "id", length = 50, nullable = false)
   private String id;

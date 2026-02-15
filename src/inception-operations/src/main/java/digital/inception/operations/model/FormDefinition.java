@@ -62,8 +62,8 @@ public class FormDefinition implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Data", required = true)
-  @NotNull
-  @Size(min = 1, max = 41943040)
+  @NotBlank
+  @Size(max = 41943040)
   @Column(name = "data", length = 41943040, nullable = false)
   private String data;
 
@@ -73,8 +73,8 @@ public class FormDefinition implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Id
   @Column(name = "id", length = 50, nullable = false)
   private String id;

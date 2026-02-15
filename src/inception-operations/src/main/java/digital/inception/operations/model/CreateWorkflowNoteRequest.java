@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -59,8 +60,8 @@ public class CreateWorkflowNoteRequest implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Content", required = true)
-  @NotNull
-  @Size(min = 1, max = 2000)
+  @NotBlank
+  @Size(max = 2000)
   private String content;
 
   /** The code for the workflow step the workflow note is associated with. */

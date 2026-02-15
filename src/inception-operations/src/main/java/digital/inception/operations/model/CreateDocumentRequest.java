@@ -25,6 +25,7 @@ import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.LocalDateAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -104,8 +105,8 @@ public class CreateDocumentRequest implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "DefinitionId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String definitionId;
 
   /** The expiry date for the document. */
@@ -147,8 +148,8 @@ public class CreateDocumentRequest implements Serializable {
   @Schema(description = "The name of the document", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 200)
+  @NotBlank
+  @Size(max = 200)
   private String name;
 
   /** The ID for the source document that was split to create this document. */

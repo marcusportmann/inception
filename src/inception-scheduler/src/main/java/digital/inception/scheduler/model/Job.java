@@ -140,8 +140,8 @@ public class Job implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "JobClass", required = true)
-  @NotNull
-  @Size(min = 1, max = 1000)
+  @NotBlank
+  @Size(max = 1000)
   @Column(name = "job_class", length = 1000, nullable = false)
   private String jobClass;
 

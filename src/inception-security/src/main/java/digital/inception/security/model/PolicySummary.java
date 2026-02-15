@@ -99,8 +99,8 @@ public class PolicySummary implements Serializable {
   @Schema(description = "The version of the policy", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Version", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "version", length = 50, nullable = false)
   private String version;
 

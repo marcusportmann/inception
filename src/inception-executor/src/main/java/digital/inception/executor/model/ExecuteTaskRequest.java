@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -54,16 +54,16 @@ public class ExecuteTaskRequest implements Serializable {
   @Schema(description = "The task data", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "TaskData", required = true)
-  @NotNull
-  @Size(min = 1, max = 10485760)
+  @NotBlank
+  @Size(max = 10485760)
   private String taskData;
 
   /** The code for the task type. */
   @Schema(description = "The code for the task type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "TaskType", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String taskType;
 
   /** Constructs a new {@code ExecuteTaskRequest}. */

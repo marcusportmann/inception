@@ -137,8 +137,8 @@ public class WorkflowDocument implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "DocumentDefinitionId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "document_definition_id", length = 50, nullable = false)
   private String documentDefinitionId;
 

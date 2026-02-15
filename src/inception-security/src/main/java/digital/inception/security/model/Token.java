@@ -103,8 +103,8 @@ public class Token implements Serializable {
   @Schema(description = "The data for the token", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Data", required = true)
-  @NotNull
-  @Size(min = 1, max = 32768)
+  @NotBlank
+  @Size(max = 32768)
   @Column(name = "data", length = 32768, nullable = false)
   private String data;
 
@@ -130,8 +130,8 @@ public class Token implements Serializable {
   @Schema(description = "The ID for the token", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Id
   @Column(name = "id", length = 50, nullable = false)
   private String id;

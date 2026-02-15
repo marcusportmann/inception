@@ -30,6 +30,7 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -397,8 +398,8 @@ public class PhysicalAddress implements Serializable {
       })
   @JsonProperty(required = true)
   @XmlElement(name = "Role", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "role", length = 50, nullable = false)
   private String role;
 
@@ -479,8 +480,8 @@ public class PhysicalAddress implements Serializable {
       })
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "type", length = 50, nullable = false)
   private String type;
 

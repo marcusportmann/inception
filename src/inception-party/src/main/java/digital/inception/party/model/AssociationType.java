@@ -27,6 +27,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -92,8 +93,8 @@ public class AssociationType implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Id
   @Column(name = "code", length = 50, nullable = false)
   private String code;
@@ -115,8 +116,8 @@ public class AssociationType implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "FirstPartyRole", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "first_party_role", length = 50, nullable = false)
   private String firstPartyRole;
 
@@ -127,8 +128,8 @@ public class AssociationType implements Serializable {
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "FirstPartyTypes", required = true)
   @XmlElement(name = "FirstPartyType", required = true)
-  @NotNull
-  @Size(min = 1, max = 10)
+  @NotBlank
+  @Size(max = 10)
   @Convert(converter = StringListAttributeConverter.class)
   @Column(name = "first_party_types", length = 510, nullable = false)
   private List<String> firstPartyTypes;
@@ -151,8 +152,8 @@ public class AssociationType implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
@@ -162,8 +163,8 @@ public class AssociationType implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "SecondPartyRole", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "second_party_role", length = 50, nullable = false)
   private String secondPartyRole;
 
@@ -174,8 +175,8 @@ public class AssociationType implements Serializable {
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "SecondPartyTypes", required = true)
   @XmlElement(name = "SecondPartyType", required = true)
-  @NotNull
-  @Size(min = 1, max = 10)
+  @NotBlank
+  @Size(max = 10)
   @Convert(converter = StringListAttributeConverter.class)
   @Column(name = "second_party_types", length = 510, nullable = false)
   private List<String> secondPartyTypes;

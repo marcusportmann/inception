@@ -87,8 +87,8 @@ public class DocumentTemplateSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "CategoryId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String categoryId;
 
   /** The date and time the document template was created. */
@@ -127,8 +127,8 @@ public class DocumentTemplateSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Hash", required = true)
-  @NotNull
-  @Size(min = 1, max = 64)
+  @NotBlank
+  @Size(max = 64)
   private String hash;
 
   /** The ID for the document template. */
@@ -137,8 +137,8 @@ public class DocumentTemplateSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String id;
 
   /** The name of the document template. */

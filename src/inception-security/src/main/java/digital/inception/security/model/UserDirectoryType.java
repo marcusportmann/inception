@@ -27,7 +27,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -94,8 +93,8 @@ public class UserDirectoryType implements java.io.Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "ProviderClassName", required = true)
-  @NotNull
-  @Size(min = 1, max = 1000)
+  @NotBlank
+  @Size(max = 1000)
   @Column(name = "provider_class", length = 1000, nullable = false)
   private String providerClassName;
 

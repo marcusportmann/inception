@@ -69,8 +69,8 @@ public class TimeZone implements Serializable {
   @Schema(description = "The ID for the time zone", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String id;
 
   /** The Unicode locale identifier for the time zone. */

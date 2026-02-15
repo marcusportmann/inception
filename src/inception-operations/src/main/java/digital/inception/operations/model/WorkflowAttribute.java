@@ -29,7 +29,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -82,8 +81,8 @@ public class WorkflowAttribute implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
-  @NotNull
-  @Size(min = 1, max = 1000)
+  @NotBlank
+  @Size(max = 1000)
   @Column(name = "value", length = 1000, nullable = false)
   private String value;
 

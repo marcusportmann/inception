@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -58,8 +59,8 @@ public class InitiateWorkflowInteractionLink implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "ConversationId", required = true)
-  @NotNull
-  @Size(min = 1, max = 30)
+  @NotBlank
+  @Size(max = 30)
   private String conversationId;
 
   /** The ID for the interaction the workflow interaction link is associated with. */

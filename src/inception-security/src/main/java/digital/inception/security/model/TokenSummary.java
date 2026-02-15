@@ -105,8 +105,8 @@ public class TokenSummary implements Serializable {
   @Schema(description = "The ID for the token", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Id
   @Column(name = "id", nullable = false)
   private String id;

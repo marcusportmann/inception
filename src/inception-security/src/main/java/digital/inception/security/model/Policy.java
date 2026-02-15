@@ -66,8 +66,8 @@ public class Policy implements Serializable {
   @Schema(description = "The policy data", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Data", required = true)
-  @NotNull
-  @Size(min = 1, max = 10485760)
+  @NotBlank
+  @Size(max = 10485760)
   @Column(name = "data", nullable = false)
   private String data;
 
@@ -111,8 +111,8 @@ public class Policy implements Serializable {
   @Schema(description = "The version of the policy", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Version", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "version", length = 50, nullable = false)
   private String version;
 

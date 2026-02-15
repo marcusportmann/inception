@@ -128,8 +128,8 @@ public class WorkflowDocumentSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "DocumentDefinitionId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String documentDefinitionId;
 
   /** The name for the document definition the workflow document is associated with. */

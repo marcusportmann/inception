@@ -29,7 +29,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.Unmarshaller;
@@ -122,8 +122,8 @@ public class ContactMechanism implements Serializable {
       })
   @JsonProperty(required = true)
   @XmlElement(name = "Role", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Id
   @Column(name = "role", length = 50, nullable = false)
   private String role;
@@ -141,8 +141,8 @@ public class ContactMechanism implements Serializable {
       })
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Pattern(
       message = "{digital.inception.party.ContactMechanism.Type.Pattern.message}",
       regexp = "(mobile_number|phone_number|fax_number|email_address|social_media)")
@@ -156,8 +156,8 @@ public class ContactMechanism implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
-  @NotNull
-  @Size(min = 1, max = 200)
+  @NotBlank
+  @Size(max = 200)
   @Column(name = "value", length = 200, nullable = false)
   private String value;
 

@@ -292,8 +292,8 @@ public class NextOfKin implements Serializable {
   @Schema(description = "The code for the next of kin type for the next of kin")
   @JsonProperty
   @XmlElement(name = "Type")
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   @Column(name = "type", length = 50)
   private String type;
 

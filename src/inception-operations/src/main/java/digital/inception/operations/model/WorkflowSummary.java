@@ -94,8 +94,8 @@ public class WorkflowSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "DefinitionId", required = true)
-  @NotNull
-  @Size(min = 1, max = 50)
+  @NotBlank
+  @Size(max = 50)
   private String definitionId;
 
   /** The name of the workflow definition the workflow is associated with. */

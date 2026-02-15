@@ -108,8 +108,8 @@ public class SMS implements Serializable {
   @Schema(description = "The message to send", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Message", required = true)
-  @NotNull
-  @Size(min = 1, max = 1000)
+  @NotBlank
+  @Size(max = 1000)
   @Column(name = "message", length = 1000, nullable = false)
   private String message;
 

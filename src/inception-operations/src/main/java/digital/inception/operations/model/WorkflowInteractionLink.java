@@ -75,8 +75,8 @@ public class WorkflowInteractionLink implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "ConversationId", required = true)
-  @NotNull
-  @Size(min = 1, max = 30)
+  @NotBlank
+  @Size(max = 30)
   @Column(name = "conversation_id", length = 30, nullable = false)
   private String conversationId;
 
