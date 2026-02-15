@@ -27,6 +27,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -228,8 +229,8 @@ public class User implements Serializable {
   @Schema(description = "The username for the user", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
+  @NotBlank
+  @Size(max = 100)
   @Column(name = "username", length = 100, nullable = false)
   private String username;
 

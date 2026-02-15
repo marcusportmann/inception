@@ -31,9 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.bind.Name;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -118,18 +116,6 @@ public class ApplicationDataSourceConfiguration {
   public ApplicationDataSourceConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
     this.activeSpringProfiles = this.applicationContext.getEnvironment().getActiveProfiles();
-  }
-
-  /**
-   * Returns the ID generator for the application database.
-   * @param platformTransactionManager the Spring platform transaction manage
-   * @param applicationDataSource the application data source
-   * @return the ID generator for the application database
-   */
-  @Bean
-  @ConditionalOnBean(PlatformTransactionManager.class)
-  public IdGenerator idGenerator(PlatformTransactionManager platformTransactionManager, @Qualifier("applicationDataSource") DataSource applicationDataSource) {
-    return new IdGenerator(platformTransactionManager, applicationDataSource);
   }
 
   /**
@@ -241,5 +227,20 @@ public class ApplicationDataSourceConfiguration {
     } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialize the application data source", e);
     }
+  }
+
+  /**
+   * Returns the ID generator for the application database.
+   *
+   * @param platformTransactionManager the Spring platform transaction manage
+   * @param applicationDataSource the application data source
+   * @return the ID generator for the application database
+   */
+  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+  @Bean
+  public IdGenerator idGenerator(
+      PlatformTransactionManager platformTransactionManager,
+      @Qualifier("applicationDataSource") DataSource applicationDataSource) {
+    return new IdGenerator(platformTransactionManager, applicationDataSource);
   }
 }

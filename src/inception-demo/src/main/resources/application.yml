@@ -57,6 +57,8 @@ inception:
     data-source:
       class-name: org.h2.jdbcx.JdbcDataSource
       url: jdbc:h2:mem:application;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=VALUE
+      username: sa
+      password: sa
       min-pool-size: 2
       max-pool-size: 6
       liquibase:
@@ -66,6 +68,8 @@ inception:
       embedded: mongo-java-server
     r2dbc-connection-factory:
       url: r2dbc:h2:mem:///application;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=VALUE
+      username: sa
+      password: sa
       initial-pool-size: 3
       max-pool-size: 7
       max-idle-time: 30m

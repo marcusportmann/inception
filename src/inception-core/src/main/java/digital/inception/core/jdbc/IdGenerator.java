@@ -18,62 +18,53 @@ package digital.inception.core.jdbc;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.sql.DataSource;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
- * Generates monotonically increasing numeric identifiers backed by a single-row-per-key table
- * (typically named {@code idgenerator}).
+ * Generates monotonically increasing numeric identifiers using a single-row-per-key table named
+ * {@code idgenerator}.
  *
- * <h2>How it works</h2>
+ * <p>The backing table contains one row per logical key (the {@code name} argument), with the
+ * current value stored in {@code current_id}.
  *
- * <ul>
- *   <li>Runs inside a {@code PROPAGATION_REQUIRES_NEW} Spring transaction, suspending any existing
- *       Spring-managed transaction.
- *   <li>Locks the {@code idgenerator} row for the given {@code name} (or the appropriate key-range
- *       in SQL Server) to ensure uniqueness across threads and processes.
- *   <li>If the row exists, increments {@code current_id} by 1 and returns the new value.
- *   <li>If the row does not exist, attempts to insert {@code current_id = 1}. If another concurrent
- *       transaction inserts first, it re-reads under lock and performs the increment path.
- * </ul>
+ * <p>This generator uses pessimistic locking to serialize increments per {@code name}. It performs:
  *
- * <h2>Agroal / pooling compatibility</h2>
+ * <ol>
+ *   <li>{@code SELECT current_id ... FOR UPDATE} (or vendor equivalent) to lock and read the row
+ *   <li>{@code UPDATE idgenerator SET current_id = ? WHERE name = ?}
+ * </ol>
  *
- * This class is compatible with Agroal (or any JDBC pool) because it never holds onto JDBC {@link
- * Connection} instances directly. All access goes through {@link JdbcTemplate}, which obtains and
- * releases connections via Spring's {@code DataSourceUtils}. This ensures pooled connections are
- * correctly returned to Agroal and that the transaction-bound connection is used within the {@code
- * REQUIRES_NEW} transaction.
+ * <p>If the row does not exist, it attempts an {@code INSERT} of {@code current_id=1}. If a
+ * concurrent transaction inserts first, the resulting duplicate-key exception is detected and the
+ * method retries by re-locking the row and performing the update path.
  *
- * <h2>Requirements</h2>
+ * <p>This implementation is deliberately agnostic of whether the configured {@link
+ * PlatformTransactionManager} is:
  *
  * <ul>
- *   <li>The injected {@link PlatformTransactionManager} must manage transactions for the same
- *       {@link DataSource} used by the {@link JdbcTemplate} (i.e., they must be paired).
- *   <li>The table must have a uniqueness constraint on {@code name} (primary key or unique index),
- *       otherwise concurrent inserts can create duplicates.
- *   <li>The SQL uses vendor-specific locking:
- *       <ul>
- *         <li>H2/Oracle/Postgres: {@code SELECT ... FOR UPDATE}
- *         <li>DB2: {@code SELECT ... FOR UPDATE WITH RS}
- *         <li>SQL Server: {@code WITH (UPDLOCK, HOLDLOCK)} hints
- *       </ul>
+ *   <li>JTA-based (e.g., Narayana via {@code JtaTransactionManager}), or
+ *   <li>local JDBC-based (e.g., {@code DataSourceTransactionManager}).
  * </ul>
  *
- * <h2>Notes</h2>
+ * <p>To avoid long-running application transactions holding locks on {@code idgenerator} rows, ID
+ * allocation always runs in a <strong>new</strong> transaction using {@link
+ * TransactionDefinition#PROPAGATION_REQUIRES_NEW}. If an existing transaction is active, it is
+ * suspended (where supported by the transaction manager) for the duration of ID allocation.
  *
- * <ul>
- *   <li>The returned IDs are unique and increasing per {@code name}, but are not guaranteed to be
- *       gap-free (e.g., if a transaction rolls back after increment).
- *   <li>For SQL Server with case-insensitive collations, consider normalising {@code name} (e.g.,
- *       upper-casing) if you require case-sensitive key semantics.
- * </ul>
+ * <p>This class does <strong>not</strong> call {@link Connection#commit()}, {@link
+ * Connection#rollback()} or modify {@link Connection#setAutoCommit(boolean)}; transaction
+ * completion is fully controlled by the {@link PlatformTransactionManager}.
+ *
+ * <p>The supplied {@link DataSource} may be XA or non-XA (e.g., Agroal). The connection is acquired
+ * <em>inside</em> the {@code REQUIRES_NEW} boundary so it can be correctly associated with the new
+ * transaction regardless of the underlying implementation.
  *
  * @author Marcus Portmann
  */
@@ -84,173 +75,247 @@ public class IdGenerator {
 
   private static final String SQL_UPDATE = "UPDATE idgenerator SET current_id = ? WHERE name = ?";
 
-  private final JdbcTemplate jdbcTemplate;
-  private final TransactionTemplate requiresNewTransaction;
+  private final DataSource dataSource;
+  private final PlatformTransactionManager transactionManager;
 
-  // DB rarely changes at runtime; caching avoids repeated metadata calls.
-  private volatile DbDialect cachedDialect;
+  /** Cached database dialect for the configured {@link DataSource}. */
+  private volatile DatabaseDialect cachedDatabaseDialect;
 
   /**
-   * Creates an {@code IdGenerator} that uses Spring-managed transactions and JDBC access via {@link
-   * JdbcTemplate}.
+   * Creates a new {@code IdGenerator} that allocates IDs using the provided {@link DataSource} and
+   * executes allocation work inside a new transaction managed by the supplied {@link
+   * PlatformTransactionManager}.
    *
-   * <p>The {@code REQUIRES_NEW} transaction created by this component will suspend any existing
-   * Spring-managed transaction on the calling thread.
+   * <p>Because ID allocation uses {@code PROPAGATION_REQUIRES_NEW}, callers can invoke {@link
+   * #nextId(String)} from within long-running transactions without holding locks on the {@code
+   * idgenerator} table for the duration of the outer transaction.
    *
-   * @param platformTransactionManager the Spring transaction manager associated with {@code
-   *     dataSource}
-   * @param dataSource the (possibly Agroal-wrapped) data source used to access the {@code
-   *     idgenerator} table
-   * @throws IllegalArgumentException if {@code platformTransactionManager} or {@code dataSource} is
-   *     {@code null}
+   * @param transactionManager the Spring transaction manager used to begin/commit/rollback the
+   *     {@code REQUIRES_NEW} transaction; must not be {@code null}
+   * @param dataSource the data source used to acquire JDBC connections; must not be {@code null}
+   * @throws IllegalArgumentException if either argument is {@code null}
    */
-  public IdGenerator(PlatformTransactionManager platformTransactionManager, DataSource dataSource) {
-    if (platformTransactionManager == null)
-      throw new IllegalArgumentException("platformTransactionManager is null");
+  public IdGenerator(PlatformTransactionManager transactionManager, DataSource dataSource) {
     if (dataSource == null) throw new IllegalArgumentException("dataSource is null");
-
-    this.jdbcTemplate = new JdbcTemplate(dataSource);
-
-    this.requiresNewTransaction = new TransactionTemplate(platformTransactionManager);
-    this.requiresNewTransaction.setPropagationBehavior(
-        TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-    this.requiresNewTransaction.setReadOnly(false);
+    if (transactionManager == null)
+      throw new IllegalArgumentException("transactionManager is null");
+    this.dataSource = dataSource;
+    this.transactionManager = transactionManager;
   }
 
   /**
-   * Generates the next ID for the specified logical key {@code name}.
+   * Returns the next monotonically increasing identifier for the given logical key.
    *
-   * <p>This method executes in a {@code PROPAGATION_REQUIRES_NEW} transaction. If the caller is
-   * already inside a Spring-managed transaction, that outer transaction is suspended for the
-   * duration of this call.
+   * <p>The returned value is strictly increasing per {@code name} (assuming the backing table is
+   * not modified externally). Calls for different {@code name} values do not block each other
+   * unless the database escalates locks.
    *
-   * <p>Concurrency control is achieved by acquiring an update lock on the relevant row/key before
-   * updating it. This guarantees that no two concurrent transactions can return the same value for
-   * the same {@code name}.
+   * <p>This method always runs ID allocation in a <strong>new</strong> transaction by using {@link
+   * TransactionDefinition#PROPAGATION_REQUIRES_NEW}. If an existing transaction is active, it is
+   * suspended (where supported by the configured {@link PlatformTransactionManager}) so that
+   * long-running application work does not hold locks on {@code idgenerator} rows.
    *
-   * @param name the logical key used to select a row in {@code idgenerator}
-   * @return the next ID value (either {@code current_id + 1} or {@code 1} if the row is newly
-   *     created)
-   * @throws SQLException if {@code name} is blank, or if the operation fails due to database access
-   *     errors
+   * <p>The JDBC {@link Connection} is acquired <em>inside</em> the {@code REQUIRES_NEW} boundary so
+   * that it can be correctly associated with the new transaction whether the underlying transaction
+   * manager is JTA-based or local JDBC-based.
+   *
+   * <p>This method does not invoke {@link Connection#commit()}, {@link Connection#rollback()}, or
+   * {@link Connection#setAutoCommit(boolean)}; commit/rollback is delegated to Spring via the
+   * {@link PlatformTransactionManager}. Any {@link SQLException} or runtime failure results in the
+   * {@code REQUIRES_NEW} transaction being rolled back and the exception propagated.
+   *
+   * @param name the logical key (entity type) for which the id is being generated; must not be
+   *     {@code null} or blank
+   * @return the next id value (starting at {@code 1})
+   * @throws SQLException if the ID cannot be generated due to invalid input, database errors, or
+   *     unexpected update counts
    */
   public long nextId(String name) throws SQLException {
-    if (!StringUtils.hasText(name)) {
+    if (name == null || name.isBlank()) {
       throw new SQLException("Failed to generate the ID: The entity type name is null or empty");
     }
 
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("IdGenerator.nextId");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+    // Optional knobs if you want:
+    // def.setTimeout(5);
+    // def.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+
+    TransactionStatus status = transactionManager.getTransaction(def);
+
     try {
-      Long result =
-          requiresNewTransaction.execute(
-              status -> {
-                DbDialect dialect = getDialect();
-
-                // 1) Lock row if it exists and read current_id
-                Long currentId = selectForUpdate(dialect, name);
-
-                if (currentId != null) {
-                  long next = currentId + 1L;
-
-                  int updated = jdbcTemplate.update(SQL_UPDATE, next, name);
-                  if (updated != 1) {
-                    throw new IllegalStateException(
-                        "Failed to update the IDGENERATOR table for the entity type with name ("
-                            + name
-                            + "): updated="
-                            + updated);
-                  }
-
-                  return next;
-                }
-
-                // 2) Row does not exist -> try insert (start at 1)
-                try {
-                  jdbcTemplate.update(SQL_INSERT, name, 1L);
-                  return 1L;
-
-                } catch (DataIntegrityViolationException dupInsert) {
-                  // Another thread/process inserted concurrently.
-                  // Re-lock row and do the update path.
-                  Long now = selectForUpdate(dialect, name);
-                  if (now == null) {
-                    throw new IllegalStateException(
-                        "Insert into IDGENERATOR table raced but row still not visible for the entity type with name ("
-                            + name
-                            + ")",
-                        dupInsert);
-                  }
-
-                  long next = now + 1L;
-                  int updated = jdbcTemplate.update(SQL_UPDATE, next, name);
-
-                  if (updated != 1) {
-                    throw new IllegalStateException(
-                        "Failed to update the IDGENERATOR table after duplicate insert for the entity type with name ("
-                            + name
-                            + "): updated="
-                            + updated,
-                        dupInsert);
-                  }
-
-                  return next;
-                }
-              });
-
-      if (result == null) {
-        throw new SQLException(
-            "Failed to generate the ID for the entity type with name ("
-                + name
-                + "): Transaction returned null");
+      long id;
+      try (Connection connection = dataSource.getConnection()) {
+        // Dialect detection done after we have a transactional connection.
+        DatabaseDialect dialect = getDialect(connection);
+        id = nextIdWithinTransaction(connection, dialect, name);
       }
 
-      return result;
+      transactionManager.commit(status);
+      return id;
 
-    } catch (Throwable e) {
-      throw new SQLException(
-          "Failed to generate the ID for the entity type with name (" + name + ")", e);
+    } catch (Exception e) {
+      try {
+        transactionManager.rollback(status);
+      } catch (RuntimeException rb) {
+        e.addSuppressed(rb);
+      }
+
+      if (e instanceof SQLException se) throw withContext(se, name);
+      throw withContext(new SQLException("Unexpected error", e), name);
     }
   }
 
-  private static DbDialect detectDialect(Connection con) throws SQLException {
-    DatabaseMetaData md = con.getMetaData();
-    String product = md.getDatabaseProductName();
-    if (product == null) return DbDialect.UNKNOWN;
-
-    String p = product.toLowerCase();
-    if (p.contains("h2")) return DbDialect.H2;
-    if (p.contains("oracle")) return DbDialect.ORACLE;
-    if (p.contains("postgres")) return DbDialect.POSTGRES;
-    if (p.contains("db2")) return DbDialect.DB2;
-    if (p.contains("microsoft sql server") || p.contains("sql server")) return DbDialect.SQLSERVER;
-
-    return DbDialect.UNKNOWN;
+  private static SQLException withContext(SQLException e, String name) {
+    final String msg = "Failed to generate the ID for the entity type with name (" + name + ")";
+    String m = e.getMessage();
+    if (m != null && m.contains("Failed to generate the ID for the entity type with name (")) {
+      return e;
+    }
+    return new SQLException(msg, e);
   }
 
-  private DbDialect getDialect() {
-    DbDialect d = cachedDialect;
+  private static int updateCurrentId(Connection connection, long next, String name)
+      throws SQLException {
+    try (PreparedStatement ps = connection.prepareStatement(SQL_UPDATE)) {
+      ps.setLong(1, next);
+      ps.setString(2, name);
+      return ps.executeUpdate();
+    }
+  }
+
+  private static void insertRow(Connection connection, String name, long id) throws SQLException {
+    try (PreparedStatement ps = connection.prepareStatement(SQL_INSERT)) {
+      ps.setString(1, name);
+      ps.setLong(2, id);
+      ps.executeUpdate();
+    }
+  }
+
+  private static DatabaseDialect detectDialect(Connection connection) throws SQLException {
+    DatabaseMetaData databaseMetaData = connection.getMetaData();
+    String databaseProductName = databaseMetaData.getDatabaseProductName();
+    if (databaseProductName == null) return DatabaseDialect.UNKNOWN;
+
+    String p = databaseProductName.toLowerCase();
+    if (p.contains("h2")) return DatabaseDialect.H2;
+    if (p.contains("oracle")) return DatabaseDialect.ORACLE;
+    if (p.contains("postgres")) return DatabaseDialect.POSTGRES;
+    if (p.contains("db2")) return DatabaseDialect.DB2;
+    if (p.contains("microsoft sql server") || p.contains("sql server"))
+      return DatabaseDialect.SQLSERVER;
+
+    return DatabaseDialect.UNKNOWN;
+  }
+
+  private static boolean isDuplicateKey(SQLException e, DatabaseDialect databaseDialect) {
+    for (Throwable t = e;
+        t != null;
+        t = (t instanceof SQLException se) ? se.getNextException() : t.getCause()) {
+
+      if (!(t instanceof SQLException se)) continue;
+
+      String sqlState = se.getSQLState();
+
+      if ("23505".equals(sqlState)) return true;
+      if (sqlState != null && sqlState.startsWith("23")) return true;
+
+      int code = se.getErrorCode();
+      switch (databaseDialect) {
+        case ORACLE -> {
+          if (code == 1) return true;
+        }
+        case DB2 -> {
+          if (code == -803 || code == 803) return true;
+        }
+        case SQLSERVER -> {
+          if (code == 2627 || code == 2601) return true;
+        }
+        case POSTGRES, H2, UNKNOWN -> {
+          // handled by SQLState checks above
+        }
+      }
+    }
+    return false;
+  }
+
+  private DatabaseDialect getDialect(Connection connection) throws SQLException {
+    DatabaseDialect d = cachedDatabaseDialect;
     if (d != null) return d;
 
-    // Use JdbcTemplate so we definitely use the transaction-bound connection.
-    DbDialect detected = jdbcTemplate.execute(IdGenerator::detectDialect);
-
-    cachedDialect = detected;
+    DatabaseDialect detected = detectDialect(connection);
+    cachedDatabaseDialect = detected;
     return detected;
   }
 
-  private Long selectForUpdate(DbDialect dialect, String name) {
-    String sql = dialect.selectForUpdateSql();
+  private long nextIdWithinTransaction(Connection connection, DatabaseDialect dialect, String name)
+      throws SQLException {
 
-    return jdbcTemplate.query(
-        sql,
-        ps -> ps.setString(1, name),
-        rs -> {
-          if (!rs.next()) return null;
-          long v = rs.getLong(1);
-          return rs.wasNull() ? null : v;
-        });
+    Long currentId = selectForUpdate(connection, dialect, name);
+
+    if (currentId != null) {
+      long next = currentId + 1L;
+
+      int updated = updateCurrentId(connection, next, name);
+      if (updated != 1) {
+        throw new SQLException(
+            "Failed to update the IDGENERATOR table for the entity type with name ("
+                + name
+                + "): updated="
+                + updated);
+      }
+      return next;
+    }
+
+    try {
+      insertRow(connection, name, 1L);
+      return 1L;
+
+    } catch (SQLException insertEx) {
+      if (!isDuplicateKey(insertEx, dialect)) {
+        throw insertEx;
+      }
+
+      Long now = selectForUpdate(connection, dialect, name);
+      if (now == null) {
+        throw new SQLException(
+            "Insert into IDGENERATOR table raced but row still not visible for the entity type with name ("
+                + name
+                + ")",
+            insertEx);
+      }
+
+      long next = now + 1L;
+      int updated = updateCurrentId(connection, next, name);
+      if (updated != 1) {
+        throw new SQLException(
+            "Failed to update the IDGENERATOR table after duplicate insert for the entity type with name ("
+                + name
+                + "): updated="
+                + updated,
+            insertEx);
+      }
+
+      return next;
+    }
   }
 
-  private enum DbDialect {
+  @SuppressWarnings("SqlSourceToSinkFlow")
+  private Long selectForUpdate(Connection connection, DatabaseDialect databaseDialect, String name)
+      throws SQLException {
+    String sql = databaseDialect.selectForUpdateSql();
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+      ps.setString(1, name);
+      try (ResultSet rs = ps.executeQuery()) {
+        if (!rs.next()) return null;
+        long v = rs.getLong(1);
+        return rs.wasNull() ? null : v;
+      }
+    }
+  }
+
+  private enum DatabaseDialect {
     H2,
     ORACLE,
     POSTGRES,
@@ -261,11 +326,8 @@ public class IdGenerator {
     String selectForUpdateSql() {
       return switch (this) {
         case SQLSERVER ->
-            // SQL Server has no FOR UPDATE; hints provide correct lock semantics.
-            "SELECT current_id FROM idgenerator WITH (UPDLOCK, HOLDLOCK) WHERE name = ?";
-        case DB2 ->
-            // DB2 common idiom to keep lock until commit.
-            "SELECT current_id FROM idgenerator WHERE name = ? FOR UPDATE WITH RS";
+            "SELECT current_id FROM idgenerator WITH (UPDLOCK, HOLDLOCK, ROWLOCK) WHERE name = ?";
+        case DB2 -> "SELECT current_id FROM idgenerator WHERE name = ? FOR UPDATE WITH RS";
         case H2, ORACLE, POSTGRES, UNKNOWN ->
             "SELECT current_id FROM idgenerator WHERE name = ? FOR UPDATE";
       };

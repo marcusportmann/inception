@@ -80,22 +80,6 @@ import org.springframework.context.annotation.Conditional;
 public @interface ConditionalOnFeatureEnabled {
 
   /**
-   * The feature key to evaluate.
-   *
-   * <p>The key is resolved as a boolean from the {@code Environment} using the hybrid precedence:
-   * <ol>
-   *   <li>{@code <spring.application.name>.features.<key>}</li>
-   *   <li>{@code features.<key>}</li>
-   * </ol>
-   *
-   * <p>Callers must provide the key only (for example {@code "pdf-export"}); do not include the
-   * {@code "features."} prefix.
-   *
-   * @return the feature key used by {@link FeatureEnabledCondition} to resolve the configured value
-   */
-  String value();
-
-  /**
    * The expected boolean value for this condition to match.
    *
    * <p>By default, the condition matches when the resolved feature value is {@code true}.
@@ -119,4 +103,20 @@ public @interface ConditionalOnFeatureEnabled {
    * @return {@code true} if missing keys should be treated as a match; {@code false} otherwise
    */
   boolean matchIfMissing() default false;
+
+  /**
+   * The feature key to evaluate.
+   *
+   * <p>The key is resolved as a boolean from the {@code Environment} using the hybrid precedence:
+   * <ol>
+   *   <li>{@code <spring.application.name>.features.<key>}</li>
+   *   <li>{@code features.<key>}</li>
+   * </ol>
+   *
+   * <p>Callers must provide the key only (for example {@code "pdf-export"}); do not include the
+   * {@code "features."} prefix.
+   *
+   * @return the feature key used by {@link FeatureEnabledCondition} to resolve the configured value
+   */
+  String value();
 }

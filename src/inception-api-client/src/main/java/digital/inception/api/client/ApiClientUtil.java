@@ -51,6 +51,16 @@ public final class ApiClientUtil {
   /**
    * Create a new web client.
    *
+   * @param jwt the Java Web Token (JWT) to use when invoking an API using the web client
+   * @return the new web client
+   */
+  public static WebClient createWebClient(String jwt) {
+    return createWebClient(jwt, null, null, null, null, null, null, null, null);
+  }
+
+  /**
+   * Create a new web client.
+   *
    * @param keyStoreType the key store type when invoking an API using mutual TLS
    * @param keyStorePath the key store path when invoking an API using mutual TLS
    * @param keyStorePassword the key store password when invoking an API using mutual TLS

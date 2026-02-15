@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -54,16 +55,16 @@ public class GroupRole implements Serializable {
   @Schema(description = "The name of the group", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "GroupName", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
+  @NotBlank
+  @Size(max = 100)
   private String groupName;
 
   /** The code for the role. */
   @Schema(description = "The code for the role", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "RoleCode", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
+  @NotBlank
+  @Size(max = 100)
   private String roleCode;
 
   /** The ID for the user directory the group is associated with. */

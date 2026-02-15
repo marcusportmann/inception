@@ -23,6 +23,7 @@ import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -108,8 +109,8 @@ public class DocumentTemplateSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "CreatedBy", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
+  @NotBlank
+  @Size(max = 100)
   @Column(name = "created_by", length = 100, nullable = false)
   private String createdBy;
 
@@ -146,8 +147,8 @@ public class DocumentTemplateSummary implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
+  @NotBlank
+  @Size(max = 100)
   private String name;
 
   /** The ID for the tenant the document template is specific to. */

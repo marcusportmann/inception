@@ -32,6 +32,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.Unmarshaller;
@@ -127,8 +128,8 @@ public class Job implements Serializable {
   @Schema(description = "The ID for the job", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
+  @NotBlank
+  @Size(max = 100)
   @Id
   @Column(name = "id", length = 100, nullable = false)
   private String id;
@@ -164,8 +165,8 @@ public class Job implements Serializable {
   @Schema(description = "The name of the job", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
+  @NotBlank
+  @Size(max = 100)
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
@@ -184,8 +185,8 @@ public class Job implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "SchedulingPattern", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
+  @NotBlank
+  @Size(max = 100)
   @Column(name = "scheduling_pattern", length = 100, nullable = false)
   private String schedulingPattern;
 

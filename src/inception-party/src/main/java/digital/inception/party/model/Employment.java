@@ -29,6 +29,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -234,8 +235,8 @@ public class Employment implements Serializable {
   @Schema(description = "The employer name", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "EmployerName", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
+  @NotBlank
+  @Size(max = 100)
   @Pattern(
       message = "{digital.inception.party.Employment.EmployerName.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-., ]*(?!\\s+)$")

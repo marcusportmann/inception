@@ -332,7 +332,8 @@ public class MongoConfiguration {
           beanName,
           FlapdoodleEmbeddedMongoHandle.class,
           () ->
-              FlapdoodleEmbeddedMongoHandle.startIfAvailable(connectionString, embeddedMongoDbServerVersion),
+              FlapdoodleEmbeddedMongoHandle.startIfAvailable(
+                  connectionString, embeddedMongoDbServerVersion),
           bd -> bd.setDestroyMethodName("close"));
 
       return gac.getBean(beanName, FlapdoodleEmbeddedMongoHandle.class);
@@ -415,10 +416,10 @@ public class MongoConfiguration {
   }
 
   private static MongoJavaServerEmbeddedMongoHandle getOrCreateMongoJavaServerHandle(
-      ApplicationContext applicationContext,
-      ConnectionString connectionString) {
+      ApplicationContext applicationContext, ConnectionString connectionString) {
 
-    if (applicationContext instanceof org.springframework.context.support.GenericApplicationContext gac) {
+    if (applicationContext
+        instanceof org.springframework.context.support.GenericApplicationContext gac) {
 
       String beanName = "inceptionEmbeddedMongoJavaServerHandle";
 
@@ -457,7 +458,8 @@ public class MongoConfiguration {
         return DefaultMongoDatabaseFactory.fromUri(applicationContext, mongoDbUri);
       }
 
-      MongoJavaServerEmbeddedMongoHandle handle = getOrCreateMongoJavaServerHandle(applicationContext, connectionString);
+      MongoJavaServerEmbeddedMongoHandle handle =
+          getOrCreateMongoJavaServerHandle(applicationContext, connectionString);
 
       String rewritten = rewriteToHostPort(mongoDbUri, handle.host(), handle.port());
       return DefaultMongoDatabaseFactory.fromUri(applicationContext, rewritten);

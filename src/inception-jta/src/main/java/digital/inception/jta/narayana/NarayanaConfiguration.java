@@ -24,28 +24,28 @@ import jakarta.transaction.UserTransaction;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 /**
- * The {@code NarayanaFactory} class produces the JTA transaction management beans for the Narayana
- * transactions toolkit.
+ * The {@code NarayanaConfiguration} class produces the JTA transaction management beans for the
+ * Narayana transactions toolkit.
  *
  * @author Marcus Portmann
  * @see <a href="https://narayana.io">Naryana</a>
  */
-@Component
+@Configuration
 @SuppressWarnings("unused")
-public class NarayanaFactory {
+public class NarayanaConfiguration {
 
   static {
     TxControl.setXANodeName(nodeName());
   }
 
-  /** Constructs a new {@code NarayanaFactory}. */
-  public NarayanaFactory() {}
+  /** Constructs a new {@code NarayanaConfiguration}. */
+  public NarayanaConfiguration() {}
 
   /**
    * Returns the Narayana recovery manager.
@@ -79,6 +79,7 @@ public class NarayanaFactory {
    * @return the Narayana JTA transaction synchronization registry
    */
   @Bean("narayanaTransactionSynchronizationRegistry")
+  @Primary
   public TransactionSynchronizationRegistry narayanaTransactionSynchronizationRegistry(
       TransactionManager transactionManager) {
     return new com.arjuna.ats.internal.jta.transaction.arjunacore
@@ -91,6 +92,7 @@ public class NarayanaFactory {
    * @return the Narayana JTA user transaction
    */
   @Bean
+  @Primary
   public UserTransaction narayanaUserTransaction() {
     return com.arjuna.ats.jta.UserTransaction.userTransaction();
   }

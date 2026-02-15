@@ -158,20 +158,6 @@ public class InitiateWorkflowRequest implements Serializable {
   @XmlElement(name = "PendWorkflow")
   private boolean pendWorkflow;
 
-  /**
-   * Add the workflow attribute for the workflow.
-   *
-   * @param attribute the workflow attribute
-   */
-  public void addAttribute(WorkflowAttribute attribute) {
-    attributes.removeIf(
-        existingAttribute ->
-            StringUtil.equalsIgnoreCase(
-                existingAttribute.getName(), attribute.getName()));
-
-    attributes.add(attribute);
-  }
-
   /** The variables for the workflow. */
   @Schema(description = "The variables for the workflow")
   @JsonProperty
@@ -221,6 +207,19 @@ public class InitiateWorkflowRequest implements Serializable {
     this.interactionLinks = interactionLinks;
     this.variables = variables;
     this.data = data;
+  }
+
+  /**
+   * Add the workflow attribute for the workflow.
+   *
+   * @param attribute the workflow attribute
+   */
+  public void addAttribute(WorkflowAttribute attribute) {
+    attributes.removeIf(
+        existingAttribute ->
+            StringUtil.equalsIgnoreCase(existingAttribute.getName(), attribute.getName()));
+
+    attributes.add(attribute);
   }
 
   /**

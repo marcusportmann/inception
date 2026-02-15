@@ -39,6 +39,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
@@ -102,6 +103,13 @@ public class DemoApplication extends Application {
    */
   public static void main(String[] args) {
     System.setProperty("com.sun.jndi.ldap.object.disableEndpointIdentification", "true");
+
+    try {
+      Server tcpServer =
+          Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9080").start();
+    } catch (Throwable e) {
+      log.error("Failed to start the H2 TCP Server on port 9080", e);
+    }
 
     SpringApplication.run(DemoApplication.class, args);
   }
