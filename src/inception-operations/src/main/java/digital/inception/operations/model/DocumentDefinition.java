@@ -111,8 +111,8 @@ public class DocumentDefinition implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "CategoryId", required = true)
   @NotBlank
-  @Size(max = 50)
-  @Column(name = "category_id", length = 50, nullable = false)
+  @Size(max = 100)
+  @Column(name = "category_id", length = 100, nullable = false)
   private String categoryId;
 
   /** The description for the document definition. */
@@ -130,9 +130,9 @@ public class DocumentDefinition implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotBlank
-  @Size(max = 50)
+  @Size(max = 100)
   @Id
-  @Column(name = "id", length = 50, nullable = false)
+  @Column(name = "id", length = 100, nullable = false)
   private String id;
 
   /** The name of the document definition. */
@@ -158,8 +158,8 @@ public class DocumentDefinition implements Serializable {
   @Schema(description = "The ID for the document template for the document definition")
   @JsonProperty
   @XmlElement(name = "TemplateId")
-  @Size(min = 1, max = 50)
-  @Column(name = "template_id", length = 50)
+  @Size(min = 1, max = 100)
+  @Column(name = "template_id", length = 100)
   private String templateId;
 
   /** The ID for the tenant the document definition is specific to. */

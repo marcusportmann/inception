@@ -130,7 +130,7 @@
 
     <createTable tableName="operations_document_template_categories"
       remarks="Document Template Categories">
-      <column name="id" type="nvarchar(50)" remarks="The ID for the document template category">
+      <column name="id" type="nvarchar(100)" remarks="The ID for the document template category">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid"
@@ -146,10 +146,10 @@
     </createIndex>
 
     <createTable tableName="operations_document_templates" remarks="Document Templates">
-      <column name="id" type="nvarchar(50)" remarks="The ID for the document template">
+      <column name="id" type="nvarchar(100)" remarks="The ID for the document template">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="category_id" type="nvarchar(50)"
+      <column name="category_id" type="nvarchar(100)"
         remarks="The ID for the document template category the document template is associated with">
         <constraints nullable="false"/>
       </column>
@@ -194,7 +194,7 @@
 
     <createTable tableName="operations_document_definition_categories"
       remarks="Document Definition Categories">
-      <column name="id" type="nvarchar(50)" remarks="The ID for the document definition category">
+      <column name="id" type="nvarchar(100)" remarks="The ID for the document definition category">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid"
@@ -210,10 +210,10 @@
     </createIndex>
 
     <createTable tableName="operations_document_definitions" remarks="Document Definitions">
-      <column name="id" type="nvarchar(50)" remarks="The ID for the document definition">
+      <column name="id" type="nvarchar(100)" remarks="The ID for the document definition">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="category_id" type="nvarchar(50)"
+      <column name="category_id" type="nvarchar(100)"
         remarks="The ID for the document definition category the document definition is associated with">
         <constraints nullable="false"/>
       </column>
@@ -224,7 +224,7 @@
       </column>
       <column name="short_name" type="nvarchar(50)" remarks="The short name for the document definition"/>
       <column name="description" type="nvarchar(500)" defaultValue="" remarks="The description for the document definition"/>
-      <column name="template_id" type="nvarchar(50)"
+      <column name="template_id" type="nvarchar(100)"
         remarks="The ID for the document template for the document definition"/>
     </createTable>
     <addForeignKeyConstraint
@@ -248,7 +248,7 @@
 
     <createTable tableName="operations_document_attribute_definitions"
       remarks="Document Attribute Definitions">
-      <column name="definition_id" type="nvarchar(50)"
+      <column name="definition_id" type="nvarchar(100)"
         remarks="The ID for the document definition the document attribute definition is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -284,7 +284,7 @@
     </createIndex>
     
     <createTable tableName="operations_form_definitions" remarks="Form Definitions">
-      <column name="id" type="nvarchar(50)" remarks="The ID for the form definition">
+      <column name="id" type="nvarchar(100)" remarks="The ID for the form definition">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="name" type="nvarchar(100)" remarks="The name of the form definition">
@@ -337,7 +337,7 @@
 
     <createTable tableName="operations_workflow_definition_categories"
       remarks="Workflow Definition Categories">
-      <column name="id" type="nvarchar(50)" remarks="The ID for the workflow definition category">
+      <column name="id" type="nvarchar(100)" remarks="The ID for the workflow definition category">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="tenant_id" type="uuid"
@@ -354,7 +354,7 @@
 
     <createTable tableName="operations_workflow_definition_category_permissions"
       remarks="Workflow Definition Category Permissions">
-      <column name="category_id" type="nvarchar(50)"
+      <column name="category_id" type="nvarchar(100)"
         remarks="The ID for the workflow definition category the workflow definition category permission is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -375,13 +375,13 @@
     </createIndex>
 
     <createTable tableName="operations_workflow_definitions" remarks="Workflow Definitions">
-      <column name="id" type="nvarchar(50)" remarks="The ID for the workflow definition">
+      <column name="id" type="nvarchar(100)" remarks="The ID for the workflow definition">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="version" type="int" remarks="The version of the workflow definition">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="category_id" type="nvarchar(50)"
+      <column name="category_id" type="nvarchar(100)"
         remarks="The ID for the workflow definition category the workflow definition is associated with">
         <constraints nullable="false"/>
       </column>
@@ -432,7 +432,7 @@
 
     <createTable tableName="operations_workflow_definition_attributes"
       remarks="Workflow Definition Attributes">
-      <column name="definition_id" type="nvarchar(50)"
+      <column name="definition_id" type="nvarchar(100)"
         remarks="The ID for the workflow definition the workflow definition attribute is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -463,7 +463,7 @@
 
     <createTable tableName="operations_workflow_definition_permissions"
       remarks="Workflow Definition Permissions">
-      <column name="definition_id" type="nvarchar(50)"
+      <column name="definition_id" type="nvarchar(100)"
         remarks="The ID for the workflow definition the workflow definition permission is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -494,7 +494,7 @@
 
     <createTable tableName="operations_workflow_attribute_definitions"
       remarks="Workflow Attribute Definitions">
-      <column name="definition_id" type="nvarchar(50)"
+      <column name="definition_id" type="nvarchar(100)"
         remarks="The ID for the workflow definition the workflow attribute definition is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -536,7 +536,7 @@
 
     <createTable tableName="operations_workflow_step_definitions"
       remarks="Workflow Step Definitions">
-      <column name="definition_id" type="nvarchar(50)"
+      <column name="definition_id" type="nvarchar(100)"
         remarks="The ID for the workflow definition the workflow step definition is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -588,7 +588,7 @@
 
     <createTable tableName="operations_workflow_variable_definitions"
       remarks="Workflow Variable Definitions">
-      <column name="definition_id" type="nvarchar(50)"
+      <column name="definition_id" type="nvarchar(100)"
         remarks="The ID for the workflow definition the workflow variable definition is associated with">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -622,7 +622,7 @@
     
     <createTable tableName="operations_workflow_definition_document_definitions"
       remarks="Workflow Definition Document Definitions">
-      <column name="workflow_definition_id" type="nvarchar(50)"
+      <column name="workflow_definition_id" type="nvarchar(100)"
         remarks="The ID for the workflow definition">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -630,7 +630,7 @@
         remarks="The version of the workflow definition">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="document_definition_id" type="nvarchar(50)"
+      <column name="document_definition_id" type="nvarchar(100)"
         remarks="The ID for the document definition">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -686,7 +686,7 @@
         <constraints nullable="false"/>
       </column>
       <column name="parent_id" type="uuid" remarks="The ID for the parent workflow"/>
-      <column name="definition_id" type="nvarchar(50)"
+      <column name="definition_id" type="nvarchar(100)"
         remarks="The ID for the workflow definition the workflow is associated with">
         <constraints nullable="false"/>
       </column>
@@ -891,7 +891,7 @@
         remarks="The ID for the tenant the document is associated with">
         <constraints nullable="false"/>
       </column>
-      <column name="definition_id" type="nvarchar(50)"
+      <column name="definition_id" type="nvarchar(100)"
         remarks="The ID for the document definition the document is associated with">
         <constraints nullable="false"/>
       </column>
@@ -1011,7 +1011,7 @@
       <column name="workflow_id" type="uuid" remarks="The ID for the workflow">
         <constraints nullable="false"/>
       </column>
-      <column name="document_definition_id" type="nvarchar(50)"
+      <column name="document_definition_id" type="nvarchar(100)"
         remarks="The ID for the document definition the workflow document is associated with">
         <constraints nullable="false"/>
       </column>

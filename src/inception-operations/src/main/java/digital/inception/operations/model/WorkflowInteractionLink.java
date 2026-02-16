@@ -88,7 +88,7 @@ public class WorkflowInteractionLink implements Serializable {
   @XmlElement(name = "InteractionId", required = true)
   @NotNull
   @Id
-  @Column(name = "interaction_id", length = 50, nullable = false)
+  @Column(name = "interaction_id", nullable = false)
   private UUID interactionId;
 
   /** The date and time the interaction was linked to the workflow. */

@@ -122,7 +122,7 @@ public class DocumentNote implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "DocumentId", required = true)
   @NotNull
-  @Column(name = "document_id", length = 50, nullable = false)
+  @Column(name = "document_id", nullable = false)
   private UUID documentId;
 
   /** The ID for the document note. */

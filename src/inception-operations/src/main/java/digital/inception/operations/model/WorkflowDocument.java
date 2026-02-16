@@ -138,8 +138,8 @@ public class WorkflowDocument implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "DocumentDefinitionId", required = true)
   @NotBlank
-  @Size(max = 50)
-  @Column(name = "document_definition_id", length = 50, nullable = false)
+  @Size(max = 100)
+  @Column(name = "document_definition_id", length = 100, nullable = false)
   private String documentDefinitionId;
 
   /** The ID for the document. */

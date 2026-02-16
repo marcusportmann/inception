@@ -218,7 +218,6 @@ public class InteractionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "SourceId", required = true)
   @NotBlank
-  @Size(max = 50)
   private UUID sourceId;
 
   /** The status of the interaction. */

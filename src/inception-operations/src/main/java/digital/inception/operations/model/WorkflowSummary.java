@@ -95,7 +95,7 @@ public class WorkflowSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "DefinitionId", required = true)
   @NotBlank
-  @Size(max = 50)
+  @Size(max = 100)
   private String definitionId;
 
   /** The name of the workflow definition the workflow is associated with. */

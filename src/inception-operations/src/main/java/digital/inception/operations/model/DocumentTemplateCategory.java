@@ -66,9 +66,9 @@ public class DocumentTemplateCategory implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotBlank
-  @Size(max = 50)
+  @Size(max = 100)
   @Id
-  @Column(name = "id", length = 50, nullable = false)
+  @Column(name = "id", length = 100, nullable = false)
   private String id;
 
   /** The name of the document template category. */

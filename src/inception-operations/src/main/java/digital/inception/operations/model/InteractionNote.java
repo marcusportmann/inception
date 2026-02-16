@@ -133,7 +133,7 @@ public class InteractionNote implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "InteractionId", required = true)
   @NotNull
-  @Column(name = "interaction_id", length = 50, nullable = false)
+  @Column(name = "interaction_id", nullable = false)
   private UUID interactionId;
 
   /** The ID for the tenant the interaction note is associated with. */

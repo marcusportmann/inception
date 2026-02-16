@@ -88,7 +88,7 @@ public class DocumentTemplateSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "CategoryId", required = true)
   @NotBlank
-  @Size(max = 50)
+  @Size(max = 100)
   private String categoryId;
 
   /** The date and time the document template was created. */
@@ -138,7 +138,7 @@ public class DocumentTemplateSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotBlank
-  @Size(max = 50)
+  @Size(max = 100)
   private String id;
 
   /** The name of the document template. */

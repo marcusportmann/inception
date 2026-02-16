@@ -103,7 +103,7 @@ public class InitiateWorkflowRequest implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "DefinitionId", required = true)
   @NotBlank
-  @Size(max = 50)
+  @Size(max = 100)
   private String definitionId;
 
   /** The description for the workflow. */

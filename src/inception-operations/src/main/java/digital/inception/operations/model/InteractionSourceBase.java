@@ -58,8 +58,8 @@ public class InteractionSourceBase implements Serializable {
   /** The ID for the interaction source. */
   @NotNull
   @Id
-  @Column(name = "id", length = 50, nullable = false)
-  private String id;
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /** The name of the interaction source. */
   @NotBlank
@@ -95,7 +95,7 @@ public class InteractionSourceBase implements Serializable {
    * @param id the ID for the interaction source
    * @param type the interaction source type
    */
-  protected InteractionSourceBase(String id, InteractionSourceType type) {
+  protected InteractionSourceBase(UUID id, InteractionSourceType type) {
     this.id = id;
     this.type = type;
   }
@@ -107,7 +107,7 @@ public class InteractionSourceBase implements Serializable {
    * @param type the type for the interaction source
    * @param name the name of the interaction source
    */
-  public InteractionSourceBase(String id, InteractionSourceType type, String name) {
+  public InteractionSourceBase(UUID id, InteractionSourceType type, String name) {
     this.id = id;
     this.type = type;
     this.name = name;
@@ -143,7 +143,7 @@ public class InteractionSourceBase implements Serializable {
    *
    * @return the ID for the interaction source
    */
-  public String getId() {
+  public UUID getId() {
     return id;
   }
 
@@ -189,7 +189,7 @@ public class InteractionSourceBase implements Serializable {
    *
    * @param id the ID for the interaction source
    */
-  public void setId(String id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

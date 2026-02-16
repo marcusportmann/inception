@@ -251,8 +251,8 @@ public class Workflow implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "DefinitionId", required = true)
   @NotBlank
-  @Size(max = 50)
-  @Column(name = "definition_id", length = 50, nullable = false)
+  @Size(max = 100)
+  @Column(name = "definition_id", length = 100, nullable = false)
   private String definitionId;
 
   /** The version of the workflow definition the workflow is associated with. */
