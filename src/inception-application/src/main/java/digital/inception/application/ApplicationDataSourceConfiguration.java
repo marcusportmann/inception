@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import javax.sql.DataSource;
 import liquibase.command.CommandScope;
+import liquibase.command.core.helpers.DatabaseChangelogCommandStep;
 import liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
@@ -191,7 +192,7 @@ public class ApplicationDataSourceConfiguration {
                 new CommandScope("update")
                     .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                     .addArgumentValue(
-                        "labels",
+                        DatabaseChangelogCommandStep.LABEL_FILTER_ARG,
                         activeSpringProfiles.length > 0
                             ? StringUtils.arrayToCommaDelimitedString(activeSpringProfiles)
                             : "default")
@@ -211,7 +212,7 @@ public class ApplicationDataSourceConfiguration {
                 new CommandScope("update")
                     .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                     .addArgumentValue(
-                        "labels",
+                        DatabaseChangelogCommandStep.LABEL_FILTER_ARG,
                         activeSpringProfiles.length > 0
                             ? StringUtils.arrayToCommaDelimitedString(activeSpringProfiles)
                             : "default")

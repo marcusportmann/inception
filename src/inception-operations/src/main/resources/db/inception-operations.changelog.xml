@@ -1226,6 +1226,8 @@
         remarks="The date and time the interaction was assigned"/>
       <column name="assigned_to" type="nvarchar(100)"
         remarks="The username for the user the interaction is assigned to"/>
+      <column name="external_reference" type="nvarchar(200)"
+        remarks="The external reference for the interaction"/>
       <column name="processed" type="timestamp with time zone"
         remarks="The date and time the interaction was processed"/>
       <column name="processing_attempts" type="int" defaultValue="0"

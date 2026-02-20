@@ -438,30 +438,17 @@ public class ResourceServerConfiguration implements InitializingBean {
               .requestMatchers(new RegexRequestMatcher("^/api(?:/[^/]+)*/oauth$", null))
               .permitAll();
 
-          // Enable non-authenticated access to API endpoints if API security is disabled, or we are
-          // running in debug mode, otherwise require authenticated access using a JWT bearer token.
-          if ((!apiSecurityEnabled) || inDebugMode) {
-            authorizeRequests
-                .requestMatchers(
-                    pathPatternRequestMatcherBuilder.matcher("/api/**"),
-                    pathPatternRequestMatcherBuilder.matcher("/csrf/**"),
-                    pathPatternRequestMatcherBuilder.matcher("/realtime/**"))
-                .access(
-                    new AuthorizationManager<RequestAuthorizationContext>() {
-                      @Override
-                      public AuthorizationDecision check(
-                          Supplier<Authentication> authentication,
-                          RequestAuthorizationContext object) {
-                        return new AuthorizationDecision(true);
-                      }
-                    });
-          } else {
-            authorizeRequests
-                .requestMatchers(
-                    pathPatternRequestMatcherBuilder.matcher("/api/**"),
-                    pathPatternRequestMatcherBuilder.matcher("/csrf/**"))
-                .authenticated();
-          }
+          /*
+           * API endpoints are protected by method-level security where appropriate using the
+           * @PreAuthorize annotation, the initial websocket connection cannot send the bearer
+           * token, and CSRF endpoints do not need to be secure.
+           */
+          authorizeRequests
+              .requestMatchers(
+                  pathPatternRequestMatcherBuilder.matcher("/api/**"),
+                  pathPatternRequestMatcherBuilder.matcher("/csrf/**"),
+                  pathPatternRequestMatcherBuilder.matcher("/realtime/**"))
+              .permitAll();
 
           // Static resources authorization rules
           authorizeRequests
@@ -480,8 +467,7 @@ public class ResourceServerConfiguration implements InitializingBean {
           // Enable non-authenticated internal network access to the actuator endpoints
           authorizeRequests
               .requestMatchers(
-                  pathPatternRequestMatcherBuilder.matcher("/actuator/**"),
-                  pathPatternRequestMatcherBuilder.matcher("/realtime/**"))
+                  pathPatternRequestMatcherBuilder.matcher("/actuator/**"))
               .access(internalNetworkAccess);
 
           // Enable non-authenticated internal network access to the Swagger endpoints

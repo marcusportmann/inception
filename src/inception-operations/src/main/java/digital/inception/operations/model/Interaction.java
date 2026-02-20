@@ -79,6 +79,7 @@ import org.springframework.util.StringUtils;
   "occurred",
   "assigned",
   "assignedTo",
+  "externalReference",
   "processed",
   "processingAttempts",
   "processingTime",
@@ -111,6 +112,7 @@ import org.springframework.util.StringUtils;
       "occurred",
       "assigned",
       "assignedTo",
+      "externalReference",
       "processed",
       "processingAttempts",
       "processingTime",
@@ -175,6 +177,14 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
   @NotNull
   @Column(name = "direction", nullable = false)
   private InteractionDirection direction;
+
+  /** The external reference for the interaction. */
+  @Schema(description = "The external reference for the interaction")
+  @JsonProperty
+  @XmlElement(name = "ExternalReference")
+  @Size(min = 1, max = 200)
+  @Column(name = "external_reference", length = 200)
+  private String externalReference;
 
   /** The ID for the interaction. */
   @Schema(description = "The ID for the interaction", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -485,6 +495,15 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
   }
 
   /**
+   * Returns the external reference for the interaction.
+   *
+   * @return the external reference for the interaction
+   */
+  public String getExternalReference() {
+    return externalReference;
+  }
+
+  /**
    * Returns the ID for the interaction.
    *
    * @return the ID for the interaction
@@ -718,6 +737,15 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
    */
   public void setDirection(InteractionDirection direction) {
     this.direction = direction;
+  }
+
+  /**
+   * Set the external reference for the interaction.
+   *
+   * @param externalReference the external reference for the interaction
+   */
+  public void setExternalReference(String externalReference) {
+    this.externalReference = externalReference;
   }
 
   /**

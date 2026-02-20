@@ -38,6 +38,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import javax.sql.DataSource;
 import liquibase.command.CommandScope;
+import liquibase.command.core.helpers.DatabaseChangelogCommandStep;
 import liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
@@ -206,7 +207,7 @@ public class TestConfiguration {
                   new CommandScope("update")
                       .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                       .addArgumentValue(
-                          "labels", StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
+                          DatabaseChangelogCommandStep.LABEL_FILTER_ARG, StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
                       .addArgumentValue("changeLogFile", changelogFile)
                       .execute();
                 }
@@ -223,7 +224,7 @@ public class TestConfiguration {
                   new CommandScope("update")
                       .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                       .addArgumentValue(
-                          "labels", StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
+                          DatabaseChangelogCommandStep.LABEL_FILTER_ARG, StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
                       .addArgumentValue("changeLogFile", changelogFile)
                       .execute();
                 }

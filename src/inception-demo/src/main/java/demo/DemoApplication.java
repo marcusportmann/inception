@@ -34,6 +34,7 @@ import digital.inception.security.model.TokenClaim;
 import digital.inception.security.model.TokenType;
 import digital.inception.security.service.SecurityService;
 import jakarta.annotation.PostConstruct;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 /**
  * The {@code DemoApplication} class provides the implementation of the Inception Framework
@@ -104,13 +106,6 @@ public class DemoApplication extends Application {
   public static void main(String[] args) {
     System.setProperty("com.sun.jndi.ldap.object.disableEndpointIdentification", "true");
 
-    try {
-      Server tcpServer =
-          Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9080").start();
-    } catch (Throwable e) {
-      log.error("Failed to start the H2 TCP Server on port 9080", e);
-    }
-
     SpringApplication.run(DemoApplication.class, args);
   }
 
@@ -130,6 +125,19 @@ public class DemoApplication extends Application {
     } catch (Throwable e) {
       throw new BeanInitializationException("Failed to initialize the Demo application", e);
     }
+  }
+
+  /**
+   * Initialize the H2 TCP Server.
+   *
+   * @return the H2 TCP Server
+   * @throws SQLException if the H2 TCP Server could not be initialized
+   */
+  @Bean(destroyMethod = "stop")
+  Server h2TcpServer() throws SQLException {
+    Server tcpServer = Server.createTcpServer("-tcp", "-tcpPort", "0").start();
+    log.info("H2 TCP Server started: {}", tcpServer.getURL());
+    return tcpServer;
   }
 
   private void createDemoErrorReports() {

@@ -34,9 +34,12 @@ import java.util.stream.Stream;
 import javax.sql.DataSource;
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.hibernate5.SpringBeanContainer;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -137,6 +140,16 @@ public final class JpaUtil {
       entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
       Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
+
+      if (applicationContext instanceof ConfigurableApplicationContext configurableContext) {
+        ConfigurableListableBeanFactory beanFactory = configurableContext.getBeanFactory();
+        jpaPropertyMap.put(AvailableSettings.BEAN_CONTAINER, new SpringBeanContainer(beanFactory));
+      } else {
+        throw new FatalBeanException(
+            "ApplicationContext must be a ConfigurableApplicationContext to configure Hibernate SpringBeanContainer. "
+                + "Actual type: "
+                + applicationContext.getClass().getName());
+      }
 
       if (dataSource.isWrapperFor(AgroalDataSource.class)) {
         AgroalDataSource agroalDataSource = dataSource.unwrap(AgroalDataSource.class);
