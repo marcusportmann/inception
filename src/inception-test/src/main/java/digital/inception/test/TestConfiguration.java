@@ -207,7 +207,8 @@ public class TestConfiguration {
                   new CommandScope("update")
                       .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                       .addArgumentValue(
-                          DatabaseChangelogCommandStep.LABEL_FILTER_ARG, StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
+                          DatabaseChangelogCommandStep.LABEL_FILTER_ARG,
+                          StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
                       .addArgumentValue("changeLogFile", changelogFile)
                       .execute();
                 }
@@ -224,7 +225,8 @@ public class TestConfiguration {
                   new CommandScope("update")
                       .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
                       .addArgumentValue(
-                          DatabaseChangelogCommandStep.LABEL_FILTER_ARG, StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
+                          DatabaseChangelogCommandStep.LABEL_FILTER_ARG,
+                          StringUtils.arrayToCommaDelimitedString(activeSpringProfiles))
                       .addArgumentValue("changeLogFile", changelogFile)
                       .execute();
                 }

@@ -1556,81 +1556,6 @@ public interface DocumentApiController {
           ServiceUnavailableException;
 
   /**
-   * Retrieve the summaries for the document templates associated with the document template
-   * category with the specified ID.
-   *
-   * @param tenantId the ID for the tenant
-   * @param documentTemplateCategoryId the ID for the document template category the document
-   *     templates are associated with
-   * @return the summaries for the document templates associated with the document template category
-   *     with the specified ID
-   * @throws InvalidArgumentException if an argument is invalid
-   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
-   *     be found
-   * @throws ServiceUnavailableException if the document templates could not be retrieved
-   */
-  @Operation(
-      summary =
-          "Retrieve the summaries for the document templates associated with the document template category",
-      description =
-          "Retrieve the summaries for the document templates associated with the document template category")
-  @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "The document template summaries were retrieved"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "403",
-            description = "Access denied",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/problem+json",
-                    schema = @Schema(implementation = ProblemDetails.class)))
-      })
-  @RequestMapping(
-      value =
-          "/document-template-categories/{documentTemplateCategoryId}/document-template-summaries",
-      method = RequestMethod.GET,
-      produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
-  List<DocumentTemplateSummary> getDocumentTemplateSummaries(
-      @Parameter(
-              name = "Tenant-ID",
-              description = "The ID for the tenant",
-              example = "00000000-0000-0000-0000-000000000000")
-          @RequestHeader(
-              name = "Tenant-ID",
-              defaultValue = "00000000-0000-0000-0000-000000000000",
-              required = false)
-          UUID tenantId,
-      @Parameter(
-              name = "documentTemplateCategoryId",
-              description = "The ID for the document template category",
-              required = true)
-          @PathVariable
-          String documentTemplateCategoryId)
-      throws InvalidArgumentException,
-          DocumentTemplateCategoryNotFoundException,
-          ServiceUnavailableException;
-
-  /**
    * Retrieve the summaries for the document templates.
    *
    * @param tenantId the ID for the tenant
@@ -1713,6 +1638,81 @@ public interface DocumentApiController {
           @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
+   * Retrieve the summaries for the document templates associated with the document template
+   * category with the specified ID.
+   *
+   * @param tenantId the ID for the tenant
+   * @param documentTemplateCategoryId the ID for the document template category the document
+   *     templates are associated with
+   * @return the summaries for the document templates associated with the document template category
+   *     with the specified ID
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws DocumentTemplateCategoryNotFoundException if the document template category could not
+   *     be found
+   * @throws ServiceUnavailableException if the document templates could not be retrieved
+   */
+  @Operation(
+      summary =
+          "Retrieve the summaries for the document templates associated with the document template category",
+      description =
+          "Retrieve the summaries for the document templates associated with the document template category")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The document template summaries were retrieved"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value =
+          "/document-template-categories/{documentTemplateCategoryId}/document-template-summaries",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  List<DocumentTemplateSummary> getDocumentTemplateSummariesForDocumentTemplateCategory(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @Parameter(
+              name = "documentTemplateCategoryId",
+              description = "The ID for the document template category",
+              required = true)
+          @PathVariable
+          String documentTemplateCategoryId)
+      throws InvalidArgumentException,
+          DocumentTemplateCategoryNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Search for documents.

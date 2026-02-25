@@ -438,7 +438,7 @@ public class Person extends PartyBase implements Serializable {
   /** The given name, firstname, forename, or Christian name for the person. */
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.Person.GivenName.Pattern.message}",
+      message = "{digital.inception.party.model.Person.GivenName.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
   @Column(name = "given_name", length = 100)
   private String givenName;
@@ -542,7 +542,7 @@ public class Person extends PartyBase implements Serializable {
   /** The surname, last name, or family name for the person. */
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.Person.Surname.Pattern.message}",
+      message = "{digital.inception.party.model.Person.Surname.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
   @Column(name = "surname", length = 100)
   private String surname;

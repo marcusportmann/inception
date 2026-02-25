@@ -423,7 +423,7 @@ public class DocumentApiControllerImpl extends SecureApiController
   }
 
   @Override
-  public List<DocumentTemplateSummary> getDocumentTemplateSummaries(
+  public List<DocumentTemplateSummary> getDocumentTemplateSummariesForDocumentTemplateCategory(
       UUID tenantId, String documentTemplateCategoryId)
       throws InvalidArgumentException,
           DocumentTemplateCategoryNotFoundException,

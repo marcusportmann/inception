@@ -118,7 +118,7 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerAddressCity")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerAddressCity.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerAddressCity.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "employer_address_city", length = 50)
   private String employerAddressCity;
@@ -137,7 +137,7 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerAddressLine1")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerAddressLine1.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerAddressLine1.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "employer_address_line1", length = 100)
   private String employerAddressLine1;
@@ -148,7 +148,7 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerAddressLine2")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerAddressLine2.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerAddressLine2.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "employer_address_line2", length = 100)
   private String employerAddressLine2;
@@ -159,7 +159,7 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerAddressLine3")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerAddressLine3.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerAddressLine3.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "employer_address_line3", length = 100)
   private String employerAddressLine3;
@@ -170,7 +170,7 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerAddressLine4")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerAddressLine4.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerAddressLine4.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "employer_address_line4", length = 100)
   private String employerAddressLine4;
@@ -181,7 +181,8 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerAddressPostalCode")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerAddressPostalCode.Pattern.message}",
+      message =
+          "{digital.inception.party.model.Employment.EmployerAddressPostalCode.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,# ]*(?!\\s+)$")
   @Column(name = "employer_address_postal_code", length = 50)
   private String employerAddressPostalCode;
@@ -192,7 +193,7 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerAddressRegion")
   @Size(min = 4, max = 6)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerAddressRegion.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerAddressRegion.Pattern.message}",
       regexp = "[A-Z]{2}-[A-Z0-9]{1,3}")
   @Column(name = "employer_address_region", length = 6)
   private String employerAddressRegion;
@@ -203,7 +204,7 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerAddressSuburb")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerAddressSuburb.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerAddressSuburb.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "employer_address_suburb", length = 50)
   private String employerAddressSuburb;
@@ -214,7 +215,7 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerContactPerson")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerContactPerson.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerContactPerson.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
   @Column(name = "employer_contact_person", length = 100)
   private String employerContactPerson;
@@ -225,7 +226,7 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerEmailAddress")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerEmailAddress.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerEmailAddress.Pattern.message}",
       regexp =
           "^$|(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
   @Column(name = "employer_email_address", length = 100)
@@ -238,7 +239,7 @@ public class Employment implements Serializable {
   @NotBlank
   @Size(max = 100)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerName.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerName.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "employer_name", length = 100, nullable = false)
   private String employerName;
@@ -249,7 +250,7 @@ public class Employment implements Serializable {
   @XmlElement(name = "EmployerPhoneNumber")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.Employment.EmployerPhoneNumber.Pattern.message}",
+      message = "{digital.inception.party.model.Employment.EmployerPhoneNumber.Pattern.message}",
       regexp = "^(?!\\s+)[0-9|+-., ()]*(?!\\s+)$")
   @Column(name = "employer_phone_number", length = 50)
   private String employerPhoneNumber;

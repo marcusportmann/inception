@@ -108,6 +108,6 @@ public enum InteractionStatus implements ProcessableObjectStatus {
    * @return the string representation of the enumeration value
    */
   public String toString() {
-    return description;
+    return code;
   }
 }

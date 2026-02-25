@@ -144,7 +144,7 @@ public class ContactMechanism implements Serializable {
   @NotBlank
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.ContactMechanism.Type.Pattern.message}",
+      message = "{digital.inception.party.model.ContactMechanism.Type.Pattern.message}",
       regexp = "(mobile_number|phone_number|fax_number|email_address|social_media)")
   @Id
   @Column(name = "type", length = 50, nullable = false)

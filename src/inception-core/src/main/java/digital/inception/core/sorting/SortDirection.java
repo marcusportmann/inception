@@ -93,6 +93,6 @@ public enum SortDirection implements CodeEnum {
    * @return the string representation of the enumeration value
    */
   public String toString() {
-    return description;
+    return code;
   }
 }

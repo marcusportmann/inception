@@ -140,7 +140,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "BuildingFloor")
   @Size(max = 20)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.BuildingFloor.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.BuildingFloor.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}]*(?!\\s+)$")
   @Column(name = "building_floor", length = 20)
   private String buildingFloor;
@@ -153,7 +153,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "BuildingName")
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.BuildingName.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.BuildingName.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,' ]*(?!\\s+)$")
   @Column(name = "building_name", length = 50)
   private String buildingName;
@@ -164,7 +164,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "BuildingRoom")
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.BuildingRoom.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.BuildingRoom.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "building_room", length = 50)
   private String buildingRoom;
@@ -180,7 +180,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "City")
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.City.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.City.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "city", length = 50)
   private String city;
@@ -193,7 +193,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "ComplexName")
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.ComplexName.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.ComplexName.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,' ]*(?!\\s+)$")
   @Column(name = "complex_name", length = 50)
   private String complexName;
@@ -206,7 +206,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "ComplexUnitNumber")
   @Size(max = 20)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.ComplexUnitNumber.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.ComplexUnitNumber.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "complex_unit_number", length = 20)
   private String complexUnitNumber;
@@ -228,7 +228,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "FarmDescription")
   @Size(max = 100)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.FarmDescription.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.FarmDescription.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "farm_description", length = 100)
   private String farmDescription;
@@ -239,7 +239,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "FarmName")
   @Size(max = 100)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.FarmName.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.FarmName.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "farm_name", length = 100)
   private String farmName;
@@ -251,7 +251,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "FarmNumber")
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.FarmNumber.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.FarmNumber.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "farm_number", length = 50)
   private String farmNumber;
@@ -273,7 +273,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "Latitude")
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.Latitude.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.Latitude.Pattern.message}",
       regexp = "^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)$")
   @Column(name = "latitude", length = 50)
   private String latitude;
@@ -289,7 +289,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "Line1")
   @Size(max = 100)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.Line1.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.Line1.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "line1", length = 100)
   private String line1;
@@ -300,7 +300,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "Line2")
   @Size(max = 100)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.Line2.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.Line2.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "line2", length = 100)
   private String line2;
@@ -311,7 +311,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "Line3")
   @Size(max = 100)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.Line3.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.Line3.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "line3", length = 100)
   private String line3;
@@ -322,7 +322,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "Line4")
   @Size(max = 100)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.Line4.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.Line4.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "line4", length = 100)
   private String line4;
@@ -333,7 +333,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "Longitude")
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.Longitude.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.Longitude.Pattern.message}",
       regexp = "^[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$")
   @Column(name = "longitude", length = 50)
   private String longitude;
@@ -353,7 +353,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "PostalCode", required = true)
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.PostalCode.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.PostalCode.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,# ]*(?!\\s+)$")
   @Column(name = "postal_code", length = 50, nullable = false)
   private String postalCode;
@@ -374,7 +374,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "Region")
   @Size(min = 4, max = 6)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.Region.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.Region.Pattern.message}",
       regexp = "[A-Z]{2}-[A-Z0-9]{1,3}")
   @Column(name = "region", length = 6)
   private String region;
@@ -410,7 +410,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "SiteBlock")
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.SiteBlock.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.SiteBlock.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,# ]*(?!\\s+)$")
   @Column(name = "site_block", length = 50)
   private String siteBlock;
@@ -422,7 +422,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "SiteNumber")
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.SiteNumber.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.SiteNumber.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,# ]*(?!\\s+)$")
   @Column(name = "site_number", length = 50)
   private String siteNumber;
@@ -435,7 +435,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "StreetName")
   @Size(max = 100)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.StreetName.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.StreetName.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "street_name", length = 100)
   private String streetName;
@@ -448,7 +448,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "StreetNumber")
   @Size(max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.StreetNumber.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.StreetNumber.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "street_number", length = 50)
   private String streetNumber;
@@ -459,7 +459,7 @@ public class PhysicalAddress implements Serializable {
   @XmlElement(name = "Suburb")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.PhysicalAddress.Suburb.Pattern.message}",
+      message = "{digital.inception.party.model.PhysicalAddress.Suburb.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "suburb", length = 50)
   private String suburb;

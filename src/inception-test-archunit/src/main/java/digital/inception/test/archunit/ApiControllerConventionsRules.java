@@ -78,6 +78,49 @@ public final class ApiControllerConventionsRules {
           .allowEmptyShould(true);
 
   /**
+   * The ArchUnit rule that prevents overloaded methods (same name, different parameters) on API
+   * controller interfaces.
+   */
+  public static final ArchRule API_CONTROLLER_INTERFACES_DISALLOW_METHOD_OVERLOADS =
+      classes()
+          .that()
+          .areInterfaces()
+          .and()
+          .haveSimpleNameEndingWith("ApiController")
+          .and()
+          .resideInAPackage("..controller..")
+          .should(
+              new ArchCondition<JavaClass>("not declare overloaded methods (same name)") {
+                @Override
+                public void check(JavaClass controllerInterface, ConditionEvents events) {
+                  // Count methods by name for methods declared directly on this interface
+                  var methodsByName =
+                      controllerInterface.getMethods().stream()
+                          .filter(m -> m.getOwner().equals(controllerInterface))
+                          .collect(java.util.stream.Collectors.groupingBy(JavaMethod::getName));
+
+                  methodsByName.forEach(
+                      (name, methods) -> {
+                        if (methods.size() > 1) {
+                          String signatures =
+                              methods.stream()
+                                  .map(JavaMethod::getFullName)
+                                  .sorted()
+                                  .collect(java.util.stream.Collectors.joining(", "));
+
+                          String message =
+                              String.format(
+                                  "API controller interface %s declares overloaded method name '%s': %s",
+                                  controllerInterface.getName(), name, signatures);
+
+                          events.add(SimpleConditionEvent.violated(controllerInterface, message));
+                        }
+                      });
+                }
+              })
+          .allowEmptyShould(true);
+
+  /**
    * The ArchUnit rule that verifies that API controller interfaces are named correctly, have the
    * correct annotations, and are in the correct package.
    */
@@ -240,6 +283,8 @@ public final class ApiControllerConventionsRules {
     API_CONTROLLERS_FOLLOW_NAMING_AND_ANNOTATIONS_AND_LOCATION.check(classes);
 
     API_CONTROLLER_INTERFACES_FOLLOW_NAMING_AND_ANNOTATIONS_AND_LOCATION.check(classes);
+
+    API_CONTROLLER_INTERFACES_DISALLOW_METHOD_OVERLOADS.check(classes);
 
     API_CONTROLLER_METHODS_HAVE_REQUEST_MAPPING.check(classes);
 

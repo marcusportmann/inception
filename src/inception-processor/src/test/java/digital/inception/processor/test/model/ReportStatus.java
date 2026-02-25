@@ -97,6 +97,6 @@ public enum ReportStatus implements ProcessableObjectStatus {
 
   @Override
   public String toString() {
-    return description;
+    return code;
   }
 }

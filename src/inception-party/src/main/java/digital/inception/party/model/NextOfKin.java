@@ -113,7 +113,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "AddressCity")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.AddressCity.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.AddressCity.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "address_city", length = 50)
   private String addressCity;
@@ -132,7 +132,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "AddressLine1")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.AddressLine1.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.AddressLine1.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "address_line1", length = 100)
   private String addressLine1;
@@ -143,7 +143,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "AddressLine2")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.AddressLine2.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.AddressLine2.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "address_line2", length = 100)
   private String addressLine2;
@@ -154,7 +154,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "AddressLine3")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.AddressLine3.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.AddressLine3.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "address_line3", length = 100)
   private String addressLine3;
@@ -165,7 +165,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "AddressLine4")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.AddressLine4.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.AddressLine4.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,#' ]*(?!\\s+)$")
   @Column(name = "address_line4", length = 100)
   private String addressLine4;
@@ -176,7 +176,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "AddressPostalCode")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.AddressPostalCode.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.AddressPostalCode.Pattern.message}",
       regexp = "^(?!\\s+)[0-9(?U)\\p{L}-.,# ]*(?!\\s+)$")
   @Column(name = "address_postal_code", length = 50)
   private String addressPostalCode;
@@ -187,7 +187,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "AddressRegion")
   @Size(min = 4, max = 6)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.AddressRegion.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.AddressRegion.Pattern.message}",
       regexp = "[A-Z]{2}-[A-Z0-9]{1,3}")
   @Column(name = "address_region", length = 6)
   private String addressRegion;
@@ -198,7 +198,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "AddressSuburb")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.AddressSuburb.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.AddressSuburb.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}-., ]*(?!\\s+)$")
   @Column(name = "address_suburb", length = 50)
   private String addressSuburb;
@@ -209,7 +209,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "EmailAddress")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.EmailAddress.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.EmailAddress.Pattern.message}",
       regexp =
           "^$|(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
   @Column(name = "email_address", length = 100)
@@ -222,7 +222,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "GivenName")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.GivenName.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.GivenName.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
   @Column(name = "given_name", length = 100)
   private String givenName;
@@ -233,7 +233,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "HomeNumber")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.HomeNumber.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.HomeNumber.Pattern.message}",
       regexp = "^(?!\\s+)[0-9|+-., ()]*(?!\\s+)$")
   @Column(name = "home_number", length = 50)
   private String homeNumber;
@@ -253,7 +253,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "MobileNumber")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.MobileNumber.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.MobileNumber.Pattern.message}",
       regexp = "^(?!\\s+)[0-9|+-., ()]*(?!\\s+)$")
   @Column(name = "mobile_number", length = 50)
   private String mobileNumber;
@@ -265,7 +265,7 @@ public class NextOfKin implements Serializable {
   @NotBlank
   @Size(max = 100)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.Name.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.Name.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
   @Column(name = "name", length = 100, nullable = false)
   private String name;
@@ -283,7 +283,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "Surname")
   @Size(min = 1, max = 100)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.Surname.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.Surname.Pattern.message}",
       regexp = "^(?!\\s+)[(?U)\\p{L}- ]*(?!\\s+)$")
   @Column(name = "surname", length = 100)
   private String surname;
@@ -303,7 +303,7 @@ public class NextOfKin implements Serializable {
   @XmlElement(name = "WorkNumber")
   @Size(min = 1, max = 50)
   @Pattern(
-      message = "{digital.inception.party.NextOfKin.WorkNumber.Pattern.message}",
+      message = "{digital.inception.party.model.NextOfKin.WorkNumber.Pattern.message}",
       regexp = "^(?!\\s+)[0-9|+-., ()]*(?!\\s+)$")
   @Column(name = "work_number", length = 50)
   private String workNumber;
