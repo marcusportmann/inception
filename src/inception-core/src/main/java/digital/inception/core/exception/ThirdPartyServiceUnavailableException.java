@@ -70,6 +70,29 @@ public class ThirdPartyServiceUnavailableException extends ServiceException {
   }
 
   /**
+   * Constructs a new <b>ThirdPartyServiceUnavailableException</b>.
+   *
+   * @param thirdPartyServiceCode the code identifying the third-party service that is unavailable,
+   *     e.g. cpb_dha, cpb_avs, ebtax_irp3a, ebtax_formb, grapevine_sim_swap, etc.
+   * @param requestReference a reference to the original request
+   * @param errorCode the error code returned by the third-party service
+   */
+  public ThirdPartyServiceUnavailableException(
+      String thirdPartyServiceCode, String requestReference, String errorCode) {
+    super(
+        "Failed to invoke the third-party service ("
+            + thirdPartyServiceCode
+            + ") with the request reference ("
+            + requestReference
+            + "): Received error code ("
+            + errorCode
+            + ")");
+
+    this.thirdPartyServiceCode = thirdPartyServiceCode;
+    this.requestReference = requestReference;
+  }
+
+  /**
    * Returns the reference to the original request.
    *
    * @return the reference to the original request

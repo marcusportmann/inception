@@ -168,6 +168,8 @@ public class MultiIssuerJwtDecoder implements JwtDecoder {
       return jwt;
     }
 
+    log.warn("No JWT decoder found to decode JWT with key ID (" + keyId + ")");
+
     throw new JwtException("No JWT decoder found to decode JWT with key ID (" + keyId + ")");
   }
 

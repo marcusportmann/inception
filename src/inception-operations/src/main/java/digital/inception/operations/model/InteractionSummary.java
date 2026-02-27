@@ -64,6 +64,7 @@ import java.util.UUID;
   "occurred",
   "assigned",
   "assignedTo",
+  "originalSourceId",
   "attachmentCount",
   "noteCount"
 })
@@ -88,6 +89,7 @@ import java.util.UUID;
       "occurred",
       "assigned",
       "assignedTo",
+      "originalSourceId",
       "attachmentCount",
       "noteCount"
     })
@@ -166,6 +168,16 @@ public class InteractionSummary implements Serializable {
   @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   private OffsetDateTime occurred;
+
+  /** The ID for the interaction source the interaction was originally associated with. */
+  @Schema(
+      description =
+          "The ID for the interaction source the interaction was originally associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "OriginalSourceId", required = true)
+  @NotNull
+  private UUID originalSourceId;
 
   /** The ID for the party the interaction is associated with. */
   @Schema(description = "The ID for the party the interaction is associated with")
@@ -276,6 +288,8 @@ public class InteractionSummary implements Serializable {
    *     outbound)
    * @param assigned the date and time the interaction was assigned
    * @param assignedTo the date and time the interaction was assigned
+   * @param originalSourceId the ID for the interaction source the interaction was originally
+   *     associated with
    * @param attachmentCount the number of interaction attachments associated with the interaction
    * @param noteCount the number of interaction notes associated with the interaction
    */
@@ -296,6 +310,7 @@ public class InteractionSummary implements Serializable {
       OffsetDateTime occurred,
       OffsetDateTime assigned,
       String assignedTo,
+      UUID originalSourceId,
       long attachmentCount,
       long noteCount) {
     this.id = id;
@@ -314,6 +329,7 @@ public class InteractionSummary implements Serializable {
     this.occurred = occurred;
     this.assigned = assigned;
     this.assignedTo = assignedTo;
+    this.originalSourceId = originalSourceId;
     this.attachmentCount = attachmentCount;
     this.noteCount = noteCount;
   }
@@ -340,6 +356,8 @@ public class InteractionSummary implements Serializable {
    *     outbound)
    * @param assigned the date and time the interaction was assigned
    * @param assignedTo the date and time the interaction was assigned
+   * @param originalSourceId the ID for the interaction source the interaction was originally
+   *     associated with
    */
   public InteractionSummary(
       UUID id,
@@ -357,7 +375,8 @@ public class InteractionSummary implements Serializable {
       InteractionPriority priority,
       OffsetDateTime occurred,
       OffsetDateTime assigned,
-      String assignedTo) {
+      String assignedTo,
+      UUID originalSourceId) {
     this.id = id;
     this.tenantId = tenantId;
     this.status = status;
@@ -374,6 +393,7 @@ public class InteractionSummary implements Serializable {
     this.occurred = occurred;
     this.assigned = assigned;
     this.assignedTo = assignedTo;
+    this.originalSourceId = originalSourceId;
   }
 
   /** Constructs a new {@code InteractionSummary}. */
@@ -483,6 +503,15 @@ public class InteractionSummary implements Serializable {
    */
   public OffsetDateTime getOccurred() {
     return occurred;
+  }
+
+  /**
+   * Returns the ID for the interaction source the interaction was originally associated with.
+   *
+   * @return the ID for the interaction source the interaction was originally associated with
+   */
+  public UUID getOriginalSourceId() {
+    return originalSourceId;
   }
 
   /**

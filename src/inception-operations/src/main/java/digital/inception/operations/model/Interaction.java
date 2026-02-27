@@ -80,6 +80,7 @@ import org.springframework.util.StringUtils;
   "assigned",
   "assignedTo",
   "externalReference",
+  "originalSourceId",
   "processed",
   "processingAttempts",
   "processingTime",
@@ -113,6 +114,7 @@ import org.springframework.util.StringUtils;
       "assigned",
       "assignedTo",
       "externalReference",
+      "originalSourceId",
       "processed",
       "processingAttempts",
       "processingTime",
@@ -275,6 +277,32 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
   @Column(name = "source_id", nullable = false)
   private UUID sourceId;
 
+  /**
+   * Returns the ID for the interaction source the interaction was originally associated with.
+   * @return the ID for the interaction source the interaction was originally associated with
+   */
+  public UUID getOriginalSourceId() {
+    return originalSourceId;
+  }
+
+  /**
+   * Set the ID for the interaction source the interaction was originally associated with.
+   * @param originalSourceId the ID for the interaction source the interaction was originally associated with
+   */
+  public void setOriginalSourceId(UUID originalSourceId) {
+    this.originalSourceId = originalSourceId;
+  }
+
+  /** The ID for the interaction source the interaction was originally associated with. */
+  @Schema(
+      description = "The ID for the interaction source the interaction was originally associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "OriginalSourceId", required = true)
+  @NotNull
+  @Column(name = "original_source_id", nullable = false)
+  private UUID originalSourceId;
+
   /** The interaction source specific reference for the interaction. */
   @Schema(description = "The interaction source specific reference for the interaction")
   @JsonProperty
@@ -330,6 +358,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
    * @param id the ID for the interaction
    * @param tenantId the ID for the tenant the interaction is associated with
    * @param sourceId the ID for the interaction source the interaction is associated with
+   * @param originalSourceId the ID for the interaction source the interaction was originally associated with
    * @param type the type of interaction
    * @param direction the direction for the interaction, i.e., inbound or outbound
    * @param sender the identifier representing who the interaction is from, e.g. an email address, a
@@ -346,6 +375,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
       UUID id,
       UUID tenantId,
       UUID sourceId,
+      UUID originalSourceId,
       InteractionType type,
       InteractionDirection direction,
       String sender,
@@ -360,6 +390,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
     this.id = id;
     this.tenantId = tenantId;
     this.sourceId = sourceId;
+    this.originalSourceId = originalSourceId;
     this.type = type;
     this.direction = direction;
     this.sender = sender;
@@ -379,6 +410,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
    * @param tenantId the ID for the tenant the interaction is associated with
    * @param sourceId the ID for the interaction source the interaction is associated with
    * @param sourceReference the interaction source specific reference for the interaction
+   * @param originalSourceId the ID for the interaction source the interaction was originally associated with
    * @param type the type of interaction
    * @param direction the direction for the interaction, i.e., inbound or outbound
    * @param sender the identifier representing who the interaction is from, e.g. an email address, a
@@ -396,6 +428,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
       UUID tenantId,
       UUID sourceId,
       String sourceReference,
+      UUID originalSourceId,
       InteractionType type,
       InteractionDirection direction,
       String sender,
@@ -411,6 +444,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
     this.tenantId = tenantId;
     this.sourceId = sourceId;
     this.sourceReference = sourceReference;
+    this.originalSourceId = originalSourceId;
     this.type = type;
     this.direction = direction;
     this.sender = sender;

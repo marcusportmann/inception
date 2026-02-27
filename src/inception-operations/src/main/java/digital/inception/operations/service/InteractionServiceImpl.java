@@ -1629,7 +1629,8 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
                   root.get("priority"),
                   root.get("occurred"),
                   root.get("assigned"),
-                  root.get("assignedTo")))
+                  root.get("assignedTo"),
+                  root.get("originalSourceId")))
           .where(dataPredicate);
 
       SortDirection sortDirection =
@@ -1928,6 +1929,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       interaction.setTenantId(interactionSource.getTenantId());
       interaction.setStatus(InteractionStatus.QUEUED);
       interaction.setSourceId(interactionSource.getId());
+      interaction.setOriginalSourceId(interactionSource.getId());
       interaction.setSourceReference(message.getHeader("Message-ID")[0]);
 
       /*

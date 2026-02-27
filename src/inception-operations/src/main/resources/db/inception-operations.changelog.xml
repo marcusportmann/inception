@@ -1190,6 +1190,10 @@
         remarks="The ID for the interaction source the interaction is associated with">
         <constraints nullable="false"/>
       </column>
+      <column name="original_source_id" type="uuid"
+        remarks="The ID for the interaction source the interaction was originally associated with">
+        <constraints nullable="false"/>
+      </column>
       <column name="source_reference" type="nvarchar(400)"
         remarks="The interaction source specific reference for the interaction"/>
       <column name="conversation_id" type="nvarchar(30)"

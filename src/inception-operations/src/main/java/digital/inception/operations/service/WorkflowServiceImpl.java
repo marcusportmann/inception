@@ -1159,7 +1159,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
                   root.get("priority"),
                   root.get("occurred"),
                   root.get("assigned"),
-                  root.get("assignedTo")))
+                  root.get("assignedTo"),
+                  root.get("originalSourceId")))
           .where(dataPredicate);
 
       // Sorting

@@ -272,6 +272,7 @@ public class InteractionServiceTests {
             UUID.randomUUID(),
             TenantUtil.DEFAULT_TENANT_ID,
             interactionSource.getId(),
+            interactionSource.getId(),
             InteractionType.OTHER,
             InteractionDirection.INBOUND,
             "test_sender",
