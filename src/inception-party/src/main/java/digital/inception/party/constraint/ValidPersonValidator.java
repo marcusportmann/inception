@@ -30,6 +30,7 @@ import digital.inception.party.model.Identification;
 import digital.inception.party.model.LanguageProficiency;
 import digital.inception.party.model.Lock;
 import digital.inception.party.model.NextOfKin;
+import digital.inception.party.model.PartyType;
 import digital.inception.party.model.Person;
 import digital.inception.party.model.PhysicalAddress;
 import digital.inception.party.model.Preference;
@@ -130,7 +131,7 @@ public class ValidPersonValidator extends PartyValidator
             Optional<AttributeType> attributeTypeOptional =
                 getPartyReferenceService()
                     .getAttributeType(
-                        person.getTenantId(), person.getType().code(), attribute.getType());
+                        person.getTenantId(), PartyType.PERSON.code(), attribute.getType());
 
             if (attributeTypeOptional.isPresent()) {
               AttributeType attributeType = attributeTypeOptional.get();
@@ -307,7 +308,7 @@ public class ValidPersonValidator extends PartyValidator
                     getPartyReferenceService()
                         .getContactMechanismRole(
                             person.getTenantId(),
-                            person.getType().code(),
+                            PartyType.PERSON.code(),
                             contactMechanism.getType(),
                             contactMechanism.getRole());
 
@@ -364,7 +365,7 @@ public class ValidPersonValidator extends PartyValidator
                   hibernateConstraintValidatorContext
                       .addMessageParameter("contactMechanismRole", contactMechanism.getRole())
                       .addMessageParameter("contactMechanismType", contactMechanism.getType())
-                      .addMessageParameter("partyType", person.getType().code())
+                      .addMessageParameter("partyType", PartyType.PERSON.code())
                       .buildConstraintViolationWithTemplate(
                           "{digital.inception.party.constraint.ValidPerson.invalidContactMechanismRoleForPartyType.message}")
                       .addPropertyNode("contactMechanisms")
@@ -381,13 +382,13 @@ public class ValidPersonValidator extends PartyValidator
                   if (!getPartyReferenceService()
                       .isValidContactMechanismPurpose(
                           person.getTenantId(),
-                          person.getType().code(),
+                          PartyType.PERSON.code(),
                           contactMechanism.getType(),
                           contactMechanismPurpose)) {
                     hibernateConstraintValidatorContext
                         .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
                         .addMessageParameter("contactMechanismType", contactMechanism.getType())
-                        .addMessageParameter("partyType", person.getType().code())
+                        .addMessageParameter("partyType", PartyType.PERSON.code())
                         .buildConstraintViolationWithTemplate(
                             "{digital.inception.party.constraint.ValidPerson.invalidContactMechanismPurposeForPartyType.message}")
                         .addPropertyNode("contactMechanisms")
@@ -609,7 +610,7 @@ public class ValidPersonValidator extends PartyValidator
           if (!getPartyReferenceService()
               .isValidExternalReference(
                   person.getTenantId(),
-                  person.getType().code(),
+                  PartyType.PERSON.code(),
                   externalReference.getType(),
                   externalReference.getValue())) {
             hibernateConstraintValidatorContext
@@ -657,10 +658,10 @@ public class ValidPersonValidator extends PartyValidator
         if (StringUtils.hasText(person.getIdentificationType())) {
           if (!getPartyReferenceService()
               .isValidIdentificationType(
-                  person.getTenantId(), person.getType().code(), person.getIdentificationType())) {
+                  person.getTenantId(), PartyType.PERSON.code(), person.getIdentificationType())) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("identificationType", person.getIdentificationType())
-                .addMessageParameter("partyType", person.getType().code())
+                .addMessageParameter("partyType", PartyType.PERSON.code())
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraint.ValidPerson.invalidIdentificationTypeForPartyType.message}")
                 .addPropertyNode("identificationType")
@@ -674,7 +675,7 @@ public class ValidPersonValidator extends PartyValidator
               if (!getPartyReferenceService()
                   .isValidIdentification(
                       person.getTenantId(),
-                      person.getType().code(),
+                      PartyType.PERSON.code(),
                       person.getIdentificationType(),
                       person.getIdentificationNumber())) {
                 hibernateConstraintValidatorContext
@@ -724,10 +725,10 @@ public class ValidPersonValidator extends PartyValidator
           if (StringUtils.hasText(identification.getType())) {
             if (!getPartyReferenceService()
                 .isValidIdentificationType(
-                    person.getTenantId(), person.getType().code(), identification.getType())) {
+                    person.getTenantId(), PartyType.PERSON.code(), identification.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("identificationType", identification.getType())
-                  .addMessageParameter("partyType", person.getType().code())
+                  .addMessageParameter("partyType", PartyType.PERSON.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidPerson.invalidIdentificationTypeForPartyType.message}")
                   .addPropertyNode("identifications")
@@ -743,7 +744,7 @@ public class ValidPersonValidator extends PartyValidator
             if (!getPartyReferenceService()
                 .isValidIdentification(
                     person.getTenantId(),
-                    person.getType().code(),
+                    PartyType.PERSON.code(),
                     identification.getType(),
                     identification.getNumber())) {
               hibernateConstraintValidatorContext
@@ -794,10 +795,10 @@ public class ValidPersonValidator extends PartyValidator
         for (Lock lock : person.getLocks()) {
           if (StringUtils.hasText(lock.getType())) {
             if (!getPartyReferenceService()
-                .isValidLockType(person.getTenantId(), person.getType().code(), lock.getType())) {
+                .isValidLockType(person.getTenantId(), PartyType.PERSON.code(), lock.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("lockType", lock.getType())
-                  .addMessageParameter("partyType", person.getType().code())
+                  .addMessageParameter("partyType", PartyType.PERSON.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidPerson.invalidLockTypeForPartyType.message}")
                   .addPropertyNode("locks")
@@ -893,7 +894,7 @@ public class ValidPersonValidator extends PartyValidator
         for (PhysicalAddress physicalAddress : person.getPhysicalAddresses()) {
           if (!validatePhysicalAddress(
               person.getTenantId(),
-              person.getType().code(),
+              PartyType.PERSON.code(),
               physicalAddress,
               hibernateConstraintValidatorContext)) {
             isValid = false;
@@ -906,7 +907,7 @@ public class ValidPersonValidator extends PartyValidator
             Optional<PreferenceType> preferenceTypeOptional =
                 getPartyReferenceService()
                     .getPreferenceType(
-                        person.getTenantId(), person.getType().code(), preference.getType());
+                        person.getTenantId(), PartyType.PERSON.code(), preference.getType());
 
             if (preferenceTypeOptional.isPresent()) {
               PreferenceType preferenceType = preferenceTypeOptional.get();
@@ -932,7 +933,7 @@ public class ValidPersonValidator extends PartyValidator
             } else {
               hibernateConstraintValidatorContext
                   .addMessageParameter("preferenceType", preference.getType())
-                  .addMessageParameter("partyType", person.getType().code())
+                  .addMessageParameter("partyType", PartyType.PERSON.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidPerson.invalidPreferenceTypeForPartyType.message}")
                   .addPropertyNode("preferences")
@@ -1009,7 +1010,7 @@ public class ValidPersonValidator extends PartyValidator
             if (!getPartyReferenceService()
                 .isValidResidencePermit(
                     person.getTenantId(),
-                    person.getType().code(),
+                    PartyType.PERSON.code(),
                     residencePermit.getType(),
                     residencePermit.getNumber())) {
               hibernateConstraintValidatorContext
@@ -1043,10 +1044,10 @@ public class ValidPersonValidator extends PartyValidator
         for (Role role : person.getRoles()) {
           if (StringUtils.hasText(role.getType())) {
             if (!getPartyReferenceService()
-                .isValidRoleType(person.getTenantId(), person.getType().code(), role.getType())) {
+                .isValidRoleType(person.getTenantId(), PartyType.PERSON.code(), role.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("roleType", role.getType())
-                  .addMessageParameter("partyType", person.getType().code())
+                  .addMessageParameter("partyType", PartyType.PERSON.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidPerson.invalidRoleTypeForPartyType.message}")
                   .addPropertyNode("roles")
@@ -1150,10 +1151,10 @@ public class ValidPersonValidator extends PartyValidator
           if (StringUtils.hasText(status.getType())) {
             if (!getPartyReferenceService()
                 .isValidStatusType(
-                    person.getTenantId(), person.getType().code(), status.getType())) {
+                    person.getTenantId(), PartyType.PERSON.code(), status.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("statusType", status.getType())
-                  .addMessageParameter("partyType", person.getType().code())
+                  .addMessageParameter("partyType", PartyType.PERSON.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidPerson.invalidStatusTypeForPartyType.message}")
                   .addPropertyNode("statuses")
@@ -1186,10 +1187,10 @@ public class ValidPersonValidator extends PartyValidator
           if (StringUtils.hasText(taxNumber.getType())) {
             if (!getPartyReferenceService()
                 .isValidTaxNumberType(
-                    person.getTenantId(), person.getType().code(), taxNumber.getType())) {
+                    person.getTenantId(), PartyType.PERSON.code(), taxNumber.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("taxNumberType", taxNumber.getType())
-                  .addMessageParameter("partyType", person.getType().code())
+                  .addMessageParameter("partyType", PartyType.PERSON.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidPerson.invalidTaxNumberTypeForPartyType.message}")
                   .addPropertyNode("taxNumbers")
@@ -1205,7 +1206,7 @@ public class ValidPersonValidator extends PartyValidator
             if (!getPartyReferenceService()
                 .isValidTaxNumber(
                     person.getTenantId(),
-                    person.getType().code(),
+                    PartyType.PERSON.code(),
                     taxNumber.getType(),
                     taxNumber.getNumber())) {
               hibernateConstraintValidatorContext

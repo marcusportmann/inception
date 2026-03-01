@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
@@ -58,6 +59,7 @@ import java.util.UUID;
 @XmlTransient
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type", length = 50)
 @Table(name = "party_parties")
 public class PartyBase implements Serializable {
 
@@ -83,34 +85,18 @@ public class PartyBase implements Serializable {
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
-  /** The type for the party. */
-  @NotNull
-  @Column(name = "type", length = 50, nullable = false)
-  private PartyType type;
-
   /** Constructs a new {@code PartyBase}. */
   protected PartyBase() {}
 
   /**
    * Constructs a new {@code PartyBase}.
    *
-   * @param type the party type
-   */
-  protected PartyBase(PartyType type) {
-    this.type = type;
-  }
-
-  /**
-   * Constructs a new {@code PartyBase}.
-   *
    * @param id the ID for the party
    * @param tenantId the ID for the tenant the party is associated with
-   * @param type the party type
    */
-  protected PartyBase(UUID id, UUID tenantId, PartyType type) {
+  protected PartyBase(UUID id, UUID tenantId) {
     this.id = id;
     this.tenantId = tenantId;
-    this.type = type;
   }
 
   /**
@@ -118,13 +104,11 @@ public class PartyBase implements Serializable {
    *
    * @param id the ID for the party
    * @param tenantId the ID for the tenant the party is associated with
-   * @param type the type for the party
    * @param name the name of the party
    */
-  public PartyBase(UUID id, UUID tenantId, PartyType type, String name) {
+  public PartyBase(UUID id, UUID tenantId, String name) {
     this.id = id;
     this.tenantId = tenantId;
-    this.type = type;
     this.name = name;
   }
 
@@ -184,16 +168,6 @@ public class PartyBase implements Serializable {
   }
 
   /**
-   * Returns the type for the party.
-   *
-   * @return the type for the party
-   */
-  @XmlTransient
-  public PartyType getType() {
-    return type;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -228,14 +202,5 @@ public class PartyBase implements Serializable {
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
-  }
-
-  /**
-   * Sets the type for the party.
-   *
-   * @param partyType the type for the party
-   */
-  public void setType(PartyType partyType) {
-    this.type = partyType;
   }
 }

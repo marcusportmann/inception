@@ -31,6 +31,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -98,6 +99,7 @@ import org.springframework.util.StringUtils;
   "countryOfResidence",
   "dateOfBirth",
   "dateOfDeath",
+  "dateOfDisability",
   "employmentStatus",
   "employmentType",
   "gender",
@@ -159,6 +161,7 @@ import org.springframework.util.StringUtils;
       "countryOfResidence",
       "dateOfBirth",
       "dateOfDeath",
+      "dateOfDisability",
       "employmentStatus",
       "employmentType",
       "gender",
@@ -211,6 +214,7 @@ import org.springframework.util.StringUtils;
 @ValidPerson
 @Entity
 @Table(name = "party_persons")
+@DiscriminatorValue("person")
 public class Person extends PartyBase implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
@@ -420,6 +424,10 @@ public class Person extends PartyBase implements Serializable {
   @Column(name = "date_of_death")
   private LocalDate dateOfDeath;
 
+  /** The date of disability for the person. */
+  @Column(name = "date_of_disability")
+  private LocalDate dateOfDisability;
+
   /** The code for the employment status for the person. */
   @Size(min = 1, max = 50)
   @Column(name = "employment_status", length = 50)
@@ -558,9 +566,7 @@ public class Person extends PartyBase implements Serializable {
   private String title;
 
   /** Constructs a new {@code Person}. */
-  public Person() {
-    super(PartyType.PERSON);
-  }
+  protected Person() {}
 
   /**
    * Constructs a new {@code Person}.
@@ -569,7 +575,7 @@ public class Person extends PartyBase implements Serializable {
    * @param name the name of the person
    */
   public Person(UUID tenantId, String name) {
-    super(UuidCreator.getTimeOrderedEpoch(), tenantId, PartyType.PERSON, name);
+    super(UuidCreator.getTimeOrderedEpoch(), tenantId, name);
   }
 
   /**
@@ -1079,6 +1085,21 @@ public class Person extends PartyBase implements Serializable {
   @XmlSchemaType(name = "date")
   public LocalDate getDateOfDeath() {
     return dateOfDeath;
+  }
+
+  /**
+   * Returns the date of disability for the person.
+   *
+   * @return the date of disability for the person
+   */
+  @Schema(description = "The date of disability for the person")
+  @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  @XmlElement(name = "DateOfDisability")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  public LocalDate getDateOfDisability() {
+    return dateOfDisability;
   }
 
   /**
@@ -1940,18 +1961,6 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the party type for the person.
-   *
-   * @return the party type for the person
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Override
-  public PartyType getType() {
-    return super.getType();
-  }
-
-  /**
    * Returns whether the person has an attribute with the specified type.
    *
    * @param type the code for the attribute type
@@ -2534,6 +2543,15 @@ public class Person extends PartyBase implements Serializable {
    */
   public void setDateOfDeath(LocalDate dateOfDeath) {
     this.dateOfDeath = dateOfDeath;
+  }
+
+  /**
+   * Set the date of disability for the person.
+   *
+   * @param dateOfDisability the date of disability for the person
+   */
+  public void setDateOfDisability(LocalDate dateOfDisability) {
+    this.dateOfDisability = dateOfDisability;
   }
 
   /**

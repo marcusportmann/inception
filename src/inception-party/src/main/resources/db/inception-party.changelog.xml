@@ -1318,6 +1318,7 @@
       <column name="country_of_residence" type="nchar(2)" remarks="The ISO 3166-1 alpha-2 code for the country of residence for the person"/>
       <column name="date_of_birth" type="date" remarks="The date of birth for the person"/>
       <column name="date_of_death" type="date" remarks="The date of death for the person"/>
+      <column name="date_of_disability" type="date" remarks="The date of disability for the person"/>
       <column name="employment_status" type="nvarchar(50)" remarks="The code for the employment status for the person"/>
       <column name="employment_type" type="nvarchar(50)" remarks="The code for the employment type for the person"/>
       <column name="gender" type="nvarchar(50)" remarks="The code for the gender for the person"/>

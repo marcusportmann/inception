@@ -27,6 +27,7 @@ import digital.inception.party.model.Identification;
 import digital.inception.party.model.IndustryAllocation;
 import digital.inception.party.model.Lock;
 import digital.inception.party.model.Organization;
+import digital.inception.party.model.PartyType;
 import digital.inception.party.model.PhysicalAddress;
 import digital.inception.party.model.Preference;
 import digital.inception.party.model.PreferenceType;
@@ -119,7 +120,7 @@ public class ValidOrganizationValidator extends PartyValidator
                 getPartyReferenceService()
                     .getAttributeType(
                         organization.getTenantId(),
-                        organization.getType().code(),
+                        PartyType.ORGANIZATION.code(),
                         attribute.getType());
 
             if (attributeTypeOptional.isPresent()) {
@@ -279,7 +280,7 @@ public class ValidOrganizationValidator extends PartyValidator
                     getPartyReferenceService()
                         .getContactMechanismRole(
                             organization.getTenantId(),
-                            organization.getType().code(),
+                            PartyType.ORGANIZATION.code(),
                             contactMechanism.getType(),
                             contactMechanism.getRole());
 
@@ -336,7 +337,7 @@ public class ValidOrganizationValidator extends PartyValidator
                   hibernateConstraintValidatorContext
                       .addMessageParameter("contactMechanismRole", contactMechanism.getRole())
                       .addMessageParameter("contactMechanismType", contactMechanism.getType())
-                      .addMessageParameter("partyType", organization.getType().code())
+                      .addMessageParameter("partyType", PartyType.ORGANIZATION.code())
                       .buildConstraintViolationWithTemplate(
                           "{digital.inception.party.constraint.ValidOrganization.invalidContactMechanismRoleForPartyType.message}")
                       .addPropertyNode("contactMechanisms")
@@ -353,13 +354,13 @@ public class ValidOrganizationValidator extends PartyValidator
                   if (!getPartyReferenceService()
                       .isValidContactMechanismPurpose(
                           organization.getTenantId(),
-                          organization.getType().code(),
+                          PartyType.ORGANIZATION.code(),
                           contactMechanism.getType(),
                           contactMechanismPurpose)) {
                     hibernateConstraintValidatorContext
                         .addMessageParameter("contactMechanismPurpose", contactMechanismPurpose)
                         .addMessageParameter("contactMechanismType", contactMechanism.getType())
-                        .addMessageParameter("partyType", organization.getType().code())
+                        .addMessageParameter("partyType", PartyType.ORGANIZATION.code())
                         .buildConstraintViolationWithTemplate(
                             "{digital.inception.party.constraint.ValidOrganization.invalidContactMechanismPurposeForPartyType.message}")
                         .addPropertyNode("contactMechanisms")
@@ -407,7 +408,7 @@ public class ValidOrganizationValidator extends PartyValidator
           if (!getPartyReferenceService()
               .isValidExternalReference(
                   organization.getTenantId(),
-                  organization.getType().code(),
+                  PartyType.ORGANIZATION.code(),
                   externalReference.getType(),
                   externalReference.getValue())) {
             hibernateConstraintValidatorContext
@@ -427,11 +428,11 @@ public class ValidOrganizationValidator extends PartyValidator
           if (!getPartyReferenceService()
               .isValidIdentificationType(
                   organization.getTenantId(),
-                  organization.getType().code(),
+                  PartyType.ORGANIZATION.code(),
                   organization.getIdentificationType())) {
             hibernateConstraintValidatorContext
                 .addMessageParameter("identificationType", organization.getIdentificationType())
-                .addMessageParameter("partyType", organization.getType().code())
+                .addMessageParameter("partyType", PartyType.ORGANIZATION.code())
                 .buildConstraintViolationWithTemplate(
                     "{digital.inception.party.constraint.ValidOrganization.invalidIdentificationTypeForPartyType.message}")
                 .addPropertyNode("identificationType")
@@ -445,7 +446,7 @@ public class ValidOrganizationValidator extends PartyValidator
               if (!getPartyReferenceService()
                   .isValidIdentification(
                       organization.getTenantId(),
-                      organization.getType().code(),
+                      PartyType.ORGANIZATION.code(),
                       organization.getIdentificationType(),
                       organization.getIdentificationNumber())) {
                 hibernateConstraintValidatorContext
@@ -499,11 +500,11 @@ public class ValidOrganizationValidator extends PartyValidator
             if (!getPartyReferenceService()
                 .isValidIdentificationType(
                     organization.getTenantId(),
-                    organization.getType().code(),
+                    PartyType.ORGANIZATION.code(),
                     identification.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("identificationType", identification.getType())
-                  .addMessageParameter("partyType", organization.getType().code())
+                  .addMessageParameter("partyType", PartyType.ORGANIZATION.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidOrganization.invalidIdentificationTypeForPartyType.message}")
                   .addPropertyNode("identifications")
@@ -519,7 +520,7 @@ public class ValidOrganizationValidator extends PartyValidator
             if (!getPartyReferenceService()
                 .isValidIdentification(
                     organization.getTenantId(),
-                    organization.getType().code(),
+                    PartyType.ORGANIZATION.code(),
                     identification.getType(),
                     identification.getNumber())) {
               hibernateConstraintValidatorContext
@@ -565,10 +566,10 @@ public class ValidOrganizationValidator extends PartyValidator
           if (StringUtils.hasText(lock.getType())) {
             if (!getPartyReferenceService()
                 .isValidLockType(
-                    organization.getTenantId(), organization.getType().code(), lock.getType())) {
+                    organization.getTenantId(), PartyType.ORGANIZATION.code(), lock.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("lockType", lock.getType())
-                  .addMessageParameter("partyType", organization.getType().code())
+                  .addMessageParameter("partyType", PartyType.ORGANIZATION.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidOrganization.invalidLockTypeForPartyType.message}")
                   .addPropertyNode("locks")
@@ -585,7 +586,7 @@ public class ValidOrganizationValidator extends PartyValidator
         for (PhysicalAddress physicalAddress : organization.getPhysicalAddresses()) {
           if (!validatePhysicalAddress(
               organization.getTenantId(),
-              organization.getType().code(),
+              PartyType.ORGANIZATION.code(),
               physicalAddress,
               hibernateConstraintValidatorContext)) {
             isValid = false;
@@ -599,7 +600,7 @@ public class ValidOrganizationValidator extends PartyValidator
                 getPartyReferenceService()
                     .getPreferenceType(
                         organization.getTenantId(),
-                        organization.getType().code(),
+                        PartyType.ORGANIZATION.code(),
                         preference.getType());
 
             if (preferenceTypeOptional.isPresent()) {
@@ -626,7 +627,7 @@ public class ValidOrganizationValidator extends PartyValidator
             } else {
               hibernateConstraintValidatorContext
                   .addMessageParameter("preferenceType", preference.getType())
-                  .addMessageParameter("partyType", organization.getType().code())
+                  .addMessageParameter("partyType", PartyType.ORGANIZATION.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidOrganization.invalidPreferenceTypeForPartyType.message}")
                   .addPropertyNode("preferences")
@@ -644,10 +645,10 @@ public class ValidOrganizationValidator extends PartyValidator
           if (StringUtils.hasText(role.getType())) {
             if (!getPartyReferenceService()
                 .isValidRoleType(
-                    organization.getTenantId(), organization.getType().code(), role.getType())) {
+                    organization.getTenantId(), PartyType.ORGANIZATION.code(), role.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("roleType", role.getType())
-                  .addMessageParameter("partyType", organization.getType().code())
+                  .addMessageParameter("partyType", PartyType.ORGANIZATION.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidOrganization.invalidRoleTypeForPartyType.message}")
                   .addPropertyNode("roles")
@@ -694,10 +695,10 @@ public class ValidOrganizationValidator extends PartyValidator
           if (StringUtils.hasText(status.getType())) {
             if (!getPartyReferenceService()
                 .isValidStatusType(
-                    organization.getTenantId(), organization.getType().code(), status.getType())) {
+                    organization.getTenantId(), PartyType.ORGANIZATION.code(), status.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("statusType", status.getType())
-                  .addMessageParameter("partyType", organization.getType().code())
+                  .addMessageParameter("partyType", PartyType.ORGANIZATION.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidOrganization.invalidStatusTypeForPartyType.message}")
                   .addPropertyNode("statuses")
@@ -731,11 +732,11 @@ public class ValidOrganizationValidator extends PartyValidator
             if (!getPartyReferenceService()
                 .isValidTaxNumberType(
                     organization.getTenantId(),
-                    organization.getType().code(),
+                    PartyType.ORGANIZATION.code(),
                     taxNumber.getType())) {
               hibernateConstraintValidatorContext
                   .addMessageParameter("taxNumberType", taxNumber.getType())
-                  .addMessageParameter("partyType", organization.getType().code())
+                  .addMessageParameter("partyType", PartyType.ORGANIZATION.code())
                   .buildConstraintViolationWithTemplate(
                       "{digital.inception.party.constraint.ValidOrganization.invalidTaxNumberTypeForPartyType.message}")
                   .addPropertyNode("taxNumbers")
@@ -751,7 +752,7 @@ public class ValidOrganizationValidator extends PartyValidator
             if (!getPartyReferenceService()
                 .isValidTaxNumber(
                     organization.getTenantId(),
-                    organization.getType().code(),
+                    PartyType.ORGANIZATION.code(),
                     taxNumber.getType(),
                     taxNumber.getNumber())) {
               hibernateConstraintValidatorContext

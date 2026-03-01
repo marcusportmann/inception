@@ -31,6 +31,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -141,6 +142,7 @@ import java.util.stream.Collectors;
 @ValidOrganization
 @Entity
 @Table(name = "party_organizations")
+@DiscriminatorValue("organization")
 public class Organization extends PartyBase implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
@@ -265,9 +267,7 @@ public class Organization extends PartyBase implements Serializable {
   private String identificationType;
 
   /** Constructs a new {@code Organization}. */
-  public Organization() {
-    super(PartyType.ORGANIZATION);
-  }
+  public Organization() {}
 
   /**
    * Constructs a new {@code Organization}.
@@ -276,7 +276,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param name the name of the organization
    */
   public Organization(UUID tenantId, String name) {
-    super(UuidCreator.getTimeOrderedEpoch(), tenantId, PartyType.ORGANIZATION, name);
+    super(UuidCreator.getTimeOrderedEpoch(), tenantId, name);
   }
 
   /**
@@ -985,18 +985,6 @@ public class Organization extends PartyBase implements Serializable {
   @XmlElement(name = "TenantId", required = true)
   public UUID getTenantId() {
     return super.getTenantId();
-  }
-
-  /**
-   * Returns the party type for the organization.
-   *
-   * @return the party type for the organization
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Override
-  public PartyType getType() {
-    return super.getType();
   }
 
   /**
