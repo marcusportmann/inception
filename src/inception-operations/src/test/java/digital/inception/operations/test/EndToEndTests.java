@@ -337,6 +337,7 @@ public class EndToEndTests {
             null,
             null,
             null,
+            null,
             null);
 
     workflowDefinition.addAttributeDefinition(

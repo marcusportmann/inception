@@ -405,6 +405,8 @@
         remarks="The comma-delimited list of codes for the optional external reference types for the workflow definition"/>
       <column name="required_external_reference_types" type="nvarchar(510)"
         remarks="The comma-delimited list of codes for the required external reference types for the workflow definition"/>
+      <column name="distinct_external_reference_types" type="nvarchar(510)"
+        remarks="The comma-delimited list of codes for the distinct external reference types for the workflow definition"/>
       <column name="supported_workflow_form_types" type="nvarchar(510)"
         remarks="The comma-delimited list of codes for the supported workflow form types for the workflow definition"/>
       <column name="validation_schema_type" type="nvarchar(50)"

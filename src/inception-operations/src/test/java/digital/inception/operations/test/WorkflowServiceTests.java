@@ -196,6 +196,7 @@ public class WorkflowServiceTests {
             null,
             null,
             null,
+            null,
             null);
 
     workflowDefinition.addStepDefinition(
@@ -312,7 +313,7 @@ public class WorkflowServiceTests {
         new DocumentDefinition(
             "test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
-            null,
+            TenantUtil.DEFAULT_TENANT_ID,
             "Test Document Definition",
             null,
             null,
@@ -333,7 +334,7 @@ public class WorkflowServiceTests {
         new DocumentDefinition(
             "another_test_document_definition_" + randomId(),
             documentDefinitionCategory.getId(),
-            null,
+            TenantUtil.DEFAULT_TENANT_ID,
             "Another Test Document Definition",
             null,
             null,
@@ -364,7 +365,7 @@ public class WorkflowServiceTests {
             "test_json_workflow_definition_" + randomId(),
             1,
             workflowDefinitionCategory.getId(),
-            null,
+            TenantUtil.DEFAULT_TENANT_ID,
             "Test JSON Workflow Definition",
             "Test JSON Workflow Definition Description",
             "dummy",
@@ -383,6 +384,7 @@ public class WorkflowServiceTests {
                     true,
                     null,
                     "Default Value")),
+            null,
             null,
             null,
             null,
@@ -1232,6 +1234,7 @@ public class WorkflowServiceTests {
             null,
             null,
             null,
+            null,
             null);
 
     sharedWorkflowDefinition.addAttribute(
@@ -1277,6 +1280,7 @@ public class WorkflowServiceTests {
                     true,
                     null,
                     null)),
+            null,
             null,
             null,
             null,

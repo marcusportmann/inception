@@ -32,6 +32,7 @@ import digital.inception.operations.model.WorkflowDefinition;
 import digital.inception.operations.model.WorkflowVariable;
 import digital.inception.operations.model.WorkflowVariableDefinition;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -109,6 +110,34 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
               + attributeName
               + ") for the document with the document definition ("
               + documentDefinition.getId()
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public boolean isValidExternalReferenceType(
+      UUID tenantId, ObjectType objectType, String externalReferenceTypeCode)
+      throws InvalidArgumentException, ServiceUnavailableException {
+    if (!StringUtils.hasText(externalReferenceTypeCode)) {
+      throw new InvalidArgumentException("externalReferenceTypeCode");
+    }
+
+    try {
+      return getOperationsReferenceService().getExternalReferenceTypes().stream()
+          .anyMatch(
+              externalReferenceType ->
+                  (externalReferenceType.getTenantId() == null
+                          || Objects.equals(externalReferenceType.getTenantId(), tenantId))
+                      && (externalReferenceType.getObjectType() == null
+                          || externalReferenceType.getObjectType() == objectType)
+                      && externalReferenceType.getCode().equals(externalReferenceTypeCode));
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to validate the external reference type ("
+              + externalReferenceTypeCode
+              + ") for the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -323,20 +352,20 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
       }
 
       // Create a Set for O(1) lookup performance instead of O(n) stream operations
-      Set<String> providedDocumentAttributeCodes =
+      Set<String> providedDocumentAttributeNames =
           documentAttributes.stream().map(DocumentAttribute::getName).collect(Collectors.toSet());
 
       // Filter and validate in a single pass
-      String missingDocumentAttributeCode =
+      String missingDocumentAttributeName =
           requiredDocumentAttributeDefinitions.stream()
               .map(DocumentAttributeDefinition::getName)
-              .filter(name -> providedDocumentAttributeCodes.stream().noneMatch(name::equals))
+              .filter(name -> providedDocumentAttributeNames.stream().noneMatch(name::equals))
               .findFirst()
               .orElse(null);
 
-      if (missingDocumentAttributeCode != null) {
+      if (missingDocumentAttributeName != null) {
         throw new InvalidArgumentException(
-            parameter, "the document attribute (" + missingDocumentAttributeCode + ") is required");
+            parameter, "the document attribute (" + missingDocumentAttributeName + ") is required");
       }
     } catch (InvalidArgumentException e) {
       throw e;
@@ -367,20 +396,20 @@ public class ValidationServiceImpl extends AbstractServiceBase implements Valida
       }
 
       // Create a Set for O(1) lookup performance instead of O(n) stream operations
-      Set<String> providedWorkflowAttributeCodes =
+      Set<String> providedWorkflowAttributeNames =
           workflowAttributes.stream().map(WorkflowAttribute::getName).collect(Collectors.toSet());
 
       // Filter and validate in a single pass
-      String missingWorkflowAttributeCode =
+      String missingWorkflowAttributeName =
           requiredWorkflowAttributeDefinitions.stream()
               .map(WorkflowAttributeDefinition::getName)
-              .filter(name -> providedWorkflowAttributeCodes.stream().noneMatch(name::equals))
+              .filter(name -> providedWorkflowAttributeNames.stream().noneMatch(name::equals))
               .findFirst()
               .orElse(null);
 
-      if (missingWorkflowAttributeCode != null) {
+      if (missingWorkflowAttributeName != null) {
         throw new InvalidArgumentException(
-            parameter, "the workflow attribute (" + missingWorkflowAttributeCode + ") is required");
+            parameter, "the workflow attribute (" + missingWorkflowAttributeName + ") is required");
       }
     } catch (InvalidArgumentException e) {
       throw e;

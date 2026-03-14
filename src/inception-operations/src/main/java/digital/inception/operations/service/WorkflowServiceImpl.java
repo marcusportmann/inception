@@ -4242,12 +4242,12 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             .getValidWorkflowDefinitionAttributes();
 
     // Create lookup sets for efficient comparison
-    Set<String> validWorkflowDefinitionAttributeCodes =
+    Set<String> validWorkflowDefinitionAttributeNames =
         validWorkflowDefinitionAttributes.stream()
-            .map(ValidWorkflowDefinitionAttribute::getCode)
+            .map(ValidWorkflowDefinitionAttribute::getName)
             .collect(Collectors.toSet());
 
-    Set<String> providedWorkflowDefinitionAttributeCodes =
+    Set<String> providedWorkflowDefinitionAttributeNames =
         workflowDefinition.getAttributes().stream()
             .map(WorkflowDefinitionAttribute::getName)
             .collect(Collectors.toSet());
@@ -4256,8 +4256,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     String missingRequiredAttribute =
         validWorkflowDefinitionAttributes.stream()
             .filter(ValidWorkflowDefinitionAttribute::isRequired)
-            .map(ValidWorkflowDefinitionAttribute::getCode)
-            .filter(code -> !providedWorkflowDefinitionAttributeCodes.contains(code))
+            .map(ValidWorkflowDefinitionAttribute::getName)
+            .filter(name -> !providedWorkflowDefinitionAttributeNames.contains(name))
             .findFirst()
             .orElse(null);
 
@@ -4269,8 +4269,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     // Check for invalid workflow definition attributes
     String invalidAttribute =
-        providedWorkflowDefinitionAttributeCodes.stream()
-            .filter(code -> !validWorkflowDefinitionAttributeCodes.contains(code))
+        providedWorkflowDefinitionAttributeNames.stream()
+            .filter(name -> !validWorkflowDefinitionAttributeNames.contains(name))
             .findFirst()
             .orElse(null);
 
@@ -4285,6 +4285,43 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         workflowDefinition.getDocumentDefinitions()) {
       if (!documentService.documentDefinitionExists(documentDefinition.getDocumentDefinitionId())) {
         throw new DocumentDefinitionNotFoundException(documentDefinition.getDocumentDefinitionId());
+      }
+    }
+
+    // Validate the external reference types
+    if (workflowDefinition.getDistinctExternalReferenceTypes() != null) {
+      for (String externalReferenceTypeCode :
+          workflowDefinition.getDistinctExternalReferenceTypes()) {
+        if (!validationService.isValidExternalReferenceType(
+            workflowDefinition.getTenantId(), ObjectType.WORKFLOW, externalReferenceTypeCode)) {
+          throw new InvalidArgumentException(
+              "workflowDefinition.distinctExternalReferenceTypes",
+              "the external reference type (" + externalReferenceTypeCode + ") is invalid");
+        }
+      }
+    }
+
+    if (workflowDefinition.getOptionalExternalReferenceTypes() != null) {
+      for (String externalReferenceTypeCode :
+          workflowDefinition.getOptionalExternalReferenceTypes()) {
+        if (!validationService.isValidExternalReferenceType(
+            workflowDefinition.getTenantId(), ObjectType.WORKFLOW, externalReferenceTypeCode)) {
+          throw new InvalidArgumentException(
+              "workflowDefinition.optionalExternalReferenceTypes",
+              "the external reference type (" + externalReferenceTypeCode + ") is invalid");
+        }
+      }
+    }
+
+    if (workflowDefinition.getRequiredExternalReferenceTypes() != null) {
+      for (String externalReferenceTypeCode :
+          workflowDefinition.getRequiredExternalReferenceTypes()) {
+        if (!validationService.isValidExternalReferenceType(
+            workflowDefinition.getTenantId(), ObjectType.WORKFLOW, externalReferenceTypeCode)) {
+          throw new InvalidArgumentException(
+              "workflowDefinition.requiredExternalReferenceTypes",
+              "the external reference type (" + externalReferenceTypeCode + ") is invalid");
+        }
       }
     }
   }

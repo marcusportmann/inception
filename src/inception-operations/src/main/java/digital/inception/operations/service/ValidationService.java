@@ -54,6 +54,23 @@ public interface ValidationService {
       throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
+   * Check whether the external reference type with the specified code is valid for the specified
+   * object type and tenant with the specified ID.
+   *
+   * @param tenantId the ID for the tenant the external reference type is specific to
+   * @param objectType the type of object the external reference type is specific to
+   * @param externalReferenceTypeCode the code for the external reference type
+   * @return {@code true} if the external reference type with the specified code is valid for the
+   *     specified object type and tenant with the specified ID or {@code false} otherwise
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws ServiceUnavailableException if the validity of the external reference type could not be
+   *     verified
+   */
+  boolean isValidExternalReferenceType(
+      UUID tenantId, ObjectType objectType, String externalReferenceTypeCode)
+      throws InvalidArgumentException, ServiceUnavailableException;
+
+  /**
    * Check whether a workflow attribute with the specified name is valid for a workflow.
    *
    * @param workflowDefinition the workflow definition the workflow is associated with

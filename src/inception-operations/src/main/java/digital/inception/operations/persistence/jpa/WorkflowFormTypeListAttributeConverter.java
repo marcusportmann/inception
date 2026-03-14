@@ -76,8 +76,8 @@ public class WorkflowFormTypeListAttributeConverter
 
     return Arrays.stream(dbData.split(","))
         .map(
-            requiredDocumentAttributeCode ->
-                CodeEnum.fromCode(WorkflowFormType.class, requiredDocumentAttributeCode))
+            workflowFormType ->
+                CodeEnum.fromCode(WorkflowFormType.class, workflowFormType))
         .collect(Collectors.toList());
   }
 }

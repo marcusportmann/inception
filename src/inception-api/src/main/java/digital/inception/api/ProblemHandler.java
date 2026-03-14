@@ -215,6 +215,21 @@ public class ProblemHandler {
   @ResponseBody
   protected ResponseEntity<ProblemDetails> handle(HttpServletRequest request, Throwable cause) {
 
+    if (cause
+        .getClass()
+        .getName()
+        .equals("org.springframework.web.servlet.resource.NoResourceFoundException")) {
+      ProblemDetails problemDetails = new ProblemDetails();
+
+      problemDetails.setTimestamp(OffsetDateTime.now());
+      problemDetails.setType("about:blank");
+      problemDetails.setTitle("Not Found");
+      problemDetails.setStatus(HttpStatus.NOT_FOUND.value());
+      problemDetails.setDetail(cause.getMessage());
+
+      return new ResponseEntity<>(problemDetails, new HttpHeaders(), problemDetails.getStatus());
+    }
+
     log.error(
         "An unexpected error occurred while processing the request: {}", cause.getMessage(), cause);
 

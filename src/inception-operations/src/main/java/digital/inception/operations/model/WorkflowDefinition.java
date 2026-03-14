@@ -79,6 +79,7 @@ import org.springframework.util.StringUtils;
   "externalReferenceRequired",
   "optionalExternalReferenceTypes",
   "requiredExternalReferenceTypes",
+  "distinctExternalReferenceTypes",
   "supportedWorkflowFormTypes",
   "attributeDefinitions",
   "documentDefinitions",
@@ -106,6 +107,7 @@ import org.springframework.util.StringUtils;
       "externalReferenceRequired",
       "optionalExternalReferenceTypes",
       "requiredExternalReferenceTypes",
+      "distinctExternalReferenceTypes",
       "supportedWorkflowFormTypes",
       "attributeDefinitions",
       "documentDefinitions",
@@ -283,6 +285,18 @@ public class WorkflowDefinition implements Serializable {
   @Column(name = "description", length = 500)
   private String description;
 
+  /** The codes for the distinct external reference types for the workflow definition. */
+  @Schema(
+      description =
+          "The codes for the distinct external reference types for the workflow definition")
+  @JsonProperty
+  @XmlElementWrapper(name = "DistinctExternalReferenceTypes")
+  @XmlElement(name = "DistinctExternalReferenceType")
+  @Size(max = 10)
+  @Convert(converter = StringListAttributeConverter.class)
+  @Column(name = "distinct_external_reference_types", length = 510)
+  private List<String> distinctExternalReferenceTypes;
+
   /** The ID for the workflow engine the workflow definition is associated with. */
   @Schema(
       description = "The ID for the workflow engine the workflow definition is associated with",
@@ -456,6 +470,8 @@ public class WorkflowDefinition implements Serializable {
    *     the workflow definition
    * @param requiredExternalReferenceTypes the codes for the required external reference types for
    *     the workflow definition
+   * @param distinctExternalReferenceTypes the codes for the distinct external reference types for
+   *     the workflow definition
    * @param supportedWorkflowFormTypes the supported workflow form types for the workflow definition
    * @param permissions the permissions for the workflow definition
    */
@@ -479,6 +495,7 @@ public class WorkflowDefinition implements Serializable {
       List<WorkflowVariableDefinition> variableDefinitions,
       List<String> optionalExternalReferenceTypes,
       List<String> requiredExternalReferenceTypes,
+      List<String> distinctExternalReferenceTypes,
       List<WorkflowFormType> supportedWorkflowFormTypes,
       List<WorkflowDefinitionPermission> permissions) {
     this.id = id;
@@ -537,6 +554,7 @@ public class WorkflowDefinition implements Serializable {
 
     this.optionalExternalReferenceTypes = optionalExternalReferenceTypes;
     this.requiredExternalReferenceTypes = requiredExternalReferenceTypes;
+    this.distinctExternalReferenceTypes = requiredExternalReferenceTypes;
 
     this.supportedWorkflowFormTypes = supportedWorkflowFormTypes;
 
@@ -792,6 +810,15 @@ public class WorkflowDefinition implements Serializable {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the codes for the distinct external reference types for the workflow definition.
+   *
+   * @return the codes for the distinct external reference types for the workflow definition
+   */
+  public List<String> getDistinctExternalReferenceTypes() {
+    return distinctExternalReferenceTypes;
   }
 
   /**
@@ -1117,6 +1144,16 @@ public class WorkflowDefinition implements Serializable {
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Sets the codes for the distinct external reference types for the workflow definition.
+   *
+   * @param distinctExternalReferenceTypes the codes for the distinct external reference types for
+   *     the workflow definition
+   */
+  public void setDistinctExternalReferenceTypes(List<String> distinctExternalReferenceTypes) {
+    this.distinctExternalReferenceTypes = distinctExternalReferenceTypes;
   }
 
   /**

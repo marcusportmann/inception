@@ -40,29 +40,19 @@ import java.util.Objects;
  */
 @Schema(description = "A valid workflow definition attribute")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "required", "description"})
+@JsonPropertyOrder({"name", "required", "description"})
 @XmlRootElement(
     name = "ValidWorkflowDefinitionAttribute",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "ValidWorkflowDefinitionAttribute",
     namespace = "https://inception.digital/operations",
-    propOrder = {"code", "required", "description"})
+    propOrder = {"name", "required", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ValidWorkflowDefinitionAttribute implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
-
-  /** The code for the workflow definition attribute. */
-  @Schema(
-      description = "The code for the workflow definition attribute",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Code", required = true)
-  @NotBlank
-  @Size(max = 50)
-  private String code;
 
   /** The description for the workflow definition attribute. */
   @Schema(
@@ -73,6 +63,16 @@ public class ValidWorkflowDefinitionAttribute implements Serializable {
   @NotBlank
   @Size(max = 200)
   private String description;
+
+  /** The name of the workflow definition attribute. */
+  @Schema(
+      description = "The name of the workflow definition attribute",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotBlank
+  @Size(max = 100)
+  private String name;
 
   /** Is the workflow definition attribute required? */
   @Schema(
@@ -89,12 +89,12 @@ public class ValidWorkflowDefinitionAttribute implements Serializable {
   /**
    * Constructs a new {@code ValidWorkflowDefinitionAttribute}.
    *
-   * @param code the code for the workflow definition attribute
+   * @param name the name of the workflow definition attribute
    * @param description the description for the workflow definition attribute
    * @param required is the workflow definition attribute required
    */
-  public ValidWorkflowDefinitionAttribute(String code, String description, boolean required) {
-    this.code = code;
+  public ValidWorkflowDefinitionAttribute(String name, String description, boolean required) {
+    this.name = name;
     this.description = description;
     this.required = required;
   }
@@ -121,16 +121,7 @@ public class ValidWorkflowDefinitionAttribute implements Serializable {
 
     ValidWorkflowDefinitionAttribute other = (ValidWorkflowDefinitionAttribute) object;
 
-    return Objects.equals(code, other.code);
-  }
-
-  /**
-   * Returns the code for the workflow definition attribute.
-   *
-   * @return the code for the workflow definition attribute
-   */
-  public String getCode() {
-    return code;
+    return Objects.equals(name, other.name);
   }
 
   /**
@@ -143,13 +134,22 @@ public class ValidWorkflowDefinitionAttribute implements Serializable {
   }
 
   /**
+   * Returns the name of the workflow definition attribute.
+   *
+   * @return the name of the workflow definition attribute
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
    */
   @Override
   public int hashCode() {
-    return (code == null) ? 0 : code.hashCode();
+    return (name == null) ? 0 : name.hashCode();
   }
 
   /**
@@ -163,21 +163,21 @@ public class ValidWorkflowDefinitionAttribute implements Serializable {
   }
 
   /**
-   * Sets the code for the workflow definition attribute.
-   *
-   * @param code the code for the workflow definition attribute
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
    * Sets the description for the workflow definition attribute.
    *
    * @param description the description for the workflow definition attribute
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Sets the name of the workflow definition attribute.
+   *
+   * @param name the name of the workflow definition attribute
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
