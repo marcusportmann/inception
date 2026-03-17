@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -27,6 +28,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
@@ -40,14 +42,26 @@ import java.util.UUID;
  */
 @Schema(description = "A request to request a workflow document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowId", "documentDefinitionId", "requestedFromPartyId", "description"})
+@JsonPropertyOrder({
+  "workflowId",
+  "documentDefinitionId",
+  "requestedFromPartyId",
+  "description",
+  "disableEvents"
+})
 @XmlRootElement(
     name = "RequestWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "RequestWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowId", "documentDefinitionId", "requestedFromPartyId", "description"})
+    propOrder = {
+      "workflowId",
+      "documentDefinitionId",
+      "requestedFromPartyId",
+      "description",
+      "disableEvents"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class RequestWorkflowDocumentRequest implements Serializable {
@@ -60,6 +74,12 @@ public class RequestWorkflowDocumentRequest implements Serializable {
   @XmlElement(name = "Description")
   @Size(max = 500)
   private String description;
+
+  /** Should document events be disabled when requesting the workflow document. */
+  @Schema(description = "Should document events be disabled when requesting the workflow document")
+  @JsonProperty
+  @XmlElement(name = "DisableEvents")
+  private Boolean disableEvents;
 
   /** The ID for the document definition the workflow document will be associated with. */
   @Schema(
@@ -128,6 +148,22 @@ public class RequestWorkflowDocumentRequest implements Serializable {
     this.workflowId = workflowId;
     this.documentDefinitionId = documentDefinitionId;
     this.requestedFromPartyId = requestedFromPartyId;
+  }
+
+  /**
+   * Returns whether document events are enabled and should be published when requesting the
+   * workflow document.
+   *
+   * @return {@code} true if documents events are enabled and should be published when requesting
+   *     the workflow document or {@code false} otherwise
+   */
+  @JsonIgnore
+  @XmlTransient
+  public boolean eventsEnabled() {
+    if (disableEvents == null) {
+      return true;
+    }
+    return (!disableEvents);
   }
 
   /**

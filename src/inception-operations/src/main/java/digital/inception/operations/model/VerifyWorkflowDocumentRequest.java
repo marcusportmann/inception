@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -26,6 +27,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
@@ -39,14 +41,14 @@ import java.util.UUID;
  */
 @Schema(description = "A request to verify a workflow document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowDocumentId", "description"})
+@JsonPropertyOrder({"workflowDocumentId", "description", "disableEvents"})
 @XmlRootElement(
     name = "VerifyWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "VerifyWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowDocumentId", "description"})
+    propOrder = {"workflowDocumentId", "description", "disableEvents"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class VerifyWorkflowDocumentRequest implements Serializable {
@@ -59,6 +61,12 @@ public class VerifyWorkflowDocumentRequest implements Serializable {
   @XmlElement(name = "Description")
   @Size(max = 500)
   private String description;
+
+  /** Should document events be disabled when verifying the workflow document. */
+  @Schema(description = "Should document events be disabled when verifying the workflow document")
+  @JsonProperty
+  @XmlElement(name = "DisableEvents")
+  private Boolean disableEvents;
 
   /** The ID for the workflow document. */
   @Schema(
@@ -90,6 +98,22 @@ public class VerifyWorkflowDocumentRequest implements Serializable {
   public VerifyWorkflowDocumentRequest(UUID workflowDocumentId, String description) {
     this.workflowDocumentId = workflowDocumentId;
     this.description = description;
+  }
+
+  /**
+   * Returns whether document events are enabled and should be published when verifying the workflow
+   * document.
+   *
+   * @return {@code} true if document events are enabled and should be published when verifying the
+   *     workflow document or {@code false} otherwise
+   */
+  @JsonIgnore
+  @XmlTransient
+  public boolean eventsEnabled() {
+    if (disableEvents == null) {
+      return true;
+    }
+    return (!disableEvents);
   }
 
   /**

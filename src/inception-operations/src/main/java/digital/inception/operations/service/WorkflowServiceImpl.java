@@ -2717,12 +2717,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
       workflowDocumentRepository.saveAndFlush(workflowDocument);
 
-      eventService.publishEvent(
-          tenantId,
-          EventType.WORKFLOW_DOCUMENT_PROVIDED,
-          ObjectType.WORKFLOW_DOCUMENT,
-          workflowDocument.getId(),
-          providedBy);
+      if (provideWorkflowDocumentRequest.eventsEnabled()) {
+        eventService.publishEvent(
+            tenantId,
+            EventType.WORKFLOW_DOCUMENT_PROVIDED,
+            ObjectType.WORKFLOW_DOCUMENT,
+            workflowDocument.getId(),
+            providedBy);
+      }
 
       return workflowDocument.getDocumentId();
     } catch (InvalidArgumentException | WorkflowDocumentNotFoundException e) {
@@ -2779,12 +2781,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             rejectWorkflowDocumentRequest.getDescription());
       }
 
-      eventService.publishEvent(
-          tenantId,
-          EventType.WORKFLOW_DOCUMENT_REJECTED,
-          ObjectType.WORKFLOW_DOCUMENT,
-          rejectWorkflowDocumentRequest.getWorkflowDocumentId(),
-          rejectedBy);
+      if (rejectWorkflowDocumentRequest.eventsEnabled()) {
+        eventService.publishEvent(
+            tenantId,
+            EventType.WORKFLOW_DOCUMENT_REJECTED,
+            ObjectType.WORKFLOW_DOCUMENT,
+            rejectWorkflowDocumentRequest.getWorkflowDocumentId(),
+            rejectedBy);
+      }
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -2861,12 +2865,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
       workflowDocument = workflowDocumentRepository.saveAndFlush(workflowDocument);
 
-      eventService.publishEvent(
-          tenantId,
-          EventType.WORKFLOW_DOCUMENT_REQUESTED,
-          ObjectType.WORKFLOW_DOCUMENT,
-          workflowDocument.getId(),
-          requestedBy);
+      if (requestWorkflowDocumentRequest.eventsEnabled()) {
+        eventService.publishEvent(
+            tenantId,
+            EventType.WORKFLOW_DOCUMENT_REQUESTED,
+            ObjectType.WORKFLOW_DOCUMENT,
+            workflowDocument.getId(),
+            requestedBy);
+      }
 
       return workflowDocument.getId();
     } catch (WorkflowNotFoundException | DocumentDefinitionNotFoundException e) {
@@ -3954,12 +3960,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             verifyWorkflowDocumentRequest.getDescription());
       }
 
-      eventService.publishEvent(
-          tenantId,
-          EventType.WORKFLOW_DOCUMENT_VERIFIED,
-          ObjectType.WORKFLOW_DOCUMENT,
-          verifyWorkflowDocumentRequest.getWorkflowDocumentId(),
-          verifiedBy);
+      if (verifyWorkflowDocumentRequest.eventsEnabled()) {
+        eventService.publishEvent(
+            tenantId,
+            EventType.WORKFLOW_DOCUMENT_VERIFIED,
+            ObjectType.WORKFLOW_DOCUMENT,
+            verifyWorkflowDocumentRequest.getWorkflowDocumentId(),
+            verifiedBy);
+      }
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -4006,12 +4014,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             waiveWorkflowDocumentRequest.getDescription());
       }
 
-      eventService.publishEvent(
-          tenantId,
-          EventType.WORKFLOW_DOCUMENT_WAIVED,
-          ObjectType.WORKFLOW_DOCUMENT,
-          waiveWorkflowDocumentRequest.getWorkflowDocumentId(),
-          waivedBy);
+      if (waiveWorkflowDocumentRequest.eventsEnabled()) {
+        eventService.publishEvent(
+            tenantId,
+            EventType.WORKFLOW_DOCUMENT_WAIVED,
+            ObjectType.WORKFLOW_DOCUMENT,
+            waiveWorkflowDocumentRequest.getWorkflowDocumentId(),
+            waivedBy);
+      }
     } catch (WorkflowDocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {

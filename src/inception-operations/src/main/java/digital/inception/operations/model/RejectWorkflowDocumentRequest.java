@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -27,6 +28,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
@@ -40,14 +42,14 @@ import java.util.UUID;
  */
 @Schema(description = "A request to reject a workflow document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowDocumentId", "rejectionReason", "description"})
+@JsonPropertyOrder({"workflowDocumentId", "rejectionReason", "description", "disableEvents"})
 @XmlRootElement(
     name = "RejectWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "RejectWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowDocumentId", "rejectionReason", "description"})
+    propOrder = {"workflowDocumentId", "rejectionReason", "description", "disableEvents"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class RejectWorkflowDocumentRequest implements Serializable {
@@ -60,6 +62,12 @@ public class RejectWorkflowDocumentRequest implements Serializable {
   @XmlElement(name = "Description")
   @Size(max = 500)
   private String description;
+
+  /** Should document events be disabled when rejecting the workflow document. */
+  @Schema(description = "Should document events be disabled when rejecting the workflow document")
+  @JsonProperty
+  @XmlElement(name = "DisableEvents")
+  private Boolean disableEvents;
 
   /** The reason the workflow document was rejected. */
   @Schema(description = "The reason the workflow document was rejected")
@@ -104,6 +112,22 @@ public class RejectWorkflowDocumentRequest implements Serializable {
     this.workflowDocumentId = workflowDocumentId;
     this.rejectionReason = rejectionReason;
     this.description = description;
+  }
+
+  /**
+   * Returns whether document events are enabled and should be published when rejecting the workflow
+   * document.
+   *
+   * @return {@code} true if documents events are enabled and should be published when rejecting the
+   *     workflow document or {@code false} otherwise
+   */
+  @JsonIgnore
+  @XmlTransient
+  public boolean eventsEnabled() {
+    if (disableEvents == null) {
+      return true;
+    }
+    return (!disableEvents);
   }
 
   /**

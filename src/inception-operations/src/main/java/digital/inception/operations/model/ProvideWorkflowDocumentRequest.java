@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -33,6 +34,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
@@ -59,7 +61,8 @@ import java.util.UUID;
   "attributes",
   "externalReferences",
   "description",
-  "data"
+  "data",
+  "disableEvents"
 })
 @XmlRootElement(
     name = "ProvideWorkflowDocumentRequest",
@@ -77,7 +80,8 @@ import java.util.UUID;
       "attributes",
       "externalReferences",
       "description",
-      "data"
+      "data",
+      "disableEvents"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -107,6 +111,12 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
   @XmlElement(name = "Description")
   @Size(max = 500)
   private String description;
+
+  /** Should document events be disabled when providing the workflow document. */
+  @Schema(description = "Should document events be disabled when providing the workflow document")
+  @JsonProperty
+  @XmlElement(name = "DisableEvents")
+  private Boolean disableEvents;
 
   /** The expiry date for the document. */
   @Schema(description = "The ISO 8601 format expiry date for the document")
@@ -205,6 +215,22 @@ public class ProvideWorkflowDocumentRequest implements Serializable {
 
   /** Constructs a new {@code ProvideWorkflowDocumentRequest}. */
   public ProvideWorkflowDocumentRequest() {}
+
+  /**
+   * Returns whether document events are enabled and should be published when providing the workflow
+   * document.
+   *
+   * @return {@code} true if documents events are enabled and should be published when providing the
+   *     workflow document or {@code false} otherwise
+   */
+  @JsonIgnore
+  @XmlTransient
+  public boolean eventsEnabled() {
+    if (disableEvents == null) {
+      return true;
+    }
+    return (!disableEvents);
+  }
 
   /**
    * Returns the attributes for the document.

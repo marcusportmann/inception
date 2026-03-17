@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -25,6 +26,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
@@ -37,19 +39,25 @@ import java.util.UUID;
  */
 @Schema(description = "A request to reset a workflow document")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"workflowDocumentId"})
+@JsonPropertyOrder({"workflowDocumentId", "disableEvents"})
 @XmlRootElement(
     name = "ResetWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations")
 @XmlType(
     name = "ResetWorkflowDocumentRequest",
     namespace = "https://inception.digital/operations",
-    propOrder = {"workflowDocumentId"})
+    propOrder = {"workflowDocumentId", "disableEvents"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ResetWorkflowDocumentRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
+
+  /** Should document events be disabled when resetting the workflow document. */
+  @Schema(description = "Should document events be disabled when resetting the workflow document")
+  @JsonProperty
+  @XmlElement(name = "DisableEvents")
+  private Boolean disableEvents;
 
   /** The ID for the workflow document. */
   @Schema(
@@ -70,6 +78,22 @@ public class ResetWorkflowDocumentRequest implements Serializable {
    */
   public ResetWorkflowDocumentRequest(UUID workflowDocumentId) {
     this.workflowDocumentId = workflowDocumentId;
+  }
+
+  /**
+   * Returns whether document events are enabled and should be published when resetting the workflow
+   * document.
+   *
+   * @return {@code} true if documents events are enabled and should be published when resetting the
+   *     workflow document or {@code false} otherwise
+   */
+  @JsonIgnore
+  @XmlTransient
+  public boolean eventsEnabled() {
+    if (disableEvents == null) {
+      return true;
+    }
+    return (!disableEvents);
   }
 
   /**
