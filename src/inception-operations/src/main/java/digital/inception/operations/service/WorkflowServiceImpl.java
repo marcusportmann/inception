@@ -30,6 +30,7 @@ import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersion
 import digital.inception.operations.exception.DuplicateWorkflowDocumentException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
 import digital.inception.operations.exception.DuplicateWorkflowException;
+import digital.inception.operations.exception.ExistingWorkflowException;
 import digital.inception.operations.exception.FormDefinitionNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
@@ -140,6 +141,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -2271,6 +2273,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           InteractionNotFoundException,
+          ExistingWorkflowException,
           ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -2372,6 +2375,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         }
       }
 
+      checkForExistingWorkflowWithDuplicateExternalReferences(
+          tenantId, workflowDefinition, initiateWorkflowRequest.getExternalReferences());
+
       // Determine the name of the workflow
       String workflowName;
 
@@ -2459,7 +2465,8 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       return workflow;
     } catch (InvalidArgumentException
         | WorkflowDefinitionNotFoundException
-        | InteractionNotFoundException e) {
+        | InteractionNotFoundException
+        | ExistingWorkflowException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -3384,6 +3391,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       throws InvalidArgumentException,
           InvalidWorkflowStatusException,
           WorkflowNotFoundException,
+          ExistingWorkflowException,
           ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -3407,6 +3415,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               .getWorkflowDefinitionVersion(
                   workflow.getDefinitionId(), workflow.getDefinitionVersion());
 
+      checkForExistingWorkflowWithDuplicateExternalReferences(
+          tenantId, workflowDefinition, workflow.getExternalReferences());
+
       // Start the workflow
       String engineInstanceId =
           getWorkflowEngineConnector(workflowDefinition.getEngineId())
@@ -3422,7 +3433,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       workflow.setStatus(WorkflowStatus.ACTIVE);
 
       workflowRepository.save(workflow);
-    } catch (InvalidWorkflowStatusException | WorkflowNotFoundException e) {
+    } catch (ExistingWorkflowException
+        | InvalidWorkflowStatusException
+        | WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
@@ -3718,13 +3731,13 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       if (updateWorkflowRequest.getVariables() != null) {
         // Validate the allowed workflow variables
         validationService.validateAllowedWorkflowVariables(
-            "initiateWorkflowRequest.variables",
+            "updateWorkflowRequest.variables",
             workflowDefinition,
             updateWorkflowRequest.getVariables());
 
         // Validate the required workflow variables
         validationService.validateRequiredWorkflowVariables(
-            "initiateWorkflowRequest.variables",
+            "updateWorkflowRequest.variables",
             workflowDefinition,
             updateWorkflowRequest.getVariables());
 
@@ -4195,6 +4208,105 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               + ") and tenant ("
               + tenantId
               + ")",
+          e);
+    }
+  }
+
+  private void checkForExistingWorkflowWithDuplicateExternalReferences(
+      UUID tenantId,
+      WorkflowDefinition workflowDefinition,
+      List<WorkflowExternalReference> externalReferences)
+      throws ExistingWorkflowException, ServiceUnavailableException {
+    try {
+      List<WorkflowExternalReference> distinctExternalReferences =
+          workflowDefinition.filterDistinctExternalReferences(externalReferences);
+
+      if (!distinctExternalReferences.isEmpty()) {
+        // Build Specification
+        Specification<Workflow> specification =
+            (root, query, criteriaBuilder) -> {
+              // Avoid duplicates when joins or subqueries are involved
+              query.distinct(true);
+
+              // AND'ed top-level predicates
+              List<Predicate> andPredicates = new ArrayList<>();
+
+              // Tenant filter
+              andPredicates.add(criteriaBuilder.equal(root.get("tenantId"), tenantId));
+
+              // Find workflows with the same workflow definition ID
+              andPredicates.add(
+                  criteriaBuilder.equal(
+                      criteriaBuilder.lower(root.get("definitionId")),
+                      workflowDefinition.getId().toLowerCase()));
+
+              // Find active workflows
+              andPredicates.add(
+                  root.get("status")
+                      .in(
+                          EnumSet.of(
+                              WorkflowStatus.PENDING,
+                              WorkflowStatus.STAGED,
+                              WorkflowStatus.STARTING,
+                              WorkflowStatus.ACTIVE,
+                              WorkflowStatus.SUSPENDED)));
+
+              // And all distinct external references
+              for (WorkflowExternalReference distinctExternalReference :
+                  distinctExternalReferences) {
+                var subQuery = query.subquery(Integer.class);
+                var workflowExternalReferenceRoot = subQuery.from(WorkflowExternalReference.class);
+                Predicate subPredicate =
+                    criteriaBuilder.equal(
+                        workflowExternalReferenceRoot.get("objectId"), root.get("id"));
+
+                subPredicate =
+                    criteriaBuilder.and(
+                        subPredicate,
+                        criteriaBuilder.equal(
+                            criteriaBuilder.lower(workflowExternalReferenceRoot.get("type")),
+                            distinctExternalReference.getType().toLowerCase()));
+
+                subPredicate =
+                    criteriaBuilder.and(
+                        subPredicate,
+                        criteriaBuilder.equal(
+                            criteriaBuilder.lower(workflowExternalReferenceRoot.get("value")),
+                            distinctExternalReference.getValue().toLowerCase()));
+
+                subQuery.select(criteriaBuilder.literal(1)).where(subPredicate);
+                andPredicates.add(criteriaBuilder.exists(subQuery));
+              }
+
+              return criteriaBuilder.and(andPredicates.toArray(new Predicate[0]));
+            };
+
+        // Retrieve the criteria builder
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        // Count query (for total elements)
+        CriteriaQuery<Long> countCriteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Workflow> countRoot = countCriteriaQuery.from(Workflow.class);
+
+        Predicate countPredicate =
+            specification.toPredicate(countRoot, countCriteriaQuery, criteriaBuilder);
+
+        // Because we used query.distinct(true) above due to joins, prefer countDistinct on the PK
+        countCriteriaQuery
+            .select(criteriaBuilder.countDistinct(countRoot.get("id")))
+            .where(countPredicate);
+
+        Long total = entityManager.createQuery(countCriteriaQuery).getSingleResult();
+
+        if ((total != null) && (total > 0)) {
+          throw new ExistingWorkflowException(distinctExternalReferences);
+        }
+      }
+    } catch (ExistingWorkflowException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to check whether an existing workflow exists with duplicate external references",
           e);
     }
   }

@@ -35,6 +35,7 @@ import digital.inception.core.util.TenantUtil;
 import digital.inception.core.validation.ValidationSchemaType;
 import digital.inception.operations.OperationsConfiguration;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
+import digital.inception.operations.exception.ExistingWorkflowException;
 import digital.inception.operations.exception.WorkflowDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.WorkflowDefinitionNotFoundException;
 import digital.inception.operations.exception.WorkflowEngineNotFoundException;
@@ -369,7 +370,7 @@ public class WorkflowServiceTests {
             "Test JSON Workflow Definition",
             "Test JSON Workflow Definition Description",
             "dummy",
-            false,
+            true,
             "Test JSON Workflow (${testWorkflowAttribute})",
             null,
             ValidationSchemaType.JSON,
@@ -388,8 +389,8 @@ public class WorkflowServiceTests {
             null,
             null,
             null,
-            null,
-            null,
+            List.of("test_workflow_external_reference"),
+            List.of("test_workflow_external_reference"),
             null,
             null);
 
@@ -525,6 +526,12 @@ public class WorkflowServiceTests {
 
     // Verify the workflow exists
     assertTrue(workflowService.workflowExists(TenantUtil.DEFAULT_TENANT_ID, workflow.getId()));
+
+    assertThrows(
+        ExistingWorkflowException.class,
+        () ->
+            workflowService.initiateWorkflow(
+                TenantUtil.DEFAULT_TENANT_ID, initiateWorkflowRequest, "TEST2"));
 
     // Retrieve the workflow
     Workflow retrievedWorkflow =

@@ -52,10 +52,14 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
 
 /**
@@ -554,7 +558,7 @@ public class WorkflowDefinition implements Serializable {
 
     this.optionalExternalReferenceTypes = optionalExternalReferenceTypes;
     this.requiredExternalReferenceTypes = requiredExternalReferenceTypes;
-    this.distinctExternalReferenceTypes = requiredExternalReferenceTypes;
+    this.distinctExternalReferenceTypes = distinctExternalReferenceTypes;
 
     this.supportedWorkflowFormTypes = supportedWorkflowFormTypes;
 
@@ -733,6 +737,46 @@ public class WorkflowDefinition implements Serializable {
     WorkflowDefinition other = (WorkflowDefinition) object;
 
     return StringUtil.equalsIgnoreCase(id, other.id) && (version == other.version);
+  }
+
+  /**
+   * Filters the specified external references and returns only those whose type matches one of the
+   * workflow definition's distinct external reference types.
+   *
+   * <p>Matching is performed case-insensitively after trimming leading and trailing whitespace from
+   * both the configured distinct external reference types and the external reference type values.
+   *
+   * <p>If the specified external references are {@code null} or empty, an empty list is returned.
+   * If the workflow definition has no distinct external reference types configured, an empty list
+   * is returned.
+   *
+   * @param externalReferences the external references to filter
+   * @return a list containing only the external references whose type matches one of the configured
+   *     distinct external reference types
+   */
+  public List<WorkflowExternalReference> filterDistinctExternalReferences(
+      List<WorkflowExternalReference> externalReferences) {
+
+    if ((externalReferences == null) || externalReferences.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    if ((distinctExternalReferenceTypes == null) || distinctExternalReferenceTypes.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    Set<String> distinctTypes =
+        distinctExternalReferenceTypes.stream()
+            .filter(StringUtils::hasText)
+            .map(String::trim)
+            .map(String::toLowerCase)
+            .collect(Collectors.toSet());
+
+    return externalReferences.stream()
+        .filter(Objects::nonNull)
+        .filter(reference -> StringUtils.hasText(reference.getType()))
+        .filter(reference -> distinctTypes.contains(reference.getType().trim().toLowerCase()))
+        .collect(Collectors.toList());
   }
 
   /**

@@ -25,6 +25,7 @@ import digital.inception.operations.exception.DocumentDefinitionNotFoundExceptio
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.ExistingWorkflowException;
 import digital.inception.operations.exception.FormDefinitionNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
@@ -713,6 +714,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           InteractionNotFoundException,
+          ExistingWorkflowException,
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 
@@ -869,6 +871,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throws InvalidArgumentException,
           InvalidWorkflowStatusException,
           WorkflowNotFoundException,
+          ExistingWorkflowException,
           ServiceUnavailableException {
     tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
 

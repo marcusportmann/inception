@@ -24,6 +24,7 @@ import digital.inception.operations.exception.DocumentDefinitionNotFoundExceptio
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionCategoryException;
 import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersionException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
+import digital.inception.operations.exception.ExistingWorkflowException;
 import digital.inception.operations.exception.FormDefinitionNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
@@ -2483,6 +2484,8 @@ public interface WorkflowApiController {
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
    * @throws InteractionNotFoundException if an interaction linked to the workflow could not be
    *     found
+   * @throws ExistingWorkflowException if an existing workflow with the same distinct external
+   *     references already exists
    * @throws ServiceUnavailableException if the workflow could not be initiated
    */
   @Operation(summary = "Initiate a workflow", description = "Initiate a workflow")
@@ -2545,6 +2548,7 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           InteractionNotFoundException,
+          ExistingWorkflowException,
           ServiceUnavailableException;
 
   /**
@@ -3037,6 +3041,8 @@ public interface WorkflowApiController {
    * @throws InvalidArgumentException if an argument is invalid
    * @throws InvalidWorkflowStatusException the status of the workflow is invalid for the operation
    * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ExistingWorkflowException if an existing workflow with the same distinct external
+   *     references already exists
    * @throws ServiceUnavailableException if the workflow could not be started
    */
   @Operation(summary = "Start a workflow", description = "Start a workflow")
@@ -3105,6 +3111,7 @@ public interface WorkflowApiController {
       throws InvalidArgumentException,
           InvalidWorkflowStatusException,
           WorkflowNotFoundException,
+          ExistingWorkflowException,
           ServiceUnavailableException;
 
   /**

@@ -26,6 +26,7 @@ import digital.inception.operations.exception.DuplicateWorkflowDefinitionVersion
 import digital.inception.operations.exception.DuplicateWorkflowDocumentException;
 import digital.inception.operations.exception.DuplicateWorkflowEngineException;
 import digital.inception.operations.exception.DuplicateWorkflowException;
+import digital.inception.operations.exception.ExistingWorkflowException;
 import digital.inception.operations.exception.FormDefinitionNotFoundException;
 import digital.inception.operations.exception.InteractionNotFoundException;
 import digital.inception.operations.exception.InvalidWorkflowStatusException;
@@ -817,6 +818,8 @@ public interface WorkflowService {
    * @throws WorkflowDefinitionNotFoundException if the workflow definition could not be found
    * @throws InteractionNotFoundException if an interaction linked to the workflow could not be
    *     found
+   * @throws ExistingWorkflowException if an existing workflow with the same distinct external
+   *     references already exists
    * @throws ServiceUnavailableException if the workflow could not be initiated
    */
   Workflow initiateWorkflow(
@@ -824,6 +827,7 @@ public interface WorkflowService {
       throws InvalidArgumentException,
           WorkflowDefinitionNotFoundException,
           InteractionNotFoundException,
+          ExistingWorkflowException,
           ServiceUnavailableException;
 
   /**
@@ -966,12 +970,15 @@ public interface WorkflowService {
    * @throws InvalidArgumentException if an argument is invalid
    * @throws InvalidWorkflowStatusException the status of the workflow is invalid for the operation
    * @throws WorkflowNotFoundException if the workflow could not be found
+   * @throws ExistingWorkflowException if an existing workflow with the same distinct external
+   *     references already exists
    * @throws ServiceUnavailableException if the workflow could not be started
    */
   void startWorkflow(UUID tenantId, StartWorkflowRequest startWorkflowRequest, String startedBy)
       throws InvalidArgumentException,
           InvalidWorkflowStatusException,
           WorkflowNotFoundException,
+          ExistingWorkflowException,
           ServiceUnavailableException;
 
   /**
