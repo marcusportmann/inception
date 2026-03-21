@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -131,7 +132,7 @@ public class Snapshot implements Serializable {
     this.tenantId = tenantId;
     this.entityType = entityType;
     this.entityId = entityId;
-    this.timestamp = OffsetDateTime.now();
+    this.timestamp = ApplicationClock.offsetNow();
     this.data = data;
   }
 

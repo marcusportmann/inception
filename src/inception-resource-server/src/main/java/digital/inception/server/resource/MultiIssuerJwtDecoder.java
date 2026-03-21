@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nimbusds.jose.HeaderParameterNames;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jose.util.JSONObjectUtils;
+import digital.inception.core.time.ApplicationClock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -176,7 +177,7 @@ public class MultiIssuerJwtDecoder implements JwtDecoder {
   private List<RevokedToken> getRevokedTokens() {
     if (revokedTokensEnabled && StringUtils.hasText(revokedTokensEndpoint)) {
       if ((retrieveRevokedTokensWhen == null)
-          || (LocalDateTime.now().isAfter(retrieveRevokedTokensWhen))) {
+          || (ApplicationClock.now().isAfter(retrieveRevokedTokensWhen))) {
         try {
           RestTemplate restTemplate = new RestTemplate();
 
@@ -190,7 +191,8 @@ public class MultiIssuerJwtDecoder implements JwtDecoder {
           if (response.getStatusCode() == HttpStatus.OK) {
             revokedTokens = response.getBody();
 
-            retrieveRevokedTokensWhen = LocalDateTime.now().plusSeconds(revokedTokensReloadPeriod);
+            retrieveRevokedTokensWhen =
+                ApplicationClock.now().plusSeconds(revokedTokensReloadPeriod);
 
             log.info("Successfully retrieved the revoked tokens");
           } else {

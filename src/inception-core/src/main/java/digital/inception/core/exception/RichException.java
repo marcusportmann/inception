@@ -16,6 +16,7 @@
 
 package digital.inception.core.exception;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ISO8601Util;
 import java.io.Serial;
 import java.time.OffsetDateTime;
@@ -42,7 +43,7 @@ public class RichException extends Exception {
   /** Constructs a new {@code RichException} instance with {@code null} as its message. */
   public RichException() {
     super();
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**
@@ -52,7 +53,7 @@ public class RichException extends Exception {
    */
   public RichException(String message) {
     super(message);
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**
@@ -65,7 +66,7 @@ public class RichException extends Exception {
    */
   public RichException(Throwable cause) {
     super(cause);
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**
@@ -77,7 +78,7 @@ public class RichException extends Exception {
   public RichException(String code, String message) {
     super(message);
     this.code = code;
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**
@@ -89,7 +90,7 @@ public class RichException extends Exception {
    */
   public RichException(String message, Throwable cause) {
     super(message, cause);
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**
@@ -103,7 +104,7 @@ public class RichException extends Exception {
   public RichException(String code, String message, Throwable cause) {
     super(message, cause);
     this.code = code;
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**

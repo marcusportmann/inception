@@ -19,6 +19,7 @@ package digital.inception.operations.service;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.operations.connector.WorkflowEngineConnector;
 import digital.inception.operations.exception.DuplicateEventException;
@@ -32,7 +33,6 @@ import digital.inception.operations.model.WorkflowEngineIds;
 import digital.inception.operations.persistence.jpa.EventRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
@@ -162,7 +162,7 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
       throws InvalidArgumentException, DuplicateEventException, ServiceUnavailableException {
     publishEvent(
         tenantId,
-        new Event(tenantId, objectType, objectId, eventType, OffsetDateTime.now(), actor));
+        new Event(tenantId, objectType, objectId, eventType, ApplicationClock.offsetNow(), actor));
   }
 
   /**

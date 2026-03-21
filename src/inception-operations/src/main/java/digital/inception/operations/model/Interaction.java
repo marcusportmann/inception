@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import digital.inception.operations.persistence.jpa.RecipientsAttributeConverter;
 import digital.inception.processor.AbstractProcessableObject;
@@ -219,6 +220,16 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
   @Column(name = "occurred", nullable = false)
   private OffsetDateTime occurred;
 
+  /** The ID for the interaction source the interaction was originally associated with. */
+  @Schema(
+      description = "The ID for the interaction source the interaction was originally associated with",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty(required = true)
+  @XmlElement(name = "OriginalSourceId", required = true)
+  @NotNull
+  @Column(name = "original_source_id", nullable = false)
+  private UUID originalSourceId;
+
   /** The ID for the party the interaction is associated with. */
   @Schema(description = "The ID for the party the interaction is associated with")
   @JsonProperty
@@ -276,32 +287,6 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
   @NotNull
   @Column(name = "source_id", nullable = false)
   private UUID sourceId;
-
-  /**
-   * Returns the ID for the interaction source the interaction was originally associated with.
-   * @return the ID for the interaction source the interaction was originally associated with
-   */
-  public UUID getOriginalSourceId() {
-    return originalSourceId;
-  }
-
-  /**
-   * Set the ID for the interaction source the interaction was originally associated with.
-   * @param originalSourceId the ID for the interaction source the interaction was originally associated with
-   */
-  public void setOriginalSourceId(UUID originalSourceId) {
-    this.originalSourceId = originalSourceId;
-  }
-
-  /** The ID for the interaction source the interaction was originally associated with. */
-  @Schema(
-      description = "The ID for the interaction source the interaction was originally associated with",
-      requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty(required = true)
-  @XmlElement(name = "OriginalSourceId", required = true)
-  @NotNull
-  @Column(name = "original_source_id", nullable = false)
-  private UUID originalSourceId;
 
   /** The interaction source specific reference for the interaction. */
   @Schema(description = "The interaction source specific reference for the interaction")
@@ -400,7 +385,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
     this.mimeType = mimeType;
     this.status = status;
     this.priority = priority;
-    this.occurred = OffsetDateTime.now();
+    this.occurred = ApplicationClock.offsetNow();
   }
 
   /**
@@ -454,7 +439,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
     this.mimeType = mimeType;
     this.priority = priority;
     this.status = status;
-    this.occurred = OffsetDateTime.now();
+    this.occurred = ApplicationClock.offsetNow();
   }
 
   /**
@@ -569,6 +554,14 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
    */
   public OffsetDateTime getOccurred() {
     return occurred;
+  }
+
+  /**
+   * Returns the ID for the interaction source the interaction was originally associated with.
+   * @return the ID for the interaction source the interaction was originally associated with
+   */
+  public UUID getOriginalSourceId() {
+    return originalSourceId;
   }
 
   /**
@@ -808,6 +801,14 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
    */
   public void setOccurred(OffsetDateTime occurred) {
     this.occurred = occurred;
+  }
+
+  /**
+   * Set the ID for the interaction source the interaction was originally associated with.
+   * @param originalSourceId the ID for the interaction source the interaction was originally associated with
+   */
+  public void setOriginalSourceId(UUID originalSourceId) {
+    this.originalSourceId = originalSourceId;
   }
 
   /**

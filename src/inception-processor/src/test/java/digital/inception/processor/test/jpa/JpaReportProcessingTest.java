@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.jpa.JpaUtil;
 import digital.inception.processor.BackgroundObjectProcessor;
 import digital.inception.processor.ObjectProcessingResult;
@@ -35,6 +36,8 @@ import digital.inception.processor.test.model.Report;
 import digital.inception.processor.test.model.ReportStatus;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -185,6 +188,31 @@ public class JpaReportProcessingTest {
     assertEquals(ReportStatus.REQUESTED, report.getStatus());
     assertEquals(0, report.getProcessingAttempts());
     assertNotNull(report.getNextProcessed());
+  }
+
+  @Test
+  void testJpaReportProcessingUsesApplicationClock() throws Exception {
+    Instant target = Instant.parse("2035-01-15T08:30:00Z");
+    ApplicationClock.jumpTo(target);
+
+    Report report = jpaReportRepository.save(new Report());
+
+    JpaBackgroundReportProcessor backgroundReportProcessor =
+        new JpaBackgroundReportProcessor(
+            applicationContext, jpaReportRepository, 2, 10, 0, 1_000L, 3, 1_000L, false);
+
+    backgroundReportProcessor.start();
+    backgroundReportProcessor.processObjects();
+    backgroundReportProcessor.waitUntilIdle(2_000L);
+
+    report = jpaReportRepository.findById(report.getId()).orElseThrow();
+
+    assertNotNull(report.getLastProcessed());
+    assertTrue(
+        Duration.between(target, report.getLastProcessed().toInstant())
+                .abs()
+                .compareTo(Duration.ofSeconds(2))
+            < 0);
   }
 
   private boolean isNotTerminal(Report report) {

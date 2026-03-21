@@ -20,6 +20,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.TokenReplacer;
 import digital.inception.json.JsonClasspathResource;
 import digital.inception.operations.connector.WorkflowEngineConnector;
@@ -337,7 +338,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               cancelWorkflowRequest.getWorkflowId(),
               workflowEngineIds.getEngineInstanceId());
 
-      OffsetDateTime now = OffsetDateTime.now();
+      OffsetDateTime now = ApplicationClock.offsetNow();
 
       if (workflowRepository.cancelWorkflow(
               tenantId,
@@ -538,7 +539,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               createWorkflowNoteRequest.getWorkflowId(),
               createWorkflowNoteRequest.getStep(),
               createWorkflowNoteRequest.getContent(),
-              OffsetDateTime.now(),
+              ApplicationClock.offsetNow(),
               createdBy);
 
       return workflowNoteRepository.saveAndFlush(workflowNote);
@@ -905,7 +906,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               tenantId,
               finalizeWorkflowRequest.getWorkflowId(),
               finalizeWorkflowRequest.getStatus(),
-              OffsetDateTime.now(),
+              ApplicationClock.offsetNow(),
               finalizedBy)
           <= 0) {
         throw new WorkflowNotFoundException(tenantId, finalizeWorkflowRequest.getWorkflowId());
@@ -968,7 +969,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               finalizeWorkflowStepRequest.getWorkflowId(),
               finalizeWorkflowStepRequest.getStep(),
               finalizeWorkflowStepRequest.getStatus(),
-              OffsetDateTime.now())
+              ApplicationClock.offsetNow())
           <= 0) {
         throw new WorkflowStepNotFoundException(
             tenantId,
@@ -982,7 +983,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
                 finalizeWorkflowStepRequest.getWorkflowId(),
                 finalizeWorkflowStepRequest.getNextStep(),
                 WorkflowStepStatus.ACTIVE,
-                OffsetDateTime.now());
+                ApplicationClock.offsetNow());
 
         workflowStepRepository.saveAndFlush(workflowStep);
       }
@@ -2286,7 +2287,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     try {
-      OffsetDateTime now = OffsetDateTime.now();
+      OffsetDateTime now = ApplicationClock.offsetNow();
 
       WorkflowDefinition workflowDefinition =
           getWorkflowService().getWorkflowDefinition(initiateWorkflowRequest.getDefinitionId());
@@ -2515,7 +2516,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               initiateWorkflowStepRequest.getWorkflowId(),
               initiateWorkflowStepRequest.getStep(),
               WorkflowStepStatus.ACTIVE,
-              OffsetDateTime.now());
+              ApplicationClock.offsetNow());
 
       workflowStepRepository.saveAndFlush(workflowStep);
 
@@ -2579,7 +2580,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               linkInteractionToWorkflowRequest.getWorkflowId(),
               linkInteractionToWorkflowRequest.getInteractionId(),
               linkInteractionToWorkflowRequest.getConversationId(),
-              OffsetDateTime.now(),
+              ApplicationClock.offsetNow(),
               linkedBy));
     } catch (InteractionNotFoundException | WorkflowNotFoundException e) {
       throw e;
@@ -2670,7 +2671,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
       // Create the new document
       document = new Document(workflowDocument.getDocumentDefinitionId());
-      document.setCreated(OffsetDateTime.now());
+      document.setCreated(ApplicationClock.offsetNow());
       document.setCreatedBy(providedBy);
       document.setData(provideWorkflowDocumentRequest.getData());
       document.setFileType(provideWorkflowDocumentRequest.getFileType());
@@ -2694,7 +2695,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
        * PROVIDED or VERIFIABLE depending on whether the workflow document is verifiable.
        */
       workflowDocument.setDocumentId(document.getId());
-      workflowDocument.setProvided(OffsetDateTime.now());
+      workflowDocument.setProvided(ApplicationClock.offsetNow());
       workflowDocument.setProvidedBy(providedBy);
       workflowDocument.setRejected(null);
       workflowDocument.setRejectedBy(null);
@@ -2767,7 +2768,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     try {
       if (workflowDocumentRepository.rejectWorkflowDocument(
               rejectWorkflowDocumentRequest.getWorkflowDocumentId(),
-              OffsetDateTime.now(),
+              ApplicationClock.offsetNow(),
               rejectedBy,
               rejectWorkflowDocumentRequest.getRejectionReason())
           == 0) {
@@ -2855,7 +2856,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               requestWorkflowDocumentRequest.getWorkflowId(),
               requestWorkflowDocumentRequest.getDocumentDefinitionId(),
               workflowDefinitionDocumentDefinition.isInternal(),
-              OffsetDateTime.now(),
+              ApplicationClock.offsetNow(),
               requestedBy,
               requestWorkflowDocumentRequest.getRequestedFromPartyId());
 
@@ -3316,7 +3317,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     }
 
     try {
-      OffsetDateTime now = OffsetDateTime.now();
+      OffsetDateTime now = ApplicationClock.offsetNow();
 
       if (status == WorkflowStatus.COMPLETED) {
         if (workflowRepository.finalizeWorkflow(
@@ -3495,7 +3496,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               suspendWorkflowRequest.getWorkflowId(),
               workflowEngineIds.getEngineInstanceId());
 
-      OffsetDateTime now = OffsetDateTime.now();
+      OffsetDateTime now = ApplicationClock.offsetNow();
 
       if (workflowRepository.suspendWorkflow(
               tenantId, suspendWorkflowRequest.getWorkflowId(), now, suspendedBy)
@@ -3547,7 +3548,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
       if (workflowStepRepository.suspendWorkflowStep(
               suspendWorkflowStepRequest.getWorkflowId(),
               suspendWorkflowStepRequest.getStep(),
-              OffsetDateTime.now())
+              ApplicationClock.offsetNow())
           <= 0) {
         throw new WorkflowStepNotFoundException(
             tenantId,
@@ -3774,7 +3775,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         workflow.setDescription(updateWorkflowRequest.getDescription());
       }
 
-      workflow.setUpdated(OffsetDateTime.now());
+      workflow.setUpdated(ApplicationClock.offsetNow());
       workflow.setUpdatedBy(updatedBy);
 
       if (!workflowRepository.existsByTenantIdAndId(tenantId, workflow.getId())) {
@@ -3907,7 +3908,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
           getWorkflowNote(tenantId, updateWorkflowNoteRequest.getWorkflowNoteId());
 
       workflowNote.setContent(updateWorkflowNoteRequest.getContent());
-      workflowNote.setUpdated(OffsetDateTime.now());
+      workflowNote.setUpdated(ApplicationClock.offsetNow());
       workflowNote.setUpdatedBy(updatedBy);
 
       if (!workflowNoteRepository.existsByTenantIdAndId(tenantId, workflowNote.getId())) {
@@ -3947,7 +3948,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     try {
       if (workflowDocumentRepository.verifyWorkflowDocument(
               verifyWorkflowDocumentRequest.getWorkflowDocumentId(),
-              OffsetDateTime.now(),
+              ApplicationClock.offsetNow(),
               verifiedBy)
           == 0) {
         throw new WorkflowDocumentNotFoundException(
@@ -4000,7 +4001,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
     try {
       if (workflowDocumentRepository.waiveWorkflowDocument(
               waiveWorkflowDocumentRequest.getWorkflowDocumentId(),
-              OffsetDateTime.now(),
+              ApplicationClock.offsetNow(),
               waivedBy,
               waiveWorkflowDocumentRequest.getWaiveReason())
           == 0) {

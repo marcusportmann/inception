@@ -20,6 +20,7 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
@@ -177,7 +178,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public Optional<SMS> getNextSMSQueuedForSending() throws ServiceUnavailableException {
     try {
-      OffsetDateTime lastProcessedBefore = OffsetDateTime.now();
+      OffsetDateTime lastProcessedBefore = ApplicationClock.offsetNow();
 
       lastProcessedBefore = lastProcessedBefore.minus(sendRetryDelay, ChronoUnit.MILLIS);
 
@@ -189,7 +190,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
       if (!smss.isEmpty()) {
         SMS sms = smss.getFirst();
 
-        OffsetDateTime when = OffsetDateTime.now();
+        OffsetDateTime when = ApplicationClock.offsetNow();
 
         smsRepository.lockSMSForSending(sms.getId(), instanceName, when);
 

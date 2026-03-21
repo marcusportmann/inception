@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.util.TenantUtil;
@@ -111,7 +112,6 @@ import digital.inception.test.TestConfiguration;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -225,7 +225,7 @@ public class WorkflowServiceTests {
             "This is name " + randomId(),
             LocalDate.of(1976, 3, 7),
             new BigDecimal("1234.56"),
-            OffsetDateTime.now());
+            ApplicationClock.offsetNow());
 
     String testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
 
@@ -499,7 +499,7 @@ public class WorkflowServiceTests {
             "This is name " + randomId(),
             LocalDate.of(1976, 3, 7),
             new BigDecimal("1234.56"),
-            OffsetDateTime.now());
+            ApplicationClock.offsetNow());
 
     String testWorkflowDataJson = objectMapper.writeValueAsString(testWorkflowData);
 

@@ -16,6 +16,7 @@
 
 package digital.inception.security.service;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.security.persistence.jpa.PasswordResetRepository;
 import java.time.OffsetDateTime;
 import java.util.concurrent.TimeUnit;
@@ -58,10 +59,10 @@ public class BackgroundPasswordResetExpiry {
   @Transactional
   public void expirePasswordResets() {
     try {
-      OffsetDateTime requestedBefore = OffsetDateTime.now();
+      OffsetDateTime requestedBefore = ApplicationClock.offsetNow();
       requestedBefore = requestedBefore.minusSeconds(passwordResetExpiry);
 
-      passwordResetRepository.expirePasswordResets(OffsetDateTime.now(), requestedBefore);
+      passwordResetRepository.expirePasswordResets(ApplicationClock.offsetNow(), requestedBefore);
     } catch (Throwable e) {
       log.error("Failed to expire the password resets", e);
     }

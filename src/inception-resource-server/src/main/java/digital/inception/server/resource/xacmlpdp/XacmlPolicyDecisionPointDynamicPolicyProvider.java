@@ -17,6 +17,7 @@
 package digital.inception.server.resource.xacmlpdp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.server.resource.PolicyDecisionPointException;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
@@ -419,7 +420,7 @@ public class XacmlPolicyDecisionPointDynamicPolicyProvider
   private void reloadExternalPolicies() {
     if (externalPoliciesEnabled && StringUtils.hasText(externalPoliciesEndpoint)) {
       if ((reloadExternalPoliciesWhen == null)
-          || (LocalDateTime.now().isAfter(reloadExternalPoliciesWhen))) {
+          || (ApplicationClock.now().isAfter(reloadExternalPoliciesWhen))) {
         try {
           RestTemplate restTemplate = new RestTemplate();
 
@@ -457,7 +458,7 @@ public class XacmlPolicyDecisionPointDynamicPolicyProvider
             rootPolicySet = buildRootPolicySet();
 
             reloadExternalPoliciesWhen =
-                LocalDateTime.now().plusSeconds(externalPoliciesReloadPeriod);
+                ApplicationClock.now().plusSeconds(externalPoliciesReloadPeriod);
 
             log.info(
                 "Successfully loaded the external policy sets and policies for the "

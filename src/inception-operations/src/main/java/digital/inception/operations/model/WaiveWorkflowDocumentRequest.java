@@ -55,34 +55,18 @@ public class WaiveWorkflowDocumentRequest implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
 
-  /** Should document events be disabled when waiving the workflow document. */
-  @Schema(description = "Should document events be disabled when waiving the workflow document")
-  @JsonProperty
-  @XmlElement(name = "DisableEvents")
-  private Boolean disableEvents;
-
-  /**
-   * Returns whether document events are enabled and should be published when waiving the workflow
-   * document.
-   *
-   * @return {@code} true if documents events are enabled and should be published when waiving the
-   *     workflow document or {@code false} otherwise
-   */
-  @JsonIgnore
-  @XmlTransient
-  public boolean eventsEnabled() {
-    if (disableEvents == null) {
-      return true;
-    }
-    return (!disableEvents);
-  }
-
   /** The description for the workflow document. */
   @Schema(description = "The description for the workflow document")
   @JsonProperty
   @XmlElement(name = "Description")
   @Size(max = 500)
   private String description;
+
+  /** Should document events be disabled when waiving the workflow document. */
+  @Schema(description = "Should document events be disabled when waiving the workflow document")
+  @JsonProperty
+  @XmlElement(name = "DisableEvents")
+  private Boolean disableEvents;
 
   /** The reason the workflow document was waived. */
   @Schema(description = "The reason the workflow document was waived")
@@ -127,6 +111,22 @@ public class WaiveWorkflowDocumentRequest implements Serializable {
     this.workflowDocumentId = workflowDocumentId;
     this.waiveReason = waiveReason;
     this.description = description;
+  }
+
+  /**
+   * Returns whether document events are enabled and should be published when waiving the workflow
+   * document.
+   *
+   * @return {@code} true if documents events are enabled and should be published when waiving the
+   *     workflow document or {@code false} otherwise
+   */
+  @JsonIgnore
+  @XmlTransient
+  public boolean eventsEnabled() {
+    if (disableEvents == null) {
+      return true;
+    }
+    return (!disableEvents);
   }
 
   /**

@@ -16,6 +16,7 @@
 
 package digital.inception.processor.persistence.jpa;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.processor.AbstractProcessableObject;
 import digital.inception.processor.BackgroundObjectProcessor;
 import digital.inception.processor.ObjectProcessor;
@@ -192,7 +193,7 @@ public abstract class JpaRepositoryBackedBackgroundObjectProcessor<
       return;
     }
 
-    OffsetDateTime cutoff = OffsetDateTime.now().minusSeconds(lockTimeoutSeconds);
+    OffsetDateTime cutoff = ApplicationClock.offsetNow().minusSeconds(lockTimeoutSeconds);
 
     // Invert PENDING → PROCESSING to PROCESSING → PENDING for the reset logic.
     pendingToProcessing.forEach(

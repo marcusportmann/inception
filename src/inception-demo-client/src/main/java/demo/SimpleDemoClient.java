@@ -26,6 +26,7 @@ import digital.inception.codes.ws.client.CodeCategoryNotFoundException;
 import digital.inception.codes.ws.client.CodesService;
 import digital.inception.codes.ws.client.ICodesService;
 import digital.inception.core.api.ProblemDetails;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.reference.api.client.ReferenceApi;
@@ -248,7 +249,8 @@ public class SimpleDemoClient {
 
       testApi.getApiClient().setBasePath("http://localhost:8080");
 
-      OffsetDateTime offsetDateTime = testApi.testOffsetDateTime(OffsetDateTime.now()).block();
+      OffsetDateTime offsetDateTime =
+          testApi.testOffsetDateTime(ApplicationClock.offsetNow()).block();
 
       System.out.println("Found time = " + offsetDateTime);
     } catch (Throwable e) {

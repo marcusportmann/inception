@@ -39,6 +39,11 @@ public final class InceptionArchUnitRules {
     JavaClasses classes = new ClassFileImporter().importPackages(packages);
 
     /*
+     * Check the general coding conventions.
+     */
+    CodingConventionsRules.check(classes);
+
+    /*
      * Check the ArchUnit rules for exceptions.
      */
     ExceptionConventionsRules.check(classes);

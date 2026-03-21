@@ -16,6 +16,7 @@
 
 package digital.inception.core.util;
 
+import digital.inception.core.time.ApplicationClock;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -214,7 +215,7 @@ public final class ISO8601Util {
         System.out.println("fromLocalDate(LocalDate.now()) = " + fromLocalDate(LocalDate.now()));
 
         System.out.println(
-            "fromLocalDateTime(LocalDateTime.now()) = " + fromLocalDateTime(LocalDateTime.now()));
+            "fromLocalDateTime(ApplicationClock.now()) = " + fromLocalDateTime(ApplicationClock.now()));
 
         System.out.println(
             "fromZonedDateTime(ZonedDateTime.now(ZoneOffset.UTC)) = "
@@ -278,7 +279,8 @@ public final class ISO8601Util {
      */
 
     System.out.println(
-        "fromOffsetDateTime(OffsetDateTime.now()) = " + fromOffsetDateTime(OffsetDateTime.now()));
+        "fromOffsetDateTime(ApplicationClock.offsetNow()) = "
+            + fromOffsetDateTime(ApplicationClock.offsetNow()));
 
     System.out.println(
         "OffsetDateTime 2017-08-14T19:14:53.120Z = "
@@ -301,7 +303,7 @@ public final class ISO8601Util {
    * @return the current date and time formatted as ISO 8601 string
    */
   public static String now() {
-    return fromLocalDateTime(LocalDateTime.now());
+    return fromLocalDateTime(ApplicationClock.now());
   }
 
   /**

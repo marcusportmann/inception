@@ -16,6 +16,7 @@
 
 package digital.inception.test;
 
+import digital.inception.core.time.ApplicationClock;
 import jakarta.transaction.Transaction;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -40,6 +41,8 @@ public class InceptionExtension implements AfterEachCallback {
 
   @Override
   public void afterEach(ExtensionContext context) throws Exception {
+    ApplicationClock.reset();
+
     Optional<Method> testMethodOptional = context.getTestMethod();
 
     if (testMethodOptional.isPresent()) {

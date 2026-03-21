@@ -16,6 +16,7 @@
 
 package digital.inception.processor;
 
+import digital.inception.core.time.ApplicationClock;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
@@ -60,11 +61,12 @@ public record RetryHandling<S extends ProcessableObjectStatus>(
    *     reprocessing
    * @param <S> the status type
    * @return a {@code RetryHandling} with the given status and a {@code nextProcessed} timestamp of
-   *     {@code OffsetDateTime.now().plus(retryDelaySeconds, ChronoUnit.SECONDS)}
+   *     {@code ApplicationClock.offsetNow().plus(retryDelaySeconds, ChronoUnit.SECONDS)}
    */
   public static <S extends ProcessableObjectStatus> RetryHandling<S> delayed(
       S retryStatus, long retryDelaySeconds) {
-    return new RetryHandling<>(retryStatus, OffsetDateTime.now().plusSeconds(retryDelaySeconds));
+    return new RetryHandling<>(
+        retryStatus, ApplicationClock.offsetNow().plusSeconds(retryDelaySeconds));
   }
 
   /**
@@ -109,7 +111,7 @@ public record RetryHandling<S extends ProcessableObjectStatus>(
     long effectiveDelay = retryDelay * multiplier;
 
     return new RetryHandling<>(
-        retryStatus, OffsetDateTime.now().plus(effectiveDelay, retryDelayUnit));
+        retryStatus, ApplicationClock.offsetNow().plus(effectiveDelay, retryDelayUnit));
   }
 
   /**
@@ -126,6 +128,6 @@ public record RetryHandling<S extends ProcessableObjectStatus>(
    *     {@link OffsetDateTime#now}
    */
   public static <S extends ProcessableObjectStatus> RetryHandling<S> immediate(S retryStatus) {
-    return new RetryHandling<>(retryStatus, OffsetDateTime.now());
+    return new RetryHandling<>(retryStatus, ApplicationClock.offsetNow());
   }
 }

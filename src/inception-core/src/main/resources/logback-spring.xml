@@ -3,6 +3,7 @@
   <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
   <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
   <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN"/>
+  <logger name="org.apache.jcp" level="WARN"/>
   <logger name="org.apache.sshd.common.util.SecurityUtils" level="WARN"/>
   <logger name="org.apache.tomcat.util.net.NioSelectorPool" level="WARN"/>
   <logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
@@ -12,14 +13,31 @@
 
   <include resource="org/springframework/boot/logging/logback/defaults.xml" />
 
+  <property name="CONSOLE_LOG_PATTERN"
+    value="%n%clr(%d{HH:mm:ss.SSS}){cyan} %clr(%-5level) %clr([%thread]){magenta} %clr(%logger{20}){blue} - %clr(%msg) %clr(%wEx)"/>
+
   <springProfile name="default">
     <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      </encoder>
+    </appender>
+
     <root level="INFO">
       <appender-ref ref="CONSOLE" />
     </root>
   </springProfile>
-  <springProfile name="local">
+  <springProfile name="local | emergency">
     <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      </encoder>
+    </appender>
+
     <root level="INFO">
       <appender-ref ref="CONSOLE" />
     </root>

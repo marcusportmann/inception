@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.processor.AbstractProcessableObject;
 import digital.inception.processor.BackgroundObjectProcessor;
 import digital.inception.processor.ObjectProcessingResult;
@@ -256,7 +257,7 @@ public class ReportProcessingTest {
 
     @Override
     public Optional<Report> claimNextProcessableObject() {
-      OffsetDateTime now = OffsetDateTime.now();
+      OffsetDateTime now = ApplicationClock.offsetNow();
 
       for (Report report : store) {
         ReportStatus status = report.getStatus();
@@ -343,7 +344,7 @@ public class ReportProcessingTest {
       object.setStatus(newStatus);
       object.setLockName(null);
       object.setLocked(null);
-      object.setLastProcessed(OffsetDateTime.now());
+      object.setLastProcessed(ApplicationClock.offsetNow());
       object.setProcessingTime(object.getProcessingTime() + processingDuration);
       object.setNextProcessed(nextProcessed);
 

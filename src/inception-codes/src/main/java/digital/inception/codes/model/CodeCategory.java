@@ -19,6 +19,7 @@ package digital.inception.codes.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -228,12 +229,12 @@ public class CodeCategory implements Serializable {
   /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
-    lastModified = OffsetDateTime.now();
+    lastModified = ApplicationClock.offsetNow();
   }
 
   /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
-    lastModified = OffsetDateTime.now();
+    lastModified = ApplicationClock.offsetNow();
   }
 }

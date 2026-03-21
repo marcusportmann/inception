@@ -19,6 +19,7 @@ package digital.inception.server.authorization.oauth;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ISO8601Util;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
@@ -71,7 +72,7 @@ public class SystemUnavailableResponse extends Response {
   public SystemUnavailableResponse(String message, Throwable cause) {
     super(HttpStatus.INTERNAL_SERVER_ERROR);
 
-    this.timestamp = OffsetDateTime.now();
+    this.timestamp = ApplicationClock.offsetNow();
 
     this.message = message;
 

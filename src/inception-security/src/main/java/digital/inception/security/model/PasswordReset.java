@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -160,7 +161,7 @@ public class PasswordReset implements Serializable {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.username = username;
     this.securityCodeHash = securityCodeHash;
-    this.requested = OffsetDateTime.now();
+    this.requested = ApplicationClock.offsetNow();
     this.status = PasswordResetStatus.REQUESTED;
   }
 

@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.time.ApplicationClock;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -264,12 +265,12 @@ public class MailTemplate implements Serializable {
   /** The Java Persistence callback method invoked before the entity is created in the database. */
   @PrePersist
   protected void onCreate() {
-    lastModified = OffsetDateTime.now();
+    lastModified = ApplicationClock.offsetNow();
   }
 
   /** The Java Persistence callback method invoked before the entity is updated in the database. */
   @PreUpdate
   protected void onUpdate() {
-    lastModified = OffsetDateTime.now();
+    lastModified = ApplicationClock.offsetNow();
   }
 }

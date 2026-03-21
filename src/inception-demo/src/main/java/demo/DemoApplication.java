@@ -17,6 +17,7 @@
 package demo;
 
 import digital.inception.application.Application;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.error.model.ErrorReport;
 import digital.inception.error.service.ErrorService;
@@ -36,7 +37,6 @@ import digital.inception.security.service.SecurityService;
 import jakarta.annotation.PostConstruct;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -150,7 +150,7 @@ public class DemoApplication extends Application {
                 "1.0.0",
                 "The description for error report " + i,
                 "The detail for error report " + i,
-                OffsetDateTime.now(),
+                ApplicationClock.offsetNow(),
                 "demo" + i);
 
         errorService.createErrorReport(demoErrorReport);

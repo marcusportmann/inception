@@ -75,9 +75,7 @@ public class WorkflowFormTypeListAttributeConverter
     }
 
     return Arrays.stream(dbData.split(","))
-        .map(
-            workflowFormType ->
-                CodeEnum.fromCode(WorkflowFormType.class, workflowFormType))
+        .map(workflowFormType -> CodeEnum.fromCode(WorkflowFormType.class, workflowFormType))
         .collect(Collectors.toList());
   }
 }

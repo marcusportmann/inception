@@ -28,6 +28,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.PasswordUtil;
 import digital.inception.core.util.RandomStringGenerator;
 import digital.inception.core.util.ResourceException;
@@ -1012,7 +1013,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
       try {
         String jwtId = UuidCreator.getTimeOrderedEpoch().toString().replace("-", "");
 
-        OffsetDateTime issuedAt = OffsetDateTime.now();
+        OffsetDateTime issuedAt = ApplicationClock.offsetNow();
 
         JWSSigner signer = new RSASSASigner(jwtRsaPrivateKey);
 

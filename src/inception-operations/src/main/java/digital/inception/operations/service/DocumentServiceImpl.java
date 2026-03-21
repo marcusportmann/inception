@@ -20,6 +20,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.json.JsonClasspathResource;
 import digital.inception.operations.exception.DocumentDefinitionCategoryNotFoundException;
 import digital.inception.operations.exception.DocumentDefinitionNotFoundException;
@@ -70,7 +71,6 @@ import digital.inception.operations.persistence.jpa.DocumentTemplateRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.criteria.Predicate;
 import java.security.MessageDigest;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
@@ -287,7 +287,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
       document.setAttributes(createDocumentRequest.getAttributes());
 
-      document.setCreated(OffsetDateTime.now());
+      document.setCreated(ApplicationClock.offsetNow());
       document.setCreatedBy(createdBy);
       document.setData(createDocumentRequest.getData());
       document.setFileType(createDocumentRequest.getFileType());
@@ -389,7 +389,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
               tenantId,
               createDocumentNoteRequest.getDocumentId(),
               createDocumentNoteRequest.getContent(),
-              OffsetDateTime.now(),
+              ApplicationClock.offsetNow(),
               createdBy);
 
       if (documentNoteRepository.existsById(documentNote.getId())) {
@@ -432,7 +432,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
       DocumentTemplate documentTemplate = new DocumentTemplate();
       documentTemplate.setCategoryId(createDocumentTemplateRequest.getCategoryId());
-      documentTemplate.setCreated(OffsetDateTime.now());
+      documentTemplate.setCreated(ApplicationClock.offsetNow());
       documentTemplate.setCreatedBy(createdBy);
       documentTemplate.setData(createDocumentTemplateRequest.getData());
       documentTemplate.setDescription(createDocumentTemplateRequest.getDescription());
@@ -1383,7 +1383,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       document.setFileType(updateDocumentRequest.getFileType());
       document.setName(updateDocumentRequest.getName());
       document.setSourceDocumentId(updateDocumentRequest.getSourceDocumentId());
-      document.setUpdated(OffsetDateTime.now());
+      document.setUpdated(ApplicationClock.offsetNow());
       document.setUpdatedBy(updatedBy);
 
       return documentRepository.saveAndFlush(document);
@@ -1474,7 +1474,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       DocumentNote documentNote = documentNoteOptional.get();
 
       documentNote.setContent(updateDocumentNoteRequest.getContent());
-      documentNote.setUpdated(OffsetDateTime.now());
+      documentNote.setUpdated(ApplicationClock.offsetNow());
       documentNote.setUpdatedBy(updatedBy);
 
       return documentNoteRepository.saveAndFlush(documentNote);
@@ -1523,7 +1523,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       documentTemplate.setId(updateDocumentTemplateRequest.getId());
       documentTemplate.setName(updateDocumentTemplateRequest.getName());
       documentTemplate.setTenantId(updateDocumentTemplateRequest.getTenantId());
-      documentTemplate.setUpdated(OffsetDateTime.now());
+      documentTemplate.setUpdated(ApplicationClock.offsetNow());
       documentTemplate.setUpdatedBy(updatedBy);
 
       documentTemplateRepository.saveAndFlush(documentTemplate);

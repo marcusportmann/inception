@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import digital.inception.executor.constraint.ValidTask;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -253,7 +254,7 @@ public class Task implements Serializable {
     this.data = data;
     this.status = TaskStatus.QUEUED;
     this.priority = TaskPriority.NORMAL;
-    this.queued = OffsetDateTime.now();
+    this.queued = ApplicationClock.offsetNow();
     this.executionAttempts = 0;
   }
 
@@ -271,7 +272,7 @@ public class Task implements Serializable {
     this.data = data;
     this.status = TaskStatus.QUEUED;
     this.priority = TaskPriority.NORMAL;
-    this.queued = OffsetDateTime.now();
+    this.queued = ApplicationClock.offsetNow();
     this.executionAttempts = 0;
   }
 

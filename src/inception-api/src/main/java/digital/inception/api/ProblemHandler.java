@@ -22,10 +22,10 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.Problem;
 import digital.inception.core.exception.ServiceException;
 import digital.inception.core.exception.ServiceUnavailableException;
+import digital.inception.core.time.ApplicationClock;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.time.OffsetDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -191,7 +191,7 @@ public class ProblemHandler {
 
     ProblemDetails problemDetails = new ProblemDetails();
 
-    problemDetails.setTimestamp(OffsetDateTime.now());
+    problemDetails.setTimestamp(ApplicationClock.offsetNow());
     problemDetails.setType("https://inception.digital/problems/access-denied");
     problemDetails.setTitle("Access denied.");
     problemDetails.setStatus(HttpStatus.FORBIDDEN.value());
@@ -221,7 +221,7 @@ public class ProblemHandler {
         .equals("org.springframework.web.servlet.resource.NoResourceFoundException")) {
       ProblemDetails problemDetails = new ProblemDetails();
 
-      problemDetails.setTimestamp(OffsetDateTime.now());
+      problemDetails.setTimestamp(ApplicationClock.offsetNow());
       problemDetails.setType("about:blank");
       problemDetails.setTitle("Not Found");
       problemDetails.setStatus(HttpStatus.NOT_FOUND.value());
@@ -235,7 +235,7 @@ public class ProblemHandler {
 
     ProblemDetails problemDetails = new ProblemDetails();
 
-    problemDetails.setTimestamp(OffsetDateTime.now());
+    problemDetails.setTimestamp(ApplicationClock.offsetNow());
 
     Problem problem = AnnotatedElementUtils.findMergedAnnotation(cause.getClass(), Problem.class);
 

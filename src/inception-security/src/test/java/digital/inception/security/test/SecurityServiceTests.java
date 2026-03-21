@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.security.exception.AuthenticationFailedException;
 import digital.inception.security.exception.DuplicateFunctionException;
@@ -1633,7 +1634,7 @@ public class SecurityServiceTests {
 
     compareUsers(user, retrievedFilteredUsers.getUsers().get(0), true);
 
-    OffsetDateTime passwordExpiry = OffsetDateTime.now();
+    OffsetDateTime passwordExpiry = ApplicationClock.offsetNow();
     passwordExpiry = passwordExpiry.plusDays(10);
 
     user.setPassword("Test Updated Password");

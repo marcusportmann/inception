@@ -21,12 +21,12 @@ import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfWriter;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.test.MarkovTextGenerator;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.OffsetDateTime;
 import java.util.Optional;
 
 /** The {@code MultiPagePdfTest} class. */
@@ -61,7 +61,7 @@ public class MultiPagePdfTest {
 
       Paragraph headerParagraph =
           new Paragraph(
-              "Generated at " + ISO8601Util.fromOffsetDateTime(OffsetDateTime.now()), headerFont);
+              "Generated at " + ISO8601Util.fromOffsetDateTime(ApplicationClock.offsetNow()), headerFont);
       headerParagraph.setSpacingAfter(16);
 
       document.add(headerParagraph);

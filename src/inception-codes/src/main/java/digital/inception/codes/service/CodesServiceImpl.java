@@ -32,6 +32,7 @@ import digital.inception.codes.persistence.jpa.CodeRepository;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
@@ -668,7 +669,8 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
         throw new CodeCategoryNotFoundException(codeCategoryId);
       }
 
-      codeCategoryRepository.setDataAndLastModifiedById(codeCategoryId, data, OffsetDateTime.now());
+      codeCategoryRepository.setDataAndLastModifiedById(
+          codeCategoryId, data, ApplicationClock.offsetNow());
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {

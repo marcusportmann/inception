@@ -176,7 +176,8 @@ public abstract class AbstractServiceBase {
   protected <T> void validateArgument(String argumentName, T argument)
       throws InvalidArgumentException {
     if (argument == null) {
-      log.error("Failed to validate the argument ({}): class: [null], invalidFields: [argument is null]",
+      log.error(
+          "Failed to validate the argument ({}): class: [null], invalidFields: [argument is null]",
           argumentName);
 
       throw new InvalidArgumentException(argumentName);
@@ -185,13 +186,20 @@ public abstract class AbstractServiceBase {
     Set<ConstraintViolation<T>> constraintViolations = validator.validate(argument);
 
     if (!constraintViolations.isEmpty()) {
-      String invalidFields = constraintViolations.stream()
-          .map(v -> String.format("field: [%s], value: [%s], message: [%s]",
-              v.getPropertyPath(), v.getInvalidValue(), v.getMessage()))
-          .collect(java.util.stream.Collectors.joining("; "));
+      String invalidFields =
+          constraintViolations.stream()
+              .map(
+                  v ->
+                      String.format(
+                          "field: [%s], value: [%s], message: [%s]",
+                          v.getPropertyPath(), v.getInvalidValue(), v.getMessage()))
+              .collect(java.util.stream.Collectors.joining("; "));
 
-      log.error("Failed to validate the argument ({}): class: [{}], invalidFields: [{}]",
-          argumentName, argument.getClass().getName(), invalidFields);
+      log.error(
+          "Failed to validate the argument ({}): class: [{}], invalidFields: [{}]",
+          argumentName,
+          argument.getClass().getName(),
+          invalidFields);
 
       throw new InvalidArgumentException(
           argumentName, ValidationError.toValidationErrors(constraintViolations));

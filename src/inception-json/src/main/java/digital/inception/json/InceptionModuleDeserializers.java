@@ -19,6 +19,7 @@ package digital.inception.json;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import digital.inception.core.model.CodeEnum;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class InceptionModuleDeserializers extends SimpleDeserializers {
   public InceptionModuleDeserializers() {
 
     addDeserializer(Date.class, new DateDeserializer());
+    addDeserializer(Duration.class, new DurationDeserializer());
     addDeserializer(Instant.class, new InstantDeserializer());
     addDeserializer(LocalDate.class, new LocalDateDeserializer());
     addDeserializer(LocalTime.class, new LocalTimeDeserializer());

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.executor.exception.InvalidTaskStatusException;
 import digital.inception.executor.exception.TaskExecutionFailedException;
 import digital.inception.executor.exception.TaskNotFoundException;
@@ -44,7 +45,6 @@ import digital.inception.executor.service.ExecutorService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.security.SecureRandom;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -525,7 +525,7 @@ public class ExecutorServiceTests {
     Task retrievedTask = executorService.getTask(taskId);
 
     assertEquals(TaskStatus.QUEUED, retrievedTask.getStatus());
-    assertTrue(retrievedTask.getNextExecution().isAfter(OffsetDateTime.now().plusSeconds(120)));
+    assertTrue(retrievedTask.getNextExecution().isAfter(ApplicationClock.offsetNow().plusSeconds(120)));
   }
 
   /** Test the parameter-based queue task functionality. */

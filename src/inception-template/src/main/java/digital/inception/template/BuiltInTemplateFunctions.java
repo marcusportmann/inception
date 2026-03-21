@@ -16,7 +16,7 @@
 
 package digital.inception.template;
 
-import java.time.LocalDateTime;
+import digital.inception.core.time.ApplicationClock;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -170,9 +170,9 @@ public class BuiltInTemplateFunctions {
           format = args[0];
         }
         try {
-          return LocalDateTime.now().format(DateTimeFormatter.ofPattern(format));
+          return ApplicationClock.now().format(DateTimeFormatter.ofPattern(format));
         } catch (Exception e) {
-          return LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+          return ApplicationClock.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         }
       };
 

@@ -20,6 +20,7 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.model.CodeEnum;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.PasswordUtil;
 import digital.inception.security.exception.AuthenticationFailedException;
 import digital.inception.security.exception.DuplicateGroupException;
@@ -39,7 +40,6 @@ import digital.inception.security.persistence.jpa.RoleRepository;
 import digital.inception.security.persistence.jpa.UserRepository;
 import jakarta.persistence.criteria.Predicate;
 import java.security.SecureRandom;
-import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -487,7 +487,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
       }
 
       if (expiredPassword) {
-        user.setPasswordExpiry(OffsetDateTime.now());
+        user.setPasswordExpiry(ApplicationClock.offsetNow());
       } else {
         ZonedDateTime passwordExpiry = ZonedDateTime.now();
 
@@ -1385,7 +1385,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
       }
 
       if (expirePassword) {
-        existingUser.setPasswordExpiry(OffsetDateTime.now());
+        existingUser.setPasswordExpiry(ApplicationClock.offsetNow());
       } else if (user.getPasswordExpiry() != null) {
         existingUser.setPasswordExpiry(user.getPasswordExpiry());
       }

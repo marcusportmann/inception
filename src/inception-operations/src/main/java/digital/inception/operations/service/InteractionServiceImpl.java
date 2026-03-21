@@ -27,6 +27,7 @@ import digital.inception.core.file.FileType;
 import digital.inception.core.model.CodeEnum;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.MimeData;
 import digital.inception.operations.exception.DuplicateInteractionAttachmentException;
 import digital.inception.operations.exception.DuplicateInteractionException;
@@ -92,7 +93,6 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.security.SecureRandom;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -237,7 +237,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
       interactionRepository.assignInteraction(
           assignInteractionRequest.getInteractionId(),
-          OffsetDateTime.now(),
+          ApplicationClock.offsetNow(),
           assignInteractionRequest.getUsername());
     } catch (InteractionNotFoundException e) {
       throw e;
@@ -365,7 +365,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               tenantId,
               createInteractionNoteRequest.getInteractionId(),
               createInteractionNoteRequest.getContent(),
-              OffsetDateTime.now(),
+              ApplicationClock.offsetNow(),
               createdBy);
 
       if (interactionNoteRepository.existsById(interactionNote.getId())) {
@@ -1856,7 +1856,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       InteractionNote interactionNote = interactionNoteOptional.get();
 
       interactionNote.setContent(updateInteractionNoteRequest.getContent());
-      interactionNote.setUpdated(OffsetDateTime.now());
+      interactionNote.setUpdated(ApplicationClock.offsetNow());
       interactionNote.setUpdatedBy(updatedBy);
 
       return interactionNoteRepository.saveAndFlush(interactionNote);
@@ -1960,9 +1960,9 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
       if (receivedDate != null) {
         interaction.setOccurred(
-            receivedDate.toInstant().atOffset(OffsetDateTime.now().getOffset()));
+            receivedDate.toInstant().atOffset(ApplicationClock.offsetNow().getOffset()));
       } else {
-        interaction.setOccurred(OffsetDateTime.now());
+        interaction.setOccurred(ApplicationClock.offsetNow());
       }
 
       // TODO: Add support for prioritizing interactions based on email domain -- MARCUS

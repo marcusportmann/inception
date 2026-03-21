@@ -19,6 +19,7 @@ package digital.inception.scheduler.service;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.scheduler.exception.DuplicateJobException;
 import digital.inception.scheduler.exception.JobExecutionFailedException;
@@ -301,7 +302,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public Optional<Job> getNextJobScheduledForExecution() throws ServiceUnavailableException {
     try {
-      OffsetDateTime lastExecutedBefore = OffsetDateTime.now();
+      OffsetDateTime lastExecutedBefore = ApplicationClock.offsetNow();
 
       lastExecutedBefore = lastExecutedBefore.minus(jobExecutionRetryDelay, ChronoUnit.MILLIS);
 
@@ -309,12 +310,12 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
 
       List<Job> jobs =
           jobRepository.findJobsScheduledForExecutionForWrite(
-              lastExecutedBefore, OffsetDateTime.now(), pageRequest);
+              lastExecutedBefore, ApplicationClock.offsetNow(), pageRequest);
 
       if (!jobs.isEmpty()) {
         Job job = jobs.getFirst();
 
-        OffsetDateTime when = OffsetDateTime.now();
+        OffsetDateTime when = ApplicationClock.offsetNow();
 
         jobRepository.lockJobForExecution(job.getId(), instanceName, when);
 

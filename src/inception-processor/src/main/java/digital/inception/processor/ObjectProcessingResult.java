@@ -16,6 +16,7 @@
 
 package digital.inception.processor;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.processor.ProcessableObjectStatus.ProcessingPhase;
 import java.time.OffsetDateTime;
 
@@ -61,6 +62,8 @@ public record ObjectProcessingResult<S extends ProcessableObjectStatus>(
   public ObjectProcessingResult(S nextStatus) {
     this(
         nextStatus,
-        nextStatus.getProcessingPhase() == ProcessingPhase.PENDING ? OffsetDateTime.now() : null);
+        nextStatus.getProcessingPhase() == ProcessingPhase.PENDING
+            ? ApplicationClock.offsetNow()
+            : null);
   }
 }

@@ -16,6 +16,7 @@
 
 package digital.inception.processor;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.processor.ProcessableObjectStatus.ProcessingPhase;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
@@ -1073,7 +1074,7 @@ public abstract class BackgroundObjectProcessor<
         S fromStatus = object.getStatus();
 
         // Mark the start of processing
-        OffsetDateTime processingStarted = OffsetDateTime.now();
+        OffsetDateTime processingStarted = ApplicationClock.offsetNow();
         objectProcessingTelemetry.setProcessingAttemptStarted(processingStarted);
 
         long start = System.currentTimeMillis();
@@ -1106,7 +1107,7 @@ public abstract class BackgroundObjectProcessor<
         }
 
         // Processing completed, update telemetry from the final object state
-        objectProcessingTelemetry.setProcessingAttemptCompleted(OffsetDateTime.now());
+        objectProcessingTelemetry.setProcessingAttemptCompleted(ApplicationClock.offsetNow());
 
         long duration = System.currentTimeMillis() - start;
         objectProcessingTelemetry.setProcessingAttemptDuration(duration);

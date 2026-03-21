@@ -16,6 +16,7 @@
 
 package digital.inception.processor.persistence.jpa;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.processor.AbstractProcessableObject;
 import digital.inception.processor.BackgroundObjectProcessor;
@@ -119,7 +120,7 @@ public abstract class JpaRepositoryBackedObjectProcessor<
   @Override
   public Optional<T> claimNextProcessableObject() {
 
-    OffsetDateTime now = OffsetDateTime.now();
+    OffsetDateTime now = ApplicationClock.offsetNow();
     PageRequest pageRequest = PageRequest.of(0, 1);
 
     List<T> processableObjects =
@@ -238,7 +239,7 @@ public abstract class JpaRepositoryBackedObjectProcessor<
       OffsetDateTime nextProcessed,
       boolean resetProcessingAttempts) {
 
-    OffsetDateTime now = OffsetDateTime.now();
+    OffsetDateTime now = ApplicationClock.offsetNow();
 
     // Only set 'processed' when the object transitions into a COMPLETED phase.
     OffsetDateTime processedTimestamp =

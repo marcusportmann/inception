@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.error.model.ErrorReport;
 import digital.inception.error.model.ErrorReportSortBy;
 import digital.inception.error.model.ErrorReportSummaries;
@@ -29,7 +30,6 @@ import digital.inception.error.service.ErrorService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -144,7 +144,7 @@ public class ErrorServiceTests {
         "ApplicationVersion",
         "Description",
         "Detail",
-        OffsetDateTime.now(),
+        ApplicationClock.offsetNow(),
         "Who",
         UuidCreator.getTimeOrderedEpoch(),
         "Feedback",

@@ -22,12 +22,11 @@ import demo.persistence.r2dbc.ReactiveDataRepository;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
+import digital.inception.core.time.ApplicationClock;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -83,8 +82,8 @@ public class DataServiceImpl extends AbstractServiceBase implements DataService 
       newData.setDateValue(LocalDate.now());
       newData.setIntegerValue(777);
       newData.setStringValue("New String Value");
-      newData.setTimestampValue(LocalDateTime.now());
-      newData.setTimestampWithTimeZoneValue(OffsetDateTime.now());
+      newData.setTimestampValue(ApplicationClock.now());
+      newData.setTimestampWithTimeZoneValue(ApplicationClock.offsetNow());
 
       entityManager.persist(newData);
     } catch (Throwable e) {

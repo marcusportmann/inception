@@ -16,6 +16,7 @@
 
 package digital.inception.processor.persistence.mongo;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.processor.AbstractProcessableObject;
 import digital.inception.processor.ObjectProcessor;
@@ -120,7 +121,7 @@ public abstract class MongoRepositoryBackedObjectProcessor<
     PageRequest pageRequest = PageRequest.of(0, 1);
 
     while (true) {
-      OffsetDateTime now = OffsetDateTime.now();
+      OffsetDateTime now = ApplicationClock.offsetNow();
 
       // 1. Find a candidate (no locking yet)
       List<T> processableObjects =
@@ -137,7 +138,7 @@ public abstract class MongoRepositoryBackedObjectProcessor<
       S currentStatus = candidate.getStatus();
       S processingStatus = determineProcessingStatusOnClaim(candidate, currentStatus);
 
-      OffsetDateTime lockedTime = OffsetDateTime.now();
+      OffsetDateTime lockedTime = ApplicationClock.offsetNow();
 
       // 2. Atomically claim and lock via findAndModify
       Optional<T> lockedOptional =
@@ -225,7 +226,7 @@ public abstract class MongoRepositoryBackedObjectProcessor<
       OffsetDateTime nextProcessed,
       boolean resetProcessingAttempts) {
 
-    OffsetDateTime now = OffsetDateTime.now();
+    OffsetDateTime now = ApplicationClock.offsetNow();
 
     OffsetDateTime processedTimestamp =
         (newStatus.getProcessingPhase() == ProcessableObjectStatus.ProcessingPhase.COMPLETED)

@@ -19,6 +19,7 @@ package digital.inception.json;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import digital.inception.core.model.CodeEnum;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,6 +44,7 @@ public class InceptionModule extends SimpleModule {
 
     addSerializer(CodeEnum.class, new CodeEnumSerializer());
     addSerializer(Date.class, new DateSerializer());
+    addSerializer(Duration.class, new DurationSerializer());
     addSerializer(Instant.class, new InstantSerializer());
     addSerializer(LocalDate.class, new LocalDateSerializer());
     addSerializer(LocalTime.class, new LocalTimeSerializer());

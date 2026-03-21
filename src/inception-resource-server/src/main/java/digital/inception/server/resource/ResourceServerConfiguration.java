@@ -463,8 +463,7 @@ public class ResourceServerConfiguration implements InitializingBean {
 
           // Enable non-authenticated internal network access to the actuator endpoints
           authorizeRequests
-              .requestMatchers(
-                  pathPatternRequestMatcherBuilder.matcher("/actuator/**"))
+              .requestMatchers(pathPatternRequestMatcherBuilder.matcher("/actuator/**"))
               .access(internalNetworkAccess);
 
           // Enable non-authenticated internal network access to the Swagger endpoints

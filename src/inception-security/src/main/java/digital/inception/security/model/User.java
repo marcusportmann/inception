@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -392,7 +393,7 @@ public class User implements Serializable {
    */
   public boolean hasPasswordExpired() {
     if (passwordExpiry != null) {
-      return OffsetDateTime.now().isAfter(passwordExpiry);
+      return ApplicationClock.offsetNow().isAfter(passwordExpiry);
     }
 
     return false;

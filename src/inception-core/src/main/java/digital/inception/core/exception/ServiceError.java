@@ -16,6 +16,7 @@
 
 package digital.inception.core.exception;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -59,7 +60,7 @@ public class ServiceError {
    * @param message the message for the service error
    */
   public ServiceError(String message) {
-    this.timestamp = OffsetDateTime.now();
+    this.timestamp = ApplicationClock.offsetNow();
     this.message = message;
   }
 

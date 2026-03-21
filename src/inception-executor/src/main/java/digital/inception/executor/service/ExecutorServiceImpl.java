@@ -21,6 +21,7 @@ import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.executor.exception.ArchivedTaskNotFoundException;
 import digital.inception.executor.exception.BatchTasksNotFoundException;
@@ -188,7 +189,8 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   @Transactional
   public void archiveAndDeleteHistoricalTasks() throws ServiceUnavailableException {
     try {
-      OffsetDateTime executedBefore = OffsetDateTime.now().minusDays(historicalTaskRetentionDays);
+      OffsetDateTime executedBefore =
+          ApplicationClock.offsetNow().minusDays(historicalTaskRetentionDays);
 
       // Keep looping while we still have historical tasks to archive or delete
       while (true) {
@@ -330,9 +332,9 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
       if (taskExecutionResult.getNextTaskStep() != null) {
         OffsetDateTime nextExecution =
             (taskExecutionResult.getNextTaskStepDelay() != null)
-                ? OffsetDateTime.now()
+                ? ApplicationClock.offsetNow()
                     .plus(taskExecutionResult.getNextTaskStepDelay(), ChronoUnit.MILLIS)
-                : OffsetDateTime.now();
+                : ApplicationClock.offsetNow();
 
         // If we have to update the task data after executing the previous task step
         if (StringUtils.hasText(taskExecutionResult.getUpdatedTaskData())) {
@@ -361,13 +363,13 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
         if (StringUtils.hasText(taskExecutionResult.getUpdatedTaskData())) {
           taskRepository.completeTask(
               task.getId(),
-              OffsetDateTime.now(),
+              ApplicationClock.offsetNow(),
               taskExecutionResult.getUpdatedTaskData(),
               executionTime);
 
           task.setData(taskExecutionResult.getUpdatedTaskData());
         } else {
-          taskRepository.completeTask(task.getId(), OffsetDateTime.now(), executionTime);
+          taskRepository.completeTask(task.getId(), ApplicationClock.offsetNow(), executionTime);
         }
 
         createTaskEvent(TaskEventType.TASK_COMPLETED, taskType, task);
@@ -412,7 +414,8 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
     }
 
     try {
-      taskRepository.delayTask(task.getId(), OffsetDateTime.now().plus(delay, ChronoUnit.MILLIS));
+      taskRepository.delayTask(
+          task.getId(), ApplicationClock.offsetNow().plus(delay, ChronoUnit.MILLIS));
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to delay the task", e);
     }
@@ -515,7 +518,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
 
       TaskType taskType = getTaskType(task.getType());
 
-      taskRepository.failTask(task.getId(), OffsetDateTime.now(), task.getFailure());
+      taskRepository.failTask(task.getId(), ApplicationClock.offsetNow(), task.getFailure());
 
       createTaskEvent(TaskEventType.TASK_FAILED, taskType, task);
     } catch (Throwable e) {
@@ -551,7 +554,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
   public Optional<Task> getNextTaskQueuedForExecution() throws ServiceUnavailableException {
     try {
       // Handle the situation where different time precisions are used in the database
-      OffsetDateTime now = OffsetDateTime.now().plusSeconds(1);
+      OffsetDateTime now = ApplicationClock.offsetNow().plusSeconds(1);
 
       PageRequest pageRequest = PageRequest.of(0, 1);
 
@@ -560,7 +563,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
       if (!tasks.isEmpty()) {
         Task task = tasks.getFirst();
 
-        OffsetDateTime locked = OffsetDateTime.now();
+        OffsetDateTime locked = ApplicationClock.offsetNow();
 
         taskRepository.lockTaskForExecution(task.getId(), instanceName, locked);
 
@@ -996,7 +999,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
                 : this.taskExecutionRetryDelay;
 
         OffsetDateTime nextExecution =
-            OffsetDateTime.now().plus(taskExecutionRetryDelay, ChronoUnit.MILLIS);
+            ApplicationClock.offsetNow().plus(taskExecutionRetryDelay, ChronoUnit.MILLIS);
 
         taskRepository.requeueTask(task.getId(), nextExecution);
 
@@ -1022,7 +1025,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
         throw new TaskNotFoundException(taskId);
       }
 
-      taskRepository.requeueTask(taskId, OffsetDateTime.now());
+      taskRepository.requeueTask(taskId, ApplicationClock.offsetNow());
 
       triggerTaskExecution();
     } catch (TaskNotFoundException e) {
@@ -1039,7 +1042,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
       for (TaskType taskType : getTaskTypes()) {
         if (taskType.getExecutionTimeout() != null) {
           OffsetDateTime lockedBefore =
-              OffsetDateTime.now().minus(taskType.getExecutionTimeout(), ChronoUnit.MILLIS);
+              ApplicationClock.offsetNow().minus(taskType.getExecutionTimeout(), ChronoUnit.MILLIS);
 
           if (log.isDebugEnabled()) {
             log.debug(
@@ -1066,7 +1069,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
 
       // Apply the global task timeout
       OffsetDateTime lockedBefore =
-          OffsetDateTime.now().minus(taskExecutionTimeout, ChronoUnit.MILLIS);
+          ApplicationClock.offsetNow().minus(taskExecutionTimeout, ChronoUnit.MILLIS);
 
       if (log.isDebugEnabled()) {
         log.debug("Resetting the hung tasks that were locked for execution before " + lockedBefore);
@@ -1218,7 +1221,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
         throw new BatchTasksNotFoundException(batchId);
       }
 
-      taskRepository.unsuspendBatch(batchId, OffsetDateTime.now());
+      taskRepository.unsuspendBatch(batchId, ApplicationClock.offsetNow());
     } catch (BatchTasksNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1242,7 +1245,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
         throw new TaskNotFoundException(taskId);
       }
 
-      if (taskRepository.unsuspendTask(taskId, OffsetDateTime.now()) == 0) {
+      if (taskRepository.unsuspendTask(taskId, ApplicationClock.offsetNow()) == 0) {
         throw new InvalidTaskStatusException(taskId);
       }
 

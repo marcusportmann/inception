@@ -26,6 +26,7 @@ import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetupTest;
 import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.util.TenantUtil;
 import digital.inception.core.validation.ValidationSchemaType;
@@ -100,7 +101,6 @@ import jakarta.mail.Transport;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -510,7 +510,7 @@ public class EndToEndTests {
             "This is name " + randomId(),
             LocalDate.of(1976, 3, 7),
             new BigDecimal("1234.56"),
-            OffsetDateTime.now());
+            ApplicationClock.offsetNow());
 
     String workflowDataJson = objectMapper.writeValueAsString(workflowData);
 

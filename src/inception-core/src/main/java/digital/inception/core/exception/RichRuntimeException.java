@@ -16,6 +16,7 @@
 
 package digital.inception.core.exception;
 
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ISO8601Util;
 import java.io.Serial;
 import java.time.OffsetDateTime;
@@ -43,7 +44,7 @@ public class RichRuntimeException extends RuntimeException {
   /** Constructs a new {@code RichRuntimeException} instance with {@code null} as its message. */
   public RichRuntimeException() {
     super();
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**
@@ -53,7 +54,7 @@ public class RichRuntimeException extends RuntimeException {
    */
   public RichRuntimeException(String message) {
     super(message);
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**
@@ -66,7 +67,7 @@ public class RichRuntimeException extends RuntimeException {
    */
   public RichRuntimeException(Throwable cause) {
     super(cause);
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**
@@ -78,7 +79,7 @@ public class RichRuntimeException extends RuntimeException {
   public RichRuntimeException(String code, String message) {
     super(message);
     this.code = code;
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**
@@ -90,7 +91,7 @@ public class RichRuntimeException extends RuntimeException {
    */
   public RichRuntimeException(String message, Throwable cause) {
     super(message, cause);
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**
@@ -105,7 +106,7 @@ public class RichRuntimeException extends RuntimeException {
   public RichRuntimeException(String code, String message, Throwable cause) {
     super(message, cause);
     this.code = code;
-    this.when = OffsetDateTime.now();
+    this.when = ApplicationClock.offsetNow();
   }
 
   /**

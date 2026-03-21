@@ -20,6 +20,7 @@ import demo.api.client.*;
 import digital.inception.codes.ws.client.CodeCategory;
 import digital.inception.codes.ws.client.CodesService;
 import digital.inception.codes.ws.client.ICodesService;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.ws.security.WebServiceClientSecurityHelper;
 import jakarta.annotation.PostConstruct;
@@ -127,7 +128,8 @@ public class SpringBootDemoClient {
     try {
       TestApi testApi = new TestApi();
 
-      OffsetDateTime offsetDateTime = testApi.testOffsetDateTime(OffsetDateTime.now()).block();
+      OffsetDateTime offsetDateTime =
+          testApi.testOffsetDateTime(ApplicationClock.offsetNow()).block();
 
       System.out.println("Found time = " + offsetDateTime);
     } catch (Throwable e) {

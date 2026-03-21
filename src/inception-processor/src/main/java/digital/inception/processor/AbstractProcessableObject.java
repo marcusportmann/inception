@@ -18,6 +18,7 @@ package digital.inception.processor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -242,7 +243,7 @@ public abstract class AbstractProcessableObject<
    * @param initialStatus the initial status for the object
    */
   protected AbstractProcessableObject(S initialStatus) {
-    this.nextProcessed = OffsetDateTime.now();
+    this.nextProcessed = ApplicationClock.offsetNow();
     this.status = initialStatus;
   }
 
