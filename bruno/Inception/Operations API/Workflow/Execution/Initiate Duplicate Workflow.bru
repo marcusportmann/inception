@@ -1,0 +1,46 @@
+meta {
+  name: Initiate Duplicate Workflow
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{baseURL}}/api/operations/initiate-workflow
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "definitionId": "test_workflow_definition",
+    "startWorkflow": true,
+    "attributes": [
+      {
+        "name": "testWorkflowAttribute",
+        "value": "Test Workflow Attribute Value"
+      }
+    ],
+    "externalReferences": [
+      {
+        "type": "test_workflow_external_reference",
+        "value": "Test Workflow External Reference Value"
+      }
+    ],
+    "variables": [
+      {
+        "name": "testWorkflowVariable",
+        "value": "Test Workflow Variable Value"
+      }
+    ],
+    "data": "eyJuYW1lIjogInZhbHVlIn0="
+  }
+}
+
+assert {
+  res.status: eq 409
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
