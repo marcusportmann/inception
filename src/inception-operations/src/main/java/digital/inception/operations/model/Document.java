@@ -167,9 +167,8 @@ public class Document implements Serializable {
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Data", required = true)
-  @NotNull
   @Size(min = 1, max = 41943040)
-  @Column(name = "data", length = 41943040, nullable = false)
+  @Column(name = "data", length = 41943040)
   private byte[] data;
 
   /** The ID for the document definition the document is associated with. */

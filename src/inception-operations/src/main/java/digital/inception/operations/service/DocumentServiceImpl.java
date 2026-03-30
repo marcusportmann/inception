@@ -69,6 +69,8 @@ import digital.inception.operations.persistence.jpa.DocumentSummaryRepository;
 import digital.inception.operations.persistence.jpa.DocumentTemplateCategoryRepository;
 import digital.inception.operations.persistence.jpa.DocumentTemplateRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Predicate;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -121,6 +123,10 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
   /** The internal reference to the Document Service to enable caching. */
   private DocumentService documentService;
+
+  /** The Entity Manager. */
+  @PersistenceContext(unitName = "operations")
+  private EntityManager entityManager;
 
   /** The maximum number of filtered document notes that will be returned by the service. */
   @Value("${inception.operations.max-filtered-document-notes:#{100}}")
@@ -200,7 +206,27 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DuplicateDocumentException(document.getId());
       }
 
-      return documentRepository.saveAndFlush(document);
+      byte[] documentData = document.getData();
+
+      // TODO: Save the document data to S3, if required
+      // s3Client.uploadFileToS3Bucket(
+      //    "bucket_id", document.getId().toString(), document.getFileType(), document.getData());
+
+      // TODO: Clear the data from the document to prevent it from being persisted in the database
+      // if persisting in S3
+      // document.setData(null);
+
+      // Save the document to the database (without the data if persisted to S3)
+      document = documentRepository.saveAndFlush(document);
+
+      // Detach the document from the entity manager to prevent the data from being updated
+      entityManager.detach(document);
+
+      // Restore the data for the document
+      document.setData(documentData);
+
+      // Return the saved document
+      return document;
     } catch (InvalidArgumentException
         | DocumentDefinitionNotFoundException
         | DuplicateDocumentException e) {
@@ -300,7 +326,26 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DuplicateDocumentException(document.getId());
       }
 
-      return documentRepository.saveAndFlush(document);
+      // TODO: Save the document data to S3, if required
+      // s3Client.uploadFileToS3Bucket(
+      //    "bucket_id", document.getId().toString(), document.getFileType(),
+      // createDocumentRequest.getData());
+
+      // TODO: Clear the data from the document to prevent it from being persisted in the database
+      // if persisting in S3
+      // document.setData(null);
+
+      // Save the document to the database (without the data if persisted to S3)
+      document = documentRepository.saveAndFlush(document);
+
+      // Detach the document from the entity manager to prevent the data from being updated
+      entityManager.detach(document);
+
+      // Restore the data for the document
+      document.setData(createDocumentRequest.getData());
+
+      // Return the saved document
+      return document;
     } catch (InvalidArgumentException | DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -490,6 +535,9 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       if (!documentRepository.existsByTenantIdAndId(tenantId, documentId)) {
         throw new DocumentNotFoundException(tenantId, documentId);
       }
+
+      // TODO: Remove the document data from S3, if required
+      // s3Client.removeFileFromS3Bucket("bucket_id", documentId.toString());
 
       documentRepository.deleteById(documentId);
     } catch (DocumentNotFoundException e) {
@@ -744,7 +792,17 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DocumentNotFoundException(tenantId, documentId);
       }
 
-      return documentOptional.get();
+      Document document = documentOptional.get();
+
+      entityManager.detach(document);
+
+      // TODO: Retrieve the document data from S3, if required
+      // byte[] documentData =
+      //    s3Client.retrieveFileFromS3Bucket("bucket_id", document.getId().toString());
+
+      // document.setData(documentData);
+
+      return document;
     } catch (DocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1386,7 +1444,26 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       document.setUpdated(ApplicationClock.offsetNow());
       document.setUpdatedBy(updatedBy);
 
-      return documentRepository.saveAndFlush(document);
+      // TODO: Save the document data to S3, if required
+      // s3Client.uploadFileToS3Bucket(
+      //    "bucket_id", document.getId().toString(), document.getFileType(),
+      // updateDocumentRequest.getData());
+
+      // TODO: Clear the data from the document to prevent it from being persisted in the database
+      // if persisting in S3
+      // document.setData(null);
+
+      // Save the document to the database (without the data if persisted to S3)
+      document = documentRepository.saveAndFlush(document);
+
+      // Detach the document from the entity manager to prevent the data from being updated
+      entityManager.detach(document);
+
+      // Restore the data for the document
+      document.setData(updateDocumentRequest.getData());
+
+      // Return the saved document
+      return document;
     } catch (InvalidArgumentException | DocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
