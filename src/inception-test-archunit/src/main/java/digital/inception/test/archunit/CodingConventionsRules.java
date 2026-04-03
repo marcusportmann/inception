@@ -148,6 +148,7 @@ public final class CodingConventionsRules {
   public static final ArchRule PUBLIC_CONVENIENCE_CONSTRUCTORS_DISABLE_JACKSON_CREATOR =
       classes()
           .that(areIntendedForJacksonJsonBinding())
+          .and().areNotRecords()
           .should(
               new ArchCondition<>("have disabled Jackson on public convenience constructors") {
                 @Override

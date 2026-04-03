@@ -157,8 +157,7 @@ public final class ApiControllerConventionsRules {
           .beAnnotatedWith("io.swagger.v3.oas.annotations.Operation")
           .andShould()
           .beAnnotatedWith("io.swagger.v3.oas.annotations.responses.ApiResponses")
-          .andShould()
-          .beAnnotatedWith("org.springframework.web.bind.annotation.ResponseStatus")
+          .andShould(haveResponseStatusUnlessReturningResponseEntity())
           .andShould(
               new ArchCondition<JavaMethod>(
                   "declare only exceptions annotated @Problem and extending ServiceException") {
@@ -291,5 +290,30 @@ public final class ApiControllerConventionsRules {
     API_CONTROLLER_METHODS_FOLLOW_ANNOTATIONS_AND_FULLY_DOCUMENTED.check(classes);
 
     API_CONTROLLER_VOID_METHODS_REQUIRE_NO_CONTENT_HTTP_STATUS.check(classes);
+  }
+
+  private static ArchCondition<JavaMethod> haveResponseStatusUnlessReturningResponseEntity() {
+    return new ArchCondition<JavaMethod>(
+        "be annotated with @ResponseStatus unless returning ResponseEntity") {
+      @Override
+      public void check(JavaMethod method, ConditionEvents events) {
+        if (returnsResponseEntity(method)) {
+          return;
+        }
+
+        if (!method.isAnnotatedWith("org.springframework.web.bind.annotation.ResponseStatus")) {
+          String message =
+              String.format(
+                  "Method %s must be annotated with @ResponseStatus unless it returns ResponseEntity",
+                  method.getFullName());
+
+          events.add(SimpleConditionEvent.violated(method, message));
+        }
+      }
+    };
+  }
+
+  private static boolean returnsResponseEntity(JavaMethod method) {
+    return method.getRawReturnType().isAssignableTo("org.springframework.http.ResponseEntity");
   }
 }
