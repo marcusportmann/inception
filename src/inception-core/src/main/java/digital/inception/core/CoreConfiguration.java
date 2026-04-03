@@ -19,7 +19,11 @@ package digital.inception.core;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
-/** The {@code CoreConfiguration} class provides the Spring configuration for the Core module. */
+/**
+ * The {@code CoreConfiguration} class provides the Spring configuration for the Core module.
+ *
+ * @author Marcus Portmann
+ */
 @Configuration
 public class CoreConfiguration {
 

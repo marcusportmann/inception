@@ -202,6 +202,8 @@ export class ErrorReportComponent extends AdminContainerView implements OnInit {
   private populateForm(errorReport: ErrorReport): void {
     this.errorReport = errorReport;
 
+    console.log(errorReport);
+
     this.applicationIdControl.setValue(errorReport.applicationId);
     this.applicationVersionControl.setValue(errorReport.applicationVersion);
     this.createdControl.setValue(errorReport.created);

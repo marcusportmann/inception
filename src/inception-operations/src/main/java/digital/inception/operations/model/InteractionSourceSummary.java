@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -148,6 +149,7 @@ public class InteractionSourceSummary implements Serializable {
    * @param name the name of the interaction source
    * @param enabled is the interaction source enabled
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public InteractionSourceSummary(
       UUID id, UUID tenantId, InteractionSourceType type, String name, boolean enabled) {
     this.id = id;

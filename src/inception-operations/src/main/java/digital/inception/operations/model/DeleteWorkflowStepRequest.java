@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -81,6 +82,7 @@ public class DeleteWorkflowStepRequest implements Serializable {
    * @param workflowId the ID for the workflow the workflow step is associated with
    * @param step the code for the workflow step
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public DeleteWorkflowStepRequest(UUID workflowId, String step) {
     this.workflowId = workflowId;
     this.step = step;

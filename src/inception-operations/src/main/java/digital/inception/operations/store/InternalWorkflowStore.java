@@ -264,7 +264,7 @@
 //        throw new WorkflowDocumentNotFoundException(tenantId, workflowDocument.getId());
 //      }
 //
-//      return workflowDocumentRepository.saveAndFlush(workflowDocument);
+//      return workflowDocumentRepository.save(workflowDocument);
 //    } catch (WorkflowDocumentNotFoundException e) {
 //      throw e;
 //    } catch (Throwable e) {

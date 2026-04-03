@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -326,6 +327,7 @@ public class WorkflowDocument implements Serializable {
    * @param requested the date and time the workflow document was requested
    * @param requestedBy the person or system that requested the workflow document
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowDocument(
       UUID tenantId,
       UUID workflowId,
@@ -355,6 +357,7 @@ public class WorkflowDocument implements Serializable {
    * @param requestedBy the person or system that requested the workflow document
    * @param requestedFromPartyId the ID for the party the workflow document was requested from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowDocument(
       UUID tenantId,
       UUID workflowId,

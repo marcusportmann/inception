@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -128,6 +129,7 @@ public class Group implements Serializable {
    *
    * @param name the name of the group
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Group(String name) {
     this.name = name;
   }
@@ -139,6 +141,7 @@ public class Group implements Serializable {
    * @param name the name of the group
    * @param description the description for the group
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Group(UUID userDirectoryId, String name, String description) {
     this.userDirectoryId = userDirectoryId;
     this.name = name;

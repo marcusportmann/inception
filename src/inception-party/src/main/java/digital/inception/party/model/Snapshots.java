@@ -16,6 +16,7 @@
 
 package digital.inception.party.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -169,6 +170,7 @@ public class Snapshots implements Serializable {
    * @param pageIndex the page index
    * @param pageSize the page size
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Snapshots(
       UUID tenantId,
       List<Snapshot> snapshots,

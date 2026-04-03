@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -95,6 +96,7 @@ public class Groups implements Serializable {
    * @param pageIndex the page index
    * @param pageSize the page size
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Groups(
       List<Group> groups, long total, SortDirection sortDirection, int pageIndex, int pageSize) {
     this.groups = groups;

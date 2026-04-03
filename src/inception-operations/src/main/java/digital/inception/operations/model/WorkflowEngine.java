@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -125,6 +126,7 @@ public class WorkflowEngine implements Serializable {
    *     engine
    * @param attributes the attributes for the workflow engine
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowEngine(
       String id, String name, String connectorClassName, List<WorkflowEngineAttribute> attributes) {
     this.id = id;
@@ -141,6 +143,7 @@ public class WorkflowEngine implements Serializable {
    * @param connectorClassName the fully qualified name of the connector class for the workflow
    *     engine
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowEngine(String id, String name, String connectorClassName) {
     this.id = id;
     this.name = name;

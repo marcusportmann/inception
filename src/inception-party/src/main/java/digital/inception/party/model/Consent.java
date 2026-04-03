@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -116,6 +117,7 @@ public class Consent implements Serializable {
    *
    * @param type the code for the consent type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Consent(String type) {
     this.type = type;
   }
@@ -126,6 +128,7 @@ public class Consent implements Serializable {
    * @param type the code for the consent type
    * @param effectiveFrom the date the consent is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Consent(String type, LocalDate effectiveFrom) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
@@ -138,6 +141,7 @@ public class Consent implements Serializable {
    * @param effectiveFrom the date the consent is effective from
    * @param effectiveTo the date the consent is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Consent(String type, LocalDate effectiveFrom, LocalDate effectiveTo) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;

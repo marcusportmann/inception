@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -175,6 +176,7 @@ public class InteractionNote implements Serializable {
    * @param created the date and time the interaction note was created
    * @param createdBy the person or system that created the interaction note
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public InteractionNote(
       UUID tenantId, UUID interactionId, String content, OffsetDateTime created, String createdBy) {
     this.id = UuidCreator.getTimeOrderedEpoch();

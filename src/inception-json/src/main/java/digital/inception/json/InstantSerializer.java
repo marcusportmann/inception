@@ -16,12 +16,11 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import digital.inception.core.util.ISO8601Util;
-import java.io.IOException;
 import java.time.Instant;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
 
 /**
  * The {@code InstantSerializer} class implements the Jackson serializer for the {@code Instant}
@@ -29,15 +28,14 @@ import java.time.Instant;
  *
  * @author Marcus Portmann
  */
-public class InstantSerializer extends JsonSerializer<Instant> {
+public class InstantSerializer extends ValueSerializer<Instant> {
 
   /** Constructs a new {@code InstantSerializer}. */
   public InstantSerializer() {}
 
   @Override
   public void serialize(
-      Instant instant, JsonGenerator jsonGenerator, SerializerProvider serializers)
-      throws IOException {
+      Instant instant, JsonGenerator jsonGenerator, SerializationContext context) {
     jsonGenerator.writeString(ISO8601Util.fromInstant(instant));
   }
 }

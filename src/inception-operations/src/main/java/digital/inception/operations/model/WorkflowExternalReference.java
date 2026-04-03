@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -67,6 +68,7 @@ public class WorkflowExternalReference extends ExternalReference implements Seri
    * @param type the code for the external reference type
    * @param value the value for the external reference
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowExternalReference(String type, String value) {
     super(type, value);
   }

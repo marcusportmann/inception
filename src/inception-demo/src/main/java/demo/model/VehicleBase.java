@@ -80,7 +80,7 @@ public class VehicleBase implements Serializable {
   private VehicleType type;
 
   /** Constructs a new {@code VehicleBase}. */
-  public VehicleBase() {}
+  protected VehicleBase() {}
 
   /**
    * Constructs a new {@code VehicleBase}.
@@ -98,7 +98,7 @@ public class VehicleBase implements Serializable {
    * @param type the vehicle type
    * @param name the name of the vehicle
    */
-  public VehicleBase(VehicleType type, String name) {
+  protected VehicleBase(VehicleType type, String name) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
     this.name = name;

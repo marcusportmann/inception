@@ -106,7 +106,7 @@ public class PartyBase implements Serializable {
    * @param tenantId the ID for the tenant the party is associated with
    * @param name the name of the party
    */
-  public PartyBase(UUID id, UUID tenantId, String name) {
+  protected PartyBase(UUID id, UUID tenantId, String name) {
     this.id = id;
     this.tenantId = tenantId;
     this.name = name;

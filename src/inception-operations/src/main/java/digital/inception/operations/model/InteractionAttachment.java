@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -189,6 +190,7 @@ public class InteractionAttachment implements Serializable {
    * @param hash the hex-encoded SHA-256 hash of the data for the interaction attachment
    * @param data the data for the interaction attachment
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public InteractionAttachment(
       UUID id,
       UUID tenantId,
@@ -223,6 +225,7 @@ public class InteractionAttachment implements Serializable {
    * @param hash the hex-encoded SHA-256 hash of the data for the interaction attachment
    * @param data the data for the interaction attachment
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public InteractionAttachment(
       UUID id,
       UUID tenantId,

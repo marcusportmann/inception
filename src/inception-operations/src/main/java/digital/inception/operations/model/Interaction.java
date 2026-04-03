@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -222,7 +223,8 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
 
   /** The ID for the interaction source the interaction was originally associated with. */
   @Schema(
-      description = "The ID for the interaction source the interaction was originally associated with",
+      description =
+          "The ID for the interaction source the interaction was originally associated with",
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "OriginalSourceId", required = true)
@@ -343,7 +345,8 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
    * @param id the ID for the interaction
    * @param tenantId the ID for the tenant the interaction is associated with
    * @param sourceId the ID for the interaction source the interaction is associated with
-   * @param originalSourceId the ID for the interaction source the interaction was originally associated with
+   * @param originalSourceId the ID for the interaction source the interaction was originally
+   *     associated with
    * @param type the type of interaction
    * @param direction the direction for the interaction, i.e., inbound or outbound
    * @param sender the identifier representing who the interaction is from, e.g. an email address, a
@@ -356,6 +359,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
    * @param priority the priority for the interaction
    * @param status the status of the interaction
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Interaction(
       UUID id,
       UUID tenantId,
@@ -395,7 +399,8 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
    * @param tenantId the ID for the tenant the interaction is associated with
    * @param sourceId the ID for the interaction source the interaction is associated with
    * @param sourceReference the interaction source specific reference for the interaction
-   * @param originalSourceId the ID for the interaction source the interaction was originally associated with
+   * @param originalSourceId the ID for the interaction source the interaction was originally
+   *     associated with
    * @param type the type of interaction
    * @param direction the direction for the interaction, i.e., inbound or outbound
    * @param sender the identifier representing who the interaction is from, e.g. an email address, a
@@ -408,6 +413,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
    * @param priority the priority for the interaction
    * @param status the status of the interaction
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Interaction(
       UUID id,
       UUID tenantId,
@@ -558,6 +564,7 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
 
   /**
    * Returns the ID for the interaction source the interaction was originally associated with.
+   *
    * @return the ID for the interaction source the interaction was originally associated with
    */
   public UUID getOriginalSourceId() {
@@ -805,7 +812,9 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
 
   /**
    * Set the ID for the interaction source the interaction was originally associated with.
-   * @param originalSourceId the ID for the interaction source the interaction was originally associated with
+   *
+   * @param originalSourceId the ID for the interaction source the interaction was originally
+   *     associated with
    */
   public void setOriginalSourceId(UUID originalSourceId) {
     this.originalSourceId = originalSourceId;

@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -235,6 +236,7 @@ public class WorkflowStepDefinition implements Serializable {
    * @param nextSteps the codes for the next workflow steps
    * @param timeToComplete the ISO-8601 duration format amount of time to complete the workflow step
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowStepDefinition(
       int sequence,
       String code,

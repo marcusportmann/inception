@@ -16,6 +16,7 @@
 
 package digital.inception.party.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -118,6 +119,7 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
    * @param type the constraint type
    * @param value the value to apply when validating the preference value
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public RoleTypePreferenceTypeConstraint(
       String roleType, String preferenceType, ConstraintType type, String value) {
     this.roleType = roleType;
@@ -133,6 +135,7 @@ public class RoleTypePreferenceTypeConstraint implements Serializable {
    * @param preferenceType the code for the preference type
    * @param type the constraint type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public RoleTypePreferenceTypeConstraint(
       String roleType, String preferenceType, ConstraintType type) {
     this(roleType, preferenceType, type, null);

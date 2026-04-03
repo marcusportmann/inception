@@ -16,6 +16,7 @@
 
 package digital.inception.reference.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -112,6 +113,7 @@ public class TimeZone implements Serializable {
    * @param description the description for the time zone
    * @param sortOrder the sort order for the time zone
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TimeZone(String id, String localeId, String name, String description, Integer sortOrder) {
     this.id = id;
     this.localeId = localeId;

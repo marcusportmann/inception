@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {CoreModule, ValidatedFormDirective} from 'ngx-inception/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { CoreModule, ValidatedFormDirective } from 'ngx-inception/core';
 import {
   CountriesChipGridComponent, CountryInputComponent, LanguageInputComponent, RegionInputComponent,
   TimeZoneInputComponent
@@ -56,11 +55,7 @@ export class ReferenceComponentsComponent {
 
   timeZoneControl: FormControl = new FormControl('', Validators.required);
 
-  private readonly activatedRoute = inject(ActivatedRoute);
-
   private readonly formBuilder = inject(FormBuilder);
-
-  private readonly router = inject(Router);
 
   constructor() {
     this.referenceForm = this.formBuilder.group({
@@ -75,10 +70,10 @@ export class ReferenceComponentsComponent {
   }
 
   ok(): void {
-    console.log('Countries = ', this.referenceForm.get('countries')!.value);
-    console.log('Country = ', this.referenceForm.get('country')!.value);
-    console.log('Language = ', this.referenceForm.get('language')!.value);
-    console.log('Region = ', this.referenceForm.get('region')!.value);
-    console.log('Time Zone = ', this.referenceForm.get('timeZone')!.value);
+    console.log('Countries = ', this.referenceForm.controls['countries'].value);
+    console.log('Country = ', this.referenceForm.controls['country'].value);
+    console.log('Language = ', this.referenceForm.controls['language'].value);
+    console.log('Region = ', this.referenceForm.controls['region'].value);
+    console.log('Time Zone = ', this.referenceForm.controls['timeZone'].value);
   }
 }

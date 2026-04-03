@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -132,6 +133,7 @@ public class PasswordChange implements Serializable {
    * @param password the password for the user that is used to authorise the operation when
    *     performing a user password change
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public PasswordChange(String newPassword, String password) {
     this.newPassword = newPassword;
     this.password = password;
@@ -148,6 +150,7 @@ public class PasswordChange implements Serializable {
    * @param resetPasswordHistory reset the user's password history when performing the
    *     administrative password change
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public PasswordChange(
       String newPassword, Boolean expirePassword, Boolean lockUser, Boolean resetPasswordHistory) {
     this.newPassword = newPassword;

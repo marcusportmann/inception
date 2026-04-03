@@ -26,7 +26,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
@@ -44,16 +43,14 @@ public class UUIDMessageConverter extends AbstractHttpMessageConverter<UUID> {
   }
 
   @Override
-  @NonNull
-  protected UUID readInternal(
-      @NonNull Class<? extends UUID> clazz, @NonNull HttpInputMessage inputMessage)
+  protected UUID readInternal(Class<? extends UUID> clazz, HttpInputMessage inputMessage)
       throws IOException, HttpMessageNotReadableException {
     return UUID.fromString(
         StreamUtils.copyToString(inputMessage.getBody(), StandardCharsets.UTF_8));
   }
 
   @Override
-  protected boolean supports(@NonNull Class<?> clazz) {
+  protected boolean supports(Class<?> clazz) {
     return UUID.class == clazz;
   }
 

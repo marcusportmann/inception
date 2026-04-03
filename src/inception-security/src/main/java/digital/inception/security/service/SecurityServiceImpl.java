@@ -675,7 +675,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
         throw new DuplicateFunctionException(function.getCode());
       }
 
-      functionRepository.saveAndFlush(function);
+      functionRepository.save(function);
     } catch (DuplicateFunctionException e) {
       throw e;
     } catch (Throwable e) {
@@ -735,7 +735,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
         tenant.linkUserDirectory(userDirectory);
       }
 
-      tenantRepository.saveAndFlush(tenant);
+      tenantRepository.save(tenant);
 
       try {
         reloadUserDirectories();
@@ -790,7 +790,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
         throw new DuplicateUserDirectoryException(userDirectory.getName());
       }
 
-      userDirectoryRepository.saveAndFlush(userDirectory);
+      userDirectoryRepository.save(userDirectory);
 
       try {
         reloadUserDirectories();
@@ -1074,7 +1074,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
                 generateTokenRequest.getClaims(),
                 signedJWT.serialize());
 
-        return tokenRepository.saveAndFlush(token);
+        return tokenRepository.save(token);
       } catch (Throwable e) {
         throw new ServiceUnavailableException(
             "Failed to generate the token ("
@@ -2357,7 +2357,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
           sendPasswordResetEmail(user, resetPasswordUrl, securityCode);
         }
 
-        passwordResetRepository.saveAndFlush(passwordReset);
+        passwordResetRepository.save(passwordReset);
       } else {
         log.warn(
             "Failed to send the password reset communication to the user ("
@@ -2735,7 +2735,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
         throw new FunctionNotFoundException(function.getCode());
       }
 
-      functionRepository.saveAndFlush(function);
+      functionRepository.save(function);
     } catch (FunctionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -2787,7 +2787,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
         existingTenant.setName(tenant.getName());
         existingTenant.setStatus(tenant.getStatus());
 
-        tenantRepository.saveAndFlush(existingTenant);
+        tenantRepository.save(existingTenant);
       } else {
         throw new TenantNotFoundException(tenant.getId());
       }
@@ -2826,7 +2826,7 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
         throw new UserDirectoryNotFoundException(userDirectory.getId());
       }
 
-      userDirectoryRepository.saveAndFlush(userDirectory);
+      userDirectoryRepository.save(userDirectory);
 
       reloadUserDirectories();
     } catch (UserDirectoryNotFoundException e) {

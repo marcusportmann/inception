@@ -32,7 +32,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -61,9 +60,7 @@ public class EnumMessageConverter extends AbstractHttpMessageConverter<Enum<?>> 
   }
 
   @Override
-  @NonNull
-  protected Enum<?> readInternal(
-      @NonNull Class<? extends Enum<?>> clazz, @NonNull HttpInputMessage inputMessage)
+  protected Enum<?> readInternal(Class<? extends Enum<?>> clazz, HttpInputMessage inputMessage)
       throws IOException, HttpMessageNotReadableException {
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(inputMessage.getBody(), StandardCharsets.UTF_8))) {
@@ -103,12 +100,12 @@ public class EnumMessageConverter extends AbstractHttpMessageConverter<Enum<?>> 
   }
 
   @Override
-  protected boolean supports(@NonNull Class<?> clazz) {
+  protected boolean supports(Class<?> clazz) {
     return clazz.isEnum();
   }
 
   @Override
-  protected void writeInternal(@NonNull Enum<?> value, @NonNull HttpOutputMessage outputMessage)
+  protected void writeInternal(Enum<?> value, HttpOutputMessage outputMessage)
       throws IOException, HttpMessageNotWritableException {
     try (OutputStreamWriter writer =
         new OutputStreamWriter(outputMessage.getBody(), StandardCharsets.UTF_8)) {

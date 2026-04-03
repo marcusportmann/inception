@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -136,6 +137,7 @@ public class WorkflowInteractionLink implements Serializable {
    * @param linked the date and time the interaction was linked to the workflow
    * @param linkedBy the person or system who linked the interaction to the workflow
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowInteractionLink(
       UUID workflowId,
       UUID interactionId,
@@ -159,6 +161,7 @@ public class WorkflowInteractionLink implements Serializable {
    * @param linked the date and time the interaction was linked to the workflow
    * @param linkedBy the person or system who linked the interaction to the workflow
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowInteractionLink(
       UUID interactionId, String conversationId, OffsetDateTime linked, String linkedBy) {
     this.interactionId = interactionId;

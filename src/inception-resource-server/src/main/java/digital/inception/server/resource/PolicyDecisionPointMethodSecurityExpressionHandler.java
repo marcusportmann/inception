@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
 import org.aopalliance.intercept.MethodInvocation;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
@@ -27,6 +29,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
@@ -98,19 +101,22 @@ public class PolicyDecisionPointMethodSecurityExpressionHandler
   }
 
   @Override
-  public EvaluationContext createEvaluationContext(
-      Supplier<Authentication> authentication, MethodInvocation methodInvocation) {
-    PolicyDecisionPointSecurityExpressionRoot policyDecisionPointSecurityExpressionRoot =
-        new PolicyDecisionPointSecurityExpressionRoot(
-            policyDecisionPoints, authentication, methodInvocation, isSecurityEnabled, inDebugMode);
-    policyDecisionPointSecurityExpressionRoot.setPermissionEvaluator(getPermissionEvaluator());
-    policyDecisionPointSecurityExpressionRoot.setTrustResolver(
-        new AuthenticationTrustResolverImpl());
-    policyDecisionPointSecurityExpressionRoot.setRoleHierarchy(getRoleHierarchy());
-    policyDecisionPointSecurityExpressionRoot.setDefaultRolePrefix(getDefaultRolePrefix());
+  public @NonNull EvaluationContext createEvaluationContext(
+      @NonNull Supplier<? extends @Nullable Authentication> authentication,
+      @NonNull MethodInvocation methodInvocation) {
+
     StandardEvaluationContext context =
         (StandardEvaluationContext) super.createEvaluationContext(authentication, methodInvocation);
-    context.setRootObject(policyDecisionPointSecurityExpressionRoot);
+
+    var root = new PolicyDecisionPointSecurityExpressionRoot(
+        this.policyDecisionPoints,
+        authentication.get(),
+        methodInvocation,
+        this.isSecurityEnabled,
+        this.inDebugMode
+    );
+
+    context.setRootObject(root);
     return context;
   }
 }

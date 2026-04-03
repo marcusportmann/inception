@@ -61,7 +61,8 @@ public class MultiPagePdfTest {
 
       Paragraph headerParagraph =
           new Paragraph(
-              "Generated at " + ISO8601Util.fromOffsetDateTime(ApplicationClock.offsetNow()), headerFont);
+              "Generated at " + ISO8601Util.fromOffsetDateTime(ApplicationClock.offsetNow()),
+              headerFont);
       headerParagraph.setSpacingAfter(16);
 
       document.add(headerParagraph);

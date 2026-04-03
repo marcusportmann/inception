@@ -20,7 +20,6 @@ import java.util.Map;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
-import org.springframework.lang.NonNull;
 
 /**
  * {@link Condition} implementation backing {@link ConditionalOnFeatureEnabled}.
@@ -87,7 +86,7 @@ public class FeatureEnabledCondition implements Condition {
    *     {@code false} otherwise
    */
   @Override
-  public boolean matches(@NonNull ConditionContext context, AnnotatedTypeMetadata metadata) {
+  public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
     Map<String, Object> attrs =
         metadata.getAnnotationAttributes(ConditionalOnFeatureEnabled.class.getName());
     if (attrs == null) return true;

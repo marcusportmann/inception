@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -113,6 +114,7 @@ public class Tenant implements Serializable {
    * @param name the name of the tenant
    * @param status the status for the tenant
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Tenant(String name, TenantStatus status) {
     this.name = name;
     this.status = status;
@@ -125,6 +127,7 @@ public class Tenant implements Serializable {
    * @param name the name of the tenant
    * @param status the status for the tenant
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Tenant(UUID id, String name, TenantStatus status) {
     this.id = id;
     this.name = name;

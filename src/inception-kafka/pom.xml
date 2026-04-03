@@ -26,11 +26,7 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-autoconfigure</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.kafka</groupId>
-      <artifactId>spring-kafka</artifactId>
+      <artifactId>spring-boot-starter-kafka</artifactId>
     </dependency>
 
     <!-- Test Dependencies -->

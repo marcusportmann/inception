@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -116,6 +117,7 @@ public class ExternalReferenceType implements Serializable {
    * @param name the name of the external reference type
    * @param description the description for the external reference type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ExternalReferenceType(String code, String name, String description) {
     this.code = code;
     this.name = name;
@@ -131,6 +133,7 @@ public class ExternalReferenceType implements Serializable {
    * @param objectType the type of object the external reference type is specific to
    * @param tenantId the ID for the tenant the external reference type is specific to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ExternalReferenceType(
       String code, String name, String description, ObjectType objectType, UUID tenantId) {
     this.code = code;
@@ -148,6 +151,7 @@ public class ExternalReferenceType implements Serializable {
    * @param description the description for the external reference type
    * @param objectType the type of object the external reference type is specific to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ExternalReferenceType(
       String code, String name, String description, ObjectType objectType) {
     this.code = code;

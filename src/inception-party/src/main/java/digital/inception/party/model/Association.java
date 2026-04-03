@@ -16,6 +16,7 @@
 
 package digital.inception.party.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -191,6 +192,7 @@ public class Association implements Serializable {
    * @param firstPartyId the ID for the first party in the association
    * @param secondPartyId the ID for the second party in the association
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Association(UUID tenantId, String type, UUID firstPartyId, UUID secondPartyId) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
@@ -208,6 +210,7 @@ public class Association implements Serializable {
    * @param secondPartyId the ID for the second party in the association
    * @param effectiveFrom the date that the association is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Association(
       UUID tenantId, String type, UUID firstPartyId, UUID secondPartyId, LocalDate effectiveFrom) {
     this.id = UuidCreator.getTimeOrderedEpoch();
@@ -228,6 +231,7 @@ public class Association implements Serializable {
    * @param effectiveFrom the date that the association is effective from
    * @param effectiveTo the date that the association is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Association(
       UUID tenantId,
       String type,

@@ -120,7 +120,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
         throw new DuplicateMailTemplateException(mailTemplate.getId());
       }
 
-      return mailTemplateRepository.saveAndFlush(mailTemplate);
+      return mailTemplateRepository.save(mailTemplate);
     } catch (DuplicateMailTemplateException e) {
       throw e;
     } catch (Throwable e) {
@@ -405,7 +405,7 @@ public class MailServiceImpl extends AbstractServiceBase implements MailService 
         throw new MailTemplateNotFoundException(mailTemplate.getId());
       }
 
-      mailTemplateRepository.saveAndFlush(mailTemplate);
+      mailTemplateRepository.save(mailTemplate);
 
       /*
        * Clear the FreeMarker template cache. This could be optimized in future but given that

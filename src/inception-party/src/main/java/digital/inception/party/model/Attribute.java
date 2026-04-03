@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -251,6 +252,7 @@ public class Attribute implements Serializable {
    *
    * @param type the attribute type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Attribute(String type) {
     this.type = type;
   }
@@ -261,6 +263,7 @@ public class Attribute implements Serializable {
    * @param type the attribute type
    * @param stringValue the string value for the attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Attribute(String type, String stringValue) {
     this.type = type;
     this.stringValue = stringValue;
@@ -272,6 +275,7 @@ public class Attribute implements Serializable {
    * @param type the attribute type
    * @param booleanValue the boolean value for the attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Attribute(String type, boolean booleanValue) {
     this.type = type;
     this.booleanValue = booleanValue;
@@ -283,6 +287,7 @@ public class Attribute implements Serializable {
    * @param type the attribute type
    * @param doubleValue the double value for the attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Attribute(String type, double doubleValue) {
     this.type = type;
     this.doubleValue = doubleValue;
@@ -294,6 +299,7 @@ public class Attribute implements Serializable {
    * @param type the attribute type
    * @param dateValue the date value for the attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Attribute(String type, LocalDate dateValue) {
     this.type = type;
     this.dateValue = dateValue;
@@ -305,6 +311,7 @@ public class Attribute implements Serializable {
    * @param type the attribute type
    * @param decimalValue the decimal value for the attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Attribute(String type, BigDecimal decimalValue) {
     this.type = type;
     this.decimalValue = decimalValue;
@@ -317,6 +324,7 @@ public class Attribute implements Serializable {
    * @param decimalValue the decimal value for the attribute
    * @param unit the measurement unit for the attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Attribute(String type, BigDecimal decimalValue, MeasurementUnit unit) {
     this.type = type;
     this.decimalValue = decimalValue;
@@ -329,6 +337,7 @@ public class Attribute implements Serializable {
    * @param type the attribute type
    * @param integerValue the integer value for the attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Attribute(String type, Integer integerValue) {
     this.type = type;
     this.integerValue = integerValue;
@@ -341,6 +350,7 @@ public class Attribute implements Serializable {
    * @param integerValue the integer value for the attribute
    * @param unit the measurement unit for the attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Attribute(String type, Integer integerValue, MeasurementUnit unit) {
     this.type = type;
     this.integerValue = integerValue;
@@ -354,6 +364,7 @@ public class Attribute implements Serializable {
    * @param doubleValue the double value for the attribute
    * @param unit the measurement unit for the attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Attribute(String type, double doubleValue, MeasurementUnit unit) {
     this.type = type;
     this.doubleValue = doubleValue;

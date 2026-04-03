@@ -445,7 +445,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
 
       group.setId(UuidCreator.getTimeOrderedEpoch());
 
-      getGroupRepository().saveAndFlush(group);
+      getGroupRepository().save(group);
     } catch (DuplicateGroupException e) {
       throw e;
     } catch (Throwable e) {
@@ -496,7 +496,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
         user.setPasswordExpiry(passwordExpiry.toOffsetDateTime());
       }
 
-      getUserRepository().saveAndFlush(user);
+      getUserRepository().save(user);
 
       getUserRepository()
           .savePasswordInPasswordHistory(
@@ -1325,7 +1325,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
 
       existingGroup.setDescription(group.getDescription());
 
-      getGroupRepository().saveAndFlush(existingGroup);
+      getGroupRepository().save(existingGroup);
     } catch (GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1390,7 +1390,7 @@ public class InternalUserDirectoryProvider extends UserDirectoryProviderBase {
         existingUser.setPasswordExpiry(user.getPasswordExpiry());
       }
 
-      getUserRepository().saveAndFlush(existingUser);
+      getUserRepository().save(existingUser);
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {

@@ -16,7 +16,6 @@
 
 package digital.inception.jpa;
 
-import io.agroal.api.AgroalDataSource;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.lang.reflect.Array;
@@ -34,18 +33,17 @@ import java.util.stream.Stream;
 import javax.sql.DataSource;
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.FatalBeanException;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.hibernate5.SpringBeanContainer;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
  * The {@code JpaUtil} class provides JPA-related utility methods.
@@ -72,6 +70,7 @@ public final class JpaUtil {
       String persistenceUnitName,
       DataSource dataSource,
       String... packagesToScan) {
+
     try {
       PlatformTransactionManager platformTransactionManager =
           applicationContext.getBean(PlatformTransactionManager.class);
@@ -81,59 +80,48 @@ public final class JpaUtil {
 
       entityManagerFactoryBean.setPersistenceUnitName(persistenceUnitName);
 
-      // Use JTA or local datasource based on the active PlatformTransactionManager
       if (platformTransactionManager instanceof JtaTransactionManager) {
         entityManagerFactoryBean.setJtaDataSource(dataSource);
       } else {
         entityManagerFactoryBean.setDataSource(dataSource);
       }
 
-      // Merge the provided packages with the additional package.
-      // NOTE: The package below is required to enable the AttributeConverters for the common
-      //       enumerations under the digital.inception.core sub-packages.
       String[] additionalPackagesToScan = {"digital.inception.jpa"};
       String[] mergedPackagesToScan =
-          Stream.concat(Arrays.stream(packagesToScan), Stream.of(additionalPackagesToScan))
+          Stream.concat(Arrays.stream(packagesToScan), Arrays.stream(additionalPackagesToScan))
               .toArray(String[]::new);
 
       entityManagerFactoryBean.setPackagesToScan(mergedPackagesToScan);
 
-      // TODO: Detect the JPA vendor and create the correct adapter -- MARCUS
       HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
       jpaVendorAdapter.setGenerateDdl(false);
-
       jpaVendorAdapter.setShowSql(
           applicationContext
               .getEnvironment()
               .getProperty("inception.debug.jpa-show-sql", Boolean.class, false));
 
+      if (applicationContext instanceof ConfigurableApplicationContext configurableContext) {
+        jpaVendorAdapter.setBeanFactory(configurableContext.getBeanFactory());
+      } else {
+        throw new FatalBeanException(
+            "ApplicationContext must be a ConfigurableApplicationContext. Actual type: "
+                + applicationContext.getClass().getName());
+      }
+
       try (Connection connection = dataSource.getConnection()) {
         DatabaseMetaData metaData = connection.getMetaData();
 
         switch (metaData.getDatabaseProductName()) {
-          case "H2":
-            break;
-
-          case "Microsoft SQL Server":
+          case "Microsoft SQL Server" -> {
             jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
-            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
-
-            break;
-
-          case "Oracle":
+            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServerDialect");
+          }
+          case "Oracle" -> {
             jpaVendorAdapter.setDatabase(Database.ORACLE);
-            // NOTE: DO NOT REMOVE THE LINE BELOW!
-            //       IT WILL RESULT IN DATA NOT BEING RETRIEVED CORRECTLY FROM ORACLE IN JPA QUERIES
             jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.OracleDialect");
-            break;
-
-          case "PostgreSQL":
-            jpaVendorAdapter.setDatabase(Database.POSTGRESQL);
-            break;
-
-          default:
-            jpaVendorAdapter.setDatabase(Database.DEFAULT);
-            break;
+          }
+          case "PostgreSQL" -> jpaVendorAdapter.setDatabase(Database.POSTGRESQL);
+          default -> jpaVendorAdapter.setDatabase(Database.DEFAULT);
         }
       }
 
@@ -141,26 +129,18 @@ public final class JpaUtil {
 
       Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
 
-      if (applicationContext instanceof ConfigurableApplicationContext configurableContext) {
-        ConfigurableListableBeanFactory beanFactory = configurableContext.getBeanFactory();
-        jpaPropertyMap.put(AvailableSettings.BEAN_CONTAINER, new SpringBeanContainer(beanFactory));
-      } else {
-        throw new FatalBeanException(
-            "ApplicationContext must be a ConfigurableApplicationContext to configure Hibernate SpringBeanContainer. "
-                + "Actual type: "
-                + applicationContext.getClass().getName());
-      }
-
-      if (dataSource.isWrapperFor(AgroalDataSource.class)) {
-        AgroalDataSource agroalDataSource = dataSource.unwrap(AgroalDataSource.class);
-
-        jpaPropertyMap.put(
-            AvailableSettings.CONNECTION_PROVIDER, new AgroalConnectionProvider(agroalDataSource));
-      }
-
       if (platformTransactionManager instanceof JtaTransactionManager) {
         jpaPropertyMap.put(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY, "jta");
         jpaPropertyMap.put(AvailableSettings.JTA_PLATFORM, "JBossTS");
+      }
+
+      try {
+        LocalValidatorFactoryBean validatorFactoryBean =
+            applicationContext.getBean(LocalValidatorFactoryBean.class);
+
+        jpaPropertyMap.put("jakarta.persistence.validation.factory", validatorFactoryBean);
+      } catch (Throwable ignored) {
+        // No Spring validator configured: let Hibernate fall back to the default bootstrap
       }
 
       return entityManagerFactoryBean;

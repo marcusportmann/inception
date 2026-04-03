@@ -16,12 +16,12 @@
 
 package digital.inception.executor.model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.executor.exception.TaskExecutionDelayedException;
 import digital.inception.executor.exception.TaskExecutionFailedException;
 import digital.inception.executor.exception.TaskExecutionRetryableException;
 import java.util.List;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code MultistepTaskExecutor} class provides a templatized abstract base class that executors
@@ -137,7 +137,7 @@ public abstract class MultistepTaskExecutor<TaskDataType> implements TaskExecuto
   }
 
   private TaskDataType deserializeTaskData(String json, Class<TaskDataType> taskDataTypeClass)
-      throws JsonProcessingException {
+      throws JacksonException {
     return objectMapper.readValue(json, taskDataTypeClass);
   }
 
@@ -151,7 +151,7 @@ public abstract class MultistepTaskExecutor<TaskDataType> implements TaskExecuto
     return null;
   }
 
-  private String serializeTaskData(TaskDataType taskData) throws JsonProcessingException {
+  private String serializeTaskData(TaskDataType taskData) throws JacksonException {
     return objectMapper.writeValueAsString(taskData);
   }
 }

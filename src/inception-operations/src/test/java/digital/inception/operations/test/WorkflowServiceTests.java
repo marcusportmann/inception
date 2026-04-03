@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.file.FileType;
 import digital.inception.core.sorting.SortDirection;
@@ -126,6 +125,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code WorkflowServiceTests} class contains the JUnit tests for The {@code WorkflowService}

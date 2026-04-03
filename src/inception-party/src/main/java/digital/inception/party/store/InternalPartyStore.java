@@ -16,7 +16,6 @@
 
 package digital.inception.party.store;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -68,6 +67,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code InternalPartyStore} class provides the internal party store implementation.
@@ -147,9 +147,9 @@ public class InternalPartyStore implements PartyStore {
       // Serialize the association object as JSON
       String associationJson = objectMapper.writeValueAsString(association);
 
-      associationRepository.saveAndFlush(association);
+      associationRepository.save(association);
 
-      snapshotRepository.saveAndFlush(
+      snapshotRepository.save(
           new Snapshot(tenantId, EntityType.ASSOCIATION, association.getId(), associationJson));
 
       return association;
@@ -183,9 +183,9 @@ public class InternalPartyStore implements PartyStore {
       // Serialize the mandate object as JSON
       String mandateJson = objectMapper.writeValueAsString(mandate);
 
-      mandateRepository.saveAndFlush(mandate);
+      mandateRepository.save(mandate);
 
-      snapshotRepository.saveAndFlush(
+      snapshotRepository.save(
           new Snapshot(tenantId, EntityType.MANDATE, mandate.getId(), mandateJson));
 
       return mandate;
@@ -213,9 +213,9 @@ public class InternalPartyStore implements PartyStore {
       // Serialize the organization object as JSON
       String organizationJson = objectMapper.writeValueAsString(organization);
 
-      organizationRepository.saveAndFlush(organization);
+      organizationRepository.save(organization);
 
-      snapshotRepository.saveAndFlush(
+      snapshotRepository.save(
           new Snapshot(tenantId, EntityType.ORGANIZATION, organization.getId(), organizationJson));
 
       return organization;
@@ -243,9 +243,9 @@ public class InternalPartyStore implements PartyStore {
       // Serialize the person object as JSON
       String personJson = objectMapper.writeValueAsString(person);
 
-      personRepository.saveAndFlush(person);
+      personRepository.save(person);
 
-      snapshotRepository.saveAndFlush(
+      snapshotRepository.save(
           new Snapshot(tenantId, EntityType.PERSON, person.getId(), personJson));
 
       return person;
@@ -840,9 +840,9 @@ public class InternalPartyStore implements PartyStore {
       // Serialize the association object as JSON
       String associationJson = objectMapper.writeValueAsString(association);
 
-      associationRepository.saveAndFlush(association);
+      associationRepository.save(association);
 
-      snapshotRepository.saveAndFlush(
+      snapshotRepository.save(
           new Snapshot(tenantId, EntityType.ASSOCIATION, association.getId(), associationJson));
 
       return association;
@@ -876,9 +876,9 @@ public class InternalPartyStore implements PartyStore {
       // Serialize the mandate object as JSON
       String mandateJson = objectMapper.writeValueAsString(mandate);
 
-      mandateRepository.saveAndFlush(mandate);
+      mandateRepository.save(mandate);
 
-      snapshotRepository.saveAndFlush(
+      snapshotRepository.save(
           new Snapshot(tenantId, EntityType.MANDATE, mandate.getId(), mandateJson));
 
       return mandate;
@@ -906,9 +906,9 @@ public class InternalPartyStore implements PartyStore {
       // Serialize the organization object as JSON
       String organizationJson = objectMapper.writeValueAsString(organization);
 
-      organizationRepository.saveAndFlush(organization);
+      organizationRepository.save(organization);
 
-      snapshotRepository.saveAndFlush(
+      snapshotRepository.save(
           new Snapshot(tenantId, EntityType.ORGANIZATION, organization.getId(), organizationJson));
 
       return organization;
@@ -936,9 +936,9 @@ public class InternalPartyStore implements PartyStore {
       // Serialize the person object as JSON
       String personJson = objectMapper.writeValueAsString(person);
 
-      personRepository.saveAndFlush(person);
+      personRepository.save(person);
 
-      snapshotRepository.saveAndFlush(
+      snapshotRepository.save(
           new Snapshot(tenantId, EntityType.PERSON, person.getId(), personJson));
 
       return person;

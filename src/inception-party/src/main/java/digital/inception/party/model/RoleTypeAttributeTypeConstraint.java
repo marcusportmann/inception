@@ -16,6 +16,7 @@
 
 package digital.inception.party.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -130,6 +131,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
    * @param type the constraint type
    * @param value the value to apply when validating the attribute value
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public RoleTypeAttributeTypeConstraint(
       String roleType, String attributeType, ConstraintType type, String value) {
     this(roleType, attributeType, "", type, value);
@@ -144,6 +146,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
    * @param type the constraint type
    * @param value the value to apply when validating the attribute value
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public RoleTypeAttributeTypeConstraint(
       String roleType,
       String attributeType,
@@ -165,6 +168,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
    * @param attributeTypeQualifier the qualifier for the attribute type
    * @param type the constraint type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public RoleTypeAttributeTypeConstraint(
       String roleType, String attributeType, String attributeTypeQualifier, ConstraintType type) {
     this(roleType, attributeType, attributeTypeQualifier, type, null);
@@ -177,6 +181,7 @@ public class RoleTypeAttributeTypeConstraint implements Serializable {
    * @param attributeType the code for the attribute type
    * @param type the constraint type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public RoleTypeAttributeTypeConstraint(
       String roleType, String attributeType, ConstraintType type) {
     this(roleType, attributeType, "", type, null);

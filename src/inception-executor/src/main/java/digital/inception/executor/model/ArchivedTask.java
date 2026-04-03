@@ -16,11 +16,11 @@
 
 package digital.inception.executor.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.executor.constraint.ValidTask;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -81,7 +81,6 @@ import java.util.UUID;
       "failure"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidTask
 @Entity
 @Table(name = "executor_archived_tasks")
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -207,6 +206,7 @@ public class ArchivedTask implements Serializable {
    * @param externalReference the external reference for the task
    * @param data the task data
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ArchivedTask(
       UUID id,
       String batchId,

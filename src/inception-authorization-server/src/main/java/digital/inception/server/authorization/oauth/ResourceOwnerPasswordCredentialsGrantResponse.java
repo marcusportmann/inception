@@ -16,11 +16,11 @@
 
 package digital.inception.server.authorization.oauth;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import java.io.StringWriter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import digital.inception.json.JsonUtil;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 
 /**
  * The {@code ResourceOwnerPasswordCredentialsGrantResponse} class holds the information for a
@@ -31,16 +31,24 @@ import org.springframework.util.StringUtils;
 public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
 
   /** The access token. */
+  @JsonProperty("access_token")
   private final String accessToken;
 
   /** The lifetime in seconds of the access token. */
+  @JsonProperty("expires_in")
   private final long expiresIn;
 
   /** The refresh token. */
+  @JsonProperty("refresh_token")
   private final String refreshToken;
 
   /** The access token scope. */
+  @JsonProperty("scope")
   private final String scope;
+
+  /** The token type. */
+  @JsonProperty("token_type")
+  private final String tokenType = "bearer";
 
   /**
    * Constructs a new {@code ResourceOwnerPasswordCredentialsGrantResponse}.
@@ -50,6 +58,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
    * @param scope the access token scope
    * @param refreshToken the refresh token
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ResourceOwnerPasswordCredentialsGrantResponse(
       String accessToken, int expiresIn, String scope, String refreshToken) {
     super(HttpStatus.OK);
@@ -67,6 +76,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
    * @param expiresIn the access token validity in seconds
    * @param refreshToken the refresh token
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ResourceOwnerPasswordCredentialsGrantResponse(
       String accessToken, long expiresIn, String refreshToken) {
     super(HttpStatus.OK);
@@ -83,6 +93,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
    * @param accessToken the access token
    * @param expiresIn the lifetime in seconds of the access token
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ResourceOwnerPasswordCredentialsGrantResponse(String accessToken, long expiresIn) {
     super(HttpStatus.OK);
 
@@ -93,40 +104,64 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
   }
 
   /**
+   * Returns the access token.
+   *
+   * @return the access token
+   */
+  public String getAccessToken() {
+    return accessToken;
+  }
+
+  /**
    * Returns the body for the OAuth2 response.
    *
    * @return the body for the OAuth2 response
    */
   @Override
+  @JsonIgnore
   public String getBody() {
     try {
-      JsonFactory jsonFactory = new JsonFactory();
-
-      StringWriter stringWriter = new StringWriter();
-
-      JsonGenerator jsonGenerator = jsonFactory.createGenerator(stringWriter);
-
-      jsonGenerator.writeStartObject();
-      jsonGenerator.writeStringField("access_token", accessToken);
-      jsonGenerator.writeStringField("token_type", "bearer");
-      jsonGenerator.writeNumberField("expires_in", expiresIn);
-
-      if (StringUtils.hasText(refreshToken)) {
-        jsonGenerator.writeStringField("refresh_token", refreshToken);
-      }
-
-      if (StringUtils.hasText(scope)) {
-        jsonGenerator.writeStringField("scope", scope);
-      }
-
-      jsonGenerator.writeEndObject();
-      jsonGenerator.close();
-
-      return stringWriter.getBuffer().toString();
+      return JsonUtil.getObjectMapper().writeValueAsString(this);
     } catch (Throwable e) {
       throw new RuntimeException(
           "Failed to construct the body for the Resource Owner Password Credentials Grant response",
           e);
     }
+  }
+
+  /**
+   * Returns the lifetime in seconds of the access token.
+   *
+   * @return the lifetime in seconds of the access token
+   */
+  public long getExpiresIn() {
+    return expiresIn;
+  }
+
+  /**
+   * Returns the refresh token.
+   *
+   * @return the refresh token
+   */
+  public String getRefreshToken() {
+    return refreshToken;
+  }
+
+  /**
+   * Returns the access token scope.
+   *
+   * @return the access token scope
+   */
+  public String getScope() {
+    return scope;
+  }
+
+  /**
+   * Returns the token type.
+   *
+   * @return the token type
+   */
+  public String getTokenType() {
+    return tokenType;
   }
 }

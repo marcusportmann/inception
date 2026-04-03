@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -115,6 +116,7 @@ public class RequestWorkflowDocumentRequest implements Serializable {
    * @param documentDefinitionId the ID for the document definition the workflow document will be
    *     associated with
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public RequestWorkflowDocumentRequest(UUID workflowId, String documentDefinitionId) {
     this.workflowId = workflowId;
     this.documentDefinitionId = documentDefinitionId;
@@ -128,6 +130,7 @@ public class RequestWorkflowDocumentRequest implements Serializable {
    *     associated with
    * @param description the description for the workflow document
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public RequestWorkflowDocumentRequest(
       UUID workflowId, String documentDefinitionId, String description) {
     this.workflowId = workflowId;
@@ -143,6 +146,7 @@ public class RequestWorkflowDocumentRequest implements Serializable {
    *     associated with
    * @param requestedFromPartyId the ID for the party the workflow document was requested from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public RequestWorkflowDocumentRequest(
       UUID workflowId, String documentDefinitionId, UUID requestedFromPartyId) {
     this.workflowId = workflowId;

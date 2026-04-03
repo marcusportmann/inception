@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -192,6 +193,7 @@ public class DocumentTemplateSummary implements Serializable {
    * @param updated the date and time the document template was last updated
    * @param updatedBy the person or system that last updated the document template
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public DocumentTemplateSummary(
       String id,
       String categoryId,

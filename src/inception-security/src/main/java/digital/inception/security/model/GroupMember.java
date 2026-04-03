@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -94,6 +95,7 @@ public class GroupMember implements Serializable {
    * @param memberType the group member type
    * @param memberName the name of the group member
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public GroupMember(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName) {
     this.userDirectoryId = userDirectoryId;

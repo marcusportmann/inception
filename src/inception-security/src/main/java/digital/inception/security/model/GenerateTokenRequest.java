@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -117,6 +118,7 @@ public class GenerateTokenRequest implements Serializable {
    * @param expiryDate the date the token expires
    * @param claims the claims for the token
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public GenerateTokenRequest(
       TokenType type,
       String name,
@@ -141,6 +143,7 @@ public class GenerateTokenRequest implements Serializable {
    * @param validFromDate the date the token is valid from
    * @param claims the claims for the token
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public GenerateTokenRequest(
       TokenType type,
       String name,
@@ -162,6 +165,7 @@ public class GenerateTokenRequest implements Serializable {
    * @param description the description for the token
    * @param claims the claims for the token
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public GenerateTokenRequest(
       TokenType type, String name, String description, List<TokenClaim> claims) {
     this.type = type;

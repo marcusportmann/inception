@@ -16,11 +16,10 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import digital.inception.core.model.CodeEnum;
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
 
 /**
  * The {@code CodeEnumSerializer} class implements the Jackson serializer for any Enum that
@@ -28,15 +27,14 @@ import java.io.IOException;
  *
  * @author Marcus Portmann
  */
-public class CodeEnumSerializer extends JsonSerializer<CodeEnum> {
+public class CodeEnumSerializer extends ValueSerializer<CodeEnum> {
 
   /** Constructs a new {@code CodeEnumSerializer}. */
   public CodeEnumSerializer() {}
 
   @Override
   public void serialize(
-      CodeEnum codeEnum, JsonGenerator jsonGenerator, SerializerProvider serializers)
-      throws IOException {
+      CodeEnum codeEnum, JsonGenerator jsonGenerator, SerializationContext context) {
     jsonGenerator.writeString(codeEnum.code());
   }
 }

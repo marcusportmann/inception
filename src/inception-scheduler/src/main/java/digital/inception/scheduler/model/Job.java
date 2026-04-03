@@ -16,6 +16,7 @@
 
 package digital.inception.scheduler.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -216,6 +217,7 @@ public class Job implements Serializable {
    * @param lastExecuted the date and time the job was last executed
    * @param nextExecution the date and time when the job will next be executed
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Job(
       String id,
       String name,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {inject} from '@angular/core';
+import { ChangeDetectorRef, inject} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {AdminContainerView} from 'ngx-inception/core';
 import {first} from 'rxjs/operators';
@@ -55,6 +55,8 @@ export abstract class JobComponent extends AdminContainerView {
     JobStatus.OnceOff
   ];
 
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   private readonly matDialog = inject(MatDialog);
 
   protected constructor() {
@@ -85,18 +87,20 @@ export abstract class JobComponent extends AdminContainerView {
     );
 
     dialogRef
-    .afterClosed()
-    .pipe(first())
-    .subscribe((jobParameter: JobParameter | undefined) => {
-      if (jobParameter) {
-        for (const aJobParameter of this.jobParameters) {
-          if (aJobParameter.name === jobParameter.name) {
-            aJobParameter.value = jobParameter.value;
-            return;
+      .afterClosed()
+      .pipe(first())
+      .subscribe((jobParameter: JobParameter | undefined) => {
+        if (jobParameter) {
+          for (const aJobParameter of this.jobParameters) {
+            if (aJobParameter.name === jobParameter.name) {
+              aJobParameter.value = jobParameter.value;
+              return;
+            }
           }
+
+          this.changeDetectorRef.markForCheck();
         }
-      }
-    });
+      });
   }
 
   newJobParameter(): void {
@@ -115,30 +119,32 @@ export abstract class JobComponent extends AdminContainerView {
     );
 
     dialogRef
-    .afterClosed()
-    .pipe(first())
-    .subscribe((jobParameter: JobParameter | undefined) => {
-      if (jobParameter) {
-        for (const aJobParameter of this.jobParameters) {
-          if (aJobParameter.name === jobParameter.name) {
-            this.dialogService.showErrorDialog(new Error('The job parameter already exists.'));
+      .afterClosed()
+      .pipe(first())
+      .subscribe((jobParameter: JobParameter | undefined) => {
+        if (jobParameter) {
+          for (const aJobParameter of this.jobParameters) {
+            if (aJobParameter.name === jobParameter.name) {
+              this.dialogService.showErrorDialog(new Error('The job parameter already exists.'));
 
-            return;
+              return;
+            }
           }
+
+          this.jobParameters.push(jobParameter);
+
+          this.jobParameters.sort((a: JobParameter, b: JobParameter) => {
+            if ((a.name ? a.name.toLowerCase() : '') < (b.name ? b.name.toLowerCase() : '')) {
+              return -1;
+            }
+            if ((a.name ? a.name.toLowerCase() : '') > (b.name ? b.name.toLowerCase() : '')) {
+              return 1;
+            }
+            return 0;
+          });
+
+          this.changeDetectorRef.markForCheck();
         }
-
-        this.jobParameters.push(jobParameter);
-
-        this.jobParameters.sort((a: JobParameter, b: JobParameter) => {
-          if ((a.name ? a.name.toLowerCase() : '') < (b.name ? b.name.toLowerCase() : '')) {
-            return -1;
-          }
-          if ((a.name ? a.name.toLowerCase() : '') > (b.name ? b.name.toLowerCase() : '')) {
-            return 1;
-          }
-          return 0;
-        });
-      }
-    });
+      });
   }
 }

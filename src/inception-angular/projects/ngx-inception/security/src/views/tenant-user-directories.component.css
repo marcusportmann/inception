@@ -19,6 +19,20 @@
   flex: 1;
 }
 
+.add-user-directory-to-tenant-container > input
+{
+  flex: 1;
+  border: 0;
+  font-size: 14px;
+}
+
+.add-user-directory-to-tenant-container > input:focus
+{
+  outline: none;
+  box-shadow: none;
+}
+
+
 .add-user-directory-to-tenant-container > button
 {
   margin-left: 8px;

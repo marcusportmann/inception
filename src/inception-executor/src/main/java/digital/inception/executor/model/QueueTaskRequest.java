@@ -16,6 +16,7 @@
 
 package digital.inception.executor.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -107,6 +108,7 @@ public class QueueTaskRequest implements Serializable {
    * @param type the code for the task type
    * @param data the task data
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public QueueTaskRequest(String type, String data) {
     this.type = type;
     this.data = data;
@@ -121,6 +123,7 @@ public class QueueTaskRequest implements Serializable {
    * @param data the task data
    * @param suspended the flag indicating that the task must be suspended
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public QueueTaskRequest(
       String type, String batchId, String externalReference, String data, boolean suspended) {
     this.batchId = batchId;

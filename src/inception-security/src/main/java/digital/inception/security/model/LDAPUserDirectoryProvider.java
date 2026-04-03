@@ -475,7 +475,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
 
         group.setId(groupId);
 
-        getGroupRepository().saveAndFlush(group);
+        getGroupRepository().save(group);
       }
 
       if (getGroupRepository().roleToGroupMappingExists(groupId, roleCode) > 0) {
@@ -831,7 +831,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
        */
       group.setId(UuidCreator.getTimeOrderedEpoch());
 
-      getGroupRepository().saveAndFlush(group);
+      getGroupRepository().save(group);
     } catch (DuplicateGroupException e) {
       throw e;
     } catch (Throwable e) {
@@ -2326,7 +2326,7 @@ public class LDAPUserDirectoryProvider extends UserDirectoryProviderBase {
         group.setId(groupIdOptional.get());
       }
 
-      getGroupRepository().saveAndFlush(group);
+      getGroupRepository().save(group);
     } catch (GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {

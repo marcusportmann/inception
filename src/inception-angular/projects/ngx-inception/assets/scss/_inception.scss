@@ -554,13 +554,14 @@ $xxx: "xxx" !default;
   --font-family-sans-serif: #{meta.inspect($font-family-sans-serif)};
   --font-family-monospace: #{meta.inspect($font-family-monospace)};
 
-  // Override Angular Material defaults
-  --mat-form-field-filled-with-label-container-padding-bottom: 4px;
-  --mat-form-field-filled-with-label-container-padding-top: 28px;
-
   // NOTE: This must be the same as the normal font size on root:
   //--mat-select-trigger-text-line-height: 15px;
   //--mat-select-trigger-text-size: 15px;
+
+  @include mat.form-field-overrides((
+    filled-with-label-container-padding-bottom: 4px,
+    filled-with-label-container-padding-top: 28px
+  ));
 
 
 
@@ -1006,6 +1007,18 @@ template {
     $gutter: $grid-gutter-width,
     $breakpoints: $media-breakpoints
   );
+
+  .row {
+    .col {
+      .mat-subtitle-1 {
+        display: flex;
+      }
+
+      .mat-subtitle-2 {
+        display: flex;
+      }
+    }
+  }
 }
 
 //        _                        _                           _
@@ -3111,7 +3124,7 @@ textarea.mat-mdc-input-element {
 
     > .sidebar-nav-dropdown {
       > .nav-dropdown-items {
-        max-height: 1500px;
+        max-height: 1500px !important;
       }
 
       .nav-link {

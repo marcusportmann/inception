@@ -16,6 +16,7 @@
 
 package digital.inception.executor.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -84,6 +85,7 @@ public class TaskExecutionResult implements Serializable {
    *
    * @param nextTaskStep the next task step for a multistep task
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskExecutionResult(TaskStep nextTaskStep) {
     this.nextTaskStep = nextTaskStep;
   }
@@ -94,6 +96,7 @@ public class TaskExecutionResult implements Serializable {
    * @param nextTaskStep the next task step for a multistep task
    * @param updatedTaskData the updated task data
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskExecutionResult(TaskStep nextTaskStep, String updatedTaskData) {
     this.nextTaskStep = nextTaskStep;
     this.updatedTaskData = updatedTaskData;
@@ -107,6 +110,7 @@ public class TaskExecutionResult implements Serializable {
    *     task is executed
    * @param updatedTaskData the updated task data
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskExecutionResult(
       TaskStep nextTaskStep, long nextTaskStepDelay, String updatedTaskData) {
     this.nextTaskStep = nextTaskStep;
@@ -123,6 +127,7 @@ public class TaskExecutionResult implements Serializable {
    * @param nextTaskStepDelay the delay in milliseconds before the next task step for a multistep
    *     task is executed
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskExecutionResult(TaskStep nextTaskStep, long nextTaskStepDelay) {
     this.nextTaskStep = nextTaskStep;
     if (nextTaskStepDelay > 0) {

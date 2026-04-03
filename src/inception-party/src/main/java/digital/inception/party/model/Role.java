@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -124,6 +125,7 @@ public class Role implements Serializable {
    *
    * @param type the role type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Role(String type) {
     this.type = type;
   }
@@ -134,6 +136,7 @@ public class Role implements Serializable {
    * @param type the role type
    * @param effectiveFrom the date the role is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Role(String type, LocalDate effectiveFrom) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
@@ -146,6 +149,7 @@ public class Role implements Serializable {
    * @param effectiveFrom the date the role is effective from
    * @param effectiveTo the date the role is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Role(String type, LocalDate effectiveFrom, LocalDate effectiveTo) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
@@ -158,6 +162,7 @@ public class Role implements Serializable {
    * @param type the role type
    * @param purpose the code for the role purpose
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Role(String type, String purpose) {
     this.type = type;
     this.purpose = purpose;
@@ -170,6 +175,7 @@ public class Role implements Serializable {
    * @param purpose the code for the role purpose
    * @param effectiveFrom the date the role is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Role(String type, String purpose, LocalDate effectiveFrom) {
     this.type = type;
     this.purpose = purpose;
@@ -184,6 +190,7 @@ public class Role implements Serializable {
    * @param effectiveFrom the date the role is effective from
    * @param effectiveTo the date the role is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Role(String type, String purpose, LocalDate effectiveFrom, LocalDate effectiveTo) {
     this.type = type;
     this.purpose = purpose;

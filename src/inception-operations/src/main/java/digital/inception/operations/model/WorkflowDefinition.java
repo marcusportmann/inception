@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -479,6 +480,7 @@ public class WorkflowDefinition implements Serializable {
    * @param supportedWorkflowFormTypes the supported workflow form types for the workflow definition
    * @param permissions the permissions for the workflow definition
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowDefinition(
       String id,
       int version,

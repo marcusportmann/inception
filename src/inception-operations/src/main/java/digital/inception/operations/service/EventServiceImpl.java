@@ -143,7 +143,7 @@ public class EventServiceImpl extends AbstractServiceBase implements EventServic
         throw new DuplicateEventException(event.getId());
       }
 
-      eventRepository.saveAndFlush(event);
+      eventRepository.save(event);
 
       getBackgroundEventProcessor().triggerProcessing();
     } catch (DuplicateEventException e) {

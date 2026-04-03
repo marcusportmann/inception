@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -107,6 +108,7 @@ public class WorkflowVariable implements Serializable {
    * @param value the value for the workflow variable
    * @param workflowId the ID for the workflow the workflow variable is associated with
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowVariable(String name, String value, UUID workflowId) {
     this.name = name;
     this.value = value;
@@ -122,6 +124,7 @@ public class WorkflowVariable implements Serializable {
    * @param name the name of the workflow variable
    * @param value the string value for the workflow variable
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowVariable(String name, String value) {
     this.name = name;
     this.value = value;
@@ -133,6 +136,7 @@ public class WorkflowVariable implements Serializable {
    * @param name the name of the workflow variable
    * @param booleanValue the boolean value for the workflow variable
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowVariable(String name, boolean booleanValue) {
     this.name = name;
     this.value = Boolean.toString(booleanValue);
@@ -144,6 +148,7 @@ public class WorkflowVariable implements Serializable {
    * @param name the name of the workflow variable
    * @param doubleValue the double value for the workflow variable
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowVariable(String name, double doubleValue) {
     this.name = name;
     this.value = Double.toString(doubleValue);
@@ -155,6 +160,7 @@ public class WorkflowVariable implements Serializable {
    * @param name the name of the workflow variable
    * @param dateValue the date value for the workflow variable
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowVariable(String name, LocalDate dateValue) {
     this.name = name;
     this.value = dateValue.toString();
@@ -166,6 +172,7 @@ public class WorkflowVariable implements Serializable {
    * @param name the name of the workflow variable
    * @param decimalValue the decimal value for the workflow variable
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowVariable(String name, BigDecimal decimalValue) {
     this.name = name;
     this.value = decimalValue.toString();
@@ -177,6 +184,7 @@ public class WorkflowVariable implements Serializable {
    * @param name the name of the workflow variable
    * @param integerValue the integer value for the workflow variable
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowVariable(String name, Integer integerValue) {
     this.name = name;
     this.value = integerValue.toString();

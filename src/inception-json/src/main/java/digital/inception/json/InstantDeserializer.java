@@ -16,12 +16,11 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import digital.inception.core.util.ISO8601Util;
-import java.io.IOException;
 import java.time.Instant;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
 
 /**
  * The {@code InstantDeserializer} class implements the Jackson deserializer for the {@code Instant}
@@ -29,19 +28,18 @@ import java.time.Instant;
  *
  * @author Marcus Portmann
  */
-public class InstantDeserializer extends JsonDeserializer<Instant> {
+public class InstantDeserializer extends ValueDeserializer<Instant> {
 
   /** Constructs a new {@code InstantDeserializer}. */
   public InstantDeserializer() {}
 
   @Override
-  public Instant deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-      throws IOException {
+  public Instant deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) {
     try {
       return ISO8601Util.toInstant(jsonParser.getValueAsString());
     } catch (Throwable e) {
-      throw new IOException(
-          "Failed to deserialize the ISO 8601 value (" + jsonParser.getValueAsString() + ")");
+      throw new RuntimeException(
+          "Failed to deserialize the ISO 8601 value (" + jsonParser.getValueAsString() + ")", e);
     }
   }
 }

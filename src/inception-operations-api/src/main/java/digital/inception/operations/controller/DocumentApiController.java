@@ -129,7 +129,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   UUID createDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -208,7 +208,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createDocumentDefinition(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The document definition version to create",
@@ -273,7 +273,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createDocumentDefinitionCategory(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The document definition category to create",
@@ -334,7 +334,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.DocumentNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.DocumentNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   UUID createDocumentNote(
       @Parameter(
               name = "Tenant-ID",
@@ -409,7 +409,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createDocumentTemplate(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The request to create the document template",
@@ -474,7 +474,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createDocumentTemplateCategory(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The document template category to create",
@@ -534,7 +534,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration')")
   void deleteDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -600,7 +600,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteDocumentDefinition(
       @Parameter(
               name = "documentDefinitionId",
@@ -665,7 +665,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteDocumentDefinitionCategory(
       @Parameter(
               name = "documentDefinitionCategoryId",
@@ -728,7 +728,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.DocumentNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.DocumentNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void deleteDocumentNote(
       @Parameter(
               name = "Tenant-ID",
@@ -801,7 +801,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteDocumentTemplate(
       @Parameter(
               name = "documentTemplateId",
@@ -866,7 +866,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteDocumentTemplateCategory(
       @Parameter(
               name = "documentTemplateCategoryId",
@@ -928,7 +928,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   Document getDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -995,7 +995,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentDefinition getDocumentDefinition(
       @Parameter(
               name = "documentDefinitionId",
@@ -1053,7 +1053,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<DocumentDefinitionCategory> getDocumentDefinitionCategories(
       @Parameter(
               name = "Tenant-ID",
@@ -1120,7 +1120,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentDefinitionCategory getDocumentDefinitionCategory(
       @Parameter(
               name = "documentDefinitionCategoryId",
@@ -1183,7 +1183,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<DocumentDefinition> getDocumentDefinitionsForDocumentDefinitionCategory(
       @Parameter(
               name = "Tenant-ID",
@@ -1256,7 +1256,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.DocumentNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.DocumentNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentNote getDocumentNote(
       @Parameter(
               name = "Tenant-ID",
@@ -1333,7 +1333,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.DocumentNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.DocumentNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentNotes getDocumentNotes(
       @Parameter(
               name = "Tenant-ID",
@@ -1419,7 +1419,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentTemplate getDocumentTemplate(
       @Parameter(
               name = "documentTemplateId",
@@ -1476,7 +1476,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<DocumentTemplateCategory> getDocumentTemplateCategories(
       @Parameter(
               name = "Tenant-ID",
@@ -1543,7 +1543,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentTemplateCategory getDocumentTemplateCategory(
       @Parameter(
               name = "documentTemplateCategoryId",
@@ -1605,7 +1605,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentTemplateSummaries getDocumentTemplateSummaries(
       @Parameter(
               name = "Tenant-ID",
@@ -1693,7 +1693,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<DocumentTemplateSummary> getDocumentTemplateSummariesForDocumentTemplateCategory(
       @Parameter(
               name = "Tenant-ID",
@@ -1756,7 +1756,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   DocumentSummaries searchDocuments(
       @Parameter(
               name = "Tenant-ID",
@@ -1823,7 +1823,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void updateDocument(
       @Parameter(
               name = "Tenant-ID",
@@ -1894,7 +1894,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateDocumentDefinition(
       @Parameter(
               name = "documentDefinitionId",
@@ -1966,7 +1966,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateDocumentDefinitionCategory(
       @Parameter(
               name = "documentDefinitionCategoryId",
@@ -2032,7 +2032,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.DocumentNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.DocumentAdministration') or hasAuthority('FUNCTION_Operations.DocumentNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void updateDocumentNote(
       @Parameter(
               name = "Tenant-ID",
@@ -2100,7 +2100,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateDocumentTemplate(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The request to update the document template",
@@ -2166,7 +2166,7 @@ public interface DocumentApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateDocumentTemplateCategory(
       @Parameter(
               name = "documentTemplateCategoryId",

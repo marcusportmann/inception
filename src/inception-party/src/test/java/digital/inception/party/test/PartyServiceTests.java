@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 import com.devskiller.jfairy.Fairy;
 import com.devskiller.jfairy.producer.company.Company;
 import com.devskiller.jfairy.producer.person.PersonProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.TenantUtil;
+import digital.inception.party.PartyConfiguration;
 import digital.inception.party.model.Association;
 import digital.inception.party.model.AssociationProperty;
 import digital.inception.party.model.AssociationSortBy;
@@ -85,6 +85,8 @@ import digital.inception.party.model.ValueType;
 import digital.inception.party.service.PartyService;
 import digital.inception.test.InceptionExtension;
 import digital.inception.test.TestConfiguration;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolation;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -103,6 +105,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.util.StringUtils;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code PartyServiceTests} class contains the JUnit tests for The {@code PartyService} class.
@@ -113,7 +116,7 @@ import org.springframework.util.StringUtils;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(InceptionExtension.class)
 @ContextConfiguration(
-    classes = {TestConfiguration.class},
+    classes = {TestConfiguration.class, PartyConfiguration.class},
     initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
@@ -124,6 +127,10 @@ import org.springframework.util.StringUtils;
 public class PartyServiceTests {
 
   private static int partyCount;
+
+  /* Entity Manager */
+  @PersistenceContext(unitName = "party")
+  private EntityManager entityManager;
 
   /** The Jackson2 object mapper. */
   @Autowired private ObjectMapper objectMapper;
@@ -357,6 +364,8 @@ public class PartyServiceTests {
 
     Person retrievedPerson = partyService.getPerson(TenantUtil.DEFAULT_TENANT_ID, person.getId());
 
+    entityManager.detach(retrievedPerson);
+
     comparePersons(person, retrievedPerson);
 
     compareConsents(
@@ -370,6 +379,8 @@ public class PartyServiceTests {
     partyService.updatePerson(TenantUtil.DEFAULT_TENANT_ID, person);
 
     retrievedPerson = partyService.getPerson(TenantUtil.DEFAULT_TENANT_ID, person.getId());
+
+    entityManager.detach(retrievedPerson);
 
     comparePersons(person, retrievedPerson);
 

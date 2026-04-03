@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -334,6 +335,7 @@ public class Employment implements Serializable {
    * @param type the code for the employment type for the employment
    * @param occupation the code for the occupation for the employment
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Employment(
       String employerName,
       String employerPhoneNumber,
@@ -392,6 +394,7 @@ public class Employment implements Serializable {
    * @param type the code for the employment type for the employment
    * @param occupation the code for the occupation for the employment
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Employment(
       String employerName,
       String employerPhoneNumber,
@@ -435,6 +438,7 @@ public class Employment implements Serializable {
    * @param startDate the start date for the employment
    * @param endDate the end date for the employment
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Employment(String employerName, LocalDate startDate, LocalDate endDate) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.employerName = employerName;
@@ -448,6 +452,7 @@ public class Employment implements Serializable {
    * @param employerName the employer name
    * @param startDate the start date for the employment
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Employment(String employerName, LocalDate startDate) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.employerName = employerName;
@@ -463,6 +468,7 @@ public class Employment implements Serializable {
    * @param type the code for the employment type for the employment
    * @param occupation the code for the occupation for the employment
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Employment(
       String employerName, LocalDate startDate, LocalDate endDate, String type, String occupation) {
     this.id = UuidCreator.getTimeOrderedEpoch();
@@ -481,6 +487,7 @@ public class Employment implements Serializable {
    * @param type the code for the employment type for the employment
    * @param occupation the code for the occupation for the employment
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Employment(String employerName, LocalDate startDate, String type, String occupation) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.employerName = employerName;

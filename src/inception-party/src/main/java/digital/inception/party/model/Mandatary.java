@@ -16,6 +16,7 @@
 
 package digital.inception.party.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -126,6 +127,7 @@ public class Mandatary implements Serializable {
    * @param partyId the ID for the party who is the recipient of the mandate
    * @param role the code for the mandatary role
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Mandatary(UUID partyId, String role) {
     this.partyId = partyId;
     this.role = role;

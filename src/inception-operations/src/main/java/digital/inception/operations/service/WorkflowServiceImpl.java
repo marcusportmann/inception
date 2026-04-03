@@ -380,7 +380,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new DuplicateWorkflowException(workflow.getId());
       }
 
-      return workflowRepository.saveAndFlush(workflow);
+      return workflowRepository.save(workflow);
     } catch (DuplicateWorkflowException e) {
       throw e;
     } catch (Throwable e) {
@@ -427,7 +427,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
       validateWorkflowDefinition(workflowDefinition);
 
-      workflowDefinitionRepository.saveAndFlush(workflowDefinition);
+      workflowDefinitionRepository.save(workflowDefinition);
     } catch (InvalidArgumentException
         | DuplicateWorkflowDefinitionVersionException
         | WorkflowDefinitionCategoryNotFoundException
@@ -459,7 +459,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new DuplicateWorkflowDefinitionCategoryException(workflowDefinitionCategory.getId());
       }
 
-      workflowDefinitionCategoryRepository.saveAndFlush(workflowDefinitionCategory);
+      workflowDefinitionCategoryRepository.save(workflowDefinitionCategory);
     } catch (DuplicateWorkflowDefinitionCategoryException e) {
       throw e;
     } catch (Throwable e) {
@@ -479,7 +479,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new DuplicateWorkflowDocumentException(workflowDocument.getId());
       }
 
-      return workflowDocumentRepository.saveAndFlush(workflowDocument);
+      return workflowDocumentRepository.save(workflowDocument);
     } catch (DuplicateWorkflowDocumentException e) {
       throw e;
     } catch (Throwable e) {
@@ -505,7 +505,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new DuplicateWorkflowEngineException(workflowEngine.getId());
       }
 
-      workflowEngineRepository.saveAndFlush(workflowEngine);
+      workflowEngineRepository.save(workflowEngine);
     } catch (DuplicateWorkflowEngineException e) {
       throw e;
     } catch (Throwable e) {
@@ -542,7 +542,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               ApplicationClock.offsetNow(),
               createdBy);
 
-      return workflowNoteRepository.saveAndFlush(workflowNote);
+      return workflowNoteRepository.save(workflowNote);
     } catch (WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -985,7 +985,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
                 WorkflowStepStatus.ACTIVE,
                 ApplicationClock.offsetNow());
 
-        workflowStepRepository.saveAndFlush(workflowStep);
+        workflowStepRepository.save(workflowStep);
       }
     } catch (InvalidArgumentException
         | WorkflowNotFoundException
@@ -1352,7 +1352,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new WorkflowNotFoundException(tenantId, workflowId);
       }
 
-      return workflowOptional.get();
+      Workflow workflow = workflowOptional.get();
+
+      entityManager.detach(workflow);
+
+      return workflow;
     } catch (WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1393,13 +1397,17 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
     try {
       Optional<WorkflowDefinition> workflowDefinitionOptional =
-          workflowDefinitionRepository.findLatestVersionById(workflowDefinitionId);
+          workflowDefinitionRepository.findFirstByIdOrderByVersionDesc(workflowDefinitionId);
 
       if (workflowDefinitionOptional.isEmpty()) {
         throw new WorkflowDefinitionNotFoundException(workflowDefinitionId);
       }
 
-      return workflowDefinitionOptional.get();
+      WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
+
+      entityManager.detach(workflowDefinition);
+
+      return workflowDefinition;
     } catch (WorkflowDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1621,7 +1629,11 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             workflowDefinitionId, workflowDefinitionVersion);
       }
 
-      return workflowDefinitionOptional.get();
+      WorkflowDefinition workflowDefinition = workflowDefinitionOptional.get();
+
+      entityManager.detach(workflowDefinition);
+
+      return workflowDefinition;
     } catch (WorkflowDefinitionVersionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -2445,7 +2457,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         workflow.setEngineInstanceId(engineInstanceId);
       }
 
-      workflowRepository.saveAndFlush(workflow);
+      workflowRepository.save(workflow);
 
       for (WorkflowDefinitionDocumentDefinition documentDefinition :
           workflowDefinition.getDocumentDefinitions()) {
@@ -2459,7 +2471,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
                   now,
                   initiatedBy);
 
-          workflowDocumentRepository.saveAndFlush(workflowDocument);
+          workflowDocumentRepository.save(workflowDocument);
         }
       }
 
@@ -2518,7 +2530,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               WorkflowStepStatus.ACTIVE,
               ApplicationClock.offsetNow());
 
-      workflowStepRepository.saveAndFlush(workflowStep);
+      workflowStepRepository.save(workflowStep);
 
       return workflowStep;
     } catch (InvalidArgumentException | WorkflowNotFoundException e) {
@@ -2575,7 +2587,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
             tenantId, linkInteractionToWorkflowRequest.getWorkflowId());
       }
 
-      workflowInteractionLinkRepository.saveAndFlush(
+      workflowInteractionLinkRepository.save(
           new WorkflowInteractionLink(
               linkInteractionToWorkflowRequest.getWorkflowId(),
               linkInteractionToWorkflowRequest.getInteractionId(),
@@ -2716,7 +2728,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         workflowDocument.setStatus(WorkflowDocumentStatus.PROVIDED);
       }
 
-      workflowDocumentRepository.saveAndFlush(workflowDocument);
+      workflowDocumentRepository.save(workflowDocument);
 
       if (provideWorkflowDocumentRequest.eventsEnabled()) {
         eventService.publishEvent(
@@ -2864,7 +2876,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         workflowDocument.setDescription(requestWorkflowDocumentRequest.getDescription());
       }
 
-      workflowDocument = workflowDocumentRepository.saveAndFlush(workflowDocument);
+      workflowDocument = workflowDocumentRepository.save(workflowDocument);
 
       if (requestWorkflowDocumentRequest.eventsEnabled()) {
         eventService.publishEvent(
@@ -3782,7 +3794,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new WorkflowNotFoundException(tenantId, workflow.getId());
       }
 
-      return workflowRepository.saveAndFlush(workflow);
+      return workflowRepository.save(workflow);
     } catch (InvalidArgumentException | WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -3825,7 +3837,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
 
       validateWorkflowDefinition(workflowDefinition);
 
-      workflowDefinitionRepository.saveAndFlush(workflowDefinition);
+      workflowDefinitionRepository.save(workflowDefinition);
     } catch (WorkflowDefinitionCategoryNotFoundException
         | WorkflowDefinitionVersionNotFoundException
         | WorkflowEngineNotFoundException
@@ -3856,7 +3868,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new WorkflowDefinitionCategoryNotFoundException(workflowDefinitionCategory.getId());
       }
 
-      workflowDefinitionCategoryRepository.saveAndFlush(workflowDefinitionCategory);
+      workflowDefinitionCategoryRepository.save(workflowDefinitionCategory);
     } catch (WorkflowDefinitionCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -3880,7 +3892,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new WorkflowEngineNotFoundException(workflowEngine.getId());
       }
 
-      workflowEngineRepository.saveAndFlush(workflowEngine);
+      workflowEngineRepository.save(workflowEngine);
     } catch (WorkflowEngineNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -3915,7 +3927,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new WorkflowNoteNotFoundException(tenantId, workflowNote.getId());
       }
 
-      return workflowNoteRepository.saveAndFlush(workflowNote);
+      return workflowNoteRepository.save(workflowNote);
     } catch (WorkflowNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {

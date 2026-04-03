@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -332,6 +333,7 @@ public class NextOfKin implements Serializable {
    * @param addressCountry the ISO 3166-1 alpha-2 code for the next of kin address country
    * @param addressPostalCode the next of kin address postal code
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public NextOfKin(
       String type,
       String name,
@@ -379,6 +381,7 @@ public class NextOfKin implements Serializable {
    * @param mobileNumber the mobile number for the next of kin
    * @param emailAddress the email address for the next of kin
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public NextOfKin(
       String type, String name, String homeNumber, String mobileNumber, String emailAddress) {
     this.id = UuidCreator.getTimeOrderedEpoch();
@@ -395,6 +398,7 @@ public class NextOfKin implements Serializable {
    * @param type the code for the next of kin type for the next of kin
    * @param name the name of the next of kin
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public NextOfKin(String type, String name) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;

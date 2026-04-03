@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -122,6 +123,7 @@ public class SourceOfWealth implements Serializable {
    *
    * @param type the code for the source of wealth type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfWealth(String type) {
     this.type = type;
   }
@@ -132,6 +134,7 @@ public class SourceOfWealth implements Serializable {
    * @param type the code for the source of wealth type
    * @param effectiveFrom the date the source of wealth is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfWealth(String type, LocalDate effectiveFrom) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
@@ -144,6 +147,7 @@ public class SourceOfWealth implements Serializable {
    * @param effectiveFrom the date the source of wealth is effective from
    * @param effectiveTo the date the source of wealth is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfWealth(String type, LocalDate effectiveFrom, LocalDate effectiveTo) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
@@ -156,6 +160,7 @@ public class SourceOfWealth implements Serializable {
    * @param type the code for the source of wealth type
    * @param description the description for the source of wealth
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfWealth(String type, String description) {
     this.type = type;
     this.description = description;
@@ -168,6 +173,7 @@ public class SourceOfWealth implements Serializable {
    * @param description the description for the source of wealth
    * @param effectiveFrom the date the source of wealth is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfWealth(String type, String description, LocalDate effectiveFrom) {
     this.type = type;
     this.description = description;
@@ -182,6 +188,7 @@ public class SourceOfWealth implements Serializable {
    * @param effectiveFrom the date the source of wealth is effective from
    * @param effectiveTo the date the source of wealth is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfWealth(
       String type, String description, LocalDate effectiveFrom, LocalDate effectiveTo) {
     this.type = type;

@@ -16,6 +16,7 @@
 
 package digital.inception.codes.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -99,6 +100,7 @@ public class CodeCategorySummary implements Serializable {
    * @param name the name of the code category
    * @param lastModified the date and time the code category was last modified
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public CodeCategorySummary(String id, String name, OffsetDateTime lastModified) {
     this.id = id;
     this.name = name;

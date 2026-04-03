@@ -16,9 +16,9 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * The {@code JsonUtil} class provides JSON-related and Jackson-related utility methods.
@@ -28,24 +28,22 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @SuppressWarnings("unused")
 public final class JsonUtil {
 
-  private static final ObjectMapper objectMapper;
-
-  static {
-    objectMapper = new ObjectMapper();
-    objectMapper.disable(SerializationFeature.INDENT_OUTPUT);
-    objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    objectMapper.registerModule(new InceptionModule());
-  }
+  private static final JsonMapper OBJECT_MAPPER =
+      JsonMapper.builder()
+          .disable(SerializationFeature.INDENT_OUTPUT)
+          .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+          .addModule(new InceptionModule())
+          .build();
 
   /** Private constructor to prevent instantiation. */
   private JsonUtil() {}
 
   /**
-   * Retrieve the Jackson2 object mapper configured with the required modules and features.
+   * Retrieve the Jackson object mapper configured with the required modules and features.
    *
-   * @return the Jackson2 object mapper configured with the required modules and features
+   * @return the Jackson object mapper configured with the required modules and features
    */
-  public static ObjectMapper getObjectMapper() {
-    return objectMapper;
+  public static JsonMapper getObjectMapper() {
+    return OBJECT_MAPPER;
   }
 }

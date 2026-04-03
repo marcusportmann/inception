@@ -32,17 +32,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class ApplicationWebMvcConfiguration implements WebMvcConfigurer {
 
-  private final StringToCodeEnumConverterFactory stringToCodeEnumConverterFactory;
-
-  /**
-   * Constructs a new {@code ApplicationWebMvcConfiguration}.
-   *
-   * @param stringToCodeEnumConverterFactory the String to CodeEnum converter factory
-   */
-  public ApplicationWebMvcConfiguration(
-      StringToCodeEnumConverterFactory stringToCodeEnumConverterFactory) {
-    this.stringToCodeEnumConverterFactory = stringToCodeEnumConverterFactory;
-  }
+  /** Constructs a new {@code ApplicationWebMvcConfiguration}. */
+  public ApplicationWebMvcConfiguration() {}
 
   @Override
   public void addFormatters(FormatterRegistry registry) {
@@ -51,7 +42,7 @@ public class ApplicationWebMvcConfiguration implements WebMvcConfigurer {
      *       e.g. the conversion of request parameters with the Enum type on a Spring rest
      *       controller.
      */
-    registry.addConverterFactory(stringToCodeEnumConverterFactory);
+    registry.addConverterFactory(new StringToCodeEnumConverterFactory());
   }
 
   @Override

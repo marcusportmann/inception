@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -148,6 +149,7 @@ public class WorkflowStep implements Serializable {
    * @param status the status of the workflow step
    * @param initiated the date and time the workflow was initiated
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowStep(
       UUID workflowId, String code, WorkflowStepStatus status, OffsetDateTime initiated) {
     this.workflowId = workflowId;

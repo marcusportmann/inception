@@ -163,7 +163,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
         throw new CodeCategoryNotFoundException(code.getCodeCategoryId());
       }
 
-      codeRepository.saveAndFlush(code);
+      codeRepository.save(code);
     } catch (DuplicateCodeException | CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -187,7 +187,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
         throw new DuplicateCodeCategoryException(codeCategory.getId());
       }
 
-      codeCategoryRepository.saveAndFlush(codeCategory);
+      codeCategoryRepository.save(codeCategory);
     } catch (DuplicateCodeCategoryException e) {
       throw e;
     } catch (Throwable e) {
@@ -618,7 +618,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
         throw new CodeNotFoundException(code.getCodeCategoryId(), code.getId());
       }
 
-      codeRepository.saveAndFlush(code);
+      codeRepository.save(code);
     } catch (CodeNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -642,7 +642,7 @@ public class CodesServiceImpl extends AbstractServiceBase implements CodesServic
         throw new CodeCategoryNotFoundException(codeCategory.getId());
       }
 
-      codeCategoryRepository.saveAndFlush(codeCategory);
+      codeCategoryRepository.save(codeCategory);
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {

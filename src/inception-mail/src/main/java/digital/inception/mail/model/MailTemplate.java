@@ -16,6 +16,7 @@
 
 package digital.inception.mail.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -122,6 +123,7 @@ public class MailTemplate implements Serializable {
    * @param contentType the content type for the mail template
    * @param template the Apache FreeMarker template for the mail template
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public MailTemplate(
       String id, String name, MailTemplateContentType contentType, byte[] template) {
     this.id = id;

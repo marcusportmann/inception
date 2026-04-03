@@ -16,6 +16,7 @@
 
 package digital.inception.party.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -127,6 +128,7 @@ public class Snapshot implements Serializable {
    * @param entityId the ID for the entity the snapshot is associated with
    * @param data the JSON data for the entity
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Snapshot(UUID tenantId, EntityType entityType, UUID entityId, String data) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;

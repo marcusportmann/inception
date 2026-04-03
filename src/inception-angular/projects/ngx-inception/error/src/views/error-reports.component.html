@@ -50,7 +50,7 @@
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-errorReportId="errorReportId">
-      <button type="button" (click)="viewErrorReport(errorReportId)">
+      <button type="button" mat-menu-item (click)="viewErrorReport(errorReportId)">
         <i class="fas fa-eye"></i>
         <span i18n="@@error_error_reports_component_menu_item_view">View</span>
       </button>

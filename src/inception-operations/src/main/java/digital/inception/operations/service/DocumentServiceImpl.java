@@ -80,6 +80,8 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -217,7 +219,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       // document.setData(null);
 
       // Save the document to the database (without the data if persisted to S3)
-      document = documentRepository.saveAndFlush(document);
+      document = documentRepository.save(document);
 
       // Detach the document from the entity manager to prevent the data from being updated
       entityManager.detach(document);
@@ -336,7 +338,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       // document.setData(null);
 
       // Save the document to the database (without the data if persisted to S3)
-      document = documentRepository.saveAndFlush(document);
+      document = documentRepository.save(document);
 
       // Detach the document from the entity manager to prevent the data from being updated
       entityManager.detach(document);
@@ -360,6 +362,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  @CacheEvict(cacheNames = "documentDefinitions", allEntries = true)
   public void createDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DuplicateDocumentDefinitionException,
@@ -376,7 +379,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DuplicateDocumentDefinitionException(documentDefinition.getId());
       }
 
-      documentDefinitionRepository.saveAndFlush(documentDefinition);
+      documentDefinitionRepository.save(documentDefinition);
     } catch (DuplicateDocumentDefinitionException | DocumentDefinitionCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -398,7 +401,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DuplicateDocumentDefinitionCategoryException(documentDefinitionCategory.getId());
       }
 
-      documentDefinitionCategoryRepository.saveAndFlush(documentDefinitionCategory);
+      documentDefinitionCategoryRepository.save(documentDefinitionCategory);
     } catch (DuplicateDocumentDefinitionCategoryException e) {
       throw e;
     } catch (Throwable e) {
@@ -441,7 +444,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DuplicateDocumentNoteException(documentNote.getId());
       }
 
-      return documentNoteRepository.saveAndFlush(documentNote);
+      return documentNoteRepository.save(documentNote);
     } catch (DocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -486,7 +489,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       documentTemplate.setName(createDocumentTemplateRequest.getName());
       documentTemplate.setTenantId(createDocumentTemplateRequest.getTenantId());
 
-      documentTemplateRepository.saveAndFlush(documentTemplate);
+      documentTemplateRepository.save(documentTemplate);
     } catch (DuplicateDocumentTemplateException | DocumentTemplateCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -508,7 +511,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DuplicateDocumentTemplateCategoryException(documentTemplateCategory.getId());
       }
 
-      documentTemplateCategoryRepository.saveAndFlush(documentTemplateCategory);
+      documentTemplateCategoryRepository.save(documentTemplateCategory);
     } catch (DuplicateDocumentTemplateCategoryException e) {
       throw e;
     } catch (Throwable e) {
@@ -550,6 +553,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  @CacheEvict(cacheNames = "documentDefinitions", allEntries = true)
   public void deleteDocumentDefinition(String documentDefinitionId)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
@@ -813,6 +817,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  @Cacheable(cacheNames = "documentDefinitions", key = "#documentDefinitionId")
   public DocumentDefinition getDocumentDefinition(String documentDefinitionId)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
@@ -829,7 +834,11 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DocumentDefinitionNotFoundException(documentDefinitionId);
       }
 
-      return documentDefinitionOptional.get();
+      DocumentDefinition documentDefinition = documentDefinitionOptional.get();
+
+      entityManager.detach(documentDefinition);
+
+      return documentDefinition;
     } catch (DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1454,7 +1463,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       // document.setData(null);
 
       // Save the document to the database (without the data if persisted to S3)
-      document = documentRepository.saveAndFlush(document);
+      document = documentRepository.save(document);
 
       // Detach the document from the entity manager to prevent the data from being updated
       entityManager.detach(document);
@@ -1478,6 +1487,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
+  @CacheEvict(cacheNames = "documentDefinitions", allEntries = true)
   public void updateDocumentDefinition(DocumentDefinition documentDefinition)
       throws InvalidArgumentException,
           DocumentDefinitionCategoryNotFoundException,
@@ -1494,7 +1504,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DocumentDefinitionNotFoundException(documentDefinition.getId());
       }
 
-      documentDefinitionRepository.saveAndFlush(documentDefinition);
+      documentDefinitionRepository.save(documentDefinition);
     } catch (DocumentDefinitionCategoryNotFoundException | DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1516,7 +1526,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DocumentDefinitionCategoryNotFoundException(documentDefinitionCategory.getId());
       }
 
-      documentDefinitionCategoryRepository.saveAndFlush(documentDefinitionCategory);
+      documentDefinitionCategoryRepository.save(documentDefinitionCategory);
     } catch (DocumentDefinitionCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1554,7 +1564,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       documentNote.setUpdated(ApplicationClock.offsetNow());
       documentNote.setUpdatedBy(updatedBy);
 
-      return documentNoteRepository.saveAndFlush(documentNote);
+      return documentNoteRepository.save(documentNote);
     } catch (DocumentNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1603,7 +1613,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       documentTemplate.setUpdated(ApplicationClock.offsetNow());
       documentTemplate.setUpdatedBy(updatedBy);
 
-      documentTemplateRepository.saveAndFlush(documentTemplate);
+      documentTemplateRepository.save(documentTemplate);
     } catch (DocumentTemplateCategoryNotFoundException | DocumentTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1625,7 +1635,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DocumentTemplateCategoryNotFoundException(documentTemplateCategory.getId());
       }
 
-      documentTemplateCategoryRepository.saveAndFlush(documentTemplateCategory);
+      documentTemplateCategoryRepository.save(documentTemplateCategory);
     } catch (DocumentTemplateCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {

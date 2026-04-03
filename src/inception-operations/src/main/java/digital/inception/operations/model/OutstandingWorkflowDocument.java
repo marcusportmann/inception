@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -209,6 +210,7 @@ public class OutstandingWorkflowDocument implements Serializable {
    * @param internal is the workflow document internal-only and excluded for external users
    * @param description the description for the workflow document
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public OutstandingWorkflowDocument(
       UUID id,
       UUID tenantId,

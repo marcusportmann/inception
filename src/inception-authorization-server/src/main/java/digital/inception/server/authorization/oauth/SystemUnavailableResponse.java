@@ -16,17 +16,15 @@
 
 package digital.inception.server.authorization.oauth;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import digital.inception.core.time.ApplicationClock;
 import digital.inception.core.util.ISO8601Util;
-import java.io.ByteArrayOutputStream;
+import digital.inception.json.JsonUtil;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.OffsetDateTime;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 
 /**
  * The {@code SystemUnavailableResponse} class holds the information for a response returned to
@@ -34,22 +32,23 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class SystemUnavailableResponse extends Response {
 
   /** The message. */
   private final String message;
 
   /** The date and time the error occurred. */
-  private final OffsetDateTime timestamp;
+  @JsonProperty private final String timestamp;
 
   /** The detail. */
-  private String detail;
+  @JsonProperty private String detail;
 
   /** The fully qualified name of the exception associated with the error. */
-  private String exception;
+  @JsonProperty private String exception;
 
   /** The stack trace associated with the error. */
-  private String stackTrace;
+  @JsonProperty private String stackTrace;
 
   /** The URI for the HTTP request that resulted in the error. */
   @JsonProperty private String uri;
@@ -59,6 +58,7 @@ public class SystemUnavailableResponse extends Response {
    *
    * @param message the message
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SystemUnavailableResponse(String message) {
     this(message, null);
   }
@@ -69,30 +69,29 @@ public class SystemUnavailableResponse extends Response {
    * @param message the message
    * @param cause the cause
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SystemUnavailableResponse(String message, Throwable cause) {
     super(HttpStatus.INTERNAL_SERVER_ERROR);
 
-    this.timestamp = ApplicationClock.offsetNow();
+    OffsetDateTime now = ApplicationClock.offsetNow();
 
+    this.timestamp = ISO8601Util.fromOffsetDateTime(now);
     this.message = message;
 
     if (cause != null) {
       this.detail = cause.getMessage();
-
       this.exception = cause.getClass().getName();
 
       try {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintWriter pw = new PrintWriter(baos);
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
 
-        pw.println(cause.getMessage());
-        pw.println();
+        printWriter.println(cause.getMessage());
+        printWriter.println();
+        cause.printStackTrace(printWriter);
+        printWriter.flush();
 
-        cause.printStackTrace(pw);
-
-        pw.flush();
-
-        this.stackTrace = baos.toString();
+        this.stackTrace = stringWriter.toString();
       } catch (Throwable ignored) {
       }
     }
@@ -104,35 +103,103 @@ public class SystemUnavailableResponse extends Response {
    * @return the body for the OAuth2 response
    */
   @Override
+  @JsonProperty
   public String getBody() {
     try {
-      JsonFactory jsonFactory = new JsonFactory();
-
-      StringWriter stringWriter = new StringWriter();
-
-      JsonGenerator jsonGenerator = jsonFactory.createGenerator(stringWriter);
-
-      jsonGenerator.writeStartObject();
-      jsonGenerator.writeStringField("timestamp", ISO8601Util.fromOffsetDateTime(timestamp));
-      jsonGenerator.writeStringField("message", message);
-      if (StringUtils.hasText(detail)) {
-        jsonGenerator.writeStringField("detail", detail);
-      }
-      if (StringUtils.hasText(exception)) {
-        jsonGenerator.writeStringField("exception", exception);
-      }
-      if (StringUtils.hasText(stackTrace)) {
-        jsonGenerator.writeStringField("exception", stackTrace);
-      }
-
-      jsonGenerator.writeEndObject();
-
-      jsonGenerator.close();
-
-      return stringWriter.getBuffer().toString();
+      return JsonUtil.getObjectMapper().writeValueAsString(this);
     } catch (Throwable e) {
       throw new RuntimeException(
           "Failed to construct the body for the system unavailable response", e);
     }
+  }
+
+  /**
+   * Returns the detail.
+   *
+   * @return the detail
+   */
+  public String getDetail() {
+    return detail;
+  }
+
+  /**
+   * Returns the fully qualified name of the exception associated with the error.
+   *
+   * @return the fully qualified name of the exception associated with the error
+   */
+  public String getException() {
+    return exception;
+  }
+
+  /**
+   * Returns the message.
+   *
+   * @return the message
+   */
+  public String getMessage() {
+    return message;
+  }
+
+  /**
+   * Returns the stack trace associated with the error.
+   *
+   * @return the stack trace associated with the error
+   */
+  public String getStackTrace() {
+    return stackTrace;
+  }
+
+  /**
+   * Returns the date and time the error occurred.
+   *
+   * @return the date and time the error occurred
+   */
+  public String getTimestamp() {
+    return timestamp;
+  }
+
+  /**
+   * Returns the URI for the HTTP request that resulted in the error.
+   *
+   * @return the URI for the HTTP request that resulted in the error
+   */
+  public String getUri() {
+    return uri;
+  }
+
+  /**
+   * Sets the detail.
+   *
+   * @param detail the detail
+   */
+  public void setDetail(String detail) {
+    this.detail = detail;
+  }
+
+  /**
+   * Sets the fully qualified name of the exception associated with the error.
+   *
+   * @param exception the fully qualified name of the exception associated with the error
+   */
+  public void setException(String exception) {
+    this.exception = exception;
+  }
+
+  /**
+   * Sets the stack trace associated with the error.
+   *
+   * @param stackTrace the stack trace associated with the error
+   */
+  public void setStackTrace(String stackTrace) {
+    this.stackTrace = stackTrace;
+  }
+
+  /**
+   * Sets the URI for the HTTP request that resulted in the error.
+   *
+   * @param uri the URI for the HTTP request that resulted in the error
+   */
+  public void setUri(String uri) {
+    this.uri = uri;
   }
 }

@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -98,6 +99,7 @@ public class FinalizeWorkflowStepRequest implements Serializable {
    * @param step the code for the workflow step
    * @param status the status for the workflow step
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public FinalizeWorkflowStepRequest(UUID workflowId, String step, WorkflowStepStatus status) {
     this.workflowId = workflowId;
     this.step = step;
@@ -112,6 +114,7 @@ public class FinalizeWorkflowStepRequest implements Serializable {
    * @param status the status for the workflow step
    * @param nextStep the code for the next workflow step to initiate
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public FinalizeWorkflowStepRequest(
       UUID workflowId, String step, WorkflowStepStatus status, String nextStep) {
     this.workflowId = workflowId;

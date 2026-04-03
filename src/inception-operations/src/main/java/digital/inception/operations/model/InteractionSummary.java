@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -293,6 +294,7 @@ public class InteractionSummary implements Serializable {
    * @param attachmentCount the number of interaction attachments associated with the interaction
    * @param noteCount the number of interaction notes associated with the interaction
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public InteractionSummary(
       UUID id,
       UUID tenantId,
@@ -359,6 +361,7 @@ public class InteractionSummary implements Serializable {
    * @param originalSourceId the ID for the interaction source the interaction was originally
    *     associated with
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public InteractionSummary(
       UUID id,
       UUID tenantId,

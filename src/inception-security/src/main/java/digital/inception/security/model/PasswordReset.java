@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -157,6 +158,7 @@ public class PasswordReset implements Serializable {
    * @param username the username for the user associated with the password reset
    * @param securityCodeHash the security code hash
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public PasswordReset(String username, String securityCodeHash) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.username = username;

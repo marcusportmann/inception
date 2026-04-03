@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -76,6 +77,7 @@ public class ResetWorkflowDocumentRequest implements Serializable {
    *
    * @param workflowDocumentId the ID for the workflow document
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ResetWorkflowDocumentRequest(UUID workflowDocumentId) {
     this.workflowDocumentId = workflowDocumentId;
   }

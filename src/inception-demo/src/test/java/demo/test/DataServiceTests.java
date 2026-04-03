@@ -20,11 +20,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import demo.model.Data;
 import demo.service.DataService;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
@@ -58,6 +63,26 @@ public class DataServiceTests {
   /** Test the reactive data functionality. */
   @Test
   public void reactiveDataTest() throws Exception {
+    DefaultConversionService conversionService = new DefaultConversionService();
+
+    boolean canConvertStringToLocaltime =
+        conversionService.canConvert(String.class, LocalTime.class);
+    boolean canConvertStringToOffsetTime =
+        conversionService.canConvert(String.class, OffsetTime.class);
+    boolean canConvertStringToLocalDateTime =
+        conversionService.canConvert(String.class, LocalDateTime.class);
+    boolean canConvertStringToOffsetDateTime =
+        conversionService.canConvert(String.class, OffsetDateTime.class);
+
+    boolean canConvertLocaltimeToString =
+        conversionService.canConvert(LocalTime.class, String.class);
+    boolean canConvertOffsetTimeToString =
+        conversionService.canConvert(OffsetTime.class, String.class);
+    boolean canConvertLocalDateTimeToString =
+        conversionService.canConvert(LocalDateTime.class, String.class);
+    boolean canConvertOffsetDateTimeToString =
+        conversionService.canConvert(OffsetDateTime.class, String.class);
+
     dataService.getAllReactiveData().toStream().forEach(System.out::println);
   }
 }

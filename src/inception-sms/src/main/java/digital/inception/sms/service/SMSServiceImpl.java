@@ -143,7 +143,7 @@ public class SMSServiceImpl extends AbstractServiceBase implements SMSService {
         sms.setId(UuidCreator.getTimeOrderedEpoch());
       }
 
-      smsRepository.saveAndFlush(sms);
+      smsRepository.save(sms);
     } catch (Throwable e) {
       throw new ServiceUnavailableException("Failed to create the SMS", e);
     }

@@ -51,16 +51,8 @@ public class ApplicationJpaConfiguration {
   /* Logger */
   private static final Logger log = LoggerFactory.getLogger(ApplicationJpaConfiguration.class);
 
-  private final ApplicationContext applicationContext;
-
-  /**
-   * Constructs a new {@code ApplicationJpaConfiguration}.
-   *
-   * @param applicationContext the Spring {@link ApplicationContext}
-   */
-  ApplicationJpaConfiguration(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
+  /** Constructs a new {@code ApplicationJpaConfiguration}. */
+  ApplicationJpaConfiguration() {}
 
   /**
    * Returns the application entity manager factory bean associated with the application data
@@ -70,6 +62,7 @@ public class ApplicationJpaConfiguration {
    * @param applicationDataSource the application data source
    * @return the application entity manager factory bean associated with the application data source
    */
+  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Bean("applicationEntityManagerFactory")
   @Primary
   public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory(

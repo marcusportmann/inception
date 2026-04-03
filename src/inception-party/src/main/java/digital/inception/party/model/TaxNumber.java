@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -117,6 +118,7 @@ public class TaxNumber implements Serializable {
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
    * @param number the tax number
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaxNumber(String type, String countryOfIssue, String number) {
     this.type = type;
     this.number = number;
@@ -129,6 +131,7 @@ public class TaxNumber implements Serializable {
    * @param type the code for the tax number type
    * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaxNumber(String type, String countryOfIssue) {
     this.type = type;
     this.countryOfIssue = countryOfIssue;

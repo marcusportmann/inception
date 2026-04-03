@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -156,6 +157,7 @@ public class UserDirectoryCapabilities {
    *     capability
    * @param supportsUserLocks the user directory supports the user locks capability
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserDirectoryCapabilities(
       boolean supportsAdminChangePassword,
       boolean supportsChangePassword,

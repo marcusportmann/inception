@@ -15,7 +15,6 @@
  */
 package digital.inception.api;
 
-import com.fasterxml.jackson.databind.type.SimpleType;
 import digital.inception.core.model.CodeEnum;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverter;
@@ -29,6 +28,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import tools.jackson.databind.type.SimpleType;
 
 /**
  * The {@code SpringDocOpenApiModelConverter} class.

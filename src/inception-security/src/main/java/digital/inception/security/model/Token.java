@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -203,6 +204,7 @@ public class Token implements Serializable {
    * @param claims the claims for the token
    * @param data the data for the token
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Token(
       String id,
       TokenType type,
@@ -236,6 +238,7 @@ public class Token implements Serializable {
    * @param claims the claims for the token
    * @param data the data for the token
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Token(
       String id,
       TokenType type,
@@ -266,6 +269,7 @@ public class Token implements Serializable {
    * @param claims the claims for the token
    * @param data the data for the token
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Token(
       String id,
       TokenType type,
@@ -297,6 +301,7 @@ public class Token implements Serializable {
    * @param claims the claims for the token
    * @param data the data for the token
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Token(
       String id,
       TokenType type,

@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -103,6 +104,7 @@ public class ExternalReference implements Serializable {
    * @param type the code for the external reference type
    * @param value the value for the external reference
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ExternalReference(String type, String value) {
     this.type = type;
     this.value = value;

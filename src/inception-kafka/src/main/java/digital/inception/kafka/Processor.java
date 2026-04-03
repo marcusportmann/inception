@@ -33,8 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.boot.ssl.DefaultSslBundleRegistry;
+import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.util.StringUtils;
 
@@ -179,15 +178,9 @@ public abstract class Processor<K, V> extends Thread {
   @Override
   public void run() {
     try {
-      Map<String, Object> properties =
-          kafkaProperties.buildConsumerProperties(new DefaultSslBundleRegistry());
+      Map<String, Object> properties = kafkaProperties.buildConsumerProperties();
 
-      if (StringUtils.hasText(kafkaProperties.getConsumer().getGroupId())) {
-        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-      } else {
-        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
-      }
-
+      properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
       properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 
       if (!properties.containsKey(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG)) {

@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -114,6 +115,7 @@ public class SegmentAllocation implements Serializable {
    *
    * @param segment the segment
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SegmentAllocation(String segment) {
     this.segment = segment;
   }
@@ -124,6 +126,7 @@ public class SegmentAllocation implements Serializable {
    * @param segment the segment
    * @param effectiveFrom the date the segment allocation is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SegmentAllocation(String segment, LocalDate effectiveFrom) {
     this.segment = segment;
     this.effectiveFrom = effectiveFrom;
@@ -136,6 +139,7 @@ public class SegmentAllocation implements Serializable {
    * @param effectiveFrom the date the segment allocation is effective from
    * @param effectiveTo the date the segment allocation is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SegmentAllocation(String segment, LocalDate effectiveFrom, LocalDate effectiveTo) {
     this.segment = segment;
     this.effectiveFrom = effectiveFrom;

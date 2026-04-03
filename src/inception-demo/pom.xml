@@ -255,6 +255,7 @@
                     <exclude>org.cryptacular:cryptacular:[1,2)</exclude>
                     <exclude>org.checkerframework:checker-qual:[3,4)</exclude>
                     <exclude>org.codehaus.woodstox:stax2-api:[4,5)</exclude>
+                    <exclude>org.eclipse.angus:angus-activation:[2,3)</exclude>
                     <exclude>org.ow2.asm:asm:[9,10)</exclude>
                   </excludes>
                 </dependencyConvergence>

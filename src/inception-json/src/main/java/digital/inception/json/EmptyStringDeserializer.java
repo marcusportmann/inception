@@ -16,11 +16,9 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
 
 /**
  * The {@code EmptyStringDeserializer} class implements the Jackson deserializer that deserializes
@@ -29,21 +27,19 @@ import java.io.IOException;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class EmptyStringDeserializer extends JsonDeserializer<String> {
+public class EmptyStringDeserializer extends ValueDeserializer<String> {
 
   /** Constructs a new {@code EmptyStringDeserializer}. */
   public EmptyStringDeserializer() {}
 
   @Override
-  public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-      throws IOException {
+  public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) {
     String value = jsonParser.getValueAsString();
     return value == null ? "" : value;
   }
 
   @Override
-  public String getNullValue(DeserializationContext deserializationContext)
-      throws JsonMappingException {
+  public String getNullValue(DeserializationContext deserializationContext) {
     return "";
   }
 }

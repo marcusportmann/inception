@@ -19,7 +19,7 @@ package digital.inception.kafka;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.common.serialization.Deserializer;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
 
 /**
  * The <code>AvroProcessor</code> class implements the base class for a thread that retrieves and

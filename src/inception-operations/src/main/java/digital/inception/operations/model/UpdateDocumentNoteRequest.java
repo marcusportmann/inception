@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -79,6 +80,7 @@ public class UpdateDocumentNoteRequest implements Serializable {
    * @param documentNoteId the ID for the document note
    * @param content the content for the document note
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UpdateDocumentNoteRequest(UUID documentNoteId, String content) {
     this.documentNoteId = documentNoteId;
     this.content = content;

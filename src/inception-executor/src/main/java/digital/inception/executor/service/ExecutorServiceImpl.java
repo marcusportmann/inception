@@ -16,7 +16,6 @@
 
 package digital.inception.executor.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
@@ -76,6 +75,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code ExecutorServiceImpl} class provides the Executor Service implementation.
@@ -392,7 +392,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
           throw new DuplicateTaskTypeException(taskType.getCode());
         }
 
-        taskTypeRepository.saveAndFlush(taskType);
+        taskTypeRepository.save(taskType);
 
         taskTypes = null;
       } catch (DuplicateTaskTypeException e) {
@@ -896,7 +896,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
         task.setExternalReference(queueTaskRequest.getExternalReference());
       }
 
-      taskRepository.saveAndFlush(task);
+      taskRepository.save(task);
 
       triggerTaskExecution();
 
@@ -1272,7 +1272,7 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
           throw new TaskTypeNotFoundException(taskType.getCode());
         }
 
-        taskTypeRepository.saveAndFlush(taskType);
+        taskTypeRepository.save(taskType);
 
         taskTypes = null;
       } catch (TaskTypeNotFoundException e) {
@@ -1300,14 +1300,14 @@ public class ExecutorServiceImpl extends AbstractServiceBase implements Executor
             task.getExternalReference(),
             task.getData());
 
-    archivedTaskRepository.saveAndFlush(archivedTask);
+    archivedTaskRepository.save(archivedTask);
   }
 
   private void createTaskEvent(TaskEventType taskEventType, TaskType taskType, Task task) {
     if (taskType.isEventTypeEnabledWithTaskData(taskEventType)) {
-      taskEventRepository.saveAndFlush(new TaskEvent(taskEventType, task, true));
+      taskEventRepository.save(new TaskEvent(taskEventType, task, true));
     } else if (taskType.isEventTypeEnabled(taskEventType)) {
-      taskEventRepository.saveAndFlush(new TaskEvent(taskEventType, task, false));
+      taskEventRepository.save(new TaskEvent(taskEventType, task, false));
     }
   }
 

@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -157,6 +158,7 @@ public class ResidencePermit implements Serializable {
    * @param issueDate the issue date for the residence permit
    * @param number the number for the residence permit
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ResidencePermit(String type, String countryOfIssue, LocalDate issueDate, String number) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
@@ -173,8 +175,9 @@ public class ResidencePermit implements Serializable {
    *     permit
    * @param issueDate the issue date for the residence permit
    * @param expiryDate the expiry date for the residence permit
-   * @param number thge number for the residence permit
+   * @param number the number for the residence permit
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ResidencePermit(
       String type,
       String countryOfIssue,

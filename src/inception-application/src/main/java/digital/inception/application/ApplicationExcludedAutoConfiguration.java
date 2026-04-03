@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * The {@code ApplicationExcludedAutoConfiguration} class disables specific Spring Boot
- * auto-configuration.
+ * autoconfiguration.
  *
  * @author Marcus Portmann
  */

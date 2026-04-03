@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -171,6 +172,7 @@ public class ContactMechanism implements Serializable {
    * @param role the code for the contact mechanism role
    * @param value the value for the contact mechanism
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ContactMechanism(String type, String role, String value) {
     this.type = type;
     this.role = role;
@@ -185,6 +187,7 @@ public class ContactMechanism implements Serializable {
    * @param value the value for the contact mechanism
    * @param purpose the code for the contact mechanism purpose
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ContactMechanism(String type, String role, String value, String purpose) {
     this.type = type;
     this.role = role;
@@ -200,6 +203,7 @@ public class ContactMechanism implements Serializable {
    * @param value the value for the contact mechanism
    * @param purposes the codes for the contact mechanism purposes
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ContactMechanism(String type, String role, String value, List<String> purposes) {
     this.type = type;
     this.role = role;

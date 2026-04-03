@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -190,6 +191,7 @@ public class Event extends AbstractProcessableObject<UUID, EventStatus> implemen
    * @param occurred the date and time the event occurred
    * @param actor the person or system who completed the action that led to the event
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Event(
       UUID tenantId,
       ObjectType objectType,

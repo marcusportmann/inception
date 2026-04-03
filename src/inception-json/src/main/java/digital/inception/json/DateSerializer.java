@@ -16,26 +16,24 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import digital.inception.core.util.ISO8601Util;
-import java.io.IOException;
 import java.util.Date;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
 
 /**
  * The {@code DateSerializer} class implements the Jackson serializer for the {@code Date} type.
  *
  * @author Marcus Portmann
  */
-public class DateSerializer extends JsonSerializer<Date> {
+public class DateSerializer extends ValueSerializer<Date> {
 
   /** Constructs a new {@code DateSerializer}. */
   public DateSerializer() {}
 
   @Override
-  public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializers)
-      throws IOException {
+  public void serialize(Date date, JsonGenerator jsonGenerator, SerializationContext context) {
     jsonGenerator.writeString(ISO8601Util.fromDateTime(date));
   }
 }

@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -88,6 +89,7 @@ public class LinkInteractionToWorkflowRequest implements Serializable {
    * @param interactionId the ID for the interaction
    * @param conversationId the ID for the conversation the interaction associated with
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public LinkInteractionToWorkflowRequest(
       UUID workflowId, UUID interactionId, String conversationId) {
     this.workflowId = workflowId;

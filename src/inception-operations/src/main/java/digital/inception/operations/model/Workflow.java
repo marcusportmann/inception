@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.operations.constraint.ValidWorkflow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -126,10 +126,9 @@ import java.util.UUID;
       "description"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidWorkflow
 @Entity
 @Table(name = "operations_workflows")
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "JpaDataSourceORMInspection"})
 public class Workflow implements Serializable {
 
   @Serial private static final long serialVersionUID = 1000000;
@@ -426,6 +425,7 @@ public class Workflow implements Serializable {
    * @param initiated the date and time the workflow was initiated
    * @param initiatedBy the person or system that initiated the workflow
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Workflow(
       UUID tenantId,
       UUID parentId,

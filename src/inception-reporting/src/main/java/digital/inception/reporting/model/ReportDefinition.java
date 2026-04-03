@@ -16,6 +16,7 @@
 
 package digital.inception.reporting.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -101,6 +102,7 @@ public class ReportDefinition implements Serializable {
    * @param name the name of the report definition
    * @param template the JasperReports template for the report definition
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ReportDefinition(String id, String name, byte[] template) {
     this.id = id;
     this.name = name;

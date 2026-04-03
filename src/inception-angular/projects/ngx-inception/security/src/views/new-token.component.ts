@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {
@@ -66,6 +66,8 @@ export class NewTokenComponent extends AdminContainerView implements OnInit {
 
   readonly validFromDateControl: FormControl<Date | null>;
 
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   private readonly matDialog = inject(MatDialog);
 
   private readonly securityService = inject(SecurityService);
@@ -112,7 +114,7 @@ export class NewTokenComponent extends AdminContainerView implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
   }
 
   deleteTokenClaim(existingTokenClaim: TokenClaim): void {
@@ -140,19 +142,20 @@ export class NewTokenComponent extends AdminContainerView implements OnInit {
     );
 
     dialogRef
-    .afterClosed()
-    .pipe(first())
-    .subscribe((tokenClaim: TokenClaim | undefined) => {
-      if (tokenClaim) {
-        for (const aTokenClaim of this.tokenClaims) {
-          if (aTokenClaim.name === tokenClaim.name) {
-            aTokenClaim.value = tokenClaim.value;
-            aTokenClaim.values = tokenClaim.values;
-            return;
+      .afterClosed()
+      .pipe(first())
+      .subscribe((tokenClaim: TokenClaim | undefined) => {
+        if (tokenClaim) {
+          for (const aTokenClaim of this.tokenClaims) {
+            if (aTokenClaim.name === tokenClaim.name) {
+              aTokenClaim.value = tokenClaim.value;
+              aTokenClaim.values = tokenClaim.values;
+              return;
+            }
           }
         }
-      }
-    });
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   newTokenClaim(): void {
@@ -172,31 +175,32 @@ export class NewTokenComponent extends AdminContainerView implements OnInit {
     );
 
     dialogRef
-    .afterClosed()
-    .pipe(first())
-    .subscribe((tokenClaim: TokenClaim | undefined) => {
-      if (tokenClaim) {
-        for (const aTokenClaim of this.tokenClaims) {
-          if (aTokenClaim.name === tokenClaim.name) {
-            this.dialogService.showErrorDialog(new Error('The token claim already exists.'));
-
-            return;
+      .afterClosed()
+      .pipe(first())
+      .subscribe((tokenClaim: TokenClaim | undefined) => {
+        if (tokenClaim) {
+          for (const aTokenClaim of this.tokenClaims) {
+            if (aTokenClaim.name === tokenClaim.name) {
+              this.dialogService.showErrorDialog(new Error('The token claim already exists.'));
+              return;
+            }
           }
+
+          this.tokenClaims.push(tokenClaim);
+
+          this.tokenClaims.sort((a: TokenClaim, b: TokenClaim) => {
+            if ((a.name ? a.name.toLowerCase() : '') < (b.name ? b.name.toLowerCase() : '')) {
+              return -1;
+            }
+            if ((a.name ? a.name.toLowerCase() : '') > (b.name ? b.name.toLowerCase() : '')) {
+              return 1;
+            }
+            return 0;
+          });
+
+          this.changeDetectorRef.markForCheck();
         }
-
-        this.tokenClaims.push(tokenClaim);
-
-        this.tokenClaims.sort((a: TokenClaim, b: TokenClaim) => {
-          if ((a.name ? a.name.toLowerCase() : '') < (b.name ? b.name.toLowerCase() : '')) {
-            return -1;
-          }
-          if ((a.name ? a.name.toLowerCase() : '') > (b.name ? b.name.toLowerCase() : '')) {
-            return 1;
-          }
-          return 0;
-        });
-      }
-    });
+      });
   }
 
   ngOnInit(): void {
@@ -205,29 +209,29 @@ export class NewTokenComponent extends AdminContainerView implements OnInit {
       this.spinnerService.showSpinner();
 
       this.securityService
-      .getToken(this.existingTokenId)
-      .pipe(
-        first(),
-        finalize(() => this.spinnerService.hideSpinner())
-      )
-      .subscribe({
-        next: (existingToken: Token) => {
-          this.nameControl.setValue(existingToken.name);
-          this.typeControl.setValue(existingToken.type);
-          this.descriptionControl.setValue(existingToken.description);
+        .getToken(this.existingTokenId)
+        .pipe(
+          first(),
+          finalize(() => this.spinnerService.hideSpinner())
+        )
+        .subscribe({
+          next: (existingToken: Token) => {
+            this.nameControl.setValue(existingToken.name);
+            this.typeControl.setValue(existingToken.type);
+            this.descriptionControl.setValue(existingToken.description);
 
-          if (existingToken.validFromDate) {
-            this.validFromDateControl.setValue(ISO8601Util.toDate(existingToken.validFromDate));
-          }
+            if (existingToken.validFromDate) {
+              this.validFromDateControl.setValue(ISO8601Util.toDate(existingToken.validFromDate));
+            }
 
-          if (existingToken.expiryDate) {
-            this.expiryDateControl.setValue(ISO8601Util.toDate(existingToken.expiryDate));
-          }
+            if (existingToken.expiryDate) {
+              this.expiryDateControl.setValue(ISO8601Util.toDate(existingToken.expiryDate));
+            }
 
-          this.tokenClaims = existingToken.claims;
-        },
-        error: (error: Error) => this.handleError(error, false)
-      });
+            this.tokenClaims = existingToken.claims;
+          },
+          error: (error: Error) => this.handleError(error, false)
+        });
     }
   }
 
@@ -268,20 +272,20 @@ export class NewTokenComponent extends AdminContainerView implements OnInit {
     this.spinnerService.showSpinner();
 
     this.securityService
-    .generateToken(generateTokenRequest)
-    .pipe(
-      first(),
-      finalize(() => {
-        this.spinnerService.hideSpinner();
+      .generateToken(generateTokenRequest)
+      .pipe(
+        first(),
+        finalize(() => {
+          this.spinnerService.hideSpinner();
 
-        this.newTokenForm.enable();
-      })
-    )
-    .subscribe({
-      next: () => {
-        void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent});
-      },
-      error: (error: Error) => this.handleError(error, false)
-    });
+          this.newTokenForm.enable();
+        })
+      )
+      .subscribe({
+        next: () => {
+          void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 }

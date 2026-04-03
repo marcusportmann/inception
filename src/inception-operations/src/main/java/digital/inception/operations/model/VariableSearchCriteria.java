@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -77,6 +78,7 @@ public class VariableSearchCriteria implements Serializable {
    * @param name the name for the variable
    * @param value the value for the variable
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public VariableSearchCriteria(String name, String value) {
     this.name = name;
     this.value = value;

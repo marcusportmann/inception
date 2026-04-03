@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -204,6 +205,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    * @param internal is a document with the document definition ID internal-only and excluded for
    *     external users
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowDefinitionDocumentDefinition(
       WorkflowDefinition workflowDefinition,
       String documentDefinitionId,
@@ -239,6 +241,7 @@ public class WorkflowDefinitionDocumentDefinition implements Serializable {
    *     during which the document, with the document definition ID, can be associated with a
    *     workflow with the workflow definition ID and workflow definition version
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowDefinitionDocumentDefinition(
       WorkflowDefinition workflowDefinition,
       String documentDefinitionId,

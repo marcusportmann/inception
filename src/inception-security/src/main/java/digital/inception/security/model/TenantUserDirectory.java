@@ -1,5 +1,6 @@
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -61,6 +62,7 @@ public class TenantUserDirectory implements Serializable {
    * @param tenantId the ID for the tenant
    * @param userDirectoryId the ID for the user directory
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TenantUserDirectory(UUID tenantId, UUID userDirectoryId) {
     this.tenantId = tenantId;
     this.userDirectoryId = userDirectoryId;

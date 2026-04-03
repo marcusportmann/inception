@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -131,6 +132,7 @@ public class Policy implements Serializable {
    * @param type the policy type
    * @param data the policy data
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Policy(String id, String version, String name, PolicyType type, String data) {
     this.id = id;
     this.version = version;

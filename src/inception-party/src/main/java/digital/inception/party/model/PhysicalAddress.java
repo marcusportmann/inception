@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -494,6 +495,7 @@ public class PhysicalAddress implements Serializable {
    * @param type the code for the physical address type
    * @param role the code for the physical address role
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public PhysicalAddress(String type, String role) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
@@ -507,6 +509,7 @@ public class PhysicalAddress implements Serializable {
    * @param role the code for the physical address role
    * @param purpose the code for the physical address purpose
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public PhysicalAddress(String type, String role, String purpose) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
@@ -521,6 +524,7 @@ public class PhysicalAddress implements Serializable {
    * @param role the code for the physical address role
    * @param purposes the codes for the physical address purposes
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public PhysicalAddress(String type, String role, List<String> purposes) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;

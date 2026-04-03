@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.time.ApplicationClock;
@@ -62,6 +60,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code ExecutorServiceTests} class contains the JUnit tests for the {@code ExecutorService}
@@ -525,7 +525,8 @@ public class ExecutorServiceTests {
     Task retrievedTask = executorService.getTask(taskId);
 
     assertEquals(TaskStatus.QUEUED, retrievedTask.getStatus());
-    assertTrue(retrievedTask.getNextExecution().isAfter(ApplicationClock.offsetNow().plusSeconds(120)));
+    assertTrue(
+        retrievedTask.getNextExecution().isAfter(ApplicationClock.offsetNow().plusSeconds(120)));
   }
 
   /** Test the parameter-based queue task functionality. */
@@ -1197,7 +1198,7 @@ public class ExecutorServiceTests {
   }
 
   private <TaskDataType> TaskDataType deserializeTaskData(
-      String json, Class<TaskDataType> taskDataTypeClass) throws JsonProcessingException {
+      String json, Class<TaskDataType> taskDataTypeClass) throws JacksonException {
     return objectMapper.readValue(json, taskDataTypeClass);
   }
 

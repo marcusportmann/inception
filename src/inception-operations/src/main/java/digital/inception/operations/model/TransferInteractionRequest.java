@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -78,6 +79,7 @@ public class TransferInteractionRequest implements Serializable {
    * @param interactionSourceId the ID for the interaction source the interaction should be
    *     transferred to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TransferInteractionRequest(UUID interactionId, UUID interactionSourceId) {
     this.interactionId = interactionId;
     this.interactionSourceId = interactionSourceId;

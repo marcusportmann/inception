@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -199,6 +200,7 @@ public class Education implements Serializable {
    * @param firstYearAttended the first year attended
    * @param lastYearAttended the last year attended
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Education(
       String institutionCountry,
       String institutionName,
@@ -226,6 +228,7 @@ public class Education implements Serializable {
    * @param qualificationType the code for the qualification type
    * @param qualificationYear the year the qualification was obtained
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Education(String institutionName, String qualificationType, Integer qualificationYear) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.institutionName = institutionName;
@@ -243,6 +246,7 @@ public class Education implements Serializable {
    * @param qualificationYear the year the qualification was obtained
    * @param fieldOfStudy the code for the field of study
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Education(
       String institutionName,
       String qualificationType,
@@ -268,6 +272,7 @@ public class Education implements Serializable {
    * @param qualificationYear the year the qualification was obtained
    * @param fieldOfStudy the code for the field of study
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Education(
       String institutionCountry,
       String institutionName,

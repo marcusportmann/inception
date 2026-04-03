@@ -92,7 +92,7 @@ public class VehicleServiceImpl extends AbstractServiceBase implements VehicleSe
         throw new DuplicateCarException(car.getId());
       }
 
-      carRepository.saveAndFlush(car);
+      carRepository.save(car);
     } catch (DuplicateCarException e) {
       throw e;
     } catch (Throwable e) {
@@ -111,7 +111,7 @@ public class VehicleServiceImpl extends AbstractServiceBase implements VehicleSe
         throw new DuplicateVehicleException(vehicle.getId());
       }
 
-      vehicleRepository.saveAndFlush(vehicle);
+      vehicleRepository.save(vehicle);
     } catch (DuplicateVehicleException e) {
       throw e;
     } catch (Throwable e) {

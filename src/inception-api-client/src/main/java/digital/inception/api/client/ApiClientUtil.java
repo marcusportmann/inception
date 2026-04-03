@@ -16,7 +16,6 @@
 
 package digital.inception.api.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.api.ProblemDetails;
 import digital.inception.core.exception.Problem;
 import digital.inception.core.util.CryptoUtil;
@@ -29,13 +28,14 @@ import javax.net.ssl.TrustManagerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.http.codec.json.JacksonJsonDecoder;
+import org.springframework.http.codec.json.JacksonJsonEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.netty.http.client.HttpClient;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * The {@code ApiClientUtil} class provides API client related utility methods.
@@ -201,16 +201,16 @@ public final class ApiClientUtil {
           ExchangeStrategies.builder()
               .codecs(
                   clientDefaultCodecsConfigurer -> {
-                    ObjectMapper objectMapper = JsonUtil.getObjectMapper();
+                    JsonMapper jsonMapper = JsonUtil.getObjectMapper();
 
                     clientDefaultCodecsConfigurer
                         .defaultCodecs()
-                        .jackson2JsonEncoder(
-                            new Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON));
+                        .jacksonJsonEncoder(
+                            new JacksonJsonEncoder(jsonMapper, MediaType.APPLICATION_JSON));
                     clientDefaultCodecsConfigurer
                         .defaultCodecs()
-                        .jackson2JsonDecoder(
-                            new Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON));
+                        .jacksonJsonDecoder(
+                            new JacksonJsonDecoder(jsonMapper, MediaType.APPLICATION_JSON));
                   })
               .build();
       webClientBuilder.exchangeStrategies(strategies);

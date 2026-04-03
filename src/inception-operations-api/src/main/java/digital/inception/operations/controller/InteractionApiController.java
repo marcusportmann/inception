@@ -132,7 +132,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void assignInteraction(
       @Parameter(
               name = "Tenant-ID",
@@ -199,7 +199,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
   void createInteraction(
       @Parameter(
               name = "Tenant-ID",
@@ -277,7 +277,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
   void createInteractionAttachment(
       @Parameter(
               name = "Tenant-ID",
@@ -362,7 +362,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   UUID createInteractionNote(
       @Parameter(
               name = "Tenant-ID",
@@ -434,7 +434,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void createInteractionSource(
       @Parameter(
               name = "Tenant-ID",
@@ -503,7 +503,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
   void deleteInteraction(
       @Parameter(
               name = "Tenant-ID",
@@ -573,7 +573,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void deleteInteractionSource(
       @Parameter(
               name = "Tenant-ID",
@@ -647,7 +647,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionPartyLinkAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionPartyLinkAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void delinkPartyFromInteraction(
       @Parameter(
               name = "Tenant-ID",
@@ -715,7 +715,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   Interaction getInteraction(
       @Parameter(
               name = "Tenant-ID",
@@ -790,7 +790,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   InteractionAttachment getInteractionAttachment(
       @Parameter(
               name = "Tenant-ID",
@@ -878,7 +878,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   InteractionAttachmentSummaries getInteractionAttachmentSummaries(
       @Parameter(
               name = "Tenant-ID",
@@ -973,7 +973,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   InteractionNote getInteractionNote(
       @Parameter(
               name = "Tenant-ID",
@@ -1060,7 +1060,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   InteractionNotes getInteractionNotes(
       @Parameter(
               name = "Tenant-ID",
@@ -1150,7 +1150,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   InteractionSource getInteractionSource(
       @Parameter(
               name = "Tenant-ID",
@@ -1216,7 +1216,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   List<InteractionSourceSummary> getInteractionSourceSummaries(
       @Parameter(
               name = "Tenant-ID",
@@ -1272,7 +1272,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   List<InteractionSource> getInteractionSources(
       @Parameter(
               name = "Tenant-ID",
@@ -1348,7 +1348,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   InteractionSummaries getInteractionSummaries(
       @Parameter(
               name = "Tenant-ID",
@@ -1450,7 +1450,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionPartyLinkAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionPartyLinkAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void linkPartyToInteraction(
       @Parameter(
               name = "Tenant-ID",
@@ -1506,7 +1506,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
   void processInteractions() throws ServiceUnavailableException;
 
   /**
@@ -1554,7 +1554,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   InteractionSummaries searchInteractions(
       @Parameter(
               name = "Tenant-ID",
@@ -1628,7 +1628,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void transferInteraction(
       @Parameter(
               name = "Tenant-ID",
@@ -1699,7 +1699,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
   void updateInteraction(
       @Parameter(
               name = "Tenant-ID",
@@ -1777,7 +1777,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration')")
   void updateInteractionAttachment(
       @Parameter(
               name = "Tenant-ID",
@@ -1859,7 +1859,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.InteractionNoteAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
   void updateInteractionNote(
       @Parameter(
               name = "Tenant-ID",
@@ -1931,7 +1931,7 @@ public interface InteractionApiController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "isSecurityDisabled() or hasRole('Administrator') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration')")
   void updateInteractionSource(
       @Parameter(
               name = "Tenant-ID",

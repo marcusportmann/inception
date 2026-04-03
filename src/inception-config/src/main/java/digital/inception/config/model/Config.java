@@ -16,6 +16,7 @@
 
 package digital.inception.config.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -98,6 +99,7 @@ public class Config implements Serializable {
    * @param value the value for the config
    * @param description the description for the config
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Config(String id, String value, String description) {
     this.id = id;
     this.value = value;

@@ -16,6 +16,7 @@
 
 package digital.inception.codes.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -110,6 +111,7 @@ public class CodeCategory implements Serializable {
    * @param id the ID for the code category
    * @param name the name of the code category
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public CodeCategory(String id, String name) {
     this.id = id;
     this.name = name;
@@ -122,6 +124,7 @@ public class CodeCategory implements Serializable {
    * @param name the name of the code category
    * @param data the code data for the code category
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public CodeCategory(String id, String name, String data) {
     this.id = id;
     this.name = name;

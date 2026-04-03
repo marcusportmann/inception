@@ -19,7 +19,6 @@ package digital.inception.core.converter;
 import digital.inception.core.util.ISO8601Util;
 import java.time.LocalDateTime;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -37,7 +36,7 @@ public final class StringToLocalDateTimeConverter implements Converter<String, L
   public StringToLocalDateTimeConverter() {}
 
   @Override
-  public LocalDateTime convert(@NonNull String source) {
+  public LocalDateTime convert(String source) {
     if (!StringUtils.hasText(source)) {
       return null;
     }

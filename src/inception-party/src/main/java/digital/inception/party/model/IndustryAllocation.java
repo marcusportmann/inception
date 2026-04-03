@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -130,6 +131,7 @@ public class IndustryAllocation implements Serializable {
    * @param system the code for the industry classification system
    * @param industry the code for the industry classification
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public IndustryAllocation(String system, String industry) {
     this.system = system;
     this.industry = industry;
@@ -142,6 +144,7 @@ public class IndustryAllocation implements Serializable {
    * @param industry the code for the industry classification
    * @param effectiveFrom the date the industry allocation is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public IndustryAllocation(String system, String industry, LocalDate effectiveFrom) {
     this.system = system;
     this.industry = industry;
@@ -156,6 +159,7 @@ public class IndustryAllocation implements Serializable {
    * @param effectiveFrom the date the industry allocation is effective from
    * @param effectiveTo the date the industry allocation is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public IndustryAllocation(
       String system, String industry, LocalDate effectiveFrom, LocalDate effectiveTo) {
     this.system = system;

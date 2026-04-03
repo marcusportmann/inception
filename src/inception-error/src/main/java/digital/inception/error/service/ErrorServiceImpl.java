@@ -16,7 +16,6 @@
 
 package digital.inception.error.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.service.AbstractServiceBase;
@@ -43,6 +42,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code ErrorServiceImpl} class provides the Error Service implementation.
@@ -124,7 +124,7 @@ public class ErrorServiceImpl extends AbstractServiceBase implements ErrorServic
 
       errorReport.setFeedback(feedback);
 
-      errorReportRepository.saveAndFlush(errorReport);
+      errorReportRepository.save(errorReport);
 
       if (inDebugMode()) {
         ObjectMapper objectMapper = getApplicationContext().getBean(ObjectMapper.class);

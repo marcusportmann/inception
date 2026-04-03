@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -86,6 +87,7 @@ public class UserDirectoryParameter implements Serializable {
    * @param name the name of the user directory parameter
    * @param value the {@code BigDecimal} value for the user directory parameter
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserDirectoryParameter(String name, BigDecimal value) {
     this.name = name;
     this.value = String.valueOf(value);
@@ -97,6 +99,7 @@ public class UserDirectoryParameter implements Serializable {
    * @param name the name of the user directory parameter
    * @param value the binary value for the user directory parameter
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserDirectoryParameter(String name, BinaryBuffer value) {
     this.name = name;
     this.value = Base64.getEncoder().encodeToString(value.getData());
@@ -108,6 +111,7 @@ public class UserDirectoryParameter implements Serializable {
    * @param name the name of the user directory parameter
    * @param value the binary value for the user directory parameter
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserDirectoryParameter(String name, byte[] value) {
     this.name = name;
     this.value = Base64.getEncoder().encodeToString(value);
@@ -119,6 +123,7 @@ public class UserDirectoryParameter implements Serializable {
    * @param name the name of the user directory parameter
    * @param value the {@code double} value for the user directory parameter
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserDirectoryParameter(String name, double value) {
     this.name = name;
     this.value = String.valueOf(value);
@@ -130,6 +135,7 @@ public class UserDirectoryParameter implements Serializable {
    * @param name the name of the user directory parameter
    * @param value the {@code long} value for the user directory parameter
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserDirectoryParameter(String name, long value) {
     this.name = name;
     this.value = String.valueOf(value);
@@ -141,6 +147,7 @@ public class UserDirectoryParameter implements Serializable {
    * @param name the name of the user directory parameter
    * @param value the {@code String} value for the user directory parameter
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserDirectoryParameter(String name, String value) {
     this.name = name;
     this.value = value;

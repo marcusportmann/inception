@@ -16,6 +16,7 @@
 
 package digital.inception.party.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -214,6 +215,7 @@ public class Mandate implements Serializable {
    * @param type the code for the mandate type
    * @param requiredMandataries the number of mandataries required to execute the mandate
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Mandate(UUID tenantId, String type, RequiredMandataries requiredMandataries) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;
@@ -229,6 +231,7 @@ public class Mandate implements Serializable {
    * @param requiredMandataries the number of mandataries required to execute the mandate
    * @param effectiveFrom the date that the association is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Mandate(
       UUID tenantId,
       String type,
@@ -250,6 +253,7 @@ public class Mandate implements Serializable {
    * @param effectiveFrom the date that the association is effective from
    * @param effectiveTo the date that the association is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Mandate(
       UUID tenantId,
       String type,

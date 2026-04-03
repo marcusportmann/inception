@@ -42,7 +42,7 @@ import {SidebarService} from '../services/sidebar.service';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'sidebar-nav-item',
   standalone: true,
-  styles: ['.nav-dropdown-toggle { cursor: pointer; }'],
+  styles: [':host { display: block; }', '.nav-dropdown-toggle { cursor: pointer; }'],
   template: `
     @if (navItem; as item) {
       @if (item.divider) {

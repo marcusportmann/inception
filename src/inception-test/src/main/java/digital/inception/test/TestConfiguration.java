@@ -16,15 +16,12 @@
 
 package digital.inception.test;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.CoreConfiguration;
 import digital.inception.core.jdbc.DataSourceConfiguration;
 import digital.inception.core.jdbc.DataSourceUtil;
 import digital.inception.core.jdbc.IdGenerator;
 import digital.inception.jpa.JpaUtil;
-import digital.inception.json.InceptionModule;
+import digital.inception.json.JsonUtil;
 import digital.inception.r2dbc.ConnectionFactoryConfiguration;
 import digital.inception.r2dbc.ConnectionFactoryUtil;
 import io.r2dbc.spi.ConnectionFactory;
@@ -42,6 +39,7 @@ import liquibase.command.core.helpers.DatabaseChangelogCommandStep;
 import liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
+import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
@@ -63,7 +61,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.data.r2dbc.core.R2dbcEntityOperations;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -73,7 +70,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.reactive.function.client.WebClient;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code TestConfiguration} class provides the base Spring configuration for the JUnit test
@@ -236,6 +235,7 @@ public class TestConfiguration {
 
               try (ResultSet catalogsResultSet = databaseMetaData.getCatalogs()) {
                 while (catalogsResultSet.next()) {
+                  @SuppressWarnings("unused")
                   String catalogName = catalogsResultSet.getString(1);
                 }
               }
@@ -334,10 +334,7 @@ public class TestConfiguration {
    */
   @Bean
   public ObjectMapper objectMapper() {
-    return jackson2ObjectMapperBuilder()
-        .build()
-        .disable(SerializationFeature.INDENT_OUTPUT)
-        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    return JsonUtil.getObjectMapper();
   }
 
   /**
@@ -367,6 +364,20 @@ public class TestConfiguration {
   }
 
   /**
+   * Returns the local validator factory bean.
+   *
+   * @return the local validator factory bean
+   */
+  @Bean
+  public LocalValidatorFactoryBean validator() {
+    LocalValidatorFactoryBean factoryBean = new LocalValidatorFactoryBean();
+
+    factoryBean.setMessageInterpolator(new ParameterMessageInterpolator());
+
+    return factoryBean;
+  }
+
+  /**
    * Returns the WebClient.Builder.
    *
    * @return the default WebClient.Builder
@@ -377,28 +388,5 @@ public class TestConfiguration {
     // TODO: Configure with security if available -- MARCUS
 
     return WebClient.builder();
-  }
-
-  /**
-   * Returns the {@code Jackson2ObjectMapperBuilder} bean, which configures the Jackson JSON
-   * processor package.
-   *
-   * @return the {@code Jackson2ObjectMapperBuilder} bean, which configures the Jackson JSON
-   *     processor package
-   */
-  protected Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
-    Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
-
-    /*
-     * Install the custom Jackson module that supports serializing and de-serializing ISO 8601 date
-     * and date/time values. The jackson-datatype-jsr310 module provided by Jackson was not used as
-     * it does not handle timezones correctly for LocalDateTime, OffsetDateTime or Instant objects.
-     *
-     * This module also supports serializing and deserializing Enum types that implement the
-     * CodeEnum interface.
-     */
-    jackson2ObjectMapperBuilder.modulesToInstall(new InceptionModule());
-
-    return jackson2ObjectMapperBuilder;
   }
 }

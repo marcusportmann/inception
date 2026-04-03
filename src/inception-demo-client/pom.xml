@@ -62,6 +62,7 @@
                     <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
                     <exclude>org.cryptacular:cryptacular:[1,2)</exclude>
                     <exclude>org.checkerframework:checker-qual:[3,4)</exclude>
+                    <exclude>org.eclipse.angus:angus-activation:[2,3)</exclude>
                     <exclude>org.ow2.asm:asm:[9,10)</exclude>
                   </excludes>
                 </dependencyConvergence>
@@ -99,11 +100,13 @@
                 <dateLibrary>java8</dateLibrary>
                 <interfaceOnly>true</interfaceOnly>
                 <notNullJacksonAnnotation>true</notNullJacksonAnnotation>
+                <openApiNullable>false</openApiNullable>
                 <serializableModel>true</serializableModel>
                 <sourceFolder>src/main/java</sourceFolder>
                 <useBeanValidation>true</useBeanValidation>
                 <useJakartaEe>true</useJakartaEe>
-                <useSpringBoot3>true</useSpringBoot3>
+                <useJackson3>true</useJackson3>
+                <useSpringBoot4>true</useSpringBoot4>
                 <useTags>true</useTags>
               </configOptions>
 
@@ -135,11 +138,13 @@
                 <dateLibrary>java8</dateLibrary>
                 <interfaceOnly>true</interfaceOnly>
                 <notNullJacksonAnnotation>true</notNullJacksonAnnotation>
+                <openApiNullable>false</openApiNullable>
                 <serializableModel>true</serializableModel>
                 <sourceFolder>src/main/java</sourceFolder>
                 <useBeanValidation>true</useBeanValidation>
                 <useJakartaEe>true</useJakartaEe>
-                <useSpringBoot3>true</useSpringBoot3>
+                <useJackson3>true</useJackson3>
+                <useSpringBoot4>true</useSpringBoot4>
                 <useTags>true</useTags>
               </configOptions>
               <generateApiDocumentation>true</generateApiDocumentation>

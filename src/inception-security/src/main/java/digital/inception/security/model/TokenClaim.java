@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -81,6 +82,7 @@ public class TokenClaim implements Serializable {
    * @param name the name of the token claim
    * @param values the values for the token claim
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TokenClaim(String name, List<String> values) {
     this.name = name;
     this.values = values;
@@ -92,6 +94,7 @@ public class TokenClaim implements Serializable {
    * @param name the name of the token claim
    * @param values the values for the token claim
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TokenClaim(String name, String[] values) {
     this.name = name;
     this.values = Arrays.asList(values);
@@ -103,6 +106,7 @@ public class TokenClaim implements Serializable {
    * @param name the name of the token claim
    * @param value the single value for the token claim
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TokenClaim(String name, String value) {
     this.name = name;
     this.value = value;

@@ -74,7 +74,7 @@ public class InternalPolicyStore implements PolicyStore {
         throw new DuplicatePolicyException(policy.getId());
       }
 
-      return policyRepository.saveAndFlush(policy);
+      return policyRepository.save(policy);
     } catch (DuplicatePolicyException e) {
       throw e;
     } catch (Throwable e) {
@@ -218,7 +218,7 @@ public class InternalPolicyStore implements PolicyStore {
         existingPolicy.setType(policy.getType());
         existingPolicy.setData(policy.getData());
 
-        return policyRepository.saveAndFlush(existingPolicy);
+        return policyRepository.save(existingPolicy);
       } else {
         throw new PolicyNotFoundException(policy.getId());
       }

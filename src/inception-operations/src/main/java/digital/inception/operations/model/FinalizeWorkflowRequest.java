@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -74,6 +75,7 @@ public class FinalizeWorkflowRequest implements Serializable {
    * @param workflowId the ID for the workflow
    * @param status the status for the workflow
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public FinalizeWorkflowRequest(UUID workflowId, WorkflowStatus status) {
     this.workflowId = workflowId;
     this.status = status;

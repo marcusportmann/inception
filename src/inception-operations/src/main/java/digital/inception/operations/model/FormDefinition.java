@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -113,6 +114,7 @@ public class FormDefinition implements Serializable {
    * @param type the form type for the form definition
    * @param data the JSON or XML data for the form definition
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public FormDefinition(String id, String name, FormType type, String data) {
     this.id = id;
     this.name = name;

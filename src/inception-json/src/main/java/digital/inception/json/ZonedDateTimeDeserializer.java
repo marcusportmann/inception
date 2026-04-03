@@ -16,12 +16,11 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import digital.inception.core.util.ISO8601Util;
-import java.io.IOException;
 import java.time.ZonedDateTime;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
 
 /**
  * The {@code ZonedDateTimeDeserializer} class implements the Jackson deserializer for the {@code
@@ -29,19 +28,19 @@ import java.time.ZonedDateTime;
  *
  * @author Marcus Portmann
  */
-public class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
+public class ZonedDateTimeDeserializer extends ValueDeserializer<ZonedDateTime> {
 
   /** Constructs a new {@code ZonedDateTimeDeserializer}. */
   public ZonedDateTimeDeserializer() {}
 
   @Override
   public ZonedDateTime deserialize(
-      JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+      JsonParser jsonParser, DeserializationContext deserializationContext) {
     try {
       return ISO8601Util.toZonedDateTime(jsonParser.getValueAsString());
     } catch (Throwable e) {
-      throw new IOException(
-          "Failed to deserialize the ISO 8601 value (" + jsonParser.getValueAsString() + ")");
+      throw new RuntimeException(
+          "Failed to deserialize the ISO 8601 value (" + jsonParser.getValueAsString() + ")", e);
     }
   }
 }

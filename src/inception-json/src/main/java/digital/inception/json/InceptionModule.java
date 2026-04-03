@@ -16,8 +16,6 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import digital.inception.core.model.CodeEnum;
 import java.time.Duration;
 import java.time.Instant;
@@ -28,6 +26,8 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import tools.jackson.core.Version;
+import tools.jackson.databind.module.SimpleModule;
 
 /**
  * The {@code InceptionModule} class implements the custom Jackson module that registers the

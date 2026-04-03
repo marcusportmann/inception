@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -131,6 +132,7 @@ public class SourceOfFunds implements Serializable {
    *
    * @param type the source of funds type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(String type) {
     this.type = type;
   }
@@ -142,6 +144,7 @@ public class SourceOfFunds implements Serializable {
    * @param percentage the percentage of the total of all sources of funds attributed to this source
    *     of funds
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(String type, int percentage) {
     this.type = type;
     this.percentage = percentage;
@@ -153,6 +156,7 @@ public class SourceOfFunds implements Serializable {
    * @param type the source of funds type
    * @param effectiveFrom the date the source of funds is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(String type, LocalDate effectiveFrom) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
@@ -166,6 +170,7 @@ public class SourceOfFunds implements Serializable {
    * @param percentage the percentage of the total of all sources of funds attributed to this source
    *     of funds
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(String type, LocalDate effectiveFrom, int percentage) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
@@ -179,6 +184,7 @@ public class SourceOfFunds implements Serializable {
    * @param effectiveFrom the date the source of funds is effective from
    * @param effectiveTo the date the source of funds is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(String type, LocalDate effectiveFrom, LocalDate effectiveTo) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
@@ -194,6 +200,7 @@ public class SourceOfFunds implements Serializable {
    * @param percentage the percentage of the total of all sources of funds attributed to this source
    *     of funds
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(
       String type, LocalDate effectiveFrom, LocalDate effectiveTo, int percentage) {
     this.type = type;
@@ -208,6 +215,7 @@ public class SourceOfFunds implements Serializable {
    * @param type the source of funds type
    * @param description the description for the source of funds
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(String type, String description) {
     this.type = type;
     this.description = description;
@@ -221,6 +229,7 @@ public class SourceOfFunds implements Serializable {
    * @param percentage the percentage of the total of all sources of funds attributed to this source
    *     of funds
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(String type, String description, int percentage) {
     this.type = type;
     this.description = description;
@@ -234,6 +243,7 @@ public class SourceOfFunds implements Serializable {
    * @param description the description for the source of funds
    * @param effectiveFrom the date the source of funds is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(String type, String description, LocalDate effectiveFrom) {
     this.type = type;
     this.description = description;
@@ -249,6 +259,7 @@ public class SourceOfFunds implements Serializable {
    * @param percentage the percentage of the total of all sources of funds attributed to this source
    *     of funds
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(String type, String description, LocalDate effectiveFrom, int percentage) {
     this.type = type;
     this.description = description;
@@ -264,6 +275,7 @@ public class SourceOfFunds implements Serializable {
    * @param effectiveFrom the date the source of funds is effective from
    * @param effectiveTo the date the source of funds is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(
       String type, String description, LocalDate effectiveFrom, LocalDate effectiveTo) {
     this.type = type;
@@ -282,6 +294,7 @@ public class SourceOfFunds implements Serializable {
    * @param percentage the percentage of the total of all sources of funds attributed to this source
    *     of funds
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public SourceOfFunds(
       String type,
       String description,

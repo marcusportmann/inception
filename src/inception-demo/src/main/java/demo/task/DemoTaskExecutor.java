@@ -16,7 +16,6 @@
 
 package demo.task;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.executor.exception.TaskExecutionFailedException;
 import digital.inception.executor.exception.TaskExecutionRetryableException;
 import digital.inception.executor.model.MultistepTaskExecutor;
@@ -25,6 +24,7 @@ import digital.inception.executor.model.TaskStep;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code DemoTaskExecutor} class.

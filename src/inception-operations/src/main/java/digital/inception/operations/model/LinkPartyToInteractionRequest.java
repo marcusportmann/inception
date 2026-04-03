@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -75,6 +76,7 @@ public class LinkPartyToInteractionRequest implements Serializable {
    * @param interactionId the ID for the interaction
    * @param partyId the ID for the party
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public LinkPartyToInteractionRequest(UUID interactionId, UUID partyId) {
     this.interactionId = interactionId;
     this.partyId = partyId;

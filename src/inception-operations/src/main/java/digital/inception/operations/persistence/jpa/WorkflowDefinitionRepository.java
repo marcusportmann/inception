@@ -85,6 +85,16 @@ public interface WorkflowDefinitionRepository
       @Param("workflowDefinitionVersion") int workflowDefinitionVersion);
 
   /**
+   * Find the latest version of the workflow definition with the specified ID.
+   *
+   * @param workflowDefinitionId the ID for the workflow definition
+   * @return the latest version of the workflow definition with the specified ID or an empty
+   *     Optional if no versions of the workflow definition exist
+   */
+  Optional<WorkflowDefinition> findFirstByIdOrderByVersionDesc(
+      @Param("workflowDefinitionId") String workflowDefinitionId);
+
+  /**
    * Find the latest versions of all the workflow definitions that are associated with the workflow
    * definition category with the specified ID and are either
    *
@@ -113,20 +123,6 @@ public interface WorkflowDefinitionRepository
        """)
   List<WorkflowDefinition> findForCategoryAndTenantOrGlobal(
       @Param("categoryId") String categoryId, @Param("tenantId") UUID tenantId);
-
-  /**
-   * Find the latest version of the workflow definition with the specified ID.
-   *
-   * @param workflowDefinitionId the ID for the workflow definition
-   * @return the latest version of the workflow definition with the specified ID or an empty
-   *     Optional if no versions of the workflow definition exist
-   */
-  @Query(
-      value =
-          "select * from operations_workflow_definitions wd where wd.id = :workflowDefinitionId order by wd.version desc limit 1",
-      nativeQuery = true)
-  Optional<WorkflowDefinition> findLatestVersionById(
-      @Param("workflowDefinitionId") String workflowDefinitionId);
 
   /**
    * Find the next version of the workflow definition with the specified ID.

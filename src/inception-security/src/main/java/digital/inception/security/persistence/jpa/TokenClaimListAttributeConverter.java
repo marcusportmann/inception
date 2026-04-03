@@ -16,16 +16,14 @@
 
 package digital.inception.security.persistence.jpa;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import digital.inception.json.InceptionModule;
+import digital.inception.json.JsonUtil;
 import digital.inception.security.model.TokenClaim;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.util.StringUtils;
+import tools.jackson.core.type.TypeReference;
 
 /**
  * The {@code TokenClaimListConverter} class implements the custom JPA attribute converter for a
@@ -36,14 +34,6 @@ import org.springframework.util.StringUtils;
 @Converter
 public class TokenClaimListAttributeConverter
     implements AttributeConverter<List<TokenClaim>, String> {
-
-  private static final ObjectMapper objectMapper;
-
-  static {
-    objectMapper = new ObjectMapper();
-    objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-    objectMapper.registerModule(new InceptionModule());
-  }
 
   /** Constructs a new {@code TokenClaimListConverter}. */
   public TokenClaimListAttributeConverter() {}
@@ -62,7 +52,7 @@ public class TokenClaimListAttributeConverter
     }
 
     try {
-      return objectMapper.writeValueAsString(attribute);
+      return JsonUtil.getObjectMapper().writeValueAsString(attribute);
     } catch (Throwable e) {
       throw new RuntimeException("Failed to serialize the token claims", e);
     }
@@ -85,8 +75,9 @@ public class TokenClaimListAttributeConverter
 
     if (StringUtils.hasText(dbData)) {
       try {
-        return objectMapper.convertValue(
-            objectMapper.readValue(dbData, List.class), new TypeReference<>() {});
+        return JsonUtil.getObjectMapper()
+            .convertValue(
+                JsonUtil.getObjectMapper().readValue(dbData, List.class), new TypeReference<>() {});
       } catch (Throwable e) {
         throw new RuntimeException("Failed to deserialize the token claims JSON", e);
       }

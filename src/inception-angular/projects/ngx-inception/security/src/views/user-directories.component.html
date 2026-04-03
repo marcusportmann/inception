@@ -30,11 +30,11 @@
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-userDirectoryId="userDirectoryId">
-      <button type="button" (click)="editUserDirectory(userDirectoryId)">
+      <button type="button" mat-menu-item (click)="editUserDirectory(userDirectoryId)">
         <i class="fas fa-edit"></i>
         <span i18n="@@security_user_directories_component_menu_item_edit">Edit</span>
       </button>
-      <button type="button" (click)="deleteUserDirectory(userDirectoryId)">
+      <button type="button" mat-menu-item (click)="deleteUserDirectory(userDirectoryId)">
         <i class="far fa-trash-alt"></i>
         <span i18n="@@security_user_directories_component_menu_item_delete">Delete</span>
       </button>

@@ -16,8 +16,6 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import digital.inception.core.model.CodeEnum;
 import java.time.Duration;
 import java.time.Instant;
@@ -28,18 +26,22 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import tools.jackson.databind.BeanDescription;
+import tools.jackson.databind.DeserializationConfig;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.module.SimpleDeserializers;
 
 /**
- * The {@code InceptionModuleDeserializers} class dynamically provides a CodeEnumDeserializer for an
- * Enum implementing the CodeEnum interface.
+ * The {@code InceptionModuleDeserializers} class dynamically provides a {@code
+ * CodeEnumDeserializer} for an enum implementing the {@link CodeEnum} interface.
  *
  * @author Marcus Portmann
  */
 public class InceptionModuleDeserializers extends SimpleDeserializers {
 
-  /** Constructs a new {@code InceptionModuleDeserializers} instance>. */
+  /** Constructs a new {@code InceptionModuleDeserializers} instance. */
   public InceptionModuleDeserializers() {
-
     addDeserializer(Date.class, new DateDeserializer());
     addDeserializer(Duration.class, new DurationDeserializer());
     addDeserializer(Instant.class, new InstantDeserializer());
@@ -52,18 +54,15 @@ public class InceptionModuleDeserializers extends SimpleDeserializers {
   }
 
   @Override
-  public JsonDeserializer<?> findEnumDeserializer(
-      Class<?> type, DeserializationConfig config, BeanDescription beanDesc)
-      throws JsonMappingException {
+  public ValueDeserializer<?> findEnumDeserializer(
+      JavaType enumType, DeserializationConfig config, BeanDescription.Supplier beanDescRef) {
 
-    // Is the type an enum that implements CodeEnum?
-    if (type.isEnum() && CodeEnum.class.isAssignableFrom(type)) {
-      JavaType javaType = config.getTypeFactory().constructType(type);
-      // Create a contextual CodeEnumDeserializer for this specific enum subtype
-      return new CodeEnumDeserializer<>(javaType);
+    Class<?> rawClass = enumType.getRawClass();
+
+    if (rawClass.isEnum() && CodeEnum.class.isAssignableFrom(rawClass)) {
+      return new CodeEnumDeserializer<>(enumType);
     }
 
-    // For other enums, let Jackson handle them normally
-    return null;
+    return super.findEnumDeserializer(enumType, config, beanDescRef);
   }
 }

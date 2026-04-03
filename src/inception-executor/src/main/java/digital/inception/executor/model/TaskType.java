@@ -16,6 +16,7 @@
 
 package digital.inception.executor.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -221,6 +222,7 @@ public class TaskType implements Serializable {
    * @param executionTimeout the amount of time in milliseconds after which a locked and executing
    *     task of this type will be considered hung and will be reset
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskType(
       String code,
       String name,
@@ -254,6 +256,7 @@ public class TaskType implements Serializable {
    * @param archiveCompleted archive completed tasks of this type
    * @param archiveFailed archive failed tasks of this type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskType(
       String code,
       String name,
@@ -282,6 +285,7 @@ public class TaskType implements Serializable {
    * @param archiveFailed archive failed tasks of this type
    * @param maximumExecutionAttempts the maximum execution attempts for tasks of this type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskType(
       String code,
       String name,
@@ -313,6 +317,7 @@ public class TaskType implements Serializable {
    * @param maximumExecutionAttempts the maximum execution attempts for tasks of this type
    * @param retryDelay the retry delay for tasks of this type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskType(
       String code,
       String name,
@@ -342,6 +347,7 @@ public class TaskType implements Serializable {
    * @param executorClass the fully qualified name of the Java class that executes tasks of this
    *     type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskType(String code, String name, TaskPriority priority, String executorClass) {
     this.code = code;
     this.name = name;
@@ -362,6 +368,7 @@ public class TaskType implements Serializable {
    *     type
    * @param maximumExecutionAttempts the maximum execution attempts for tasks of this type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskType(
       String code,
       String name,
@@ -389,6 +396,7 @@ public class TaskType implements Serializable {
    * @param maximumExecutionAttempts the maximum execution attempts for tasks of this type
    * @param retryDelay the retry delay for tasks of this type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskType(
       String code,
       String name,

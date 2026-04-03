@@ -16,11 +16,10 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import java.io.IOException;
 import java.time.Duration;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
 
 /**
  * The {@code DurationDeserializer} class implements the Jackson deserializer for the {@code
@@ -28,21 +27,19 @@ import java.time.Duration;
  *
  * @author Marcus Portmann
  */
-public class DurationDeserializer extends JsonDeserializer<Duration> {
+public class DurationDeserializer extends ValueDeserializer<Duration> {
 
   /** Constructs a new {@code DurationDeserializer}. */
   public DurationDeserializer() {}
 
   @Override
-  public Duration deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-      throws IOException {
+  public Duration deserialize(
+      JsonParser jsonParser, DeserializationContext deserializationContext) {
     try {
       return Duration.parse(jsonParser.getValueAsString());
     } catch (Throwable e) {
-      throw new IOException(
-          "Failed to deserialize the ISO 8601 duration value ("
-              + jsonParser.getValueAsString()
-              + ")");
+      throw new RuntimeException(
+          "Failed to deserialize the ISO 8601 value (" + jsonParser.getValueAsString() + ")", e);
     }
   }
 }

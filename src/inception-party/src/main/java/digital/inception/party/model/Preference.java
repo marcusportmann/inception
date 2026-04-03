@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -101,6 +102,7 @@ public class Preference implements Serializable {
    * @param type the preference type
    * @param value the value for the preference
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Preference(String type, String value) {
     this.type = type;
     this.value = value;

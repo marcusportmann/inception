@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -84,6 +85,7 @@ public class UserAttribute implements Serializable {
    * @param name the name of the user attribute
    * @param value the {@code BigDecimal} value for the user attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserAttribute(String name, BigDecimal value) {
     this.name = name;
     this.value = String.valueOf(value);
@@ -95,6 +97,7 @@ public class UserAttribute implements Serializable {
    * @param name the name of the user attribute
    * @param value the binary value for the user attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserAttribute(String name, BinaryBuffer value) {
     this.name = name;
     this.value = Base64.getEncoder().encodeToString(value.getData());
@@ -106,6 +109,7 @@ public class UserAttribute implements Serializable {
    * @param name the name of the user attribute
    * @param value the binary value for the user attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserAttribute(String name, byte[] value) {
     this.name = name;
     this.value = Base64.getEncoder().encodeToString(value);
@@ -117,6 +121,7 @@ public class UserAttribute implements Serializable {
    * @param name the name of the user attribute
    * @param value the {@code double} value for the user attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserAttribute(String name, double value) {
     this.name = name;
     this.value = String.valueOf(value);
@@ -128,6 +133,7 @@ public class UserAttribute implements Serializable {
    * @param name the name of the user attribute
    * @param value the {@code long} value for the user attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserAttribute(String name, long value) {
     this.name = name;
     this.value = String.valueOf(value);
@@ -139,6 +145,7 @@ public class UserAttribute implements Serializable {
    * @param name the name of the user attribute
    * @param value the {@code String} value for the user attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public UserAttribute(String name, String value) {
     this.name = name;
     this.value = value;

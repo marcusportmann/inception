@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -82,6 +83,7 @@ public class CreateInteractionNoteRequest implements Serializable {
    * @param interactionId the ID for the interaction the interaction note is associated with
    * @param content the content for the interaction note
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public CreateInteractionNoteRequest(UUID interactionId, String content) {
     this.interactionId = interactionId;
     this.content = content;

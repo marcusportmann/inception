@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -97,6 +98,7 @@ public class WorkflowDefinitionCategoryPermission implements Serializable {
    * @param roleCode the code for the role the workflow definition category permission is assigned
    *     to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowDefinitionCategoryPermission(String roleCode) {
     this.roleCode = roleCode;
   }

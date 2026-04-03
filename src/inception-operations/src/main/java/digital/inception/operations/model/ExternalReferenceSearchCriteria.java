@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -76,6 +77,7 @@ public class ExternalReferenceSearchCriteria implements Serializable {
    * @param type the code for the external reference type
    * @param value the value for the external reference
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ExternalReferenceSearchCriteria(String type, String value) {
     this.type = type;
     this.value = value;

@@ -17,6 +17,7 @@
 package digital.inception.scheduler.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -104,6 +105,7 @@ public class JobParameter implements Serializable {
    * @param name the name of the job parameter
    * @param value the value of the job parameter
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public JobParameter(String name, String value) {
     this.name = name;
     this.value = value;

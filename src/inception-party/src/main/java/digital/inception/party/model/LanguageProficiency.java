@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -140,6 +141,7 @@ public class LanguageProficiency implements Serializable {
    * @param speakLevel the speak proficiency level for the language.
    * @param writeLevel the write proficiency level for the language.
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public LanguageProficiency(
       String language,
       LanguageProficiencyLevel listenLevel,

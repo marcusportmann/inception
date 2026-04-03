@@ -16,6 +16,7 @@
 
 package demo.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -65,6 +66,7 @@ public class Car extends VehicleBase implements Serializable {
   private int numberOfDoors;
 
   /** Constructs a new {@code Car}. */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Car() {
     super(VehicleType.CAR);
   }
@@ -75,6 +77,7 @@ public class Car extends VehicleBase implements Serializable {
    * @param name the name of the car
    * @param numberOfDoors the number of doors
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Car(String name, int numberOfDoors) {
     super(VehicleType.CAR, name);
 

@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -140,6 +141,7 @@ public class RevokedToken implements Serializable {
    * @param expiryDate the date the token expires
    * @param revocationDate the date the token was revoked
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public RevokedToken(
       String id,
       TokenType type,

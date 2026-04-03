@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -160,6 +161,7 @@ public class AssociationProperty implements Serializable {
    *
    * @param type the code for the association property type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public AssociationProperty(String type) {
     this.type = type;
   }
@@ -170,6 +172,7 @@ public class AssociationProperty implements Serializable {
    * @param type the code for the association property type
    * @param stringValue the string value for the association property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public AssociationProperty(String type, String stringValue) {
     this.type = type;
     this.stringValue = stringValue;
@@ -181,6 +184,7 @@ public class AssociationProperty implements Serializable {
    * @param type the code for the association property type
    * @param booleanValue the boolean value for the association property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public AssociationProperty(String type, boolean booleanValue) {
     this.type = type;
     this.booleanValue = booleanValue;
@@ -192,6 +196,7 @@ public class AssociationProperty implements Serializable {
    * @param type the code for the association property type
    * @param doubleValue the double value for the association property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public AssociationProperty(String type, double doubleValue) {
     this.type = type;
     this.doubleValue = doubleValue;
@@ -203,6 +208,7 @@ public class AssociationProperty implements Serializable {
    * @param type the code for the association property type
    * @param dateValue the date value for the association property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public AssociationProperty(String type, LocalDate dateValue) {
     this.type = type;
     this.dateValue = dateValue;
@@ -214,6 +220,7 @@ public class AssociationProperty implements Serializable {
    * @param type the code for the association property type
    * @param decimalValue the decimal value for the association property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public AssociationProperty(String type, BigDecimal decimalValue) {
     this.type = type;
     this.decimalValue = decimalValue;
@@ -225,6 +232,7 @@ public class AssociationProperty implements Serializable {
    * @param type the code for the association property type
    * @param integerValue the integer value for the association property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public AssociationProperty(String type, Integer integerValue) {
     this.type = type;
     this.integerValue = integerValue;

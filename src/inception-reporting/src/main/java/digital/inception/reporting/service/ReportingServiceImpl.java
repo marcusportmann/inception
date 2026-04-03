@@ -97,7 +97,7 @@ public class ReportingServiceImpl extends AbstractServiceBase implements Reporti
         throw new DuplicateReportDefinitionException(reportDefinition.getId());
       }
 
-      reportDefinitionRepository.saveAndFlush(reportDefinition);
+      reportDefinitionRepository.save(reportDefinition);
     } catch (DuplicateReportDefinitionException e) {
       throw e;
     } catch (Throwable e) {
@@ -397,7 +397,7 @@ public class ReportingServiceImpl extends AbstractServiceBase implements Reporti
         throw new ReportDefinitionNotFoundException(reportDefinition.getId());
       }
 
-      reportDefinitionRepository.saveAndFlush(reportDefinition);
+      reportDefinitionRepository.save(reportDefinition);
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {

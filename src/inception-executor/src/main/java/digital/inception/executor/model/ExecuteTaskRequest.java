@@ -16,6 +16,7 @@
 
 package digital.inception.executor.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -75,6 +76,7 @@ public class ExecuteTaskRequest implements Serializable {
    * @param taskType the code for the task type
    * @param taskData the task data
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ExecuteTaskRequest(String taskType, String taskData) {
     this.taskType = taskType;
     this.taskData = taskData;

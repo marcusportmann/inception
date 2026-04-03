@@ -16,11 +16,10 @@
 
 package digital.inception.server.authorization.oauth;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import java.io.StringWriter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import digital.inception.json.JsonUtil;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 
 /**
  * The {@code ErrorGrantResponse} class holds the information for an OAuth2 error response and
@@ -33,9 +32,11 @@ import org.springframework.util.StringUtils;
 public abstract class ErrorResponse extends Response {
 
   /** The single ASCII error code. */
+  @JsonProperty("error")
   private final String error;
 
   /** The human-readable ASCII text description of the error. */
+  @JsonProperty("error_description")
   private final String errorDescription;
 
   /**
@@ -44,6 +45,7 @@ public abstract class ErrorResponse extends Response {
    * @param status the HTTP status that should be returned for the OAuth2 error response
    * @param error the single ASCII error code
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ErrorResponse(HttpStatus status, String error) {
     super(status);
 
@@ -58,6 +60,7 @@ public abstract class ErrorResponse extends Response {
    * @param error the single ASCII error code
    * @param errorDescription the human-readable ASCII text description of the error
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ErrorResponse(HttpStatus status, String error, String errorDescription) {
     super(status);
 
@@ -73,22 +76,7 @@ public abstract class ErrorResponse extends Response {
   @Override
   public String getBody() {
     try {
-      JsonFactory jsonFactory = new JsonFactory();
-
-      StringWriter stringWriter = new StringWriter();
-
-      JsonGenerator jsonGenerator = jsonFactory.createGenerator(stringWriter);
-
-      jsonGenerator.writeStartObject();
-      jsonGenerator.writeStringField("error", error);
-      if (StringUtils.hasText(errorDescription)) {
-        jsonGenerator.writeStringField("error_description", errorDescription);
-      }
-      jsonGenerator.writeEndObject();
-
-      jsonGenerator.close();
-
-      return stringWriter.getBuffer().toString();
+      return JsonUtil.getObjectMapper().writeValueAsString(this);
     } catch (Throwable e) {
       throw new RuntimeException("Failed to construct the body for the error response", e);
     }

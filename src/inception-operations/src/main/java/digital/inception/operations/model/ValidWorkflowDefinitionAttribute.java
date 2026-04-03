@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -93,6 +94,7 @@ public class ValidWorkflowDefinitionAttribute implements Serializable {
    * @param description the description for the workflow definition attribute
    * @param required is the workflow definition attribute required
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ValidWorkflowDefinitionAttribute(String name, String description, boolean required) {
     this.name = name;
     this.description = description;

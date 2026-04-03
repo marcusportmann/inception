@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -91,6 +92,7 @@ public class CreateWorkflowNoteRequest implements Serializable {
    * @param step the code for the workflow step the workflow note is associated with
    * @param content the content for the workflow note
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public CreateWorkflowNoteRequest(UUID workflowId, String step, String content) {
     this.workflowId = workflowId;
     this.step = step;

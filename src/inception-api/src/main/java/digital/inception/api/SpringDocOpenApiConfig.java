@@ -16,7 +16,6 @@
 
 package digital.inception.api;
 
-import com.fasterxml.jackson.databind.type.SimpleType;
 import io.swagger.v3.core.converter.ModelConverters;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -27,6 +26,7 @@ import java.util.Set;
 import org.springdoc.core.customizers.PropertyCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.databind.type.SimpleType;
 
 /**
  * The {@code SpringDocOpenApiConfig} class provides the customization configuration for the {@code

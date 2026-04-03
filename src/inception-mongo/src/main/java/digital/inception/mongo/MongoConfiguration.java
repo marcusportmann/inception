@@ -56,7 +56,6 @@ import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 /**
@@ -440,7 +439,6 @@ public class MongoConfiguration {
         "ApplicationContext is not a GenericApplicationContext; cannot register embedded Mongo lifecycle bean");
   }
 
-  @NonNull
   private DefaultMongoDatabaseFactory initMongoDatabaseFactory(
       ApplicationContext applicationContext,
       String mongoDbUri,

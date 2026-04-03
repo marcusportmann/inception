@@ -27,7 +27,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
@@ -45,22 +44,20 @@ public class OffsetDateTimeMessageConverter extends AbstractHttpMessageConverter
   }
 
   @Override
-  @NonNull
   protected OffsetDateTime readInternal(
-      @NonNull Class<? extends OffsetDateTime> clazz, @NonNull HttpInputMessage inputMessage)
+      Class<? extends OffsetDateTime> clazz, HttpInputMessage inputMessage)
       throws IOException, HttpMessageNotReadableException {
     return ISO8601Util.toOffsetDateTime(
         StreamUtils.copyToString(inputMessage.getBody(), StandardCharsets.UTF_8));
   }
 
   @Override
-  protected boolean supports(@NonNull Class<?> clazz) {
+  protected boolean supports(Class<?> clazz) {
     return OffsetDateTime.class == clazz;
   }
 
   @Override
-  protected void writeInternal(
-      @NonNull OffsetDateTime offsetDateTime, HttpOutputMessage outputMessage)
+  protected void writeInternal(OffsetDateTime offsetDateTime, HttpOutputMessage outputMessage)
       throws IOException, HttpMessageNotWritableException {
     try (OutputStreamWriter writer =
         new OutputStreamWriter(outputMessage.getBody(), StandardCharsets.UTF_8)) {

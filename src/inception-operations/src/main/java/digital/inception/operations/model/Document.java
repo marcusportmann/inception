@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,7 +25,6 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.file.FileType;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.OffsetDateTimeAdapter;
-import digital.inception.operations.constraint.ValidDocument;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -100,7 +100,6 @@ import java.util.UUID;
       "updatedBy"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
-@ValidDocument
 @Entity
 @Table(name = "operations_documents")
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -260,6 +259,7 @@ public class Document implements Serializable {
    *
    * @param definitionId the ID for the document definition the document is associated with
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Document(String definitionId) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.definitionId = definitionId;

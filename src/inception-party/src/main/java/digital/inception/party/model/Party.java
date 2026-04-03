@@ -16,6 +16,7 @@
 
 package digital.inception.party.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -116,6 +117,7 @@ public class Party implements Serializable {
    *
    * @param type the party type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   protected Party(PartyType type) {
     this.type = type;
   }
@@ -127,6 +129,7 @@ public class Party implements Serializable {
    * @param type the party type
    * @param name the name of the party
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Party(UUID tenantId, PartyType type, String name) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.tenantId = tenantId;

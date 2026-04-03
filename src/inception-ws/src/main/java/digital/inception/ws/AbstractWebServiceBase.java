@@ -16,7 +16,6 @@
 
 package digital.inception.ws;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ValidationError;
 import jakarta.validation.ConstraintViolation;
@@ -27,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code AbstractWebServiceBase} class provides an abstract base class that web service
@@ -82,37 +82,6 @@ public abstract class AbstractWebServiceBase {
     } catch (Throwable e) {
       throw new BeanCreationException(
           "Failed to retrieve the Jackson Object Mapper from the Spring application context", e);
-    }
-
-    /*
-     * Register the InceptionModule module dynamically with the Jackson Object Mapper if not
-     * already registered
-     */
-    try {
-      // Check if the InceptionModule module is already registered
-      boolean isModuleRegistered =
-          objectMapper.getRegisteredModuleIds().contains("InceptionModule");
-
-      if (!isModuleRegistered) {
-        // Check if the class for the InceptionModule module is on the classpath
-        Class<?> moduleClass = Class.forName("digital.inception.json.InceptionModule");
-
-        // Dynamically instantiate and register InceptionModule the module
-        Object moduleInstance = moduleClass.getDeclaredConstructor().newInstance();
-
-        if (moduleInstance instanceof com.fasterxml.jackson.databind.Module) {
-          objectMapper.registerModule((com.fasterxml.jackson.databind.Module) moduleInstance);
-          log.info(
-              "Successfully registered the InceptionModule module with the Jackson Object Mapper");
-        }
-      }
-    } catch (ClassNotFoundException e) {
-      log.warn(
-          "The InceptionModule class was not found on the classpath and could not be registered with the Jackson Object Mapper");
-    } catch (Exception e) {
-      throw new BeanCreationException(
-          "Failed to dynamically register the InceptionModule module with the Jackson Object Mapper",
-          e);
     }
 
     try {

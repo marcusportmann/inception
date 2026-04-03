@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -85,6 +86,7 @@ public class VerifyWorkflowDocumentRequest implements Serializable {
    *
    * @param workflowDocumentId the ID for the workflow document
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public VerifyWorkflowDocumentRequest(UUID workflowDocumentId) {
     this.workflowDocumentId = workflowDocumentId;
   }
@@ -95,6 +97,7 @@ public class VerifyWorkflowDocumentRequest implements Serializable {
    * @param workflowDocumentId the ID for the workflow document
    * @param description the description for the workflow document
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public VerifyWorkflowDocumentRequest(UUID workflowDocumentId, String description) {
     this.workflowDocumentId = workflowDocumentId;
     this.description = description;

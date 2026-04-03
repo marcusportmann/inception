@@ -118,7 +118,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
 
       job.setExecutionAttempts(0);
 
-      jobRepository.saveAndFlush(job);
+      jobRepository.save(job);
     } catch (DuplicateJobException e) {
       throw e;
     } catch (Throwable e) {
@@ -526,7 +526,7 @@ public class SchedulerServiceImpl extends AbstractServiceBase implements Schedul
         job.setNextExecution(null);
       }
 
-      jobRepository.saveAndFlush(job);
+      jobRepository.save(job);
     } catch (JobNotFoundException e) {
       throw e;
     } catch (Throwable e) {

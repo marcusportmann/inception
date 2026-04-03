@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -173,6 +174,7 @@ public class DocumentNote implements Serializable {
    * @param created the date and time the document note was created
    * @param createdBy the person or system that created the document note
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public DocumentNote(
       UUID tenantId, UUID documentId, String content, OffsetDateTime created, String createdBy) {
     this.id = UuidCreator.getTimeOrderedEpoch();

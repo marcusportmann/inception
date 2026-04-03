@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -98,6 +99,7 @@ public class DocumentDefinitionCategory implements Serializable {
    * @param id the ID for the document definition category
    * @param name the name of the document definition category
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public DocumentDefinitionCategory(String id, String name) {
     this.id = id;
     this.name = name;
@@ -110,6 +112,7 @@ public class DocumentDefinitionCategory implements Serializable {
    * @param tenantId the ID for the tenant the document definition category is specific to
    * @param name the name of the document definition category
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public DocumentDefinitionCategory(String id, UUID tenantId, String name) {
     this.id = id;
     this.tenantId = tenantId;

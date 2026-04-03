@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -159,6 +160,7 @@ public class MandateProperty implements Serializable {
    *
    * @param type the code for the mandate property type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public MandateProperty(String type) {
     this.type = type;
   }
@@ -169,6 +171,7 @@ public class MandateProperty implements Serializable {
    * @param type the code for the mandate property type
    * @param stringValue the string value for the mandate property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public MandateProperty(String type, String stringValue) {
     this.type = type;
     this.stringValue = stringValue;
@@ -180,6 +183,7 @@ public class MandateProperty implements Serializable {
    * @param type the code for the mandate property type
    * @param booleanValue the boolean value for the mandate property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public MandateProperty(String type, boolean booleanValue) {
     this.type = type;
     this.booleanValue = booleanValue;
@@ -191,6 +195,7 @@ public class MandateProperty implements Serializable {
    * @param type the code for the mandate property type
    * @param doubleValue the double value for the mandate property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public MandateProperty(String type, double doubleValue) {
     this.type = type;
     this.doubleValue = doubleValue;
@@ -202,6 +207,7 @@ public class MandateProperty implements Serializable {
    * @param type the code for the mandate property type
    * @param dateValue the date value for the mandate property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public MandateProperty(String type, LocalDate dateValue) {
     this.type = type;
     this.dateValue = dateValue;
@@ -213,6 +219,7 @@ public class MandateProperty implements Serializable {
    * @param type the code for the mandate property type
    * @param decimalValue the decimal value for the mandate property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public MandateProperty(String type, BigDecimal decimalValue) {
     this.type = type;
     this.decimalValue = decimalValue;
@@ -224,6 +231,7 @@ public class MandateProperty implements Serializable {
    * @param type the code for the mandate property type
    * @param integerValue the integer value for the mandate property
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public MandateProperty(String type, Integer integerValue) {
     this.type = type;
     this.integerValue = integerValue;

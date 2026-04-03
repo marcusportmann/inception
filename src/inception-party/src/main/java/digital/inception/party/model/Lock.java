@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -113,6 +114,7 @@ public class Lock implements Serializable {
    *
    * @param type the code for the lock type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Lock(String type) {
     this.type = type;
   }
@@ -123,6 +125,7 @@ public class Lock implements Serializable {
    * @param type the code for the lock type
    * @param effectiveFrom the date the lock is effective from
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Lock(String type, LocalDate effectiveFrom) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;
@@ -135,6 +138,7 @@ public class Lock implements Serializable {
    * @param effectiveFrom the date the lock is effective from
    * @param effectiveTo the date the lock is effective to
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Lock(String type, LocalDate effectiveFrom, LocalDate effectiveTo) {
     this.type = type;
     this.effectiveFrom = effectiveFrom;

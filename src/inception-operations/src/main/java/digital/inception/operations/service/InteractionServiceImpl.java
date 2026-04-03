@@ -276,7 +276,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new DuplicateInteractionException(interaction.getId());
       }
 
-      interactionRepository.saveAndFlush(interaction);
+      interactionRepository.save(interaction);
 
       return interaction;
     } catch (DuplicateInteractionException e) {
@@ -319,7 +319,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new DuplicateInteractionAttachmentException(interactionAttachment.getId());
       }
 
-      interactionAttachmentRepository.saveAndFlush(interactionAttachment);
+      interactionAttachmentRepository.save(interactionAttachment);
 
       return interactionAttachment;
     } catch (DuplicateInteractionAttachmentException e) {
@@ -372,7 +372,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new DuplicateInteractionNoteException(interactionNote.getId());
       }
 
-      return interactionNoteRepository.saveAndFlush(interactionNote);
+      return interactionNoteRepository.save(interactionNote);
     } catch (DuplicateInteractionNoteException | InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -415,7 +415,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new DuplicateInteractionSourceException(interactionSource.getId());
       }
 
-      interactionSourceRepository.saveAndFlush(interactionSource);
+      interactionSourceRepository.save(interactionSource);
 
       return interactionSource;
     } catch (DuplicateInteractionSourceException e) {
@@ -1770,7 +1770,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new InteractionNotFoundException(tenantId, interaction.getId());
       }
 
-      interactionRepository.saveAndFlush(interaction);
+      interactionRepository.save(interaction);
 
       return interaction;
     } catch (InteractionNotFoundException e) {
@@ -1809,7 +1809,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new InteractionAttachmentNotFoundException(interactionAttachment.getId());
       }
 
-      interactionAttachmentRepository.saveAndFlush(interactionAttachment);
+      interactionAttachmentRepository.save(interactionAttachment);
 
       return interactionAttachment;
     } catch (InteractionAttachmentNotFoundException e) {
@@ -1859,7 +1859,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       interactionNote.setUpdated(ApplicationClock.offsetNow());
       interactionNote.setUpdatedBy(updatedBy);
 
-      return interactionNoteRepository.saveAndFlush(interactionNote);
+      return interactionNoteRepository.save(interactionNote);
     } catch (InteractionNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1901,7 +1901,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new InteractionSourceNotFoundException(tenantId, interactionSource.getId());
       }
 
-      interactionSourceRepository.saveAndFlush(interactionSource);
+      interactionSourceRepository.save(interactionSource);
 
       return interactionSource;
     } catch (InteractionSourceNotFoundException e) {

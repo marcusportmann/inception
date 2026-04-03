@@ -16,7 +16,6 @@
 
 package digital.inception.flowable;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.flowable.flowable.FormEngineConfiguration;
 import digital.inception.flowable.flowable.FormEngineConfigurator;
@@ -36,6 +35,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code WorkflowConfiguration} class provides the Spring configuration for the Workflow

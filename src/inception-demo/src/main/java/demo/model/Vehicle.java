@@ -16,6 +16,7 @@
 
 package demo.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -104,6 +105,7 @@ public class Vehicle implements Serializable {
    * @param type the vehicle type
    * @param name the name of the vehicle
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Vehicle(VehicleType type, String name) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;

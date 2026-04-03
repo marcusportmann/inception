@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {inject} from '@angular/core';
-import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
-import {firstValueFrom, Observable} from 'rxjs';
-import {DialogService} from '../../dialogs/services/dialog.service';
-import {AccessDeniedError, InvalidArgumentError, ServiceUnavailableError} from '../../errors';
-import {SpinnerService} from '../services/spinner.service';
-import {BackNavigation} from './back-navigation';
+import { inject } from '@angular/core';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { firstValueFrom, Observable } from 'rxjs';
+import { DialogService } from '../../dialogs/services/dialog.service';
+import { AccessDeniedError, InvalidArgumentError, ServiceUnavailableError } from '../../errors';
+import { SpinnerService } from '../services/spinner.service';
+import { BackNavigation } from './back-navigation';
 
 /**
  * The AdminContainerView class provides the abstract base class that all admin container view
@@ -102,7 +102,7 @@ export abstract class AdminContainerView {
       error instanceof InvalidArgumentError ||
       error instanceof ServiceUnavailableError
     ) {
-      await this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      await this.router.navigateByUrl('/error/send-error-report', { state: { error } });
       return;
     }
 

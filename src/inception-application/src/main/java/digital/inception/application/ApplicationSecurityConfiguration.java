@@ -23,10 +23,11 @@ import io.netty.handler.ssl.SslContextBuilder;
 import java.security.KeyStore;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
+import org.springframework.boot.webclient.WebClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ClientHttpConnector;
@@ -85,7 +86,7 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
   public ApplicationSecurityConfiguration() {}
 
   @Override
-  public void customize(Builder webClientBuilder) {
+  public void customize(@NonNull Builder webClientBuilder) {
     try {
       KeyManagerFactory keyManagerFactory = null;
 
@@ -129,7 +130,7 @@ public class ApplicationSecurityConfiguration implements WebClientCustomizer {
       webClientBuilder.clientConnector(connector);
 
       // Add the persistent application JWT to all API calls if configured
-      if (jwt != null) {
+      if (StringUtils.hasText(jwt)) {
         webClientBuilder.defaultHeader("Authorization", "Bearer " + jwt);
       }
     } catch (Throwable e) {

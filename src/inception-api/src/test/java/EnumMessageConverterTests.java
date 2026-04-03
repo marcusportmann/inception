@@ -29,7 +29,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
-import org.springframework.lang.NonNull;
 
 /** The {@code EnumMessageConverterTests} class. */
 public class EnumMessageConverterTests {
@@ -48,13 +47,11 @@ public class EnumMessageConverterTests {
             testEnum.getClass(),
             new HttpInputMessage() {
               @Override
-              @NonNull
               public InputStream getBody() throws IOException {
                 return new ByteArrayInputStream("option2".getBytes(StandardCharsets.UTF_8));
               }
 
               @Override
-              @NonNull
               public HttpHeaders getHeaders() {
                 return new HttpHeaders();
               }
@@ -69,13 +66,11 @@ public class EnumMessageConverterTests {
         MediaType.TEXT_PLAIN,
         new HttpOutputMessage() {
           @Override
-          @NonNull
           public OutputStream getBody() throws IOException {
             return baos;
           }
 
           @Override
-          @NonNull
           public HttpHeaders getHeaders() {
             return new HttpHeaders();
           }
@@ -100,13 +95,11 @@ public class EnumMessageConverterTests {
             anotherTestEnum.getClass(),
             new HttpInputMessage() {
               @Override
-              @NonNull
               public InputStream getBody() throws IOException {
                 return new ByteArrayInputStream("OPTION2".getBytes(StandardCharsets.UTF_8));
               }
 
               @Override
-              @NonNull
               public HttpHeaders getHeaders() {
                 return new HttpHeaders();
               }
@@ -121,13 +114,11 @@ public class EnumMessageConverterTests {
         MediaType.TEXT_PLAIN,
         new HttpOutputMessage() {
           @Override
-          @NonNull
           public OutputStream getBody() throws IOException {
             return baos;
           }
 
           @Override
-          @NonNull
           public HttpHeaders getHeaders() {
             return new HttpHeaders();
           }

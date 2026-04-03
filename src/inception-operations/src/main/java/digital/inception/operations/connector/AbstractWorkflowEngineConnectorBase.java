@@ -16,12 +16,12 @@
 
 package digital.inception.operations.connector;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.operations.model.WorkflowEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.ApplicationContext;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code AbstractWorkflowEngineConnectorBase} class provides an abstract base class that

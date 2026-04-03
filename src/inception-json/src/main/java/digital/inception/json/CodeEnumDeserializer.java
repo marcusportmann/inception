@@ -16,12 +16,11 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import digital.inception.core.model.CodeEnum;
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ValueDeserializer;
 
 /**
  * The {@code CodeEnumDeserializer} class implements the Jackson deserializer that can deserialize a
@@ -31,7 +30,7 @@ import java.io.IOException;
  * @param <E> the enumeration type
  * @author Marcus Portmann
  */
-public class CodeEnumDeserializer<E extends Enum<E> & CodeEnum> extends JsonDeserializer<E> {
+public class CodeEnumDeserializer<E extends Enum<E> & CodeEnum> extends ValueDeserializer<E> {
 
   private final JavaType targetType;
 
@@ -45,8 +44,7 @@ public class CodeEnumDeserializer<E extends Enum<E> & CodeEnum> extends JsonDese
   }
 
   @Override
-  public E deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-      throws IOException {
+  public E deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) {
     String code = jsonParser.getValueAsString();
     if (code == null || code.isEmpty()) {
       return null; // or handle as you prefer (throw exception, etc.)

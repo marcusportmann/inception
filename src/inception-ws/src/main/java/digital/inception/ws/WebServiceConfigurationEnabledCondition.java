@@ -19,7 +19,6 @@ package digital.inception.ws;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
-import org.springframework.lang.NonNull;
 
 /**
  * The {@code WebServiceConfigurationEnabledCondition} class implements the condition that must be
@@ -33,8 +32,7 @@ public class WebServiceConfigurationEnabledCondition implements Condition {
   public WebServiceConfigurationEnabledCondition() {}
 
   @Override
-  public boolean matches(
-      @NonNull ConditionContext context, @NonNull AnnotatedTypeMetadata metadata) {
+  public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
     try {
       Class.forName("jakarta.servlet.Servlet");
       return true;

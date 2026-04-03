@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -106,6 +107,7 @@ public class Function implements java.io.Serializable {
    * @param name the name of the function
    * @param description the description for the function
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Function(String code, String name, String description) {
     this.code = code;
     this.name = name;

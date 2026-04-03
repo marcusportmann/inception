@@ -16,16 +16,14 @@
 
 package digital.inception.core.validation;
 
-import org.hibernate.validator.internal.engine.ConfigurationImpl;
-import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLevel;
-import org.springframework.beans.BeanUtils;
+import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
- * The {@code ValidationConfiguration} class provides access to the JSR-380 validation configuration
- * and initialises the JSR-380 validator.
+ * The {@code ValidationConfiguration} class provides access to the Jakarta Validation configuration
+ * and initialises the validator.
  *
  * @author Marcus Portmann
  */
@@ -44,18 +42,8 @@ public class ValidationConfiguration {
   public static LocalValidatorFactoryBean validator() {
     LocalValidatorFactoryBean factoryBean = new LocalValidatorFactoryBean();
 
-    factoryBean.setMessageInterpolator(
-        BeanUtils.instantiateClass(ValidationMessageInterpolator.class));
+    factoryBean.setMessageInterpolator(new ParameterMessageInterpolator());
 
-    factoryBean.setConfigurationInitializer(
-        (jakarta.validation.Configuration<?> configuration) -> {
-          if (configuration instanceof ConfigurationImpl hibernateConfiguration) {
-            hibernateConfiguration.customViolationExpressionLanguageFeatureLevel(
-                ExpressionLanguageFeatureLevel.DEFAULT);
-            hibernateConfiguration.constraintExpressionLanguageFeatureLevel(
-                ExpressionLanguageFeatureLevel.DEFAULT);
-          }
-        });
     return factoryBean;
   }
 }

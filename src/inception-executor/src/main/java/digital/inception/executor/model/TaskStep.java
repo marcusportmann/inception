@@ -16,6 +16,7 @@
 
 package digital.inception.executor.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -77,6 +78,7 @@ public class TaskStep implements Serializable {
    * @param code the code for the task step
    * @param name the name of the task step
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskStep(String code, String name) {
     this.code = code;
     this.name = name;
@@ -90,6 +92,7 @@ public class TaskStep implements Serializable {
    * @param postExecutionDelay the delay in milliseconds before the next task step for a multistep
    *     task is executed
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskStep(String code, String name, long postExecutionDelay) {
     this.code = code;
     this.name = name;

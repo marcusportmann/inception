@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -104,6 +105,7 @@ public class MandateLink implements Serializable {
    * @param type the code for the link type
    * @param target the target for the mandate link
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public MandateLink(String type, String target) {
     this.type = type;
     this.target = target;

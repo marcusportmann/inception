@@ -72,7 +72,7 @@ public class OperationsReferenceServiceImpl extends AbstractServiceBase
         throw new DuplicateExternalReferenceTypeException(externalReferenceType.getCode());
       }
 
-      externalReferenceTypeRepository.saveAndFlush(externalReferenceType);
+      externalReferenceTypeRepository.save(externalReferenceType);
     } catch (DuplicateExternalReferenceTypeException e) {
       throw e;
     } catch (Throwable e) {
@@ -172,7 +172,7 @@ public class OperationsReferenceServiceImpl extends AbstractServiceBase
         throw new ExternalReferenceTypeNotFoundException(externalReferenceType.getCode());
       }
 
-      externalReferenceTypeRepository.saveAndFlush(externalReferenceType);
+      externalReferenceTypeRepository.save(externalReferenceType);
     } catch (ExternalReferenceTypeNotFoundException e) {
       throw e;
     } catch (Throwable e) {

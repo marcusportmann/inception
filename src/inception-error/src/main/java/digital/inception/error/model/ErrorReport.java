@@ -16,6 +16,7 @@
 
 package digital.inception.error.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -194,6 +195,7 @@ public class ErrorReport implements Serializable {
    * @param created the date and time the error report was created
    * @param who the username for the user associated with the error report
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ErrorReport(
       UUID id,
       String applicationId,
@@ -225,6 +227,7 @@ public class ErrorReport implements Serializable {
    * @param feedback the feedback provided by the user for the error
    * @param data the base-64 encoded data associated with the error report
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ErrorReport(
       UUID id,
       String applicationId,

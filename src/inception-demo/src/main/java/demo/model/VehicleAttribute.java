@@ -17,6 +17,7 @@
 package demo.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -113,6 +114,7 @@ public class VehicleAttribute implements Serializable {
    * @param type the vehicle attribute type
    * @param value the value for the vehicle attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public VehicleAttribute(String type, String value) {
     this.type = type;
     this.value = value;

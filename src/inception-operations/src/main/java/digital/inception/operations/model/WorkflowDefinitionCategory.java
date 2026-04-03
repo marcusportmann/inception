@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -127,6 +128,7 @@ public class WorkflowDefinitionCategory implements Serializable {
    * @param id the ID for the workflow definition category
    * @param name the name of the workflow definition category
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowDefinitionCategory(String id, String name) {
     this.id = id;
     this.name = name;
@@ -139,6 +141,7 @@ public class WorkflowDefinitionCategory implements Serializable {
    * @param tenantId the ID for the tenant the workflow definition category is specific to
    * @param name the name of the workflow definition category
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowDefinitionCategory(String id, UUID tenantId, String name) {
     this.id = id;
     this.tenantId = tenantId;

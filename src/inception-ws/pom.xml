@@ -32,6 +32,7 @@
                     <exclude>org.bouncycastle:bcpkix-jdk18on:[1,2)</exclude>
                     <exclude>org.bouncycastle:bcprov-jdk18on:[1,2)</exclude>
                     <exclude>org.cryptacular:cryptacular:[1,2)</exclude>
+                    <exclude>org.eclipse.angus:angus-activation:[2,3)</exclude>
                   </excludes>
                 </dependencyConvergence>
               </rules>

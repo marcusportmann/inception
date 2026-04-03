@@ -16,6 +16,7 @@
 
 package digital.inception.reporting.controller;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -65,6 +66,7 @@ public class GenerateReportRequest implements Serializable {
    * @param reportDefinitionId the ID for the report definition
    * @param reportParameters the report parameters
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public GenerateReportRequest(String reportDefinitionId, List<ReportParameter> reportParameters) {
     this.reportDefinitionId = reportDefinitionId;
     this.reportParameters = reportParameters;

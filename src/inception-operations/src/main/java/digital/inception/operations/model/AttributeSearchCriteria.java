@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -76,6 +77,7 @@ public class AttributeSearchCriteria implements Serializable {
    * @param name the name of the attribute
    * @param value the value for the attribute
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public AttributeSearchCriteria(String name, String value) {
     this.name = name;
     this.value = value;

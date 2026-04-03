@@ -105,7 +105,15 @@ public class DataServiceImpl extends AbstractServiceBase implements DataService 
 
   @Override
   public Flux<ReactiveData> getAllReactiveData() throws ServiceUnavailableException {
-    return reactiveDataRepository.findAll();
+    try {
+      return reactiveDataRepository
+          .findAll()
+          .onErrorMap(
+              ex -> new ServiceUnavailableException("Failed to retrieve reactive data", ex));
+    } catch (Throwable e) {
+      return Flux.error(
+          new ServiceUnavailableException("Failed to initialise reactive retrieval", e));
+    }
   }
 
   @Override

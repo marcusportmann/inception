@@ -16,11 +16,10 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import java.io.IOException;
 import java.time.Duration;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
 
 /**
  * The {@code DurationSerializer} class implements the Jackson serializer for the {@code Duration}
@@ -28,15 +27,14 @@ import java.time.Duration;
  *
  * @author Marcus Portmann
  */
-public class DurationSerializer extends JsonSerializer<Duration> {
+public class DurationSerializer extends ValueSerializer<Duration> {
 
   /** Constructs a new {@code DurationSerializer}. */
   public DurationSerializer() {}
 
   @Override
   public void serialize(
-      Duration duration, JsonGenerator jsonGenerator, SerializerProvider serializers)
-      throws IOException {
+      Duration duration, JsonGenerator jsonGenerator, SerializationContext context) {
     jsonGenerator.writeString(duration.toString());
   }
 }

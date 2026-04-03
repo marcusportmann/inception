@@ -16,6 +16,7 @@
 
 package digital.inception.executor.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -136,6 +137,7 @@ public class TaskEvent implements Serializable {
    * @param withData {@code true} if the task data should be captured as part of the task event or
    *     {@code false} otherwise
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskEvent(TaskEventType type, Task task, boolean withData) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
@@ -157,6 +159,7 @@ public class TaskEvent implements Serializable {
    * @param taskType the code for the task type
    * @param taskStep optional code for the task step for a multistep task
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskEvent(TaskEventType type, UUID taskId, String taskType, String taskStep) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
@@ -175,6 +178,7 @@ public class TaskEvent implements Serializable {
    * @param taskStep optional code for the task step for a multistep task
    * @param taskData the task data
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public TaskEvent(
       TaskEventType type, UUID taskId, String taskType, String taskStep, String taskData) {
     this.id = UuidCreator.getTimeOrderedEpoch();

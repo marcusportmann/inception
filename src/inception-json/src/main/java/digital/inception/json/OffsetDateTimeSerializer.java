@@ -16,12 +16,11 @@
 
 package digital.inception.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import digital.inception.core.util.ISO8601Util;
-import java.io.IOException;
 import java.time.OffsetDateTime;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
 
 /**
  * The {@code OffsetDateTimeSerializer} class implements the Jackson serializer for the {@code
@@ -29,15 +28,14 @@ import java.time.OffsetDateTime;
  *
  * @author Marcus Portmann
  */
-public class OffsetDateTimeSerializer extends JsonSerializer<OffsetDateTime> {
+public class OffsetDateTimeSerializer extends ValueSerializer<OffsetDateTime> {
 
   /** Constructs a new {@code OffsetDateTimeSerializer}. */
   public OffsetDateTimeSerializer() {}
 
   @Override
   public void serialize(
-      OffsetDateTime offsetDateTime, JsonGenerator jsonGenerator, SerializerProvider serializers)
-      throws IOException {
+      OffsetDateTime offsetDateTime, JsonGenerator jsonGenerator, SerializationContext context) {
     jsonGenerator.writeString(ISO8601Util.fromOffsetDateTime(offsetDateTime));
   }
 }

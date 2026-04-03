@@ -16,6 +16,7 @@
 
 package digital.inception.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -86,6 +87,7 @@ public class GroupRole implements Serializable {
    * @param groupName the name of the group
    * @param roleCode the code for the role
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public GroupRole(UUID userDirectoryId, String groupName, String roleCode) {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;

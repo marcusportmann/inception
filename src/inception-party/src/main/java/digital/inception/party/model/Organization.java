@@ -16,6 +16,7 @@
 
 package digital.inception.party.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -275,6 +276,7 @@ public class Organization extends PartyBase implements Serializable {
    * @param tenantId the ID for the tenant the organization is associated with
    * @param name the name of the organization
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Organization(UUID tenantId, String name) {
     super(UuidCreator.getTimeOrderedEpoch(), tenantId, name);
   }

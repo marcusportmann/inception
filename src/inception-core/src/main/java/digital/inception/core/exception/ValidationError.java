@@ -16,6 +16,7 @@
 
 package digital.inception.core.exception;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -79,6 +80,7 @@ public class ValidationError implements Serializable, Cloneable {
    *
    * @param constraintViolation the constraint violation
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ValidationError(ConstraintViolation<?> constraintViolation) {
     this.property = constraintViolation.getPropertyPath().toString();
     this.message = constraintViolation.getMessage();
@@ -92,6 +94,7 @@ public class ValidationError implements Serializable, Cloneable {
    * @param property the path for the property that resulted in the validation error
    * @param message the error message for the validation error
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ValidationError(String property, String message) {
     this.property = property;
     this.message = message;

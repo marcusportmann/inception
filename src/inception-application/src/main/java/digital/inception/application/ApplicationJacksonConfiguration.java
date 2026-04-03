@@ -16,10 +16,10 @@
 
 package digital.inception.application;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.inception.json.JsonUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * The {@code ApplicationJacksonConfiguration} class initializes the Jackson components for the

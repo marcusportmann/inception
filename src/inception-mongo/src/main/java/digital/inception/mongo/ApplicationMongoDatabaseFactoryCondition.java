@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotatedTypeMetadata;
-import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 /**
@@ -42,7 +41,7 @@ public class ApplicationMongoDatabaseFactoryCondition implements Condition {
   public ApplicationMongoDatabaseFactoryCondition() {}
 
   @Override
-  public boolean matches(ConditionContext context, @NonNull AnnotatedTypeMetadata metadata) {
+  public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
     Environment environment = context.getEnvironment();
 
     String applicationMongoDbUri = environment.getProperty("inception.application.mongodb.uri");

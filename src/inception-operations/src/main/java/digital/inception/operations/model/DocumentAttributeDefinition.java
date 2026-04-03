@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -178,6 +179,7 @@ public class DocumentAttributeDefinition implements Serializable {
    *     attribute associated with the document attribute definition
    * @param defaultValue the default value for a document attribute associated with the document
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public DocumentAttributeDefinition(
       String name,
       AttributeType type,

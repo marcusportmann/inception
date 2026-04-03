@@ -16,6 +16,7 @@
 
 package digital.inception.error.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -122,6 +123,7 @@ public class ErrorReportSummaries implements Serializable {
    * @param pageIndex the page index
    * @param pageSize the page size
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ErrorReportSummaries(
       List<ErrorReportSummary> errorReportSummaries,
       long total,

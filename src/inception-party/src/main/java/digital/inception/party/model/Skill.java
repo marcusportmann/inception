@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -101,6 +102,7 @@ public class Skill implements Serializable {
    * @param type the skill type
    * @param level the proficiency level for the skill
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Skill(String type, SkillProficiencyLevel level) {
     this.type = type;
     this.level = level;

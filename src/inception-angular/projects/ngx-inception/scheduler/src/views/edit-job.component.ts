@@ -137,7 +137,7 @@ export class EditJobComponent extends JobComponent implements OnInit {
   }
 
   cancel(): void {
-    void this.router.navigate(['.'], {relativeTo: this.activatedRoute.parent?.parent});
+    void this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent?.parent });
   }
 
   ngOnInit(): void {
@@ -145,25 +145,25 @@ export class EditJobComponent extends JobComponent implements OnInit {
     this.spinnerService.showSpinner();
 
     this.schedulerService
-    .getJob(this.jobId)
-    .pipe(
-      first(),
-      finalize(() => this.spinnerService.hideSpinner())
-    )
-    .subscribe({
-      next: (job: Job) => {
-        this.job = job;
-        this.enabledControl.setValue(job.enabled);
-        this.idControl.setValue(job.id);
-        this.jobClassControl.setValue(job.jobClass);
-        this.nameControl.setValue(job.name);
-        this.schedulingPatternControl.setValue(job.schedulingPattern);
-        this.statusControl.setValue(job.status);
-        this.jobParameters = job.parameters;
-      },
-      error: (error: Error) =>
-        this.handleError(error, true, ['.'], {relativeTo: this.activatedRoute.parent?.parent})
-    });
+      .getJob(this.jobId)
+      .pipe(
+        first(),
+        finalize(() => this.spinnerService.hideSpinner())
+      )
+      .subscribe({
+        next: (job: Job) => {
+          this.job = job;
+          this.enabledControl.setValue(job.enabled);
+          this.idControl.setValue(job.id);
+          this.jobClassControl.setValue(job.jobClass);
+          this.nameControl.setValue(job.name);
+          this.schedulingPatternControl.setValue(job.schedulingPattern);
+          this.statusControl.setValue(job.status);
+          this.jobParameters = job.parameters;
+        },
+        error: (error: Error) =>
+          this.handleError(error, true, ['.'], { relativeTo: this.activatedRoute.parent?.parent })
+      });
   }
 
   ok(): void {
@@ -187,22 +187,22 @@ export class EditJobComponent extends JobComponent implements OnInit {
     this.spinnerService.showSpinner();
 
     this.schedulerService
-    .updateJob(this.job)
-    .pipe(
-      first(),
-      finalize(() => {
-        this.spinnerService.hideSpinner();
+      .updateJob(this.job)
+      .pipe(
+        first(),
+        finalize(() => {
+          this.spinnerService.hideSpinner();
 
-        this.editJobForm.enable();
-      })
-    )
-    .subscribe({
-      next: () => {
-        void this.router.navigate(['.'], {
-          relativeTo: this.activatedRoute.parent?.parent
-        });
-      },
-      error: (error: Error) => this.handleError(error, false)
-    });
+          this.editJobForm.enable();
+        })
+      )
+      .subscribe({
+        next: () => {
+          void this.router.navigate(['.'], {
+            relativeTo: this.activatedRoute.parent?.parent
+          });
+        },
+        error: (error: Error) => this.handleError(error, false)
+      });
   }
 }

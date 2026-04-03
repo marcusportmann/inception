@@ -16,6 +16,7 @@
 
 package digital.inception.processor;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -193,6 +194,7 @@ public class ObjectProcessingTelemetry implements Serializable {
    * @param processorName the logical name of the processing instance (e.g. node or instance
    *     identifier) processing the object
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public ObjectProcessingTelemetry(String objectId, String processorName) {
     this.objectId = objectId;
     this.processorName = processorName;

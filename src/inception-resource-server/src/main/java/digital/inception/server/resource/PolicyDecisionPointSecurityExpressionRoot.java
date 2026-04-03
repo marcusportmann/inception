@@ -16,9 +16,10 @@
 
 package digital.inception.server.resource;
 
+import digital.inception.core.util.StringUtil;
 import java.util.Map;
-import java.util.function.Supplier;
 import org.aopalliance.intercept.MethodInvocation;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
@@ -33,8 +34,8 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressionRoot
-    implements MethodSecurityExpressionOperations {
+public class PolicyDecisionPointSecurityExpressionRoot
+    extends SecurityExpressionRoot<MethodInvocation> implements MethodSecurityExpressionOperations {
 
   /* Logger */
   private static final Logger log =
@@ -69,38 +70,15 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
    */
   public PolicyDecisionPointSecurityExpressionRoot(
       Map<String, PolicyDecisionPoint> policyDecisionPoints,
-      Supplier<Authentication> authentication,
-      MethodInvocation methodInvocation,
-      boolean isSecurityEnabled,
-      boolean inDebugMode) {
-    super(authentication);
-    this.policyDecisionPoints = policyDecisionPoints;
-    this.methodInvocation = methodInvocation;
-    this.isSecurityEnabled = isSecurityEnabled;
-    this.inDebugMode = inDebugMode;
-  }
-
-  /**
-   * Constructs a new {@code PolicyDecisionPointSecurityExpressionRoot}.
-   *
-   * @param policyDecisionPoints the policy decision points
-   * @param authentication the authentication
-   * @param methodInvocation the method invocation
-   * @param isSecurityEnabled is API security enabled for the Inception Framework
-   * @param inDebugMode is debugging enabled for the Inception Framework
-   */
-  public PolicyDecisionPointSecurityExpressionRoot(
-      Map<String, PolicyDecisionPoint> policyDecisionPoints,
       Authentication authentication,
       MethodInvocation methodInvocation,
       boolean isSecurityEnabled,
       boolean inDebugMode) {
-    this(
-        policyDecisionPoints,
-        () -> authentication,
-        methodInvocation,
-        isSecurityEnabled,
-        inDebugMode);
+    super(() -> authentication, methodInvocation);
+    this.policyDecisionPoints = policyDecisionPoints;
+    this.methodInvocation = methodInvocation;
+    this.isSecurityEnabled = isSecurityEnabled;
+    this.inDebugMode = inDebugMode;
   }
 
   /**
@@ -109,33 +87,27 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
    * @return {@code true} if the policy decision point authorization was successful or {@code false}
    */
   public boolean authorize() {
-    if (isSecurityEnabled) {
-      for (var policyDecisionPoint : policyDecisionPoints.entrySet()) {
-        if (policyDecisionPoint.getValue().authorize(getAuthentication(), methodInvocation)) {
-          if (inDebugMode || log.isDebugEnabled()) {
-            String message =
-                String.format(
-                    "Authorization successful for policy decision point (%s)",
-                    policyDecisionPoint.getKey());
+    if (!isSecurityEnabled) {
+      return true;
+    }
 
-            log.info(message);
-          }
+    for (var policyDecisionPoint : policyDecisionPoints.entrySet()) {
+      boolean authorized =
+          policyDecisionPoint.getValue().authorize(getAuthentication(), methodInvocation);
 
-          return true;
-        } else {
-          if (inDebugMode || log.isDebugEnabled()) {
-            String message =
-                String.format(
-                    "Authorization failed for policy decision point (%s)",
-                    policyDecisionPoint.getKey());
+      if (inDebugMode || log.isDebugEnabled()) {
+        log.info(
+            "Authorization {} for policy decision point ({})",
+            authorized ? "successful" : "failed",
+            policyDecisionPoint.getKey());
+      }
 
-            log.info(message);
-          }
-        }
+      if (authorized) {
+        return true;
       }
     }
 
-    // NOTE: We want to execute the authorization but not enforce it in debug mode
+    // NOTE: We want to execute the authorization but do not enforce in debug mode
     return inDebugMode;
   }
 
@@ -163,32 +135,26 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
    *     function identified by the specified function code or {@code false} otherwise
    */
   public boolean hasAccessToFunction(String functionCode) {
-    if (isSecurityEnabled) {
-      // Could not retrieve the currently authenticated principal
-      if (getAuthentication() == null) {
-        return false;
-      }
-
-      if (!StringUtils.hasText(functionCode)) {
-        return false;
-      }
-
-      if (!getAuthentication().isAuthenticated()) {
-        return false;
-      }
-
-      String functionAuthority = "FUNCTION_" + functionCode;
-
-      for (GrantedAuthority grantedAuthority : getAuthentication().getAuthorities()) {
-        if (grantedAuthority.getAuthority().equalsIgnoreCase(functionAuthority)) {
-          return true;
-        }
-      }
-
-      return false;
-    } else {
+    if (!isSecurityEnabled) {
       return true;
     }
+
+    Authentication authentication = getAuthentication();
+    if (authentication == null
+        || !authentication.isAuthenticated()
+        || !StringUtils.hasText(functionCode)) {
+      return false;
+    }
+
+    String functionAuthority = "FUNCTION_" + functionCode;
+
+    for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
+      if (StringUtil.equalsIgnoreCase(grantedAuthority.getAuthority(), functionAuthority)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -201,7 +167,7 @@ public class PolicyDecisionPointSecurityExpressionRoot extends SecurityExpressio
   }
 
   @Override
-  public void setFilterObject(Object filterObject) {
+  public void setFilterObject(@NonNull Object filterObject) {
     this.filterObject = filterObject;
   }
 

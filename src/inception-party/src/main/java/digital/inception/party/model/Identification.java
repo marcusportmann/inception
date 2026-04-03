@@ -17,6 +17,7 @@
 package digital.inception.party.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -187,6 +188,7 @@ public class Identification implements Serializable {
    * @param issueDate the issue date for the identification
    * @param number the number for the identification
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Identification(String type, String countryOfIssue, LocalDate issueDate, String number) {
     this.id = UuidCreator.getTimeOrderedEpoch();
     this.type = type;
@@ -205,6 +207,7 @@ public class Identification implements Serializable {
    * @param expiryDate the expiry date for the identification
    * @param number the number for the identification
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public Identification(
       String type,
       String countryOfIssue,

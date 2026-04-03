@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -94,6 +95,7 @@ public class WaiveWorkflowDocumentRequest implements Serializable {
    * @param workflowDocumentId the ID for the workflow document
    * @param waiveReason the reason the workflow document was waived
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WaiveWorkflowDocumentRequest(UUID workflowDocumentId, String waiveReason) {
     this.workflowDocumentId = workflowDocumentId;
     this.waiveReason = waiveReason;
@@ -106,6 +108,7 @@ public class WaiveWorkflowDocumentRequest implements Serializable {
    * @param waiveReason the reason the workflow document was waived
    * @param description the description for the workflow document
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WaiveWorkflowDocumentRequest(
       UUID workflowDocumentId, String waiveReason, String description) {
     this.workflowDocumentId = workflowDocumentId;

@@ -414,7 +414,7 @@ public class ConfigServiceImpl extends AbstractServiceBase implements ConfigServ
     validateArgument("config", config);
 
     try {
-      configRepository.saveAndFlush(config);
+      configRepository.save(config);
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to set the config with the ID (" + config.getId() + ")", e);

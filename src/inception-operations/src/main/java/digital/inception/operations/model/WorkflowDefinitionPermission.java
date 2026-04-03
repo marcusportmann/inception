@@ -17,6 +17,7 @@
 package digital.inception.operations.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -107,6 +108,7 @@ public class WorkflowDefinitionPermission implements Serializable {
   @Column(name = "type", length = 50, nullable = false)
   @JdbcTypeCode(SqlTypes.VARCHAR)
   @JavaType(WorkflowPermissionTypeJavaType.class)
+  @jakarta.persistence.Convert(disableConversion = true)
   private WorkflowPermissionType type;
 
   /** Constructs a new {@code WorkflowDefinitionPermission}. */
@@ -118,6 +120,7 @@ public class WorkflowDefinitionPermission implements Serializable {
    * @param roleCode the code for the role the workflow definition permission is assigned to
    * @param type the workflow permission type
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public WorkflowDefinitionPermission(String roleCode, WorkflowPermissionType type) {
     this.roleCode = roleCode;
     this.type = type;

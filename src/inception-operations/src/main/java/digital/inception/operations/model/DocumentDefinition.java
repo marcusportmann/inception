@@ -16,6 +16,7 @@
 
 package digital.inception.operations.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -185,6 +186,7 @@ public class DocumentDefinition implements Serializable {
    * @param templateId the ID for the document template for the document definition
    * @param attributeDefinitions the document attribute definitions for the document definition
    */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
   public DocumentDefinition(
       String id,
       String categoryId,
