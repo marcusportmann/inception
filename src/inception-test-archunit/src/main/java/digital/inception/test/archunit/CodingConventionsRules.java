@@ -60,7 +60,8 @@ public final class CodingConventionsRules {
           .callMethod(LocalDateTime.class, "now")
           .because(
               "LocalDateTime.now() bypasses the application clock - use "
-                  + "digital.inception.core.time.ApplicationClock.now() instead");
+                  + "digital.inception.core.time.ApplicationClock.now() instead")
+          .allowEmptyShould(true);
 
   /**
    * The ArchUnit rule that verifies that {@link LocalDateTime#now(ZoneId)} is not used directly and
@@ -74,7 +75,8 @@ public final class CodingConventionsRules {
           .callMethod(LocalDateTime.class, "now", ZoneId.class)
           .because(
               "LocalDateTime.now(ZoneId) bypasses the application clock - use "
-                  + "digital.inception.core.time.ApplicationClock.now(ZoneId) instead");
+                  + "digital.inception.core.time.ApplicationClock.now(ZoneId) instead")
+          .allowEmptyShould(true);
 
   /**
    * The ArchUnit rule that verifies that {@link LocalDateTime#now(Clock)} is not used directly and
@@ -90,7 +92,8 @@ public final class CodingConventionsRules {
           .because(
               "LocalDateTime.now(Clock) should not be used directly - use "
                   + "digital.inception.core.time.ApplicationClock.now() or "
-                  + "digital.inception.core.time.ApplicationClock.getClock() instead");
+                  + "digital.inception.core.time.ApplicationClock.getClock() instead")
+          .allowEmptyShould(true);
 
   /**
    * The ArchUnit rule that verifies that {@link OffsetDateTime#now()} is not used directly and that
@@ -104,7 +107,8 @@ public final class CodingConventionsRules {
           .callMethod(OffsetDateTime.class, "now")
           .because(
               "OffsetDateTime.now() bypasses the application clock - use "
-                  + "digital.inception.core.time.ApplicationClock.offsetNow() instead");
+                  + "digital.inception.core.time.ApplicationClock.offsetNow() instead")
+          .allowEmptyShould(true);
 
   /**
    * The ArchUnit rule that verifies that {@link OffsetDateTime#now(ZoneId)} is not used directly
@@ -118,7 +122,8 @@ public final class CodingConventionsRules {
           .callMethod(OffsetDateTime.class, "now", ZoneId.class)
           .because(
               "OffsetDateTime.now(ZoneId) bypasses the application clock - use "
-                  + "digital.inception.core.time.ApplicationClock.offsetNow(ZoneId) instead");
+                  + "digital.inception.core.time.ApplicationClock.offsetNow(ZoneId) instead")
+          .allowEmptyShould(true);
 
   /**
    * The ArchUnit rule that verifies that {@link OffsetDateTime#now(Clock)} is not used directly and
@@ -134,7 +139,8 @@ public final class CodingConventionsRules {
           .because(
               "OffsetDateTime.now(Clock) should not be used directly - use "
                   + "digital.inception.core.time.ApplicationClock.offsetNow() or "
-                  + "digital.inception.core.time.ApplicationClock.getClock() instead");
+                  + "digital.inception.core.time.ApplicationClock.getClock() instead")
+          .allowEmptyShould(true);
 
   private static final String JACKSON_ANNOTATION_PACKAGE = "com.fasterxml.jackson.annotation";
 
@@ -148,7 +154,8 @@ public final class CodingConventionsRules {
   public static final ArchRule PUBLIC_CONVENIENCE_CONSTRUCTORS_DISABLE_JACKSON_CREATOR =
       classes()
           .that(areIntendedForJacksonJsonBinding())
-          .and().areNotRecords()
+          .and()
+          .areNotRecords()
           .should(
               new ArchCondition<>("have disabled Jackson on public convenience constructors") {
                 @Override
@@ -183,7 +190,8 @@ public final class CodingConventionsRules {
               "Jackson can treat public multi-argument convenience constructors as creators; on "
                   + "types intended for JSON binding, such constructors must explicitly disable "
                   + "Jackson creator use unless they are already explicitly annotated for Jackson "
-                  + "or are the class's Lombok-generated all-args constructor");
+                  + "or are the class's Lombok-generated all-args constructor")
+          .allowEmptyShould(true);
 
   /** Constructs a new {@code CodingConventionsRules}. */
   public CodingConventionsRules() {}
