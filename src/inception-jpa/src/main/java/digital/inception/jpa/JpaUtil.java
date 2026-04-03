@@ -131,7 +131,7 @@ public final class JpaUtil {
 
       if (platformTransactionManager instanceof JtaTransactionManager) {
         jpaPropertyMap.put(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY, "jta");
-        jpaPropertyMap.put(AvailableSettings.JTA_PLATFORM, "JBossTS");
+        jpaPropertyMap.put(AvailableSettings.JTA_PLATFORM, "Narayana");
       }
 
       try {

@@ -105,7 +105,6 @@ public class Mandate implements Serializable {
   @JsonManagedReference("mandateLinkReference")
   @XmlElementWrapper(name = "Links")
   @XmlElement(name = "Link")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type ASC, target ASC")
   @JoinColumn(
@@ -113,7 +112,7 @@ public class Mandate implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<MandateLink> links = new ArrayList<>();
+  private final List<@Valid MandateLink> links = new ArrayList<>();
 
   /** The mandataries for the mandate. */
   @Schema(description = "The mandataries for the mandate")
@@ -121,7 +120,6 @@ public class Mandate implements Serializable {
   @JsonManagedReference("mandataryReference")
   @XmlElementWrapper(name = "Mandataries")
   @XmlElement(name = "Mandatary")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("role ASC, effectiveFrom ASC")
   @JoinColumn(
@@ -129,7 +127,7 @@ public class Mandate implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<Mandatary> mandataries = new ArrayList<>();
+  private final List<@Valid Mandatary> mandataries = new ArrayList<>();
 
   /** The properties for the mandate. */
   @Schema(description = "The properties for the mandate")
@@ -137,7 +135,6 @@ public class Mandate implements Serializable {
   @JsonManagedReference("mandatePropertyReference")
   @XmlElementWrapper(name = "Properties")
   @XmlElement(name = "Property")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(
@@ -145,7 +142,7 @@ public class Mandate implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<MandateProperty> properties = new ArrayList<>();
+  private final List<@Valid MandateProperty> properties = new ArrayList<>();
 
   /** The date the mandate is effective from. */
   @Schema(description = "The ISO 8601 format date the mandate is effective from")

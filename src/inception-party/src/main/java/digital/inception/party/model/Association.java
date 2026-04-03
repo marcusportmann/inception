@@ -101,7 +101,6 @@ public class Association implements Serializable {
   @JsonManagedReference("associationPropertyReference")
   @XmlElementWrapper(name = "Properties")
   @XmlElement(name = "Property")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(
@@ -109,7 +108,7 @@ public class Association implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<AssociationProperty> properties = new ArrayList<>();
+  private final List<@Valid AssociationProperty> properties = new ArrayList<>();
 
   /** The date the association is effective from. */
   @Schema(description = "The ISO 8601 format date the association is effective from")

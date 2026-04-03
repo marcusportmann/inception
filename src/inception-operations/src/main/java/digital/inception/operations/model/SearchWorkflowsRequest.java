@@ -84,8 +84,7 @@ public class SearchWorkflowsRequest implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  @Valid
-  private List<AttributeSearchCriteria> attributes;
+  private List<@Valid AttributeSearchCriteria> attributes;
 
   /**
    * The person or system who canceled the workflow search criteria to apply when searching for
@@ -111,8 +110,7 @@ public class SearchWorkflowsRequest implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
-  @Valid
-  private List<ExternalReferenceSearchCriteria> externalReferences;
+  private List<@Valid ExternalReferenceSearchCriteria> externalReferences;
 
   /**
    * The person or system that finalized the workflow search criteria to apply when searching for
@@ -221,8 +219,7 @@ public class SearchWorkflowsRequest implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "Variables")
   @XmlElement(name = "Variable")
-  @Valid
-  private List<VariableSearchCriteria> variables;
+  private List<@Valid VariableSearchCriteria> variables;
 
   /** Constructs a new {@code SearchWorkflowsRequest}. */
   public SearchWorkflowsRequest() {}

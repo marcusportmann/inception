@@ -77,8 +77,7 @@ public class UpdateWorkflowRequest implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  @Valid
-  private List<WorkflowAttribute> attributes;
+  private List<@Valid WorkflowAttribute> attributes;
 
   /** The updated JSON or XML data for the workflow. */
   @Schema(description = "The updated JSON or XML data for the workflow")
@@ -99,8 +98,7 @@ public class UpdateWorkflowRequest implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
-  @Valid
-  private List<WorkflowExternalReference> externalReferences;
+  private List<@Valid WorkflowExternalReference> externalReferences;
 
   /** The name of the workflow. */
   @Schema(description = "The name of the workflow")
@@ -120,8 +118,7 @@ public class UpdateWorkflowRequest implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "Variables")
   @XmlElement(name = "Variable")
-  @Valid
-  private List<WorkflowVariable> variables;
+  private List<@Valid WorkflowVariable> variables;
 
   /** The ID for the workflow. */
   @Schema(description = "The ID for the workflow", requiredMode = Schema.RequiredMode.REQUIRED)

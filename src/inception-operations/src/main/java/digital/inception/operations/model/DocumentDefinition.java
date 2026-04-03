@@ -92,7 +92,6 @@ public class DocumentDefinition implements Serializable {
   @JsonManagedReference("documentDefinitionAttributeDefinitionReference")
   @XmlElementWrapper(name = "AttributeDefinitions")
   @XmlElement(name = "AttributeDefinition")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("name")
   @JoinColumns({
@@ -102,7 +101,7 @@ public class DocumentDefinition implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<DocumentAttributeDefinition> attributeDefinitions = new ArrayList<>();
+  private final List<@Valid DocumentAttributeDefinition> attributeDefinitions = new ArrayList<>();
 
   /** The ID for the document definition category the document definition is associated with. */
   @Schema(

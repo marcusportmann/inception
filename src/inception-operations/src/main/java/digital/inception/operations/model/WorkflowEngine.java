@@ -74,11 +74,10 @@ public class WorkflowEngine implements Serializable {
   @JsonManagedReference("workflowEngineAttributeReference")
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("name")
   @JoinColumn(name = "engine_id", insertable = false, updatable = false)
-  private final List<WorkflowEngineAttribute> attributes = new ArrayList<>();
+  private final List<@Valid WorkflowEngineAttribute> attributes = new ArrayList<>();
 
   /** The fully qualified name of the connector class for the workflow engine. */
   @Schema(

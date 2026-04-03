@@ -85,8 +85,7 @@ public class UpdateDocumentRequest implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  @Valid
-  private List<DocumentAttribute> attributes;
+  private List<@Valid DocumentAttribute> attributes;
 
   /** The data for the document. */
   @Schema(description = "The data for the document", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -117,8 +116,7 @@ public class UpdateDocumentRequest implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
-  @Valid
-  private List<DocumentExternalReference> externalReferences;
+  private List<@Valid DocumentExternalReference> externalReferences;
 
   /** The file type for the document. */
   @Schema(

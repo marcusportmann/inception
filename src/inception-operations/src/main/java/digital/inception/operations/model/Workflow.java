@@ -139,7 +139,6 @@ public class Workflow implements Serializable {
   @JsonManagedReference("workflowAttributeReference")
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("name")
   @JoinColumn(
@@ -147,7 +146,7 @@ public class Workflow implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<WorkflowAttribute> attributes = new ArrayList<>();
+  private final List<@Valid WorkflowAttribute> attributes = new ArrayList<>();
 
   /** The external references for the workflow. */
   @Schema(description = "The external references for the workflow")
@@ -155,7 +154,6 @@ public class Workflow implements Serializable {
   @JsonManagedReference("workflowExternalReferenceReference")
   @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(
@@ -163,7 +161,7 @@ public class Workflow implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<WorkflowExternalReference> externalReferences = new ArrayList<>();
+  private final List<@Valid WorkflowExternalReference> externalReferences = new ArrayList<>();
 
   /** The interaction links for the workflow. */
   @Schema(description = "The interaction links for the workflow")
@@ -171,7 +169,6 @@ public class Workflow implements Serializable {
   @JsonManagedReference("workflowInteractionLinkReference")
   @XmlElementWrapper(name = "InteractionLinks")
   @XmlElement(name = "InteractionLink")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("linked")
   @JoinColumn(
@@ -179,7 +176,7 @@ public class Workflow implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<WorkflowInteractionLink> interactionLinks = new ArrayList<>();
+  private final List<@Valid WorkflowInteractionLink> interactionLinks = new ArrayList<>();
 
   /** The workflow steps for the workflow. */
   @Schema(description = "The workflow steps for the workflow")
@@ -187,11 +184,10 @@ public class Workflow implements Serializable {
   @JsonManagedReference("workflowStepReference")
   @XmlElementWrapper(name = "Steps")
   @XmlElement(name = "Step")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("initiated")
   @JoinColumn(name = "workflow_id", insertable = false, updatable = false)
-  private final List<WorkflowStep> steps = new ArrayList<>();
+  private final List<@Valid WorkflowStep> steps = new ArrayList<>();
 
   /** The variables for the workflow. */
   @Schema(description = "The variables for the workflow")
@@ -199,7 +195,6 @@ public class Workflow implements Serializable {
   @JsonManagedReference("workflowVariableReference")
   @XmlElementWrapper(name = "Variables")
   @XmlElement(name = "Variable")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("name")
   @JoinColumn(
@@ -207,7 +202,7 @@ public class Workflow implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<WorkflowVariable> variables = new ArrayList<>();
+  private final List<@Valid WorkflowVariable> variables = new ArrayList<>();
 
   /** The date and time the workflow was canceled. */
   @Schema(description = "The date and time the workflow was canceled")

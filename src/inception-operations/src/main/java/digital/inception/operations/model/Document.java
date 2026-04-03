@@ -113,7 +113,6 @@ public class Document implements Serializable {
   @JsonManagedReference("documentAttributeReference")
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("name")
   @JoinColumn(
@@ -121,7 +120,7 @@ public class Document implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<DocumentAttribute> attributes = new ArrayList<>();
+  private final List<@Valid DocumentAttribute> attributes = new ArrayList<>();
 
   /** The external references for the document. */
   @Schema(description = "The external references for the document")
@@ -129,7 +128,6 @@ public class Document implements Serializable {
   @JsonManagedReference("documentExternalReferenceReference")
   @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(
@@ -137,7 +135,7 @@ public class Document implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<DocumentExternalReference> externalReferences = new ArrayList<>();
+  private final List<@Valid DocumentExternalReference> externalReferences = new ArrayList<>();
 
   /** The date and time the document was created. */
   @Schema(

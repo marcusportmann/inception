@@ -221,14 +221,12 @@ public class Person extends PartyBase implements Serializable {
   @Serial private static final long serialVersionUID = 1000000;
 
   /** The attributes for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<Attribute> attributes = new ArrayList<>();
+  private final List<@Valid Attribute> attributes = new ArrayList<>();
 
   /** The consents provided by the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(
@@ -236,17 +234,15 @@ public class Person extends PartyBase implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<Consent> consents = new ArrayList<>();
+  private final List<@Valid Consent> consents = new ArrayList<>();
 
   /** The contact mechanisms for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<ContactMechanism> contactMechanisms = new ArrayList<>();
+  private final List<@Valid ContactMechanism> contactMechanisms = new ArrayList<>();
 
   /** The educations for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("qualificationYear")
   @JoinColumn(
@@ -254,10 +250,9 @@ public class Person extends PartyBase implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<Education> educations = new ArrayList<>();
+  private final List<@Valid Education> educations = new ArrayList<>();
 
   /** The employments for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("startDate")
   @JoinColumn(
@@ -265,24 +260,21 @@ public class Person extends PartyBase implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<Employment> employments = new ArrayList<>();
+  private final List<@Valid Employment> employments = new ArrayList<>();
 
   /** The external references for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<ExternalReference> externalReferences = new ArrayList<>();
+  private final List<@Valid ExternalReference> externalReferences = new ArrayList<>();
 
   /** The identifications for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<Identification> identifications = new ArrayList<>();
+  private final List<@Valid Identification> identifications = new ArrayList<>();
 
   /** The language proficiencies for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("language")
   @JoinColumn(
@@ -290,17 +282,15 @@ public class Person extends PartyBase implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<LanguageProficiency> languageProficiencies = new ArrayList<>();
+  private final List<@Valid LanguageProficiency> languageProficiencies = new ArrayList<>();
 
   /** The locks applied to the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<Lock> locks = new ArrayList<>();
+  private final List<@Valid Lock> locks = new ArrayList<>();
 
   /** The next of kin for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(
@@ -308,23 +298,20 @@ public class Person extends PartyBase implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<NextOfKin> nextOfKin = new ArrayList<>();
+  private final List<@Valid NextOfKin> nextOfKin = new ArrayList<>();
 
   /** The physical addresses for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<PhysicalAddress> physicalAddresses = new ArrayList<>();
+  private final List<@Valid PhysicalAddress> physicalAddresses = new ArrayList<>();
 
   /** The preferences for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<Preference> preferences = new ArrayList<>();
+  private final List<@Valid Preference> preferences = new ArrayList<>();
 
   /** The residence permits for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(
@@ -332,24 +319,21 @@ public class Person extends PartyBase implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<ResidencePermit> residencePermits = new ArrayList<>();
+  private final List<@Valid ResidencePermit> residencePermits = new ArrayList<>();
 
   /** The roles assigned directly to the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<Role> roles = new ArrayList<>();
+  private final List<@Valid Role> roles = new ArrayList<>();
 
   /** The segment allocations for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("segment")
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<SegmentAllocation> segmentAllocations = new ArrayList<>();
+  private final List<@Valid SegmentAllocation> segmentAllocations = new ArrayList<>();
 
   /** The skills for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(
@@ -357,10 +341,9 @@ public class Person extends PartyBase implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<Skill> skills = new ArrayList<>();
+  private final List<@Valid Skill> skills = new ArrayList<>();
 
   /** The sources of funds for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(
@@ -368,10 +351,9 @@ public class Person extends PartyBase implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<SourceOfFunds> sourcesOfFunds = new ArrayList<>();
+  private final List<@Valid SourceOfFunds> sourcesOfFunds = new ArrayList<>();
 
   /** The sources of wealth for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(
@@ -379,21 +361,19 @@ public class Person extends PartyBase implements Serializable {
       referencedColumnName = "id",
       insertable = false,
       updatable = false)
-  private final List<SourceOfWealth> sourcesOfWealth = new ArrayList<>();
+  private final List<@Valid SourceOfWealth> sourcesOfWealth = new ArrayList<>();
 
   /** The statuses assigned to the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<Status> statuses = new ArrayList<>();
+  private final List<@Valid Status> statuses = new ArrayList<>();
 
   /** The tax numbers for the person. */
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("type")
   @JoinColumn(name = "party_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private final List<TaxNumber> taxNumbers = new ArrayList<>();
+  private final List<@Valid TaxNumber> taxNumbers = new ArrayList<>();
 
   /** The ISO 3166-1 alpha-2 codes for the countries of citizenship for the person. */
   @Size(min = 1, max = 10)

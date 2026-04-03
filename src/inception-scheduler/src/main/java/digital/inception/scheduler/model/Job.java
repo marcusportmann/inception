@@ -103,10 +103,9 @@ public class Job implements Serializable {
   @JsonManagedReference("parameterReference")
   @XmlElementWrapper(name = "Parameters")
   @XmlElement(name = "Parameter")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @JoinColumn(name = "job_id", insertable = false, updatable = false)
-  private final List<JobParameter> parameters = new ArrayList<>();
+  private final List<@Valid JobParameter> parameters = new ArrayList<>();
 
   /** Is the job enabled for execution? */
   @Schema(

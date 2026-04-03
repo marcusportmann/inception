@@ -77,11 +77,10 @@ public class InteractionSourceSummary implements Serializable {
   @JsonManagedReference("interactionSourcePermissionReference")
   @XmlElementWrapper(name = "Permissions")
   @XmlElement(name = "Permission")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("roleCode")
   @JoinColumn(name = "source_id", insertable = false, updatable = false)
-  private final List<InteractionSourcePermission> permissions = new ArrayList<>();
+  private final List<@Valid InteractionSourcePermission> permissions = new ArrayList<>();
 
   /**
    * Is the interaction source enabled?

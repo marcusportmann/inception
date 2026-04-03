@@ -74,8 +74,7 @@ public class SearchDocumentsRequest implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  @Valid
-  private List<AttributeSearchCriteria> attributes;
+  private List<@Valid AttributeSearchCriteria> attributes;
 
   /** The document definition ID search criteria to apply to the documents. */
   @Schema(description = "The document definition ID search criteria to apply to the documents")
@@ -89,8 +88,7 @@ public class SearchDocumentsRequest implements Serializable {
   @JsonProperty
   @XmlElementWrapper(name = "ExternalReferences")
   @XmlElement(name = "ExternalReference")
-  @Valid
-  private List<ExternalReferenceSearchCriteria> externalReferences;
+  private List<@Valid ExternalReferenceSearchCriteria> externalReferences;
 
   /** The page index. */
   @Schema(description = "The page index")

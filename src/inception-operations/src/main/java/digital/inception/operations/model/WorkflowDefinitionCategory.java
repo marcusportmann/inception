@@ -77,7 +77,6 @@ public class WorkflowDefinitionCategory implements Serializable {
   @JsonManagedReference("workflowDefinitionCategoryPermissionReference")
   @XmlElementWrapper(name = "Permissions")
   @XmlElement(name = "Permission")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("roleCode")
   @JoinColumns({
@@ -87,7 +86,7 @@ public class WorkflowDefinitionCategory implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<WorkflowDefinitionCategoryPermission> permissions = new ArrayList<>();
+  private final List<@Valid WorkflowDefinitionCategoryPermission> permissions = new ArrayList<>();
 
   /** The ID for the workflow definition category. */
   @Schema(

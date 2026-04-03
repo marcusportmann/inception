@@ -111,9 +111,8 @@ public class UserDirectory implements Serializable {
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Parameters", required = true)
   @XmlElement(name = "Parameter", required = true)
-  @Valid
   @Transient
-  private List<UserDirectoryParameter> parameters = new ArrayList<>();
+  private List<@Valid UserDirectoryParameter> parameters = new ArrayList<>();
 
   /** The tenants the user directory is associated with. */
   @JsonIgnore

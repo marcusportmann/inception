@@ -136,7 +136,6 @@ public class WorkflowDefinition implements Serializable {
   @JsonManagedReference("workflowDefinitionAttributeDefinitionReference")
   @XmlElementWrapper(name = "AttributeDefinitions")
   @XmlElement(name = "AttributeDefinition")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("name")
   @JoinColumns({
@@ -151,7 +150,7 @@ public class WorkflowDefinition implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<WorkflowAttributeDefinition> attributeDefinitions = new ArrayList<>();
+  private final List<@Valid WorkflowAttributeDefinition> attributeDefinitions = new ArrayList<>();
 
   /** The attributes for the workflow definition. */
   @Schema(description = "The attributes for the workflow definition")
@@ -159,7 +158,6 @@ public class WorkflowDefinition implements Serializable {
   @JsonManagedReference("workflowDefinitionAttributeReference")
   @XmlElementWrapper(name = "Attributes")
   @XmlElement(name = "Attribute")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("name")
   @JoinColumns({
@@ -174,7 +172,7 @@ public class WorkflowDefinition implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<WorkflowDefinitionAttribute> attributes = new ArrayList<>();
+  private final List<@Valid WorkflowDefinitionAttribute> attributes = new ArrayList<>();
 
   /** The document definitions associated with the workflow definition. */
   @Schema(
@@ -184,7 +182,6 @@ public class WorkflowDefinition implements Serializable {
   @JsonManagedReference("workflowDefinitionDocumentDefinitionReference")
   @XmlElementWrapper(name = "DocumentDefinitions", required = true)
   @XmlElement(name = "DocumentDefinition", required = true)
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("documentDefinitionId")
   @JoinColumns({
@@ -199,7 +196,7 @@ public class WorkflowDefinition implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
+  private final List<@Valid WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
 
   /** The permissions for the workflow definition. */
   @Schema(description = "The permissions for the workflow definition")
@@ -207,7 +204,6 @@ public class WorkflowDefinition implements Serializable {
   @JsonManagedReference("workflowDefinitionPermissionReference")
   @XmlElementWrapper(name = "Permissions")
   @XmlElement(name = "Permission")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("roleCode")
   @JoinColumns({
@@ -222,7 +218,7 @@ public class WorkflowDefinition implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<WorkflowDefinitionPermission> permissions = new ArrayList<>();
+  private final List<@Valid WorkflowDefinitionPermission> permissions = new ArrayList<>();
 
   /** The workflow step definitions for the workflow definition. */
   @Schema(description = "The workflow step definitions for the workflow definition")
@@ -230,7 +226,6 @@ public class WorkflowDefinition implements Serializable {
   @JsonManagedReference("workflowDefinitionStepDefinitionReference")
   @XmlElementWrapper(name = "StepDefinitions")
   @XmlElement(name = "StepDefinition")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("sequence")
   @JoinColumns({
@@ -245,7 +240,7 @@ public class WorkflowDefinition implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<WorkflowStepDefinition> stepDefinitions = new ArrayList<>();
+  private final List<@Valid WorkflowStepDefinition> stepDefinitions = new ArrayList<>();
 
   /** The workflow variable definitions for the workflow definition. */
   @Schema(description = "The workflow variable definitions for the workflow definition")
@@ -253,7 +248,6 @@ public class WorkflowDefinition implements Serializable {
   @JsonManagedReference("workflowDefinitionVariableDefinitionReference")
   @XmlElementWrapper(name = "VariableDefinitions")
   @XmlElement(name = "VariableDefinition")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("name")
   @JoinColumns({
@@ -268,7 +262,7 @@ public class WorkflowDefinition implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<WorkflowVariableDefinition> variableDefinitions = new ArrayList<>();
+  private final List<@Valid WorkflowVariableDefinition> variableDefinitions = new ArrayList<>();
 
   /** The ID for the workflow definition category the workflow definition is associated with. */
   @Schema(

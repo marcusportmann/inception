@@ -102,7 +102,6 @@ public class WorkflowDefinitionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "DocumentDefinitions", required = true)
   @XmlElement(name = "DocumentDefinition", required = true)
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("documentDefinitionId")
   @JoinColumns({
@@ -117,14 +116,13 @@ public class WorkflowDefinitionSummary implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
+  private final List<@Valid WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
 
   /** The permissions for the workflow definition. */
   @Schema(description = "The permissions for the workflow definition")
   @JsonProperty
   @XmlElementWrapper(name = "Permissions")
   @XmlElement(name = "Permission")
-  @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   @OrderBy("roleCode")
   @JoinColumns({
@@ -139,7 +137,7 @@ public class WorkflowDefinitionSummary implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<WorkflowDefinitionPermission> permissions = new ArrayList<>();
+  private final List<@Valid WorkflowDefinitionPermission> permissions = new ArrayList<>();
 
   /** The ID for the workflow definition category the workflow definition is associated with. */
   @Schema(
