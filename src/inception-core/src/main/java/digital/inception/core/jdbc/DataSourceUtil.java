@@ -24,6 +24,9 @@ import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
@@ -113,15 +116,30 @@ public final class DataSourceUtil {
               : "5");
 
       agroalProperties.setProperty(AgroalPropertiesReader.ENHANCED_LEAK_REPORT, "true");
-
       agroalProperties.setProperty(AgroalPropertiesReader.LEAK_TIMEOUT_S, "300");
-
       agroalProperties.setProperty(AgroalPropertiesReader.METRICS_ENABLED, "true");
 
       AgroalPropertiesReader agroalReaderProperties =
           new AgroalPropertiesReader().readProperties(agroalProperties);
       AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
           agroalReaderProperties.modify();
+
+      // Apply driver-specific JDBC properties here
+      Map<String, String> jdbcProperties = new LinkedHashMap<>();
+
+      if (dataSourceConfiguration.isStatementCachingEnabled()) {
+        buildStatementCachingJdbcProperties(dataSourceConfiguration, jdbcProperties);
+
+        if (!jdbcProperties.isEmpty()) {
+          agroalDataSourceConfigurationSupplier.connectionPoolConfiguration(
+              cp ->
+                  cp.connectionFactoryConfiguration(
+                      cf -> {
+                        jdbcProperties.forEach(cf::jdbcProperty);
+                        return cf;
+                      }));
+        }
+      }
 
       if (enableTransactionIntegration) {
         try {
@@ -319,5 +337,50 @@ public final class DataSourceUtil {
     }
 
     return TransactionIntegration.none();
+  }
+
+  private static void buildStatementCachingJdbcProperties(
+      DataSourceConfiguration dataSourceConfiguration, Map<String, String> jdbcProperties) {
+
+    String className =
+        dataSourceConfiguration.getClassName() == null
+            ? ""
+            : dataSourceConfiguration.getClassName().toLowerCase(Locale.ROOT);
+    String url =
+        dataSourceConfiguration.getUrl() == null
+            ? ""
+            : dataSourceConfiguration.getUrl().toLowerCase(Locale.ROOT);
+
+    // PostgreSQL
+    if (className.contains("postgresql") || url.startsWith("jdbc:postgresql:")) {
+      jdbcProperties.put("prepareThreshold", "3");
+      jdbcProperties.put("preparedStatementCacheQueries", "256");
+      jdbcProperties.put("preparedStatementCacheSizeMiB", "5");
+    }
+
+    // MySQL / MariaDB
+    if (className.contains("mysql")
+        || className.contains("mariadb")
+        || url.startsWith("jdbc:mysql:")
+        || url.startsWith("jdbc:mariadb:")) {
+      jdbcProperties.put("cachePrepStmts", "true");
+      jdbcProperties.put("prepStmtCacheSize", "250");
+      jdbcProperties.put("prepStmtCacheSqlLimit", "2048");
+      jdbcProperties.put("useServerPrepStmts", "true");
+    }
+
+    // Oracle
+    if (className.contains("oracle") || url.startsWith("jdbc:oracle:")) {
+      // Enables Oracle implicit statement caching when > 0
+      jdbcProperties.put("oracle.jdbc.implicitStatementCacheSize", "50");
+    }
+
+    // SQL Server
+    if (className.contains("sqlserver")
+        || className.contains("microsoft")
+        || url.startsWith("jdbc:sqlserver:")) {
+      jdbcProperties.put("disableStatementPooling", "false");
+      jdbcProperties.put("statementPoolingCacheSize", "50");
+    }
   }
 }

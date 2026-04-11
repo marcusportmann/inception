@@ -42,6 +42,9 @@ public class DataSourceConfiguration implements Serializable {
   /** The password for the database. */
   private String password;
 
+  /** Is statement caching enabled for the data source. */
+  private boolean statementCachingEnabled;
+
   /** The URL used to connect to the database. */
   private String url;
 
@@ -178,6 +181,16 @@ public class DataSourceConfiguration implements Serializable {
   }
 
   /**
+   * Returns whether statement caching is enable for the data source.
+   *
+   * @return {@code true} if statement caching is enabled for the data source or {@code false}
+   *     otherwise
+   */
+  public boolean isStatementCachingEnabled() {
+    return statementCachingEnabled;
+  }
+
+  /**
    * Sets the fully qualified name of the data source class used to connect to the database.
    *
    * @param className the fully qualified name of the data source class used to connect to the
@@ -214,6 +227,15 @@ public class DataSourceConfiguration implements Serializable {
    */
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  /**
+   * Set whether statement caching is enabled for the data source.
+   *
+   * @param statementCachingEnabled is statement caching enabled for the data source
+   */
+  public void setStatementCachingEnabled(boolean statementCachingEnabled) {
+    this.statementCachingEnabled = statementCachingEnabled;
   }
 
   /**
