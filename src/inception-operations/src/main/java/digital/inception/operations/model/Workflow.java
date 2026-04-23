@@ -573,8 +573,8 @@ public class Workflow implements Serializable {
    * Retrieve the attribute with the specified name for the workflow.
    *
    * @param name the name of the attribute
-   * @return an Optional containing the attribute with the specified name for the workflow or an
-   *     empty Optional if the attribute could not be found
+   * @return an {@link Optional} containing the attribute with the specified name for the workflow
+   *     or an empty {@link Optional} if the attribute could not be found
    */
   public Optional<WorkflowAttribute> getAttribute(String name) {
     return attributes.stream()
@@ -667,8 +667,8 @@ public class Workflow implements Serializable {
    * Retrieve the external reference with the specified type for the workflow.
    *
    * @param type the code for the external reference type
-   * @return an Optional containing the external reference with the specified type for the workflow
-   *     or an empty Optional if the external reference could not be found
+   * @return an {@link Optional} containing the external reference with the specified type for the
+   *     workflow or an empty {@link Optional} if the external reference could not be found
    */
   public Optional<WorkflowExternalReference> getExternalReference(String type) {
     return externalReferences.stream()
@@ -833,8 +833,8 @@ public class Workflow implements Serializable {
    * Retrieve the variable with the specified name for the workflow.
    *
    * @param name the name of the workflow variable
-   * @return an Optional containing the variable with the specified name for the workflow or an
-   *     empty Optional if the variable could not be found
+   * @return an {@link Optional} containing the variable with the specified name for the workflow or
+   *     an empty {@link Optional} if the variable could not be found
    */
   public Optional<WorkflowVariable> getVariable(String name) {
     return variables.stream()

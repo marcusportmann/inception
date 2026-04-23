@@ -86,9 +86,8 @@ public class InteractionAttachment implements Serializable {
       requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty(required = true)
   @XmlElement(name = "Data", required = true)
-  @NotNull
   @Size(min = 1, max = 20971520)
-  @Column(name = "data", nullable = false)
+  @Column(name = "data", length = 20971520)
   private byte[] data;
 
   /** The file type for the interaction attachment. */
@@ -175,6 +174,25 @@ public class InteractionAttachment implements Serializable {
 
   /** Constructs a new {@code InteractionAttachment}. */
   public InteractionAttachment() {}
+
+  /**
+   * Constructs a new {@code InteractionAttachment}.
+   *
+   * @param interactionAttachment the existing interaction attachment
+   */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+  public InteractionAttachment(InteractionAttachment interactionAttachment) {
+    this.data = interactionAttachment.data;
+
+    this.fileType = interactionAttachment.fileType;
+    this.hash = interactionAttachment.hash;
+    this.id = interactionAttachment.id;
+    this.interactionId = interactionAttachment.interactionId;
+    this.name = interactionAttachment.name;
+    this.sourceId = interactionAttachment.sourceId;
+    this.sourceReference = interactionAttachment.sourceReference;
+    this.tenantId = interactionAttachment.tenantId;
+  }
 
   /**
    * Constructs a new {@code InteractionAttachment}.

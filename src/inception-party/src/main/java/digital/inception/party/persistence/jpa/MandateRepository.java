@@ -60,8 +60,8 @@ public interface MandateRepository extends JpaRepository<Mandate, UUID> {
    *
    * @param tenantId the ID for the tenant
    * @param mandateId the ID for the mandate
-   * @return an Optional containing the mandate or an empty Optional if the mandate could not be
-   *     found
+   * @return an {@link Optional} containing the mandate or an empty {@link Optional} if the mandate
+   *     could not be found
    */
   Optional<Mandate> findByTenantIdAndId(UUID tenantId, UUID mandateId);
 

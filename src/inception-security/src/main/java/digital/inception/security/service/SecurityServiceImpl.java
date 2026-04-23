@@ -2842,9 +2842,9 @@ public class SecurityServiceImpl extends AbstractServiceBase implements Security
    * associated with.
    *
    * @param username the username for the internal user
-   * @return an Optional containing the ID for the internal user directory the internal user with
-   *     the specified username is associated with or an empty Optional if an internal user with the
-   *     specified username could not be found
+   * @return an {@link Optional} containing the ID for the internal user directory the internal user
+   *     with the specified username is associated with or an empty {@link Optional} if an internal
+   *     user with the specified username could not be found
    * @throws ServiceUnavailableException if the internal user directory ID could not be retrieved
    *     for the user
    */

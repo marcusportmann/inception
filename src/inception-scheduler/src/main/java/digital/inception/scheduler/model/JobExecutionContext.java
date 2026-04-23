@@ -74,8 +74,8 @@ public class JobExecutionContext {
    * Returns the parameter with the specified name for the job.
    *
    * @param name the name of the parameter
-   * @return an Optional containing the value of the parameter with the specified name or an empty
-   *     Optional if the parameter cannot be found
+   * @return an {@link Optional} containing the value of the parameter with the specified name or an
+   *     empty {@link Optional} if the parameter cannot be found
    */
   public Optional<String> getParameter(String name) {
     return Optional.ofNullable(parameters.get(name));

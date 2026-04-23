@@ -61,8 +61,8 @@ public interface DocumentNoteRepository
    *
    * @param tenantId the ID for the tenant
    * @param documentNoteId the ID for the document note
-   * @return an Optional containing the document note or an empty Optional if the document note
-   *     could not be found
+   * @return an {@link Optional} containing the document note or an empty {@link Optional} if the
+   *     document note could not be found
    */
   Optional<DocumentNote> findByTenantIdAndId(UUID tenantId, UUID documentNoteId);
 }

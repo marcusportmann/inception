@@ -47,8 +47,8 @@ public interface InteractionAttachmentRepository
    *
    * @param tenantId the ID for the tenant
    * @param interactionAttachmentId the ID for the interaction attachment
-   * @return an Optional containing the interaction attachment or an empty Optional if the
-   *     interaction attachment could not be found
+   * @return an {@link Optional} containing the interaction attachment or an empty {@link Optional}
+   *     if the interaction attachment could not be found
    */
   Optional<InteractionAttachment> findByTenantIdAndId(UUID tenantId, UUID interactionAttachmentId);
 
@@ -58,7 +58,7 @@ public interface InteractionAttachmentRepository
    * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
    * @param hash the hash for interaction attachment
-   * @return an Optional containing the ID for the interaction attachment with the specified
+   * @return an {@link Optional} containing the ID for the interaction attachment with the specified
    *     interaction ID and hash or an empty optional if the interaction attachment could not be
    *     found
    */

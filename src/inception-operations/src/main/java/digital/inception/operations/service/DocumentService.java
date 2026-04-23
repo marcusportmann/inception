@@ -74,13 +74,12 @@ public interface DocumentService {
    * @param tenantId the ID for the tenant
    * @param createDocumentRequest the request to create a document
    * @param createdBy the person or system creating the document
-   * @return the document
+   * @return the ID for the document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws ServiceUnavailableException if the document could not be created
    */
-  Document createDocument(
-      UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
+  UUID createDocument(UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           ServiceUnavailableException;
@@ -90,13 +89,12 @@ public interface DocumentService {
    *
    * @param tenantId the ID for the tenant
    * @param document the document
-   * @return the document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentDefinitionNotFoundException if the document definition could not be found
    * @throws DuplicateDocumentException if the document already exists
    * @throws ServiceUnavailableException if the document could not be created
    */
-  Document createDocument(UUID tenantId, Document document)
+  void createDocument(UUID tenantId, Document document)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           DuplicateDocumentException,
@@ -138,12 +136,12 @@ public interface DocumentService {
    * @param tenantId the ID for the tenant
    * @param createDocumentNoteRequest the request to create a document note
    * @param createdBy the person or system creating the document note
-   * @return the document note
+   * @return the document note ID
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document note could not be created
    */
-  DocumentNote createDocumentNote(
+  UUID createDocumentNote(
       UUID tenantId, CreateDocumentNoteRequest createDocumentNoteRequest, String createdBy)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
@@ -526,13 +524,11 @@ public interface DocumentService {
    * @param tenantId the ID for the tenant
    * @param updateDocumentRequest the request to update the document
    * @param updatedBy the person or system updating the document
-   * @return the updated document
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNotFoundException if the document could not be found
    * @throws ServiceUnavailableException if the document could not be updated
    */
-  Document updateDocument(
-      UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
+  void updateDocument(UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException;
 
   /**
@@ -571,12 +567,11 @@ public interface DocumentService {
    * @param tenantId the ID for the tenant
    * @param updateDocumentNoteRequest the request to update a document note
    * @param updatedBy the person or system updating the document note
-   * @return the updated document note
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DocumentNoteNotFoundException if the document note could not be found
    * @throws ServiceUnavailableException if the document note could not be updated
    */
-  DocumentNote updateDocumentNote(
+  void updateDocumentNote(
       UUID tenantId, UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException;
 

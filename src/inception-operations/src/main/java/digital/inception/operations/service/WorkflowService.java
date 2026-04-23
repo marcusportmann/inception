@@ -113,13 +113,12 @@ public interface WorkflowService {
    *
    * @param tenantId the ID for the tenant
    * @param workflow the workflow
-   * @return the workflow
    * @throws WorkflowDefinitionVersionNotFoundException if the workflow definition version for the
    *     workflow could not be found
    * @throws DuplicateWorkflowException if the workflow already exists
    * @throws ServiceUnavailableException if the workflow could not be created
    */
-  Workflow createWorkflow(UUID tenantId, Workflow workflow)
+  void createWorkflow(UUID tenantId, Workflow workflow)
       throws WorkflowDefinitionVersionNotFoundException,
           DuplicateWorkflowException,
           ServiceUnavailableException;
@@ -165,11 +164,10 @@ public interface WorkflowService {
    *
    * @param tenantId the ID for the tenant
    * @param workflowDocument the workflow document
-   * @return the workflow document
    * @throws DuplicateWorkflowDocumentException if the workflow document already exists
    * @throws ServiceUnavailableException if the workflow document could not be created
    */
-  WorkflowDocument createWorkflowDocument(UUID tenantId, WorkflowDocument workflowDocument)
+  void createWorkflowDocument(UUID tenantId, WorkflowDocument workflowDocument)
       throws DuplicateWorkflowDocumentException, ServiceUnavailableException;
 
   /**
@@ -191,12 +189,12 @@ public interface WorkflowService {
    * @param tenantId the ID for the tenant
    * @param createWorkflowNoteRequest the request to create a workflow note
    * @param createdBy the person or system that created the workflow note
-   * @return the workflow note
+   * @return the ID for the workflow note
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws ServiceUnavailableException if the workflow note could not be created
    */
-  WorkflowNote createWorkflowNote(
+  UUID createWorkflowNote(
       UUID tenantId, CreateWorkflowNoteRequest createWorkflowNoteRequest, String createdBy)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
@@ -1054,13 +1052,11 @@ public interface WorkflowService {
    * @param tenantId the ID for the tenant
    * @param updateWorkflowRequest the request to update the workflow
    * @param updatedBy the person or system updating the workflow
-   * @return the updated workflow
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNotFoundException if the workflow could not be found
    * @throws ServiceUnavailableException if the workflow could not be updated
    */
-  Workflow updateWorkflow(
-      UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest, String updatedBy)
+  void updateWorkflow(UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest, String updatedBy)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException;
 
   /**
@@ -1116,12 +1112,11 @@ public interface WorkflowService {
    * @param tenantId the ID for the tenant
    * @param updateWorkflowNoteRequest the request to update a workflow note
    * @param updatedBy the person or system updating the workflow note
-   * @return the updated workflow note
    * @throws InvalidArgumentException if an argument is invalid
    * @throws WorkflowNoteNotFoundException if the workflow note could not be found
    * @throws ServiceUnavailableException if the workflow note could not be updated
    */
-  WorkflowNote updateWorkflowNote(
+  void updateWorkflowNote(
       UUID tenantId, UpdateWorkflowNoteRequest updateWorkflowNoteRequest, String updatedBy)
       throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException;
 

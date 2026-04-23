@@ -116,7 +116,8 @@ public class WorkflowDefinitionSummary implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<@Valid WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
+  private final List<@Valid WorkflowDefinitionDocumentDefinition> documentDefinitions =
+      new ArrayList<>();
 
   /** The permissions for the workflow definition. */
   @Schema(description = "The permissions for the workflow definition")

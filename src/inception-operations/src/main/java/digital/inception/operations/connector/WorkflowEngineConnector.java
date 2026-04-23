@@ -58,8 +58,8 @@ public interface WorkflowEngineConnector {
    *
    * @param workflowDefinition the workflow definition
    * @param workflowFormType the workflow form type
-   * @return the Optional containing the form definition for the workflow definition or an empty
-   *     Optional if no form definition exists
+   * @return the {@link Optional} containing the form definition for the workflow definition or an
+   *     empty {@link Optional} if no form definition exists
    * @throws WorkflowEngineConnectorException if the form definition could not be retrieved for the
    *     workflow definition
    */

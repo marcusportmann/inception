@@ -102,8 +102,8 @@ public interface InteractionRepository
    *
    * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
-   * @return an Optional containing the interaction or an empty Optional if the interaction could
-   *     not be found
+   * @return an {@link Optional} containing the interaction or an empty {@link Optional} if the
+   *     interaction could not be found
    */
   Optional<Interaction> findByTenantIdAndId(UUID tenantId, UUID interactionId);
 
@@ -113,8 +113,8 @@ public interface InteractionRepository
    * @param tenantId the ID for the tenant
    * @param sourceId the ID for the interaction source the interaction is associated with
    * @param sourceReference the interaction source specific reference
-   * @return an Optional containing the ID for the interaction with the specified source reference
-   *     and source ID or an empty optional if the interaction could not be found
+   * @return an {@link Optional} containing the ID for the interaction with the specified source
+   *     reference and source ID or an empty optional if the interaction could not be found
    */
   @Query(
       "select i.id from Interaction i where i.tenantId = :tenantId and i.sourceId = :sourceId "
@@ -129,8 +129,8 @@ public interface InteractionRepository
    *
    * @param tenantId the ID for the tenant
    * @param interactionId the ID for the interaction
-   * @return an Optional containing the ID for the interaction source the interaction is associated
-   *     with or an empty Optional if the interaction could not be found
+   * @return an {@link Optional} containing the ID for the interaction source the interaction is
+   *     associated with or an empty {@link Optional} if the interaction could not be found
    */
   @Query(
       "select i.sourceId from Interaction i where i.tenantId = :tenantId and i.id = :interactionId")
@@ -207,8 +207,8 @@ public interface InteractionRepository
    * Find the subject for the interaction.
    *
    * @param interactionId the ID for the interaction
-   * @return an Optional containing the subject for the interaction or an empty Optional if the
-   *     interaction could not be found
+   * @return an {@link Optional} containing the subject for the interaction or an empty {@link
+   *     Optional} if the interaction could not be found
    */
   @Query("select i.subject from Interaction i where i.id = :interactionId")
   Optional<String> findSubjectById(@Param("interactionId") UUID interactionId);

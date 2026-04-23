@@ -42,8 +42,8 @@ public interface ReportDefinitionRepository extends JpaRepository<ReportDefiniti
    * Find the name for the report definition.
    *
    * @param reportDefinitionId the ID for the report definition
-   * @return an Optional containing the name for the report definition or an empty Optional if the
-   *     report definition could not be found
+   * @return an {@link Optional} containing the name for the report definition or an empty {@link
+   *     Optional} if the report definition could not be found
    */
   @Query("select rd.name from ReportDefinition rd where rd.id = :reportDefinitionId")
   Optional<String> findNameById(@Param("reportDefinitionId") String reportDefinitionId);

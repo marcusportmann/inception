@@ -142,8 +142,8 @@ public class UserTransactionProxy implements UserTransaction {
   /**
    * Returns the current transaction.
    *
-   * @return an Optional containing the current transaction or an empty Optional if there is no
-   *     current transaction
+   * @return an {@link Optional} containing the current transaction or an empty {@link Optional} if
+   *     there is no current transaction
    */
   private Optional<Transaction> getCurrentTransaction() {
     try {

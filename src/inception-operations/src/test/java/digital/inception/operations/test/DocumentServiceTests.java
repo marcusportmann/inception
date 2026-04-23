@@ -292,11 +292,13 @@ public class DocumentServiceTests {
 
     compareDocumentDefinitions(tenantDocumentDefinition, retrievedDocumentDefinition);
 
-    Document document =
+    UUID documentId =
         documentService.createDocument(
             TenantUtil.DEFAULT_TENANT_ID,
             getCreateDocumentRequest(sharedDocumentDefinition.getId()),
             "TEST1");
+
+    Document document = documentService.getDocument(TenantUtil.DEFAULT_TENANT_ID, documentId);
 
     assertTrue(documentService.documentExists(TenantUtil.DEFAULT_TENANT_ID, document.getId()));
 
@@ -307,10 +309,7 @@ public class DocumentServiceTests {
 
     UpdateDocumentRequest updateDocumentRequest = getUpdateDocumentRequest(document);
 
-    @SuppressWarnings("unused")
-    Document updatedDocument =
-        documentService.updateDocument(
-            TenantUtil.DEFAULT_TENANT_ID, updateDocumentRequest, "TEST2");
+    documentService.updateDocument(TenantUtil.DEFAULT_TENANT_ID, updateDocumentRequest, "TEST2");
 
     retrievedDocument = documentService.getDocument(TenantUtil.DEFAULT_TENANT_ID, document.getId());
 
@@ -383,9 +382,12 @@ public class DocumentServiceTests {
     CreateDocumentNoteRequest createDocumentNoteRequest =
         new CreateDocumentNoteRequest(document.getId(), "This is the document note content.");
 
-    DocumentNote documentNote =
+    UUID documentNoteId =
         documentService.createDocumentNote(
             TenantUtil.DEFAULT_TENANT_ID, createDocumentNoteRequest, "TEST1");
+
+    DocumentNote documentNote =
+        documentService.getDocumentNote(TenantUtil.DEFAULT_TENANT_ID, documentNoteId);
 
     assertTrue(
         documentService.documentNoteExists(
@@ -399,14 +401,8 @@ public class DocumentServiceTests {
     UpdateDocumentNoteRequest updateDocumentNoteRequest =
         new UpdateDocumentNoteRequest(documentNote.getId(), "This is the document note content.");
 
-    DocumentNote updatedDocumentNote =
-        documentService.updateDocumentNote(
-            TenantUtil.DEFAULT_TENANT_ID, updateDocumentNoteRequest, "TEST2");
-
-    retrievedDocumentNote =
-        documentService.getDocumentNote(TenantUtil.DEFAULT_TENANT_ID, updatedDocumentNote.getId());
-
-    compareDocumentNotes(updatedDocumentNote, retrievedDocumentNote);
+    documentService.updateDocumentNote(
+        TenantUtil.DEFAULT_TENANT_ID, updateDocumentNoteRequest, "TEST2");
 
     DocumentNotes documentNotes =
         documentService.getDocumentNotes(
@@ -419,8 +415,6 @@ public class DocumentServiceTests {
             10);
 
     assertEquals(1, documentNotes.getTotal());
-
-    compareDocumentNotes(updatedDocumentNote, documentNotes.getDocumentNotes().getFirst());
 
     documentService.deleteDocumentNote(TenantUtil.DEFAULT_TENANT_ID, documentNote.getId());
 

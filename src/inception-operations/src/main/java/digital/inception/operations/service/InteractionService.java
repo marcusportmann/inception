@@ -16,6 +16,7 @@
 
 package digital.inception.operations.service;
 
+import digital.inception.core.exception.BusinessException;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -30,6 +31,7 @@ import digital.inception.operations.exception.InteractionSourceNotFoundException
 import digital.inception.operations.exception.PartyNotFoundException;
 import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
+import digital.inception.operations.model.DecryptInteractionAttachmentRequest;
 import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
@@ -80,12 +82,11 @@ public interface InteractionService {
    *
    * @param tenantId the ID for the tenant
    * @param interaction the interaction
-   * @return the interaction
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateInteractionException if the interaction already exists
    * @throws ServiceUnavailableException if the interaction could not be created
    */
-  Interaction createInteraction(UUID tenantId, Interaction interaction)
+  void createInteraction(UUID tenantId, Interaction interaction)
       throws InvalidArgumentException, DuplicateInteractionException, ServiceUnavailableException;
 
   /**
@@ -93,13 +94,11 @@ public interface InteractionService {
    *
    * @param tenantId the ID for the tenant
    * @param interactionAttachment the interaction attachment
-   * @return the interaction attachment
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateInteractionAttachmentException if the interaction attachment already exists
    * @throws ServiceUnavailableException if the interaction attachment could not be created
    */
-  InteractionAttachment createInteractionAttachment(
-      UUID tenantId, InteractionAttachment interactionAttachment)
+  void createInteractionAttachment(UUID tenantId, InteractionAttachment interactionAttachment)
       throws InvalidArgumentException,
           DuplicateInteractionAttachmentException,
           ServiceUnavailableException;
@@ -110,13 +109,13 @@ public interface InteractionService {
    * @param tenantId the ID for the tenant
    * @param createInteractionNoteRequest the request to create an interaction note
    * @param createdBy the person or system that created the interaction note
-   * @return the interaction note
+   * @return the ID for the interaction note
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateInteractionNoteException if the interaction note already exists
    * @throws InteractionNotFoundException if the interaction could not be found
    * @throws ServiceUnavailableException if the interaction note could not be created
    */
-  InteractionNote createInteractionNote(
+  UUID createInteractionNote(
       UUID tenantId, CreateInteractionNoteRequest createInteractionNoteRequest, String createdBy)
       throws InvalidArgumentException,
           DuplicateInteractionNoteException,
@@ -128,14 +127,31 @@ public interface InteractionService {
    *
    * @param tenantId the ID for the tenant
    * @param interactionSource the interaction source
-   * @return the interaction source
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateInteractionSourceException if the interaction source already exists
    * @throws ServiceUnavailableException if the interaction source could not be created
    */
-  InteractionSource createInteractionSource(UUID tenantId, InteractionSource interactionSource)
+  void createInteractionSource(UUID tenantId, InteractionSource interactionSource)
       throws InvalidArgumentException,
           DuplicateInteractionSourceException,
+          ServiceUnavailableException;
+
+  /**
+   * Decrypt an interaction attachment.
+   *
+   * @param tenantId the ID for the tenant
+   * @param decryptInteractionAttachmentRequest the request to decrypt an interaction attachment
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionAttachmentNotFoundException if the interaction attachment could not be found
+   * @throws BusinessException if a business error occurred while decrypting the interaction
+   *     attachment
+   * @throws ServiceUnavailableException if the interaction attachment could not be decrypted
+   */
+  void decryptInteractionAttachment(
+      UUID tenantId, DecryptInteractionAttachmentRequest decryptInteractionAttachmentRequest)
+      throws InvalidArgumentException,
+          InteractionAttachmentNotFoundException,
+          BusinessException,
           ServiceUnavailableException;
 
   /**
@@ -240,7 +256,7 @@ public interface InteractionService {
    * @param interactionId the ID for the interaction that the interaction attachment is associated
    *     with
    * @param hash the hash for interaction attachment
-   * @return an Optional containing the ID for the interaction attachment with the specified
+   * @return an {@link Optional} containing the ID for the interaction attachment with the specified
    *     interaction ID and hash or an empty optional if the interaction attachment could not be
    *     found
    * @throws ServiceUnavailableException if the ID for the interaction attachment with the specified
@@ -282,8 +298,8 @@ public interface InteractionService {
    * @param tenantId the ID for the tenant
    * @param sourceId the ID for the interaction source the interaction is associated with
    * @param sourceReference the interaction source-specific reference
-   * @return an Optional containing the ID for the interaction with the specified source reference
-   *     and source ID or an empty optional if the interaction could not be found
+   * @return an {@link Optional} containing the ID for the interaction with the specified source
+   *     reference and source ID or an empty optional if the interaction could not be found
    * @throws ServiceUnavailableException if the ID for the interaction with the specified source
    *     reference and source ID could not be retrieved
    */
@@ -640,12 +656,11 @@ public interface InteractionService {
    *
    * @param tenantId the ID for the tenant
    * @param interaction the interaction
-   * @return the interaction
    * @throws InvalidArgumentException if an argument is invalid
    * @throws InteractionNotFoundException if the interaction could not be found
    * @throws ServiceUnavailableException if the interaction could not be updated
    */
-  Interaction updateInteraction(UUID tenantId, Interaction interaction)
+  void updateInteraction(UUID tenantId, Interaction interaction)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException;
 
   /**
@@ -653,13 +668,11 @@ public interface InteractionService {
    *
    * @param tenantId the ID for the tenant
    * @param interactionAttachment the interaction attachment
-   * @return the interaction attachment
    * @throws InvalidArgumentException if an argument is invalid
    * @throws InteractionAttachmentNotFoundException if the interaction attachment could not be found
    * @throws ServiceUnavailableException if the interaction attachment could not be updated
    */
-  InteractionAttachment updateInteractionAttachment(
-      UUID tenantId, InteractionAttachment interactionAttachment)
+  void updateInteractionAttachment(UUID tenantId, InteractionAttachment interactionAttachment)
       throws InvalidArgumentException,
           InteractionAttachmentNotFoundException,
           ServiceUnavailableException;
@@ -670,12 +683,11 @@ public interface InteractionService {
    * @param tenantId the ID for the tenant
    * @param updateInteractionNoteRequest the request to update an interaction note
    * @param updatedBy the person or system updating the interaction note
-   * @return the updated interaction note
    * @throws InvalidArgumentException if an argument is invalid
    * @throws InteractionNoteNotFoundException if the interaction note could not be found
    * @throws ServiceUnavailableException if the interaction note could not be updated
    */
-  InteractionNote updateInteractionNote(
+  void updateInteractionNote(
       UUID tenantId, UpdateInteractionNoteRequest updateInteractionNoteRequest, String updatedBy)
       throws InvalidArgumentException,
           InteractionNoteNotFoundException,
@@ -686,12 +698,11 @@ public interface InteractionService {
    *
    * @param tenantId the ID for the tenant
    * @param interactionSource the interaction source
-   * @return the interaction source
    * @throws InvalidArgumentException if an argument is invalid
    * @throws InteractionSourceNotFoundException if the interaction source could not be found
    * @throws ServiceUnavailableException if the interaction source could not be updated
    */
-  InteractionSource updateInteractionSource(UUID tenantId, InteractionSource interactionSource)
+  void updateInteractionSource(UUID tenantId, InteractionSource interactionSource)
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException;

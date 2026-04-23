@@ -17,6 +17,7 @@
 package digital.inception.operations.controller;
 
 import digital.inception.core.api.ProblemDetails;
+import digital.inception.core.exception.BusinessException;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -31,6 +32,7 @@ import digital.inception.operations.exception.InteractionSourceNotFoundException
 import digital.inception.operations.exception.PartyNotFoundException;
 import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
+import digital.inception.operations.model.DecryptInteractionAttachmentRequest;
 import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
@@ -452,6 +454,89 @@ public interface InteractionApiController {
           InteractionSource interactionSource)
       throws InvalidArgumentException,
           DuplicateInteractionSourceException,
+          ServiceUnavailableException;
+
+  /**
+   * Decrypt an interaction attachment.
+   *
+   * @param tenantId the ID for the tenant
+   * @param decryptInteractionAttachmentRequest the request to decrypt an interaction attachment
+   * @throws InvalidArgumentException if an argument is invalid
+   * @throws InteractionAttachmentNotFoundException if the interaction attachment could not be found
+   * @throws BusinessException if a business error occurred while decrypting the interaction
+   *     attachment
+   * @throws ServiceUnavailableException if the interaction attachment could not be decrypted
+   */
+  @Operation(
+      summary = "Decrypt an interaction attachment",
+      description = "Decrypt an interaction attachment")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The interaction attachment was decrypted"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Access denied",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The interaction could not be found",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "422",
+            description = "A business error occurred and the request could not be processed",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemDetails.class)))
+      })
+  @RequestMapping(
+      value = "/decrypt-interaction-attachment",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "isSecurityDisabled() or hasRole('Administrator') or hasRole('WorkflowEngine') or hasAuthority('FUNCTION_Operations.OperationsAdministration') or hasAuthority('FUNCTION_Operations.InteractionAdministration') or hasAuthority('FUNCTION_Operations.Indexing')")
+  void decryptInteractionAttachment(
+      @Parameter(
+              name = "Tenant-ID",
+              description = "The ID for the tenant",
+              example = "00000000-0000-0000-0000-000000000000")
+          @RequestHeader(
+              name = "Tenant-ID",
+              defaultValue = "00000000-0000-0000-0000-000000000000",
+              required = false)
+          UUID tenantId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The request to decrypt an interaction attachment",
+              required = true)
+          @RequestBody
+          DecryptInteractionAttachmentRequest decryptInteractionAttachmentRequest)
+      throws InvalidArgumentException,
+          InteractionAttachmentNotFoundException,
+          BusinessException,
           ServiceUnavailableException;
 
   /**

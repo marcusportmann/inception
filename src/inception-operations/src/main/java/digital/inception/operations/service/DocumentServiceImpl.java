@@ -189,7 +189,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public Document createDocument(UUID tenantId, Document document)
+  public void createDocument(UUID tenantId, Document document)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
           DuplicateDocumentException,
@@ -208,27 +208,18 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DuplicateDocumentException(document.getId());
       }
 
-      byte[] documentData = document.getData();
+      // Copy the document
+      Document persistedDocument = new Document(document);
+
+      // TODO: If persisting the document to S3, clear the data
+      // persistedDocument.setData(null);
 
       // TODO: Save the document data to S3, if required
       // s3Client.uploadFileToS3Bucket(
       //    "bucket_id", document.getId().toString(), document.getFileType(), document.getData());
 
-      // TODO: Clear the data from the document to prevent it from being persisted in the database
-      // if persisting in S3
-      // document.setData(null);
-
       // Save the document to the database (without the data if persisted to S3)
-      document = documentRepository.save(document);
-
-      // Detach the document from the entity manager to prevent the data from being updated
-      entityManager.detach(document);
-
-      // Restore the data for the document
-      document.setData(documentData);
-
-      // Return the saved document
-      return document;
+      documentRepository.save(persistedDocument);
     } catch (InvalidArgumentException
         | DocumentDefinitionNotFoundException
         | DuplicateDocumentException e) {
@@ -247,7 +238,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public Document createDocument(
+  public UUID createDocument(
       UUID tenantId, CreateDocumentRequest createDocumentRequest, String createdBy)
       throws InvalidArgumentException,
           DocumentDefinitionNotFoundException,
@@ -317,7 +308,6 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
 
       document.setCreated(ApplicationClock.offsetNow());
       document.setCreatedBy(createdBy);
-      document.setData(createDocumentRequest.getData());
       document.setFileType(createDocumentRequest.getFileType());
       document.setHash(calculateDataHash(createDocumentRequest.getData()));
       document.setName(createDocumentRequest.getName());
@@ -328,26 +318,18 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DuplicateDocumentException(document.getId());
       }
 
+      // TODO: If the document is persisted to S3, do not set the data
+      document.setData(createDocumentRequest.getData());
+
       // TODO: Save the document data to S3, if required
       // s3Client.uploadFileToS3Bucket(
       //    "bucket_id", document.getId().toString(), document.getFileType(),
       // createDocumentRequest.getData());
 
-      // TODO: Clear the data from the document to prevent it from being persisted in the database
-      // if persisting in S3
-      // document.setData(null);
-
       // Save the document to the database (without the data if persisted to S3)
-      document = documentRepository.save(document);
+      documentRepository.save(document);
 
-      // Detach the document from the entity manager to prevent the data from being updated
-      entityManager.detach(document);
-
-      // Restore the data for the document
-      document.setData(createDocumentRequest.getData());
-
-      // Return the saved document
-      return document;
+      return document.getId();
     } catch (InvalidArgumentException | DocumentDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -414,7 +396,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public DocumentNote createDocumentNote(
+  public UUID createDocumentNote(
       UUID tenantId, CreateDocumentNoteRequest createDocumentNoteRequest, String createdBy)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -444,7 +426,9 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         throw new DuplicateDocumentNoteException(documentNote.getId());
       }
 
-      return documentNoteRepository.save(documentNote);
+      documentNoteRepository.save(documentNote);
+
+      return documentNote.getId();
     } catch (DocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1397,7 +1381,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public Document updateDocument(
+  public void updateDocument(
       UUID tenantId, UpdateDocumentRequest updateDocumentRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -1446,33 +1430,22 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
         document.setAttributes(updateDocumentRequest.getAttributes());
       }
 
-      document.setData(updateDocumentRequest.getData());
       document.setFileType(updateDocumentRequest.getFileType());
       document.setName(updateDocumentRequest.getName());
       document.setSourceDocumentId(updateDocumentRequest.getSourceDocumentId());
       document.setUpdated(ApplicationClock.offsetNow());
       document.setUpdatedBy(updatedBy);
 
+      // TODO: If the document is persisted to S3, do not set the data
+      document.setData(updateDocumentRequest.getData());
+
       // TODO: Save the document data to S3, if required
       // s3Client.uploadFileToS3Bucket(
       //    "bucket_id", document.getId().toString(), document.getFileType(),
       // updateDocumentRequest.getData());
 
-      // TODO: Clear the data from the document to prevent it from being persisted in the database
-      // if persisting in S3
-      // document.setData(null);
-
       // Save the document to the database (without the data if persisted to S3)
-      document = documentRepository.save(document);
-
-      // Detach the document from the entity manager to prevent the data from being updated
-      entityManager.detach(document);
-
-      // Restore the data for the document
-      document.setData(updateDocumentRequest.getData());
-
-      // Return the saved document
-      return document;
+      documentRepository.save(document);
     } catch (InvalidArgumentException | DocumentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1539,7 +1512,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
   }
 
   @Override
-  public DocumentNote updateDocumentNote(
+  public void updateDocumentNote(
       UUID tenantId, UpdateDocumentNoteRequest updateDocumentNoteRequest, String updatedBy)
       throws InvalidArgumentException, DocumentNoteNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -1564,7 +1537,7 @@ public class DocumentServiceImpl extends AbstractServiceBase implements Document
       documentNote.setUpdated(ApplicationClock.offsetNow());
       documentNote.setUpdatedBy(updatedBy);
 
-      return documentNoteRepository.save(documentNote);
+      documentNoteRepository.save(documentNote);
     } catch (DocumentNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {

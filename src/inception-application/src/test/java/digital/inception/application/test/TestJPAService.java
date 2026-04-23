@@ -74,8 +74,8 @@ public interface TestJPAService {
    * Retrieve the test data.
    *
    * @param id the ID
-   * @return an Optional containing the test data or an empty Optional if the test data cannot be
-   *     found
+   * @return an {@link Optional} containing the test data or an empty {@link Optional} if the test
+   *     data cannot be found
    */
   Optional<TestData> getTestData(String id) throws TestJPAServiceException;
 
@@ -83,7 +83,8 @@ public interface TestJPAService {
    * Retrieve the test data without a transaction.
    *
    * @param id the ID
-   * @return an Optional containing the test data or empty Optional if the test data cannot be found
+   * @return an {@link Optional} containing the test data or empty {@link Optional} if the test data
+   *     cannot be found
    */
   Optional<TestData> getTestDataWithoutTransaction(String id) throws TestJPAServiceException;
 }

@@ -63,8 +63,8 @@ public interface UserDirectoryRepository
    * Find the name of the user directory.
    *
    * @param userDirectoryId the ID for the user directory
-   * @return an Optional containing the name of the user directory or an empty Optional if the user
-   *     directory could not be found
+   * @return an {@link Optional} containing the name of the user directory or an empty {@link
+   *     Optional} if the user directory could not be found
    */
   @Query("select ud.name from UserDirectory ud where ud.id = :userDirectoryId")
   Optional<String> findNameById(@Param("userDirectoryId") UUID userDirectoryId);
@@ -82,8 +82,8 @@ public interface UserDirectoryRepository
    * Find the type for the user directory.
    *
    * @param userDirectoryId the ID for the user directory
-   * @return an Optional containing the type for the user directory or an empty Optional if the user
-   *     directory could not be found
+   * @return an {@link Optional} containing the type for the user directory or an empty {@link
+   *     Optional} if the user directory could not be found
    */
   @Query("select ud.type from UserDirectory ud where ud.id = :userDirectoryId")
   Optional<String> findTypeForUserDirectoryById(@Param("userDirectoryId") UUID userDirectoryId);

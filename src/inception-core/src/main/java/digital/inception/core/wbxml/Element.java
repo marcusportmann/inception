@@ -114,8 +114,8 @@ public class Element implements Serializable, Content {
    * Returns the attribute with the specified name.
    *
    * @param name the name of the attribute
-   * @return an Optional containing the attribute with the specified name or an empty Optional if no
-   *     matching attribute could be found
+   * @return an {@link Optional} containing the attribute with the specified name or an empty {@link
+   *     Optional} if no matching attribute could be found
    */
   public Optional<Attribute> getAttribute(String name) {
     return attributes.stream()
@@ -127,8 +127,8 @@ public class Element implements Serializable, Content {
    * Returns the value for the attribute with the specified name.
    *
    * @param name the name of the attribute
-   * @return an Optional containing the value for the attribute with the specified name or an empty
-   *     Optional if no matching attribute could be found
+   * @return an {@link Optional} containing the value for the attribute with the specified name or
+   *     an empty {@link Optional} if no matching attribute could be found
    */
   public Optional<String> getAttributeValue(String name) {
     Optional<Attribute> attributeOptional = getAttribute(name);
@@ -149,8 +149,8 @@ public class Element implements Serializable, Content {
    * Returns the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return an Optional containing the child element with the specified name or an empty Optional
-   *     if the child element could not be found
+   * @return an {@link Optional} containing the child element with the specified name or an empty
+   *     {@link Optional} if the child element could not be found
    */
   public Optional<Element> getChild(String name) {
     for (Content tmpContent : content) {
@@ -169,8 +169,8 @@ public class Element implements Serializable, Content {
    * Get the binary data content for the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return an Optional containing the binary data content for the child element or an empty
-   *     Optional if a child element with the specified name could not be found
+   * @return an {@link Optional} containing the binary data content for the child element or an
+   *     empty {@link Optional} if a child element with the specified name could not be found
    */
   public Optional<byte[]> getChildOpaque(String name) {
     for (Content tmpContent : content) {
@@ -189,8 +189,8 @@ public class Element implements Serializable, Content {
    * Get the text content for the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return an Optional containing the text content for the child element or an empty Optional if a
-   *     child element with the specified name could not be found
+   * @return an {@link Optional} containing the text content for the child element or an empty
+   *     {@link Optional} if a child element with the specified name could not be found
    */
   public Optional<String> getChildText(String name) {
     for (Content tmpContent : content) {

@@ -58,8 +58,8 @@ public interface OrganizationRepository
    *
    * @param tenantId the ID for the tenant
    * @param organizationId the ID for the organization
-   * @return an Optional containing the organization or an empty Optional if the organization could
-   *     not be found
+   * @return an {@link Optional} containing the organization or an empty {@link Optional} if the
+   *     organization could not be found
    */
   Optional<Organization> findByTenantIdAndId(UUID tenantId, UUID organizationId);
 }

@@ -60,7 +60,8 @@ public interface PartyRepository
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party
-   * @return an Optional containing the party or an empty Optional if the party could not be found
+   * @return an {@link Optional} containing the party or an empty {@link Optional} if the party
+   *     could not be found
    */
   Optional<Party> findByTenantIdAndId(UUID tenantId, UUID partyId);
 
@@ -68,8 +69,8 @@ public interface PartyRepository
    * Find the ID for the tenant the party is associated with.
    *
    * @param partyId the ID for the party
-   * @return an Optional containing the ID for the tenant the party is associated with or an empty
-   *     Optional if the party could not be found
+   * @return an {@link Optional} containing the ID for the tenant the party is associated with or an
+   *     empty {@link Optional} if the party could not be found
    */
   @Query("select p.tenantId from Party p where p.id = :partyId")
   Optional<UUID> findTenantIdById(@Param("partyId") UUID partyId);
@@ -79,8 +80,8 @@ public interface PartyRepository
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party
-   * @return an Optional containing the party type for the party or an empty Optional if the party
-   *     could not be found
+   * @return an {@link Optional} containing the party type for the party or an empty {@link
+   *     Optional} if the party could not be found
    */
   @Query("select p.type from Party p where p.tenantId = :tenantId and p.id = :partyId")
   Optional<PartyType> findTypeByTenantIdAndId(

@@ -88,8 +88,8 @@ public interface TenantRepository
    * Find the name of the tenant.
    *
    * @param tenantId the ID for the tenant
-   * @return an Optional containing the name of the tenant or an empty Optional if the tenant could
-   *     not be found
+   * @return an {@link Optional} containing the name of the tenant or an empty {@link Optional} if
+   *     the tenant could not be found
    */
   @Query("select t.name from Tenant t where t.id = :tenantId")
   Optional<String> findNameById(@Param("tenantId") UUID tenantId);

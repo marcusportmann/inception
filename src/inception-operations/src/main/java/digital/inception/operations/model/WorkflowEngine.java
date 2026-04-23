@@ -193,8 +193,8 @@ public class WorkflowEngine implements Serializable {
    * Retrieve the attribute with the specified name for the workflow engine.
    *
    * @param name the name of the attribute
-   * @return an Optional containing the attribute with the specified name for the workflow engine or
-   *     an empty Optional if the attribute could not be found
+   * @return an {@link Optional} containing the attribute with the specified name for the workflow
+   *     engine or an empty {@link Optional} if the attribute could not be found
    */
   public Optional<WorkflowEngineAttribute> getAttribute(String name) {
     return attributes.stream()

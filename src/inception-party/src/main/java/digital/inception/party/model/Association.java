@@ -335,8 +335,8 @@ public class Association implements Serializable {
    * Retrieve the property with the specified type for the association.
    *
    * @param type the code for the association property type
-   * @return an Optional containing the property with the specified type for the association or an
-   *     empty Optional if the property could not be found
+   * @return an {@link Optional} containing the property with the specified type for the association
+   *     or an empty {@link Optional} if the property could not be found
    */
   public Optional<AssociationProperty> getPropertyWithType(String type) {
     return properties.stream()

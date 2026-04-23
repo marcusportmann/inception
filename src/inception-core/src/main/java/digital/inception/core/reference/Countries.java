@@ -1631,8 +1631,8 @@ public final class Countries {
    * Retrieve the country with the specified ISO 3166-1 alpha-2 code.
    *
    * @param code the ISO 3166-1 alpha-2 code for the country
-   * @return an Optional containing the country with the specified ISO 3166-1 alpha-2 code or an
-   *     empty Optional if the country could not be found
+   * @return an {@link Optional} containing the country with the specified ISO 3166-1 alpha-2 code
+   *     or an empty {@link Optional} if the country could not be found
    */
   public static Optional<Country> getByCode(String code) {
     for (Country country : countries) {
@@ -1648,8 +1648,8 @@ public final class Countries {
    * Retrieve the country with the specified ISO 3166-1 alpha-3 code.
    *
    * @param iso3Code the ISO 3166-1 alpha-3 code for the country
-   * @return an Optional containing the country with the specified ISO 3166-1 alpha-3 code or an
-   *     empty Optional if the country could not be found
+   * @return an {@link Optional} containing the country with the specified ISO 3166-1 alpha-3 code
+   *     or an empty {@link Optional} if the country could not be found
    */
   public static Optional<Country> getByIso3Code(String iso3Code) {
     for (Country country : countries) {
@@ -1665,9 +1665,9 @@ public final class Countries {
    * Retrieve the ISO 3166-1 alpha-2 code for the ISO 3166-1 alpha-3 code for the country.
    *
    * @param code the ISO 3166-1 alpha-3 code for the country
-   * @return an Optional containing the ISO 3166-1 alpha-2 code for the ISO 3166-1 alpha-3 code for
-   *     the country or an empty Optional if the country with the specified ISO 3166-1 alpha-3 code
-   *     could not be found
+   * @return an {@link Optional} containing the ISO 3166-1 alpha-2 code for the ISO 3166-1 alpha-3
+   *     code for the country or an empty {@link Optional} if the country with the specified ISO
+   *     3166-1 alpha-3 code could not be found
    */
   public static Optional<String> getCodeForIso3Code(String code) {
     return getByIso3Code(code).map(Country::getCode);
@@ -1686,9 +1686,9 @@ public final class Countries {
    * Retrieve the ISO 3166-1 alpha-3 code for the ISO 3166-1 alpha-2 code for the country.
    *
    * @param code the ISO 3166-1 alpha-2 code for the country
-   * @return an Optional containing the ISO 3166-1 alpha-3 code for the ISO 3166-1 alpha-2 code for
-   *     the country or an empty Optional if the country with the specified ISO 3166-1 alpha-2 code
-   *     could not be found
+   * @return an {@link Optional} containing the ISO 3166-1 alpha-3 code for the ISO 3166-1 alpha-2
+   *     code for the country or an empty {@link Optional} if the country with the specified ISO
+   *     3166-1 alpha-2 code could not be found
    */
   public static Optional<String> getIso3CodeForCode(String code) {
     return getByCode(code).map(Country::getIso3Code);

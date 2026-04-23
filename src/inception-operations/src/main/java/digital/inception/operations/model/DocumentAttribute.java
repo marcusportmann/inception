@@ -111,6 +111,18 @@ public class DocumentAttribute implements Serializable {
   }
 
   /**
+   * Constructs a new {@code DocumentAttribute}.
+   *
+   * @param documentAttribute the document attribute
+   */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+  public DocumentAttribute(DocumentAttribute documentAttribute) {
+    this.documentId = null;
+    this.name = documentAttribute.name;
+    this.value = documentAttribute.value;
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare

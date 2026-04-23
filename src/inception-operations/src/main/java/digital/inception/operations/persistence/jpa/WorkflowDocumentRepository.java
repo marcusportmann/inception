@@ -87,8 +87,8 @@ public interface WorkflowDocumentRepository
    *
    * @param tenantId the ID for the tenant
    * @param workflowDocumentId the ID for the workflow document
-   * @return an Optional containing the workflow document or an empty Optional if the workflow
-   *     document could not be found
+   * @return an {@link Optional} containing the workflow document or an empty {@link Optional} if
+   *     the workflow document could not be found
    */
   Optional<WorkflowDocument> findByTenantIdAndId(UUID tenantId, UUID workflowDocumentId);
 
@@ -105,8 +105,8 @@ public interface WorkflowDocumentRepository
    *
    * @param tenantId the ID for the tenant
    * @param workflowDocumentId the ID for the workflow document
-   * @return an Optional containing the document definition ID or an empty Optional if the workflow
-   *     * document could not be found
+   * @return an {@link Optional} containing the document definition ID or an empty {@link Optional}
+   *     if the workflow * document could not be found
    */
   @Query(
       """
@@ -122,8 +122,8 @@ public interface WorkflowDocumentRepository
    *
    * @param tenantId the ID for the tenant
    * @param workflowDocumentId the ID for the workflow document
-   * @return an Optional containing the document ID or an empty Optional if the workflow * document
-   *     could not be found
+   * @return an {@link Optional} containing the document ID or an empty {@link Optional} if the
+   *     workflow * document could not be found
    */
   @Query(
       """
@@ -216,8 +216,9 @@ public interface WorkflowDocumentRepository
    *
    * @param tenantId the ID for the tenant
    * @param workflowDocumentId the workflow document ID
-   * @return an Optional containing the ID for workflow for the workflow document with the specified
-   *     tenant ID and ID or an empty Optional if the workflow document could not be found
+   * @return an {@link Optional} containing the ID for workflow for the workflow document with the
+   *     specified tenant ID and ID or an empty {@link Optional} if the workflow document could not
+   *     be found
    */
   @Query(
       "select wd.workflowId from WorkflowDocument wd where wd.tenantId = :tenantId and wd.id = :workflowDocumentId")

@@ -165,8 +165,9 @@ public abstract class SecureApiController extends AbstractApiControllerBase {
    *
    * @param authentication the authenticated principal associated with the authenticated request
    * @param prefix the authority prefix
-   * @return an Optional containing the value portion of the authority with the specified prefix or
-   *     an empty Optional if the authority with the specified prefix could not be found
+   * @return an {@link Optional} containing the value portion of the authority with the specified
+   *     prefix or an empty {@link Optional} if the authority with the specified prefix could not be
+   *     found
    */
   protected Optional<String> getValueForAuthorityWithPrefix(
       Authentication authentication, String prefix) {

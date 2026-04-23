@@ -88,8 +88,8 @@ public interface WorkflowDefinitionRepository
    * Find the latest version of the workflow definition with the specified ID.
    *
    * @param workflowDefinitionId the ID for the workflow definition
-   * @return the latest version of the workflow definition with the specified ID or an empty
-   *     Optional if no versions of the workflow definition exist
+   * @return the latest version of the workflow definition with the specified ID or an empty {@link
+   *     Optional} if no versions of the workflow definition exist
    */
   Optional<WorkflowDefinition> findFirstByIdOrderByVersionDesc(
       @Param("workflowDefinitionId") String workflowDefinitionId);

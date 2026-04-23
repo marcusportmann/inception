@@ -139,8 +139,8 @@ public final class Languages {
    * Retrieve the language with the specified ISO 639-1 alpha-2 code.
    *
    * @param code the ISO 639-1 alpha-2 code for the language
-   * @return an Optional containing the language with the specified ISO 639-1 alpha-2 code or an
-   *     empty Optional if the language could not be found
+   * @return an {@link Optional} containing the language with the specified ISO 639-1 alpha-2 code
+   *     or an empty {@link Optional} if the language could not be found
    */
   public static Optional<Language> getByCode(String code) {
     for (Language language : languages) {
@@ -156,8 +156,8 @@ public final class Languages {
    * Retrieve the language with the specified ISO 639-2 alpha-3 code.
    *
    * @param iso3Code the ISO 639-2 alpha-3 code for the language
-   * @return an Optional containing the language with the specified ISO 639-2 alpha-3 code or an
-   *     empty Optional if the language could not be found
+   * @return an {@link Optional} containing the language with the specified ISO 639-2 alpha-3 code
+   *     or an empty {@link Optional} if the language could not be found
    */
   public static Optional<Language> getByIso3Code(String iso3Code) {
     for (Language language : languages) {
@@ -173,9 +173,9 @@ public final class Languages {
    * Retrieve the ISO 639-1 alpha-2 code for the ISO 639-1 alpha-3 code for the country.
    *
    * @param code the ISO 639-1 alpha-3 code for the country
-   * @return an Optional containing the ISO 639-1 alpha-2 code for the ISO 639-1 alpha-3 code for
-   *     the country or an empty Optional if the country with the specified ISO 639-1 alpha-3 code
-   *     could not be found
+   * @return an {@link Optional} containing the ISO 639-1 alpha-2 code for the ISO 639-1 alpha-3
+   *     code for the country or an empty {@link Optional} if the country with the specified ISO
+   *     639-1 alpha-3 code could not be found
    */
   public static Optional<String> getCodeForIso3Code(String code) {
     return getByIso3Code(code).map(Language::getCode);
@@ -185,9 +185,9 @@ public final class Languages {
    * Retrieve the ISO 639-1 alpha-3 code for the ISO 639-1 alpha-2 code for the country.
    *
    * @param code the ISO 639-1 alpha-2 code for the country
-   * @return an Optional containing the ISO 639-1 alpha-3 code for the ISO 639-1 alpha-2 code for
-   *     the country or an empty Optional if the country with the specified ISO 639-1 alpha-2 code
-   *     could not be found
+   * @return an {@link Optional} containing the ISO 639-1 alpha-3 code for the ISO 639-1 alpha-2
+   *     code for the country or an empty {@link Optional} if the country with the specified ISO
+   *     639-1 alpha-2 code could not be found
    */
   public static Optional<String> getIso3CodeForCode(String code) {
     return getByCode(code).map(Language::getIso3Code);

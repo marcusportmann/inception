@@ -64,8 +64,8 @@ public interface InteractionNoteRepository
    *
    * @param tenantId the ID for the tenant
    * @param interactionNoteId the ID for the interaction note
-   * @return an Optional containing the interaction note or an empty Optional if the interaction
-   *     note could not be found
+   * @return an {@link Optional} containing the interaction note or an empty {@link Optional} if the
+   *     interaction note could not be found
    */
   Optional<InteractionNote> findByTenantIdAndId(UUID tenantId, UUID interactionNoteId);
 
@@ -74,8 +74,8 @@ public interface InteractionNoteRepository
    *
    * @param tenantId the ID for the tenant
    * @param interactionNoteId the ID for the interaction note
-   * @return an Optional containing the ID for the interaction source the interaction note is
-   *     associated with or an empty Optional if the interaction note could not be found
+   * @return an {@link Optional} containing the ID for the interaction source the interaction note
+   *     is associated with or an empty {@link Optional} if the interaction note could not be found
    */
   @Query(
       """

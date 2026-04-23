@@ -100,10 +100,7 @@ public class DocumentApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    Document document =
-        documentService.createDocument(tenantId, createDocumentRequest, getAuthenticationName());
-
-    return document.getId();
+    return documentService.createDocument(tenantId, createDocumentRequest, getAuthenticationName());
   }
 
   @Override
@@ -135,11 +132,8 @@ public class DocumentApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    DocumentNote documentNote =
-        documentService.createDocumentNote(
-            tenantId, createDocumentNoteRequest, getAuthenticationName());
-
-    return documentNote.getId();
+    return documentService.createDocumentNote(
+        tenantId, createDocumentNoteRequest, getAuthenticationName());
   }
 
   @Override
@@ -465,8 +459,7 @@ public class DocumentApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    Document document =
-        documentService.updateDocument(tenantId, updateDocumentRequest, getAuthenticationName());
+    documentService.updateDocument(tenantId, updateDocumentRequest, getAuthenticationName());
   }
 
   @Override
@@ -515,9 +508,8 @@ public class DocumentApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    DocumentNote documentNote =
-        documentService.updateDocumentNote(
-            tenantId, updateDocumentNoteRequest, getAuthenticationName());
+    documentService.updateDocumentNote(
+        tenantId, updateDocumentNoteRequest, getAuthenticationName());
   }
 
   @Override

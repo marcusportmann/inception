@@ -89,7 +89,8 @@ public interface UserRepository
    *
    * @param userDirectoryId the ID for the user directory
    * @param username the username
-   * @return an Optional containing the user or an empty Optional if the user could not be found
+   * @return an {@link Optional} containing the user or an empty {@link Optional} if the user could
+   *     not be found
    */
   Optional<User> findByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
@@ -127,8 +128,8 @@ public interface UserRepository
    *
    * @param userDirectoryId the ID for the user directory
    * @param username the username
-   * @return an Optional containing the ID for the user with the specified username for the user
-   *     directory or an empty Optional if the user could not be found
+   * @return an {@link Optional} containing the ID for the user with the specified username for the
+   *     user directory or an empty {@link Optional} if the user could not be found
    */
   @Query(
       "select u.id from User u where u.userDirectoryId = :userDirectoryId and lower(u.username) "
@@ -141,8 +142,8 @@ public interface UserRepository
    *
    * @param userDirectoryId the ID for the user directory
    * @param username the username
-   * @return an Optional containing the name for the user with the specified username for the user
-   *     directory or an empty Optional if the user could not be found
+   * @return an {@link Optional} containing the name for the user with the specified username for
+   *     the user directory or an empty {@link Optional} if the user could not be found
    */
   @Query(
       "select u.name from User u where ((lower(u.username) = lower(:username)) "
@@ -178,8 +179,8 @@ public interface UserRepository
    * Find the ID for the user directory for the user with the specified username.
    *
    * @param username the username
-   * @return an Optional containing the ID for the user directory for the user with the specified
-   *     username or an empty Optional if the user could not be found
+   * @return an {@link Optional} containing the ID for the user directory for the user with the
+   *     specified username or an empty {@link Optional} if the user could not be found
    */
   @Query("select u.userDirectoryId from User u where lower(u.username) = lower(:username)")
   Optional<UUID> findUserDirectoryIdByUsernameIgnoreCase(@Param("username") String username);

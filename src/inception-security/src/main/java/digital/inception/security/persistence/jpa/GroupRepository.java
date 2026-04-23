@@ -105,7 +105,8 @@ public interface GroupRepository
    *
    * @param userDirectoryId the ID for the user directory
    * @param name the name of the group
-   * @return an Optional containing the group or an empty Optional if the group could not be found
+   * @return an {@link Optional} containing the group or an empty {@link Optional} if the group
+   *     could not be found
    */
   Optional<Group> findByUserDirectoryIdAndNameIgnoreCase(UUID userDirectoryId, String name);
 
@@ -144,8 +145,8 @@ public interface GroupRepository
    *
    * @param userDirectoryId the ID for the user directory
    * @param name the group name
-   * @return an Optional containing the ID for the group with the specified name for the user
-   *     directory or an empty Optional if the group could not be found
+   * @return an {@link Optional} containing the ID for the group with the specified name for the
+   *     user directory or an empty {@link Optional} if the group could not be found
    */
   @Query(
       "select g.id from Group g where g.userDirectoryId = :userDirectoryId and "

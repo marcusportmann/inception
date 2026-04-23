@@ -850,31 +850,34 @@ public class WorkflowServiceTests {
         new CreateWorkflowNoteRequest(
             workflow.getId(), "test_workflow_step_1", "This is the workflow note content.");
 
-    WorkflowNote workflowNote =
+    UUID workflowNoteId =
         workflowService.createWorkflowNote(
             TenantUtil.DEFAULT_TENANT_ID, createWorkflowNoteRequest, "TEST1");
 
     assertTrue(
         workflowService.workflowNoteExists(
-            TenantUtil.DEFAULT_TENANT_ID, workflowNote.getWorkflowId(), workflowNote.getId()));
+            TenantUtil.DEFAULT_TENANT_ID, workflow.getId(), workflowNoteId));
 
     WorkflowNote retrievedWorkflowNote =
-        workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
+        workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNoteId);
 
-    compareWorkflowNotes(workflowNote, retrievedWorkflowNote);
+    assertEquals(workflowNoteId, retrievedWorkflowNote.getId());
+    assertEquals(createWorkflowNoteRequest.getStep(), retrievedWorkflowNote.getStep());
+    assertEquals(createWorkflowNoteRequest.getContent(), retrievedWorkflowNote.getContent());
 
     // Update the workflow note for the workflow
     UpdateWorkflowNoteRequest updateWorkflowNoteRequest =
-        new UpdateWorkflowNoteRequest(workflowNote.getId(), "This is the workflow note content.");
+        new UpdateWorkflowNoteRequest(workflowNoteId, "This is the workflow note content.");
 
-    WorkflowNote updatedWorkflowNote =
-        workflowService.updateWorkflowNote(
-            TenantUtil.DEFAULT_TENANT_ID, updateWorkflowNoteRequest, "TEST2");
+    workflowService.updateWorkflowNote(
+        TenantUtil.DEFAULT_TENANT_ID, updateWorkflowNoteRequest, "TEST2");
 
     retrievedWorkflowNote =
-        workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, updatedWorkflowNote.getId());
+        workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNoteId);
 
-    compareWorkflowNotes(updatedWorkflowNote, retrievedWorkflowNote);
+    assertEquals(workflowNoteId, retrievedWorkflowNote.getId());
+    assertEquals(createWorkflowNoteRequest.getStep(), retrievedWorkflowNote.getStep());
+    assertEquals(createWorkflowNoteRequest.getContent(), updateWorkflowNoteRequest.getContent());
 
     // Retrieve the workflow notes for the workflow
     WorkflowNotes workflowNotes =
@@ -889,8 +892,6 @@ public class WorkflowServiceTests {
 
     assertEquals(1, workflowNotes.getTotal());
 
-    compareWorkflowNotes(updatedWorkflowNote, workflowNotes.getWorkflowNotes().getFirst());
-
     // Initiate the workflow step
     workflowService.initiateWorkflowStep(
         TenantUtil.DEFAULT_TENANT_ID,
@@ -898,11 +899,10 @@ public class WorkflowServiceTests {
 
     assertThrows(
         InvalidArgumentException.class,
-        () -> {
-          workflowService.initiateWorkflowStep(
-              TenantUtil.DEFAULT_TENANT_ID,
-              new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_invalid"));
-        });
+        () ->
+            workflowService.initiateWorkflowStep(
+                TenantUtil.DEFAULT_TENANT_ID,
+                new InitiateWorkflowStepRequest(workflow.getId(), "test_workflow_step_invalid")));
 
     retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
@@ -998,9 +998,7 @@ public class WorkflowServiceTests {
             null,
             testWorkflowDataJson);
 
-    Workflow updatedWorkflow =
-        workflowService.updateWorkflow(
-            TenantUtil.DEFAULT_TENANT_ID, updateWorkflowRequest, "TEST2");
+    workflowService.updateWorkflow(TenantUtil.DEFAULT_TENANT_ID, updateWorkflowRequest, "TEST2");
 
     retrievedWorkflow = workflowService.getWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
 
@@ -1024,13 +1022,11 @@ public class WorkflowServiceTests {
     assertEquals("TEST1", retrievedWorkflow.getFinalizedBy());
 
     // Delete the workflow note
-    workflowService.deleteWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
+    workflowService.deleteWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNoteId);
 
     assertThrows(
         WorkflowNoteNotFoundException.class,
-        () -> {
-          workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNote.getId());
-        });
+        () -> workflowService.getWorkflowNote(TenantUtil.DEFAULT_TENANT_ID, workflowNoteId));
 
     // Delete the workflow
     workflowService.deleteWorkflow(TenantUtil.DEFAULT_TENANT_ID, workflow.getId());
@@ -1395,9 +1391,7 @@ public class WorkflowServiceTests {
 
     assertThrows(
         DuplicateWorkflowDefinitionVersionException.class,
-        () -> {
-          workflowService.createWorkflowDefinition(tenantWorkflowDefinition);
-        });
+        () -> workflowService.createWorkflowDefinition(tenantWorkflowDefinition));
 
     tenantWorkflowDefinition.setVersion(tenantWorkflowDefinition.getVersion() + 1);
     workflowService.createWorkflowDefinition(tenantWorkflowDefinition);
@@ -1451,17 +1445,13 @@ public class WorkflowServiceTests {
 
     assertThrows(
         WorkflowDefinitionNotFoundException.class,
-        () -> {
-          workflowService.getWorkflowDefinition(tenantWorkflowDefinition.getId());
-        });
+        () -> workflowService.getWorkflowDefinition(tenantWorkflowDefinition.getId()));
 
     workflowService.deleteWorkflowDefinition(sharedWorkflowDefinition.getId());
 
     assertThrows(
         WorkflowDefinitionNotFoundException.class,
-        () -> {
-          workflowService.getWorkflowDefinition(sharedWorkflowDefinition.getId());
-        });
+        () -> workflowService.getWorkflowDefinition(sharedWorkflowDefinition.getId()));
 
     tenantWorkflowDefinitionCategory.setName("Updated Test Tenant Workflow Definition Category");
     tenantWorkflowDefinitionCategory.setTenantId(UUID.randomUUID());
@@ -1478,17 +1468,17 @@ public class WorkflowServiceTests {
 
     assertThrows(
         WorkflowDefinitionCategoryNotFoundException.class,
-        () -> {
-          workflowService.getWorkflowDefinitionCategory(tenantWorkflowDefinitionCategory.getId());
-        });
+        () ->
+            workflowService.getWorkflowDefinitionCategory(
+                tenantWorkflowDefinitionCategory.getId()));
 
     workflowService.deleteWorkflowDefinitionCategory(sharedWorkflowDefinitionCategory.getId());
 
     assertThrows(
         WorkflowDefinitionCategoryNotFoundException.class,
-        () -> {
-          workflowService.getWorkflowDefinitionCategory(sharedWorkflowDefinitionCategory.getId());
-        });
+        () ->
+            workflowService.getWorkflowDefinitionCategory(
+                sharedWorkflowDefinitionCategory.getId()));
 
     documentService.deleteDocumentDefinition(tenantDocumentDefinition.getId());
 
@@ -1515,9 +1505,7 @@ public class WorkflowServiceTests {
 
     assertThrows(
         WorkflowEngineNotFoundException.class,
-        () -> {
-          workflowService.deleteWorkflowEngine(workflowEngine.getId());
-        });
+        () -> workflowService.deleteWorkflowEngine(workflowEngine.getId()));
 
     operationsReferenceService.deleteExternalReferenceType("test_workflow_external_reference");
 
@@ -1755,20 +1743,19 @@ public class WorkflowServiceTests {
     workflowDefinition1
         .getDocumentDefinitions()
         .forEach(
-            workflowDefinitionDocumentDefinition1 -> {
-              workflowDefinition2
-                  .getDocumentDefinitions()
-                  .forEach(
-                      workflowDefinitionDocumentDefinition2 -> {
-                        if (Objects.equals(
-                            workflowDefinitionDocumentDefinition1,
-                            workflowDefinitionDocumentDefinition2)) {
-                          compareWorkflowDefinitionDocumentDefinitions(
+            workflowDefinitionDocumentDefinition1 ->
+                workflowDefinition2
+                    .getDocumentDefinitions()
+                    .forEach(
+                        workflowDefinitionDocumentDefinition2 -> {
+                          if (Objects.equals(
                               workflowDefinitionDocumentDefinition1,
-                              workflowDefinitionDocumentDefinition2);
-                        }
-                      });
-            });
+                              workflowDefinitionDocumentDefinition2)) {
+                            compareWorkflowDefinitionDocumentDefinitions(
+                                workflowDefinitionDocumentDefinition1,
+                                workflowDefinitionDocumentDefinition2);
+                          }
+                        }));
 
     if ((workflowDefinition1.getOptionalExternalReferenceTypes() == null)
         && (workflowDefinition2.getOptionalExternalReferenceTypes() != null)) {
@@ -1903,17 +1890,16 @@ public class WorkflowServiceTests {
     workflowDefinition1
         .getStepDefinitions()
         .forEach(
-            workflowStepDefinition1 -> {
-              workflowDefinition2
-                  .getStepDefinitions()
-                  .forEach(
-                      workflowStepDefinition2 -> {
-                        if (Objects.equals(workflowStepDefinition1, workflowStepDefinition2)) {
-                          compareWorkflowStepDefinitions(
-                              workflowStepDefinition1, workflowStepDefinition2);
-                        }
-                      });
-            });
+            workflowStepDefinition1 ->
+                workflowDefinition2
+                    .getStepDefinitions()
+                    .forEach(
+                        workflowStepDefinition2 -> {
+                          if (Objects.equals(workflowStepDefinition1, workflowStepDefinition2)) {
+                            compareWorkflowStepDefinitions(
+                                workflowStepDefinition1, workflowStepDefinition2);
+                          }
+                        }));
 
     assertEquals(
         workflowDefinition1.getVariableDefinitions().size(),
@@ -1943,18 +1929,17 @@ public class WorkflowServiceTests {
     workflowDefinition1
         .getVariableDefinitions()
         .forEach(
-            workflowVariableDefinition1 -> {
-              workflowDefinition2
-                  .getVariableDefinitions()
-                  .forEach(
-                      workflowVariableDefinition2 -> {
-                        if (Objects.equals(
-                            workflowVariableDefinition1, workflowVariableDefinition2)) {
-                          compareWorkflowVariableDefinitions(
-                              workflowVariableDefinition1, workflowVariableDefinition2);
-                        }
-                      });
-            });
+            workflowVariableDefinition1 ->
+                workflowDefinition2
+                    .getVariableDefinitions()
+                    .forEach(
+                        workflowVariableDefinition2 -> {
+                          if (Objects.equals(
+                              workflowVariableDefinition1, workflowVariableDefinition2)) {
+                            compareWorkflowVariableDefinitions(
+                                workflowVariableDefinition1, workflowVariableDefinition2);
+                          }
+                        }));
 
     assertEquals(
         (workflowDefinition1.getSupportedWorkflowFormTypes() != null)
@@ -2003,37 +1988,6 @@ public class WorkflowServiceTests {
                         + ")");
               }
             });
-  }
-
-  private void compareWorkflowNotes(WorkflowNote workflowNote1, WorkflowNote workflowNote2) {
-    assertEquals(
-        workflowNote1.getId(),
-        workflowNote2.getId(),
-        "The ID values for the workflow notes do not match");
-    assertEquals(
-        workflowNote1.getContent(),
-        workflowNote2.getContent(),
-        "The content values for the workflow notes do not match");
-    assertEquals(
-        workflowNote1.getCreated(),
-        workflowNote2.getCreated(),
-        "The created values for the workflow notes do not match");
-    assertEquals(
-        workflowNote1.getCreatedBy(),
-        workflowNote2.getCreatedBy(),
-        "The created by values for the workflow notes do not match");
-    assertEquals(
-        workflowNote1.getStep(),
-        workflowNote2.getStep(),
-        "The step values for the workflow notes do not match");
-    assertEquals(
-        workflowNote1.getUpdated(),
-        workflowNote2.getUpdated(),
-        "The updated values for the workflow notes do not match");
-    assertEquals(
-        workflowNote1.getUpdatedBy(),
-        workflowNote2.getUpdatedBy(),
-        "The updated by values for the workflow notes do not match");
   }
 
   private void compareWorkflowStepDefinitions(

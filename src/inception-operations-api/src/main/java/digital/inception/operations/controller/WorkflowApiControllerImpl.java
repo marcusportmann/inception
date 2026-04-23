@@ -174,11 +174,8 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    WorkflowNote workflowNote =
-        workflowService.createWorkflowNote(
-            tenantId, createWorkflowNoteRequest, getAuthenticationName());
-
-    return workflowNote.getId();
+    return workflowService.createWorkflowNote(
+        tenantId, createWorkflowNoteRequest, getAuthenticationName());
   }
 
   @Override
@@ -965,8 +962,7 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    Workflow workflow =
-        workflowService.updateWorkflow(tenantId, updateWorkflowRequest, getAuthenticationName());
+    workflowService.updateWorkflow(tenantId, updateWorkflowRequest, getAuthenticationName());
   }
 
   @Override
@@ -1043,9 +1039,8 @@ public class WorkflowApiControllerImpl extends SecureApiController
       throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
     }
 
-    WorkflowNote workflowNote =
-        workflowService.updateWorkflowNote(
-            tenantId, updateWorkflowNoteRequest, getAuthenticationName());
+    workflowService.updateWorkflowNote(
+        tenantId, updateWorkflowNoteRequest, getAuthenticationName());
   }
 
   @Override

@@ -403,8 +403,8 @@ public class Mandate implements Serializable {
    * Retrieve the property with the specified type for the mandate.
    *
    * @param type the code for the mandate property type
-   * @return an Optional containing the property with the specified type for the mandate or an empty
-   *     Optional if the property could not be found
+   * @return an {@link Optional} containing the property with the specified type for the mandate or
+   *     an empty {@link Optional} if the property could not be found
    */
   public Optional<MandateProperty> getPropertyWithType(String type) {
     return properties.stream()

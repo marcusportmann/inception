@@ -68,8 +68,8 @@ public interface JobRepository extends JpaRepository<Job, String>, JpaSpecificat
    * Find the name for the job.
    *
    * @param jobId the ID for the job
-   * @return an Optional containing the name for the job or an empty Optional if the job could not
-   *     be found
+   * @return an {@link Optional} containing the name for the job or an empty {@link Optional} if the
+   *     job could not be found
    */
   @Query("select j.name from Job j where j.id = :jobId")
   Optional<String> findNameById(@Param("jobId") String jobId);

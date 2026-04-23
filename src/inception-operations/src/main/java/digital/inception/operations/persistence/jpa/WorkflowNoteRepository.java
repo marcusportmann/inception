@@ -61,8 +61,8 @@ public interface WorkflowNoteRepository
    *
    * @param tenantId the ID for the tenant
    * @param workflowNoteId the ID for the workflow note
-   * @return an Optional containing the workflow note or an empty Optional if the workflow note
-   *     could not be found
+   * @return an {@link Optional} containing the workflow note or an empty {@link Optional} if the
+   *     workflow note could not be found
    */
   Optional<WorkflowNote> findByTenantIdAndId(UUID tenantId, UUID workflowNoteId);
 }

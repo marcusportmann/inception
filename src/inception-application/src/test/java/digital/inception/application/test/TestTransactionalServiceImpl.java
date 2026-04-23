@@ -167,8 +167,8 @@ public class TestTransactionalServiceImpl implements TestTransactionalService {
    * Retrieve the test data.
    *
    * @param id the ID
-   * @return an Optional containing the test data or an empty Optional if the test data cannot be
-   *     found
+   * @return an {@link Optional} containing the test data or an empty {@link Optional} if the test
+   *     data cannot be found
    */
   public Optional<TestData> getTestData(String id) throws TestTransactionalServiceException {
     String getTestDataSQL = "SELECT id, name, value FROM test_data WHERE id=?";

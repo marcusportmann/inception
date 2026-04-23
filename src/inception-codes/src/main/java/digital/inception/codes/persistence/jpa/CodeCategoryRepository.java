@@ -45,8 +45,8 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
    * Find the data for the code category.
    *
    * @param codeCategoryId the ID for the code category
-   * @return an Optional containing the data for the code category or an empty Optional if the code
-   *     category could not be found
+   * @return an {@link Optional} containing the data for the code category or an empty {@link
+   *     Optional} if the code category could not be found
    */
   @Query("select cc.data from CodeCategory cc where cc.id = :codeCategoryId")
   Optional<String> findDataById(@Param("codeCategoryId") String codeCategoryId);
@@ -55,8 +55,8 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
    * Find the date and time the code category was last modified.
    *
    * @param codeCategoryId the ID for the code category
-   * @return an Optional containing the date and time the code category was last modified or an
-   *     empty Optional if the code category could not be found
+   * @return an {@link Optional} containing the date and time the code category was last modified or
+   *     an empty {@link Optional} if the code category could not be found
    */
   @Query("select cc.lastModified from CodeCategory cc where cc.id = :codeCategoryId")
   Optional<OffsetDateTime> findLastModifiedById(@Param("codeCategoryId") String codeCategoryId);
@@ -65,8 +65,8 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
    * Find the name for the code category.
    *
    * @param codeCategoryId the ID for the code category
-   * @return an Optional containing the name for the code category or an empty Optional if the code
-   *     category could not be found
+   * @return an {@link Optional} containing the name for the code category or an empty {@link
+   *     Optional} if the code category could not be found
    */
   @Query("select cc.name from CodeCategory cc where cc.id = :codeCategoryId")
   Optional<String> findNameById(@Param("codeCategoryId") String codeCategoryId);

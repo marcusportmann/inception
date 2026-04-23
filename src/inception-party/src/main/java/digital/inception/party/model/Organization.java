@@ -480,8 +480,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the attribute with the specified type for the organization.
    *
    * @param type the code for the attribute type
-   * @return an Optional containing the attribute with the specified type for the organization or an
-   *     empty Optional if the attribute could not be found
+   * @return an {@link Optional} containing the attribute with the specified type for the
+   *     organization or an empty {@link Optional} if the attribute could not be found
    */
   public Optional<Attribute> getAttributeWithType(String type) {
     return attributes.stream()
@@ -507,8 +507,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the contact mechanism with the specified role for the organization.
    *
    * @param role the code for the contact mechanism role
-   * @return an Optional containing the contact mechanism with the specified role for the
-   *     organization or an empty Optional if the contact mechanism could not be found
+   * @return an {@link Optional} containing the contact mechanism with the specified role for the
+   *     organization or an empty {@link Optional} if the contact mechanism could not be found
    */
   public Optional<ContactMechanism> getContactMechanismWithRole(String role) {
     return contactMechanisms.stream()
@@ -521,8 +521,9 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for the contact mechanism type
    * @param purpose the code for the contact mechanism role
-   * @return an Optional containing the contact mechanism with the specified type and purpose for
-   *     the organization or an empty Optional if the contact mechanism could not be found
+   * @return an {@link Optional} containing the contact mechanism with the specified type and
+   *     purpose for the organization or an empty {@link Optional} if the contact mechanism could
+   *     not be found
    */
   public Optional<ContactMechanism> getContactMechanismWithTypeAndPurpose(
       String type, String purpose) {
@@ -567,8 +568,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the first external reference with the specified type for the organization.
    *
    * @param type the code for the external reference type
-   * @return an Optional containing the first external reference with the specified type for the
-   *     organization or an empty if an external reference could not be found
+   * @return an {@link Optional} containing the first external reference with the specified type for
+   *     the organization or an empty if an external reference could not be found
    */
   public Optional<ExternalReference> getExternalReferenceWithType(String type) {
     return externalReferences.stream()
@@ -691,8 +692,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the identification with the specified type for the organization.
    *
    * @param type the code for the identification type
-   * @return an Optional containing the identification with the specified type for the organization
-   *     or an empty if the identification could not be found
+   * @return an {@link Optional} containing the identification with the specified type for the
+   *     organization or an empty if the identification could not be found
    */
   public Optional<Identification> getIdentificationWithType(String type) {
     return identifications.stream()
@@ -720,9 +721,9 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param system the code for the industry classification system
    * @param industry the code for the industry classification
-   * @return an Optional containing the industry allocation with the specified industry
-   *     classification system and industry classification for the organization or an empty Optional
-   *     if the industry allocation could not be found
+   * @return an {@link Optional} containing the industry allocation with the specified industry
+   *     classification system and industry classification for the organization or an empty {@link
+   *     Optional} if the industry allocation could not be found
    */
   public Optional<IndustryAllocation> getIndustryAllocationWithSystemAndIndustry(
       String system, String industry) {
@@ -752,8 +753,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the lock with the specified type for the organization.
    *
    * @param type the code for the lock type
-   * @return an Optional containing the lock with the specified type for the organization or an
-   *     empty Optional if the lock could not be found
+   * @return an {@link Optional} containing the lock with the specified type for the organization or
+   *     an empty {@link Optional} if the lock could not be found
    */
   public Optional<Lock> getLockWithType(String type) {
     return locks.stream().filter(lock -> Objects.equals(lock.getType(), type)).findFirst();
@@ -790,8 +791,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the first physical address with the specified role for the organization.
    *
    * @param role the code for the physical address role
-   * @return an Optional containing the first physical address with the specified role for the
-   *     organization or an empty Optional if the physical address could not be found
+   * @return an {@link Optional} containing the first physical address with the specified role for
+   *     the organization or an empty {@link Optional} if the physical address could not be found
    */
   public Optional<PhysicalAddress> getPhysicalAddressWithRole(String role) {
     return physicalAddresses.stream()
@@ -804,8 +805,9 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @param type the code for the physical address type
    * @param purpose the code for the physical address purpose
-   * @return an Optional containing the first physical address with the specified type and purpose
-   *     for the organization or an empty Optional if the physical address could not be found
+   * @return an {@link Optional} containing the first physical address with the specified type and
+   *     purpose for the organization or an empty {@link Optional} if the physical address could not
+   *     be found
    */
   public Optional<PhysicalAddress> getPhysicalAddressWithTypeAndPurpose(
       String type, String purpose) {
@@ -835,8 +837,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the preference with the specified type for the organization.
    *
    * @param type the code for the preference type
-   * @return an Optional containing the preference with the specified type for the organization or
-   *     an empty Optional if the preference could not be found
+   * @return an {@link Optional} containing the preference with the specified type for the
+   *     organization or an empty {@link Optional} if the preference could not be found
    */
   public Optional<Preference> getPreferenceWithType(String type) {
     return preferences.stream()
@@ -863,8 +865,9 @@ public class Organization extends PartyBase implements Serializable {
    * association.
    *
    * @param type the code for the role type
-   * @return an Optional containing the role with the specified type for the organization
-   *     independent of a party association or an empty Optional if the role could not be found
+   * @return an {@link Optional} containing the role with the specified type for the organization
+   *     independent of a party association or an empty {@link Optional} if the role could not be
+   *     found
    */
   public Optional<Role> getRoleWithType(String type) {
     return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst();
@@ -888,8 +891,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the segment allocation with the specified segment for the organization.
    *
    * @param segment the code for the segment
-   * @return an Optional containing the segment allocation with the specified segment for the
-   *     organization or an empty Optional if the segment allocation could not be found
+   * @return an {@link Optional} containing the segment allocation with the specified segment for
+   *     the organization or an empty {@link Optional} if the segment allocation could not be found
    */
   public Optional<SegmentAllocation> getSegmentAllocationWithSegment(String segment) {
     return segmentAllocations.stream()
@@ -915,8 +918,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the status with the specified type for the organization.
    *
    * @param type the code for the status type
-   * @return an Optional containing the status with the specified type for the organization or an
-   *     empty Optional if the status could not be found
+   * @return an {@link Optional} containing the status with the specified type for the organization
+   *     or an empty {@link Optional} if the status could not be found
    */
   public Optional<Status> getStatusWithType(String type) {
     return statuses.stream().filter(status -> Objects.equals(status.getType(), type)).findFirst();
@@ -940,8 +943,8 @@ public class Organization extends PartyBase implements Serializable {
    * Retrieve the tax number with the specified type for the organization.
    *
    * @param type the tax number type
-   * @return an Optional containing the tax number with the specified type for the organization or
-   *     an empty Optional if the tax number could not be found
+   * @return an {@link Optional} containing the tax number with the specified type for the
+   *     organization or an empty {@link Optional} if the tax number could not be found
    */
   public Optional<TaxNumber> getTaxNumberWithType(String type) {
     return taxNumbers.stream()

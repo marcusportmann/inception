@@ -58,8 +58,8 @@ public interface CodeRepository extends JpaRepository<Code, CodeId> {
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code
-   * @return an Optional containing the name for the code or an empty Optional if the code could not
-   *     be found
+   * @return an {@link Optional} containing the name for the code or an empty {@link Optional} if
+   *     the code could not be found
    */
   @Query("select c.name from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
   Optional<String> findNameByCodeCategoryIdAndId(

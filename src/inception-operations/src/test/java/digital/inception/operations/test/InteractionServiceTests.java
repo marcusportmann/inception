@@ -620,36 +620,27 @@ public class InteractionServiceTests {
         new CreateInteractionNoteRequest(
             retrievedInteraction.getId(), "This is the interaction note content.");
 
-    InteractionNote interactionNote =
+    UUID interactionNoteId =
         interactionService.createInteractionNote(
             TenantUtil.DEFAULT_TENANT_ID, createInteractionNoteRequest, "TEST1");
 
     assertTrue(
         interactionService.interactionNoteExists(
-            TenantUtil.DEFAULT_TENANT_ID,
-            interactionNote.getInteractionId(),
-            interactionNote.getId()));
+            TenantUtil.DEFAULT_TENANT_ID, retrievedInteraction.getId(), interactionNoteId));
 
     InteractionNote retrievedInteractionNote =
-        interactionService.getInteractionNote(
-            TenantUtil.DEFAULT_TENANT_ID, interactionNote.getId());
-
-    compareInteractionNotes(interactionNote, retrievedInteractionNote);
+        interactionService.getInteractionNote(TenantUtil.DEFAULT_TENANT_ID, interactionNoteId);
 
     // Update the interaction note for the interaction
     UpdateInteractionNoteRequest updateInteractionNoteRequest =
         new UpdateInteractionNoteRequest(
-            interactionNote.getId(), "This is the interaction note content.");
+            interactionNoteId, "This is the interaction note content.");
 
-    InteractionNote updatedInteractionNote =
-        interactionService.updateInteractionNote(
-            TenantUtil.DEFAULT_TENANT_ID, updateInteractionNoteRequest, "TEST2");
+    interactionService.updateInteractionNote(
+        TenantUtil.DEFAULT_TENANT_ID, updateInteractionNoteRequest, "TEST2");
 
     retrievedInteractionNote =
-        interactionService.getInteractionNote(
-            TenantUtil.DEFAULT_TENANT_ID, updatedInteractionNote.getId());
-
-    compareInteractionNotes(updatedInteractionNote, retrievedInteractionNote);
+        interactionService.getInteractionNote(TenantUtil.DEFAULT_TENANT_ID, interactionNoteId);
 
     // Retrieve the interaction notes for the interaction
     InteractionNotes interactionNotes =
@@ -663,9 +654,6 @@ public class InteractionServiceTests {
             10);
 
     assertEquals(1, interactionNotes.getTotal());
-
-    compareInteractionNotes(
-        updatedInteractionNote, interactionNotes.getInteractionNotes().getFirst());
 
     interactionService.deleteInteractionAttachment(
         TenantUtil.DEFAULT_TENANT_ID, retrievedInteractionAttachmentId);

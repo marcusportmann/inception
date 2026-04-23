@@ -49,8 +49,8 @@ public interface InteractionSourceRepository extends JpaRepository<InteractionSo
    *
    * @param tenantId the ID for the tenant
    * @param interactionSourceId the ID for the interaction source
-   * @return an Optional containing the interaction source or an empty Optional if the interaction
-   *     source could not be found
+   * @return an {@link Optional} containing the interaction source or an empty {@link Optional} if
+   *     the interaction source could not be found
    */
   Optional<InteractionSource> findByTenantIdAndId(UUID tenantId, UUID interactionSourceId);
 

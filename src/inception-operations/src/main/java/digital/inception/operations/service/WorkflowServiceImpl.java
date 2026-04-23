@@ -373,14 +373,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public Workflow createWorkflow(UUID tenantId, Workflow workflow)
+  public void createWorkflow(UUID tenantId, Workflow workflow)
       throws DuplicateWorkflowException, ServiceUnavailableException {
     try {
       if (workflowRepository.existsById(workflow.getId())) {
         throw new DuplicateWorkflowException(workflow.getId());
       }
 
-      return workflowRepository.save(workflow);
+      workflowRepository.save(workflow);
     } catch (DuplicateWorkflowException e) {
       throw e;
     } catch (Throwable e) {
@@ -472,14 +472,14 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public WorkflowDocument createWorkflowDocument(UUID tenantId, WorkflowDocument workflowDocument)
+  public void createWorkflowDocument(UUID tenantId, WorkflowDocument workflowDocument)
       throws DuplicateWorkflowDocumentException, ServiceUnavailableException {
     try {
       if (workflowDocumentRepository.existsById(workflowDocument.getId())) {
         throw new DuplicateWorkflowDocumentException(workflowDocument.getId());
       }
 
-      return workflowDocumentRepository.save(workflowDocument);
+      workflowDocumentRepository.save(workflowDocument);
     } catch (DuplicateWorkflowDocumentException e) {
       throw e;
     } catch (Throwable e) {
@@ -515,7 +515,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public WorkflowNote createWorkflowNote(
+  public UUID createWorkflowNote(
       UUID tenantId, CreateWorkflowNoteRequest createWorkflowNoteRequest, String createdBy)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -542,7 +542,9 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
               ApplicationClock.offsetNow(),
               createdBy);
 
-      return workflowNoteRepository.save(workflowNote);
+      workflowNoteRepository.save(workflowNote);
+
+      return workflowNote.getId();
     } catch (WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -3688,7 +3690,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public Workflow updateWorkflow(
+  public void updateWorkflow(
       UUID tenantId, UpdateWorkflowRequest updateWorkflowRequest, String updatedBy)
       throws InvalidArgumentException, WorkflowNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -3794,7 +3796,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new WorkflowNotFoundException(tenantId, workflow.getId());
       }
 
-      return workflowRepository.save(workflow);
+      workflowRepository.save(workflow);
     } catch (InvalidArgumentException | WorkflowNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -3902,7 +3904,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
   }
 
   @Override
-  public WorkflowNote updateWorkflowNote(
+  public void updateWorkflowNote(
       UUID tenantId, UpdateWorkflowNoteRequest updateWorkflowNoteRequest, String updatedBy)
       throws InvalidArgumentException, WorkflowNoteNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
@@ -3927,7 +3929,7 @@ public class WorkflowServiceImpl extends AbstractServiceBase implements Workflow
         throw new WorkflowNoteNotFoundException(tenantId, workflowNote.getId());
       }
 
-      return workflowNoteRepository.save(workflowNote);
+      workflowNoteRepository.save(workflowNote);
     } catch (WorkflowNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {

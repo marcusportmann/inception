@@ -61,7 +61,8 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
    * Find the config.
    *
    * @param configId the ID for the config
-   * @return an Optional containing the config or an empty Optional if the config could not be found
+   * @return an {@link Optional} containing the config or an empty {@link Optional} if the config
+   *     could not be found
    */
   Optional<Config> findByIdIgnoreCase(String configId);
 
@@ -77,8 +78,8 @@ public interface ConfigRepository extends JpaRepository<Config, String> {
    * Find the value for the config.
    *
    * @param configId the ID for the config
-   * @return an Optional containing the value for the config or an empty Optional if the config
-   *     could not be found
+   * @return an {@link Optional} containing the value for the config or an empty {@link Optional} if
+   *     the config could not be found
    */
   @Query("select c.value from Config c where lower(c.id) = lower(:configId)")
   Optional<String> findValueByIdIgnoreCase(@Param("configId") String configId);

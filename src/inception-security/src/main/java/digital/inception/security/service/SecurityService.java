@@ -309,8 +309,8 @@ public interface SecurityService {
    *
    * @param tenant the tenant
    * @param createUserDirectory should a new internal user directory be created for the tenant
-   * @return an Optional containing the new internal user directory that was created for the tenant
-   *     or an empty Optional if no user directory was created
+   * @return an {@link Optional} containing the new internal user directory that was created for the
+   *     tenant or an empty {@link Optional} if no user directory was created
    * @throws InvalidArgumentException if an argument is invalid
    * @throws DuplicateTenantException if the tenant already exists
    * @throws ServiceUnavailableException if the tenant could not be created
@@ -988,8 +988,9 @@ public interface SecurityService {
    * with.
    *
    * @param username the username for the user
-   * @return an Optional containing the ID for the user directory that the user with the specified
-   *     username is associated with or an empty Optional if the user cannot be found
+   * @return an {@link Optional} containing the ID for the user directory that the user with the
+   *     specified username is associated with or an empty {@link Optional} if the user cannot be
+   *     found
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the user directory ID could not be retrieved for the
    *     user

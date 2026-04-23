@@ -58,7 +58,8 @@ public interface PersonRepository
    *
    * @param tenantId the ID for the tenant
    * @param personId the ID for the person
-   * @return an Optional containing the person or an empty Optional if the person could not be found
+   * @return an {@link Optional} containing the person or an empty {@link Optional} if the person
+   *     could not be found
    */
   Optional<Person> findByTenantIdAndId(UUID tenantId, UUID personId);
 }

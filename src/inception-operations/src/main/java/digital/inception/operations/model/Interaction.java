@@ -342,6 +342,35 @@ public class Interaction extends AbstractProcessableObject<UUID, InteractionStat
   /**
    * Constructs a new {@code Interaction}.
    *
+   * @param interaction the existing interaction
+   */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+  public Interaction(Interaction interaction) {
+    this.assigned = interaction.assigned;
+    this.assignedTo = interaction.assignedTo;
+    this.content = interaction.content;
+    this.conversationId = interaction.conversationId;
+    this.direction = interaction.direction;
+    this.externalReference = interaction.externalReference;
+    this.id = interaction.id;
+    this.mimeType = interaction.mimeType;
+    this.occurred = interaction.occurred;
+    this.originalSourceId = interaction.originalSourceId;
+    this.partyId = interaction.partyId;
+    this.priority = interaction.priority;
+    this.recipients = interaction.recipients;
+    this.sender = interaction.sender;
+    this.sourceId = interaction.sourceId;
+    this.sourceReference = interaction.sourceReference;
+    this.status = interaction.status;
+    this.subject = interaction.subject;
+    this.tenantId = interaction.tenantId;
+    this.type = interaction.type;
+  }
+
+  /**
+   * Constructs a new {@code Interaction}.
+   *
    * @param id the ID for the interaction
    * @param tenantId the ID for the tenant the interaction is associated with
    * @param sourceId the ID for the interaction source the interaction is associated with

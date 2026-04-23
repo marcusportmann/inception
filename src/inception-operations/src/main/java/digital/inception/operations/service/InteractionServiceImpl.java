@@ -21,6 +21,7 @@ import com.microsoft.aad.msal4j.ClientCredentialFactory;
 import com.microsoft.aad.msal4j.ClientCredentialParameters;
 import com.microsoft.aad.msal4j.ConfidentialClientApplication;
 import com.microsoft.aad.msal4j.IClientCredential;
+import digital.inception.core.exception.BusinessException;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.file.FileType;
@@ -40,6 +41,7 @@ import digital.inception.operations.exception.InteractionSourceNotFoundException
 import digital.inception.operations.exception.PartyNotFoundException;
 import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
+import digital.inception.operations.model.DecryptInteractionAttachmentRequest;
 import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
@@ -111,7 +113,6 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
@@ -256,7 +257,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
   @Override
   @Transactional
-  public Interaction createInteraction(UUID tenantId, Interaction interaction)
+  public void createInteraction(UUID tenantId, Interaction interaction)
       throws InvalidArgumentException, DuplicateInteractionException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -277,8 +278,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       }
 
       interactionRepository.save(interaction);
-
-      return interaction;
     } catch (DuplicateInteractionException e) {
       throw e;
     } catch (InteractionSourceNotFoundException e) {
@@ -296,7 +295,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
   @Override
   @Transactional
-  public InteractionAttachment createInteractionAttachment(
+  public void createInteractionAttachment(
       UUID tenantId, InteractionAttachment interactionAttachment)
       throws InvalidArgumentException,
           DuplicateInteractionAttachmentException,
@@ -319,9 +318,21 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new DuplicateInteractionAttachmentException(interactionAttachment.getId());
       }
 
-      interactionAttachmentRepository.save(interactionAttachment);
+      InteractionAttachment persistedInteractionAttachment =
+          new InteractionAttachment(interactionAttachment);
 
-      return interactionAttachment;
+      // TODO: If persisting the interaction attachment to S3, clear the data
+      // persistedInteractionAttachment.setData(null);
+
+      // TODO: Save the interaction attachment data to S3, if required
+      // s3Client.uploadFileToS3Bucket(
+      //    "bucket_id",
+      //    interactionAttachment.getId().toString(),
+      //    interactionAttachment.getFileType(),
+      //    interactionAttachment.getData());
+
+      // Save the interaction attachment to the database (without the data if persisted to S3)
+      interactionAttachmentRepository.save(persistedInteractionAttachment);
     } catch (DuplicateInteractionAttachmentException e) {
       throw e;
     } catch (InteractionSourceNotFoundException e) {
@@ -338,7 +349,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
-  public InteractionNote createInteractionNote(
+  public UUID createInteractionNote(
       UUID tenantId, CreateInteractionNoteRequest createInteractionNoteRequest, String createdBy)
       throws InvalidArgumentException,
           DuplicateInteractionNoteException,
@@ -372,7 +383,9 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new DuplicateInteractionNoteException(interactionNote.getId());
       }
 
-      return interactionNoteRepository.save(interactionNote);
+      interactionNoteRepository.save(interactionNote);
+
+      return interactionNote.getId();
     } catch (DuplicateInteractionNoteException | InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -395,8 +408,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
             cacheNames = {"interactionSources", "interactionSourceSummaries"},
             key = "#tenantId")
       })
-  public InteractionSource createInteractionSource(
-      UUID tenantId, InteractionSource interactionSource)
+  public void createInteractionSource(UUID tenantId, InteractionSource interactionSource)
       throws InvalidArgumentException,
           DuplicateInteractionSourceException,
           ServiceUnavailableException {
@@ -416,14 +428,56 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       }
 
       interactionSourceRepository.save(interactionSource);
-
-      return interactionSource;
     } catch (DuplicateInteractionSourceException e) {
       throw e;
     } catch (Throwable e) {
       throw new ServiceUnavailableException(
           "Failed to create the interaction source ("
               + interactionSource.getId()
+              + ") for the tenant ("
+              + tenantId
+              + ")",
+          e);
+    }
+  }
+
+  @Override
+  public void decryptInteractionAttachment(
+      UUID tenantId, DecryptInteractionAttachmentRequest decryptInteractionAttachmentRequest)
+      throws InvalidArgumentException,
+          InteractionAttachmentNotFoundException,
+          BusinessException,
+          ServiceUnavailableException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    validateArgument("decryptInteractionAttachmentRequest", decryptInteractionAttachmentRequest);
+
+    try {
+      /*
+       * NOTE: The search by both tenant ID and interaction attachment ID includes a security check
+       *       to ensure that the interaction attachment not only exists, but is also associated
+       *       with the specified tenant.
+       */
+
+      Optional<InteractionAttachment> interactionAttachmentOptional =
+          interactionAttachmentRepository.findByTenantIdAndId(
+              tenantId, decryptInteractionAttachmentRequest.getInteractionAttachmentId());
+
+      if (interactionAttachmentOptional.isPresent()) {
+        // TODO: IMPLEMENT ME!!!
+        throw new ServiceUnavailableException("Not Implemented");
+      } else {
+        throw new InteractionAttachmentNotFoundException(
+            decryptInteractionAttachmentRequest.getInteractionAttachmentId());
+      }
+    } catch (InteractionAttachmentNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException(
+          "Failed to decrypt the interaction attachment ("
+              + decryptInteractionAttachmentRequest.getInteractionAttachmentId()
               + ") for the tenant ("
               + tenantId
               + ")",
@@ -1576,12 +1630,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
             return criteriaBuilder.and(andPredicates.toArray(new Predicate[0]));
           };
 
-      // Sorting
-      String sortByPropertyName =
-          InteractionSortBy.resolveSortByPropertyName(searchInteractionsRequest.getSortBy());
-      Sort.Direction dir = resolveSortDirection(searchInteractionsRequest.getSortDirection());
-      Sort sort = Sort.by(dir, sortByPropertyName);
-
       // Paging
       int pageIndex =
           searchInteractionsRequest.getPageIndex() == null
@@ -1592,7 +1640,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               ? 50
               : Math.max(
                   1, Math.min(searchInteractionsRequest.getPageSize(), maxFilteredInteractions));
-      Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
 
       final int firstResult = pageIndex * pageSize;
 
@@ -1753,7 +1800,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
   @Override
   @Transactional
-  public Interaction updateInteraction(UUID tenantId, Interaction interaction)
+  public void updateInteraction(UUID tenantId, Interaction interaction)
       throws InvalidArgumentException, InteractionNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
@@ -1771,8 +1818,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       }
 
       interactionRepository.save(interaction);
-
-      return interaction;
     } catch (InteractionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1788,7 +1833,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
 
   @Override
   @Transactional
-  public InteractionAttachment updateInteractionAttachment(
+  public void updateInteractionAttachment(
       UUID tenantId, InteractionAttachment interactionAttachment)
       throws InvalidArgumentException,
           InteractionAttachmentNotFoundException,
@@ -1809,9 +1854,21 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
         throw new InteractionAttachmentNotFoundException(interactionAttachment.getId());
       }
 
-      interactionAttachmentRepository.save(interactionAttachment);
+      InteractionAttachment persistedInteractionAttachment =
+          new InteractionAttachment(interactionAttachment);
 
-      return interactionAttachment;
+      // TODO: If persisting the interaction attachment to S3, clear the data
+      // persistedInteractionAttachment.setData(null);
+
+      // TODO: Save the interaction attachment data to S3, if required
+      // s3Client.uploadFileToS3Bucket(
+      //    "bucket_id",
+      //    interactionAttachment.getId().toString(),
+      //    interactionAttachment.getFileType(),
+      //    interactionAttachment.getData());
+
+      // Save the interaction attachment to the database (without the data if persisted to S3)
+      interactionAttachmentRepository.save(persistedInteractionAttachment);
     } catch (InteractionAttachmentNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1826,7 +1883,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
   }
 
   @Override
-  public InteractionNote updateInteractionNote(
+  public void updateInteractionNote(
       UUID tenantId, UpdateInteractionNoteRequest updateInteractionNoteRequest, String updatedBy)
       throws InvalidArgumentException,
           InteractionNoteNotFoundException,
@@ -1859,7 +1916,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       interactionNote.setUpdated(ApplicationClock.offsetNow());
       interactionNote.setUpdatedBy(updatedBy);
 
-      return interactionNoteRepository.save(interactionNote);
+      interactionNoteRepository.save(interactionNote);
     } catch (InteractionNoteNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1881,8 +1938,7 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
             cacheNames = {"interactionSources", "interactionSourceSummaries"},
             key = "#tenantId")
       })
-  public InteractionSource updateInteractionSource(
-      UUID tenantId, InteractionSource interactionSource)
+  public void updateInteractionSource(UUID tenantId, InteractionSource interactionSource)
       throws InvalidArgumentException,
           InteractionSourceNotFoundException,
           ServiceUnavailableException {
@@ -1902,8 +1958,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
       }
 
       interactionSourceRepository.save(interactionSource);
-
-      return interactionSource;
     } catch (InteractionSourceNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -2247,16 +2301,6 @@ public class InteractionServiceImpl extends AbstractServiceBase implements Inter
               + interactionSource.getId()
               + ")",
           e);
-    }
-  }
-
-  private Sort.Direction resolveSortDirection(SortDirection sortDirection) {
-    if (sortDirection == null) {
-      return Sort.Direction.DESC;
-    } else if (sortDirection == SortDirection.ASCENDING) {
-      return Sort.Direction.ASC;
-    } else {
-      return Sort.Direction.DESC;
     }
   }
 

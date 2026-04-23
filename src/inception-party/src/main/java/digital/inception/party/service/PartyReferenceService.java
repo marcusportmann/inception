@@ -94,9 +94,10 @@ public interface PartyReferenceService {
    *     to
    * @param associationTypeCode the code for the association type
    * @param associationPropertyTypeCode the code for the association property type
-   * @return an Optional containing the association property type with the specified code for the
-   *     association type with the specified code for the tenant with the specified ID for the first
-   *     matching locale or an empty Optional if the association property type could not be found
+   * @return an {@link Optional} containing the association property type with the specified code
+   *     for the association type with the specified code for the tenant with the specified ID for
+   *     the first matching locale or an empty {@link Optional} if the association property type
+   *     could not be found
    * @throws ServiceUnavailableException if the association property type could not be retrieved
    */
   Optional<AssociationPropertyType> getAssociationPropertyType(
@@ -146,9 +147,9 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant the association type reference data is specific to
    * @param associationTypeCode the code for the association type
-   * @return an Optional containing the association type with the specified code for the tenant with
-   *     the specified ID for the first matching locale or an empty Optional if the association type
-   *     could not be found
+   * @return an {@link Optional} containing the association type with the specified code for the
+   *     tenant with the specified ID for the first matching locale or an empty {@link Optional} if
+   *     the association type could not be found
    * @throws ServiceUnavailableException if the association type could not be retrieved
    */
   Optional<AssociationType> getAssociationType(UUID tenantId, String associationTypeCode)
@@ -197,9 +198,9 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant the attribute type reference data is specific to
    * @param partyTypeCode the code for the party type
    * @param attributeTypeCode the code for the attribute type
-   * @return an Optional containing the attribute type with the specified code for the party type
-   *     with the specified code for the tenant with the specified ID for the first matching locale
-   *     or an empty Optional if the attribute type could not be found
+   * @return an {@link Optional} containing the attribute type with the specified code for the party
+   *     type with the specified code for the tenant with the specified ID for the first matching
+   *     locale or an empty {@link Optional} if the attribute type could not be found
    * @throws ServiceUnavailableException if the attribute type could not be retrieved
    */
   Optional<AttributeType> getAttributeType(
@@ -366,10 +367,10 @@ public interface PartyReferenceService {
    * @param partyTypeCode the code for the party type
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismRoleCode the code for the contact mechanism role
-   * @return an Optional containing the contact mechanism role with the specified code, for the
-   *     contact mechanism type with the specified code and the party type with the specified code,
-   *     for the tenant with the specified ID for the first matching locale or an empty Optional if
-   *     the attribute type could not be found
+   * @return an {@link Optional} containing the contact mechanism role with the specified code, for
+   *     the contact mechanism type with the specified code and the party type with the specified
+   *     code, for the tenant with the specified ID for the first matching locale or an empty {@link
+   *     Optional} if the attribute type could not be found
    * @throws ServiceUnavailableException if the contact mechanism role type could not be retrieved
    */
   Optional<ContactMechanismRole> getContactMechanismRole(
@@ -421,9 +422,9 @@ public interface PartyReferenceService {
    *
    * @param tenantId the ID for the tenant
    * @param contactMechanismTypeCode the code for the contact mechanism type
-   * @return an Optional containing the contact mechanism type with the specified code for the
-   *     tenant with the specified ID for the first matching locale or an empty Optional if the
-   *     contact mechanism type could not be found
+   * @return an {@link Optional} containing the contact mechanism type with the specified code for
+   *     the tenant with the specified ID for the first matching locale or an empty {@link Optional}
+   *     if the contact mechanism type could not be found
    * @throws ServiceUnavailableException if the contact mechanism type could not be retrieved
    */
   Optional<ContactMechanismType> getContactMechanismType(
@@ -932,9 +933,10 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant the mandate property type reference data is specific to
    * @param mandateTypeCode the code for the mandate type
    * @param mandatePropertyTypeCode the code for the mandate property type
-   * @return an Optional containing the mandate property type with the specified code for the
-   *     mandate type with the specified code for the tenant with the specified ID for the first
-   *     matching locale or an empty Optional if the mandate property type could not be found
+   * @return an {@link Optional} containing the mandate property type with the specified code for
+   *     the mandate type with the specified code for the tenant with the specified ID for the first
+   *     matching locale or an empty {@link Optional} if the mandate property type could not be
+   *     found
    * @throws ServiceUnavailableException if the mandate property type could not be retrieved
    */
   Optional<MandatePropertyType> getMandatePropertyType(
@@ -1261,9 +1263,9 @@ public interface PartyReferenceService {
    * @param tenantId the ID for the tenant the preference type reference data is specific to
    * @param partyTypeCode the code for the party type
    * @param preferenceTypeCode the code for the preference type
-   * @return an Optional containing the preference type with the specified code for the party type
-   *     with the specified code for the tenant with the specified ID for the first matching locale
-   *     or an empty Optional if the preference type could not be found
+   * @return an {@link Optional} containing the preference type with the specified code for the
+   *     party type with the specified code for the tenant with the specified ID for the first
+   *     matching locale or an empty {@link Optional} if the preference type could not be found
    * @throws ServiceUnavailableException if the preference type could not be retrieved
    */
   Optional<PreferenceType> getPreferenceType(

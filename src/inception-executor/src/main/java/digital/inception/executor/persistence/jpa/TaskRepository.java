@@ -228,7 +228,8 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * Find the task with the specified external reference.
    *
    * @param externalReference the external reference for the task
-   * @return an Optional containing the task or an empty Optional if the task could not be found
+   * @return an {@link Optional} containing the task or an empty {@link Optional} if the task could
+   *     not be found
    */
   Optional<Task> findByExternalReference(String externalReference);
 
@@ -265,8 +266,8 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
    * Find the status of the task.
    *
    * @param taskId the ID for the task
-   * @return an Optional containing the status of the task or an empty Optional if the task could
-   *     not be found
+   * @return an {@link Optional} containing the status of the task or an empty {@link Optional} if
+   *     the task could not be found
    */
   @Query("SELECT t.status FROM Task t WHERE t.id = :taskId")
   Optional<TaskStatus> findTaskStatus(@Param("taskId") UUID taskId);

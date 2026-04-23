@@ -196,7 +196,8 @@ public class WorkflowDefinition implements Serializable {
         insertable = false,
         updatable = false)
   })
-  private final List<@Valid WorkflowDefinitionDocumentDefinition> documentDefinitions = new ArrayList<>();
+  private final List<@Valid WorkflowDefinitionDocumentDefinition> documentDefinitions =
+      new ArrayList<>();
 
   /** The permissions for the workflow definition. */
   @Schema(description = "The permissions for the workflow definition")
@@ -779,8 +780,8 @@ public class WorkflowDefinition implements Serializable {
    * Retrieve the attribute with the specified name for the workflow definition.
    *
    * @param name the name of the attribute
-   * @return an Optional containing the attribute with the specified name for the workflow
-   *     definition or an empty Optional if the attribute could not be found
+   * @return an {@link Optional} containing the attribute with the specified name for the workflow
+   *     definition or an empty {@link Optional} if the attribute could not be found
    */
   public Optional<WorkflowDefinitionAttribute> getAttribute(String name) {
     return attributes.stream()
@@ -792,9 +793,9 @@ public class WorkflowDefinition implements Serializable {
    * Returns the workflow attribute definition with the specified name for the workflow definition.
    *
    * @param name the name of the workflow attribute definition
-   * @return an Optional containing the workflow attribute definition with the specified name for
-   *     the workflow definition or an empty Optional if the workflow attribute definition could not
-   *     be found
+   * @return an {@link Optional} containing the workflow attribute definition with the specified
+   *     name for the workflow definition or an empty {@link Optional} if the workflow attribute
+   *     definition could not be found
    */
   public Optional<WorkflowAttributeDefinition> getAttributeDefinition(String name) {
     return attributeDefinitions.stream()
@@ -816,8 +817,8 @@ public class WorkflowDefinition implements Serializable {
    * Retrieve the value for the attribute with the specified name for the workflow definition.
    *
    * @param name the name of the attribute
-   * @return an Optional containing the value for the attribute with the specified name for the
-   *     workflow definition or an empty Optional if the attribute could not be found
+   * @return an {@link Optional} containing the value for the attribute with the specified name for
+   *     the workflow definition or an empty {@link Optional} if the attribute could not be found
    */
   public Optional<String> getAttributeValue(String name) {
     Optional<WorkflowDefinitionAttribute> attribute = getAttribute(name);
@@ -865,8 +866,9 @@ public class WorkflowDefinition implements Serializable {
    * Retrieve the document definition with the specified ID for the workflow definition.
    *
    * @param documentDefinitionId the ID for the document definition
-   * @return an Optional containing the document definition with the specified ID for the workflow
-   *     definition or an empty Optional if the document definition could not be found
+   * @return an {@link Optional} containing the document definition with the specified ID for the
+   *     workflow definition or an empty {@link Optional} if the document definition could not be
+   *     found
    */
   public Optional<WorkflowDefinitionDocumentDefinition> getDocumentDefinition(
       String documentDefinitionId) {
@@ -1024,9 +1026,9 @@ public class WorkflowDefinition implements Serializable {
    * Returns the workflow variable definition with the specified name for the workflow definition.
    *
    * @param name the name of the workflow variable definition
-   * @return an Optional containing the workflow variable definition with the specified name for the
-   *     workflow definition or an empty Optional if the workflow variable definition could not be
-   *     found
+   * @return an {@link Optional} containing the workflow variable definition with the specified name
+   *     for the workflow definition or an empty {@link Optional} if the workflow variable
+   *     definition could not be found
    */
   public Optional<WorkflowVariableDefinition> getVariableDefinition(String name) {
     return variableDefinitions.stream()

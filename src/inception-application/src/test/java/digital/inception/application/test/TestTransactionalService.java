@@ -76,8 +76,8 @@ public interface TestTransactionalService {
    * Retrieve the test data.
    *
    * @param id the ID
-   * @return an Optional containing the test data or an empty Optional if the test data cannot be
-   *     found
+   * @return an {@link Optional} containing the test data or an empty {@link Optional} if the test
+   *     data cannot be found
    */
   Optional<TestData> getTestData(String id) throws TestTransactionalServiceException;
 }

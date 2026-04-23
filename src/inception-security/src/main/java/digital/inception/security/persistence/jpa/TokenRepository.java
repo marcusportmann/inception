@@ -53,8 +53,8 @@ public interface TokenRepository extends JpaRepository<Token, String> {
    * Find the name of the token.
    *
    * @param tokenId the ID for the token
-   * @return an Optional containing the name of the token or an empty Optional if the token could
-   *     not be found
+   * @return an {@link Optional} containing the name of the token or an empty {@link Optional} if
+   *     the token could not be found
    */
   @Query("select t.name from Token t where t.id = :tokenId")
   Optional<String> findNameById(@Param("tokenId") String tokenId);

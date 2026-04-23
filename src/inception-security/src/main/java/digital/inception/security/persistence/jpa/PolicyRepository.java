@@ -50,8 +50,8 @@ public interface PolicyRepository extends JpaRepository<Policy, String> {
    * Find the name of the policy.
    *
    * @param policyId the ID for the policy
-   * @return an Optional containing the name of the policy or an empty Optional if the policy could
-   *     not be found
+   * @return an {@link Optional} containing the name of the policy or an empty {@link Optional} if
+   *     the policy could not be found
    */
   @Query("select p.name from Policy p where p.id = :policyId")
   Optional<String> findNameById(@Param("policyId") String policyId);

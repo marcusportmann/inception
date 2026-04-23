@@ -190,8 +190,8 @@ public interface ExecutorService {
    *
    * <p>The task will be locked to prevent duplicate processing.
    *
-   * @return an Optional containing the next task that is queued for execution or an empty Optional
-   *     if no tasks are currently queued for execution
+   * @return an {@link Optional} containing the next task that is queued for execution or an empty
+   *     {@link Optional} if no tasks are currently queued for execution
    * @throws ServiceUnavailableException if the next task queued for execution could not be
    *     retrieved
    */

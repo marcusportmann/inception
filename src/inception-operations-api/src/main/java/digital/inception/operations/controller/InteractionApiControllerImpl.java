@@ -17,6 +17,7 @@
 package digital.inception.operations.controller;
 
 import digital.inception.api.SecureApiController;
+import digital.inception.core.exception.BusinessException;
 import digital.inception.core.exception.InvalidArgumentException;
 import digital.inception.core.exception.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
@@ -32,6 +33,7 @@ import digital.inception.operations.exception.InteractionSourceNotFoundException
 import digital.inception.operations.exception.PartyNotFoundException;
 import digital.inception.operations.model.AssignInteractionRequest;
 import digital.inception.operations.model.CreateInteractionNoteRequest;
+import digital.inception.operations.model.DecryptInteractionAttachmentRequest;
 import digital.inception.operations.model.DelinkPartyFromInteractionRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachment;
@@ -199,11 +201,8 @@ public class InteractionApiControllerImpl extends SecureApiController
           "Access denied to the interaction source (" + interactionSourceId + ")");
     }
 
-    InteractionNote interactionNote =
-        interactionService.createInteractionNote(
-            tenantId, createInteractionNoteRequest, getAuthenticationName());
-
-    return interactionNote.getId();
+    return interactionService.createInteractionNote(
+        tenantId, createInteractionNoteRequest, getAuthenticationName());
   }
 
   @Override
@@ -220,6 +219,24 @@ public class InteractionApiControllerImpl extends SecureApiController
     }
 
     interactionService.createInteractionSource(tenantId, interactionSource);
+  }
+
+  @Override
+  public void decryptInteractionAttachment(
+      UUID tenantId, DecryptInteractionAttachmentRequest decryptInteractionAttachmentRequest)
+      throws InvalidArgumentException,
+          InteractionAttachmentNotFoundException,
+          BusinessException,
+          ServiceUnavailableException {
+    tenantId = (tenantId == null) ? TenantUtil.DEFAULT_TENANT_ID : tenantId;
+
+    if ((!hasAccessToFunction("Operations.OperationsAdministration"))
+        && (!hasAccessToFunction("Operations.InteractionAdministration"))
+        && (!hasAccessToTenant(tenantId))) {
+      throw new AccessDeniedException("Access denied to the tenant (" + tenantId + ")");
+    }
+
+    interactionService.decryptInteractionAttachment(tenantId, decryptInteractionAttachmentRequest);
   }
 
   @Override
@@ -752,9 +769,8 @@ public class InteractionApiControllerImpl extends SecureApiController
           "Access denied to the interaction source (" + interactionSourceId + ")");
     }
 
-    InteractionNote interactionNote =
-        interactionService.updateInteractionNote(
-            tenantId, updateInteractionNoteRequest, getAuthenticationName());
+    interactionService.updateInteractionNote(
+        tenantId, updateInteractionNoteRequest, getAuthenticationName());
   }
 
   @Override

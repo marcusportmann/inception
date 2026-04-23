@@ -893,8 +893,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the attribute with the specified type for the person.
    *
    * @param type the code for the attribute type
-   * @return an Optional containing the attribute with the specified type for the person or an empty
-   *     Optional if the attribute could not be found
+   * @return an {@link Optional} containing the attribute with the specified type for the person or
+   *     an empty {@link Optional} if the attribute could not be found
    */
   public Optional<Attribute> getAttributeWithType(String type) {
     return attributes.stream()
@@ -920,8 +920,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the consent with the specified type for the person.
    *
    * @param type the code for the consent type
-   * @return an Optional containing the consent with the specified type for the person or an empty
-   *     Optional if the consent could not be found
+   * @return an {@link Optional} containing the consent with the specified type for the person or an
+   *     empty {@link Optional} if the consent could not be found
    */
   public Optional<Consent> getConsentWithType(String type) {
     return consents.stream().filter(consent -> Objects.equals(consent.getType(), type)).findFirst();
@@ -945,8 +945,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the contact mechanism with the specified role for the person.
    *
    * @param role the code for the contact mechanism role
-   * @return an Optional containing the contact mechanism with the specified role for the person or
-   *     an empty Optional if the contact mechanism could not be found
+   * @return an {@link Optional} containing the contact mechanism with the specified role for the
+   *     person or an empty {@link Optional} if the contact mechanism could not be found
    */
   public Optional<ContactMechanism> getContactMechanismWithRole(String role) {
     return contactMechanisms.stream()
@@ -959,8 +959,9 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the code for the contact mechanism type
    * @param purpose the code for the contact mechanism role
-   * @return an Optional containing the contact mechanism with the specified type and purpose for
-   *     the person or an empty Optional if the contact mechanism could not be found
+   * @return an {@link Optional} containing the contact mechanism with the specified type and
+   *     purpose for the person or an empty {@link Optional} if the contact mechanism could not be
+   *     found
    */
   public Optional<ContactMechanism> getContactMechanismWithTypeAndPurpose(
       String type, String purpose) {
@@ -1088,8 +1089,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the education with the specified ID for the person.
    *
    * @param id the ID for the education
-   * @return an Optional containing the education with the specified ID for the person or an empty
-   *     if the education could not be found
+   * @return an {@link Optional} containing the education with the specified ID for the person or an
+   *     empty if the education could not be found
    */
   public Optional<Education> getEducationWithId(UUID id) {
     return educations.stream()
@@ -1139,8 +1140,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the employment with the specified ID for the person.
    *
    * @param id the ID for the employment
-   * @return an Optional containing the employment with the specified ID for the person or an empty
-   *     if the employment could not be found
+   * @return an {@link Optional} containing the employment with the specified ID for the person or
+   *     an empty if the employment could not be found
    */
   public Optional<Employment> getEmploymentWithId(UUID id) {
     return employments.stream()
@@ -1166,8 +1167,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the first external reference with the specified type for the person.
    *
    * @param type the code for the external reference type
-   * @return an Optional containing the first external reference with the specified type for the
-   *     person or an empty if an external reference could not be found
+   * @return an {@link Optional} containing the first external reference with the specified type for
+   *     the person or an empty if an external reference could not be found
    */
   public Optional<ExternalReference> getExternalReferenceWithType(String type) {
     return externalReferences.stream()
@@ -1324,8 +1325,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the identification with the specified type for the person.
    *
    * @param type the code for the identification type
-   * @return an Optional containing the identification with the specified type for the person or an
-   *     empty if the identification could not be found
+   * @return an {@link Optional} containing the identification with the specified type for the
+   *     person or an empty if the identification could not be found
    */
   public Optional<Identification> getIdentificationWithType(String type) {
     return identifications.stream()
@@ -1389,8 +1390,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the language proficiency with the specified language for the person.
    *
    * @param language the ISO 639-1 alpha-2 code for the language
-   * @return an Optional containing the language proficiency with the specified language for the
-   *     person or an empty Optional if the language proficiency could not be found
+   * @return an {@link Optional} containing the language proficiency with the specified language for
+   *     the person or an empty {@link Optional} if the language proficiency could not be found
    */
   public Optional<LanguageProficiency> getLanguageProficiencyWithLanguage(String language) {
     return languageProficiencies.stream()
@@ -1402,8 +1403,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the lock with the specified type for the person.
    *
    * @param type the code for the lock type
-   * @return an Optional containing the lock with the specified type for the person or an empty
-   *     Optional if the lock could not be found
+   * @return an {@link Optional} containing the lock with the specified type for the person or an
+   *     empty {@link Optional} if the lock could not be found
    */
   public Optional<Lock> getLockWithType(String type) {
     return locks.stream().filter(lock -> Objects.equals(lock.getType(), type)).findFirst();
@@ -1538,8 +1539,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the next of kin with the specified ID for the person.
    *
    * @param id the ID for the next of kin
-   * @return an Optional containing the next of kin with the specified ID for the person or an empty
-   *     Optional if the next of kin could not be found
+   * @return an {@link Optional} containing the next of kin with the specified ID for the person or
+   *     an empty {@link Optional} if the next of kin could not be found
    */
   public Optional<NextOfKin> getNextOfKinWithId(UUID id) {
     return nextOfKin.stream()
@@ -1551,8 +1552,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the next of kin with the specified type for the person.
    *
    * @param type the code for the next of kin type
-   * @return an Optional containing the next of kin with the specified type for the person or an
-   *     empty Optional if the next of kin could not be found
+   * @return an {@link Optional} containing the next of kin with the specified type for the person
+   *     or an empty {@link Optional} if the next of kin could not be found
    */
   public Optional<NextOfKin> getNextOfKinWithType(String type) {
     return nextOfKin.stream()
@@ -1576,8 +1577,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the first physical address with the specified role for the person.
    *
    * @param role the code for the physical address role
-   * @return an Optional containing the first physical address with the specified role for the
-   *     person or an empty Optional if the physical address could not be found
+   * @return an {@link Optional} containing the first physical address with the specified role for
+   *     the person or an empty {@link Optional} if the physical address could not be found
    */
   public Optional<PhysicalAddress> getPhysicalAddressWithRole(String role) {
     return physicalAddresses.stream()
@@ -1590,8 +1591,9 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the code for the physical address type
    * @param purpose the code for the physical address purpose
-   * @return an Optional containing the first physical address with the specified type and purpose
-   *     for the person or an empty Optional if the physical address could not be found
+   * @return an {@link Optional} containing the first physical address with the specified type and
+   *     purpose for the person or an empty {@link Optional} if the physical address could not be
+   *     found
    */
   public Optional<PhysicalAddress> getPhysicalAddressWithTypeAndPurpose(
       String type, String purpose) {
@@ -1621,8 +1623,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the preference with the specified type for the person.
    *
    * @param type the code for the preference type
-   * @return an Optional containing the preference with the specified type for the person or an
-   *     empty if the preference could not be found
+   * @return an {@link Optional} containing the preference with the specified type for the person or
+   *     an empty if the preference could not be found
    */
   public Optional<Preference> getPreferenceWithType(String type) {
     return preferences.stream()
@@ -1713,8 +1715,9 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the role with the specified type for the person independent of a party association.
    *
    * @param type the code for the role type
-   * @return an Optional containing the role with the specified type for the person independent of a
-   *     party association or an empty Optional if the role could not be found
+   * @return an {@link Optional} containing the role with the specified type for the person
+   *     independent of a party association or an empty {@link Optional} if the role could not be
+   *     found
    */
   public Optional<Role> getRoleWithType(String type) {
     return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst();
@@ -1738,8 +1741,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the segment allocation with the specified segment for the person.
    *
    * @param segment the code for the segment
-   * @return an Optional containing the segment allocation with the specified segment for the person
-   *     or an empty Optional if the segment allocation could not be found
+   * @return an {@link Optional} containing the segment allocation with the specified segment for
+   *     the person or an empty {@link Optional} if the segment allocation could not be found
    */
   public Optional<SegmentAllocation> getSegmentAllocationWithSegment(String segment) {
     return segmentAllocations.stream()
@@ -1765,8 +1768,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the skill with the specified type for the person.
    *
    * @param type the code for the skill type
-   * @return an Optional containing the skill with the specified type for the person or an empty
-   *     Optional if the skill could not be found
+   * @return an {@link Optional} containing the skill with the specified type for the person or an
+   *     empty {@link Optional} if the skill could not be found
    */
   public Optional<Skill> getSkillWithType(String type) {
     return skills.stream().filter(skill -> Objects.equals(skill.getType(), type)).findFirst();
@@ -1790,8 +1793,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the source of funds with the specified type for the person.
    *
    * @param type the code for the source of funds type
-   * @return an Optional containing the source of funds with the specified type for the person or an
-   *     empty Optional if the source of funds could not be found
+   * @return an {@link Optional} containing the source of funds with the specified type for the
+   *     person or an empty {@link Optional} if the source of funds could not be found
    */
   public Optional<SourceOfFunds> getSourceOfFundsWithType(String type) {
     return sourcesOfFunds.stream()
@@ -1803,8 +1806,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the source of wealth with the specified type for the person.
    *
    * @param type the code for the source of wealth type
-   * @return an Optional containing the source of wealth with the specified type for the person or
-   *     an empty Optional if the source of wealth could not be found
+   * @return an {@link Optional} containing the source of wealth with the specified type for the
+   *     person or an empty {@link Optional} if the source of wealth could not be found
    */
   public Optional<SourceOfWealth> getSourceOfWealthWithType(String type) {
     return sourcesOfWealth.stream()
@@ -1844,8 +1847,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the status with the specified type for the person.
    *
    * @param type the code for the status type
-   * @return an Optional containing the status with the specified type for the person or an empty
-   *     Optional if the status could not be found
+   * @return an {@link Optional} containing the status with the specified type for the person or an
+   *     empty {@link Optional} if the status could not be found
    */
   public Optional<Status> getStatusWithType(String type) {
     return statuses.stream().filter(status -> Objects.equals(status.getType(), type)).findFirst();
@@ -1881,8 +1884,8 @@ public class Person extends PartyBase implements Serializable {
    * Retrieve the tax number with the specified type for the person.
    *
    * @param type the code for the tax number type
-   * @return an Optional containing the tax number with the specified type for the person or an
-   *     empty Optional if the tax number could not be found
+   * @return an {@link Optional} containing the tax number with the specified type for the person or
+   *     an empty {@link Optional} if the tax number could not be found
    */
   public Optional<TaxNumber> getTaxNumberWithType(String type) {
     return taxNumbers.stream()

@@ -50,7 +50,6 @@ import digital.inception.operations.model.InitiateWorkflowStepRequest;
 import digital.inception.operations.model.Interaction;
 import digital.inception.operations.model.InteractionAttachmentSummaries;
 import digital.inception.operations.model.InteractionAttachmentSummary;
-import digital.inception.operations.model.InteractionNote;
 import digital.inception.operations.model.InteractionNoteSortBy;
 import digital.inception.operations.model.InteractionNotes;
 import digital.inception.operations.model.InteractionSortBy;
@@ -448,19 +447,17 @@ public class EndToEndTests {
         new CreateInteractionNoteRequest(
             interaction.getId(), "This is the interaction note content.");
 
-    InteractionNote interactionNote =
+    UUID interactionNoteId =
         interactionService.createInteractionNote(
             TenantUtil.DEFAULT_TENANT_ID, createInteractionNoteRequest, "TEST1");
 
     // Update the interaction note for the interaction
     UpdateInteractionNoteRequest updateInteractionNoteRequest =
         new UpdateInteractionNoteRequest(
-            interactionNote.getId(), "This is the interaction note content.");
+            interactionNoteId, "This is the interaction note content.");
 
-    @SuppressWarnings("unused")
-    InteractionNote updatedInteractionNote =
-        interactionService.updateInteractionNote(
-            TenantUtil.DEFAULT_TENANT_ID, updateInteractionNoteRequest, "TEST2");
+    interactionService.updateInteractionNote(
+        TenantUtil.DEFAULT_TENANT_ID, updateInteractionNoteRequest, "TEST2");
 
     // Retrieve the interaction notes for the interaction
     InteractionNotes interactionNotes =
@@ -809,10 +806,8 @@ public class EndToEndTests {
     //  |___|_| |_|\__\___|_|  \__,_|\___|\__|_|\___/|_| |_|  \____|_|\___|\__,_|_| |_|\__,_| .__/
     //                                                                                      |_|
 
-    // Delete the interaction notes
-    for (UUID interactionNoteId : List.of(interactionNote.getId())) {
-      interactionService.deleteInteractionNote(TenantUtil.DEFAULT_TENANT_ID, interactionNoteId);
-    }
+    // Delete the interaction note
+    interactionService.deleteInteractionNote(TenantUtil.DEFAULT_TENANT_ID, interactionNoteId);
 
     // Delete the interaction attachments
     for (UUID interactionAttachmentId : interactionAttachmentIds) {

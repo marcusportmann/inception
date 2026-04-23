@@ -121,8 +121,8 @@ public interface SchedulerService {
    *
    * <p>The job will be locked to prevent duplicate processing.
    *
-   * @return an Optional containing the next job that is scheduled for execution or an empty
-   *     Optional if no jobs are currently scheduled for execution
+   * @return an {@link Optional} containing the next job that is scheduled for execution or an empty
+   *     {@link Optional} if no jobs are currently scheduled for execution
    * @throws ServiceUnavailableException if the next job scheduled for execution could not be
    *     retrieved
    */

@@ -264,6 +264,35 @@ public class Document implements Serializable {
   }
 
   /**
+   * Constructs a new {@code Document}.
+   *
+   * @param document the existing document
+   */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+  public Document(Document document) {
+    this.created = document.getCreated();
+    this.createdBy = document.getCreatedBy();
+    this.data = document.getData();
+    this.definitionId = document.getDefinitionId();
+    this.fileType = document.getFileType();
+    this.hash = document.getHash();
+    this.id = document.getId();
+    this.name = document.getName();
+    this.sourceDocumentId = document.getSourceDocumentId();
+    this.tenantId = document.getTenantId();
+    this.updated = document.getUpdated();
+    this.updatedBy = document.getUpdatedBy();
+
+    for (DocumentAttribute documentAttribute : document.getAttributes()) {
+      addAttribute(new DocumentAttribute(documentAttribute));
+    }
+
+    for (DocumentExternalReference documentExternalReference : document.getExternalReferences()) {
+      addExternalReference(new DocumentExternalReference(documentExternalReference));
+    }
+  }
+
+  /**
    * Add the attribute for the document.
    *
    * @param attribute the attribute
@@ -323,8 +352,8 @@ public class Document implements Serializable {
    * Retrieve the attribute with the specified name for the document.
    *
    * @param name the name of the attribute
-   * @return an Optional containing the attribute with the specified name for the document or an
-   *     empty Optional if the attribute could not be found
+   * @return an {@link Optional} containing the attribute with the specified name for the document
+   *     or an empty {@link Optional} if the attribute could not be found
    */
   public Optional<DocumentAttribute> getAttribute(String name) {
     return attributes.stream()
@@ -381,8 +410,8 @@ public class Document implements Serializable {
    * Retrieve the external reference with the specified type for the document.
    *
    * @param type the code for the external reference type
-   * @return an Optional containing the external reference with the specified type for the document
-   *     or an empty Optional if the external reference could not be found
+   * @return an {@link Optional} containing the external reference with the specified type for the
+   *     document or an empty {@link Optional} if the external reference could not be found
    */
   public Optional<DocumentExternalReference> getExternalReference(String type) {
     return externalReferences.stream()

@@ -388,8 +388,8 @@ public interface PartyService {
    * Retrieve the ID for the tenant the party is associated with.
    *
    * @param partyId the ID for the party
-   * @return an Optional containing the ID for the tenant the party is associated with or an empty
-   *     Optional if the party could not be found
+   * @return an {@link Optional} containing the ID for the tenant the party is associated with or an
+   *     empty {@link Optional} if the party could not be found
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the ID for the tenant the party is associated with could
    *     not be retrieved
@@ -402,8 +402,8 @@ public interface PartyService {
    *
    * @param tenantId the ID for the tenant
    * @param partyId the ID for the party
-   * @return an Optional containing the party type for the party or an empty Optional if the party
-   *     could not be found
+   * @return an {@link Optional} containing the party type for the party or an empty {@link
+   *     Optional} if the party could not be found
    * @throws InvalidArgumentException if an argument is invalid
    * @throws ServiceUnavailableException if the party type for the party could not be retrieved
    */

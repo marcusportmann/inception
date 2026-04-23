@@ -189,8 +189,8 @@ public class ApplicationR2dbcConfiguration {
   /**
    * Returns the R2DBC mapping context for the application database.
    *
-   * <p>This Spring Data RDBC implementation configures the mapping context to use plain
-   * (unquoted) identifiers using the dedicated plain-identifier factory methods.
+   * <p>This Spring Data RDBC implementation configures the mapping context to use plain (unquoted)
+   * identifiers using the dedicated plain-identifier factory methods.
    *
    * <p>If the managed entity types are available in the Spring application context, they are
    * applied to the mapping context. If they are not available, the mapping context is returned

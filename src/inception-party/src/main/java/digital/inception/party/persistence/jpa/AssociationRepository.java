@@ -60,8 +60,8 @@ public interface AssociationRepository extends JpaRepository<Association, UUID> 
    *
    * @param tenantId the ID for the tenant
    * @param associationId the ID for the association
-   * @return an Optional containing the association or an empty Optional if the association could
-   *     not be found
+   * @return an {@link Optional} containing the association or an empty {@link Optional} if the
+   *     association could not be found
    */
   Optional<Association> findByTenantIdAndId(UUID tenantId, UUID associationId);
 

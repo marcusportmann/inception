@@ -65,8 +65,8 @@ public interface SMSService {
    *
    * <p>The SMS will be locked to prevent duplicate sending.
    *
-   * @return an Optional containing the next SMS that has been queued for sending or an empty
-   *     Optional if no SMSs are currently queued for sending
+   * @return an {@link Optional} containing the next SMS that has been queued for sending or an
+   *     empty {@link Optional} if no SMSs are currently queued for sending
    * @throws ServiceUnavailableException if the next SMS queued for sending could not be retrieved
    */
   Optional<SMS> getNextSMSQueuedForSending() throws ServiceUnavailableException;

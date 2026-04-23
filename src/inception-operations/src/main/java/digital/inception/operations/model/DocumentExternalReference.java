@@ -74,6 +74,16 @@ public class DocumentExternalReference extends ExternalReference implements Seri
   }
 
   /**
+   * Constructs a new {@code DocumentExternalReference}.
+   *
+   * @param documentExternalReference the document external reference
+   */
+  @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+  public DocumentExternalReference(DocumentExternalReference documentExternalReference) {
+    super(documentExternalReference.type, documentExternalReference.value);
+  }
+
+  /**
    * Returns the code for the external reference type.
    *
    * @return the code for the external reference type
@@ -118,24 +128,6 @@ public class DocumentExternalReference extends ExternalReference implements Seri
     } else {
       this.objectId = null;
     }
-  }
-
-  /**
-   * Sets the code for the external reference type.
-   *
-   * @param type the code for the external reference type
-   */
-  public void setType(String type) {
-    this.type = type;
-  }
-
-  /**
-   * Sets the value for the external reference.
-   *
-   * @param value the value for the external reference
-   */
-  public void setValue(String value) {
-    this.value = value;
   }
 
   /**

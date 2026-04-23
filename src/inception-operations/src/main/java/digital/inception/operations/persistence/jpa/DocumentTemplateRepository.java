@@ -52,8 +52,8 @@ public interface DocumentTemplateRepository
    *
    * @param tenantId the ID for the tenant
    * @param documentTemplateId the ID for the document template
-   * @return an Optional containing the document template or an empty Optional if the document
-   *     template could not be found
+   * @return an {@link Optional} containing the document template or an empty {@link Optional} if
+   *     the document template could not be found
    */
   Optional<DocumentTemplate> findByTenantIdAndId(UUID tenantId, String documentTemplateId);
 

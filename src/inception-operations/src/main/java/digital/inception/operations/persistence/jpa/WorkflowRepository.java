@@ -146,8 +146,8 @@ public interface WorkflowRepository
    *
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
-   * @return an Optional containing the workflow or an empty Optional if the workflow could not be
-   *     found
+   * @return an {@link Optional} containing the workflow or an empty {@link Optional} if the
+   *     workflow could not be found
    */
   Optional<Workflow> findByTenantIdAndId(UUID tenantId, UUID workflowId);
 
@@ -156,8 +156,9 @@ public interface WorkflowRepository
    * specified ID.
    *
    * @param workflowId the ID for the workflow
-   * @return the Optional containing the ID (composite key) of the workflow definition version for
-   *     the workflow with the specified ID or an empty Optional if the workflow could not be found
+   * @return the {@link Optional} containing the ID (composite key) of the workflow definition
+   *     version for the workflow with the specified ID or an empty {@link Optional} if the workflow
+   *     could not be found
    */
   @Query(
       """
@@ -175,8 +176,8 @@ public interface WorkflowRepository
    * Find the workflow engine IDs for the workflow.
    *
    * @param workflowId the ID for the workflow
-   * @return the optional containing the workflow engine IDs for the workflow or an empty Optional
-   *     if the workflow could not be found
+   * @return the optional containing the workflow engine IDs for the workflow or an empty {@link
+   *     Optional} if the workflow could not be found
    */
   @Query(
       """
@@ -194,8 +195,8 @@ public interface WorkflowRepository
    *
    * @param tenantId the ID for the tenant
    * @param workflowId the ID for the workflow
-   * @return the Optional containing the status for the workflow with the specified ID or an empty
-   *     Optional if the workflow could not be found
+   * @return the {@link Optional} containing the status for the workflow with the specified ID or an
+   *     empty {@link Optional} if the workflow could not be found
    */
   @Query(
       """
