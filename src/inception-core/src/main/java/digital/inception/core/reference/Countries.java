@@ -1624,7 +1624,7 @@ public final class Countries {
           new Country(
               "AX", "ALA", 1, "Åland Islands", "Åland Islands", "Åland Islands", "FI", "Ålandic"));
 
-  /** Private default constructor to enforce singleton pattern. */
+  /** Private default constructor to enforce the singleton pattern. */
   private Countries() {}
 
   /**

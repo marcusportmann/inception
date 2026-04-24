@@ -132,7 +132,7 @@ public final class Languages {
           new Language("XH", "XHO", 1, "Xhosa", "Xhosa", "Xhosa"),
           new Language("ZU", "ZUL", 1, "Zulu", "Zulu", "Zulu"));
 
-  /** Private default constructor to enforce singleton pattern. */
+  /** Private default constructor to enforce the singleton pattern. */
   private Languages() {}
 
   /**

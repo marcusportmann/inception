@@ -226,7 +226,7 @@ public final class Currencies {
           new Currency("ZMW", "967", 1, "Zambian Kwacha", "Kwacha", "Zambian kwacha"),
           new Currency("ZWG", "924", 1, "Zimbabwe Gold", "Zimbabwe Gold", "Zimbabwe Gold"));
 
-  /** Private default constructor to enforce singleton pattern. */
+  /** Private default constructor to enforce the singleton pattern. */
   private Currencies() {}
 
   /**
