@@ -1,0 +1,26 @@
+{
+  "lm_studio/openai/gpt-oss-20b": {
+    "max_tokens": 12288,
+    "max_input_tokens": 12288,
+    "max_output_tokens": 4096,
+    "input_cost_per_token": 0,
+    "output_cost_per_token": 0,
+    "mode": "chat"
+  },
+  "lm_studio/kimi-k2.5-pruned-20b": {
+    "max_tokens": 12288,
+    "max_input_tokens": 12288,
+    "max_output_tokens": 4096,
+    "input_cost_per_token": 0,
+    "output_cost_per_token": 0,
+    "mode": "chat"
+  },
+  "lm_studio/qwen/qwen3.6-27b": {
+    "max_tokens": 12288,
+    "max_input_tokens": 12288,
+    "max_output_tokens": 4096,
+    "input_cost_per_token": 0,
+    "output_cost_per_token": 0,
+    "mode": "chat"
+  }
+}

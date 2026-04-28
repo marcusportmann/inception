@@ -1,0 +1,62 @@
+# Aider files
+.aider*
+.aider.chat.history.md
+.aider.input.history
+.aider.model.metadata.json
+.aider.model.settings.yml
+
+# Git / IDE
+.git/
+.idea/
+.vscode/
+*.iml
+
+# Java / Maven / Gradle build output
+target/
+**/target/
+build/
+**/build/
+.gradle/
+**/.gradle/
+out/
+**/out/
+
+# Java compiled / packaged artifacts
+*.class
+*.jar
+*.war
+*.ear
+
+# Angular / Node / Yarn
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.angular/
+**/.angular/
+coverage/
+**/coverage/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Logs and temp files
+*.log
+logs/
+**/logs/
+tmp/
+**/tmp/
+temp/
+**/temp/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+
+# Large/minified/generated frontend assets
+*.map
+*.min.js
+*.min.css
