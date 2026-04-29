@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.0.5</version>
+    <version>4.0.6</version>
   </parent>
 
   <repositories>
@@ -100,14 +100,14 @@
 
     <agroal-pool.version>3.0.1</agroal-pool.version>
     <apache-poi.version>5.5.1</apache-poi.version>
-    <archunit.version>1.4.1</archunit.version>
+    <archunit.version>1.4.2</archunit.version>
     <authzforce-ce-core-pdp-engine.version>21.1.0</authzforce-ce-core-pdp-engine.version>
     <avro.version>1.12.1</avro.version>
     <azure-identity.version>1.18.2</azure-identity.version>
-    <bucket4j_jdk17-core.version>8.17.0</bucket4j_jdk17-core.version>
+    <bucket4j_jdk17-core.version>8.18.0</bucket4j_jdk17-core.version>
     <com.ibm.icu.icu4j.version>78.3</com.ibm.icu.icu4j.version>
     <commons-beanutils.version>1.11.0</commons-beanutils.version>
-    <commons-io.version>2.21.0</commons-io.version>
+    <commons-io.version>2.22.0</commons-io.version>
     <!-- NOTE: Version of Apache CXF compatible with jaxb-xew-plugin -->
     <cxf.version>4.0.2</cxf.version>
     <de.bwaldvogel.mongo-java-server.version>1.47.0</de.bwaldvogel.mongo-java-server.version>
@@ -126,12 +126,12 @@
     <jaxb-xew-plugin.version>2.1</jaxb-xew-plugin.version>
     <jboss-transaction-spi.version>8.0.1.Final</jboss-transaction-spi.version>
     <json-path.version>3.0.0</json-path.version>
-    <jsoup.version>1.22.1</jsoup.version>
+    <jsoup.version>1.22.2</jsoup.version>
     <liquibase-slf4j.version>5.1.0</liquibase-slf4j.version>
     <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
     <mssql-jdbc.version>13.4.0.jre11</mssql-jdbc.version>
     <narayana.version>7.3.3.Final</narayana.version>
-    <ognl.version>3.4.10</ognl.version>
+    <ognl.version>3.4.11</ognl.version>
     <ojdbc11.version>23.26.0.0.0</ojdbc11.version>
     <openpdf.version>2.4.0</openpdf.version>
     <!-- NOTE: The Open Telemetry Java Agent version need to be compatible with the Open Telemetry SDK version -->
@@ -141,13 +141,13 @@
     <org.glassfish.jaxb.version>4.0.7</org.glassfish.jaxb.version>
     <postgresql.version>42.7.10</postgresql.version>
     <r2dbc-h2.version>1.1.0.RELEASE</r2dbc-h2.version>
-    <software.amazon.awssdk.s3.version>2.42.24</software.amazon.awssdk.s3.version>
-    <spring-shell-starter.version>4.0.1</spring-shell-starter.version>
-    <springdoc-openapi.version>3.0.2</springdoc-openapi.version>
+    <software.amazon.awssdk.s3.version>2.42.41</software.amazon.awssdk.s3.version>
+    <spring-shell-starter.version>4.0.2</spring-shell-starter.version>
+    <springdoc-openapi.version>3.0.3</springdoc-openapi.version>
     <sun-activation.version>1.2.0</sun-activation.version>
-    <swagger.version>2.2.46</swagger.version>
+    <swagger.version>2.2.48</swagger.version>
     <uuid-creator.version>6.1.1</uuid-creator.version>
-    <wss4j-ws-security-common.version>3.0.4</wss4j-ws-security-common.version>
+    <wss4j-ws-security-common.version>3.0.5</wss4j-ws-security-common.version>
 
     <node.version>v24.14.1</node.version>
     <yarn.version>v1.22.22</yarn.version>
